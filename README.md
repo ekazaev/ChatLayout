@@ -1,1 +1,1 @@
-# ChatCollectionLayout
+# ChatLayout
