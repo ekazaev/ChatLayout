@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ChatLayout Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/ChatLayout" class="dashAnchor"></a>
+
+    <a title="ChatLayout Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          ChatLayout 0.1.0 Docs
+        </a>
+         (100% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">ChatLayout Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      ChatLayout Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../readme.html">README</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CellLayoutContainerView.html">CellLayoutContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayout.html">ChatLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayoutInvalidationContext.html">ChatLayoutInvalidationContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ContainerCollectionReusableView.html">ContainerCollectionReusableView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ContainerCollectionViewCell.html">ContainerCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/EdgeAligningView.html">EdgeAligningView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/EdgeAligningView/Edge.html">– Edge</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ImageMaskedView.html">ImageMaskedView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/MessageContainerView.html">MessageContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/RoundedCornersContainerView.html">RoundedCornersContainerView</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/CellLayoutContainerViewAlignment.html">CellLayoutContainerViewAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ChatItemAlignment.html">ChatItemAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ImageMaskedViewTransformation.html">ImageMaskedViewTransformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ItemKind.html">ItemKind</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ItemSize.html">ItemSize</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ChatLayoutDelegate.html">ChatLayoutDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ContainerCollectionViewCellDelegate.html">ContainerCollectionViewCellDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/StaticViewFactory.html">StaticViewFactory</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot/Edge.html">– Edge</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutSettings.html">ChatLayoutSettings</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VoidViewFactory.html">VoidViewFactory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VoidViewFactory.html#/s:10ChatLayout15VoidViewFactoryV0cD0C">– VoidView</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>ChatLayout</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ChatLayout</span> <span class="p">:</span> <span class="kt">UICollectionViewLayout</span></code></pre>
+
+                </div>
+              </div>
+            <p>A collection view layout that can display items in a grid similar to <code>UITableView</code> but aligning them
+to the leading or trailing edge of the <code>UICollectionView</code>. Helps to maintain chat like behavior by keeping
+content offset from the bottom constant. Can deal with autosizing cells and supplementary views.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayoutAAC8delegateAA0aB8Delegate_pSgvp"></a>
+                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayoutAAC8delegateAA0aB8Delegate_pSgvp">delegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>ChatLayout</code> delegate.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ChatLayoutDelegate.html">ChatLayoutDelegate</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(cpy)layoutAttributesClass"></a>
+                    <a name="//apple_ref/swift/Variable/layoutAttributesClass" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(cpy)layoutAttributesClass">layoutAttributesClass</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Custom layoutAttributesClass is <code><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">layoutAttributesClass</span><span class="p">:</span> <span class="kt">AnyClass</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(cpy)invalidationContextClass"></a>
+                    <a name="//apple_ref/swift/Variable/invalidationContextClass" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(cpy)invalidationContextClass">invalidationContextClass</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Custom invalidationContextClass is <code><a href="../Classes/ChatLayoutInvalidationContext.html">ChatLayoutInvalidationContext</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">invalidationContextClass</span><span class="p">:</span> <span class="kt">AnyClass</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayoutAAC8settingsAA0aB8SettingsVvp"></a>
+                    <a name="//apple_ref/swift/Property/settings" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayoutAAC8settingsAA0aB8SettingsVvp">settings</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Additional settings for <code>ChatLayout</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">settings</span><span class="p">:</span> <span class="kt"><a href="../Structs/ChatLayoutSettings.html">ChatLayoutSettings</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayoutAAC37shouldKeepContentOffsetOnBatchUpdatesSbvp"></a>
+                    <a name="//apple_ref/swift/Property/shouldKeepContentOffsetOnBatchUpdates" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayoutAAC37shouldKeepContentOffsetOnBatchUpdatesSbvp">shouldKeepContentOffsetOnBatchUpdates</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>ChatLayout</code> should try to compensate batch update changes to keep the current content at the bottom of the visible
+part of <code>UICollectionView</code>.</p>
+
+<p><strong>NB:</strong>
+Keep in mind that if during the batch content inset changes also (e.g. keyboard frame changes), <code>ChatLayout</code> will usually get that information after
+the animation starts and wont be able to compensate that change too. It should be done manually.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shouldKeepContentOffsetOnBatchUpdates</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(py)collectionViewContentSize"></a>
+                    <a name="//apple_ref/swift/Property/collectionViewContentSize" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(py)collectionViewContentSize">collectionViewContentSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The width and height of the collection view’s contents.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">collectionViewContentSize</span><span class="p">:</span> <span class="kt">CGSize</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayoutAAC13visibleBoundsSo6CGRectVvp"></a>
+                    <a name="//apple_ref/swift/Property/visibleBounds" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayoutAAC13visibleBoundsSo6CGRectVvp">visibleBounds</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represent the currently visible rectangle.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">visibleBounds</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayoutAAC11layoutFrameSo6CGRectVvp"></a>
+                    <a name="//apple_ref/swift/Property/layoutFrame" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayoutAAC11layoutFrameSo6CGRectVvp">layoutFrame</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represent the rectangle where all the items are aligned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">layoutFrame</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Content%20Offset%20of%20an%20Item"></a>
+                <a name="//apple_ref/swift/Section/Content Offset of an Item" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Content%20Offset%20of%20an%20Item"></a>
+                  <h3 class="section-name"><p>Content Offset of an Item</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayoutAAC24getContentOffsetSnapshot4fromAA0ab8PositionF0VSgAF4EdgeO_tF"></a>
+                    <a name="//apple_ref/swift/Method/getContentOffsetSnapshot(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayoutAAC24getContentOffsetSnapshot4fromAA0ab8PositionF0VSgAF4EdgeO_tF">getContentOffsetSnapshot(from:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get current offset of the item closest to the provided edge.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getContentOffsetSnapshot</span><span class="p">(</span><span class="n">from</span> <span class="nv">edge</span><span class="p">:</span> <span class="kt"><a href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a></span><span class="o">.</span><span class="kt">Edge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>edge</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The edge of the <code>UICollectionView</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code><a href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a></code></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayoutAAC20restoreContentOffset4withyAA0aB16PositionSnapshotV_tF"></a>
+                    <a name="//apple_ref/swift/Method/restoreContentOffset(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayoutAAC20restoreContentOffset4withyAA0aB16PositionSnapshotV_tF">restoreContentOffset(with:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Invalidates layout of the <code>UICollectionView</code> and trying to keep the offset of the item provided in <code><a href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a></code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">restoreContentOffset</span><span class="p">(</span><span class="n">with</span> <span class="nv">snapshot</span><span class="p">:</span> <span class="kt"><a href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>snapshot</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code><a href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a></code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Providing%20Layout%20Attributes"></a>
+                <a name="//apple_ref/swift/Section/Providing Layout Attributes" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Providing%20Layout%20Attributes"></a>
+                  <h3 class="section-name"><p>Providing Layout Attributes</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)prepareLayout"></a>
+                    <a name="//apple_ref/swift/Method/prepare()" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)prepareLayout">prepare()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tells the layout object to update the current layout.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)layoutAttributesForElementsInRect:"></a>
+                    <a name="//apple_ref/swift/Method/layoutAttributesForElements(in:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)layoutAttributesForElementsInRect:">layoutAttributesForElements(in:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves the layout attributes for all of the cells and views in the specified rectangle.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">layoutAttributesForElements</span><span class="p">(</span><span class="k">in</span> <span class="nv">rect</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">UICollectionViewLayoutAttributes</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)layoutAttributesForItemAtIndexPath:"></a>
+                    <a name="//apple_ref/swift/Method/layoutAttributesForItem(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)layoutAttributesForItemAtIndexPath:">layoutAttributesForItem(at:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves layout information for an item at the specified index path with a corresponding cell.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">layoutAttributesForItem</span><span class="p">(</span><span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)layoutAttributesForSupplementaryViewOfKind:atIndexPath:"></a>
+                    <a name="//apple_ref/swift/Method/layoutAttributesForSupplementaryView(ofKind:at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)layoutAttributesForSupplementaryViewOfKind:atIndexPath:">layoutAttributesForSupplementaryView(ofKind:<wbr>at:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves the layout attributes for the specified supplementary view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">layoutAttributesForSupplementaryView</span><span class="p">(</span><span class="n">ofKind</span> <span class="nv">elementKind</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Coordinating%20Animated%20Changes"></a>
+                <a name="//apple_ref/swift/Section/Coordinating Animated Changes" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Coordinating%20Animated%20Changes"></a>
+                  <h3 class="section-name"><p>Coordinating Animated Changes</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)prepareForAnimatedBoundsChange:"></a>
+                    <a name="//apple_ref/swift/Method/prepare(forAnimatedBoundsChange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)prepareForAnimatedBoundsChange:">prepare(forAnimatedBoundsChange:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Prepares the layout object for animated changes to the view’s bounds or the insertion or deletion of items.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">forAnimatedBoundsChange</span> <span class="nv">oldBounds</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)finalizeAnimatedBoundsChange"></a>
+                    <a name="//apple_ref/swift/Method/finalizeAnimatedBoundsChange()" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)finalizeAnimatedBoundsChange">finalizeAnimatedBoundsChange()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Cleans up after any animated changes to the view’s bounds or after the insertion or deletion of items.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">finalizeAnimatedBoundsChange</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Context%20Invalidation"></a>
+                <a name="//apple_ref/swift/Section/Context Invalidation" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Context%20Invalidation"></a>
+                  <h3 class="section-name"><p>Context Invalidation</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)shouldInvalidateLayoutForPreferredLayoutAttributes:withOriginalAttributes:"></a>
+                    <a name="//apple_ref/swift/Method/shouldInvalidateLayout(forPreferredLayoutAttributes:withOriginalAttributes:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)shouldInvalidateLayoutForPreferredLayoutAttributes:withOriginalAttributes:">shouldInvalidateLayout(forPreferredLayoutAttributes:<wbr>withOriginalAttributes:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asks the layout object if changes to a self-sizing cell require a layout update.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">shouldInvalidateLayout</span><span class="p">(</span><span class="n">forPreferredLayoutAttributes</span> <span class="nv">preferredAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">,</span> <span class="n">withOriginalAttributes</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)invalidationContextForPreferredLayoutAttributes:withOriginalAttributes:"></a>
+                    <a name="//apple_ref/swift/Method/invalidationContext(forPreferredLayoutAttributes:withOriginalAttributes:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)invalidationContextForPreferredLayoutAttributes:withOriginalAttributes:">invalidationContext(forPreferredLayoutAttributes:<wbr>withOriginalAttributes:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves a context object that identifies the portions of the layout that should change in response to dynamic cell changes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">invalidationContext</span><span class="p">(</span><span class="n">forPreferredLayoutAttributes</span> <span class="nv">preferredAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">,</span> <span class="n">withOriginalAttributes</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutInvalidationContext</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)shouldInvalidateLayoutForBoundsChange:"></a>
+                    <a name="//apple_ref/swift/Method/shouldInvalidateLayout(forBoundsChange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)shouldInvalidateLayoutForBoundsChange:">shouldInvalidateLayout(forBoundsChange:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asks the layout object if the new bounds require a layout update.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">shouldInvalidateLayout</span><span class="p">(</span><span class="n">forBoundsChange</span> <span class="nv">newBounds</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)invalidationContextForBoundsChange:"></a>
+                    <a name="//apple_ref/swift/Method/invalidationContext(forBoundsChange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)invalidationContextForBoundsChange:">invalidationContext(forBoundsChange:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">invalidationContext</span><span class="p">(</span><span class="n">forBoundsChange</span> <span class="nv">newBounds</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutInvalidationContext</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)invalidateLayoutWithContext:"></a>
+                    <a name="//apple_ref/swift/Method/invalidateLayout(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)invalidateLayoutWithContext:">invalidateLayout(with:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Invalidates the current layout using the information in the provided context object.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">invalidateLayout</span><span class="p">(</span><span class="n">with</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutInvalidationContext</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)invalidateLayout"></a>
+                    <a name="//apple_ref/swift/Method/invalidateLayout()" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)invalidateLayout">invalidateLayout()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Invalidates the current layout and triggers a layout update.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">invalidateLayout</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)targetContentOffsetForProposedContentOffset:"></a>
+                    <a name="//apple_ref/swift/Method/targetContentOffset(forProposedContentOffset:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)targetContentOffsetForProposedContentOffset:">targetContentOffset(forProposedContentOffset:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves the content offset to use after an animated layout update or change.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">targetContentOffset</span><span class="p">(</span><span class="n">forProposedContentOffset</span> <span class="nv">proposedContentOffset</span><span class="p">:</span> <span class="kt">CGPoint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGPoint</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Batch%20Updates"></a>
+                <a name="//apple_ref/swift/Section/Batch Updates" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Batch%20Updates"></a>
+                  <h3 class="section-name"><p>Batch Updates</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)prepareForCollectionViewUpdates:"></a>
+                    <a name="//apple_ref/swift/Method/prepare(forCollectionViewUpdates:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)prepareForCollectionViewUpdates:">prepare(forCollectionViewUpdates:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Notifies the layout object that the contents of the collection view are about to change.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">forCollectionViewUpdates</span> <span class="nv">updateItems</span><span class="p">:</span> <span class="p">[</span><span class="kt">UICollectionViewUpdateItem</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)finalizeCollectionViewUpdates"></a>
+                    <a name="//apple_ref/swift/Method/finalizeCollectionViewUpdates()" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)finalizeCollectionViewUpdates">finalizeCollectionViewUpdates()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs any additional animations or clean up needed during a collection view update.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">finalizeCollectionViewUpdates</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)initialLayoutAttributesForAppearingItemAtIndexPath:"></a>
+                    <a name="//apple_ref/swift/Method/initialLayoutAttributesForAppearingItem(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)initialLayoutAttributesForAppearingItemAtIndexPath:">initialLayoutAttributesForAppearingItem(at:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves the starting layout information for an item being inserted into the collection view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">initialLayoutAttributesForAppearingItem</span><span class="p">(</span><span class="n">at</span> <span class="nv">itemIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)finalLayoutAttributesForDisappearingItemAtIndexPath:"></a>
+                    <a name="//apple_ref/swift/Method/finalLayoutAttributesForDisappearingItem(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)finalLayoutAttributesForDisappearingItemAtIndexPath:">finalLayoutAttributesForDisappearingItem(at:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves the final layout information for an item that is about to be removed from the collection view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">finalLayoutAttributesForDisappearingItem</span><span class="p">(</span><span class="n">at</span> <span class="nv">itemIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)initialLayoutAttributesForAppearingSupplementaryElementOfKind:atIndexPath:"></a>
+                    <a name="//apple_ref/swift/Method/initialLayoutAttributesForAppearingSupplementaryElement(ofKind:at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)initialLayoutAttributesForAppearingSupplementaryElementOfKind:atIndexPath:">initialLayoutAttributesForAppearingSupplementaryElement(ofKind:<wbr>at:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves the starting layout information for a supplementary view being inserted into the collection view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">initialLayoutAttributesForAppearingSupplementaryElement</span><span class="p">(</span><span class="n">ofKind</span> <span class="nv">elementKind</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">at</span> <span class="nv">elementIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayout(im)finalLayoutAttributesForDisappearingSupplementaryElementOfKind:atIndexPath:"></a>
+                    <a name="//apple_ref/swift/Method/finalLayoutAttributesForDisappearingSupplementaryElement(ofKind:at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayout(im)finalLayoutAttributesForDisappearingSupplementaryElementOfKind:atIndexPath:">finalLayoutAttributesForDisappearingSupplementaryElement(ofKind:<wbr>at:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves the final layout information for a supplementary view that is about to be removed from the collection view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">finalLayoutAttributesForDisappearingSupplementaryElement</span><span class="p">(</span><span class="n">ofKind</span> <span class="nv">elementKind</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">at</span> <span class="nv">elementIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-07-21)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

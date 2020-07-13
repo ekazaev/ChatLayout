@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CellLayoutContainerView Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/CellLayoutContainerView" class="dashAnchor"></a>
+
+    <a title="CellLayoutContainerView Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          ChatLayout 0.1.0 Docs
+        </a>
+         (100% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">ChatLayout Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      CellLayoutContainerView Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../readme.html">README</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CellLayoutContainerView.html">CellLayoutContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayout.html">ChatLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayoutInvalidationContext.html">ChatLayoutInvalidationContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ContainerCollectionReusableView.html">ContainerCollectionReusableView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ContainerCollectionViewCell.html">ContainerCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/EdgeAligningView.html">EdgeAligningView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/EdgeAligningView/Edge.html">– Edge</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ImageMaskedView.html">ImageMaskedView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/MessageContainerView.html">MessageContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/RoundedCornersContainerView.html">RoundedCornersContainerView</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/CellLayoutContainerViewAlignment.html">CellLayoutContainerViewAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ChatItemAlignment.html">ChatItemAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ImageMaskedViewTransformation.html">ImageMaskedViewTransformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ItemKind.html">ItemKind</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ItemSize.html">ItemSize</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ChatLayoutDelegate.html">ChatLayoutDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ContainerCollectionViewCellDelegate.html">ContainerCollectionViewCellDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/StaticViewFactory.html">StaticViewFactory</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot/Edge.html">– Edge</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutSettings.html">ChatLayoutSettings</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VoidViewFactory.html">VoidViewFactory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VoidViewFactory.html#/s:10ChatLayout15VoidViewFactoryV0cD0C">– VoidView</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>CellLayoutContainerView</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">CellLayoutContainerView</span><span class="o">&lt;</span><span class="kt">LeadingAccessory</span><span class="p">,</span> <span class="kt">CustomView</span><span class="p">,</span> <span class="kt">TrailingAccessory</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">UIView</span> <span class="k">where</span> <span class="kt">LeadingAccessory</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/StaticViewFactory.html">StaticViewFactory</a></span><span class="p">,</span> <span class="kt">CustomView</span> <span class="p">:</span> <span class="kt">UIView</span><span class="p">,</span> <span class="kt">TrailingAccessory</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/StaticViewFactory.html">StaticViewFactory</a></span></code></pre>
+
+                </div>
+              </div>
+            <p><code>CellLayoutContainerView</code> is a container view that helps to arrange the views in a horizontal cell-alike layout with an optional <code>LeadingAccessory</code> first,
+a <code>CustomView</code> next and am optional <code>TrailingAccessory</code> last. Use <code><a href="../Structs/VoidViewFactory.html">VoidViewFactory</a></code> to specify that <code>LeadingAccessory</code> or <code>TrailingAccessory</code> views should not be
+allocated.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout04CellB13ContainerViewC07leadingE00E0QzSgvp"></a>
+                    <a name="//apple_ref/swift/Property/leadingView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout04CellB13ContainerViewC07leadingE00E0QzSgvp">leadingView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Leading accessory view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">leadingView</span><span class="p">:</span> <span class="kt">LeadingAccessory</span><span class="o">.</span><span class="kt">View</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout04CellB13ContainerViewC06customE0q_vp"></a>
+                    <a name="//apple_ref/swift/Property/customView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout04CellB13ContainerViewC06customE0q_vp">customView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Main view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">customView</span><span class="p">:</span> <span class="kt">CustomView</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout04CellB13ContainerViewC08trailingE00E0Qy0_Sgvp"></a>
+                    <a name="//apple_ref/swift/Property/trailingView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout04CellB13ContainerViewC08trailingE00E0Qy0_Sgvp">trailingView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Trailing accessory view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">trailingView</span><span class="p">:</span> <span class="kt">TrailingAccessory</span><span class="o">.</span><span class="kt">View</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout04CellB13ContainerViewC9alignmentAA0cbdE9AlignmentOvp"></a>
+                    <a name="//apple_ref/swift/Property/alignment" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout04CellB13ContainerViewC9alignmentAA0cbdE9AlignmentOvp">alignment</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Alignment that corresponds to <code>UIStackView.Alignment</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">alignment</span><span class="p">:</span> <span class="kt"><a href="../Enums/CellLayoutContainerViewAlignment.html">CellLayoutContainerViewAlignment</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout04CellB13ContainerViewC7spacing12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/spacing" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout04CellB13ContainerViewC7spacing12CoreGraphics7CGFloatVvp">spacing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Default spacing between the views.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">spacing</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout04CellB13ContainerViewC20customLeadingSpacing12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/customLeadingSpacing" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout04CellB13ContainerViewC20customLeadingSpacing12CoreGraphics7CGFloatVvp">customLeadingSpacing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Custom spacing between the leading and main views.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">customLeadingSpacing</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout04CellB13ContainerViewC21customTrailingSpacing12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/customTrailingSpacing" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout04CellB13ContainerViewC21customTrailingSpacing12CoreGraphics7CGFloatVvp">customTrailingSpacing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Custom spacing between the main and trailing views.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">customTrailingSpacing</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout04CellB13ContainerViewC5frameACyxq_q0_GSo6CGRectV_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(frame:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout04CellB13ContainerViewC5frameACyxq_q0_GSo6CGRectV_tcfc">init(frame:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes and returns a newly allocated view object with the specified frame rectangle.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="nf">init</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>frame</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The frame rectangle for the view, measured in points. The origin of the frame is relative
+to the superview in which you plan to add it.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout04CellB13ContainerViewC5coderACyxq_q0_GSgSo7NSCoderC_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(coder:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout04CellB13ContainerViewC5coderACyxq_q0_GSgSo7NSCoderC_tcfc">init(coder:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an object initialized from data in a given unarchiver.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">required</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">coder</span><span class="p">:</span> <span class="kt">NSCoder</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>coder</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An unarchiver object.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-07-21)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

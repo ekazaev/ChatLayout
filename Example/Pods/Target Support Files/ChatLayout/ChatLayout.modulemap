@@ -1,0 +1,6 @@
+framework module ChatLayout {
+  umbrella header "ChatLayout-umbrella.h"
+
+  export *
+  module * { export * }
+}

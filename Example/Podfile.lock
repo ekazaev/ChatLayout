@@ -1,0 +1,23 @@
+PODS:
+  - ChatLayout (0.1.0):
+    - ChatLayout/Ultimate (= 0.1.0)
+  - ChatLayout/Core (0.1.0)
+  - ChatLayout/Extras (0.1.0):
+    - ChatLayout/Core
+  - ChatLayout/Ultimate (0.1.0):
+    - ChatLayout/Core
+    - ChatLayout/Extras
+
+DEPENDENCIES:
+  - ChatLayout (from `../`)
+
+EXTERNAL SOURCES:
+  ChatLayout:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  ChatLayout: f33accdafefe2699c2147918c0a9522155df7136
+
+PODFILE CHECKSUM: a75a10814e4337e564df40bb87ee7278c31a4122
+
+COCOAPODS: 1.9.3

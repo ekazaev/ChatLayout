@@ -1,0 +1,49 @@
+{
+  "name": "ChatLayout",
+  "version": "0.1.0",
+  "summary": "Custom UICollectionViewLayout to support a Chat0like layout of the cells.",
+  "description": "Custom UICollectionViewLayout to support a Chat0like layout of the cells.",
+  "homepage": "https://github.com/Eugene Kazaev/ChatLayout",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Eugene Kazaev": "eugene.kazaev@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/Eugene Kazaev/ChatLayout.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "12.0"
+  },
+  "default_subspecs": "Ultimate",
+  "frameworks": "UIKit",
+  "subspecs": [
+    {
+      "name": "Ultimate",
+      "dependencies": {
+        "ChatLayout/Core": [
+
+        ],
+        "ChatLayout/Extras": [
+
+        ]
+      }
+    },
+    {
+      "name": "Core",
+      "source_files": "ChatLayout/Classes/Core/**/*"
+    },
+    {
+      "name": "Extras",
+      "source_files": "ChatLayout/Classes/Extras/**/*",
+      "dependencies": {
+        "ChatLayout/Core": [
+
+        ]
+      }
+    }
+  ]
+}

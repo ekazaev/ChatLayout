@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ChatLayoutAttributes Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/ChatLayoutAttributes" class="dashAnchor"></a>
+
+    <a title="ChatLayoutAttributes Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          ChatLayout 0.1.0 Docs
+        </a>
+         (100% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">ChatLayout Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      ChatLayoutAttributes Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../readme.html">README</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CellLayoutContainerView.html">CellLayoutContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayout.html">ChatLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayoutInvalidationContext.html">ChatLayoutInvalidationContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ContainerCollectionReusableView.html">ContainerCollectionReusableView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ContainerCollectionViewCell.html">ContainerCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/EdgeAligningView.html">EdgeAligningView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/EdgeAligningView/Edge.html">– Edge</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ImageMaskedView.html">ImageMaskedView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/MessageContainerView.html">MessageContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/RoundedCornersContainerView.html">RoundedCornersContainerView</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/CellLayoutContainerViewAlignment.html">CellLayoutContainerViewAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ChatItemAlignment.html">ChatItemAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ImageMaskedViewTransformation.html">ImageMaskedViewTransformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ItemKind.html">ItemKind</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ItemSize.html">ItemSize</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ChatLayoutDelegate.html">ChatLayoutDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ContainerCollectionViewCellDelegate.html">ContainerCollectionViewCellDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/StaticViewFactory.html">StaticViewFactory</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot/Edge.html">– Edge</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutSettings.html">ChatLayoutSettings</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VoidViewFactory.html">VoidViewFactory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VoidViewFactory.html#/s:10ChatLayout15VoidViewFactoryV0cD0C">– VoidView</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>ChatLayoutAttributes</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ChatLayoutAttributes</span> <span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span></code></pre>
+
+                </div>
+              </div>
+            <p>Custom implementation of <code>UICollectionViewLayoutAttributes</code></p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB10AttributesC9alignmentAA0A13ItemAlignmentOvp"></a>
+                    <a name="//apple_ref/swift/Property/alignment" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB10AttributesC9alignmentAA0A13ItemAlignmentOvp">alignment</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Alignment of the current item. Can be changed within <code>UICollectionViewCell.preferredLayoutAttributesFitting(...)</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">alignment</span><span class="p">:</span> <span class="kt"><a href="../Enums/ChatItemAlignment.html">ChatItemAlignment</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB10AttributesC16additionalInsetsSo06UIEdgeE0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/additionalInsets" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB10AttributesC16additionalInsetsSo06UIEdgeE0Vvp">additionalInsets</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/ChatLayout.html">ChatLayout</a></code>s additional insets setup using <code><a href="../Structs/ChatLayoutSettings.html">ChatLayoutSettings</a></code>. Added for convenience.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">additionalInsets</span><span class="p">:</span> <span class="kt">UIEdgeInsets</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB10AttributesC8viewSizeSo6CGSizeVvp"></a>
+                    <a name="//apple_ref/swift/Property/viewSize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB10AttributesC8viewSizeSo6CGSizeVvp">viewSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>UICollectionView</code>s frame size. Added for convenience.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">viewSize</span><span class="p">:</span> <span class="kt">CGSize</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB10AttributesC21adjustedContentInsetsSo06UIEdgeF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/adjustedContentInsets" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB10AttributesC21adjustedContentInsetsSo06UIEdgeF0Vvp">adjustedContentInsets</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>UICollectionView</code>s adjusted content insets. Added for convenience.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">adjustedContentInsets</span><span class="p">:</span> <span class="kt">UIEdgeInsets</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB10AttributesC17visibleBoundsSizeSo6CGSizeVvp"></a>
+                    <a name="//apple_ref/swift/Property/visibleBoundsSize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB10AttributesC17visibleBoundsSizeSo6CGSizeVvp">visibleBoundsSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/ChatLayout.html">ChatLayout</a></code>s visible bounds size excluding <code><a href="../Classes/ChatLayoutAttributes.html#/s:10ChatLayout0aB10AttributesC21adjustedContentInsetsSo06UIEdgeF0Vvp">adjustedContentInsets</a></code>. Added for convenience.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">visibleBoundsSize</span><span class="p">:</span> <span class="kt">CGSize</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB10AttributesC11layoutFrameSo6CGRectVvp"></a>
+                    <a name="//apple_ref/swift/Property/layoutFrame" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB10AttributesC11layoutFrameSo6CGRectVvp">layoutFrame</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/ChatLayout.html">ChatLayout</a></code>s visible bounds size excluding <code><a href="../Classes/ChatLayoutAttributes.html#/s:10ChatLayout0aB10AttributesC21adjustedContentInsetsSo06UIEdgeF0Vvp">adjustedContentInsets</a></code> and <code><a href="../Classes/ChatLayoutAttributes.html#/s:10ChatLayout0aB10AttributesC16additionalInsetsSo06UIEdgeE0Vvp">additionalInsets</a></code>. Added for convenience.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">layoutFrame</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayoutAttributes(im)copyWithZone:"></a>
+                    <a name="//apple_ref/swift/Method/copy(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayoutAttributes(im)copyWithZone:">copy(with:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an exact copy of <code>ChatLayoutAttributes</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">copy</span><span class="p">(</span><span class="n">with</span> <span class="nv">zone</span><span class="p">:</span> <span class="kt">NSZone</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ChatLayout@objc(cs)ChatLayoutAttributes(im)isEqual:"></a>
+                    <a name="//apple_ref/swift/Method/isEqual(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ChatLayout@objc(cs)ChatLayoutAttributes(im)isEqual:">isEqual(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a Boolean value indicating whether two <code>ChatLayoutAttributes</code> are considered equal.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">isEqual</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-07-21)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

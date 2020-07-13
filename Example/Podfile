@@ -1,0 +1,12 @@
+platform :ios, '12.0'
+use_frameworks!
+
+target 'ChatLayout_Example' do
+  pod 'ChatLayout', :path => '../'
+
+  target 'ChatLayout_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
