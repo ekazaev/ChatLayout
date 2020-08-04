@@ -91,10 +91,9 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
     /// - Returns: Modified `UICollectionViewLayoutAttributes`
     public override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {
-            return layoutAttributes
+            return super.preferredLayoutAttributesFitting(layoutAttributes)
         }
         delegate?.apply(chatLayoutAttributes)
-
         let resultingLayoutAttributes: ChatLayoutAttributes
         if let preferredLayoutAttributes = delegate?.preferredLayoutAttributesFitting(chatLayoutAttributes) {
             resultingLayoutAttributes = preferredLayoutAttributes

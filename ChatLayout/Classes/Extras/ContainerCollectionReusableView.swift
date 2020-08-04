@@ -49,7 +49,7 @@ public final class ContainerCollectionReusableView<CustomView: UIView>: UICollec
     /// - Returns: Modified `UICollectionViewLayoutAttributes`
     public override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {
-            return layoutAttributes
+            return super.preferredLayoutAttributesFitting(layoutAttributes)
         }
         delegate?.apply(chatLayoutAttributes)
 

@@ -62,153 +62,153 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00A701350E0A594F3C6CAF9DEB345E96 /* ContainerCollectionReusableView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ContainerCollectionReusableView.html; sourceTree = "<group>"; };
-		011912753142CB0BA4AC79747228E090 /* docSet.dsidx */ = {isa = PBXFileReference; includeInIndex = 1; name = docSet.dsidx; path = docs/docsets/ChatLayout.docset/Contents/Resources/docSet.dsidx; sourceTree = "<group>"; };
 		028BB1D821B09469F8EFDADA0E57CA27 /* ItemKind.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemKind.swift; sourceTree = "<group>"; };
 		05D2065AB5A99090499B22D42576B72A /* Pods-ChatLayout_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatLayout_Tests-Info.plist"; sourceTree = "<group>"; };
-		0648E14D702A172AA095E58929FFE07F /* CellLayoutContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/CellLayoutContainerView.html; sourceTree = "<group>"; };
-		08A0580AF88A60908E0936548901E443 /* ContainerCollectionViewCellDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCellDelegate.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/ContainerCollectionViewCellDelegate.html; sourceTree = "<group>"; };
-		0942396C66D80734FD64BC84BE1ADBF6 /* jazzy.css */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.css; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/css/jazzy.css; sourceTree = "<group>"; };
-		09A71E755508EFF66B27861C12C283FF /* ChatLayoutInvalidationContext.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutInvalidationContext.html; path = docs/Classes/ChatLayoutInvalidationContext.html; sourceTree = "<group>"; };
-		0A0E30E61518FDF7917C45B3D7A7ECEE /* badge.svg */ = {isa = PBXFileReference; includeInIndex = 1; name = badge.svg; path = docs/badge.svg; sourceTree = "<group>"; };
+		065A55C3209DA71BB43CBB6B46342352 /* Structs.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Structs.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs.html; sourceTree = "<group>"; };
+		079A61DAF0D60701A96CB6D7A0FE963D /* ChatLayoutSettings.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.html; path = docs/Structs/ChatLayoutSettings.html; sourceTree = "<group>"; };
 		0A297C1D0E5CBE76D103A78108D0C935 /* Pods-ChatLayout_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatLayout_Example-Info.plist"; sourceTree = "<group>"; };
+		0CBD4C72E69212319912FEA5D9FF3332 /* jazzy.css */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.css; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/css/jazzy.css; sourceTree = "<group>"; };
+		0DF1404C7ECEEA2B44D401ED50450DC7 /* spinner.gif */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.gif; name = spinner.gif; path = docs/img/spinner.gif; sourceTree = "<group>"; };
+		0E15A89933898EAF4AC4312FB410EF56 /* ContainerCollectionViewCell.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ContainerCollectionViewCell.html; sourceTree = "<group>"; };
+		0EA2F278E85E4A15A31B652802597F7D /* jazzy.css */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.css; path = docs/css/jazzy.css; sourceTree = "<group>"; };
 		0F67820C1B0CDFAF496517CC7D3678EA /* Pods-ChatLayout_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ChatLayout_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		0F932A21E88F82C7D9FCFC90ADF98EC9 /* ChatLayout.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayout.html; sourceTree = "<group>"; };
+		0FF42A22AF37493CA195AB10E400DBB5 /* lunr.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = lunr.min.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/lunr.min.js; sourceTree = "<group>"; };
 		10AE5C265A83FE757BC1928E4FAD0EDC /* ChatItemAlignment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatItemAlignment.swift; path = ChatLayout/Classes/Core/ChatItemAlignment.swift; sourceTree = "<group>"; };
 		113AEFE68760204D2FB8D8DA96B887F6 /* ChatLayout.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = ChatLayout.modulemap; sourceTree = "<group>"; };
-		11B092A494E0DBB8E7C134DB9D9B0E6B /* readme.html */ = {isa = PBXFileReference; includeInIndex = 1; name = readme.html; path = docs/readme.html; sourceTree = "<group>"; };
-		14305F15ACD06848F7D059ED1D9CB9FE /* carat.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = carat.png; path = docs/img/carat.png; sourceTree = "<group>"; };
-		1510F3E33455AC6CA6288D40121F1094 /* jquery.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jquery.min.js; path = docs/js/jquery.min.js; sourceTree = "<group>"; };
 		15B553CDB5FBF0D484991EDE929144E5 /* ChatLayoutInvalidationContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutInvalidationContext.swift; path = ChatLayout/Classes/Core/ChatLayoutInvalidationContext.swift; sourceTree = "<group>"; };
-		181C9680222AB87EE58D3167D8C8CD5A /* gh.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = gh.png; path = docs/img/gh.png; sourceTree = "<group>"; };
-		1CC3D44B6B5CC27E902E8D3F8945BB0C /* search.json */ = {isa = PBXFileReference; includeInIndex = 1; name = search.json; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/search.json; sourceTree = "<group>"; };
-		1CFA3CCFBBEB6BF28EFA6DF3A58E9F75 /* CellLayoutContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.html; path = docs/Classes/CellLayoutContainerView.html; sourceTree = "<group>"; };
+		1CD4C6BD9B85B75EE25BB78EB9CB1005 /* undocumented.json */ = {isa = PBXFileReference; includeInIndex = 1; name = undocumented.json; path = docs/undocumented.json; sourceTree = "<group>"; };
 		1E3C9CBCF35A0F6CB6D204BDFA507009 /* ItemSize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemSize.swift; sourceTree = "<group>"; };
 		1EA650C09B51CBE717B0F4905FA4A78C /* Pods-ChatLayout_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ChatLayout_Tests-dummy.m"; sourceTree = "<group>"; };
 		1FBAD74F75ED314365877935C740AE53 /* CGRect+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
-		1FC33FDB93227C8435E291A5DE26EA66 /* CircleContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CircleContainerView.html; path = docs/Classes/CircleContainerView.html; sourceTree = "<group>"; };
-		20EF82DDA5DC8B62CD3FDC808BAF150E /* ChatLayoutDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.html; path = docs/Protocols/ChatLayoutDelegate.html; sourceTree = "<group>"; };
-		21DD1FF173EBE67D71EE6D269228C85B /* jazzy.search.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.search.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jazzy.search.js; sourceTree = "<group>"; };
-		21F9493F042A7E3A1662D31C0BA67605 /* spinner.gif */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.gif; name = spinner.gif; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/spinner.gif; sourceTree = "<group>"; };
 		2251DEA6AF483075AEF4C14B53028CF4 /* ChatLayout-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ChatLayout-umbrella.h"; sourceTree = "<group>"; };
-		25827C4BC414B0B5C1C45B106197944F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		267CAB9494C91B11813221867DD761BA /* jazzy.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jazzy.js; sourceTree = "<group>"; };
+		22741899D6CF20FA0F1C6716CAF0A11B /* search.json */ = {isa = PBXFileReference; includeInIndex = 1; name = search.json; path = docs/search.json; sourceTree = "<group>"; };
+		23454E4730025B7D419AF72433FB39AF /* ChatLayoutInvalidationContext.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutInvalidationContext.html; path = docs/Classes/ChatLayoutInvalidationContext.html; sourceTree = "<group>"; };
+		2624116389088DA1574280EE1A85230E /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/Classes/EdgeAligningView/Edge.html; sourceTree = "<group>"; };
 		27A2E4B9A05CFDE071F0767A540CD629 /* ContainerCollectionReusableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContainerCollectionReusableView.swift; path = ChatLayout/Classes/Extras/ContainerCollectionReusableView.swift; sourceTree = "<group>"; };
-		2C3890DEDD5E5A94C4A502FF8EB5EBE3 /* ChatItemAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatItemAlignment.html; path = docs/Enums/ChatItemAlignment.html; sourceTree = "<group>"; };
-		2CE6C7A2C43F49338D9E975A978D9610 /* Classes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Classes.html; path = docs/Classes.html; sourceTree = "<group>"; };
+		29274D0E31FD24280BABC5AA68D03373 /* ImageMaskedView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ImageMaskedView.html; sourceTree = "<group>"; };
 		2DE189CE1F2E4BD1D559A3B33BBF9051 /* Pods-ChatLayout_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ChatLayout_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		303E43F2BB963FB8D1C78C03C5786905 /* Guides.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Guides.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Guides.html; sourceTree = "<group>"; };
-		303F463B67F1C8682D8B42EA3DCB78EE /* ChatLayoutInvalidationContext.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutInvalidationContext.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayoutInvalidationContext.html; sourceTree = "<group>"; };
-		30CBE74B9A2514CB2F33FC7E93653A9D /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/index.html; sourceTree = "<group>"; };
+		30542EAFAEFE7F385F27FEE1CD5496D9 /* CellLayoutContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.html; path = docs/Classes/CellLayoutContainerView.html; sourceTree = "<group>"; };
+		310C2CCF87A2CC5FECBF2A525902FD32 /* gh.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = gh.png; path = docs/img/gh.png; sourceTree = "<group>"; };
+		31131F2FF8C3EAAD0DE4C51FB78FD818 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/Structs/ChatLayoutPositionSnapshot/Edge.html; sourceTree = "<group>"; };
 		312B988EF117AE4DE76A268D970131FE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		3171945F07827DD7BF05E421E67244E8 /* StaticViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.html; path = docs/Protocols/StaticViewFactory.html; sourceTree = "<group>"; };
+		314F306275F5C1161B38D4268B28C08C /* ItemSize.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemSize.html; path = docs/Enums/ItemSize.html; sourceTree = "<group>"; };
+		3270FFB1F099FB52C2E1378A2D36A1FA /* VoidViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = VoidViewFactory.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/VoidViewFactory.html; sourceTree = "<group>"; };
 		32C4A01F04E51C9601FD73BE52DBE11B /* ChatLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ChatLayout.framework; path = ChatLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		353DC2782B0D45C0A405B9DA77879405 /* Pods-ChatLayout_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ChatLayout_Example-frameworks.sh"; sourceTree = "<group>"; };
 		36892F6FD5950757046097446DC2669A /* ModelState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ModelState.swift; sourceTree = "<group>"; };
-		375B269944A67F1CB9F98FBCFC1FF15D /* ChatLayoutAttributes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayoutAttributes.html; sourceTree = "<group>"; };
-		3A805867E791FF50AEE3F378FA0F359D /* MessageContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/MessageContainerView.html; sourceTree = "<group>"; };
-		3B9F501E32A2A44C1627877FC9B663D2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		3CBB16FBDEDABDFE23D7FF31BB0902BF /* Guides.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Guides.html; path = docs/Guides.html; sourceTree = "<group>"; };
-		3D930C9956E54ED31F2132D9506D8851 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/Classes/EdgeAligningView/Edge.html; sourceTree = "<group>"; };
-		3E7D0B5C903CAB55927AF89A492B6F71 /* search.json */ = {isa = PBXFileReference; includeInIndex = 1; name = search.json; path = docs/search.json; sourceTree = "<group>"; };
+		39EA583747C64EB6D7B16A09FA1419C9 /* spinner.gif */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.gif; name = spinner.gif; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/spinner.gif; sourceTree = "<group>"; };
+		3AB072CF2F2E35CEE2DD8AD152B27459 /* readme.html */ = {isa = PBXFileReference; includeInIndex = 1; name = readme.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/readme.html; sourceTree = "<group>"; };
+		42257295DA732692D9413E661A020B09 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutPositionSnapshot/Edge.html; sourceTree = "<group>"; };
 		42FC6CB9CE335A7D0E0891F053EDC172 /* Pods-ChatLayout_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatLayout_Example.release.xcconfig"; sourceTree = "<group>"; };
-		43449126D065F9FD1D0F1193024786D9 /* ContainerCollectionViewCellDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCellDelegate.html; path = docs/Protocols/ContainerCollectionViewCellDelegate.html; sourceTree = "<group>"; };
 		436BAA54A31999B53B3CC7115C55FE50 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		44B5813F96D8217E006F45F1094914A8 /* jazzy.css */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.css; path = docs/css/jazzy.css; sourceTree = "<group>"; };
-		45DF30C709BE2476028871DEB9C4B007 /* Enums.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Enums.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums.html; sourceTree = "<group>"; };
-		4779582EBD310D39B8AAB79B9CD36450 /* MessageContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.html; path = docs/Classes/MessageContainerView.html; sourceTree = "<group>"; };
+		457388F1332A44002C56D5793E5C562B /* ChatLayout.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = ChatLayout.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		494839BFBAC1483D1F383D485E0B17AC /* ChatLayout.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ChatLayout.debug.xcconfig; sourceTree = "<group>"; };
 		4AE2C81B2FABDDF9DF763CA1F20D00BE /* ChatLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayout.swift; path = ChatLayout/Classes/Core/ChatLayout.swift; sourceTree = "<group>"; };
-		4E5D85D3B159FB32D74CBA70E64E85FA /* Structs.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Structs.html; path = docs/Structs.html; sourceTree = "<group>"; };
-		4E74D160E86C5CF066FED6B0FF909777 /* Classes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Classes.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes.html; sourceTree = "<group>"; };
+		4E45D88411858621B9EF8A7DEEBB6D20 /* RoundedCornersContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = RoundedCornersContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/RoundedCornersContainerView.html; sourceTree = "<group>"; };
 		4F4F2C0BEB3216742CB83BBFE0BD7EA2 /* Pods-ChatLayout_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatLayout_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		4F5411195C28C950B6DD51030C43B553 /* CellLayoutContainerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CellLayoutContainerView.swift; path = ChatLayout/Classes/Extras/CellLayoutContainerView.swift; sourceTree = "<group>"; };
 		4FE79287DCCF4E837BD57E538BF4CE9E /* Pods_ChatLayout_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ChatLayout_Tests.framework; path = "Pods-ChatLayout_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		50426B79A3E384EEE2E8EF13CA7DC1C1 /* Pods-ChatLayout_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatLayout_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		51ABA4A5608091C4695265AB5BB31522 /* ChatLayoutSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutSettings.swift; path = ChatLayout/Classes/Core/ChatLayoutSettings.swift; sourceTree = "<group>"; };
-		5564FAA7F8327DF0CA9DFBFE83EC54F3 /* CellLayoutContainerViewAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerViewAlignment.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/CellLayoutContainerViewAlignment.html; sourceTree = "<group>"; };
-		56FBE56C9F6101A25D39C48CC144465B /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutPositionSnapshot/Edge.html; sourceTree = "<group>"; };
-		639D5B3E39D07A9BE311072EC66F1353 /* StaticViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/StaticViewFactory.html; sourceTree = "<group>"; };
-		66C8E2318AE89661224B1C253B2C4D00 /* ImageMaskedViewTransformation.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedViewTransformation.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ImageMaskedViewTransformation.html; sourceTree = "<group>"; };
+		59D101B76B8597FA797BA46DD79671AD /* readme.html */ = {isa = PBXFileReference; includeInIndex = 1; name = readme.html; path = docs/readme.html; sourceTree = "<group>"; };
+		5DA8D5D10799F1B8146B8D68897BE83F /* badge.svg */ = {isa = PBXFileReference; includeInIndex = 1; name = badge.svg; path = docs/badge.svg; sourceTree = "<group>"; };
+		6422458037E3F05604BF64C3CC941D05 /* VoidViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = VoidViewFactory.html; path = docs/Structs/VoidViewFactory.html; sourceTree = "<group>"; };
+		65D1F8997529EB174AED35F4BA32314F /* StaticViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/StaticViewFactory.html; sourceTree = "<group>"; };
+		66FCF8EB929B364EC5A75273215CD0C6 /* MessageContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/MessageContainerView.html; sourceTree = "<group>"; };
+		670EFAA0FC755F924B573F48D9D3B2C0 /* jazzy.search.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.search.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jazzy.search.js; sourceTree = "<group>"; };
+		67767C42C5A2A2AD7B12F0B451930797 /* Guides.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Guides.html; path = docs/Guides.html; sourceTree = "<group>"; };
 		6783999052B042B1573906A6716DBA8A /* LayoutModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LayoutModel.swift; sourceTree = "<group>"; };
 		68166391B8AC99B098176357C794F460 /* ChatLayoutAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutAttributes.swift; path = ChatLayout/Classes/Core/ChatLayoutAttributes.swift; sourceTree = "<group>"; };
-		6A37B23685CFFE0051FA63E215A913FF /* Structs.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Structs.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs.html; sourceTree = "<group>"; };
+		68E938741152994F9054F854A351F12E /* ChatLayoutInvalidationContext.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutInvalidationContext.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayoutInvalidationContext.html; sourceTree = "<group>"; };
 		6B12CA2A99625559F0B25F25F98E8FCF /* CGSize+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CGSize+Extension.swift"; sourceTree = "<group>"; };
-		6C177F15CE04F23D4D2D03D5535557D8 /* ContainerCollectionViewCell.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.html; path = docs/Classes/ContainerCollectionViewCell.html; sourceTree = "<group>"; };
 		6CAA1D50659EA10F70AAD02742FA1141 /* ChatLayout-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ChatLayout-dummy.m"; sourceTree = "<group>"; };
-		6E4297C35CB080D101B461BC442DA6ED /* carat.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = carat.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/carat.png; sourceTree = "<group>"; };
-		6E5F828F4BF38EF845D980DC408D3FE0 /* Protocols.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Protocols.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols.html; sourceTree = "<group>"; };
+		6D306D73A7588057F7D853BA98698F41 /* ImageMaskedViewTransformation.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedViewTransformation.html; path = docs/Enums/ImageMaskedViewTransformation.html; sourceTree = "<group>"; };
 		714543A024C05CEC7FB649123E339378 /* ChatLayoutDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutDelegate.swift; path = ChatLayout/Classes/Core/ChatLayoutDelegate.swift; sourceTree = "<group>"; };
-		71E84264A83629F94F788C5E6C4399EA /* ChatLayoutPositionSnapshot.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutPositionSnapshot.html; sourceTree = "<group>"; };
+		735E3DFB96201DED9A8DB7167515A379 /* ChatLayoutPositionSnapshot.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.html; path = docs/Structs/ChatLayoutPositionSnapshot.html; sourceTree = "<group>"; };
 		736604498E920F65122B5BEA28291D5B /* StateController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StateController.swift; sourceTree = "<group>"; };
-		73F185936D985DF9C61AA27BF7384D32 /* ItemSize.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemSize.html; path = docs/Enums/ItemSize.html; sourceTree = "<group>"; };
-		76BE90C5166274B374FE15B244AC1D0F /* ChatLayout.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = ChatLayout.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		74DF2D9E6AE16795B5216B715F4731EA /* ContainerCollectionViewCell.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.html; path = docs/Classes/ContainerCollectionViewCell.html; sourceTree = "<group>"; };
+		7564B16DFF084091D84605FC71B7DDB1 /* docSet.dsidx */ = {isa = PBXFileReference; includeInIndex = 1; name = docSet.dsidx; path = docs/docsets/ChatLayout.docset/Contents/Resources/docSet.dsidx; sourceTree = "<group>"; };
+		75D529E98200313932549B7B4900FFDC /* Classes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Classes.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes.html; sourceTree = "<group>"; };
+		763D802DED11189492BB9C8E29F78ACC /* ContainerCollectionViewCellDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCellDelegate.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/ContainerCollectionViewCellDelegate.html; sourceTree = "<group>"; };
 		7776A61FE1D2CEF5969FEF37F1489AC9 /* ItemModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
-		78F58A529C23947FCA255F31D648D610 /* jazzy.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.js; path = docs/js/jazzy.js; sourceTree = "<group>"; };
 		7AC7236711942C632BCDE4086A089921 /* Pods-ChatLayout_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ChatLayout_Example.modulemap"; sourceTree = "<group>"; };
-		7DAF94CB21495EF9FE9386945145E3AD /* ChatLayoutDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/ChatLayoutDelegate.html; sourceTree = "<group>"; };
-		85B9F4BFD6880634F49646BD6977FD91 /* typeahead.jquery.js */ = {isa = PBXFileReference; includeInIndex = 1; name = typeahead.jquery.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/typeahead.jquery.js; sourceTree = "<group>"; };
-		873CB9E490654D27890F11123C0C6804 /* ItemKind.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.html; path = docs/Enums/ItemKind.html; sourceTree = "<group>"; };
-		878D97CD28D7D73A56B15423A069E004 /* ContainerCollectionViewCell.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ContainerCollectionViewCell.html; sourceTree = "<group>"; };
+		7DE81D00262E9C171D6A92428469E14A /* highlight.css */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.css; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/css/highlight.css; sourceTree = "<group>"; };
+		851B10C213B7319F2811485FAF62C080 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = docs/docsets/ChatLayout.docset/Contents/Info.plist; sourceTree = "<group>"; };
+		874E2FABE2BBE0269436218386A1F110 /* CellLayoutContainerViewAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerViewAlignment.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/CellLayoutContainerViewAlignment.html; sourceTree = "<group>"; };
+		88FA577FD6D81F5E39DFF09A450EF058 /* carat.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = carat.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/carat.png; sourceTree = "<group>"; };
 		8927E6B5049B5B129BA5D1F1027EEDDE /* EdgeAligningView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EdgeAligningView.swift; path = ChatLayout/Classes/Extras/EdgeAligningView.swift; sourceTree = "<group>"; };
 		8A3BD74356876062C05F4746C68E09DC /* ChatLayout.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ChatLayout.release.xcconfig; sourceTree = "<group>"; };
-		8B54C1C726E17E6273857D910E8E9D1C /* spinner.gif */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.gif; name = spinner.gif; path = docs/img/spinner.gif; sourceTree = "<group>"; };
 		8D0CDE0A055E12A22C7FDBD2E59497F2 /* ContainerCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContainerCollectionViewCell.swift; path = ChatLayout/Classes/Extras/ContainerCollectionViewCell.swift; sourceTree = "<group>"; };
+		8DBA003B1439BC4CAF0D52B8DEDAA6E8 /* MessageContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.html; path = docs/Classes/MessageContainerView.html; sourceTree = "<group>"; };
+		8EAF85816E5F494BD95CE314F5D56417 /* Classes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Classes.html; path = docs/Classes.html; sourceTree = "<group>"; };
 		8ED20B69514F694BEAF20F8F5C5A9BAA /* StaticViewFactory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StaticViewFactory.swift; path = ChatLayout/Classes/Extras/StaticViewFactory.swift; sourceTree = "<group>"; };
-		8F484E602620E8F8C93E11B218350309 /* VoidViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = VoidViewFactory.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/VoidViewFactory.html; sourceTree = "<group>"; };
-		90DF0ACDC385CF7A5F44E28754F04C01 /* dash.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = dash.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/dash.png; sourceTree = "<group>"; };
-		96B3ABD4D64AB40D8C2C39FAB629F9E8 /* CellLayoutContainerViewAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerViewAlignment.html; path = docs/Enums/CellLayoutContainerViewAlignment.html; sourceTree = "<group>"; };
-		9C8228C288B201FB84F2975E64B790AC /* readme.html */ = {isa = PBXFileReference; includeInIndex = 1; name = readme.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/readme.html; sourceTree = "<group>"; };
+		956B1BAC020EF07EC6BFCA226A10F66C /* EdgeAligningView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.html; path = docs/Classes/EdgeAligningView.html; sourceTree = "<group>"; };
+		95A221478932D1505C8FAB7070407B90 /* jazzy.search.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.search.js; path = docs/js/jazzy.search.js; sourceTree = "<group>"; };
+		9BE9B5CFD4FEDCD6810E6148C6A70AC3 /* jquery.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jquery.min.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jquery.min.js; sourceTree = "<group>"; };
+		9C74D6F46CCEDC634CA0BEFFE67BCD83 /* CellLayoutContainerViewAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerViewAlignment.html; path = docs/Enums/CellLayoutContainerViewAlignment.html; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9E5EB1D65572C3C458C52CEE3DF85B70 /* lunr.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = lunr.min.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/lunr.min.js; sourceTree = "<group>"; };
-		A43974887A099E94FBD2535EA5715A44 /* ChatItemAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatItemAlignment.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ChatItemAlignment.html; sourceTree = "<group>"; };
+		A070CDB1B6761097EE2DEBE31F1B43D9 /* ContainerCollectionViewCellDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCellDelegate.html; path = docs/Protocols/ContainerCollectionViewCellDelegate.html; sourceTree = "<group>"; };
+		A142DFA23B80ECCA459060A44F7C2BB1 /* Enums.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Enums.html; path = docs/Enums.html; sourceTree = "<group>"; };
+		A39F2F5047505D5ED8DD45041B724935 /* ItemKind.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.html; path = docs/Enums/ItemKind.html; sourceTree = "<group>"; };
+		A3F4A61547C1BAB1186B72B165B7A505 /* ItemKind.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ItemKind.html; sourceTree = "<group>"; };
+		A46B00934011FCB172CBFFF3AF515A87 /* ItemSize.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemSize.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ItemSize.html; sourceTree = "<group>"; };
 		A53E8EDBCC8B178BAF5D71787146D652 /* Pods-ChatLayout_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ChatLayout_Tests.modulemap"; sourceTree = "<group>"; };
 		A6CCDEF836722A33B20ABD6FE086D4BA /* ChatLayout-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ChatLayout-Info.plist"; sourceTree = "<group>"; };
-		A7EF3A5139A14D741F7226CC1540EC0B /* ChatLayout.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.html; path = docs/Classes/ChatLayout.html; sourceTree = "<group>"; };
-		A8DE4EB345EE41E5C6C00C98B1D1DE5A /* Enums.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Enums.html; path = docs/Enums.html; sourceTree = "<group>"; };
-		A9DC059AABD6C82BDBD8AB5FC269840F /* ContainerCollectionReusableView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.html; path = docs/Classes/ContainerCollectionReusableView.html; sourceTree = "<group>"; };
+		A788E46FF088E9D464EDEF89D36069C4 /* jazzy.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jazzy.js; sourceTree = "<group>"; };
+		A7AB25A7ED35BC850AEC49AE15037E61 /* carat.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = carat.png; path = docs/img/carat.png; sourceTree = "<group>"; };
+		A80C2B33E53C71A8693D27E28519F638 /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/index.html; sourceTree = "<group>"; };
 		AA5F637F7EA91407686F9028B85C4EBD /* Pods-ChatLayout_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ChatLayout_Tests-umbrella.h"; sourceTree = "<group>"; };
 		AA6D5CD685870658A584740AF3302400 /* Pods_ChatLayout_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ChatLayout_Example.framework; path = "Pods-ChatLayout_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA7A6EDBDF227D28E84580B951A9877E /* ImageMaskedViewTransformation.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedViewTransformation.html; path = docs/Enums/ImageMaskedViewTransformation.html; sourceTree = "<group>"; };
+		AB2536CDCAE07BD00DD3C11BA3F61B4C /* ContainerCollectionReusableView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.html; path = docs/Classes/ContainerCollectionReusableView.html; sourceTree = "<group>"; };
+		AD5338E87949E38FFEE74E33039F3A00 /* jquery.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jquery.min.js; path = docs/js/jquery.min.js; sourceTree = "<group>"; };
+		AEB66E76E76B5E4853EADD109C4973D7 /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/index.html; sourceTree = "<group>"; };
+		AF1D874FFFD96A8804A033DDB198929A /* highlight.css */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.css; path = docs/css/highlight.css; sourceTree = "<group>"; };
+		B1392A2A48F277ACCF94BC699C344C3B /* EdgeAligningView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/EdgeAligningView.html; sourceTree = "<group>"; };
 		B2536EC187C110004AE7DBB23339385F /* Pods-ChatLayout_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ChatLayout_Example-dummy.m"; sourceTree = "<group>"; };
-		B40D9E6C999F6DB4206E625C39C49BC7 /* ChatLayoutAttributes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.html; path = docs/Classes/ChatLayoutAttributes.html; sourceTree = "<group>"; };
-		B66CF650A5B6C585832516E35D0B7C3B /* ChatLayoutPositionSnapshot.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.html; path = docs/Structs/ChatLayoutPositionSnapshot.html; sourceTree = "<group>"; };
-		B70F033583AF9BE3F9625E03CA2FBC43 /* gh.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = gh.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/gh.png; sourceTree = "<group>"; };
-		B9EFCD1D22B3878EA923633EE1570710 /* ImageMaskedView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.html; path = docs/Classes/ImageMaskedView.html; sourceTree = "<group>"; };
-		BC2EC252305362ADB4DC85B7FF6D0B62 /* jazzy.search.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.search.js; path = docs/js/jazzy.search.js; sourceTree = "<group>"; };
-		BD44F962C505347C25AE0A2DEC72C6B0 /* ChatLayout.tgz */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.tgz; path = docs/docsets/ChatLayout.tgz; sourceTree = "<group>"; };
+		B48F5E297E7020FCF51BC7FF75D20081 /* CellLayoutContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/CellLayoutContainerView.html; sourceTree = "<group>"; };
+		B55A6D7E74F697917ABB6FA82438D8B0 /* ChatLayoutAttributes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.html; path = docs/Classes/ChatLayoutAttributes.html; sourceTree = "<group>"; };
+		BAC65C588ADF390E4A39EB6D5F07537A /* typeahead.jquery.js */ = {isa = PBXFileReference; includeInIndex = 1; name = typeahead.jquery.js; path = docs/js/typeahead.jquery.js; sourceTree = "<group>"; };
+		BFF2039530F45BCE6F7B0B86691A7C6E /* ChatLayoutSettings.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutSettings.html; sourceTree = "<group>"; };
 		C132FD965BE5B874C15D9C404E5E1874 /* Pods-ChatLayout_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatLayout_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		C18788337A68BF4ADEEA19A4641FC467 /* EdgeAligningView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.html; path = docs/Classes/EdgeAligningView.html; sourceTree = "<group>"; };
-		C23BB673132BC18E27F3A4B9B5589A21 /* typeahead.jquery.js */ = {isa = PBXFileReference; includeInIndex = 1; name = typeahead.jquery.js; path = docs/js/typeahead.jquery.js; sourceTree = "<group>"; };
 		C242135754892E8B1AA537D5D0DA0FAD /* RoundedCornersContainerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoundedCornersContainerView.swift; path = ChatLayout/Classes/Extras/RoundedCornersContainerView.swift; sourceTree = "<group>"; };
-		C53785E1FCC25BBA34C705480A7CB032 /* ItemSize.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemSize.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ItemSize.html; sourceTree = "<group>"; };
-		C5C034BABB6B500EB0B1DA09C75893BB /* EdgeAligningView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/EdgeAligningView.html; sourceTree = "<group>"; };
-		C6B9765A4544300B0BC395DF243AE692 /* ChatLayoutSettings.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.html; path = docs/Structs/ChatLayoutSettings.html; sourceTree = "<group>"; };
-		CA811BEA214FF62E73DE288650B9BA2B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = docs/docsets/ChatLayout.docset/Contents/Info.plist; sourceTree = "<group>"; };
-		CAC66C337708792FA3CBEB0A4697F12E /* lunr.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = lunr.min.js; path = docs/js/lunr.min.js; sourceTree = "<group>"; };
+		C427DE129ACAB523A77EDCC45460FC51 /* Protocols.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Protocols.html; path = docs/Protocols.html; sourceTree = "<group>"; };
+		C67D1B6300C7BB2540F12FDE8E56A987 /* ChatLayoutDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/ChatLayoutDelegate.html; sourceTree = "<group>"; };
+		C75C123AF1702CDB02B5DE1B787C5ECF /* Enums.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Enums.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums.html; sourceTree = "<group>"; };
+		C8C75B040C691FF19FCF25EE81685A8D /* RoundedCornersContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = RoundedCornersContainerView.html; path = docs/Classes/RoundedCornersContainerView.html; sourceTree = "<group>"; };
+		C952307B2CC3954CCA0876B2A88BB5BF /* ImageMaskedViewTransformation.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedViewTransformation.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ImageMaskedViewTransformation.html; sourceTree = "<group>"; };
+		CA8E944B8A9DB431758407931E4776F4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		CB3A8C9B09EC0A97E1EB4FD4FAEA0542 /* ChatLayoutPositionSnapshot.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutPositionSnapshot.html; sourceTree = "<group>"; };
+		CC376112FA4F7443D07B5C914B6B37D4 /* dash.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = dash.png; path = docs/img/dash.png; sourceTree = "<group>"; };
 		CDBD0CC94B2B80F7C371239A397E8766 /* SectionModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SectionModel.swift; sourceTree = "<group>"; };
-		CE982956F8A6000028C99A1593A1983B /* ItemKind.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ItemKind.html; sourceTree = "<group>"; };
-		CEBB5EADF2BFD1361D20B8154FD7B944 /* dash.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = dash.png; path = docs/img/dash.png; sourceTree = "<group>"; };
-		D2D7C4A5014CC81FE358D815D7170588 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/EdgeAligningView/Edge.html; sourceTree = "<group>"; };
+		D02C247C4F671AAA32438FF6059736DF /* ChatLayoutDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.html; path = docs/Protocols/ChatLayoutDelegate.html; sourceTree = "<group>"; };
+		D1FE7CA810C7FC17772D03DBB05032C2 /* ChatLayoutAttributes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayoutAttributes.html; sourceTree = "<group>"; };
+		D401A073AEAB8532EA7701FBB3EA51BB /* Guides.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Guides.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Guides.html; sourceTree = "<group>"; };
+		D545953606978CC784B620289CD6E06D /* Structs.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Structs.html; path = docs/Structs.html; sourceTree = "<group>"; };
+		D855AFD2947FB8AE2890417D36022466 /* jazzy.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.js; path = docs/js/jazzy.js; sourceTree = "<group>"; };
 		D9BB7C3401AA21EA6628F4B29CD08B9E /* Pods-ChatLayout_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatLayout_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DA8047C81F753482394118F1D3432858 /* Pods-ChatLayout_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatLayout_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
-		DBFAB7B0DD2F7C238F5F41A706012BD5 /* ImageMaskedView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ImageMaskedView.html; sourceTree = "<group>"; };
-		DE3F3E55E1957FE6F2305DD98B2C37F1 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/Structs/ChatLayoutPositionSnapshot/Edge.html; sourceTree = "<group>"; };
-		DEA8F1F33085447912F8C64E3DC108FA /* VoidViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = VoidViewFactory.html; path = docs/Structs/VoidViewFactory.html; sourceTree = "<group>"; };
-		DEEB22BFF98AEE12A60E97CCD02451FD /* undocumented.json */ = {isa = PBXFileReference; includeInIndex = 1; name = undocumented.json; path = docs/undocumented.json; sourceTree = "<group>"; };
+		DBC5687767E50DA927804B447D256868 /* ContainerCollectionReusableView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ContainerCollectionReusableView.html; sourceTree = "<group>"; };
+		DC1E01234CF4C2302500FA5ECB8DE719 /* ChatItemAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatItemAlignment.html; path = docs/Enums/ChatItemAlignment.html; sourceTree = "<group>"; };
+		DFB725ED0631A4390CB7F75C86D33669 /* typeahead.jquery.js */ = {isa = PBXFileReference; includeInIndex = 1; name = typeahead.jquery.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/typeahead.jquery.js; sourceTree = "<group>"; };
+		E136966F24E98EF487984B4D9D8A70F5 /* StaticViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.html; path = docs/Protocols/StaticViewFactory.html; sourceTree = "<group>"; };
 		E1EAB6AB49E699F44D0E714A9FB46F23 /* ItemIdentifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemIdentifier.swift; sourceTree = "<group>"; };
-		E4211FE05E6A77922E16F02B45574BDB /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/index.html; sourceTree = "<group>"; };
-		E4D1E85E7175D7403604B7B2958242D6 /* Protocols.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Protocols.html; path = docs/Protocols.html; sourceTree = "<group>"; };
-		E815F256EB51A88E8DDD9CFC9C0B3A2A /* highlight.css */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.css; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/css/highlight.css; sourceTree = "<group>"; };
-		EA2DA964A5F7AE29F20CD90A0A60CF9D /* jquery.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jquery.min.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jquery.min.js; sourceTree = "<group>"; };
+		E2918674FF0BE91DDD6A4548002DB41B /* lunr.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = lunr.min.js; path = docs/js/lunr.min.js; sourceTree = "<group>"; };
+		E560AAFC957F3EFA6DF9B4A7BC866124 /* search.json */ = {isa = PBXFileReference; includeInIndex = 1; name = search.json; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/search.json; sourceTree = "<group>"; };
+		E710A81655529AA099217EFA4BCA8B7A /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/EdgeAligningView/Edge.html; sourceTree = "<group>"; };
+		E9766710C4758382557FB0A7B2573BC6 /* ChatLayout.tgz */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.tgz; path = docs/docsets/ChatLayout.tgz; sourceTree = "<group>"; };
 		EB01DCAD535B82AE85586F971E03FCCD /* Pods-ChatLayout_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ChatLayout_Example-umbrella.h"; sourceTree = "<group>"; };
-		F284C0974F16ED7C7B4819AB9D301C2D /* highlight.css */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.css; path = docs/css/highlight.css; sourceTree = "<group>"; };
-		F50D59193D10CB493B023C3BB9AB46A4 /* CircleContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CircleContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/CircleContainerView.html; sourceTree = "<group>"; };
+		EDFD287B0942DBD3A0C75F8D9D7F8E0B /* ChatLayout.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.html; path = docs/Classes/ChatLayout.html; sourceTree = "<group>"; };
+		F0630D9D82CE69B5F4B5744758BC23BE /* ChatLayout.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayout.html; sourceTree = "<group>"; };
+		F42E249370843FD894659CC85CAC1B44 /* gh.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = gh.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/gh.png; sourceTree = "<group>"; };
+		F4D4EE30412B614F9693C6BC3F56A0F6 /* dash.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = dash.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/dash.png; sourceTree = "<group>"; };
 		F51B91196BCAFAFF7E202587BDDCC61F /* ChatLayout-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ChatLayout-prefix.pch"; sourceTree = "<group>"; };
 		F55402028B1BD03A7614D67FDC99707E /* MessageContainerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MessageContainerView.swift; path = ChatLayout/Classes/Extras/MessageContainerView.swift; sourceTree = "<group>"; };
-		F753CE9B3A0162DC2B6B47D6AE730FE8 /* ChatLayoutSettings.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutSettings.html; sourceTree = "<group>"; };
+		F658E4DE2EA008F25365C28851E5BAF5 /* Protocols.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Protocols.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols.html; sourceTree = "<group>"; };
 		F9B8FB764A28C26CCADF3ABC959CB1D3 /* ImageMaskedView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageMaskedView.swift; path = ChatLayout/Classes/Extras/ImageMaskedView.swift; sourceTree = "<group>"; };
 		FB998F1890D4F62FC3050A02986768A9 /* ChatLayoutPositionSnapshot.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutPositionSnapshot.swift; path = ChatLayout/Classes/Core/ChatLayoutPositionSnapshot.swift; sourceTree = "<group>"; };
+		FCDECF071E7F3319F83EE339E78DE64C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		FEC6F1FB3714CFA36F3524B1B2D17CCF /* ChatItemAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatItemAlignment.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ChatItemAlignment.html; sourceTree = "<group>"; };
+		FFC77AA3F82CC0F61420A5FA9B8BF037 /* ImageMaskedView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.html; path = docs/Classes/ImageMaskedView.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,7 +268,7 @@
 			children = (
 				994786E56E32DBB8BF03034ED01D801D /* Core */,
 				444EF5B21234FA39BA3D5BF353F0092F /* Extras */,
-				A1AA91D97C9C9D11E1400442FA0D1BD6 /* Pod */,
+				86FFFD0ED50EB7DE7CFC08063AFD0075 /* Pod */,
 				021E1D25F2F9467F3142FE62A4F688DD /* Support Files */,
 			);
 			name = ChatLayout;
@@ -323,6 +323,105 @@
 			path = "Target Support Files/Pods-ChatLayout_Tests";
 			sourceTree = "<group>";
 		};
+		86FFFD0ED50EB7DE7CFC08063AFD0075 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				5DA8D5D10799F1B8146B8D68897BE83F /* badge.svg */,
+				A7AB25A7ED35BC850AEC49AE15037E61 /* carat.png */,
+				88FA577FD6D81F5E39DFF09A450EF058 /* carat.png */,
+				30542EAFAEFE7F385F27FEE1CD5496D9 /* CellLayoutContainerView.html */,
+				B48F5E297E7020FCF51BC7FF75D20081 /* CellLayoutContainerView.html */,
+				874E2FABE2BBE0269436218386A1F110 /* CellLayoutContainerViewAlignment.html */,
+				9C74D6F46CCEDC634CA0BEFFE67BCD83 /* CellLayoutContainerViewAlignment.html */,
+				FEC6F1FB3714CFA36F3524B1B2D17CCF /* ChatItemAlignment.html */,
+				DC1E01234CF4C2302500FA5ECB8DE719 /* ChatItemAlignment.html */,
+				F0630D9D82CE69B5F4B5744758BC23BE /* ChatLayout.html */,
+				EDFD287B0942DBD3A0C75F8D9D7F8E0B /* ChatLayout.html */,
+				457388F1332A44002C56D5793E5C562B /* ChatLayout.podspec */,
+				E9766710C4758382557FB0A7B2573BC6 /* ChatLayout.tgz */,
+				D1FE7CA810C7FC17772D03DBB05032C2 /* ChatLayoutAttributes.html */,
+				B55A6D7E74F697917ABB6FA82438D8B0 /* ChatLayoutAttributes.html */,
+				D02C247C4F671AAA32438FF6059736DF /* ChatLayoutDelegate.html */,
+				C67D1B6300C7BB2540F12FDE8E56A987 /* ChatLayoutDelegate.html */,
+				68E938741152994F9054F854A351F12E /* ChatLayoutInvalidationContext.html */,
+				23454E4730025B7D419AF72433FB39AF /* ChatLayoutInvalidationContext.html */,
+				CB3A8C9B09EC0A97E1EB4FD4FAEA0542 /* ChatLayoutPositionSnapshot.html */,
+				735E3DFB96201DED9A8DB7167515A379 /* ChatLayoutPositionSnapshot.html */,
+				BFF2039530F45BCE6F7B0B86691A7C6E /* ChatLayoutSettings.html */,
+				079A61DAF0D60701A96CB6D7A0FE963D /* ChatLayoutSettings.html */,
+				75D529E98200313932549B7B4900FFDC /* Classes.html */,
+				8EAF85816E5F494BD95CE314F5D56417 /* Classes.html */,
+				AB2536CDCAE07BD00DD3C11BA3F61B4C /* ContainerCollectionReusableView.html */,
+				DBC5687767E50DA927804B447D256868 /* ContainerCollectionReusableView.html */,
+				0E15A89933898EAF4AC4312FB410EF56 /* ContainerCollectionViewCell.html */,
+				74DF2D9E6AE16795B5216B715F4731EA /* ContainerCollectionViewCell.html */,
+				763D802DED11189492BB9C8E29F78ACC /* ContainerCollectionViewCellDelegate.html */,
+				A070CDB1B6761097EE2DEBE31F1B43D9 /* ContainerCollectionViewCellDelegate.html */,
+				CC376112FA4F7443D07B5C914B6B37D4 /* dash.png */,
+				F4D4EE30412B614F9693C6BC3F56A0F6 /* dash.png */,
+				7564B16DFF084091D84605FC71B7DDB1 /* docSet.dsidx */,
+				2624116389088DA1574280EE1A85230E /* Edge.html */,
+				31131F2FF8C3EAAD0DE4C51FB78FD818 /* Edge.html */,
+				E710A81655529AA099217EFA4BCA8B7A /* Edge.html */,
+				42257295DA732692D9413E661A020B09 /* Edge.html */,
+				956B1BAC020EF07EC6BFCA226A10F66C /* EdgeAligningView.html */,
+				B1392A2A48F277ACCF94BC699C344C3B /* EdgeAligningView.html */,
+				A142DFA23B80ECCA459060A44F7C2BB1 /* Enums.html */,
+				C75C123AF1702CDB02B5DE1B787C5ECF /* Enums.html */,
+				F42E249370843FD894659CC85CAC1B44 /* gh.png */,
+				310C2CCF87A2CC5FECBF2A525902FD32 /* gh.png */,
+				D401A073AEAB8532EA7701FBB3EA51BB /* Guides.html */,
+				67767C42C5A2A2AD7B12F0B451930797 /* Guides.html */,
+				AF1D874FFFD96A8804A033DDB198929A /* highlight.css */,
+				7DE81D00262E9C171D6A92428469E14A /* highlight.css */,
+				29274D0E31FD24280BABC5AA68D03373 /* ImageMaskedView.html */,
+				FFC77AA3F82CC0F61420A5FA9B8BF037 /* ImageMaskedView.html */,
+				6D306D73A7588057F7D853BA98698F41 /* ImageMaskedViewTransformation.html */,
+				C952307B2CC3954CCA0876B2A88BB5BF /* ImageMaskedViewTransformation.html */,
+				A80C2B33E53C71A8693D27E28519F638 /* index.html */,
+				AEB66E76E76B5E4853EADD109C4973D7 /* index.html */,
+				851B10C213B7319F2811485FAF62C080 /* Info.plist */,
+				A3F4A61547C1BAB1186B72B165B7A505 /* ItemKind.html */,
+				A39F2F5047505D5ED8DD45041B724935 /* ItemKind.html */,
+				A46B00934011FCB172CBFFF3AF515A87 /* ItemSize.html */,
+				314F306275F5C1161B38D4268B28C08C /* ItemSize.html */,
+				0EA2F278E85E4A15A31B652802597F7D /* jazzy.css */,
+				0CBD4C72E69212319912FEA5D9FF3332 /* jazzy.css */,
+				D855AFD2947FB8AE2890417D36022466 /* jazzy.js */,
+				A788E46FF088E9D464EDEF89D36069C4 /* jazzy.js */,
+				95A221478932D1505C8FAB7070407B90 /* jazzy.search.js */,
+				670EFAA0FC755F924B573F48D9D3B2C0 /* jazzy.search.js */,
+				AD5338E87949E38FFEE74E33039F3A00 /* jquery.min.js */,
+				9BE9B5CFD4FEDCD6810E6148C6A70AC3 /* jquery.min.js */,
+				FCDECF071E7F3319F83EE339E78DE64C /* LICENSE */,
+				E2918674FF0BE91DDD6A4548002DB41B /* lunr.min.js */,
+				0FF42A22AF37493CA195AB10E400DBB5 /* lunr.min.js */,
+				66FCF8EB929B364EC5A75273215CD0C6 /* MessageContainerView.html */,
+				8DBA003B1439BC4CAF0D52B8DEDAA6E8 /* MessageContainerView.html */,
+				F658E4DE2EA008F25365C28851E5BAF5 /* Protocols.html */,
+				C427DE129ACAB523A77EDCC45460FC51 /* Protocols.html */,
+				59D101B76B8597FA797BA46DD79671AD /* readme.html */,
+				3AB072CF2F2E35CEE2DD8AD152B27459 /* readme.html */,
+				CA8E944B8A9DB431758407931E4776F4 /* README.md */,
+				C8C75B040C691FF19FCF25EE81685A8D /* RoundedCornersContainerView.html */,
+				4E45D88411858621B9EF8A7DEEBB6D20 /* RoundedCornersContainerView.html */,
+				E560AAFC957F3EFA6DF9B4A7BC866124 /* search.json */,
+				22741899D6CF20FA0F1C6716CAF0A11B /* search.json */,
+				39EA583747C64EB6D7B16A09FA1419C9 /* spinner.gif */,
+				0DF1404C7ECEEA2B44D401ED50450DC7 /* spinner.gif */,
+				E136966F24E98EF487984B4D9D8A70F5 /* StaticViewFactory.html */,
+				65D1F8997529EB174AED35F4BA32314F /* StaticViewFactory.html */,
+				D545953606978CC784B620289CD6E06D /* Structs.html */,
+				065A55C3209DA71BB43CBB6B46342352 /* Structs.html */,
+				BAC65C588ADF390E4A39EB6D5F07537A /* typeahead.jquery.js */,
+				DFB725ED0631A4390CB7F75C86D33669 /* typeahead.jquery.js */,
+				1CD4C6BD9B85B75EE25BB78EB9CB1005 /* undocumented.json */,
+				3270FFB1F099FB52C2E1378A2D36A1FA /* VoidViewFactory.html */,
+				6422458037E3F05604BF64C3CC941D05 /* VoidViewFactory.html */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
 		994786E56E32DBB8BF03034ED01D801D /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -337,105 +436,6 @@
 				FB8F4B6C5B66FAFE85A3604D55CE3722 /* Model */,
 			);
 			name = Core;
-			sourceTree = "<group>";
-		};
-		A1AA91D97C9C9D11E1400442FA0D1BD6 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				0A0E30E61518FDF7917C45B3D7A7ECEE /* badge.svg */,
-				6E4297C35CB080D101B461BC442DA6ED /* carat.png */,
-				14305F15ACD06848F7D059ED1D9CB9FE /* carat.png */,
-				0648E14D702A172AA095E58929FFE07F /* CellLayoutContainerView.html */,
-				1CFA3CCFBBEB6BF28EFA6DF3A58E9F75 /* CellLayoutContainerView.html */,
-				96B3ABD4D64AB40D8C2C39FAB629F9E8 /* CellLayoutContainerViewAlignment.html */,
-				5564FAA7F8327DF0CA9DFBFE83EC54F3 /* CellLayoutContainerViewAlignment.html */,
-				A43974887A099E94FBD2535EA5715A44 /* ChatItemAlignment.html */,
-				2C3890DEDD5E5A94C4A502FF8EB5EBE3 /* ChatItemAlignment.html */,
-				0F932A21E88F82C7D9FCFC90ADF98EC9 /* ChatLayout.html */,
-				A7EF3A5139A14D741F7226CC1540EC0B /* ChatLayout.html */,
-				76BE90C5166274B374FE15B244AC1D0F /* ChatLayout.podspec */,
-				BD44F962C505347C25AE0A2DEC72C6B0 /* ChatLayout.tgz */,
-				375B269944A67F1CB9F98FBCFC1FF15D /* ChatLayoutAttributes.html */,
-				B40D9E6C999F6DB4206E625C39C49BC7 /* ChatLayoutAttributes.html */,
-				7DAF94CB21495EF9FE9386945145E3AD /* ChatLayoutDelegate.html */,
-				20EF82DDA5DC8B62CD3FDC808BAF150E /* ChatLayoutDelegate.html */,
-				09A71E755508EFF66B27861C12C283FF /* ChatLayoutInvalidationContext.html */,
-				303F463B67F1C8682D8B42EA3DCB78EE /* ChatLayoutInvalidationContext.html */,
-				71E84264A83629F94F788C5E6C4399EA /* ChatLayoutPositionSnapshot.html */,
-				B66CF650A5B6C585832516E35D0B7C3B /* ChatLayoutPositionSnapshot.html */,
-				F753CE9B3A0162DC2B6B47D6AE730FE8 /* ChatLayoutSettings.html */,
-				C6B9765A4544300B0BC395DF243AE692 /* ChatLayoutSettings.html */,
-				F50D59193D10CB493B023C3BB9AB46A4 /* CircleContainerView.html */,
-				1FC33FDB93227C8435E291A5DE26EA66 /* CircleContainerView.html */,
-				4E74D160E86C5CF066FED6B0FF909777 /* Classes.html */,
-				2CE6C7A2C43F49338D9E975A978D9610 /* Classes.html */,
-				00A701350E0A594F3C6CAF9DEB345E96 /* ContainerCollectionReusableView.html */,
-				A9DC059AABD6C82BDBD8AB5FC269840F /* ContainerCollectionReusableView.html */,
-				6C177F15CE04F23D4D2D03D5535557D8 /* ContainerCollectionViewCell.html */,
-				878D97CD28D7D73A56B15423A069E004 /* ContainerCollectionViewCell.html */,
-				43449126D065F9FD1D0F1193024786D9 /* ContainerCollectionViewCellDelegate.html */,
-				08A0580AF88A60908E0936548901E443 /* ContainerCollectionViewCellDelegate.html */,
-				CEBB5EADF2BFD1361D20B8154FD7B944 /* dash.png */,
-				90DF0ACDC385CF7A5F44E28754F04C01 /* dash.png */,
-				011912753142CB0BA4AC79747228E090 /* docSet.dsidx */,
-				56FBE56C9F6101A25D39C48CC144465B /* Edge.html */,
-				D2D7C4A5014CC81FE358D815D7170588 /* Edge.html */,
-				DE3F3E55E1957FE6F2305DD98B2C37F1 /* Edge.html */,
-				3D930C9956E54ED31F2132D9506D8851 /* Edge.html */,
-				C5C034BABB6B500EB0B1DA09C75893BB /* EdgeAligningView.html */,
-				C18788337A68BF4ADEEA19A4641FC467 /* EdgeAligningView.html */,
-				A8DE4EB345EE41E5C6C00C98B1D1DE5A /* Enums.html */,
-				45DF30C709BE2476028871DEB9C4B007 /* Enums.html */,
-				B70F033583AF9BE3F9625E03CA2FBC43 /* gh.png */,
-				181C9680222AB87EE58D3167D8C8CD5A /* gh.png */,
-				303E43F2BB963FB8D1C78C03C5786905 /* Guides.html */,
-				3CBB16FBDEDABDFE23D7FF31BB0902BF /* Guides.html */,
-				E815F256EB51A88E8DDD9CFC9C0B3A2A /* highlight.css */,
-				F284C0974F16ED7C7B4819AB9D301C2D /* highlight.css */,
-				DBFAB7B0DD2F7C238F5F41A706012BD5 /* ImageMaskedView.html */,
-				B9EFCD1D22B3878EA923633EE1570710 /* ImageMaskedView.html */,
-				AA7A6EDBDF227D28E84580B951A9877E /* ImageMaskedViewTransformation.html */,
-				66C8E2318AE89661224B1C253B2C4D00 /* ImageMaskedViewTransformation.html */,
-				E4211FE05E6A77922E16F02B45574BDB /* index.html */,
-				30CBE74B9A2514CB2F33FC7E93653A9D /* index.html */,
-				CA811BEA214FF62E73DE288650B9BA2B /* Info.plist */,
-				873CB9E490654D27890F11123C0C6804 /* ItemKind.html */,
-				CE982956F8A6000028C99A1593A1983B /* ItemKind.html */,
-				73F185936D985DF9C61AA27BF7384D32 /* ItemSize.html */,
-				C53785E1FCC25BBA34C705480A7CB032 /* ItemSize.html */,
-				0942396C66D80734FD64BC84BE1ADBF6 /* jazzy.css */,
-				44B5813F96D8217E006F45F1094914A8 /* jazzy.css */,
-				267CAB9494C91B11813221867DD761BA /* jazzy.js */,
-				78F58A529C23947FCA255F31D648D610 /* jazzy.js */,
-				BC2EC252305362ADB4DC85B7FF6D0B62 /* jazzy.search.js */,
-				21DD1FF173EBE67D71EE6D269228C85B /* jazzy.search.js */,
-				EA2DA964A5F7AE29F20CD90A0A60CF9D /* jquery.min.js */,
-				1510F3E33455AC6CA6288D40121F1094 /* jquery.min.js */,
-				3B9F501E32A2A44C1627877FC9B663D2 /* LICENSE */,
-				9E5EB1D65572C3C458C52CEE3DF85B70 /* lunr.min.js */,
-				CAC66C337708792FA3CBEB0A4697F12E /* lunr.min.js */,
-				4779582EBD310D39B8AAB79B9CD36450 /* MessageContainerView.html */,
-				3A805867E791FF50AEE3F378FA0F359D /* MessageContainerView.html */,
-				6E5F828F4BF38EF845D980DC408D3FE0 /* Protocols.html */,
-				E4D1E85E7175D7403604B7B2958242D6 /* Protocols.html */,
-				9C8228C288B201FB84F2975E64B790AC /* readme.html */,
-				11B092A494E0DBB8E7C134DB9D9B0E6B /* readme.html */,
-				25827C4BC414B0B5C1C45B106197944F /* README.md */,
-				1CC3D44B6B5CC27E902E8D3F8945BB0C /* search.json */,
-				3E7D0B5C903CAB55927AF89A492B6F71 /* search.json */,
-				8B54C1C726E17E6273857D910E8E9D1C /* spinner.gif */,
-				21F9493F042A7E3A1662D31C0BA67605 /* spinner.gif */,
-				639D5B3E39D07A9BE311072EC66F1353 /* StaticViewFactory.html */,
-				3171945F07827DD7BF05E421E67244E8 /* StaticViewFactory.html */,
-				6A37B23685CFFE0051FA63E215A913FF /* Structs.html */,
-				4E5D85D3B159FB32D74CBA70E64E85FA /* Structs.html */,
-				C23BB673132BC18E27F3A4B9B5589A21 /* typeahead.jquery.js */,
-				85B9F4BFD6880634F49646BD6977FD91 /* typeahead.jquery.js */,
-				DEEB22BFF98AEE12A60E97CCD02451FD /* undocumented.json */,
-				DEA8F1F33085447912F8C64E3DC108FA /* VoidViewFactory.html */,
-				8F484E602620E8F8C93E11B218350309 /* VoidViewFactory.html */,
-			);
-			name = Pod;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {

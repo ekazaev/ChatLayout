@@ -12,12 +12,12 @@ import UIKit
 
 extension CGRect {
 
-    // Had to introduce this comparision as the numbers slightly changes on the actual device.
+    // Had to introduce this comparision as the numbers slightly change on the actual device.
     func equalRounded(to rect: CGRect) -> Bool {
-        return origin.x.rounded() == rect.origin.x.rounded() &&
-            origin.y.rounded() == rect.origin.y.rounded() &&
-            size.width.rounded() == rect.size.width.rounded() &&
-            size.height.rounded() == rect.size.height.rounded()
+        return abs(origin.x - rect.origin.x) <= 1 &&
+            abs(origin.y - rect.origin.y) <= 1 &&
+            abs(size.width - rect.size.width) <= 1 &&
+            abs(size.height - rect.size.height) <= 1
     }
 
     var higherPoint: CGPoint {

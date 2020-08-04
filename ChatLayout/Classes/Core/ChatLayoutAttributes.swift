@@ -61,11 +61,6 @@ public class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     public override func isEqual(_ object: Any?) -> Bool {
         return super.isEqual(object)
             && alignment == (object as? ChatLayoutAttributes)?.alignment
-            && additionalInsets == (object as? ChatLayoutAttributes)?.additionalInsets
-            && viewSize == (object as? ChatLayoutAttributes)?.viewSize
-            && adjustedContentInsets == (object as? ChatLayoutAttributes)?.adjustedContentInsets
-            && visibleBoundsSize == (object as? ChatLayoutAttributes)?.visibleBoundsSize
-            && layoutFrame == (object as? ChatLayoutAttributes)?.layoutFrame
     }
 
     var kind: ItemKind {

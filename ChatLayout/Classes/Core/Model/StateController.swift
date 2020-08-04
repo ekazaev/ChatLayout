@@ -692,7 +692,7 @@ final class StateController {
             guard let deletedFrame = itemFrame(for: indexPath, kind: kind, at: .beforeUpdate) else {
                 return
             }
-            if deletedFrame.maxY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if deletedFrame.minY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
                 // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.
                 // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.
                 proposedCompensatingOffset -= (deletedFrame.height + collectionLayout.settings.interItemSpacing)
