@@ -11,7 +11,8 @@ before_install:
 - gem install cocoapods # Since Travis is not always on latest version
 - pod install --project-directory=Example
 script:
-- set -o pipefail && xcodebuild test -enableCodeCoverage YES -workspace Example/ChatLayout.xcworkspace -scheme ChatLayout-Example -sdk iphonesimulator -derivedDataPath ${TRAVIS_BUILD_DIR}/myDerivedData -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.5' ONLY_ACTIVE_ARCH=YES | xcpretty
+- set -o pipefail && xcodebuild test -enableCodeCoverage YES -workspace Example/ChatLayout.xcworkspace -scheme ChatLayout-Example -sdk iphonesimulator -derivedDataPath ${TRAVIS_BUILD_DIR}/chatLayoutDerivedData -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.5' ONLY_ACTIVE_ARCH=YES | xcpretty
 - pod lib lint
 after_success:
-  - slather coverage -t -b ${TRAVIS_BUILD_DIR}/myDerivedData --cobertura-xml --output-directory ${TRAVIS_BUILD_DIR}/tests --arch x86_64 --verbose
+  - slather coverage -t -b ${TRAVIS_BUILD_DIR}/chatLayoutDerivedData --cobertura-xml --output-directory ${TRAVIS_BUILD_DIR}/tests --arch x86_64 --verbose
+  - bash <(curl -s https://codecov.io/bash) -f ${TRAVIS_BUILD_DIR}/tests/cobertura.xml -X coveragepy -X gcov -X xcode -t 3dc048e4-cc93-4a01-9423-4f516c9e1885
