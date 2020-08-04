@@ -1,9 +1,10 @@
 {
   "name": "ChatLayout",
   "version": "0.1.0",
-  "summary": "Custom UICollectionViewLayout to support a Chat0like layout of the cells.",
-  "description": "Custom UICollectionViewLayout to support a Chat0like layout of the cells.",
-  "homepage": "https://github.com/Eugene Kazaev/ChatLayout",
+  "summary": "Custom UICollectionViewLayout to support a Chat like layout of the cells.",
+  "swift_versions": "5.2",
+  "description": "Custom UICollectionViewLayout to support a Chat like layout of the cells. Supports ful width alignment and\nand leading/trailing/center alignment of the cells.",
+  "homepage": "https://github.com/ekazaev/ChatLayout",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +13,7 @@
     "Eugene Kazaev": "eugene.kazaev@gmail.com"
   },
   "source": {
-    "git": "https://github.com/Eugene Kazaev/ChatLayout.git",
+    "git": "https://github.com/ekazaev/ChatLayout.git",
     "tag": "0.1.0"
   },
   "platforms": {
@@ -45,5 +46,6 @@
         ]
       }
     }
-  ]
+  ],
+  "swift_version": "5.2"
 }
