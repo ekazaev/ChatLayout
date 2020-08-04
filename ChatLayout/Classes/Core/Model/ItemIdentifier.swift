@@ -9,6 +9,7 @@
 
 import Foundation
 
+// User for internal search
 struct ItemIdentifier {
 
     var sectionId: UUID
