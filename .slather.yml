@@ -1,0 +1,7 @@
+xcodeproj: ./Example/ChatLayout.xcodeproj
+workspace: ./Example/ChatLayout.xcworkspace
+scheme: ChatLayout-Example
+source_directory: ./ChatLayout/Classes
+binary_basename: ChatLayout
+ignore:
+  - ./Example/*
