@@ -20,6 +20,8 @@ final class StateController {
 
     var proposedCompensatingOffset: CGFloat = 0
 
+    var totalProposedCompensatingOffset: CGFloat = 0
+
     private(set) var storage: [ModelState: LayoutModel] = [:]
 
     private(set) var reloadedIndexes: Set<IndexPath> = []
@@ -502,6 +504,8 @@ final class StateController {
         deletedIndexes.sorted(by: { $0 < $1 }).forEach {
             compensateOffsetIfNeeded(for: $0, kind: .cell, action: .delete)
         }
+
+        totalProposedCompensatingOffset = proposedCompensatingOffset
     }
 
     func commitUpdates() {
@@ -514,6 +518,7 @@ final class StateController {
         deletedIndexes = []
         storage[.beforeUpdate] = layout(at: .afterUpdate)
         storage[.afterUpdate] = nil
+        totalProposedCompensatingOffset = 0
     }
 
     func contentSize(for state: ModelState) -> CGSize {
@@ -533,13 +538,13 @@ final class StateController {
         return contentSize
     }
 
-    func offsetByCompensation(attributes: UICollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
+    func offsetByTotalCompensation(attributes: UICollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
         guard collectionLayout.shouldKeepContentOffsetOnBatchUpdates,
             state == .afterUpdate,
             let attributes = attributes else {
             return
         }
-        attributes.frame = offsetByCompensation(frame: attributes.frame, indexPath: attributes.indexPath, for: state, backward: backward)
+        attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset * (backward ? -1 : 1))
     }
 
     func layout(at state: ModelState) -> LayoutModel {
@@ -634,8 +639,8 @@ final class StateController {
                 }
             }
 
-            return allRects.compactMap { _, path, kind -> ChatLayoutAttributes? in
-                return self.itemAttributes(for: path, kind: kind, at: state)
+            return allRects.compactMap { frame, path, kind -> ChatLayoutAttributes? in
+                return self.itemAttributes(for: path, kind: kind, predefinedFrame: frame, at: state)
             }
         } else {
             // Here just to test without caching just in case
@@ -743,19 +748,7 @@ final class StateController {
             state == .afterUpdate else {
             return frame
         }
-        let newFrame: CGRect
-        if insertedIndexes.contains(indexPath) ||
-            insertedSectionsIndexes.contains(indexPath.section) {
-            newFrame = frame.offsetBy(dx: 0, dy: (batchUpdateCompensatingOffset + proposedCompensatingOffset) * (backward ? -1 : 1))
-        } else if reloadedIndexes.contains(indexPath) ||
-            reloadedSectionsIndexes.contains(indexPath.section) {
-            newFrame = frame.offsetBy(dx: 0, dy: (batchUpdateCompensatingOffset + proposedCompensatingOffset) / 2 * (backward ? -1 : 1))
-        } else if !backward, deletedIndexes.contains(indexPath) || deletedSectionsIndexes.contains(indexPath.section) {
-            newFrame = frame.offsetBy(dx: 0, dy: (batchUpdateCompensatingOffset + proposedCompensatingOffset) * (backward ? -1 : 1))
-        } else {
-            newFrame = frame
-        }
-        return newFrame
+        return frame.offsetBy(dx: 0, dy: (proposedCompensatingOffset) * (backward ? -1 : 1))
     }
 
 }

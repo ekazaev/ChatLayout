@@ -88,11 +88,19 @@ public final class ChatLayout: UICollectionViewLayout {
         static let switchStates = PrepareActions(rawValue: 1 << 4)
     }
 
+    private struct InvalidationActions: OptionSet {
+        let rawValue: UInt
+
+        static let shouldInvalidateOnBoundsChange = InvalidationActions(rawValue: 1 << 0)
+    }
+
     private lazy var controller = StateController(collectionLayout: self)
 
     private var state: ModelState = .beforeUpdate
 
     private var prepareActions: PrepareActions = []
+
+    private var invalidationActions: InvalidationActions = []
 
     private var contentOffsetObserver: NSKeyValueObservation?
 
@@ -110,7 +118,6 @@ public final class ChatLayout: UICollectionViewLayout {
     // animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
     // animations will start from the estimated height.
     private var attributesForPendingAnimations = [ItemKind: [IndexPath: ChatLayoutAttributes]]()
-
     private var invalidatedAttributes = [ItemKind: Set<IndexPath>]()
 
     private var dontReturnAttributes: Bool = true
@@ -307,9 +314,6 @@ public final class ChatLayout: UICollectionViewLayout {
         }
         let attributes = controller.itemAttributes(for: indexPath, kind: .cell, at: state)
 
-        // It is important for insertions as UICollectionView assumes that insertions happen below the contentOffset.
-        controller.offsetByCompensation(attributes: attributes, for: state, backward: false)
-
         return attributes
     }
 
@@ -356,7 +360,8 @@ public final class ChatLayout: UICollectionViewLayout {
             shouldInvalidateLayout = false
         } else {
             if item.calculatedSize == nil {
-                shouldInvalidateLayout = true
+                // Can not get rid of UI glitches when layout becomes smaller and we need to invalidate self calculating cell. So just ignore it
+                shouldInvalidateLayout = state == .beforeUpdate || controller.contentHeight(at: .beforeUpdate) <= controller.contentHeight(at: .afterUpdate)
             } else {
                 if let calculatedFrame = controller.itemFrame(for: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state) {
                     // It seems that the UICollectionView starts to present the cell according to it proffered frame. So even if the size is exactly as
@@ -405,6 +410,8 @@ public final class ChatLayout: UICollectionViewLayout {
         }
 
         if let attributes = controller.itemAttributes(for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state) {
+            controller.totalProposedCompensatingOffset += heightDifference
+            controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
             layoutAttributesForPendingAnimation?.frame = attributes.frame
         } else {
             layoutAttributesForPendingAnimation?.frame.size = preferredAttributes.frame.size
@@ -417,7 +424,8 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Asks the layout object if the new bounds require a layout update.
     public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) || cachedCollectionViewInset != .some(adjustedContentInset)
+        let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) || cachedCollectionViewInset != .some(adjustedContentInset) || invalidationActions.contains(.shouldInvalidateOnBoundsChange)
+        invalidationActions.remove(.shouldInvalidateOnBoundsChange)
         return shouldInvalidateLayout
     }
 
@@ -468,7 +476,7 @@ public final class ChatLayout: UICollectionViewLayout {
                     let desiredOffset = frame.minY - currentPositionSnapshot.offset - collectionView.adjustedContentInset.top - settings.additionalInsets.top
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 case .bottom:
-                    let desiredOffset = frame.maxY + currentPositionSnapshot.offset - collectionView.bounds.height + collectionView.adjustedContentInset.bottom + settings.additionalInsets.bottom
+                    let desiredOffset = min(maxPossibleContentOffset.y, frame.maxY + currentPositionSnapshot.offset - collectionView.bounds.height + collectionView.adjustedContentInset.bottom + settings.additionalInsets.bottom)
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 }
             }
@@ -488,6 +496,7 @@ public final class ChatLayout: UICollectionViewLayout {
         if controller.proposedCompensatingOffset != 0 {
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y))
             controller.proposedCompensatingOffset = 0
+            invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
             return newProposedContentOffset
         }
         return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
@@ -501,7 +510,6 @@ public final class ChatLayout: UICollectionViewLayout {
         controller.process(updateItems: updateItems)
         state = .afterUpdate
         dontReturnAttributes = false
-
         super.prepare(forCollectionViewUpdates: updateItems)
     }
 
@@ -541,6 +549,7 @@ public final class ChatLayout: UICollectionViewLayout {
         if state == .afterUpdate {
             if controller.insertedIndexes.contains(itemIndexPath) || controller.insertedSectionsIndexes.contains(itemIndexPath.section) {
                 attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .afterUpdate)
+                controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
                 attributes?.alpha = 0
                 attributesForPendingAnimations[.cell]?[itemIndexPath] = attributes
             } else if let itemIdentifier = controller.itemIdentifier(for: itemIndexPath, kind: .cell, at: .afterUpdate),
@@ -559,6 +568,7 @@ public final class ChatLayout: UICollectionViewLayout {
         } else {
             attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .beforeUpdate)
         }
+
         return attributes
     }
 
@@ -569,12 +579,12 @@ public final class ChatLayout: UICollectionViewLayout {
         if state == .afterUpdate {
             if controller.deletedIndexes.contains(itemIndexPath) || controller.deletedSectionsIndexes.contains(itemIndexPath.section) {
                 attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .beforeUpdate) ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
-                controller.offsetByCompensation(attributes: attributes, for: state, backward: false)
+                controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 attributes?.alpha = 0
             } else if let itemIdentifier = controller.itemIdentifier(for: itemIndexPath, kind: .cell, at: .beforeUpdate),
                 let finalIndexPath = controller.indexPath(by: itemIdentifier, at: .afterUpdate) {
                 if controller.movedIndexes.contains(itemIndexPath) || controller.movedSectionsIndexes.contains(itemIndexPath.section) ||
-                    controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemIndexPath.section) {
+                       controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemIndexPath.section) {
                     attributes = controller.itemAttributes(for: finalIndexPath, kind: .cell, at: .afterUpdate)
                 } else {
                     attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .beforeUpdate)
@@ -594,6 +604,7 @@ public final class ChatLayout: UICollectionViewLayout {
         } else {
             attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .beforeUpdate)
         }
+
         return attributes
     }
 
