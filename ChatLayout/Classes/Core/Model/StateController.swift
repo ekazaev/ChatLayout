@@ -292,7 +292,7 @@ final class StateController {
         case .cell:
             layout.setAndAssemble(item: item, sectionIndex: indexPath.section, itemIndex: indexPath.item)
         }
-
+        item.calculatedOnce = true
         storage[state] = layout
         compensateOffsetIfNeeded(for: indexPath, kind: kind, action: .frameUpdate(previousFrame: previousFrame, newFrame: item.frame))
     }
@@ -625,7 +625,39 @@ final class StateController {
                         let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
                         if let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
                             check(rect: itemFrame) {
-                            allRects.append((frame: itemFrame, indexPath: indexPath, kind: .cell))
+                            if state == .beforeUpdate {
+                                allRects.append((frame: itemFrame, indexPath: indexPath, kind: .cell))
+                            } else {
+                                var itemWasVisibleBefore: Bool {
+                                    guard let itemIdentifier = self.itemIdentifier(for: indexPath, kind: .cell, at: .afterUpdate),
+                                          let initialIndexPath = self.indexPath(by: itemIdentifier, at: .beforeUpdate),
+                                          let item = self.item(for: initialIndexPath, kind: .cell, at: .beforeUpdate),
+                                          item.calculatedOnce == true,
+                                          let itemFrame = self.itemFrame(for: initialIndexPath, kind: .cell, at: .beforeUpdate, isFinal: false),
+                                          itemFrame.intersects(self.collectionLayout.visibleBounds.offsetBy(dx: 0, dy: -self.totalProposedCompensatingOffset)) else {
+                                        return false
+                                    }
+                                    return true
+                                }
+                                var itemWillBeVisible: Bool {
+                                    if self.insertedIndexes.contains(indexPath),
+                                       let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
+                                       itemFrame.intersects(self.collectionLayout.visibleBounds.offsetBy(dx: 0, dy: self.proposedCompensatingOffset + self.batchUpdateCompensatingOffset)) {
+                                        return true
+                                    }
+                                    if let itemIdentifier = self.itemIdentifier(for: indexPath, kind: .cell, at: .afterUpdate),
+                                          let initialIndexPath = self.indexPath(by: itemIdentifier, at: .beforeUpdate),
+                                          self.movedIndexes.contains(initialIndexPath) || self.reloadedIndexes.contains(initialIndexPath),
+                                          let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
+                                        itemFrame.intersects(self.collectionLayout.visibleBounds.offsetBy(dx: 0, dy: self.proposedCompensatingOffset + self.batchUpdateCompensatingOffset)) {
+                                        return true
+                                    }
+                                    return false
+                                }
+                                if itemWillBeVisible || itemWasVisibleBefore {
+                                    allRects.append((frame: itemFrame, indexPath: indexPath, kind: .cell))
+                                }
+                            }
                         }
                         guard traverseState != .done else {
                             break

@@ -30,6 +30,8 @@ struct ItemModel: Equatable {
 
     var calculatedSize: CGSize?
 
+    var calculatedOnce: Bool = false
+
     var alignment: ChatItemAlignment
 
     init(id: UUID = UUID(), with configuration: Configuration) {
@@ -37,6 +39,7 @@ struct ItemModel: Equatable {
         self.alignment = configuration.alignment
         self.preferredSize = configuration.preferredSize
         self.calculatedSize = configuration.calculatedSize
+        self.calculatedOnce = configuration.calculatedSize != nil
     }
 
     var origin: CGPoint {

@@ -359,20 +359,7 @@ public final class ChatLayout: UICollectionViewLayout {
         if isAnimatedBoundsChange {
             shouldInvalidateLayout = false
         } else {
-            if item.calculatedSize == nil {
-                // Can not get rid of UI glitches when layout becomes smaller and we need to invalidate self calculating cell. So just ignore it
-                shouldInvalidateLayout = state == .beforeUpdate || controller.contentHeight(at: .beforeUpdate) <= controller.contentHeight(at: .afterUpdate)
-            } else {
-                if let calculatedFrame = controller.itemFrame(for: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state) {
-                    // It seems that the UICollectionView starts to present the cell according to it proffered frame. So even if the size is exactly as
-                    // we have calculated. And if we say to not invalidate in this case - we wont be able to position it correctly using layoutAttributesForPendingAnimation.
-                    // So if it misaligned more the 3 pixels - we still invalidate layout for this cell and reposition it.
-                    let animationTolerance: CGFloat = 3
-                    shouldInvalidateLayout = (abs(calculatedFrame.midY.rounded() - preferredAttributes.frame.midY.rounded()) > animationTolerance) || (abs(calculatedFrame.midX.rounded() - preferredAttributes.frame.midX.rounded()) > animationTolerance)
-                } else {
-                    shouldInvalidateLayout = true
-                }
-            }
+            shouldInvalidateLayout = item.calculatedSize == nil
 
             if item.alignment != preferredMessageAttributes.alignment {
                 controller.update(alignment: preferredMessageAttributes.alignment, for: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)
@@ -411,7 +398,9 @@ public final class ChatLayout: UICollectionViewLayout {
 
         if let attributes = controller.itemAttributes(for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state) {
             controller.totalProposedCompensatingOffset += heightDifference
-            controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
+            if !controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) || !controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
+                controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
+            }
             layoutAttributesForPendingAnimation?.frame = attributes.frame
         } else {
             layoutAttributesForPendingAnimation?.frame.size = preferredAttributes.frame.size
@@ -555,6 +544,7 @@ public final class ChatLayout: UICollectionViewLayout {
             } else if let itemIdentifier = controller.itemIdentifier(for: itemIndexPath, kind: .cell, at: .afterUpdate),
                 let initialIndexPath = controller.indexPath(by: itemIdentifier, at: .beforeUpdate) {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: .cell, at: .beforeUpdate) ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
+                attributes?.indexPath = itemIndexPath
                 if #available(iOS 13.0, *) {
                 } else {
                     if controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemIndexPath.section) {
@@ -580,6 +570,10 @@ public final class ChatLayout: UICollectionViewLayout {
             if controller.deletedIndexes.contains(itemIndexPath) || controller.deletedSectionsIndexes.contains(itemIndexPath.section) {
                 attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .beforeUpdate) ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
+                if shouldKeepContentOffsetOnBatchUpdates,
+                   let attributes = attributes {
+                    attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height / 2)
+                }
                 attributes?.alpha = 0
             } else if let itemIdentifier = controller.itemIdentifier(for: itemIndexPath, kind: .cell, at: .beforeUpdate),
                 let finalIndexPath = controller.indexPath(by: itemIdentifier, at: .afterUpdate) {
@@ -593,6 +587,7 @@ public final class ChatLayout: UICollectionViewLayout {
                     attributes = nil
                 }
 
+                attributes?.indexPath = itemIndexPath
                 attributesForPendingAnimations[.cell]?[itemIndexPath] = attributes
                 if controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemIndexPath.section) {
                     attributes?.alpha = 0
