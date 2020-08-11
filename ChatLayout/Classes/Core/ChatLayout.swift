@@ -398,7 +398,8 @@ public final class ChatLayout: UICollectionViewLayout {
 
         if let attributes = controller.itemAttributes(for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state) {
             controller.totalProposedCompensatingOffset += heightDifference
-            if !controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) || !controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
+            if state == .afterUpdate,
+               !controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) || !controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
             }
             layoutAttributesForPendingAnimation?.frame = attributes.frame
