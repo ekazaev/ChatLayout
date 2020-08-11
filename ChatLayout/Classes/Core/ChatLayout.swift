@@ -174,6 +174,10 @@ public final class ChatLayout: UICollectionViewLayout {
             return
         }
 
+        if collectionView.isPrefetchingEnabled {
+            preconditionFailure("UICollectionView with prefetching enabled is not supported due to https://openradar.appspot.com/40926834 bug.")
+        }
+
         if prepareActions.contains(.switchStates) {
             controller.commitUpdates()
             state = .beforeUpdate
