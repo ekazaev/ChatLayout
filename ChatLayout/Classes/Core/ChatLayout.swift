@@ -339,7 +339,8 @@ public final class ChatLayout: UICollectionViewLayout {
     public override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
         guard let collectionView = collectionView,
             oldBounds.width != collectionView.bounds.width,
-            shouldKeepContentOffsetOnBatchUpdates else {
+            shouldKeepContentOffsetOnBatchUpdates,
+            controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded() else {
             return
         }
         controller.proposedCompensatingOffset += oldBounds.origin.y - collectionView.bounds.origin.y + (oldBounds.height - collectionView.bounds.height)
@@ -395,7 +396,8 @@ public final class ChatLayout: UICollectionViewLayout {
         let isAboveBottomEdge = originalAttributes.frame.minY.rounded() <= visibleBounds.maxY.rounded()
 
         if heightDifference != 0,
-            shouldKeepContentOffsetOnBatchUpdates || isUserInitiatedScrolling || isAnimatedBoundsChange,
+            (shouldKeepContentOffsetOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded())
+            || isUserInitiatedScrolling || isAnimatedBoundsChange,
             isAboveBottomEdge {
             context.contentOffsetAdjustment.y += heightDifference
         }
@@ -403,7 +405,7 @@ public final class ChatLayout: UICollectionViewLayout {
         if let attributes = controller.itemAttributes(for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state) {
             controller.totalProposedCompensatingOffset += heightDifference
             if state == .afterUpdate,
-               !controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) || !controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
+                !controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) || !controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
             }
             layoutAttributesForPendingAnimation?.frame = attributes.frame
@@ -512,6 +514,7 @@ public final class ChatLayout: UICollectionViewLayout {
         controller.proposedCompensatingOffset = 0
 
         if shouldKeepContentOffsetOnBatchUpdates,
+            controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded(),
             controller.batchUpdateCompensatingOffset != 0,
             let collectionView = collectionView {
             let compensatingOffset: CGFloat
@@ -576,14 +579,15 @@ public final class ChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .beforeUpdate) ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if shouldKeepContentOffsetOnBatchUpdates,
-                   let attributes = attributes {
+                    controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded(),
+                    let attributes = attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height / 2)
                 }
                 attributes?.alpha = 0
             } else if let itemIdentifier = controller.itemIdentifier(for: itemIndexPath, kind: .cell, at: .beforeUpdate),
                 let finalIndexPath = controller.indexPath(by: itemIdentifier, at: .afterUpdate) {
                 if controller.movedIndexes.contains(itemIndexPath) || controller.movedSectionsIndexes.contains(itemIndexPath.section) ||
-                       controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemIndexPath.section) {
+                    controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemIndexPath.section) {
                     attributes = controller.itemAttributes(for: finalIndexPath, kind: .cell, at: .afterUpdate)
                 } else {
                     attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .beforeUpdate)
@@ -728,7 +732,7 @@ extension ChatLayout {
 extension ChatLayout {
 
     private var maxPossibleContentOffset: CGPoint {
-        let maxContentOffset = controller.contentHeight(at: state) - collectionView!.bounds.height + collectionView!.adjustedContentInset.bottom
+        let maxContentOffset = max(0, controller.contentHeight(at: state) - collectionView!.bounds.height) + collectionView!.adjustedContentInset.bottom
         return CGPoint(x: 0, y: maxContentOffset)
     }
 
