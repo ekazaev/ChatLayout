@@ -22,7 +22,7 @@ final class StateController {
 
     var totalProposedCompensatingOffset: CGFloat = 0
 
-    private(set) var storage: [ModelState: LayoutModel] = [:]
+    private(set) lazy var storage: [ModelState: LayoutModel] = [.beforeUpdate:LayoutModel(sections: [], collectionLayout: self.collectionLayout)]
 
     private(set) var reloadedIndexes: Set<IndexPath> = []
 
