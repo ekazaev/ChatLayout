@@ -472,7 +472,7 @@ public final class ChatLayout: UICollectionViewLayout {
                     let desiredOffset = frame.minY - currentPositionSnapshot.offset - collectionView.adjustedContentInset.top - settings.additionalInsets.top
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 case .bottom:
-                    let desiredOffset = min(maxPossibleContentOffset.y, frame.maxY + currentPositionSnapshot.offset - collectionView.bounds.height + collectionView.adjustedContentInset.bottom + settings.additionalInsets.bottom)
+                    let desiredOffset = max(min(maxPossibleContentOffset.y, frame.maxY + currentPositionSnapshot.offset - collectionView.bounds.height + collectionView.adjustedContentInset.bottom + settings.additionalInsets.bottom), -collectionView.adjustedContentInset.top)
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 }
             }
