@@ -541,11 +541,15 @@ final class StateController {
     func offsetByTotalCompensation(attributes: UICollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
         guard collectionLayout.shouldKeepContentOffsetOnBatchUpdates,
             state == .afterUpdate,
-            contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.height.rounded(),
             let attributes = attributes else {
             return
         }
-        attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset * (backward ? -1 : 1))
+        if backward,
+            contentHeight(at: .beforeUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() {
+            attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset * -1)
+        } else if !backward, contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() {
+            attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset)
+        }
     }
 
     func layout(at state: ModelState) -> LayoutModel {
