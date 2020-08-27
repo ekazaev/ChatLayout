@@ -9,6 +9,8 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+![](https://habrastorage.org/webt/co/ez/u0/coezu0frywtqquysiorny-rud9s.gif)
+
 ## Requirements
 
 ## Installation
