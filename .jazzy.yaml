@@ -6,97 +6,26 @@ output: docs
 documentation: ./*.md
 theme: fullwidth
 
-# custom_categories:
-#   - name: Core Entities
-#     children:
-#       - Router
-#       - RoutingError
-#       - DestinationStep
-#       - Finder
-#       - Factory
-#       - ContainerFactory
-#       - Action
-#       - ContainerAction
-#       - RoutingResult
+custom_categories:
+  - name: Core
+    children:
+      - ChatLayout
+      - ChatLayoutDelegate
+      - ChatLayoutAttributes
+      - ChatLayoutSettings
+      - ChatLayoutPositionSnapshot
+      - ChatLayoutInvalidationContext
+      - ItemKind
+      - ItemSize
 
-#   - name: Tasks
-#     children:
-#       - RoutingInterceptor
-#       - ContextTask
-#       - PostRoutingTask
-
-#   - name: Assemblies
-#     children:
-#       - StepAssembly
-#       - SwitchAssembly
-#       - ChainAssembly
-#       - CompleteFactoryAssembly
-
-#   - name: Additional Assemblies
-#     children:
-#       - SingleStep
-#       - SingleContainerStep
-
-#   - name: Factories
-#     children:
-#       - ClassFactory
-#       - StoryboardFactory
-#       - FinderFactory
-#       - NavigationControllerFactory
-#       - TabBarControllerFactory
-#       - SplitControllerFactory
-#       - NilFactory
-#       - UIHostingControllerFactory
-#       - UIHostingControllerWithContextFactory
-
-#   - name: Finders
-#     children:
-#       - StackIteratingFinder
-#       - ClassFinder
-#       - InstanceFinder
-#       - NilFinder
-#       - UIHostingControllerWithContextFinder
-
-#   - name: Steps
-#     children:
-#       - GeneralStep
-#       - NavigationControllerStep
-#       - TabBarControllerStep
-#       - SplitControllerStep
-
-#   - name: UIViewController's protocols
-#     children:
-#       - RoutingInterceptable
-#       - ContainerViewController
-
-#   - name: General Actions
-#     children:
-#       - GeneralAction
-
-#   - name: Logging
-#     children:
-#       - Logger
-#       - LogMessage
-
-#   - name: Extras
-#     children:
-#       - Destination
-#       - AnyDestination
-#       - InlineInterceptor
-#       - InlineContextTask
-#       - InlinePostTask
-#       - NavigationDelayingInterceptor
-#       - SingleNavigationRouter
-#       - PresentingFinder
-#       - ContextSettingTask
-#       - ContextAccepting
-#       - ContextAcceptingView
-#       - ContextInstantiatable
-#       - ClassWithContextFinder
-#       - ContextChecking
-#       - DismissalMethodProvidingContextTask
-#       - Dismissible
-#       - DismissibleWithRuntimeStorage
-#       - DetailsNavigationFinder
-#       - CATransaction
-#       - DispatchQueue
+  - name: Extras
+    children:
+      - ContainerCollectionViewCellDelegate
+      - ContainerCollectionReusableView
+      - MessageContainerView
+      - CellLayoutContainerView
+      - EdgeAligningView
+      - ImageMaskedView
+      - RoundedCornersContainerView
+      - StaticViewFactory
+      - VoidViewFactory

@@ -13,6 +13,21 @@ import UIKit
 /// A collection view layout that can display items in a grid similar to `UITableView` but aligning them
 /// to the leading or trailing edge of the `UICollectionView`. Helps to maintain chat like behavior by keeping
 /// content offset from the bottom constant. Can deal with autosizing cells and supplementary views.
+/// ### Custom Properties:
+/// `ChatLayout.delegate`
+///
+/// `ChatLayout.settings`
+///
+/// `ChatLayout.shouldKeepContentOffsetOnBatchUpdates`
+///
+/// `ChatLayout.visibleBounds`
+///
+/// `ChatLayout.layoutFrame`
+///
+/// ### Custom Methods:
+/// `ChatLayout.getContentOffsetSnapshot(...)`
+///
+/// `ChatLayout.restoreContentOffset(...)`
 public final class ChatLayout: UICollectionViewLayout {
 
     /// `ChatLayout` delegate.

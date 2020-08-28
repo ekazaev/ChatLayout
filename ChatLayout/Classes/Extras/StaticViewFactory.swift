@@ -35,7 +35,7 @@ public extension StaticViewFactory where Self: UIView {
 /// Use this factory to specify that this view should not be build and should be equla to nil within the container.
 public struct VoidViewFactory: StaticViewFactory {
 
-    /// Nill view placeholder type.
+    /// Nil view placeholder type.
     public final class VoidView: UIView {
 
         @available(*, unavailable, message: "This view can not be instantiated")
