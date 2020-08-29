@@ -3,6 +3,8 @@ use_frameworks!
 
 target 'ChatLayout_Example' do
   pod 'ChatLayout', :path => '../'
+  pod 'InputBarAccessoryView'
+  pod 'DifferenceKit'
 
   target 'ChatLayout_Tests' do
     inherit! :search_paths

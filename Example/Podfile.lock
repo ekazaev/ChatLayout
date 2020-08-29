@@ -7,9 +7,25 @@ PODS:
   - ChatLayout/Ultimate (0.1.0):
     - ChatLayout/Core
     - ChatLayout/Extras
+  - DifferenceKit (1.1.5):
+    - DifferenceKit/Core (= 1.1.5)
+    - DifferenceKit/UIKitExtension (= 1.1.5)
+  - DifferenceKit/Core (1.1.5)
+  - DifferenceKit/UIKitExtension (1.1.5):
+    - DifferenceKit/Core
+  - InputBarAccessoryView (5.0.0):
+    - InputBarAccessoryView/Core (= 5.0.0)
+  - InputBarAccessoryView/Core (5.0.0)
 
 DEPENDENCIES:
   - ChatLayout (from `../`)
+  - DifferenceKit
+  - InputBarAccessoryView
+
+SPEC REPOS:
+  trunk:
+    - DifferenceKit
+    - InputBarAccessoryView
 
 EXTERNAL SOURCES:
   ChatLayout:
@@ -17,7 +33,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   ChatLayout: f0b91aa37217e826c10565df2397a77f27343679
+  DifferenceKit: 516f12e336ed65a3a0665847b5c3cb5cad4bd4ea
+  InputBarAccessoryView: cbc0b2d9456058e1166898897865f9f4960fac81
 
-PODFILE CHECKSUM: a75a10814e4337e564df40bb87ee7278c31a4122
+PODFILE CHECKSUM: f230988da6958787685b4e622158e210ca181bf9
 
 COCOAPODS: 1.9.3
