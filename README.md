@@ -13,13 +13,55 @@
 
 `ChatLayout` is an alternative solution to [MessageKit](https://github.com/MessageKit/MessageKit). It uses custom 
 `UICollectionViewLayout` to provide you full control over the presentation as well as all the tools available in 
-`UICollectionView`. It supports dynamic cells and supplementary view sizes.
+`UICollectionView`.
+
+### Features
+
+- Supports dynamic cells and supplementary view sizes.
+- Animated insertion/deletion/reloading/moving of the items.
+- Keeps content of the last visible item at the top or bottom of the `UICollectionView` during updates.
+- Provides tools for precise scrolling to the required item.
+- Shipped with generic container views to simplify the custom items implementation.  
+
+### What ChatLayout doesnt provide (And why it is good)
+
+`ChatLayout` is the custom `UICollectionViewLayout`, so:
+
+- You don't have to extend or override any custom `UIViewController` or `UICollectionView`. You need to instantiate them 
+yourself and use them the way you like. 
+
+- `ChatLayout` does not rely on modified `UICollectionViewFlowLayout` nor does it rotate your `UICollectionView` upside-down. 
+This means you can use your views as if they would be regular cells within `UICollectionView`. You can benefit from using the 
+default `UIKit` implementations of `adjustedContextInsets` (and others) because your view controller is a normal view 
+controller without any hacks or tricks.
+
+- `ChatLayout` doesn't require you to calculate all the cell sizes before it renders them on the screen. You can fully use
+auto-layout constraints and rely on the fact that the correct size will be calculated in the runtime. However, `ChatLayout` 
+as any other `UICollectionViewLayout` will benefit from you providing the estimated sizes of your cells as it will allow you 
+to get better performance. 
+
+- `ChatLayout` doesn't enforce you to use any specific data model. You can store your messages and update `UICollectionView`
+the way you like. The only thing you need is to respect the natural boundaries that `UICollectionView` have and correctly
+implement `UICollectionViewDataSource`.
+
+- `ChatLayout` doesn't enforce you to use any specific `UIView`s to create your collection cells. You can create them the way 
+you like. It can be any `UICollectionViewCell` or `UICollectionReusableView`. There are some generic `UIView`s bundled with
+the library that may help you to build them faster. However, you do not have to use them. 
+
+- `ChatLayout` doesn't handle the keyboard appearance behavior. You have to implement
+that yourself from scratch or use the library you are already using in your project. It gives you full control over the 
+keyboard presentation. The only thing you have to do is to update the `contentInsets` of your `UICollectionView`.
+
+- `ChatLayout` doesn't provide you any input control. You can use any one you like and customise it the way you like. 
+The Example app for instance uses [InputBarAccessoryView](https://github.com/nathantannar4/InputBarAccessoryView).
 
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-![](https://habrastorage.org/webt/co/ez/u0/coezu0frywtqquysiorny-rud9s.gif)
+![](https://habrastorage.org/webt/jt/gq/sl/jtgqsluujffi4-jnxeikbwtyyu0.gif)
+![](https://habrastorage.org/webt/b7/cu/3s/b7cu3su6uk4hw1kqg3_ky3uklu4.gif)
+![](https://habrastorage.org/webt/sv/ul/cq/svulcqg5ompgyhp-pjxy1tyiie4.gif)
 
 ## Installation
 
@@ -32,6 +74,11 @@ and [SwiftPM](https://github.com/apple/swift-package-manager). See the `Example`
 
 If you’d like to contribute to this repo, please
 read [the contribution guidelines](https://github.com/ekazaev/route-composer/blob/master/CONTRIBUTING.md).
+
+## Todo
+
+- [ ] Improve the test coverage
+- [ ] Provide proper documentation
 
 ## License
 

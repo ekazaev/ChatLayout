@@ -20,7 +20,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          ChatLayout 0.1.0 Docs
+          ChatLayout 0.2.0 Docs
         </a>
          (100% documented)
       </p>
@@ -164,12 +164,50 @@
 
 <p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is an alternative solution to <a href="https://github.com/MessageKit/MessageKit">MessageKit</a>. It uses custom 
 <code>UICollectionViewLayout</code> to provide you full control over the presentation as well as all the tools available in 
-<code>UICollectionview</code>. It supports dynamic cells and supplementary view sizes.</p>
+<code>UICollectionView</code>.</p>
+<h3 id='features' class='heading'>Features</h3>
+
+<ul>
+<li>Supports dynamic cells and supplementary view sizes.</li>
+<li>Animated insertion/deletion/reloading/moving of the items.</li>
+<li>Keeps content of the last visible item at the top or bottom of the <code>UICollectionView</code> during updates.</li>
+<li>Provides tools for precise scrolling to the required item.</li>
+<li>Shipped with generic container views to simplify the custom items implementation.<br></li>
+</ul>
+<h3 id='what-chatlayout-doesnt-provide-and-why-it-is-good' class='heading'>What ChatLayout doesnt provide (And why it is good)</h3>
+
+<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is the custom <code>UICollectionViewLayout</code>, so:</p>
+
+<ul>
+<li><p>You don&rsquo;t have to extend or override any custom <code>UIViewController</code> or <code>UICollectionView</code>. You need to instantiate them 
+yourself and use them the way you like. </p></li>
+<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> does not rely on modified <code>UICollectionViewFlowLayout</code> nor does it rotate your <code>UICollectionView</code> upside-down. 
+This means you can use your views as if they would be regular cells within <code>UICollectionView</code>. You can benefit from using the 
+default <code>UIKit</code> implementations of <code>adjustedContextInsets</code> (and others) because your view controller is a normal view 
+controller without any hacks or tricks.</p></li>
+<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t require you to calculate all the cell sizes before it renders them on the screen. You can fully use
+auto-layout constraints and rely on the fact that the correct size will be calculated in the runtime. However, <code><a href="Classes/ChatLayout.html">ChatLayout</a></code> 
+as any other <code>UICollectionViewLayout</code> will benefit from you providing the estimated sizes of your cells as it will allow you 
+to get better performance. </p></li>
+<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t enforce you to use any specific data model. You can store your messages and update <code>UICollectionView</code>
+the way you like. The only thing you need is to respect the natural boundaries that <code>UICollectionView</code> have and correctly
+implement <code>UICollectionViewDataSource</code>.</p></li>
+<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t enforce you to use any specific <code>UIView</code>s to create your collection cells. You can create them the way 
+you like. It can be any <code>UICollectionViewCell</code> or <code>UICollectionReusableView</code>. There are some generic <code>UIView</code>s bundled with
+the library that may help you to build them faster. However, you do not have to use them. </p></li>
+<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t handle the keyboard appearance behavior. You have to implement
+that yourself from scratch or use the library you are already using in your project. It gives you full control over the 
+keyboard presentation. The only thing you have to do is to update the <code>contentInsets</code> of your <code>UICollectionView</code>.</p></li>
+<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t provide you any input control. You can use any one you like and customise it the way you like. 
+The Example app for instance uses <a href="https://github.com/nathantannar4/InputBarAccessoryView">InputBarAccessoryView</a>.</p></li>
+</ul>
 <h2 id='example' class='heading'>Example</h2>
 
 <p>To run the example project, clone the repo, and run <code>pod install</code> from the Example directory first.</p>
 
-<p><img src="https://habrastorage.org/webt/co/ez/u0/coezu0frywtqquysiorny-rud9s.gif" alt=""></p>
+<p><img src="https://habrastorage.org/webt/jt/gq/sl/jtgqsluujffi4-jnxeikbwtyyu0.gif" alt="">
+<img src="https://habrastorage.org/webt/b7/cu/3s/b7cu3su6uk4hw1kqg3_ky3uklu4.gif" alt="">
+<img src="https://habrastorage.org/webt/sv/ul/cq/svulcqg5ompgyhp-pjxy1tyiie4.gif" alt=""></p>
 <h2 id='installation' class='heading'>Installation</h2>
 
 <p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is available through <a href="https://cocoapods.org">CocoaPods</a>, <a href="https://github.com/Carthage/Carthage">Carthage</a> 
@@ -180,6 +218,12 @@ and <a href="https://github.com/apple/swift-package-manager">SwiftPM</a>. See th
 
 <p>If you’d like to contribute to this repo, please
 read <a href="https://github.com/ekazaev/route-composer/blob/master/CONTRIBUTING.md">the contribution guidelines</a>.</p>
+<h2 id='todo' class='heading'>Todo</h2>
+
+<ul>
+<li>[ ] Improve the test coverage</li>
+<li>[ ] Provide proper documentation</li>
+</ul>
 <h2 id='license' class='heading'>License</h2>
 
 <p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is distributed under <a href="https://github.com/ekazaev/ChatLayout/blob/master/LICENSE">the MIT license</a>.</p>

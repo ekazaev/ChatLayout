@@ -186,8 +186,6 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // С подгрузкой данных надо быть очень аккуратным потому как если делать мултипл анимацию это может сломать все колекшен вью к хуям
-        // И не забудь делать подгрузку данных без анимации
         guard !currentControllerActions.options.contains(.loadingInitialMessages),
             !currentControllerActions.options.contains(.loadingPreviousMessages),
             !currentInterfaceActions.options.contains(.scrollingToTop) else {
