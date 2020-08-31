@@ -80,7 +80,7 @@
             <a class="nav-group-name-link" href="Extras.html">Extras</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Protocols/ContainerCollectionViewCellDelegate.html">ContainerCollectionViewCellDelegate</a>
+                <a class="nav-group-task-link" href="Classes/ContainerCollectionViewCell.html">ContainerCollectionViewCell</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/ContainerCollectionReusableView.html">ContainerCollectionReusableView</a>
@@ -123,14 +123,6 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="Other%20Classes.html">Other Classes</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/ContainerCollectionViewCell.html">ContainerCollectionViewCell</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a class="nav-group-name-link" href="Other%20Enums.html">Other Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -141,6 +133,14 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/ImageMaskedViewTransformation.html">ImageMaskedViewTransformation</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other%20Protocols.html">Other Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ContainerCollectionViewCellDelegate.html">ContainerCollectionViewCellDelegate</a>
               </li>
             </ul>
           </li>
@@ -162,9 +162,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout35ContainerCollectionViewCellDelegateP"></a>
-                    <a name="//apple_ref/swift/Protocol/ContainerCollectionViewCellDelegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout35ContainerCollectionViewCellDelegateP">ContainerCollectionViewCellDelegate</a>
+                    <a name="/s:10ChatLayout27ContainerCollectionViewCellC"></a>
+                    <a name="//apple_ref/swift/Class/ContainerCollectionViewCell" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout27ContainerCollectionViewCellC">ContainerCollectionViewCell</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -172,16 +172,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A delegate of <code>ContainerCollectionViewCell</code>/<code>ContainerCollectionReusableView</code> should implement this methods if
-it is required to participate in containers lifecycle.</p>
+                        <p>A container <code>UICollectionViewCell</code> that constraints its contained view to its margins.</p>
 
-                        <a href="Protocols/ContainerCollectionViewCellDelegate.html" class="slightly-smaller">See more</a>
+                        <a href="Classes/ContainerCollectionViewCell.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ContainerCollectionViewCellDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ContainerCollectionViewCell</span><span class="o">&lt;</span><span class="kt">CustomView</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">UICollectionViewCell</span> <span class="k">where</span> <span class="kt">CustomView</span> <span class="p">:</span> <span class="kt">UIView</span></code></pre>
 
                         </div>
                       </div>
@@ -423,7 +422,7 @@ settings provided in <code><a href="Classes/EdgeAligningView.html#/s:10ChatLayou
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-08-28)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-08-31)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

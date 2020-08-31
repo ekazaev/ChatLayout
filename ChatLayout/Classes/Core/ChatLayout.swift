@@ -93,6 +93,13 @@ public final class ChatLayout: UICollectionViewLayout {
         return collectionView.adjustedContentInset
     }
 
+    var viewSize: CGSize {
+        guard let collectionView = collectionView else {
+            return .zero
+        }
+        return collectionView.frame.size
+    }
+
     private struct PrepareActions: OptionSet {
         let rawValue: UInt
 
@@ -690,6 +697,11 @@ public final class ChatLayout: UICollectionViewLayout {
 
 extension ChatLayout {
 
+    func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
+        let itemSize = estimatedSize(for: element, at: indexPath)
+        return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact)
+    }
+
     private func estimatedSize(for element: ItemKind, at indexPath: IndexPath) -> (estimated: CGSize, exact: CGSize?) {
         guard let delegate = delegate else {
             return (estimated: estimatedItemSize, exact: nil)
@@ -714,11 +726,6 @@ extension ChatLayout {
         return delegate.alignmentForItem(of: element, at: indexPath)
     }
 
-    func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
-        let itemSize = estimatedSize(for: element, at: indexPath)
-        return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact)
-    }
-
     private var estimatedItemSize: CGSize {
         guard let estimatedItemSize = settings.estimatedItemSize else {
             guard collectionView != nil else {
@@ -740,6 +747,17 @@ extension ChatLayout {
         ItemKind.allCases.forEach {
             invalidatedAttributes[$0] = []
         }
+    }
+
+}
+
+extension ChatLayout: ChatLayoutRepresentation {
+
+    func numberOfItems(inSection section: Int) -> Int {
+        guard let collectionView = collectionView else {
+            return .zero
+        }
+        return collectionView.numberOfItems(inSection: section)
     }
 
 }

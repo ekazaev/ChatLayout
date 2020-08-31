@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Other Classes  Reference</title>
+    <title>Other Protocols  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Section/Other Classes" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Section/Other Protocols" class="dashAnchor"></a>
 
-    <a title="Other Classes  Reference"></a>
+    <a title="Other Protocols  Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="index.html">ChatLayout Reference</a>
       <img class="carat" src="img/carat.png" />
-      Other Classes  Reference
+      Other Protocols  Reference
     </p>
 
     <div class="content-wrapper">
@@ -80,7 +80,7 @@
             <a class="nav-group-name-link" href="Extras.html">Extras</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Protocols/ContainerCollectionViewCellDelegate.html">ContainerCollectionViewCellDelegate</a>
+                <a class="nav-group-task-link" href="Classes/ContainerCollectionViewCell.html">ContainerCollectionViewCell</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/ContainerCollectionReusableView.html">ContainerCollectionReusableView</a>
@@ -123,14 +123,6 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="Other%20Classes.html">Other Classes</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/ContainerCollectionViewCell.html">ContainerCollectionViewCell</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a class="nav-group-name-link" href="Other%20Enums.html">Other Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -144,14 +136,22 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other%20Protocols.html">Other Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ContainerCollectionViewCellDelegate.html">ContainerCollectionViewCellDelegate</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>Other Classes</h1>
-            <p>The following classes are available globally.</p>
+            <h1>Other Protocols</h1>
+            <p>The following protocols are available globally.</p>
 
           </div>
         </section>
@@ -163,9 +163,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout27ContainerCollectionViewCellC"></a>
-                    <a name="//apple_ref/swift/Class/ContainerCollectionViewCell" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout27ContainerCollectionViewCellC">ContainerCollectionViewCell</a>
+                    <a name="/s:10ChatLayout35ContainerCollectionViewCellDelegateP"></a>
+                    <a name="//apple_ref/swift/Protocol/ContainerCollectionViewCellDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout35ContainerCollectionViewCellDelegateP">ContainerCollectionViewCellDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -173,15 +173,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A container <code>UICollectionViewCell</code> that constraints its contained view to its margins.</p>
+                        <p>A delegate of <code>ContainerCollectionViewCell</code>/<code>ContainerCollectionReusableView</code> should implement this methods if
+it is required to participate in containers lifecycle.</p>
 
-                        <a href="Classes/ContainerCollectionViewCell.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/ContainerCollectionViewCellDelegate.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ContainerCollectionViewCell</span><span class="o">&lt;</span><span class="kt">CustomView</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">UICollectionViewCell</span> <span class="k">where</span> <span class="kt">CustomView</span> <span class="p">:</span> <span class="kt">UIView</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ContainerCollectionViewCellDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -196,7 +197,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-08-28)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-08-31)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

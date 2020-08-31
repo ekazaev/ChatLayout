@@ -14,17 +14,11 @@ struct LayoutModel {
 
     var sections: [SectionModel]
 
-//    var viewPort: CGRect
-//
-//    var adjustedContentInsets: UIEdgeInsets
-//
-    private unowned var collectionLayout: ChatLayout
+    private unowned var collectionLayout: ChatLayoutRepresentation
 
-    init(sections: [SectionModel], collectionLayout: ChatLayout) {
+    init(sections: [SectionModel], collectionLayout: ChatLayoutRepresentation) {
         self.sections = sections
         self.collectionLayout = collectionLayout
-//        self.viewPort = collectionLayout.viewPort
-//        self.adjustedContentInsets = collectionLayout.adjustedContentInset
     }
 
     mutating func assembleLayout() {
@@ -40,7 +34,8 @@ struct LayoutModel {
 
     mutating func setAndAssemble(section: SectionModel, sectionIndex: Int) {
         guard sectionIndex < sections.count else {
-            fatalError()
+            assertionFailure("Internal inconsistency")
+            return
         }
         let oldSection = sections[sectionIndex]
         sections[sectionIndex] = section
@@ -50,7 +45,8 @@ struct LayoutModel {
 
     mutating func setAndAssemble(header: ItemModel?, sectionIndex: Int) {
         guard sectionIndex < sections.count else {
-            fatalError()
+            assertionFailure("Internal inconsistency")
+            return
         }
 
         let oldSection = sections[sectionIndex]
@@ -61,7 +57,8 @@ struct LayoutModel {
 
     mutating func setAndAssemble(item: ItemModel, sectionIndex: Int, itemIndex: Int) {
         guard sectionIndex < sections.count else {
-            fatalError()
+            assertionFailure("Internal inconsistency")
+            return
         }
         let oldSection = sections[sectionIndex]
         sections[sectionIndex].setAndAssemble(item: item, at: itemIndex)
@@ -71,7 +68,8 @@ struct LayoutModel {
 
     mutating func setAndAssemble(footer: ItemModel?, sectionIndex: Int) {
         guard sectionIndex < sections.count else {
-            fatalError()
+            assertionFailure("Internal inconsistency")
+            return
         }
         let oldSection = sections[sectionIndex]
         sections[sectionIndex].setAndAssemble(footer: footer)
@@ -95,7 +93,8 @@ struct LayoutModel {
     mutating func insertSection(_ section: SectionModel, at sectionIndex: Int, at state: ModelState) {
         var sections = self.sections
         guard sectionIndex <= sections.count else {
-            fatalError("Incorrect index section")
+            assertionFailure("Internal inconsistency")
+            return
         }
 
         sections.insert(section, at: sectionIndex)
@@ -104,7 +103,8 @@ struct LayoutModel {
 
     mutating func removeSection(by sectionIdentifier: UUID, at state: ModelState) {
         guard let sectionIndex = sections.firstIndex(where: { $0.id == sectionIdentifier }) else {
-            fatalError()
+            assertionFailure("Internal inconsistency")
+            return
         }
         sections.remove(at: sectionIndex)
     }
@@ -115,7 +115,8 @@ struct LayoutModel {
 
     mutating func removeRow(by identifier: ItemIdentifier, at state: ModelState) {
         guard let sectionIndex = sections.firstIndex(where: { $0.id == identifier.sectionId }) else {
-            fatalError("Incorrect identifier")
+            assertionFailure("Internal inconsistency")
+            return
         }
         sections[sectionIndex].remove(by: identifier.itemId)
     }

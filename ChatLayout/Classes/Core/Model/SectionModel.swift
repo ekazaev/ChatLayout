@@ -22,13 +22,13 @@ struct SectionModel {
 
     var offsetY: CGFloat = 0
 
-    private unowned var collectionLayout: ChatLayout
+    private unowned var collectionLayout: ChatLayoutRepresentation
 
     init(id: UUID = UUID(),
          header: ItemModel?,
          footer: ItemModel?,
          items: [ItemModel] = [],
-         collectionLayout: ChatLayout) {
+         collectionLayout: ChatLayoutRepresentation) {
         self.id = id
         self.items = items
         self.collectionLayout = collectionLayout
@@ -97,7 +97,8 @@ struct SectionModel {
 
     mutating func setAndAssemble(item: ItemModel, at index: Int) {
         guard index < count else {
-            fatalError()
+            assertionFailure("Internal inconsistency")
+            return
         }
         let oldItem = items[index]
         items[index] = item
@@ -148,14 +149,16 @@ struct SectionModel {
 
     mutating func insert(_ item: ItemModel, at index: Int) {
         guard index <= count else {
-            fatalError()
+            assertionFailure("Internal inconsistency")
+            return
         }
         items.insert(item, at: index)
     }
 
     mutating func remove(at index: Int) {
         guard index < count else {
-            fatalError()
+            assertionFailure("Internal inconsistency")
+            return
         }
         items.remove(at: index)
     }

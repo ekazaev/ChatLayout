@@ -12,6 +12,28 @@ import UIKit
 
 private let enableCaching = true
 
+protocol ChatLayoutRepresentation: AnyObject {
+
+    var delegate: ChatLayoutDelegate? { get }
+
+    var settings: ChatLayoutSettings { get }
+
+    var viewSize: CGSize { get }
+
+    var visibleBounds: CGRect { get }
+
+    var layoutFrame: CGRect { get }
+
+    var adjustedContentInset: UIEdgeInsets { get }
+
+    var shouldKeepContentOffsetOnBatchUpdates: Bool { get }
+
+    func numberOfItems(inSection section: Int) -> Int
+
+    func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration
+
+}
+
 final class StateController {
 
     // This thing exists here as `UICollectionView` calls `targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint)` only once at the
@@ -42,9 +64,9 @@ final class StateController {
 
     private var cachedAttributesState: (rect: CGRect, attributes: [ChatLayoutAttributes])?
 
-    private unowned var collectionLayout: ChatLayout
+    private unowned var collectionLayout: ChatLayoutRepresentation
 
-    init(collectionLayout: ChatLayout) {
+    init(collectionLayout: ChatLayoutRepresentation) {
         self.collectionLayout = collectionLayout
     }
 
@@ -137,7 +159,7 @@ final class StateController {
             attributes.zIndex = 0
             attributes.alignment = item.alignment
         }
-        attributes.viewSize = collectionLayout.collectionView?.frame.size ?? .zero
+        attributes.viewSize = collectionLayout.viewSize
         attributes.adjustedContentInsets = collectionLayout.adjustedContentInset
         attributes.visibleBoundsSize = collectionLayout.visibleBounds.size
         attributes.layoutFrame = collectionLayout.layoutFrame
@@ -274,7 +296,8 @@ final class StateController {
 
     func update(preferredSize: CGSize, for indexPath: IndexPath, kind: ItemKind, at state: ModelState) {
         guard var item = item(for: indexPath, kind: kind, at: state) else {
-            fatalError("Internal inconsistency")
+            assertionFailure("Internal inconsistency")
+            return
         }
         var layout = self.layout(at: state)
         let previousFrame = item.frame
@@ -299,7 +322,8 @@ final class StateController {
 
     func update(alignment: ChatItemAlignment, for indexPath: IndexPath, kind: ItemKind, at state: ModelState) {
         guard var item = item(for: indexPath, kind: kind, at: state) else {
-            fatalError("Internal inconsistency")
+            assertionFailure("Internal inconsistency")
+            return
         }
         var layout = self.layout(at: state)
 
@@ -321,9 +345,6 @@ final class StateController {
     }
 
     func process(updateItems: [UICollectionViewUpdateItem]) {
-        guard let collectionView = collectionLayout.collectionView else {
-            return
-        }
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
         let updateItems = updateItems.sorted(by: { $0.indexPathAfterUpdate?.item ?? -1 < $1.indexPathAfterUpdate?.item ?? -1 })
@@ -363,7 +384,7 @@ final class StateController {
                 }
 
                 if indexPath.item == NSNotFound {
-                    let items = (0..<collectionView.numberOfItems(inSection: indexPath.section)).map { index -> ItemModel in
+                    let items = (0..<collectionLayout.numberOfItems(inSection: indexPath.section)).map { index -> ItemModel in
                         let itemIndexPath = IndexPath(item: index, section: indexPath.section)
                         return ItemModel(with: collectionLayout.configuration(for: .cell, at: itemIndexPath))
                     }
@@ -435,7 +456,7 @@ final class StateController {
                     section.set(footer: footer)
 
                     let oldItems = section.items
-                    let items: [ItemModel] = (0..<collectionView.numberOfItems(inSection: indexPath.section)).map { index in
+                    let items: [ItemModel] = (0..<collectionLayout.numberOfItems(inSection: indexPath.section)).map { index in
                         var newItem: ItemModel
                         if index < oldItems.count {
                             newItem = oldItems[index]
@@ -451,7 +472,8 @@ final class StateController {
                     afterUpdateModel.insertSection(section, at: indexPath.section, at: .afterUpdate)
                 } else {
                     guard var item = self.item(for: indexPath, kind: .cell, at: .beforeUpdate) else {
-                        fatalError("Internal inconsistency")
+                        assertionFailure("Internal inconsistency")
+                        return
                     }
                     item.resetSize()
 
@@ -460,7 +482,7 @@ final class StateController {
                     reloadedIndexes.insert(indexPath)
                 }
             default:
-                fatalError("Unexpected action to process")
+                assertionFailure("Unexpected action to process")
             }
         }
 
@@ -479,7 +501,8 @@ final class StateController {
         reloadedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
             let oldSection = self.section(at: $0, at: .beforeUpdate)
             guard let newSectionIndex = self.sectionIndex(for: oldSection.id, at: .afterUpdate) else {
-                fatalError("Internal inconsistency")
+                assertionFailure("Internal inconsistency")
+                return
             }
             let newSection = self.section(at: newSectionIndex, at: .afterUpdate)
             compensateOffsetOfSectionIfNeeded(for: $0, action: .frameUpdate(previousFrame: oldSection.frame, newFrame: newSection.frame))
@@ -493,7 +516,8 @@ final class StateController {
             guard let oldItem = self.item(for: $0, kind: .cell, at: .beforeUpdate),
                 let newItemIndexPath = self.indexPath(by: ItemIdentifier(sectionId: oldSection.id, itemId: oldItem.id), at: .afterUpdate),
                 let newItem = self.item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
-                fatalError("Internal inconsistency")
+                assertionFailure("Internal inconsistency")
+                return
             }
             compensateOffsetIfNeeded(for: $0, kind: .cell, action: .frameUpdate(previousFrame: oldItem.frame, newFrame: newItem.frame))
         }
@@ -554,7 +578,8 @@ final class StateController {
 
     func layout(at state: ModelState) -> LayoutModel {
         guard let layout = storage[state] else {
-            fatalError("Internal inconsistency. Layout at \(state) is missing.")
+            assertionFailure("Internal inconsistency. Layout at \(state) is missing.")
+            return LayoutModel(sections: [], collectionLayout: collectionLayout)
         }
         return layout
     }

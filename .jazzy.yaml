@@ -20,7 +20,7 @@ custom_categories:
 
   - name: Extras
     children:
-      - ContainerCollectionViewCellDelegate
+      - ContainerCollectionViewCell
       - ContainerCollectionReusableView
       - MessageContainerView
       - CellLayoutContainerView
