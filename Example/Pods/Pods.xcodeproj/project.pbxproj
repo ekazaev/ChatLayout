@@ -131,237 +131,237 @@
 /* Begin PBXFileReference section */
 		0026A173C966292DBD90F44CF9959E75 /* DifferenceKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DifferenceKit.debug.xcconfig; sourceTree = "<group>"; };
 		011CAB136F563D14B29023CF3DE31FAF /* ChatLayoutDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutDelegate.swift; path = ChatLayout/Classes/Core/ChatLayoutDelegate.swift; sourceTree = "<group>"; };
-		0552E61515434F0FF071C2186CC445C5 /* readme.html */ = {isa = PBXFileReference; includeInIndex = 1; name = readme.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/readme.html; sourceTree = "<group>"; };
+		0188C413B4F93107169ADB3627A81E4A /* MessageContainerView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.swift.html; path = docs/tests/MessageContainerView.swift.html; sourceTree = "<group>"; };
+		037EC299929DFFAB583E54173F75CF31 /* ContainerCollectionViewCellDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCellDelegate.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/ContainerCollectionViewCellDelegate.html; sourceTree = "<group>"; };
 		05D2065AB5A99090499B22D42576B72A /* Pods-ChatLayout_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatLayout_Tests-Info.plist"; sourceTree = "<group>"; };
 		06BEE5734A8685B5EB3DA73542D5D700 /* AutocompleteTableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutocompleteTableView.swift; path = Sources/Plugins/AutocompleteManager/Views/AutocompleteTableView.swift; sourceTree = "<group>"; };
 		07391766B3320292131650237591923B /* ItemModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
-		084B1EF71D8B37779DCE9035CC3BA392 /* badge.svg */ = {isa = PBXFileReference; includeInIndex = 1; name = badge.svg; path = docs/badge.svg; sourceTree = "<group>"; };
-		08EF5FDF4FF40A063AEEE3821047EA4F /* ChatLayout.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = ChatLayout.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		0A0AF898C9654BCFD021F1BBB13F69D1 /* ChatLayoutDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/ChatLayoutDelegate.html; sourceTree = "<group>"; };
 		0A28029F725ACA92BCAE2955E626EDA7 /* CellLayoutContainerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CellLayoutContainerView.swift; path = ChatLayout/Classes/Extras/CellLayoutContainerView.swift; sourceTree = "<group>"; };
 		0A297C1D0E5CBE76D103A78108D0C935 /* Pods-ChatLayout_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatLayout_Example-Info.plist"; sourceTree = "<group>"; };
-		0B0611E1AE34B7F93D8B558B00EE5860 /* dash.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = dash.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/dash.png; sourceTree = "<group>"; };
-		0BAEAC6C8DD5C36B8AB688FA941F257A /* ContainerCollectionReusableView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ContainerCollectionReusableView.html; sourceTree = "<group>"; };
-		0E43B9E1483150B6090ED7ACBE3320B9 /* StaticViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.html; path = docs/Protocols/StaticViewFactory.html; sourceTree = "<group>"; };
+		0B0BF810976BBC79CC8DCE1D7BC895D2 /* VoidViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = VoidViewFactory.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/VoidViewFactory.html; sourceTree = "<group>"; };
+		0E2B3BECD00420D938281EF0829F5520 /* ChatLayoutInvalidationContext.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutInvalidationContext.html; path = docs/Classes/ChatLayoutInvalidationContext.html; sourceTree = "<group>"; };
 		0E720F0A2792B086A4451769F6342F21 /* ChatLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayout.swift; path = ChatLayout/Classes/Core/ChatLayout.swift; sourceTree = "<group>"; };
 		0EEEDB54EC5D499A61FA2E4B48DC11DD /* InputBarAccessoryView.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = InputBarAccessoryView.release.xcconfig; sourceTree = "<group>"; };
 		0F67820C1B0CDFAF496517CC7D3678EA /* Pods-ChatLayout_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ChatLayout_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		107079EA73A965B86C7E95507F951862 /* RoundedCornersContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = RoundedCornersContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/RoundedCornersContainerView.html; sourceTree = "<group>"; };
 		11711A5CA818D36BEF0866B9957AEE9D /* CGSize+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CGSize+Extension.swift"; sourceTree = "<group>"; };
 		119D1CBFAF2E9D32F07F0CCCE83ECDCB /* InputBarAccessoryView+Availability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "InputBarAccessoryView+Availability.swift"; path = "Sources/Supporting Files/InputBarAccessoryView+Availability.swift"; sourceTree = "<group>"; };
 		11B24E71DE2A82CDF80C915ADF980AFF /* AutocompleteCompletion.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutocompleteCompletion.swift; path = Sources/Plugins/AutocompleteManager/Models/AutocompleteCompletion.swift; sourceTree = "<group>"; };
+		11CE523CC5DEAF1559075A38561F2835 /* ChatLayout.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = ChatLayout.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		11E4ABAD444803D4EBFB9C03527D0199 /* InputBarAccessoryView.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = InputBarAccessoryView.modulemap; sourceTree = "<group>"; };
+		11E912A4A060812516BD28F62E5D76D2 /* search.json */ = {isa = PBXFileReference; includeInIndex = 1; name = search.json; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/search.json; sourceTree = "<group>"; };
+		137660962F73105DC6E6C2C6F6546830 /* ChatLayoutSettings.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.swift.html; path = docs/tests/ChatLayoutSettings.swift.html; sourceTree = "<group>"; };
+		14443715818465A4C427DE7C7D870145 /* ContainerCollectionViewCell.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.swift.html; path = docs/tests/ContainerCollectionViewCell.swift.html; sourceTree = "<group>"; };
 		146B236C9F6C1E1B3717A714AFE895D1 /* NSMutableAttributedString+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSMutableAttributedString+Extensions.swift"; path = "Sources/Extensions/NSMutableAttributedString+Extensions.swift"; sourceTree = "<group>"; };
 		156EC41B3D6BB49C578CD5C330F22FE9 /* InputBarSendButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputBarSendButton.swift; path = Sources/Controls/InputBarSendButton.swift; sourceTree = "<group>"; };
-		16EAF9293B3E2F356D90003E2C737959 /* gh.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = gh.png; path = docs/img/gh.png; sourceTree = "<group>"; };
+		1691ADA4C55ABF603C55C875BF95AD97 /* ChatLayout.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.swift.html; path = docs/tests/ChatLayout.swift.html; sourceTree = "<group>"; };
+		180E13606BB943DD66CDFDCF80534AFA /* jazzy.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.js; path = docs/js/jazzy.js; sourceTree = "<group>"; };
 		1842F660842CD780341B0794AA8F9FBA /* ChatLayout-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ChatLayout-dummy.m"; sourceTree = "<group>"; };
+		196ACFE4A07FE0374CE17F16E80BDAD2 /* RoundedCornersContainerView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = RoundedCornersContainerView.swift.html; path = docs/tests/RoundedCornersContainerView.swift.html; sourceTree = "<group>"; };
 		1BACA0E2F780AF0E42F968F68D8FEC7C /* UITextView+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UITextView+Extensions.swift"; path = "Sources/Extensions/UITextView+Extensions.swift"; sourceTree = "<group>"; };
 		1BEED7EDC7263E5B43A17A4CCB78EDBC /* AttachmentsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentsView.swift; path = Sources/Plugins/AttachmentManager/Views/AttachmentsView.swift; sourceTree = "<group>"; };
-		1D59287E60BF4AE94DED9FFACCE67B2D /* EdgeAligningView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.html; path = docs/Classes/EdgeAligningView.html; sourceTree = "<group>"; };
+		1E3BD5E8245D058D3B17186EE0EAFA5F /* readme.html */ = {isa = PBXFileReference; includeInIndex = 1; name = readme.html; path = docs/readme.html; sourceTree = "<group>"; };
 		1EA650C09B51CBE717B0F4905FA4A78C /* Pods-ChatLayout_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ChatLayout_Tests-dummy.m"; sourceTree = "<group>"; };
-		1F975B6BEF946931958ED351FF74EF28 /* StaticViewFactory.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.swift.html; path = docs/tests/StaticViewFactory.swift.html; sourceTree = "<group>"; };
-		20ACE28222AA6F357DB3F1F764FBA523 /* docSet.dsidx */ = {isa = PBXFileReference; includeInIndex = 1; name = docSet.dsidx; path = docs/docsets/ChatLayout.docset/Contents/Resources/docSet.dsidx; sourceTree = "<group>"; };
-		214FC7A74D5D897FC9AF7AA8A10BB326 /* ChatLayoutPositionSnapshot.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.html; path = docs/Structs/ChatLayoutPositionSnapshot.html; sourceTree = "<group>"; };
+		1FDBAA15E7FF58441F55D21F5E03B1BA /* jquery.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jquery.min.js; path = docs/js/jquery.min.js; sourceTree = "<group>"; };
 		21C27BCB4165573DE5B0FF0DF2930B9E /* AutocompleteSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutocompleteSession.swift; path = Sources/Plugins/AutocompleteManager/Models/AutocompleteSession.swift; sourceTree = "<group>"; };
-		231464F25B00D5F203877140C7501993 /* ImageMaskedView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ImageMaskedView.html; sourceTree = "<group>"; };
-		25A03C655A4A4505BD8F4287D2588B38 /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/index.html; sourceTree = "<group>"; };
+		224C6B79001C82E36C0BB08578FB1558 /* list.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = list.min.js; path = docs/tests/list.min.js; sourceTree = "<group>"; };
+		22D4EF481424AC29A708D5F155AE133F /* Other Guides.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Guides.html"; path = "docs/Other Guides.html"; sourceTree = "<group>"; };
+		2620BC1AF886FFCE8BAFA85CE3C2EE58 /* Core.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Core.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Core.html; sourceTree = "<group>"; };
+		265267179E26CAC8D2EC47ABBEF8EDD0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		2761570759D92AD7DA6E88EA0B67B2A7 /* CGRect+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
-		28B5AF6CF2A8C435452B776B30A59409 /* CGRect+Extension.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "CGRect+Extension.swift.html"; path = "docs/tests/CGRect+Extension.swift.html"; sourceTree = "<group>"; };
 		2A5BB2946CA8130A008063F123D66317 /* InputBarAccessoryViewDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputBarAccessoryViewDelegate.swift; path = Sources/Protocols/InputBarAccessoryViewDelegate.swift; sourceTree = "<group>"; };
-		2A76E15DE59D32BA89997042593413F2 /* CellLayoutContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/CellLayoutContainerView.html; sourceTree = "<group>"; };
+		2B2CA7717D2D58DC5E48C8D83F384E81 /* lunr.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = lunr.min.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/lunr.min.js; sourceTree = "<group>"; };
+		2BA79289D5C33D851CF412F86137F205 /* StateController.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StateController.swift.html; path = docs/tests/StateController.swift.html; sourceTree = "<group>"; };
+		2C72B59CF7BD916DC533674A67E2FAC6 /* EdgeAligningView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.html; path = docs/Classes/EdgeAligningView.html; sourceTree = "<group>"; };
+		2D2DB5029A0127A48BD173A76CB313E9 /* Other Protocols.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Protocols.html"; path = "docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Other Protocols.html"; sourceTree = "<group>"; };
 		2DE189CE1F2E4BD1D559A3B33BBF9051 /* Pods-ChatLayout_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ChatLayout_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		30DF826540340A023CA33E0D404C0A82 /* ImageMaskedViewTransformation.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedViewTransformation.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ImageMaskedViewTransformation.html; sourceTree = "<group>"; };
 		312B988EF117AE4DE76A268D970131FE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		31342C57881B8798101FF53C9581251A /* InputItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputItem.swift; path = Sources/Protocols/InputItem.swift; sourceTree = "<group>"; };
 		32A8C57F0E4EC5DE14E722554F7F9333 /* ChatLayout.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ChatLayout.debug.xcconfig; sourceTree = "<group>"; };
 		32C4A01F04E51C9601FD73BE52DBE11B /* ChatLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ChatLayout.framework; path = ChatLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A74DA8A65F7CC80A13C3486CBC9D05 /* StagedChangeset.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StagedChangeset.swift; path = Sources/StagedChangeset.swift; sourceTree = "<group>"; };
+		33B7148EA7C558B409ADC5C369651FD2 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/EdgeAligningView/Edge.html; sourceTree = "<group>"; };
 		33CD28B2DD96B28F03CEE4C56C5441E5 /* RoundedCornersContainerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoundedCornersContainerView.swift; path = ChatLayout/Classes/Extras/RoundedCornersContainerView.swift; sourceTree = "<group>"; };
 		33FADEF0D362C8ECABE4C37B380DD008 /* AutocompleteManagerDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutocompleteManagerDelegate.swift; path = Sources/Plugins/AutocompleteManager/Protocols/AutocompleteManagerDelegate.swift; sourceTree = "<group>"; };
-		3407D0D8D398F778C7AD49B95C1F61B3 /* ImageMaskedViewTransformation.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedViewTransformation.html; path = docs/Enums/ImageMaskedViewTransformation.html; sourceTree = "<group>"; };
 		353DC2782B0D45C0A405B9DA77879405 /* Pods-ChatLayout_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ChatLayout_Example-frameworks.sh"; sourceTree = "<group>"; };
 		354F09A68B9F0607F631CF868B24CD16 /* InputBarAccessoryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputBarAccessoryView.swift; path = Sources/InputBarAccessoryView.swift; sourceTree = "<group>"; };
 		36772502A0E020092DF28E87FBF39EF4 /* DifferenceKit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = DifferenceKit.modulemap; sourceTree = "<group>"; };
-		38242B30E6D3B283A34EE7FC5D084DFC /* Other Enums.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Enums.html"; path = "docs/Other Enums.html"; sourceTree = "<group>"; };
-		3A9B2B68A2EA06FDA5A807D1B68B58F3 /* spinner.gif */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.gif; name = spinner.gif; path = docs/img/spinner.gif; sourceTree = "<group>"; };
-		3ADD51BEFA6F3151CB5A8776BC3ADAB9 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		36E916D96197E9EBE4AD27556167E05D /* gh.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = gh.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/gh.png; sourceTree = "<group>"; };
 		3D4334CC2A1D49317C8F0C62E43B26D2 /* ItemKind.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemKind.swift; sourceTree = "<group>"; };
-		3E0E5951DF6AE51489D6F866DFCE07BA /* VoidViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = VoidViewFactory.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/VoidViewFactory.html; sourceTree = "<group>"; };
-		40F368056620C51283BA9B0CE83FF25D /* jazzy.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.js; path = docs/js/jazzy.js; sourceTree = "<group>"; };
-		40F4DF6BDA8721F922A8BC4BB32595D3 /* RoundedCornersContainerView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = RoundedCornersContainerView.swift.html; path = docs/tests/RoundedCornersContainerView.swift.html; sourceTree = "<group>"; };
-		41D8ECEB08535A323A79A0E6E19055E3 /* carat.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = carat.png; path = docs/img/carat.png; sourceTree = "<group>"; };
-		42352F0DB252C7BC219C5C4E8FDCD1C9 /* Other Classes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Classes.html"; path = "docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Other Classes.html"; sourceTree = "<group>"; };
+		3D5034F12C7CFC4B1017C3A451D2B0D6 /* ChatItemAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatItemAlignment.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ChatItemAlignment.html; sourceTree = "<group>"; };
+		3DAE9187E476C0286E3DFF96DCA9B006 /* ItemKind.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.swift.html; path = docs/tests/ItemKind.swift.html; sourceTree = "<group>"; };
+		3E3EAFFAF8798B1B243694AEC98E44E5 /* jazzy.css */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.css; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/css/jazzy.css; sourceTree = "<group>"; };
+		3FE320FEB8024D99644E2835BB26FAC0 /* logo.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = logo.jpg; path = docs/tests/logo.jpg; sourceTree = "<group>"; };
 		42FC6CB9CE335A7D0E0891F053EDC172 /* Pods-ChatLayout_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatLayout_Example.release.xcconfig"; sourceTree = "<group>"; };
 		436BAA54A31999B53B3CC7115C55FE50 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		451CA01FFD88FBD53B62658957BB7416 /* lunr.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = lunr.min.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/lunr.min.js; sourceTree = "<group>"; };
-		457E22355CD85C2788ACD5DB9DE109ED /* ChatLayout.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayout.html; sourceTree = "<group>"; };
-		4878BB5D27BB5A80C217BE73CF5B1587 /* Other Classes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Classes.html"; path = "docs/Other Classes.html"; sourceTree = "<group>"; };
-		4DD222219C03A0F3C0AB1F671A50B40A /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/tests/index.html; sourceTree = "<group>"; };
+		44CC6B6B361C8C2979D101151565CB7F /* ChatLayoutPositionSnapshot.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.html; path = docs/Structs/ChatLayoutPositionSnapshot.html; sourceTree = "<group>"; };
+		4E12D946A7FC5E38D1905A62CC7ABBC1 /* dash.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = dash.png; path = docs/img/dash.png; sourceTree = "<group>"; };
 		4E219106D1F257FEEADF76EC16D72F5A /* InputBarAccessoryView-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "InputBarAccessoryView-Info.plist"; sourceTree = "<group>"; };
-		4E28065070BB2589D908840916482C73 /* Other Enums.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Enums.html"; path = "docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Other Enums.html"; sourceTree = "<group>"; };
-		4E395CD89118925DB5D76AB2CCDFF4F6 /* Other Guides.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Guides.html"; path = "docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Other Guides.html"; sourceTree = "<group>"; };
 		4F4F2C0BEB3216742CB83BBFE0BD7EA2 /* Pods-ChatLayout_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatLayout_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		4FE79287DCCF4E837BD57E538BF4CE9E /* Pods_ChatLayout_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ChatLayout_Tests.framework; path = "Pods-ChatLayout_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5038929643315E8A7BA9C6CC96E2B7C6 /* jquery.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jquery.min.js; path = docs/js/jquery.min.js; sourceTree = "<group>"; };
 		50426B79A3E384EEE2E8EF13CA7DC1C1 /* Pods-ChatLayout_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatLayout_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		511AD3EEE8A5F0FA5D9B6A7A7E74022E /* DifferenceKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DifferenceKit-prefix.pch"; sourceTree = "<group>"; };
-		5126234EA7232DA5F9EB016752B19F52 /* Other Guides.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Guides.html"; path = "docs/Other Guides.html"; sourceTree = "<group>"; };
+		5161C4478AD3B7F567ADFBA37FEC1F29 /* LayoutModel.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = LayoutModel.swift.html; path = docs/tests/LayoutModel.swift.html; sourceTree = "<group>"; };
+		53782C0031D8CB9BB5A9BE1B5AE580A9 /* ContainerCollectionViewCell.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.html; path = docs/Classes/ContainerCollectionViewCell.html; sourceTree = "<group>"; };
 		5402F2F13F83A8EA3D4AF30DB70C44C5 /* EdgeAligningView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EdgeAligningView.swift; path = ChatLayout/Classes/Extras/EdgeAligningView.swift; sourceTree = "<group>"; };
 		5785178A12B633AFEEB466A7622683BD /* AttachmentManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentManager.swift; path = Sources/Plugins/AttachmentManager/AttachmentManager.swift; sourceTree = "<group>"; };
 		57A95A73F91F7A01A8D60AB98A6A8956 /* InputBarViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputBarViewController.swift; path = Sources/ViewControllers/InputBarViewController.swift; sourceTree = "<group>"; };
-		57F0287F92073ECAA53E2757E3F22B85 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		5A033CFE8CDD749DDEEC7F60BE4AC60B /* MessageContainerView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.swift.html; path = docs/tests/MessageContainerView.swift.html; sourceTree = "<group>"; };
 		5BE545BBA5DF360FAD5DD5699311EC89 /* ContainerCollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContainerCollectionViewCell.swift; path = ChatLayout/Classes/Extras/ContainerCollectionViewCell.swift; sourceTree = "<group>"; };
-		5D06FFB363F835161AA76087D3D933F7 /* EdgeAligningView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/EdgeAligningView.html; sourceTree = "<group>"; };
+		5C5B528B2671D82D1300DF7F5760C16D /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/Structs/ChatLayoutPositionSnapshot/Edge.html; sourceTree = "<group>"; };
+		5DD721911A338911F50F62DB4C3E00F9 /* ChatLayout.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayout.html; sourceTree = "<group>"; };
 		5E0CA27726243ECEE020A34BD3F4B923 /* InputTextView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputTextView.swift; path = Sources/Views/InputTextView.swift; sourceTree = "<group>"; };
 		5F3057FB1F33611F91FA581529BD2639 /* AttachmentCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentCell.swift; path = Sources/Plugins/AttachmentManager/Views/AttachmentCell.swift; sourceTree = "<group>"; };
 		612AFE5605B7731D83D34715E5F89239 /* AnyDifferentiable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AnyDifferentiable.swift; path = Sources/AnyDifferentiable.swift; sourceTree = "<group>"; };
-		6136D6621B276123110E7EB584C36B99 /* ChatLayoutSettings.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.swift.html; path = docs/tests/ChatLayoutSettings.swift.html; sourceTree = "<group>"; };
 		61969CC28968ACEFFAD41A1A706D58B8 /* ImageMaskedView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageMaskedView.swift; path = ChatLayout/Classes/Extras/ImageMaskedView.swift; sourceTree = "<group>"; };
-		619B3A57177E6E837FC2C25BF614192C /* ImageMaskedView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.swift.html; path = docs/tests/ImageMaskedView.swift.html; sourceTree = "<group>"; };
-		6286ECF535AA246BD620C638F1274886 /* highlight.pack.js */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.pack.js; path = docs/tests/highlight.pack.js; sourceTree = "<group>"; };
-		63CEF08424B0FD75321E2B4CC84E3A21 /* CellLayoutContainerView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.swift.html; path = docs/tests/CellLayoutContainerView.swift.html; sourceTree = "<group>"; };
-		6404634155ABF2F8965449F7B1B16DE6 /* ItemSize.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemSize.html; path = docs/Enums/ItemSize.html; sourceTree = "<group>"; };
-		642628B776C49743C1075FC3F6048D69 /* jazzy.search.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.search.js; path = docs/js/jazzy.search.js; sourceTree = "<group>"; };
-		64314EC75CA6ADF095EB106D800F4ECF /* ChatLayoutPositionSnapshot.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.swift.html; path = docs/tests/ChatLayoutPositionSnapshot.swift.html; sourceTree = "<group>"; };
 		6492F8397763228ECAF771C05CC55F35 /* InputPlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputPlugin.swift; path = Sources/Protocols/InputPlugin.swift; sourceTree = "<group>"; };
 		656CD737B21ADFF65D97BB374682D263 /* Differentiable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Differentiable.swift; path = Sources/Differentiable.swift; sourceTree = "<group>"; };
+		669E83354B4E0DE99365902ED2746C5B /* ItemKind.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ItemKind.html; sourceTree = "<group>"; };
+		66BE14ECB20B4BB4AB45705B8C5DC7CF /* StaticViewFactory.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.swift.html; path = docs/tests/StaticViewFactory.swift.html; sourceTree = "<group>"; };
+		66F460EB254A85DE8FD9EDE037C141BA /* typeahead.jquery.js */ = {isa = PBXFileReference; includeInIndex = 1; name = typeahead.jquery.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/typeahead.jquery.js; sourceTree = "<group>"; };
 		6810F8502CF1F9057A68B49ED5F49FDF /* AttachmentManagerDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentManagerDelegate.swift; path = Sources/Plugins/AttachmentManager/Protocols/AttachmentManagerDelegate.swift; sourceTree = "<group>"; };
+		68E75CD78F1AFF66D7F062F89984D6F0 /* StaticViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/StaticViewFactory.html; sourceTree = "<group>"; };
 		6A74138A79F78DC0673145BE7A23A908 /* InputBarAccessoryView-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "InputBarAccessoryView-umbrella.h"; sourceTree = "<group>"; };
-		6BE8475D35560DDAF968D5643DB4E80B /* search.json */ = {isa = PBXFileReference; includeInIndex = 1; name = search.json; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/search.json; sourceTree = "<group>"; };
 		6C39FB81EA44B9FF492413D60C2E30E4 /* ChatLayout.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = ChatLayout.modulemap; sourceTree = "<group>"; };
-		6D7F9518B90A0B4DEFE2D43ADA1F12D1 /* jazzy.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jazzy.js; sourceTree = "<group>"; };
+		6DEE914AE82DA7DA2FBEA0646DA439D6 /* Other Protocols.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Protocols.html"; path = "docs/Other Protocols.html"; sourceTree = "<group>"; };
 		6E839542AB710EDFB3780B7A3A3DCB9F /* ElementPath.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ElementPath.swift; path = Sources/ElementPath.swift; sourceTree = "<group>"; };
+		6EF305F18BEF429BF0359A191FF182A1 /* carat.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = carat.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/carat.png; sourceTree = "<group>"; };
 		6EF6F25EC59674B7934B859CAE692E80 /* ChatLayout-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ChatLayout-umbrella.h"; sourceTree = "<group>"; };
-		7478B0022EA79C85C27BA106DA159D5F /* MessageContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/MessageContainerView.html; sourceTree = "<group>"; };
+		71AC2F866F5CB8998CF5B1AFAB3CEF71 /* jquery.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jquery.min.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jquery.min.js; sourceTree = "<group>"; };
+		733A73F893CB240DCF9687B8583297B8 /* Core.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Core.html; path = docs/Core.html; sourceTree = "<group>"; };
+		740130D357E81CE2E815A7233165D300 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		755760718F3CE749ABAF030AB355B8DB /* KeyboardManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyboardManager.swift; path = Sources/KeyboardManager/KeyboardManager.swift; sourceTree = "<group>"; };
+		76244C85719D58BF4CF5D827A6EE589B /* Other Guides.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Guides.html"; path = "docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Other Guides.html"; sourceTree = "<group>"; };
 		7847763A7799403C0AA5A4C22EC97E92 /* UIView+AutoLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIView+AutoLayout.swift"; path = "Sources/Extensions/UIView+AutoLayout.swift"; sourceTree = "<group>"; };
-		78E09404D70DA02E008BDB3BBC76FC48 /* ChatLayoutDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.html; path = docs/Protocols/ChatLayoutDelegate.html; sourceTree = "<group>"; };
 		797B1BBC3E03CD39B8CB79D79BCFF843 /* DifferenceKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = DifferenceKit.framework; path = DifferenceKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		79BFBA9E16FD85DC09A18D1D2633A852 /* ItemIdentifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemIdentifier.swift; sourceTree = "<group>"; };
 		7AC7236711942C632BCDE4086A089921 /* Pods-ChatLayout_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ChatLayout_Example.modulemap"; sourceTree = "<group>"; };
-		7D92C9D6031B58EFFE4037EAD3FCD5DA /* carat.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = carat.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/carat.png; sourceTree = "<group>"; };
-		7F2A4E35AD91F44AB54B249D8DF74E42 /* ChatLayout.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.html; path = docs/Classes/ChatLayout.html; sourceTree = "<group>"; };
-		8299A65FBB3C7F336815FD29D7D37D38 /* CellLayoutContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.html; path = docs/Classes/CellLayoutContainerView.html; sourceTree = "<group>"; };
-		82FAEB536E58B2F96760B76C1FC2CF87 /* list.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = list.min.js; path = docs/tests/list.min.js; sourceTree = "<group>"; };
+		7B0746CE19CC42D38EB5E36F78813BDB /* ChatLayoutDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.html; path = docs/Protocols/ChatLayoutDelegate.html; sourceTree = "<group>"; };
+		7F1598F424E47536F772B63F95FCF586 /* EdgeAligningView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.swift.html; path = docs/tests/EdgeAligningView.swift.html; sourceTree = "<group>"; };
+		806B882271F98A0B1109FEABB6DE25E2 /* ChatLayoutDelegate.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.swift.html; path = docs/tests/ChatLayoutDelegate.swift.html; sourceTree = "<group>"; };
+		83756B6B14D5C7DDA5B28284091A8F9D /* ItemSize.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemSize.html; path = docs/Enums/ItemSize.html; sourceTree = "<group>"; };
+		841015BC1E4E3528DD4D26CE7F153647 /* CellLayoutContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.html; path = docs/Classes/CellLayoutContainerView.html; sourceTree = "<group>"; };
 		843DF95884346DBD4F0434B87CA40100 /* DifferentiableSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DifferentiableSection.swift; path = Sources/DifferentiableSection.swift; sourceTree = "<group>"; };
-		848A2B281C323D25C8153D8D20915CB9 /* highlight.css */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.css; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/css/highlight.css; sourceTree = "<group>"; };
+		84AADBCAEB82225B42FD55D1AE19B9EA /* highlight.pack.js */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.pack.js; path = docs/tests/highlight.pack.js; sourceTree = "<group>"; };
+		8647875F8D6B33A59F2B27AD86D694D7 /* jazzy.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jazzy.js; sourceTree = "<group>"; };
 		86AC57E68B0EB58755BF2F589B9272C9 /* ChatItemAlignment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatItemAlignment.swift; path = ChatLayout/Classes/Core/ChatItemAlignment.swift; sourceTree = "<group>"; };
-		870D163659504759CBB1F646030611F5 /* ChatLayoutDelegate.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.swift.html; path = docs/tests/ChatLayoutDelegate.swift.html; sourceTree = "<group>"; };
 		878D0DD12BEBBFBEE0FB0C7625E668D7 /* DifferenceKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DifferenceKit.release.xcconfig; sourceTree = "<group>"; };
-		878E64F30CCE9ABA4C9EED09C3E54818 /* StaticViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/StaticViewFactory.html; sourceTree = "<group>"; };
 		88C330A3FCE48D4162AD3217BB5360CE /* ChatLayoutPositionSnapshot.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutPositionSnapshot.swift; path = ChatLayout/Classes/Core/ChatLayoutPositionSnapshot.swift; sourceTree = "<group>"; };
-		893A0F463C17E8E7232250CFB07461B3 /* gh.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = gh.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/gh.png; sourceTree = "<group>"; };
-		89A64BEEABADB43F18A3C0D31D6BD35F /* ChatLayoutSettings.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutSettings.html; sourceTree = "<group>"; };
-		8AF6E8A6F73BF101CDDC8C6F23FB8D7F /* ItemKind.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.swift.html; path = docs/tests/ItemKind.swift.html; sourceTree = "<group>"; };
 		8C3D1F0FCC2220B61C8E39E460F62F1B /* String+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "String+Extensions.swift"; path = "Sources/Extensions/String+Extensions.swift"; sourceTree = "<group>"; };
-		8C6E1C307DC246E65ED53A23A6BBB286 /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/index.html; sourceTree = "<group>"; };
-		8DB3EDDB19C90686998C1FE00E8E10F6 /* ContainerCollectionReusableView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.swift.html; path = docs/tests/ContainerCollectionReusableView.swift.html; sourceTree = "<group>"; };
 		8E3E0284DF8D122FDD313028A44D84F2 /* DifferenceKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DifferenceKit-dummy.m"; sourceTree = "<group>"; };
+		8E4F1D6B5B6101BEC1FF4A1DE273C2A2 /* CellLayoutContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/CellLayoutContainerView.html; sourceTree = "<group>"; };
 		8E88E2D2701274F37D89C1B75286A511 /* ChatLayout-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ChatLayout-Info.plist"; sourceTree = "<group>"; };
-		8F3D41FC5F6A034C0625B707CE4515B6 /* EdgeAligningView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.swift.html; path = docs/tests/EdgeAligningView.swift.html; sourceTree = "<group>"; };
+		8EC9C7C8568312948B74A3DEB26A3A0E /* StaticViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StaticViewFactory.html; path = docs/Protocols/StaticViewFactory.html; sourceTree = "<group>"; };
 		907259CB59F8025A59896C2CC6A7051F /* Algorithm.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Algorithm.swift; path = Sources/Algorithm.swift; sourceTree = "<group>"; };
-		9166FD8A6AE185F3E927A9D9ABBF5455 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/Structs/ChatLayoutPositionSnapshot/Edge.html; sourceTree = "<group>"; };
-		91CE74D57CB87A5ABB323F9707471622 /* jquery.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jquery.min.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jquery.min.js; sourceTree = "<group>"; };
-		922463DA1BA89C603751B67D285615DE /* jazzy.search.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.search.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jazzy.search.js; sourceTree = "<group>"; };
 		92AF5FBBFBD3DF2BE16298B0E943B418 /* DifferenceKit-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "DifferenceKit-Info.plist"; sourceTree = "<group>"; };
 		9342239666719B2AD5271B4C458BCD16 /* KeyboardNotification.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyboardNotification.swift; path = Sources/KeyboardManager/KeyboardNotification.swift; sourceTree = "<group>"; };
-		936933310B4DE14EE5CA1703A0C54FB1 /* CGSize+Extension.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "CGSize+Extension.swift.html"; path = "docs/tests/CGSize+Extension.swift.html"; sourceTree = "<group>"; };
-		951FD68500B809855FAF644D048FA0C0 /* ItemSize.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemSize.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ItemSize.html; sourceTree = "<group>"; };
-		95334C2367FCF83EAC02B5926363BB38 /* VoidViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = VoidViewFactory.html; path = docs/Structs/VoidViewFactory.html; sourceTree = "<group>"; };
-		958A31623C1722FC7C47F4EF809A924E /* ChatItemAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatItemAlignment.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ChatItemAlignment.html; sourceTree = "<group>"; };
-		96DBB1CD493963D981971FD4AFCF2478 /* ChatLayoutSettings.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.html; path = docs/Structs/ChatLayoutSettings.html; sourceTree = "<group>"; };
-		988CC0252B1EDA2B57DE7C1904F77799 /* jazzy.css */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.css; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/css/jazzy.css; sourceTree = "<group>"; };
-		98C73F2F97885AD6AFE010576EAAD189 /* ChatLayout.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.swift.html; path = docs/tests/ChatLayout.swift.html; sourceTree = "<group>"; };
-		9BD3FA29B47286FC14D9D8410D33AA54 /* typeahead.jquery.js */ = {isa = PBXFileReference; includeInIndex = 1; name = typeahead.jquery.js; path = docs/js/typeahead.jquery.js; sourceTree = "<group>"; };
-		9D5F98E754BD38DDF6B98AB058D33755 /* ContainerCollectionViewCell.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.html; path = docs/Classes/ContainerCollectionViewCell.html; sourceTree = "<group>"; };
+		942A364A8C31974105D2784ADC52C756 /* docSet.dsidx */ = {isa = PBXFileReference; includeInIndex = 1; name = docSet.dsidx; path = docs/docsets/ChatLayout.docset/Contents/Resources/docSet.dsidx; sourceTree = "<group>"; };
+		94494AAA1B5193E832277891D2D7F988 /* EdgeAligningView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = EdgeAligningView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/EdgeAligningView.html; sourceTree = "<group>"; };
+		94F9D9A76944CC6B14EA455674A43737 /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/tests/index.html; sourceTree = "<group>"; };
+		9694D7882E86FBF99661DF67C1019A25 /* CellLayoutContainerViewAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerViewAlignment.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/CellLayoutContainerViewAlignment.html; sourceTree = "<group>"; };
+		98E7AB07B920F4017011BACD2403B574 /* CellLayoutContainerView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerView.swift.html; path = docs/tests/CellLayoutContainerView.swift.html; sourceTree = "<group>"; };
+		9C514688EB57593494C07F04707F6F64 /* ChatLayoutAttributes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayoutAttributes.html; sourceTree = "<group>"; };
+		9CA10EB9381D4514FB719D2A3B444C5B /* jazzy.search.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.search.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/jazzy.search.js; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9DE07BE6A36F2814B0F456DCE5BBE640 /* lunr.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = lunr.min.js; path = docs/js/lunr.min.js; sourceTree = "<group>"; };
-		9E459B51B81A05EB6E7AE1DE8EE93863 /* ChatLayoutPositionSnapshot.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutPositionSnapshot.html; sourceTree = "<group>"; };
-		A05AAD1E6D00E15A31EEADC54FEC573A /* MessageContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.html; path = docs/Classes/MessageContainerView.html; sourceTree = "<group>"; };
-		A2A97D7B84EE6B222D4F1F69882BFB70 /* CellLayoutContainerViewAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerViewAlignment.html; path = docs/Enums/CellLayoutContainerViewAlignment.html; sourceTree = "<group>"; };
+		9ECDD2D81937D88C86703A752660D9B2 /* ChatLayout.tgz */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.tgz; path = docs/docsets/ChatLayout.tgz; sourceTree = "<group>"; };
+		9F2424FA0DD74FC8413866EE40DF288C /* ChatLayoutSettings.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.html; path = docs/Structs/ChatLayoutSettings.html; sourceTree = "<group>"; };
+		A0523FE47807A1840BA3B1A30465E010 /* ImageMaskedView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.html; path = docs/Classes/ImageMaskedView.html; sourceTree = "<group>"; };
+		A36445EF301F333432828F5234051101 /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/index.html; sourceTree = "<group>"; };
+		A3BE0BC9DF974C8CF51B1AD9B41DAB5A /* ItemSize.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemSize.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ItemSize.html; sourceTree = "<group>"; };
 		A53E8EDBCC8B178BAF5D71787146D652 /* Pods-ChatLayout_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ChatLayout_Tests.modulemap"; sourceTree = "<group>"; };
-		A6382AA6DC83B551B421C8C164F74E4D /* ChatLayoutAttributes.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.swift.html; path = docs/tests/ChatLayoutAttributes.swift.html; sourceTree = "<group>"; };
-		A74636C659B98CB1C8613876B3073C26 /* ContainerCollectionViewCellDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCellDelegate.html; path = docs/Protocols/ContainerCollectionViewCellDelegate.html; sourceTree = "<group>"; };
-		A7C0B619494FDD17C6043955264F4911 /* ChatLayout.tgz */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.tgz; path = docs/docsets/ChatLayout.tgz; sourceTree = "<group>"; };
-		A9021A5F94A7AB5ABA3171B2A1E9AC00 /* slather.css */ = {isa = PBXFileReference; includeInIndex = 1; name = slather.css; path = docs/tests/slather.css; sourceTree = "<group>"; };
+		A5A2E944B1B6FF7B339BAD1FD18446AB /* ImageMaskedViewTransformation.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedViewTransformation.html; path = docs/Enums/ImageMaskedViewTransformation.html; sourceTree = "<group>"; };
 		A90B6E8B4D64700C33F2BDA1A05BCF34 /* StaticViewFactory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StaticViewFactory.swift; path = ChatLayout/Classes/Extras/StaticViewFactory.swift; sourceTree = "<group>"; };
-		AA15E525CC2E8254F1BF437ABC50CFA2 /* ContainerCollectionViewCell.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ContainerCollectionViewCell.html; sourceTree = "<group>"; };
+		AA31D48AC31D4D465AF58A7B9029EB6D /* ChatLayoutPositionSnapshot.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.swift.html; path = docs/tests/ChatLayoutPositionSnapshot.swift.html; sourceTree = "<group>"; };
 		AA5F637F7EA91407686F9028B85C4EBD /* Pods-ChatLayout_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ChatLayout_Tests-umbrella.h"; sourceTree = "<group>"; };
+		AA6816FE9F20835A151A100D03EF33AB /* ContainerCollectionViewCell.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ContainerCollectionViewCell.html; sourceTree = "<group>"; };
 		AA6D5CD685870658A584740AF3302400 /* Pods_ChatLayout_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ChatLayout_Example.framework; path = "Pods-ChatLayout_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB2DD440DED3D6DF2C58C9A0DB34240A /* ImageAttachmentCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageAttachmentCell.swift; path = Sources/Plugins/AttachmentManager/Views/ImageAttachmentCell.swift; sourceTree = "<group>"; };
 		AB668DA2D8D883185F056837E99E7AFC /* InputStackView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputStackView.swift; path = Sources/Views/InputStackView.swift; sourceTree = "<group>"; };
 		AC74BAA18DFB2B6D12FF30F137B2E4D8 /* ItemSize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemSize.swift; sourceTree = "<group>"; };
 		ACAAC90A2AFDF639571ED39F524E06A8 /* ChatLayoutInvalidationContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutInvalidationContext.swift; path = ChatLayout/Classes/Core/ChatLayoutInvalidationContext.swift; sourceTree = "<group>"; };
 		AE9CD6FDC7ECF91D9EC9BF5A027F3CB9 /* HorizontalEdgePadding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HorizontalEdgePadding.swift; path = Sources/Models/HorizontalEdgePadding.swift; sourceTree = "<group>"; };
-		AFFDE1C4CE63859B7782416656BDD8E5 /* CellLayoutContainerViewAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerViewAlignment.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/CellLayoutContainerViewAlignment.html; sourceTree = "<group>"; };
-		B0CB5B7290D852AAEEEC6AB2E4E32A6B /* highlight.css */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.css; path = docs/css/highlight.css; sourceTree = "<group>"; };
-		B2006E28DAB60C876FB0E1C07E0431DD /* ChatLayoutInvalidationContext.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutInvalidationContext.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayoutInvalidationContext.html; sourceTree = "<group>"; };
+		AFDF33EAA7FE32BC1C56C096C3E33DAE /* ContainerCollectionViewCellDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCellDelegate.html; path = docs/Protocols/ContainerCollectionViewCellDelegate.html; sourceTree = "<group>"; };
+		B02F5F20283C0233D46A029684510E63 /* CellLayoutContainerViewAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = CellLayoutContainerViewAlignment.html; path = docs/Enums/CellLayoutContainerViewAlignment.html; sourceTree = "<group>"; };
+		B032360E75CA5BD2E79EF2BB5488C20A /* readme.html */ = {isa = PBXFileReference; includeInIndex = 1; name = readme.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/readme.html; sourceTree = "<group>"; };
+		B0A0E9F96C769AB39DDCE2DA3FCE102E /* search.json */ = {isa = PBXFileReference; includeInIndex = 1; name = search.json; path = docs/search.json; sourceTree = "<group>"; };
+		B0B8621E6C26FFF8592C7450C8ED3023 /* ImageMaskedViewTransformation.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedViewTransformation.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ImageMaskedViewTransformation.html; sourceTree = "<group>"; };
 		B2536EC187C110004AE7DBB23339385F /* Pods-ChatLayout_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ChatLayout_Example-dummy.m"; sourceTree = "<group>"; };
-		B4CFD7633606B63D16D6380C4284C811 /* StateController.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = StateController.swift.html; path = docs/tests/StateController.swift.html; sourceTree = "<group>"; };
+		B325616ADA60EA90B1233A3586985390 /* SectionModel.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = SectionModel.swift.html; path = docs/tests/SectionModel.swift.html; sourceTree = "<group>"; };
+		B37133BCED7E0D3C194FA9761EE2A0DC /* badge.svg */ = {isa = PBXFileReference; includeInIndex = 1; name = badge.svg; path = docs/badge.svg; sourceTree = "<group>"; };
+		B46B968B520CEE8CCF6AD8DC0FE4F16B /* ChatLayoutSettings.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutSettings.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutSettings.html; sourceTree = "<group>"; };
+		B50EB85E62BD3ED12FEAEB863E50A1A8 /* jazzy.search.js */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.search.js; path = docs/js/jazzy.search.js; sourceTree = "<group>"; };
+		B518A3D738575816229DAFBC34900D88 /* ChatLayout.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayout.html; path = docs/Classes/ChatLayout.html; sourceTree = "<group>"; };
 		B68FE7063EEEA2E9A393BFC5B3CB115C /* ChatLayoutSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutSettings.swift; path = ChatLayout/Classes/Core/ChatLayoutSettings.swift; sourceTree = "<group>"; };
 		B81513B0B3333500DFFB1B1B179FB571 /* InputBarAccessoryView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = InputBarAccessoryView.framework; path = InputBarAccessoryView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B89ED68DF8AF43D4E0469DE9D40DC8D3 /* typeahead.jquery.js */ = {isa = PBXFileReference; includeInIndex = 1; name = typeahead.jquery.js; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/js/typeahead.jquery.js; sourceTree = "<group>"; };
-		BB1FB15003B48EAFF4A89E19C8680A90 /* spinner.gif */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.gif; name = spinner.gif; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/spinner.gif; sourceTree = "<group>"; };
-		BB73FA4389F665AB9BF0F631D29BC011 /* ChatItemAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatItemAlignment.html; path = docs/Enums/ChatItemAlignment.html; sourceTree = "<group>"; };
+		B9F5DAEB642EFCD9C255283AEFDDBA70 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutPositionSnapshot/Edge.html; sourceTree = "<group>"; };
+		BC0604FA991F68F7FF2330797271D0F5 /* ChatLayoutAttributes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.html; path = docs/Classes/ChatLayoutAttributes.html; sourceTree = "<group>"; };
 		BD8CE19584E2AA9DB902E1FA8768BE29 /* LayoutModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LayoutModel.swift; sourceTree = "<group>"; };
 		BD9A0796893A65DFEE458ACDE15A12F9 /* ChatLayoutAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatLayoutAttributes.swift; path = ChatLayout/Classes/Core/ChatLayoutAttributes.swift; sourceTree = "<group>"; };
+		BDC619AC6E2E5711977F94F1CBDF7C6C /* ChatLayoutAttributes.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.swift.html; path = docs/tests/ChatLayoutAttributes.swift.html; sourceTree = "<group>"; };
 		BDFA07FCD0735507913B18664DE807E9 /* InputBarAccessoryView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "InputBarAccessoryView-prefix.pch"; sourceTree = "<group>"; };
-		BEBAC00BD665E56962CCD1D2928A2BCD /* ChatLayoutAttributes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayoutAttributes.html; sourceTree = "<group>"; };
 		BEE85B9516BCBF5A065EEF546BDF4596 /* ContainerCollectionReusableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContainerCollectionReusableView.swift; path = ChatLayout/Classes/Extras/ContainerCollectionReusableView.swift; sourceTree = "<group>"; };
 		BF841A49896C8758E9B7E2673D1B2AB3 /* AutocompleteManagerDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutocompleteManagerDataSource.swift; path = Sources/Plugins/AutocompleteManager/Protocols/AutocompleteManagerDataSource.swift; sourceTree = "<group>"; };
-		C023535DC36B42E92A5978ED56510ECE /* ChatLayoutAttributes.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutAttributes.html; path = docs/Classes/ChatLayoutAttributes.html; sourceTree = "<group>"; };
+		C05B88AC705AFD39876C170EC91A04DC /* MessageContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/MessageContainerView.html; sourceTree = "<group>"; };
 		C132FD965BE5B874C15D9C404E5E1874 /* Pods-ChatLayout_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatLayout_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		C1E1EA00782B3CB2A6585D353AADE066 /* ContentEquatable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContentEquatable.swift; path = Sources/ContentEquatable.swift; sourceTree = "<group>"; };
-		C84578F374A7D00309E158987354A463 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = docs/docsets/ChatLayout.docset/Contents/Info.plist; sourceTree = "<group>"; };
-		C850759D8C89540FBF1022D60C2D1F2D /* ImageMaskedView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.html; path = docs/Classes/ImageMaskedView.html; sourceTree = "<group>"; };
-		CAE26B0793A6DFFA7DDF13A1263B1186 /* dash.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = dash.png; path = docs/img/dash.png; sourceTree = "<group>"; };
-		CAEE1DE2A55767B45352DF08ABDBE45E /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/Classes/EdgeAligningView/Edge.html; sourceTree = "<group>"; };
-		CB20EF1547528FB94C72FEB2B0107CB2 /* ContainerCollectionReusableView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.html; path = docs/Classes/ContainerCollectionReusableView.html; sourceTree = "<group>"; };
+		C63808E0AC05F45D2840E102AD76EEF4 /* jazzy.css */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.css; path = docs/css/jazzy.css; sourceTree = "<group>"; };
+		CAD7AC641EF57DF3083E4FBF58E0832D /* RoundedCornersContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = RoundedCornersContainerView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/RoundedCornersContainerView.html; sourceTree = "<group>"; };
+		CB69410B6E41DAA751A6F718E5D4370F /* Extras.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Extras.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Extras.html; sourceTree = "<group>"; };
 		CB7A70FA1ACE79608D8DFBA5E7D5FF30 /* ContentIdentifiable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContentIdentifiable.swift; path = Sources/ContentIdentifiable.swift; sourceTree = "<group>"; };
+		CB8C748E50B71A566C814C461D658475 /* spinner.gif */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.gif; name = spinner.gif; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/spinner.gif; sourceTree = "<group>"; };
 		CBD33A691FB420ACF89E22E065EA6EAA /* InputBarAccessoryView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = InputBarAccessoryView.debug.xcconfig; sourceTree = "<group>"; };
-		CDD8984B5F5CC9D7C7CA2438AF5365C6 /* ChatLayoutDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutDelegate.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/ChatLayoutDelegate.html; sourceTree = "<group>"; };
-		CF46F8F964BB33306979F0D0AD18BA20 /* logo.jpg */ = {isa = PBXFileReference; includeInIndex = 1; name = logo.jpg; path = docs/tests/logo.jpg; sourceTree = "<group>"; };
-		CF852F2E8671B75E3D3F22C61B2E8911 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/EdgeAligningView/Edge.html; sourceTree = "<group>"; };
+		CC274DEF1D1D2E3DD58D57D6118D1EF7 /* slather.css */ = {isa = PBXFileReference; includeInIndex = 1; name = slather.css; path = docs/tests/slather.css; sourceTree = "<group>"; };
+		CC980F62E254908ADBAC67FDDA007C0B /* ContainerCollectionReusableView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.swift.html; path = docs/tests/ContainerCollectionReusableView.swift.html; sourceTree = "<group>"; };
+		CECF6D66A8705DF06140B989B127FA91 /* CGSize+Extension.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "CGSize+Extension.swift.html"; path = "docs/tests/CGSize+Extension.swift.html"; sourceTree = "<group>"; };
+		CFA297063EA7A7B91C3F2784F3A74A38 /* RoundedCornersContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = RoundedCornersContainerView.html; path = docs/Classes/RoundedCornersContainerView.html; sourceTree = "<group>"; };
 		CFA95674643619ACD12B5995C2232490 /* Changeset.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Changeset.swift; path = Sources/Changeset.swift; sourceTree = "<group>"; };
 		D00DB29CFEF487473BE50F3E1C524479 /* SeparatorLine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SeparatorLine.swift; path = Sources/Views/SeparatorLine.swift; sourceTree = "<group>"; };
-		D0E489F2D426AF2203E3559F81A4DF71 /* ContainerCollectionViewCell.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCell.swift.html; path = docs/tests/ContainerCollectionViewCell.swift.html; sourceTree = "<group>"; };
-		D13A1D523C7B846F9686523569BF0C0E /* LayoutModel.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = LayoutModel.swift.html; path = docs/tests/LayoutModel.swift.html; sourceTree = "<group>"; };
-		D4EBA0D4A78E709427DB8C255D1FC0A2 /* undocumented.json */ = {isa = PBXFileReference; includeInIndex = 1; name = undocumented.json; path = docs/undocumented.json; sourceTree = "<group>"; };
+		D19A4DE8D1B5F6FCCA2AD0BBB7CA4F82 /* Other Enums.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Enums.html"; path = "docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Other Enums.html"; sourceTree = "<group>"; };
+		D2D485658AEA6ED881B3A86763CEF0FD /* gh.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = gh.png; path = docs/img/gh.png; sourceTree = "<group>"; };
+		D3418E8C425C47F42A9D605EDBFAE4F9 /* ChatItemAlignment.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatItemAlignment.html; path = docs/Enums/ChatItemAlignment.html; sourceTree = "<group>"; };
 		D64DBD3D559E7DB9831D51F1E04C3173 /* SectionModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SectionModel.swift; sourceTree = "<group>"; };
-		D810BCE298284ADC0C0B058E79EE7AF6 /* SectionModel.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = SectionModel.swift.html; path = docs/tests/SectionModel.swift.html; sourceTree = "<group>"; };
-		D8C3AE7EE7D2665EAF8A9DE40D87C7AE /* Extras.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Extras.html; path = docs/Extras.html; sourceTree = "<group>"; };
+		D6E127CA3A2E3E4FF94910B0D2317EBD /* ItemModel.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemModel.swift.html; path = docs/tests/ItemModel.swift.html; sourceTree = "<group>"; };
+		D73DAF6F4AB749C81F9F7C5C18C74100 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/Classes/EdgeAligningView/Edge.html; sourceTree = "<group>"; };
 		D9848B6740E730085C38F8F49E84B537 /* AutocompleteManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutocompleteManager.swift; path = Sources/Plugins/AutocompleteManager/AutocompleteManager.swift; sourceTree = "<group>"; };
+		D98F76B1878A9DF9F33F843932233A60 /* MessageContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = MessageContainerView.html; path = docs/Classes/MessageContainerView.html; sourceTree = "<group>"; };
+		D99FC4EBA4290D055BE632358A7ECEAC /* highlight.css */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.css; path = docs/css/highlight.css; sourceTree = "<group>"; };
 		D9BB7C3401AA21EA6628F4B29CD08B9E /* Pods-ChatLayout_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChatLayout_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		DA607F9ED28BD2CDDBE9578A8D07D095 /* spinner.gif */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.gif; name = spinner.gif; path = docs/img/spinner.gif; sourceTree = "<group>"; };
+		DA61A53616544321E92E5F54B1271105 /* CGRect+Extension.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "CGRect+Extension.swift.html"; path = "docs/tests/CGRect+Extension.swift.html"; sourceTree = "<group>"; };
 		DA8047C81F753482394118F1D3432858 /* Pods-ChatLayout_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ChatLayout_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
-		DB1B92A4EBBD19F11F05EB35175A86C0 /* ItemKind.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.html; path = docs/Enums/ItemKind.html; sourceTree = "<group>"; };
-		DB70C3961AE1C4356CF1A2D7E55EDE87 /* Edge.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Edge.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutPositionSnapshot/Edge.html; sourceTree = "<group>"; };
-		DD01D8875E706334A94F2B46E1F9269A /* search.json */ = {isa = PBXFileReference; includeInIndex = 1; name = search.json; path = docs/search.json; sourceTree = "<group>"; };
-		DE27F84C83ECDD687FA882FCA6D17160 /* readme.html */ = {isa = PBXFileReference; includeInIndex = 1; name = readme.html; path = docs/readme.html; sourceTree = "<group>"; };
-		DE45F5BA479666A240AA3885ECA0228B /* ContainerCollectionViewCellDelegate.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionViewCellDelegate.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Protocols/ContainerCollectionViewCellDelegate.html; sourceTree = "<group>"; };
+		DCF9A1A02BE656F65E6FBB7827FBA91C /* carat.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = carat.png; path = docs/img/carat.png; sourceTree = "<group>"; };
 		DF7E3BFBDD4674A4A066F7AB1727C985 /* UIKitExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIKitExtension.swift; path = Sources/Extensions/UIKitExtension.swift; sourceTree = "<group>"; };
-		DFA104A9ED0DD6EE2BA1652B8D399567 /* jazzy.css */ = {isa = PBXFileReference; includeInIndex = 1; name = jazzy.css; path = docs/css/jazzy.css; sourceTree = "<group>"; };
+		E0D37A1280E3082EB7CC3E56EF13769D /* typeahead.jquery.js */ = {isa = PBXFileReference; includeInIndex = 1; name = typeahead.jquery.js; path = docs/js/typeahead.jquery.js; sourceTree = "<group>"; };
+		E2848B0A8C9453DB86C5725405BC1E75 /* VoidViewFactory.html */ = {isa = PBXFileReference; includeInIndex = 1; name = VoidViewFactory.html; path = docs/Structs/VoidViewFactory.html; sourceTree = "<group>"; };
 		E35E651D3338EE5FA90E94E3E77A4BF8 /* AttachmentManagerDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentManagerDataSource.swift; path = Sources/Plugins/AttachmentManager/Protocols/AttachmentManagerDataSource.swift; sourceTree = "<group>"; };
+		E47D570E4B5D24DAAF7D49DE5E299A10 /* ImageMaskedView.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.swift.html; path = docs/tests/ImageMaskedView.swift.html; sourceTree = "<group>"; };
 		E6A2CCDBCCEEF1BD92B88A19DD8E52A3 /* NSConstraintLayoutSet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NSConstraintLayoutSet.swift; path = Sources/Models/NSConstraintLayoutSet.swift; sourceTree = "<group>"; };
+		E6D0274CE62BFE8B4BDCD3193106950E /* lunr.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = lunr.min.js; path = docs/js/lunr.min.js; sourceTree = "<group>"; };
+		E7606F667C15CCF3794B08AE4196EC8D /* Extras.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Extras.html; path = docs/Extras.html; sourceTree = "<group>"; };
 		E89C714A968065AFB3C9B2392AC725C9 /* NSNotification+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSNotification+Extensions.swift"; path = "Sources/Extensions/NSNotification+Extensions.swift"; sourceTree = "<group>"; };
-		EADEFE39AD74F78F940EAFC5EEE66F34 /* Core.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Core.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Core.html; sourceTree = "<group>"; };
 		EB01DCAD535B82AE85586F971E03FCCD /* Pods-ChatLayout_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ChatLayout_Example-umbrella.h"; sourceTree = "<group>"; };
 		EC059BEF59D1E58F46771B5CCB27E620 /* MessageContainerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MessageContainerView.swift; path = ChatLayout/Classes/Extras/MessageContainerView.swift; sourceTree = "<group>"; };
 		ED460EF47CC475E65EAD21BCC0EB64B8 /* AutocompleteCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutocompleteCell.swift; path = Sources/Plugins/AutocompleteManager/Views/AutocompleteCell.swift; sourceTree = "<group>"; };
+		EDFAB4FD040DACF18EB6F95AE571324B /* ContainerCollectionReusableView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ContainerCollectionReusableView.html; sourceTree = "<group>"; };
 		EECF7D5DDFC3F3B8B781DAC75C61E854 /* ModelState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ModelState.swift; sourceTree = "<group>"; };
-		EF770C2FB26371C974F1E0DB16A91CD0 /* RoundedCornersContainerView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = RoundedCornersContainerView.html; path = docs/Classes/RoundedCornersContainerView.html; sourceTree = "<group>"; };
 		F061336AE5937EB83F90E92959827A37 /* StateController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StateController.swift; sourceTree = "<group>"; };
-		F0CAA2D3DD96D3C692BF60C59846849D /* Extras.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Extras.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Extras.html; sourceTree = "<group>"; };
+		F06595F0626EF76CA40BC087CC7CDF8A /* Other Enums.html */ = {isa = PBXFileReference; includeInIndex = 1; name = "Other Enums.html"; path = "docs/Other Enums.html"; sourceTree = "<group>"; };
+		F0A5BB856D4335E9C350FF11E69AA15D /* undocumented.json */ = {isa = PBXFileReference; includeInIndex = 1; name = undocumented.json; path = docs/undocumented.json; sourceTree = "<group>"; };
+		F0B07FF962EC9A0880527BC8D70E1F2B /* ItemKind.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.html; path = docs/Enums/ItemKind.html; sourceTree = "<group>"; };
+		F0FD88B754D9E73EE5F6440ADB7AD1FD /* dash.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = dash.png; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/img/dash.png; sourceTree = "<group>"; };
+		F13CA00AACA7CF258DACAFC320F1AF46 /* highlight.css */ = {isa = PBXFileReference; includeInIndex = 1; name = highlight.css; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/css/highlight.css; sourceTree = "<group>"; };
 		F18F37E29CC5A71C97E016A4BD35937F /* DifferenceKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DifferenceKit-umbrella.h"; sourceTree = "<group>"; };
 		F1FA673D9B5985C5B3464B51524391CD /* ChatLayout.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ChatLayout.release.xcconfig; sourceTree = "<group>"; };
 		F2DDD8450D4CCBAA733D39126B2F26E6 /* InputBarButtonItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputBarButtonItem.swift; path = Sources/Controls/InputBarButtonItem.swift; sourceTree = "<group>"; };
-		F302EAC4BED7A7E603A515CCBEBDAC4A /* ItemKind.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemKind.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Enums/ItemKind.html; sourceTree = "<group>"; };
-		F6492E95DA3723314E535D86513F5349 /* ItemModel.swift.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ItemModel.swift.html; path = docs/tests/ItemModel.swift.html; sourceTree = "<group>"; };
+		F3E239DBCCA213D35D1E5889A64832B7 /* ChatLayoutPositionSnapshot.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutPositionSnapshot.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Structs/ChatLayoutPositionSnapshot.html; sourceTree = "<group>"; };
+		F5A4775CF6C52A4C63531FE2E535BBDB /* ChatLayoutInvalidationContext.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutInvalidationContext.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ChatLayoutInvalidationContext.html; sourceTree = "<group>"; };
+		F67A12EF0DA35B07B44DCD8DB2618947 /* index.html */ = {isa = PBXFileReference; includeInIndex = 1; name = index.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/index.html; sourceTree = "<group>"; };
+		F87FF8364241C1476F6AAC15B72D6D0F /* ImageMaskedView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ImageMaskedView.html; path = docs/docsets/ChatLayout.docset/Contents/Resources/Documents/Classes/ImageMaskedView.html; sourceTree = "<group>"; };
+		FAB0F1B17355445A9FDE051B375EF027 /* ContainerCollectionReusableView.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ContainerCollectionReusableView.html; path = docs/Classes/ContainerCollectionReusableView.html; sourceTree = "<group>"; };
 		FC0E3119019B6F11B0DE7144E4B24BEA /* InputBarAccessoryView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "InputBarAccessoryView-dummy.m"; sourceTree = "<group>"; };
 		FC202E85AD982D448319EC523E02E90E /* ChatLayout-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ChatLayout-prefix.pch"; sourceTree = "<group>"; };
+		FC307958F442ECD61DEAB34DD439C399 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = docs/docsets/ChatLayout.docset/Contents/Info.plist; sourceTree = "<group>"; };
 		FD15A4447B139F3D6657C524EFC04CAA /* KeyboardEvent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyboardEvent.swift; path = Sources/KeyboardManager/KeyboardEvent.swift; sourceTree = "<group>"; };
-		FE7FA2D95E3E04DFF9EDA0FCDDDDADD4 /* Core.html */ = {isa = PBXFileReference; includeInIndex = 1; name = Core.html; path = docs/Core.html; sourceTree = "<group>"; };
 		FF20AFD0D05E1E46D84628B1D6839187 /* ArraySection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ArraySection.swift; path = Sources/ArraySection.swift; sourceTree = "<group>"; };
-		FF8C66FD18AC693F1FB7D2F5B10E3D11 /* ChatLayoutInvalidationContext.html */ = {isa = PBXFileReference; includeInIndex = 1; name = ChatLayoutInvalidationContext.html; path = docs/Classes/ChatLayoutInvalidationContext.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -444,130 +444,6 @@
 				E2983683FD097A93297E2F5D4E382B36 /* iOS */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		307851319C64CBCAC012A0B7640CF0AF /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				084B1EF71D8B37779DCE9035CC3BA392 /* badge.svg */,
-				7D92C9D6031B58EFFE4037EAD3FCD5DA /* carat.png */,
-				41D8ECEB08535A323A79A0E6E19055E3 /* carat.png */,
-				8299A65FBB3C7F336815FD29D7D37D38 /* CellLayoutContainerView.html */,
-				2A76E15DE59D32BA89997042593413F2 /* CellLayoutContainerView.html */,
-				63CEF08424B0FD75321E2B4CC84E3A21 /* CellLayoutContainerView.swift.html */,
-				A2A97D7B84EE6B222D4F1F69882BFB70 /* CellLayoutContainerViewAlignment.html */,
-				AFFDE1C4CE63859B7782416656BDD8E5 /* CellLayoutContainerViewAlignment.html */,
-				28B5AF6CF2A8C435452B776B30A59409 /* CGRect+Extension.swift.html */,
-				936933310B4DE14EE5CA1703A0C54FB1 /* CGSize+Extension.swift.html */,
-				BB73FA4389F665AB9BF0F631D29BC011 /* ChatItemAlignment.html */,
-				958A31623C1722FC7C47F4EF809A924E /* ChatItemAlignment.html */,
-				7F2A4E35AD91F44AB54B249D8DF74E42 /* ChatLayout.html */,
-				457E22355CD85C2788ACD5DB9DE109ED /* ChatLayout.html */,
-				08EF5FDF4FF40A063AEEE3821047EA4F /* ChatLayout.podspec */,
-				A7C0B619494FDD17C6043955264F4911 /* ChatLayout.tgz */,
-				98C73F2F97885AD6AFE010576EAAD189 /* ChatLayout.swift.html */,
-				BEBAC00BD665E56962CCD1D2928A2BCD /* ChatLayoutAttributes.html */,
-				C023535DC36B42E92A5978ED56510ECE /* ChatLayoutAttributes.html */,
-				A6382AA6DC83B551B421C8C164F74E4D /* ChatLayoutAttributes.swift.html */,
-				78E09404D70DA02E008BDB3BBC76FC48 /* ChatLayoutDelegate.html */,
-				CDD8984B5F5CC9D7C7CA2438AF5365C6 /* ChatLayoutDelegate.html */,
-				870D163659504759CBB1F646030611F5 /* ChatLayoutDelegate.swift.html */,
-				B2006E28DAB60C876FB0E1C07E0431DD /* ChatLayoutInvalidationContext.html */,
-				FF8C66FD18AC693F1FB7D2F5B10E3D11 /* ChatLayoutInvalidationContext.html */,
-				214FC7A74D5D897FC9AF7AA8A10BB326 /* ChatLayoutPositionSnapshot.html */,
-				9E459B51B81A05EB6E7AE1DE8EE93863 /* ChatLayoutPositionSnapshot.html */,
-				64314EC75CA6ADF095EB106D800F4ECF /* ChatLayoutPositionSnapshot.swift.html */,
-				96DBB1CD493963D981971FD4AFCF2478 /* ChatLayoutSettings.html */,
-				89A64BEEABADB43F18A3C0D31D6BD35F /* ChatLayoutSettings.html */,
-				6136D6621B276123110E7EB584C36B99 /* ChatLayoutSettings.swift.html */,
-				0BAEAC6C8DD5C36B8AB688FA941F257A /* ContainerCollectionReusableView.html */,
-				CB20EF1547528FB94C72FEB2B0107CB2 /* ContainerCollectionReusableView.html */,
-				8DB3EDDB19C90686998C1FE00E8E10F6 /* ContainerCollectionReusableView.swift.html */,
-				9D5F98E754BD38DDF6B98AB058D33755 /* ContainerCollectionViewCell.html */,
-				AA15E525CC2E8254F1BF437ABC50CFA2 /* ContainerCollectionViewCell.html */,
-				D0E489F2D426AF2203E3559F81A4DF71 /* ContainerCollectionViewCell.swift.html */,
-				A74636C659B98CB1C8613876B3073C26 /* ContainerCollectionViewCellDelegate.html */,
-				DE45F5BA479666A240AA3885ECA0228B /* ContainerCollectionViewCellDelegate.html */,
-				EADEFE39AD74F78F940EAFC5EEE66F34 /* Core.html */,
-				FE7FA2D95E3E04DFF9EDA0FCDDDDADD4 /* Core.html */,
-				CAE26B0793A6DFFA7DDF13A1263B1186 /* dash.png */,
-				0B0611E1AE34B7F93D8B558B00EE5860 /* dash.png */,
-				20ACE28222AA6F357DB3F1F764FBA523 /* docSet.dsidx */,
-				CAEE1DE2A55767B45352DF08ABDBE45E /* Edge.html */,
-				CF852F2E8671B75E3D3F22C61B2E8911 /* Edge.html */,
-				9166FD8A6AE185F3E927A9D9ABBF5455 /* Edge.html */,
-				DB70C3961AE1C4356CF1A2D7E55EDE87 /* Edge.html */,
-				5D06FFB363F835161AA76087D3D933F7 /* EdgeAligningView.html */,
-				1D59287E60BF4AE94DED9FFACCE67B2D /* EdgeAligningView.html */,
-				8F3D41FC5F6A034C0625B707CE4515B6 /* EdgeAligningView.swift.html */,
-				D8C3AE7EE7D2665EAF8A9DE40D87C7AE /* Extras.html */,
-				F0CAA2D3DD96D3C692BF60C59846849D /* Extras.html */,
-				893A0F463C17E8E7232250CFB07461B3 /* gh.png */,
-				16EAF9293B3E2F356D90003E2C737959 /* gh.png */,
-				B0CB5B7290D852AAEEEC6AB2E4E32A6B /* highlight.css */,
-				848A2B281C323D25C8153D8D20915CB9 /* highlight.css */,
-				6286ECF535AA246BD620C638F1274886 /* highlight.pack.js */,
-				231464F25B00D5F203877140C7501993 /* ImageMaskedView.html */,
-				C850759D8C89540FBF1022D60C2D1F2D /* ImageMaskedView.html */,
-				619B3A57177E6E837FC2C25BF614192C /* ImageMaskedView.swift.html */,
-				30DF826540340A023CA33E0D404C0A82 /* ImageMaskedViewTransformation.html */,
-				3407D0D8D398F778C7AD49B95C1F61B3 /* ImageMaskedViewTransformation.html */,
-				4DD222219C03A0F3C0AB1F671A50B40A /* index.html */,
-				8C6E1C307DC246E65ED53A23A6BBB286 /* index.html */,
-				25A03C655A4A4505BD8F4287D2588B38 /* index.html */,
-				C84578F374A7D00309E158987354A463 /* Info.plist */,
-				F302EAC4BED7A7E603A515CCBEBDAC4A /* ItemKind.html */,
-				DB1B92A4EBBD19F11F05EB35175A86C0 /* ItemKind.html */,
-				8AF6E8A6F73BF101CDDC8C6F23FB8D7F /* ItemKind.swift.html */,
-				F6492E95DA3723314E535D86513F5349 /* ItemModel.swift.html */,
-				6404634155ABF2F8965449F7B1B16DE6 /* ItemSize.html */,
-				951FD68500B809855FAF644D048FA0C0 /* ItemSize.html */,
-				988CC0252B1EDA2B57DE7C1904F77799 /* jazzy.css */,
-				DFA104A9ED0DD6EE2BA1652B8D399567 /* jazzy.css */,
-				6D7F9518B90A0B4DEFE2D43ADA1F12D1 /* jazzy.js */,
-				40F368056620C51283BA9B0CE83FF25D /* jazzy.js */,
-				642628B776C49743C1075FC3F6048D69 /* jazzy.search.js */,
-				922463DA1BA89C603751B67D285615DE /* jazzy.search.js */,
-				91CE74D57CB87A5ABB323F9707471622 /* jquery.min.js */,
-				5038929643315E8A7BA9C6CC96E2B7C6 /* jquery.min.js */,
-				D13A1D523C7B846F9686523569BF0C0E /* LayoutModel.swift.html */,
-				57F0287F92073ECAA53E2757E3F22B85 /* LICENSE */,
-				82FAEB536E58B2F96760B76C1FC2CF87 /* list.min.js */,
-				CF46F8F964BB33306979F0D0AD18BA20 /* logo.jpg */,
-				9DE07BE6A36F2814B0F456DCE5BBE640 /* lunr.min.js */,
-				451CA01FFD88FBD53B62658957BB7416 /* lunr.min.js */,
-				7478B0022EA79C85C27BA106DA159D5F /* MessageContainerView.html */,
-				A05AAD1E6D00E15A31EEADC54FEC573A /* MessageContainerView.html */,
-				5A033CFE8CDD749DDEEC7F60BE4AC60B /* MessageContainerView.swift.html */,
-				42352F0DB252C7BC219C5C4E8FDCD1C9 /* Other Classes.html */,
-				4878BB5D27BB5A80C217BE73CF5B1587 /* Other Classes.html */,
-				4E28065070BB2589D908840916482C73 /* Other Enums.html */,
-				38242B30E6D3B283A34EE7FC5D084DFC /* Other Enums.html */,
-				4E395CD89118925DB5D76AB2CCDFF4F6 /* Other Guides.html */,
-				5126234EA7232DA5F9EB016752B19F52 /* Other Guides.html */,
-				0552E61515434F0FF071C2186CC445C5 /* readme.html */,
-				DE27F84C83ECDD687FA882FCA6D17160 /* readme.html */,
-				3ADD51BEFA6F3151CB5A8776BC3ADAB9 /* README.md */,
-				EF770C2FB26371C974F1E0DB16A91CD0 /* RoundedCornersContainerView.html */,
-				107079EA73A965B86C7E95507F951862 /* RoundedCornersContainerView.html */,
-				40F4DF6BDA8721F922A8BC4BB32595D3 /* RoundedCornersContainerView.swift.html */,
-				DD01D8875E706334A94F2B46E1F9269A /* search.json */,
-				6BE8475D35560DDAF968D5643DB4E80B /* search.json */,
-				D810BCE298284ADC0C0B058E79EE7AF6 /* SectionModel.swift.html */,
-				A9021A5F94A7AB5ABA3171B2A1E9AC00 /* slather.css */,
-				3A9B2B68A2EA06FDA5A807D1B68B58F3 /* spinner.gif */,
-				BB1FB15003B48EAFF4A89E19C8680A90 /* spinner.gif */,
-				B4CFD7633606B63D16D6380C4284C811 /* StateController.swift.html */,
-				878E64F30CCE9ABA4C9EED09C3E54818 /* StaticViewFactory.html */,
-				0E43B9E1483150B6090ED7ACBE3320B9 /* StaticViewFactory.html */,
-				1F975B6BEF946931958ED351FF74EF28 /* StaticViewFactory.swift.html */,
-				9BD3FA29B47286FC14D9D8410D33AA54 /* typeahead.jquery.js */,
-				B89ED68DF8AF43D4E0469DE9D40DC8D3 /* typeahead.jquery.js */,
-				D4EBA0D4A78E709427DB8C255D1FC0A2 /* undocumented.json */,
-				95334C2367FCF83EAC02B5926363BB38 /* VoidViewFactory.html */,
-				3E0E5951DF6AE51489D6F866DFCE07BA /* VoidViewFactory.html */,
-			);
-			name = Pod;
 			sourceTree = "<group>";
 		};
 		337E29E8632E5B0E0620DE159B48B2B1 /* Support Files */ = {
@@ -683,7 +559,7 @@
 			children = (
 				5BA6324514ADE97DAF3C0CA4A76AB311 /* Core */,
 				07DA4C26CAD5DFEF6CE13953402AEC45 /* Extras */,
-				307851319C64CBCAC012A0B7640CF0AF /* Pod */,
+				A9C5AF289EC6D6988E0EA80C3AD5134F /* Pod */,
 				337E29E8632E5B0E0620DE159B48B2B1 /* Support Files */,
 			);
 			name = ChatLayout;
@@ -720,6 +596,130 @@
 				33A74DA8A65F7CC80A13C3486CBC9D05 /* StagedChangeset.swift */,
 			);
 			name = Core;
+			sourceTree = "<group>";
+		};
+		A9C5AF289EC6D6988E0EA80C3AD5134F /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				B37133BCED7E0D3C194FA9761EE2A0DC /* badge.svg */,
+				6EF305F18BEF429BF0359A191FF182A1 /* carat.png */,
+				DCF9A1A02BE656F65E6FBB7827FBA91C /* carat.png */,
+				841015BC1E4E3528DD4D26CE7F153647 /* CellLayoutContainerView.html */,
+				8E4F1D6B5B6101BEC1FF4A1DE273C2A2 /* CellLayoutContainerView.html */,
+				98E7AB07B920F4017011BACD2403B574 /* CellLayoutContainerView.swift.html */,
+				B02F5F20283C0233D46A029684510E63 /* CellLayoutContainerViewAlignment.html */,
+				9694D7882E86FBF99661DF67C1019A25 /* CellLayoutContainerViewAlignment.html */,
+				DA61A53616544321E92E5F54B1271105 /* CGRect+Extension.swift.html */,
+				CECF6D66A8705DF06140B989B127FA91 /* CGSize+Extension.swift.html */,
+				D3418E8C425C47F42A9D605EDBFAE4F9 /* ChatItemAlignment.html */,
+				3D5034F12C7CFC4B1017C3A451D2B0D6 /* ChatItemAlignment.html */,
+				B518A3D738575816229DAFBC34900D88 /* ChatLayout.html */,
+				5DD721911A338911F50F62DB4C3E00F9 /* ChatLayout.html */,
+				11CE523CC5DEAF1559075A38561F2835 /* ChatLayout.podspec */,
+				9ECDD2D81937D88C86703A752660D9B2 /* ChatLayout.tgz */,
+				1691ADA4C55ABF603C55C875BF95AD97 /* ChatLayout.swift.html */,
+				9C514688EB57593494C07F04707F6F64 /* ChatLayoutAttributes.html */,
+				BC0604FA991F68F7FF2330797271D0F5 /* ChatLayoutAttributes.html */,
+				BDC619AC6E2E5711977F94F1CBDF7C6C /* ChatLayoutAttributes.swift.html */,
+				7B0746CE19CC42D38EB5E36F78813BDB /* ChatLayoutDelegate.html */,
+				0A0AF898C9654BCFD021F1BBB13F69D1 /* ChatLayoutDelegate.html */,
+				806B882271F98A0B1109FEABB6DE25E2 /* ChatLayoutDelegate.swift.html */,
+				F5A4775CF6C52A4C63531FE2E535BBDB /* ChatLayoutInvalidationContext.html */,
+				0E2B3BECD00420D938281EF0829F5520 /* ChatLayoutInvalidationContext.html */,
+				44CC6B6B361C8C2979D101151565CB7F /* ChatLayoutPositionSnapshot.html */,
+				F3E239DBCCA213D35D1E5889A64832B7 /* ChatLayoutPositionSnapshot.html */,
+				AA31D48AC31D4D465AF58A7B9029EB6D /* ChatLayoutPositionSnapshot.swift.html */,
+				9F2424FA0DD74FC8413866EE40DF288C /* ChatLayoutSettings.html */,
+				B46B968B520CEE8CCF6AD8DC0FE4F16B /* ChatLayoutSettings.html */,
+				137660962F73105DC6E6C2C6F6546830 /* ChatLayoutSettings.swift.html */,
+				EDFAB4FD040DACF18EB6F95AE571324B /* ContainerCollectionReusableView.html */,
+				FAB0F1B17355445A9FDE051B375EF027 /* ContainerCollectionReusableView.html */,
+				CC980F62E254908ADBAC67FDDA007C0B /* ContainerCollectionReusableView.swift.html */,
+				53782C0031D8CB9BB5A9BE1B5AE580A9 /* ContainerCollectionViewCell.html */,
+				AA6816FE9F20835A151A100D03EF33AB /* ContainerCollectionViewCell.html */,
+				14443715818465A4C427DE7C7D870145 /* ContainerCollectionViewCell.swift.html */,
+				AFDF33EAA7FE32BC1C56C096C3E33DAE /* ContainerCollectionViewCellDelegate.html */,
+				037EC299929DFFAB583E54173F75CF31 /* ContainerCollectionViewCellDelegate.html */,
+				2620BC1AF886FFCE8BAFA85CE3C2EE58 /* Core.html */,
+				733A73F893CB240DCF9687B8583297B8 /* Core.html */,
+				4E12D946A7FC5E38D1905A62CC7ABBC1 /* dash.png */,
+				F0FD88B754D9E73EE5F6440ADB7AD1FD /* dash.png */,
+				942A364A8C31974105D2784ADC52C756 /* docSet.dsidx */,
+				D73DAF6F4AB749C81F9F7C5C18C74100 /* Edge.html */,
+				33B7148EA7C558B409ADC5C369651FD2 /* Edge.html */,
+				5C5B528B2671D82D1300DF7F5760C16D /* Edge.html */,
+				B9F5DAEB642EFCD9C255283AEFDDBA70 /* Edge.html */,
+				94494AAA1B5193E832277891D2D7F988 /* EdgeAligningView.html */,
+				2C72B59CF7BD916DC533674A67E2FAC6 /* EdgeAligningView.html */,
+				7F1598F424E47536F772B63F95FCF586 /* EdgeAligningView.swift.html */,
+				E7606F667C15CCF3794B08AE4196EC8D /* Extras.html */,
+				CB69410B6E41DAA751A6F718E5D4370F /* Extras.html */,
+				36E916D96197E9EBE4AD27556167E05D /* gh.png */,
+				D2D485658AEA6ED881B3A86763CEF0FD /* gh.png */,
+				D99FC4EBA4290D055BE632358A7ECEAC /* highlight.css */,
+				F13CA00AACA7CF258DACAFC320F1AF46 /* highlight.css */,
+				84AADBCAEB82225B42FD55D1AE19B9EA /* highlight.pack.js */,
+				F87FF8364241C1476F6AAC15B72D6D0F /* ImageMaskedView.html */,
+				A0523FE47807A1840BA3B1A30465E010 /* ImageMaskedView.html */,
+				E47D570E4B5D24DAAF7D49DE5E299A10 /* ImageMaskedView.swift.html */,
+				B0B8621E6C26FFF8592C7450C8ED3023 /* ImageMaskedViewTransformation.html */,
+				A5A2E944B1B6FF7B339BAD1FD18446AB /* ImageMaskedViewTransformation.html */,
+				94F9D9A76944CC6B14EA455674A43737 /* index.html */,
+				F67A12EF0DA35B07B44DCD8DB2618947 /* index.html */,
+				A36445EF301F333432828F5234051101 /* index.html */,
+				FC307958F442ECD61DEAB34DD439C399 /* Info.plist */,
+				669E83354B4E0DE99365902ED2746C5B /* ItemKind.html */,
+				F0B07FF962EC9A0880527BC8D70E1F2B /* ItemKind.html */,
+				3DAE9187E476C0286E3DFF96DCA9B006 /* ItemKind.swift.html */,
+				D6E127CA3A2E3E4FF94910B0D2317EBD /* ItemModel.swift.html */,
+				83756B6B14D5C7DDA5B28284091A8F9D /* ItemSize.html */,
+				A3BE0BC9DF974C8CF51B1AD9B41DAB5A /* ItemSize.html */,
+				3E3EAFFAF8798B1B243694AEC98E44E5 /* jazzy.css */,
+				C63808E0AC05F45D2840E102AD76EEF4 /* jazzy.css */,
+				8647875F8D6B33A59F2B27AD86D694D7 /* jazzy.js */,
+				180E13606BB943DD66CDFDCF80534AFA /* jazzy.js */,
+				B50EB85E62BD3ED12FEAEB863E50A1A8 /* jazzy.search.js */,
+				9CA10EB9381D4514FB719D2A3B444C5B /* jazzy.search.js */,
+				71AC2F866F5CB8998CF5B1AFAB3CEF71 /* jquery.min.js */,
+				1FDBAA15E7FF58441F55D21F5E03B1BA /* jquery.min.js */,
+				5161C4478AD3B7F567ADFBA37FEC1F29 /* LayoutModel.swift.html */,
+				740130D357E81CE2E815A7233165D300 /* LICENSE */,
+				224C6B79001C82E36C0BB08578FB1558 /* list.min.js */,
+				3FE320FEB8024D99644E2835BB26FAC0 /* logo.jpg */,
+				E6D0274CE62BFE8B4BDCD3193106950E /* lunr.min.js */,
+				2B2CA7717D2D58DC5E48C8D83F384E81 /* lunr.min.js */,
+				C05B88AC705AFD39876C170EC91A04DC /* MessageContainerView.html */,
+				D98F76B1878A9DF9F33F843932233A60 /* MessageContainerView.html */,
+				0188C413B4F93107169ADB3627A81E4A /* MessageContainerView.swift.html */,
+				D19A4DE8D1B5F6FCCA2AD0BBB7CA4F82 /* Other Enums.html */,
+				F06595F0626EF76CA40BC087CC7CDF8A /* Other Enums.html */,
+				76244C85719D58BF4CF5D827A6EE589B /* Other Guides.html */,
+				22D4EF481424AC29A708D5F155AE133F /* Other Guides.html */,
+				2D2DB5029A0127A48BD173A76CB313E9 /* Other Protocols.html */,
+				6DEE914AE82DA7DA2FBEA0646DA439D6 /* Other Protocols.html */,
+				B032360E75CA5BD2E79EF2BB5488C20A /* readme.html */,
+				1E3BD5E8245D058D3B17186EE0EAFA5F /* readme.html */,
+				265267179E26CAC8D2EC47ABBEF8EDD0 /* README.md */,
+				CFA297063EA7A7B91C3F2784F3A74A38 /* RoundedCornersContainerView.html */,
+				CAD7AC641EF57DF3083E4FBF58E0832D /* RoundedCornersContainerView.html */,
+				196ACFE4A07FE0374CE17F16E80BDAD2 /* RoundedCornersContainerView.swift.html */,
+				B0A0E9F96C769AB39DDCE2DA3FCE102E /* search.json */,
+				11E912A4A060812516BD28F62E5D76D2 /* search.json */,
+				B325616ADA60EA90B1233A3586985390 /* SectionModel.swift.html */,
+				CC274DEF1D1D2E3DD58D57D6118D1EF7 /* slather.css */,
+				DA607F9ED28BD2CDDBE9578A8D07D095 /* spinner.gif */,
+				CB8C748E50B71A566C814C461D658475 /* spinner.gif */,
+				2BA79289D5C33D851CF412F86137F205 /* StateController.swift.html */,
+				68E75CD78F1AFF66D7F062F89984D6F0 /* StaticViewFactory.html */,
+				8EC9C7C8568312948B74A3DEB26A3A0E /* StaticViewFactory.html */,
+				66BE14ECB20B4BB4AB45705B8C5DC7CF /* StaticViewFactory.swift.html */,
+				E0D37A1280E3082EB7CC3E56EF13769D /* typeahead.jquery.js */,
+				66F460EB254A85DE8FD9EDE037C141BA /* typeahead.jquery.js */,
+				F0A5BB856D4335E9C350FF11E69AA15D /* undocumented.json */,
+				E2848B0A8C9453DB86C5725405BC1E75 /* VoidViewFactory.html */,
+				0B0BF810976BBC79CC8DCE1D7BC895D2 /* VoidViewFactory.html */,
+			);
+			name = Pod;
 			sourceTree = "<group>";
 		};
 		BE4157E8D64F32B9B2D98A8456B045EB /* InputBarAccessoryView */ = {

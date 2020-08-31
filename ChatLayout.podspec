@@ -1,12 +1,13 @@
 Pod::Spec.new do |s|
   s.name             = 'ChatLayout'
-  s.version          = '0.1.0'
-  s.summary          = 'Custom UICollectionViewLayout to support a Chat like layout of the cells.'
+  s.version          = '0.2.0'
+  s.summary          = 'An alternative solution to MessageKit. It uses custom UICollectionViewLayout to provide you full control over the presentation.'
   s.swift_version    = '5.2'
 
   s.description      = <<-DESC
-    Custom UICollectionViewLayout to support a Chat like layout of the cells. Supports ful width alignment and
-    and leading/trailing/center alignment of the cells.
+ChatLayout is an alternative solution to MessageKit. It uses custom
+UICollectionViewLayout to provide you full control over the presentation as well as all the tools available in
+UICollectionView. It supports dynamic cells and supplementary view sizes.
                        DESC
 
   s.homepage         = 'https://github.com/ekazaev/ChatLayout'

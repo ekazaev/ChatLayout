@@ -1,9 +1,9 @@
 {
   "name": "ChatLayout",
-  "version": "0.1.0",
-  "summary": "Custom UICollectionViewLayout to support a Chat like layout of the cells.",
+  "version": "0.2.0",
+  "summary": "An alternative solution to MessageKit. It uses custom UICollectionViewLayout to provide you full control over the presentation.",
   "swift_versions": "5.2",
-  "description": "Custom UICollectionViewLayout to support a Chat like layout of the cells. Supports ful width alignment and\nand leading/trailing/center alignment of the cells.",
+  "description": "ChatLayout is an alternative solution to MessageKit. It uses custom\nUICollectionViewLayout to provide you full control over the presentation as well as all the tools available in\nUICollectionView. It supports dynamic cells and supplementary view sizes.",
   "homepage": "https://github.com/ekazaev/ChatLayout",
   "license": {
     "type": "MIT",
@@ -14,7 +14,7 @@
   },
   "source": {
     "git": "https://github.com/ekazaev/ChatLayout.git",
-    "tag": "0.1.0"
+    "tag": "0.2.0"
   },
   "platforms": {
     "ios": "12.0"
