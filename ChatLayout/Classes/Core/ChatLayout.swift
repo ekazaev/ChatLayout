@@ -18,7 +18,7 @@ import UIKit
 ///
 /// `ChatLayout.settings`
 ///
-/// `ChatLayout.shouldKeepContentOffsetOnBatchUpdates`
+/// `ChatLayout.keepContentOffestAtBottomOnBatchUpdates`
 ///
 /// `ChatLayout.visibleBounds`
 ///
@@ -53,13 +53,14 @@ public final class ChatLayout: UICollectionViewLayout {
         }
     }
 
+    /// Default `UIScrollView` behaviour is to keep content offset constant from the top edge. If this flag is set to `true`
     /// `ChatLayout` should try to compensate batch update changes to keep the current content at the bottom of the visible
     /// part of `UICollectionView`.
     ///
     /// **NB:**
     /// Keep in mind that if during the batch content inset changes also (e.g. keyboard frame changes), `ChatLayout` will usually get that information after
     /// the animation starts and wont be able to compensate that change too. It should be done manually.
-    public var shouldKeepContentOffsetOnBatchUpdates: Bool = false
+    public var keepContentOffestAtBottomOnBatchUpdates: Bool = false
 
     /// The width and height of the collection view’s contents.
     public override var collectionViewContentSize: CGSize {
@@ -361,7 +362,7 @@ public final class ChatLayout: UICollectionViewLayout {
     public override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
         guard let collectionView = collectionView,
             oldBounds.width != collectionView.bounds.width,
-            shouldKeepContentOffsetOnBatchUpdates,
+            keepContentOffestAtBottomOnBatchUpdates,
             controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded() else {
             return
         }
@@ -418,7 +419,7 @@ public final class ChatLayout: UICollectionViewLayout {
         let isAboveBottomEdge = originalAttributes.frame.minY.rounded() <= visibleBounds.maxY.rounded()
 
         if heightDifference != 0,
-            (shouldKeepContentOffsetOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded())
+            (keepContentOffestAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded())
             || isUserInitiatedScrolling || isAnimatedBoundsChange,
             isAboveBottomEdge {
             context.contentOffsetAdjustment.y += heightDifference
@@ -535,7 +536,7 @@ public final class ChatLayout: UICollectionViewLayout {
     public override func finalizeCollectionViewUpdates() {
         controller.proposedCompensatingOffset = 0
 
-        if shouldKeepContentOffsetOnBatchUpdates,
+        if keepContentOffestAtBottomOnBatchUpdates,
             controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded(),
             controller.batchUpdateCompensatingOffset != 0,
             let collectionView = collectionView {
@@ -600,7 +601,7 @@ public final class ChatLayout: UICollectionViewLayout {
             if controller.deletedIndexes.contains(itemIndexPath) || controller.deletedSectionsIndexes.contains(itemIndexPath.section) {
                 attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .beforeUpdate) ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
-                if shouldKeepContentOffsetOnBatchUpdates,
+                if keepContentOffestAtBottomOnBatchUpdates,
                     controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded(),
                     let attributes = attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height / 2)

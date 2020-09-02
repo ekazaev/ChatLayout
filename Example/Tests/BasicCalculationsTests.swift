@@ -20,7 +20,7 @@ class BasicCalculationsTests: XCTestCase {
         lazy var visibleBounds: CGRect = CGRect(origin: .zero, size: viewSize)
         lazy var layoutFrame: CGRect = visibleBounds
         let adjustedContentInset: UIEdgeInsets = .zero
-        let shouldKeepContentOffsetOnBatchUpdates: Bool = true
+        let keepContentOffestAtBottomOnBatchUpdates: Bool = true
 
         func numberOfItems(inSection section: Int) -> Int {
             return 100
