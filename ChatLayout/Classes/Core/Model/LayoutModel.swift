@@ -113,12 +113,12 @@ struct LayoutModel {
         sections.remove(at: sectionIndex)
     }
 
-    mutating func removeRow(by identifier: ItemIdentifier, at state: ModelState) {
-        guard let sectionIndex = sections.firstIndex(where: { $0.id == identifier.sectionId }) else {
+    mutating func removeRow(by itemId: UUID, at state: ModelState) {
+        guard let sectionIndex = sections.firstIndex(where: { $0.items.firstIndex(where: { $0.id == itemId }) != nil }) else {
             assertionFailure("Internal inconsistency")
             return
         }
-        sections[sectionIndex].remove(by: identifier.itemId)
+        sections[sectionIndex].remove(by: itemId)
     }
 
     mutating func removeItem(for indexPath: IndexPath, at state: ModelState) {

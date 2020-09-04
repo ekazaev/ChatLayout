@@ -14,6 +14,7 @@ class BasicCalculationsTests: XCTestCase {
 
     class TestCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
 
+        var numberOfItemsInSection: [Int: Int] = [0: 100, 1: 100, 2: 100]
         lazy var delegate: ChatLayoutDelegate? = self
         var settings: ChatLayoutSettings = ChatLayoutSettings(estimatedItemSize: CGSize(width: 300, height: 40), interItemSpacing: 7, interSectionSpacing: 3)
         var viewSize: CGSize = CGSize(width: 300, height: 400)
@@ -23,7 +24,7 @@ class BasicCalculationsTests: XCTestCase {
         let keepContentOffsetAtBottomOnBatchUpdates: Bool = true
 
         func numberOfItems(inSection section: Int) -> Int {
-            return 100
+            return numberOfItemsInSection[section] ?? 0
         }
 
         func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
@@ -89,7 +90,7 @@ class BasicCalculationsTests: XCTestCase {
         let layout = TestCollectionLayout()
         let controller = StateController(collectionLayout: layout)
         var sections: [SectionModel] = []
-        for sectionIndex in 0..<5 {
+        for sectionIndex in 0..<layout.numberOfItemsInSection.count {
             let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
             let header = ItemModel(with: layout.configuration(for: .header, at: headerIndexPath))
             let footer = ItemModel(with: layout.configuration(for: .footer, at: headerIndexPath))
@@ -106,8 +107,8 @@ class BasicCalculationsTests: XCTestCase {
         }
         controller.set(sections, at: .beforeUpdate)
 
-        XCTAssertEqual(controller.contentHeight(at: .beforeUpdate), 23947.0)
-        for i in 0..<5 {
+        XCTAssertEqual(controller.contentHeight(at: .beforeUpdate), 14367)
+        for i in 0..<layout.numberOfItemsInSection.count {
             let header = controller.item(for: IndexPath(item: 0, section: i), kind: .header, at: .beforeUpdate)
             let footer = controller.item(for: IndexPath(item: 0, section: i), kind: .footer, at: .beforeUpdate)
             XCTAssertNotNil(header)
@@ -133,7 +134,7 @@ class BasicCalculationsTests: XCTestCase {
         var sections: [SectionModel] = []
         var updateItems: [UICollectionViewUpdateItem] = []
 
-        for sectionIndex in 0..<2 {
+        for sectionIndex in 0..<layout.numberOfItemsInSection.count {
             let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
             let header = ItemModel(with: layout.configuration(for: .header, at: headerIndexPath))
             let footer = ItemModel(with: layout.configuration(for: .footer, at: headerIndexPath))
@@ -162,6 +163,124 @@ class BasicCalculationsTests: XCTestCase {
                                          TestUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 1), indexPathAfterUpdate: IndexPath(item: NSNotFound, section: 1), action: .reload)])
         
         XCTAssertEqual(controller.contentHeight(at: .beforeUpdate), controller.contentHeight(at: .afterUpdate))
+        controller.commitUpdates()
+    }
+
+    func testItemInsertion() {
+        let layout = TestCollectionLayout()
+        layout.numberOfItemsInSection = [0: 100, 1: 100, 2: 0]
+        let controller = StateController(collectionLayout: layout)
+        var sections: [SectionModel] = []
+        var insertItems: [UICollectionViewUpdateItem] = []
+
+        for sectionIndex in 0..<layout.numberOfItemsInSection.count {
+            let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
+            let header = ItemModel(with: layout.configuration(for: .header, at: headerIndexPath))
+            let footer = ItemModel(with: layout.configuration(for: .footer, at: headerIndexPath))
+
+            var items: [ItemModel] = []
+            for itemIndex in 0..<layout.numberOfItems(inSection: sectionIndex) {
+                let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                items.append(ItemModel(with: layout.configuration(for: .cell, at: indexPath)))
+
+            }
+
+            var section = SectionModel(header: header, footer: footer, items: items, collectionLayout: layout)
+            section.assembleLayout()
+            sections.append(section)
+        }
+        controller.set(sections, at: .beforeUpdate)
+        XCTAssertEqual(controller.contentHeight(at: .beforeUpdate), layout.settings.estimatedItemSize!.height * (102 + 102 + 2) + layout.settings.interItemSpacing * (101 + 101 + 1) + layout.settings.interSectionSpacing * 2)
+
+        insertItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: nil, indexPathAfterUpdate: IndexPath(item: 100, section: 0), action: .insert))
+        insertItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: nil, indexPathAfterUpdate: IndexPath(item: 0, section: 1), action: .insert))
+        insertItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: nil, indexPathAfterUpdate: IndexPath(item: 0, section: 2), action: .insert))
+        insertItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: nil, indexPathAfterUpdate: IndexPath(item: 1, section: 2), action: .insert))
+
+        controller.process(updateItems: insertItems)
+        XCTAssertEqual(controller.contentHeight(at: .beforeUpdate) + layout.settings.estimatedItemSize!.height * 4.0 + layout.settings.interItemSpacing * 4.0, controller.contentHeight(at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 99, section: 0), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 99, section: 0), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 1, section: 1), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 2, section: 2), kind: .cell, at: .afterUpdate))
+        controller.commitUpdates()
+    }
+
+    func testItemDeletion() {
+        let layout = TestCollectionLayout()
+        layout.numberOfItemsInSection = [0: 100, 1: 100, 2: 1]
+        let controller = StateController(collectionLayout: layout)
+        var sections: [SectionModel] = []
+
+        for sectionIndex in 0..<layout.numberOfItemsInSection.count {
+            let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
+            let header = ItemModel(with: layout.configuration(for: .header, at: headerIndexPath))
+            let footer = ItemModel(with: layout.configuration(for: .footer, at: headerIndexPath))
+
+            var items: [ItemModel] = []
+            for itemIndex in 0..<layout.numberOfItems(inSection: sectionIndex) {
+                let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                items.append(ItemModel(with: layout.configuration(for: .cell, at: indexPath)))
+
+            }
+
+            var section = SectionModel(header: header, footer: footer, items: items, collectionLayout: layout)
+            section.assembleLayout()
+            sections.append(section)
+        }
+        controller.set(sections, at: .beforeUpdate)
+
+        var deleteItems: [UICollectionViewUpdateItem] = []
+        deleteItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 99, section: 0), indexPathAfterUpdate: nil, action: .delete))
+        deleteItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 0, section: 1), indexPathAfterUpdate: nil, action: .delete))
+        deleteItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 0, section: 2), indexPathAfterUpdate: nil, action: .delete))
+
+        controller.process(updateItems: deleteItems)
+        XCTAssertEqual(controller.contentHeight(at: .beforeUpdate) - layout.settings.estimatedItemSize!.height * 3.0 - layout.settings.interItemSpacing * 3.0, controller.contentHeight(at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 98, section: 0), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 98, section: 0), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 1, section: 1), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
+        XCTAssertNil(controller.itemIdentifier(for: IndexPath(item: 2, section: 2), kind: .cell, at: .afterUpdate))
+        controller.commitUpdates()
+    }
+
+    func testItemMove() {
+        let layout = TestCollectionLayout()
+        layout.numberOfItemsInSection = [0: 100, 1: 100, 2: 1]
+        let controller = StateController(collectionLayout: layout)
+        var sections: [SectionModel] = []
+
+        for sectionIndex in 0..<layout.numberOfItemsInSection.count {
+            let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
+            let header = ItemModel(with: layout.configuration(for: .header, at: headerIndexPath))
+            let footer = ItemModel(with: layout.configuration(for: .footer, at: headerIndexPath))
+
+            var items: [ItemModel] = []
+            for itemIndex in 0..<layout.numberOfItems(inSection: sectionIndex) {
+                let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                items.append(ItemModel(with: layout.configuration(for: .cell, at: indexPath)))
+
+            }
+
+            var section = SectionModel(header: header, footer: footer, items: items, collectionLayout: layout)
+            section.assembleLayout()
+            sections.append(section)
+        }
+        controller.set(sections, at: .beforeUpdate)
+
+        var moveItems: [UICollectionViewUpdateItem] = []
+        moveItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 0, section: 0), indexPathAfterUpdate: IndexPath(item: 0, section: 2), action: .move))
+        moveItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 0, section: 1), indexPathAfterUpdate: IndexPath(item: 1, section: 1), action: .move))
+        moveItems.append(TestUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 0, section: 2), indexPathAfterUpdate: IndexPath(item: 0, section: 0), action: .move))
+
+        controller.process(updateItems: moveItems)
+        XCTAssertEqual(controller.contentHeight(at: .beforeUpdate), controller.contentHeight(at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 0, section: 2), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 1, section: 0), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 1, section: 1), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 1, section: 1), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 2, section: 1), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 2, section: 1), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(controller.itemIdentifier(for: IndexPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate), controller.itemIdentifier(for: IndexPath(item: 0, section: 0), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(controller.indexPath(by: controller.itemIdentifier(for: IndexPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate)!, at: .afterUpdate), IndexPath(item: 0, section: 0))
+        XCTAssertEqual(controller.indexPath(by: controller.itemIdentifier(for: IndexPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)!, at: .afterUpdate), IndexPath(item: 0, section: 2))
         controller.commitUpdates()
     }
 
