@@ -26,7 +26,7 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     var adjustedContentInset: UIEdgeInsets { get }
 
-    var keepContentOffestAtBottomOnBatchUpdates: Bool { get }
+    var keepContentOffsetAtBottomOnBatchUpdates: Bool { get }
 
     func numberOfItems(inSection section: Int) -> Int
 
@@ -563,7 +563,7 @@ final class StateController {
     }
 
     func offsetByTotalCompensation(attributes: UICollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
-        guard collectionLayout.keepContentOffestAtBottomOnBatchUpdates,
+        guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates,
             state == .afterUpdate,
             let attributes = attributes else {
             return
@@ -735,7 +735,7 @@ final class StateController {
     }
 
     private func compensateOffsetIfNeeded(for indexPath: IndexPath, kind: ItemKind, action: CompensatingAction) {
-        guard collectionLayout.keepContentOffestAtBottomOnBatchUpdates else {
+        guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
         switch action {
@@ -770,7 +770,7 @@ final class StateController {
     }
 
     private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int, action: CompensatingAction) {
-        guard collectionLayout.keepContentOffestAtBottomOnBatchUpdates else {
+        guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
         switch action {
@@ -808,7 +808,7 @@ final class StateController {
     }
 
     private func offsetByCompensation(frame: CGRect, indexPath: IndexPath, for state: ModelState, backward: Bool = false) -> CGRect {
-        guard collectionLayout.keepContentOffestAtBottomOnBatchUpdates,
+        guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates,
             state == .afterUpdate,
             contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() else {
             return frame
