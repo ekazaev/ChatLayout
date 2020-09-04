@@ -23,6 +23,12 @@
 - Provides tools for precise scrolling to the required item.
 - Shipped with generic container views to simplify the custom items implementation.  
 
+![](https://habrastorage.org/webt/jt/gq/sl/jtgqsluujffi4-jnxeikbwtyyu0.gif)
+![](https://habrastorage.org/webt/b7/cu/3s/b7cu3su6uk4hw1kqg3_ky3uklu4.gif)
+![](https://habrastorage.org/webt/sv/ul/cq/svulcqg5ompgyhp-pjxy1tyiie4.gif)
+![](https://habrastorage.org/webt/bq/kw/xg/bqkwxgggxnxlqyzau36utlwcyui.gif)
+
+
 ### What ChatLayout doesnt provide (And why it is good)
 
 `ChatLayout` is the custom `UICollectionViewLayout`, so:
@@ -58,11 +64,6 @@ The Example app for instance uses [InputBarAccessoryView](https://github.com/nat
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-![](https://habrastorage.org/webt/jt/gq/sl/jtgqsluujffi4-jnxeikbwtyyu0.gif)
-![](https://habrastorage.org/webt/b7/cu/3s/b7cu3su6uk4hw1kqg3_ky3uklu4.gif)
-![](https://habrastorage.org/webt/sv/ul/cq/svulcqg5ompgyhp-pjxy1tyiie4.gif)
-![](https://habrastorage.org/webt/bq/kw/xg/bqkwxgggxnxlqyzau36utlwcyui.gif)
 
 ## Installation
 
