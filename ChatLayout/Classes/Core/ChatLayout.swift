@@ -310,10 +310,10 @@ public final class ChatLayout: UICollectionViewLayout {
         // immediately after an update is sent to the collection view via the insert/delete/reload/move
         // functions. Unfortunately, this is impossible - when batch updates occur, `invalidateLayout:`
         // is invoked immediately with a context that has `invalidateDataSourceCounts` set to `true`.
-        // At this time, `MagazineLayout` has no way of knowing the details of this data source count
-        // change (where the insert/delete/move took place). `MagazineLayout` only gets this additional
+        // At this time, `ChatLayout` has no way of knowing the details of this data source count
+        // change (where the insert/delete/move took place). `ChatLayout` only gets this additional
         // information once `prepareForCollectionViewUpdates:` is invoked. At that time, we're able to
-        // update our layout's source of truth, the `ModelState`, which allows us to resolve the
+        // update our layout's source of truth, the `StateController`, which allows us to resolve the
         // post-batch-update layout and return post-batch-update layout attributes from this function.
         // Between the time that `invalidateLayout:` is invoked with `invalidateDataSourceCounts` set to
         // `true`, and when `prepareForCollectionViewUpdates:` is invoked with details of the updates,
@@ -458,7 +458,7 @@ public final class ChatLayout: UICollectionViewLayout {
     /// Invalidates the current layout using the information in the provided context object.
     public override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
         guard let context = context as? ChatLayoutInvalidationContext else {
-            assertionFailure("`context` must be an instance of `MagazineLayoutInvalidationContext`")
+            assertionFailure("`context` must be an instance of `ChatLayoutInvalidationContext`")
             return
         }
 
