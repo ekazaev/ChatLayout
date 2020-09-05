@@ -37,7 +37,7 @@ struct SectionModel {
     }
 
     mutating func assembleLayout() {
-        var offsetY: CGFloat = collectionLayout.settings.interItemSpacing
+        var offsetY: CGFloat = 0
 
         if header != nil {
             header?.offsetY = 0

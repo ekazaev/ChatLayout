@@ -91,7 +91,7 @@ final class StateController {
         }
 
         if let cachedAttributesState = cachedAttributesState,
-           cachedAttributesState.rect.contains(rect) {
+            cachedAttributesState.rect.contains(rect) {
             return cachedAttributesState.attributes
         } else {
             let totalRect = rect.inset(by: UIEdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))
@@ -115,12 +115,12 @@ final class StateController {
         switch kind {
         case .header:
             guard indexPath.section < layout(at: state).sections.count,
-                  indexPath.item == 0 else {
+                indexPath.item == 0 else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
             guard let headerFrame = predefinedFrame ?? itemFrame(for: indexPath, kind: kind, at: state, isFinal: true),
-                  let item = item(for: indexPath, kind: kind, at: state) else {
+                let item = item(for: indexPath, kind: kind, at: state) else {
                 return nil
             }
             attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: indexPath)
@@ -130,12 +130,12 @@ final class StateController {
             attributes.alignment = item.alignment
         case .footer:
             guard indexPath.section < layout(at: state).sections.count,
-                  indexPath.item == 0 else {
+                indexPath.item == 0 else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
             guard let footerFrame = predefinedFrame ?? itemFrame(for: indexPath, kind: kind, at: state, isFinal: true),
-                  let item = item(for: indexPath, kind: kind, at: state) else {
+                let item = item(for: indexPath, kind: kind, at: state) else {
                 return nil
             }
             attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: indexPath)
@@ -145,12 +145,12 @@ final class StateController {
             attributes.alignment = item.alignment
         case .cell:
             guard indexPath.section < layout(at: state).sections.count,
-                  indexPath.item < layout(at: state).sections[indexPath.section].items.count else {
+                indexPath.item < layout(at: state).sections[indexPath.section].items.count else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
             guard let itemFrame = predefinedFrame ?? itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
-                  let item = item(for: indexPath, kind: kind, at: state) else {
+                let item = item(for: indexPath, kind: kind, at: state) else {
                 return nil
             }
             attributes = ChatLayoutAttributes(forCellWith: indexPath)
@@ -266,7 +266,7 @@ final class StateController {
         switch kind {
         case .header:
             guard indexPath.section < layout(at: state).sections.count,
-                  indexPath.item == 0 else {
+                indexPath.item == 0 else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
@@ -276,7 +276,7 @@ final class StateController {
             return header
         case .footer:
             guard indexPath.section < layout(at: state).sections.count,
-                  indexPath.item == 0 else {
+                indexPath.item == 0 else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
@@ -286,7 +286,7 @@ final class StateController {
             return footer
         case .cell:
             guard indexPath.section < layout(at: state).sections.count,
-                  indexPath.item < layout(at: state).sections[indexPath.section].count else {
+                indexPath.item < layout(at: state).sections[indexPath.section].count else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
@@ -361,7 +361,7 @@ final class StateController {
                 break
             case .move:
                 guard let indexPathBeforeUpdate = indexPathBeforeUpdate,
-                      let indexPathAfterUpdate = indexPathAfterUpdate else {
+                    let indexPathAfterUpdate = indexPathAfterUpdate else {
                     assertionFailure("`indexPathBeforeUpdate` and `indexPathAfterUpdate` cannot be `nil` for a `.move` update action")
                     return
                 }
@@ -513,8 +513,8 @@ final class StateController {
 
         reloadedIndexes.sorted(by: { $0 < $1 }).forEach {
             guard let oldItem = self.item(for: $0, kind: .cell, at: .beforeUpdate),
-                  let newItemIndexPath = self.indexPath(by: oldItem.id, at: .afterUpdate),
-                  let newItem = self.item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
+                let newItemIndexPath = self.indexPath(by: oldItem.id, at: .afterUpdate),
+                let newItem = self.item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
                 assertionFailure("Internal inconsistency")
                 return
             }
@@ -563,12 +563,12 @@ final class StateController {
 
     func offsetByTotalCompensation(attributes: UICollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
         guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates,
-              state == .afterUpdate,
-              let attributes = attributes else {
+            state == .afterUpdate,
+            let attributes = attributes else {
             return
         }
         if backward,
-           contentHeight(at: .beforeUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() {
+            contentHeight(at: .beforeUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset * -1)
         } else if !backward, contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset)
@@ -626,7 +626,7 @@ final class StateController {
                 let section = layout.sections[sectionIndex]
                 let sectionIndexPath = IndexPath(item: 0, section: sectionIndex)
                 if let headerFrame = itemFrame(for: sectionIndexPath, kind: .header, at: state, isFinal: true),
-                   check(rect: headerFrame) {
+                    check(rect: headerFrame) {
                     allRects.append((frame: headerFrame, indexPath: sectionIndexPath, kind: .header))
                 }
                 guard traverseState != .done else {
@@ -653,32 +653,32 @@ final class StateController {
                     for itemIndex in startingIndex..<section.items.count {
                         let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
                         if let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
-                           check(rect: itemFrame) {
+                            check(rect: itemFrame) {
                             if state == .beforeUpdate {
                                 allRects.append((frame: itemFrame, indexPath: indexPath, kind: .cell))
                             } else {
                                 var itemWasVisibleBefore: Bool {
                                     guard let itemIdentifier = self.itemIdentifier(for: indexPath, kind: .cell, at: .afterUpdate),
-                                          let initialIndexPath = self.indexPath(by: itemIdentifier, at: .beforeUpdate),
-                                          let item = self.item(for: initialIndexPath, kind: .cell, at: .beforeUpdate),
-                                          item.calculatedOnce == true,
-                                          let itemFrame = self.itemFrame(for: initialIndexPath, kind: .cell, at: .beforeUpdate, isFinal: false),
-                                          itemFrame.intersects(collectionLayout.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
+                                        let initialIndexPath = self.indexPath(by: itemIdentifier, at: .beforeUpdate),
+                                        let item = self.item(for: initialIndexPath, kind: .cell, at: .beforeUpdate),
+                                        item.calculatedOnce == true,
+                                        let itemFrame = self.itemFrame(for: initialIndexPath, kind: .cell, at: .beforeUpdate, isFinal: false),
+                                        itemFrame.intersects(collectionLayout.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
                                         return false
                                     }
                                     return true
                                 }
                                 var itemWillBeVisible: Bool {
                                     if insertedIndexes.contains(indexPath),
-                                       let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
-                                       itemFrame.intersects(collectionLayout.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
+                                        let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
+                                        itemFrame.intersects(collectionLayout.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
                                         return true
                                     }
                                     if let itemIdentifier = self.itemIdentifier(for: indexPath, kind: .cell, at: .afterUpdate),
-                                       let initialIndexPath = self.indexPath(by: itemIdentifier, at: .beforeUpdate),
-                                       self.movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
-                                       let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
-                                       itemFrame.intersects(collectionLayout.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
+                                        let initialIndexPath = self.indexPath(by: itemIdentifier, at: .beforeUpdate),
+                                        self.movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
+                                        let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
+                                        itemFrame.intersects(collectionLayout.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
                                         return true
                                     }
                                     return false
@@ -695,7 +695,7 @@ final class StateController {
                 }
 
                 if let footerFrame = itemFrame(for: sectionIndexPath, kind: .footer, at: state, isFinal: true),
-                   check(rect: footerFrame) {
+                    check(rect: footerFrame) {
                     allRects.append((frame: footerFrame, indexPath: sectionIndexPath, kind: .footer))
                 }
             }
@@ -740,7 +740,7 @@ final class StateController {
         switch action {
         case .insert:
             guard contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.size.height.rounded(),
-                  let itemFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) else {
+                let itemFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) else {
                 return
             }
             if itemFrame.minY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
@@ -748,7 +748,7 @@ final class StateController {
             }
         case let .frameUpdate(previousFrame, newFrame):
             guard contentHeight(at: .afterUpdate).rounded() > (collectionLayout.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
-                /* let newFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) */ else {
+            /* let newFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) */ else {
                 return
             }
             if newFrame.minY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
@@ -756,7 +756,7 @@ final class StateController {
             }
         case .delete:
             guard contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.size.height.rounded(),
-                  let deletedFrame = itemFrame(for: indexPath, kind: kind, at: .beforeUpdate) else {
+                let deletedFrame = itemFrame(for: indexPath, kind: kind, at: .beforeUpdate) else {
                 return
             }
             if deletedFrame.minY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
@@ -775,7 +775,7 @@ final class StateController {
         switch action {
         case .insert:
             guard sectionIndex < layout(at: .afterUpdate).sections.count,
-                  contentHeight(at: .afterUpdate).rounded() >= collectionLayout.visibleBounds.size.height.rounded() else {
+                contentHeight(at: .afterUpdate).rounded() >= collectionLayout.visibleBounds.size.height.rounded() else {
                 return
             }
             let section = layout(at: .afterUpdate).sections[sectionIndex]
@@ -785,7 +785,7 @@ final class StateController {
             }
         case let .frameUpdate(previousFrame, newFrame):
             guard sectionIndex < layout(at: .afterUpdate).sections.count,
-                  contentHeight(at: .afterUpdate).rounded() >= (collectionLayout.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {
+                contentHeight(at: .afterUpdate).rounded() >= (collectionLayout.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {
                 return
             }
             if newFrame.minY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
@@ -793,7 +793,7 @@ final class StateController {
             }
         case .delete:
             guard contentHeight(at: .afterUpdate).rounded() >= collectionLayout.visibleBounds.size.height.rounded(),
-                  sectionIndex < layout(at: .afterUpdate).sections.count else {
+                sectionIndex < layout(at: .afterUpdate).sections.count else {
                 return
             }
             let section = layout(at: .beforeUpdate).sections[sectionIndex]
@@ -808,8 +808,8 @@ final class StateController {
 
     private func offsetByCompensation(frame: CGRect, indexPath: IndexPath, for state: ModelState, backward: Bool = false) -> CGRect {
         guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates,
-              state == .afterUpdate,
-              contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() else {
+            state == .afterUpdate,
+            contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() else {
             return frame
         }
         return frame.offsetBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))
