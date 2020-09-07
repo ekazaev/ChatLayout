@@ -20,9 +20,23 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     lazy var delegate: ChatLayoutDelegate? = self
     var settings: ChatLayoutSettings = ChatLayoutSettings(estimatedItemSize: CGSize(width: 300, height: 40), interItemSpacing: 7, interSectionSpacing: 3)
     var viewSize: CGSize = CGSize(width: 300, height: 400)
+
     lazy var visibleBounds: CGRect = CGRect(origin: .zero, size: viewSize)
-    lazy var layoutFrame: CGRect = visibleBounds
+
+    var state: ModelState = .beforeUpdate
+
+    lazy var controller = StateController(collectionLayout: self)
+
+    /// Represent the rectangle where all the items are aligned.
+    public var layoutFrame: CGRect {
+        return CGRect(x: adjustedContentInset.left + settings.additionalInsets.left,
+            y: adjustedContentInset.top + settings.additionalInsets.top,
+            width: visibleBounds.width - settings.additionalInsets.left - settings.additionalInsets.right,
+            height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom)
+    }
+
     let adjustedContentInset: UIEdgeInsets = .zero
+
     let keepContentOffsetAtBottomOnBatchUpdates: Bool = true
 
     func numberOfItems(inSection section: Int) -> Int {
