@@ -1,4 +1,4 @@
-# ChatLayout (pre-release)
+# ChatLayout
 
 [![CI Status](https://travis-ci.org/ekazaev/ChatLayout.svg?branch=master&style=flat)](https://travis-ci.org/github/ekazaev/ChatLayout)
 [![Release](https://img.shields.io/github/release/ekazaev/ChatLayout.svg?style=flat&color=darkcyan)](https://github.com/ekazaev/ChatLayout/releases)
@@ -29,7 +29,7 @@
 ![](https://habrastorage.org/webt/bq/kw/xg/bqkwxgggxnxlqyzau36utlwcyui.gif)
 
 
-### What ChatLayout doesnt provide (And why it is good)
+### What ChatLayout doesn't provide (And why it is good)
 
 `ChatLayout` is the custom `UICollectionViewLayout`, so:
 
@@ -48,7 +48,8 @@ to get better performance.
 
 - `ChatLayout` doesn't enforce you to use any specific data model. You can store your messages and update `UICollectionView`
 the way you like. The only thing you need is to respect the natural boundaries that `UICollectionView` have and correctly
-implement `UICollectionViewDataSource`.
+implement `UICollectionViewDataSource`. The Example app uses [DifferenceKit](https://github.com/ra1028/DifferenceKit) to 
+process changes in the data model for the compatibility with IOs 12.
 
 - `ChatLayout` doesn't enforce you to use any specific `UIView`s to create your collection cells. You can create them the way 
 you like. It can be any `UICollectionViewCell` or `UICollectionReusableView`. There are some generic `UIView`s bundled with
@@ -69,6 +70,14 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 `ChatLayout` is available through [CocoaPods](https://cocoapods.org), [Carthage](https://github.com/Carthage/Carthage) 
 and [SwiftPM](https://github.com/apple/swift-package-manager). See the `Example` app for the usage details.
+
+If you are using cocoapods you can install the whole package using `pod 'ChatLayout'`. If you do not need the additional
+components provided, you can install only the layout itself using `pod 'ChatLayout/Core'`
+
+**NB: `ChatLayout` is in pre-release state, so it doesn't respect the [semantic versioning](https://semver.org) at
+this moment and may introduce breaking changes in further versions. It is recommended to link the dependency to
+the exact version number in the dependency manager you use and increase the release version manually.**
+
 
 ## Contributing
 
