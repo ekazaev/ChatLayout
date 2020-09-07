@@ -30,18 +30,10 @@ import UIKit
 /// `ChatLayout.restoreContentOffset(...)`
 public final class ChatLayout: UICollectionViewLayout {
 
+    // MARK: Custom Properties
+
     /// `ChatLayout` delegate.
     public weak var delegate: ChatLayoutDelegate?
-
-    /// Custom layoutAttributesClass is `ChatLayoutAttributes`.
-    public override class var layoutAttributesClass: AnyClass {
-        return ChatLayoutAttributes.self
-    }
-
-    /// Custom invalidationContextClass is `ChatLayoutInvalidationContext`.
-    public override class var invalidationContextClass: AnyClass {
-        return ChatLayoutInvalidationContext.self
-    }
 
     /// Additional settings for `ChatLayout`.
     public var settings: ChatLayoutSettings = ChatLayoutSettings() {
@@ -62,12 +54,6 @@ public final class ChatLayout: UICollectionViewLayout {
     /// the animation starts and wont be able to compensate that change too. It should be done manually.
     public var keepContentOffsetAtBottomOnBatchUpdates: Bool = false
 
-    /// The width and height of the collection view’s contents.
-    public override var collectionViewContentSize: CGSize {
-        let contentSize = controller.contentSize(for: .beforeUpdate)
-        return contentSize
-    }
-
     /// Represent the currently visible rectangle.
     public var visibleBounds: CGRect {
         guard let collectionView = collectionView else {
@@ -87,6 +73,26 @@ public final class ChatLayout: UICollectionViewLayout {
                       height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom)
     }
 
+    // MARK: Inherited Properties
+
+    /// Custom layoutAttributesClass is `ChatLayoutAttributes`.
+    public override class var layoutAttributesClass: AnyClass {
+        return ChatLayoutAttributes.self
+    }
+
+    /// Custom invalidationContextClass is `ChatLayoutInvalidationContext`.
+    public override class var invalidationContextClass: AnyClass {
+        return ChatLayoutInvalidationContext.self
+    }
+
+    /// The width and height of the collection view’s contents.
+    public override var collectionViewContentSize: CGSize {
+        let contentSize = controller.contentSize(for: .beforeUpdate)
+        return contentSize
+    }
+
+    // MARK: Internal Properties
+
     var adjustedContentInset: UIEdgeInsets {
         guard let collectionView = collectionView else {
             return .zero
@@ -100,6 +106,8 @@ public final class ChatLayout: UICollectionViewLayout {
         }
         return collectionView.frame.size
     }
+
+    // MARK: Private Properties
 
     private struct PrepareActions: OptionSet {
         let rawValue: UInt
@@ -147,7 +155,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
     private var currentPositionSnapshot: ChatLayoutPositionSnapshot?
 
-    // MARK: Content Offset of an Item
+    // MARK: Custom Methods
 
     /// Get current offset of the item closest to the provided edge.
     /// - Parameter edge: The edge of the `UICollectionView`

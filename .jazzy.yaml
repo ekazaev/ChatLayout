@@ -17,6 +17,7 @@ custom_categories:
       - ChatLayoutInvalidationContext
       - ItemKind
       - ItemSize
+      - ChatItemAlignment
 
   - name: Extras
     children:
@@ -24,8 +25,10 @@ custom_categories:
       - ContainerCollectionReusableView
       - MessageContainerView
       - CellLayoutContainerView
+      - CellLayoutContainerViewAlignment
       - EdgeAligningView
       - ImageMaskedView
+      - ImageMaskedViewTransformation
       - RoundedCornersContainerView
       - StaticViewFactory
       - VoidViewFactory
