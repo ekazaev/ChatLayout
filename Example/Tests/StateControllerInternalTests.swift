@@ -1,6 +1,10 @@
 //
-// Created by Eugene Kazaev on 05/09/2020.
-// Copyright (c) 2020 CocoaPods. All rights reserved.
+// ChatLayout
+// StateControllerInternalTests.swift
+// https://github.com/ekazaev/ChatLayout
+//
+// Created by Eugene Kazaev in 2020.
+// Distributed under the MIT license.
 //
 
 @testable import ChatLayout
@@ -34,7 +38,7 @@ class StateControllerInternalTests: XCTestCase {
         layout.controller.update(alignment: .trailing, for: IndexPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)
         layout.controller.update(alignment: .center, for: IndexPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)
         layout.controller.update(alignment: .full, for: IndexPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)
-        
+
         XCTAssertEqual(layout.controller.itemAttributes(for: IndexPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.alignment, .trailing)
         XCTAssertEqual(layout.controller.itemAttributes(for: IndexPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)?.alignment, .leading)
         XCTAssertEqual(layout.controller.itemAttributes(for: IndexPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.alignment, .center)

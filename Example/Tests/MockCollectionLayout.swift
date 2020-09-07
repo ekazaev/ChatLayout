@@ -30,9 +30,9 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     /// Represent the rectangle where all the items are aligned.
     public var layoutFrame: CGRect {
         return CGRect(x: adjustedContentInset.left + settings.additionalInsets.left,
-            y: adjustedContentInset.top + settings.additionalInsets.top,
-            width: visibleBounds.width - settings.additionalInsets.left - settings.additionalInsets.right,
-            height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom)
+                      y: adjustedContentInset.top + settings.additionalInsets.top,
+                      width: visibleBounds.width - settings.additionalInsets.left - settings.additionalInsets.right,
+                      height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom)
     }
 
     let adjustedContentInset: UIEdgeInsets = .zero
