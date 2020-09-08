@@ -252,7 +252,7 @@ extension ChatViewController: ChatControllerDelegate {
                                                                                            return
                                                                                        }
                                                                                        self.processUpdates(with: sections, animated: animated, completion: completion)
-                                                                                   })
+                })
             currentInterfaceActions.add(reaction: reaction)
             return
         }
@@ -260,25 +260,27 @@ extension ChatViewController: ChatControllerDelegate {
         let changeSet = StagedChangeset(source: dataSource.sections, target: sections)
 
         func process() {
-            collectionView.reload(using: changeSet,
-                                  interrupt: { changeSet in
-                                      guard changeSet.sectionInserted.isEmpty else {
-                                          return true
-                                      }
-                                      return false
-                                  },
-                                  onInterruptedReload: {
-                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
-                                      self.collectionView.reloadData()
-                                      // We want so that user on reload appeared at the very bottom of the layout
-                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                                  },
-                                  completion: { _ in
-                                      completion?()
-                                  },
-                                  setData: { data in
-                                      self.dataSource.sections = data
-                                  })
+            self.dataSource.sections = sections
+
+//            collectionView.reload(using: changeSet,
+//                                  interrupt: { changeSet in
+//                                      guard changeSet.sectionInserted.isEmpty else {
+//                                          return true
+//                                      }
+//                                      return false
+//                                  },
+//                                  onInterruptedReload: {
+//                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
+//                                      self.collectionView.reloadData()
+//                                      // We want so that user on reload appeared at the very bottom of the layout
+//                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
+//                                  },
+//                                  completion: { _ in
+//                                      completion?()
+//                                  },
+//                                  setData: { data in
+//                                      self.dataSource.sections = data
+//                                  })
         }
 
         if animated {
