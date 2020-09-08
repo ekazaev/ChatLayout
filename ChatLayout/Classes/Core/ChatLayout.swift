@@ -75,6 +75,16 @@ public final class ChatLayout: UICollectionViewLayout {
 
     // MARK: Inherited Properties
 
+    /// The direction of the language you used when designing `ChatLayout` layout.
+    public override var developmentLayoutDirection: UIUserInterfaceLayoutDirection {
+        return .leftToRight
+    }
+
+    /// A Boolean value that indicates whether the horizontal coordinate system is automatically flipped at appropriate times.
+    public override var flipsHorizontallyInOppositeLayoutDirection: Bool {
+        return _flipsHorizontallyInOppositeLayoutDirection
+    }
+
     /// Custom layoutAttributesClass is `ChatLayoutAttributes`.
     public override class var layoutAttributesClass: AnyClass {
         return ChatLayoutAttributes.self
@@ -149,11 +159,30 @@ public final class ChatLayout: UICollectionViewLayout {
     // animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
     // animations will start from the estimated height.
     private var attributesForPendingAnimations = [ItemKind: [IndexPath: ChatLayoutAttributes]]()
+
     private var invalidatedAttributes = [ItemKind: Set<IndexPath>]()
 
     private var dontReturnAttributes: Bool = true
 
     private var currentPositionSnapshot: ChatLayoutPositionSnapshot?
+
+    private let _flipsHorizontallyInOppositeLayoutDirection: Bool
+
+    // MARK: Constructors
+
+    /// - Parameters:
+    ///   - flipsHorizontallyInOppositeLayoutDirection: Indicates whether the horizontal coordinate
+    ///     system is automatically flipped at appropriate times. In practice, this is used to support
+    ///     right-to-left layout.
+    public init(flipsHorizontallyInOppositeLayoutDirection: Bool = true) {
+        self._flipsHorizontallyInOppositeLayoutDirection = flipsHorizontallyInOppositeLayoutDirection
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        self._flipsHorizontallyInOppositeLayoutDirection = true
+        super.init(coder: aDecoder)
+    }
 
     // MARK: Custom Methods
 

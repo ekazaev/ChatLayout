@@ -88,11 +88,12 @@ public final class ImageMaskedView<CustomView: UIView>: UIView {
 
     private func updateMask() {
         UIView.performWithoutAnimation {
+            let multiplier = effectiveUserInterfaceLayoutDirection == .leftToRight ? 1 : -1
             switch maskTransformation {
             case .flippedVertically:
-                imageView.transform = CGAffineTransform(scaleX: -1, y: 1)
+                imageView.transform = CGAffineTransform(scaleX: CGFloat(multiplier * -1), y: 1)
             case .asIs:
-                imageView.transform = CGAffineTransform(scaleX: 1, y: 1)
+                imageView.transform = CGAffineTransform(scaleX: CGFloat(multiplier * 1), y: 1)
             }
         }
     }

@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "MessageContainerView.swift" : </span><span class="cov_low">0.00%</span>
+<span>Coverage for "MessageContainerView.swift" : </span><span class="cov_high">87.50%</span>
 </h2>
-<h4 class="cov_subtitle">(0 of 48 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(42 of 48 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Extras/MessageContainerView.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -117,20 +117,20 @@
 <td class="src"><pre><code class="objc">    /// Main view.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">22</td>
 <td class="src"><pre><code class="objc">    public var customView: MainView {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">32x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">23</td>
 <td class="src"><pre><code class="objc">        return internalContentView.customView</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">32x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">24</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">32x</td>
 </tr>
 <tr class="never">
 <td class="num">25</td>
@@ -142,70 +142,70 @@
 <td class="src"><pre><code class="objc">    /// An alignment of the contained views within the `MessageContainerView`,</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">27</td>
 <td class="src"><pre><code class="objc">    public var alignment: ChatItemAlignment = .full {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">28</td>
 <td class="src"><pre><code class="objc">        didSet {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">29</td>
 <td class="src"><pre><code class="objc">            switch alignment {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">30</td>
 <td class="src"><pre><code class="objc">            case .leading:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">31</td>
 <td class="src"><pre><code class="objc">                internalContentView.flexibleEdges = [.trailing]</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">12x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">32</td>
 <td class="src"><pre><code class="objc">            case .trailing:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">33</td>
 <td class="src"><pre><code class="objc">                internalContentView.flexibleEdges = [.leading]</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">4x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">34</td>
 <td class="src"><pre><code class="objc">            case .center:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
 <tr class="missed">
 <td class="num">35</td>
 <td class="src"><pre><code class="objc">                internalContentView.flexibleEdges = [.leading, .trailing]</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">36</td>
 <td class="src"><pre><code class="objc">            case .full:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
 <tr class="missed">
 <td class="num">37</td>
 <td class="src"><pre><code class="objc">                internalContentView.flexibleEdges = []</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">38</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">39</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
 <tr class="never">
 <td class="num">40</td>
@@ -242,25 +242,25 @@
 <td class="src"><pre><code class="objc">    ///   to the superview in which you plan to add it.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">47</td>
 <td class="src"><pre><code class="objc">    public override init(frame: CGRect) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">48</td>
 <td class="src"><pre><code class="objc">        super.init(frame: frame)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">49</td>
 <td class="src"><pre><code class="objc">        setupSubviews()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">50</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
 <tr class="never">
 <td class="num">51</td>
@@ -302,125 +302,125 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">59</td>
 <td class="src"><pre><code class="objc">    private func setupSubviews() {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">60</td>
 <td class="src"><pre><code class="objc">        translatesAutoresizingMaskIntoConstraints = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">61</td>
 <td class="src"><pre><code class="objc">        insetsLayoutMarginsFromSafeArea = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">62</td>
 <td class="src"><pre><code class="objc">        layoutMargins = .zero</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">63</td>
 <td class="src"><pre><code class="objc">        addSubview(stackView)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">64</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">65</td>
 <td class="src"><pre><code class="objc">        stackView.translatesAutoresizingMaskIntoConstraints = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">66</td>
 <td class="src"><pre><code class="objc">        stackView.axis = .horizontal</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">67</td>
 <td class="src"><pre><code class="objc">        stackView.spacing = .zero</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">68</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">69</td>
 <td class="src"><pre><code class="objc">        stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">70</td>
 <td class="src"><pre><code class="objc">        stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">71</td>
 <td class="src"><pre><code class="objc">        stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">72</td>
 <td class="src"><pre><code class="objc">        stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">73</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">74</td>
 <td class="src"><pre><code class="objc">        if let accessoryView = accessoryView {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">75</td>
 <td class="src"><pre><code class="objc">            stackView.addArrangedSubview(accessoryView)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">76</td>
 <td class="src"><pre><code class="objc">            accessoryView.isHidden = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">77</td>
 <td class="src"><pre><code class="objc">            accessoryView.translatesAutoresizingMaskIntoConstraints = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">78</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">79</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">80</td>
 <td class="src"><pre><code class="objc">        internalContentView.translatesAutoresizingMaskIntoConstraints = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">81</td>
 <td class="src"><pre><code class="objc">        stackView.addArrangedSubview(internalContentView)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">82</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
 <tr class="never">
 <td class="num">83</td>

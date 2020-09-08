@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "ContainerCollectionViewCell.swift" : </span><span class="cov_low">5.17%</span>
+<span>Coverage for "ContainerCollectionViewCell.swift" : </span><span class="cov_medium">84.48%</span>
 </h2>
-<h4 class="cov_subtitle">(3 of 58 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(49 of 58 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Extras/ContainerCollectionViewCell.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -232,30 +232,30 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">45</td>
 <td class="src"><pre><code class="objc">    func preferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) -&gt; ChatLayoutAttributes? {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">37x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">46</td>
 <td class="src"><pre><code class="objc">        return nil</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">37x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">47</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">37x</td>
 </tr>
 <tr class="never">
 <td class="num">48</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">49</td>
 <td class="src"><pre><code class="objc">    func modifyPreferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) {}</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">37x</td>
 </tr>
 <tr class="never">
 <td class="num">50</td>
@@ -305,17 +305,17 @@
 <tr class="covered">
 <td class="num">59</td>
 <td class="src"><pre><code class="objc">    public static var reuseIdentifier: String {</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">28x</td>
 </tr>
 <tr class="covered">
 <td class="num">60</td>
 <td class="src"><pre><code class="objc">        return String(describing: self)</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">28x</td>
 </tr>
 <tr class="covered">
 <td class="num">61</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">28x</td>
 </tr>
 <tr class="never">
 <td class="num">62</td>
@@ -367,25 +367,25 @@
 <td class="src"><pre><code class="objc">    ///   to the superview in which you plan to add it.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">72</td>
 <td class="src"><pre><code class="objc">    override init(frame: CGRect) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">73</td>
 <td class="src"><pre><code class="objc">        super.init(frame: frame)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">74</td>
 <td class="src"><pre><code class="objc">        setupSubviews()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">75</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
 <tr class="never">
 <td class="num">76</td>
@@ -427,25 +427,25 @@
 <td class="src"><pre><code class="objc">    /// Performs any clean up necessary to prepare the view for use again.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">84</td>
 <td class="src"><pre><code class="objc">    public override func prepareForReuse() {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">5x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">85</td>
 <td class="src"><pre><code class="objc">        super.prepareForReuse()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">5x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">86</td>
 <td class="src"><pre><code class="objc">        delegate?.prepareForReuse()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">5x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">87</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="never">
 <td class="num">88</td>
@@ -467,85 +467,85 @@
 <td class="src"><pre><code class="objc">    /// - Returns: Modified `UICollectionViewLayoutAttributes`</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">92</td>
 <td class="src"><pre><code class="objc">    public override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -&gt; UICollectionViewLayoutAttributes {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">93</td>
 <td class="src"><pre><code class="objc">        guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
 <tr class="missed">
 <td class="num">94</td>
 <td class="src"><pre><code class="objc">            return super.preferredLayoutAttributesFitting(layoutAttributes)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">95</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">96</td>
 <td class="src"><pre><code class="objc">        delegate?.apply(chatLayoutAttributes)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">97</td>
 <td class="src"><pre><code class="objc">        let resultingLayoutAttributes: ChatLayoutAttributes</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">98</td>
 <td class="src"><pre><code class="objc">        if let preferredLayoutAttributes = delegate?.preferredLayoutAttributesFitting(chatLayoutAttributes) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
 <tr class="missed">
 <td class="num">99</td>
 <td class="src"><pre><code class="objc">            resultingLayoutAttributes = preferredLayoutAttributes</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">100</td>
 <td class="src"><pre><code class="objc">        } else if let chatLayoutAttributes = super.preferredLayoutAttributesFitting(chatLayoutAttributes) as? ChatLayoutAttributes {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">101</td>
 <td class="src"><pre><code class="objc">            delegate?.modifyPreferredLayoutAttributesFitting(chatLayoutAttributes)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">102</td>
 <td class="src"><pre><code class="objc">            resultingLayoutAttributes = chatLayoutAttributes</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">103</td>
 <td class="src"><pre><code class="objc">        } else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
 <tr class="missed">
 <td class="num">104</td>
 <td class="src"><pre><code class="objc">            resultingLayoutAttributes = chatLayoutAttributes</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">105</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">106</td>
 <td class="src"><pre><code class="objc">        return resultingLayoutAttributes</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">107</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">58x</td>
 </tr>
 <tr class="never">
 <td class="num">108</td>
@@ -562,120 +562,120 @@
 <td class="src"><pre><code class="objc">    /// - Parameter layoutAttributes: The layout attributes to apply.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">111</td>
 <td class="src"><pre><code class="objc">    public override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">43x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">112</td>
 <td class="src"><pre><code class="objc">        guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">43x</td>
 </tr>
 <tr class="missed">
 <td class="num">113</td>
 <td class="src"><pre><code class="objc">            return</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">114</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">43x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">115</td>
 <td class="src"><pre><code class="objc">        super.apply(layoutAttributes)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">43x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">116</td>
 <td class="src"><pre><code class="objc">        delegate?.apply(chatLayoutAttributes)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">43x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">117</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">43x</td>
 </tr>
 <tr class="never">
 <td class="num">118</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">119</td>
 <td class="src"><pre><code class="objc">    private func setupSubviews() {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">120</td>
 <td class="src"><pre><code class="objc">        contentView.addSubview(customView)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">121</td>
 <td class="src"><pre><code class="objc">        translatesAutoresizingMaskIntoConstraints = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">122</td>
 <td class="src"><pre><code class="objc">        insetsLayoutMarginsFromSafeArea = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">123</td>
 <td class="src"><pre><code class="objc">        layoutMargins = .zero</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">124</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">125</td>
 <td class="src"><pre><code class="objc">        contentView.insetsLayoutMarginsFromSafeArea = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">126</td>
 <td class="src"><pre><code class="objc">        contentView.layoutMargins = .zero</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">127</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">128</td>
 <td class="src"><pre><code class="objc">        customView.translatesAutoresizingMaskIntoConstraints = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">129</td>
 <td class="src"><pre><code class="objc">        customView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">130</td>
 <td class="src"><pre><code class="objc">        customView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">131</td>
 <td class="src"><pre><code class="objc">        customView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">132</td>
 <td class="src"><pre><code class="objc">        customView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">133</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
 <tr class="never">
 <td class="num">134</td>

@@ -379,5 +379,5 @@ class StateControllerProcessUpdatesTests: XCTestCase {
             }
         }
     }
-    
+
 }

@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "EdgeAligningView.swift" : </span><span class="cov_low">0.00%</span>
+<span>Coverage for "EdgeAligningView.swift" : </span><span class="cov_medium">72.16%</span>
 </h2>
-<h4 class="cov_subtitle">(0 of 97 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(70 of 97 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Extras/EdgeAligningView.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -202,40 +202,40 @@
 <td class="src"><pre><code class="objc">    /// Set of edge constraints  to be set as loose.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">39</td>
 <td class="src"><pre><code class="objc">    public var flexibleEdges: Set&lt;Edge&gt; = [] {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">40</td>
 <td class="src"><pre><code class="objc">        didSet {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">41</td>
 <td class="src"><pre><code class="objc">            guard flexibleEdges != oldValue else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">42</td>
 <td class="src"><pre><code class="objc">                return</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">43</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">44</td>
 <td class="src"><pre><code class="objc">            setupContainer()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">45</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
 <tr class="never">
 <td class="num">46</td>
@@ -302,10 +302,10 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">59</td>
 <td class="src"><pre><code class="objc">    private var addedConstraints: [NSLayoutConstraint] = []</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
 <tr class="never">
 <td class="num">60</td>
@@ -382,30 +382,30 @@
 <td class="src"><pre><code class="objc">    ///   to the superview in which you plan to add it.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">75</td>
 <td class="src"><pre><code class="objc">    public override init(frame: CGRect) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">76</td>
 <td class="src"><pre><code class="objc">        self.customView = CustomView(frame: frame)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">77</td>
 <td class="src"><pre><code class="objc">        super.init(frame: frame)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">78</td>
 <td class="src"><pre><code class="objc">        setupSubviews()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">79</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
 <tr class="never">
 <td class="num">80</td>
@@ -442,300 +442,300 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">87</td>
 <td class="src"><pre><code class="objc">    private func setupSubviews() {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">88</td>
 <td class="src"><pre><code class="objc">        translatesAutoresizingMaskIntoConstraints = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">89</td>
 <td class="src"><pre><code class="objc">        insetsLayoutMarginsFromSafeArea = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">90</td>
 <td class="src"><pre><code class="objc">        layoutMargins = .zero</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">91</td>
 <td class="src"><pre><code class="objc">        setupContainer()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">92</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
 <tr class="never">
 <td class="num">93</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">94</td>
 <td class="src"><pre><code class="objc">    private func setupContainer() {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">95</td>
 <td class="src"><pre><code class="objc">        if customView.superview != self {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">96</td>
 <td class="src"><pre><code class="objc">            customView.removeFromSuperview()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">97</td>
 <td class="src"><pre><code class="objc">            addSubview(customView)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">98</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">99</td>
 <td class="src"><pre><code class="objc">        customView.translatesAutoresizingMaskIntoConstraints = false</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">100</td>
 <td class="src"><pre><code class="objc">        if !addedConstraints.isEmpty {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">101</td>
 <td class="src"><pre><code class="objc">            removeConstraints(addedConstraints)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">102</td>
 <td class="src"><pre><code class="objc">            addedConstraints.removeAll()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">14x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">103</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">104</td>
 <td class="src"><pre><code class="objc">        Set(Edge.allCases).subtracting(flexibleEdges).forEach { setConstraint(for: $0, on: customView, flexible: false) }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">98x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">105</td>
 <td class="src"><pre><code class="objc">        flexibleEdges.forEach { setConstraint(for: $0, on: customView, flexible: true) }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">106</td>
 <td class="src"><pre><code class="objc">        setDistributionConstraint(on: customView)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">107</td>
 <td class="src"><pre><code class="objc">        setNeedsLayout()</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">108</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
 <tr class="never">
 <td class="num">109</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">110</td>
 <td class="src"><pre><code class="objc">    private func setConstraint(for edge: Edge, on view: UIView, flexible: Bool = false) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">111</td>
 <td class="src"><pre><code class="objc">        var addedConstraints: [NSLayoutConstraint] = []</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">112</td>
 <td class="src"><pre><code class="objc">        switch edge {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">113</td>
 <td class="src"><pre><code class="objc">        case .top:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">114</td>
 <td class="src"><pre><code class="objc">            if flexible {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
 <tr class="missed">
 <td class="num">115</td>
 <td class="src"><pre><code class="objc">                addedConstraints.append(view.topAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.topAnchor))</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">116</td>
 <td class="src"><pre><code class="objc">            } else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">117</td>
 <td class="src"><pre><code class="objc">                addedConstraints.append(view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor))</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">118</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">119</td>
 <td class="src"><pre><code class="objc">        case .leading:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">120</td>
 <td class="src"><pre><code class="objc">            if flexible {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">121</td>
 <td class="src"><pre><code class="objc">                addedConstraints.append(view.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor))</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">4x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">122</td>
 <td class="src"><pre><code class="objc">            } else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">123</td>
 <td class="src"><pre><code class="objc">                addedConstraints.append(view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor))</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">24x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">124</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">125</td>
 <td class="src"><pre><code class="objc">        case .trailing:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">126</td>
 <td class="src"><pre><code class="objc">            if flexible {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">127</td>
 <td class="src"><pre><code class="objc">                addedConstraints.append(view.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor))</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">10x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">128</td>
 <td class="src"><pre><code class="objc">            } else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">129</td>
 <td class="src"><pre><code class="objc">                addedConstraints.append(view.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor))</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">130</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">131</td>
 <td class="src"><pre><code class="objc">        case .bottom:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">132</td>
 <td class="src"><pre><code class="objc">            if flexible {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
 <tr class="missed">
 <td class="num">133</td>
 <td class="src"><pre><code class="objc">                addedConstraints.append(view.bottomAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.bottomAnchor))</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">134</td>
 <td class="src"><pre><code class="objc">            } else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">135</td>
 <td class="src"><pre><code class="objc">                addedConstraints.append(view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor))</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">136</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">137</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">138</td>
 <td class="src"><pre><code class="objc">        addedConstraints.forEach { constraint in</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">139</td>
 <td class="src"><pre><code class="objc">            constraint.isActive = true</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">140</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">141</td>
 <td class="src"><pre><code class="objc">        self.addedConstraints.append(contentsOf: addedConstraints)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">142</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">112x</td>
 </tr>
 <tr class="never">
 <td class="num">143</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">144</td>
 <td class="src"><pre><code class="objc">    private func setDistributionConstraint(on view: UIView) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">145</td>
 <td class="src"><pre><code class="objc">        if flexibleEdges.contains(.leading), flexibleEdges.contains(.trailing) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
 <tr class="missed">
 <td class="num">146</td>
@@ -752,10 +752,10 @@
 <td class="src"><pre><code class="objc">            layoutConstraint.isActive = true</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">149</td>
 <td class="src"><pre><code class="objc">        } else if flexibleEdges.contains(.top), flexibleEdges.contains(.bottom) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
 <tr class="missed">
 <td class="num">150</td>
@@ -772,15 +772,15 @@
 <td class="src"><pre><code class="objc">            layoutConstraint.isActive = true</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">153</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">154</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">28x</td>
 </tr>
 <tr class="never">
 <td class="num">155</td>
