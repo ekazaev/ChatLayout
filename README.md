@@ -78,6 +78,15 @@ components provided, you can install only the layout itself using `pod 'ChatLayo
 this moment and may introduce breaking changes in further versions. It is recommended to link the dependency to
 the exact version number in the dependency manager you use and increase the release version manually.**
 
+## About `UICollectionViewDiffableDataSource`
+
+`ChatLayout` can process any update commands that you send to your `UICollectionView`, so you can use 
+`UICollectionViewDiffableDataSource` as well. But you have to keep in mind that `UICollectionViewDiffableDataSource` 
+does not support the reloading of cells out of the box if you are relying on the `Hashable` protocol implementation.
+It will delete the changed cell and insert the new version of said cell. That may lead to strange animations on 
+the screen, especially when the reloaded cell changes its size. In order to get the best behaviour of the update animation 
+I would strongly recommend you rely on [DifferenceKit](https://github.com/ra1028/DifferenceKit) to process the model changes.
+The Example app does it as well.
 
 ## Contributing
 
