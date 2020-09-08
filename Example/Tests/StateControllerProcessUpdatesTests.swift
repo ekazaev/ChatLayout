@@ -327,4 +327,57 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         layout.controller.commitUpdates()
     }
 
+    func testInsertionPerformance() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection = [0: 0]
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        var insertItems: [UICollectionViewUpdateItem] = []
+        for i in 0..<10000 {
+            insertItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: nil, indexPathAfterUpdate: IndexPath(item: i, section: 0), action: .insert))
+        }
+        measure {
+            layout.controller.process(updateItems: insertItems)
+        }
+        layout.controller.commitUpdates()
+    }
+
+    func testReloadPerformance() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection = [0: 1000]
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        var insertItems: [UICollectionViewUpdateItem] = []
+        for i in 0..<1000 {
+            insertItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: i, section: 0), indexPathAfterUpdate: IndexPath(item: i, section: 0), action: .reload))
+        }
+        measure {
+            layout.controller.process(updateItems: insertItems)
+        }
+        layout.controller.commitUpdates()
+    }
+
+    func testDeletePerformance() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection = [0: 10000]
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        var insertItems: [UICollectionViewUpdateItem] = []
+        for i in 0..<10000 {
+            insertItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: i, section: 0), indexPathAfterUpdate: nil, action: .delete))
+        }
+        measure {
+            layout.controller.process(updateItems: insertItems)
+        }
+        layout.controller.commitUpdates()
+    }
+
+    func testItemUpdatePerformance() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection = [0: 1000]
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        measure {
+            for i in 0..<1000 {
+                layout.controller.update(preferredSize: CGSize(width: Int(arc4random_uniform(200)) + 100, height: Int(arc4random_uniform(500)) + 100), for: IndexPath(row: i, section: 0), kind: .cell, at: .beforeUpdate)
+            }
+        }
+    }
+    
 }

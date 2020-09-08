@@ -368,14 +368,14 @@ final class StateController {
                 if indexPathBeforeUpdate.item == NSNotFound, indexPathAfterUpdate.item == NSNotFound {
                     let section = layout(at: .beforeUpdate).sections[indexPathBeforeUpdate.section]
                     movedSectionsIndexes.insert(indexPathBeforeUpdate.section)
-                    afterUpdateModel.removeSection(by: section.id, at: .afterUpdate)
-                    afterUpdateModel.insertSection(section, at: indexPathAfterUpdate.section, at: .afterUpdate)
+                    afterUpdateModel.removeSection(by: section.id)
+                    afterUpdateModel.insertSection(section, at: indexPathAfterUpdate.section)
                 } else {
                     let itemId = itemIdentifier(for: indexPathBeforeUpdate, kind: .cell, at: .beforeUpdate)!
                     let item = layout(at: .beforeUpdate).sections[indexPathBeforeUpdate.section].items[indexPathBeforeUpdate.item]
                     movedIndexes.insert(indexPathBeforeUpdate)
-                    afterUpdateModel.removeRow(by: itemId, at: .afterUpdate)
-                    afterUpdateModel.insertItem(item, at: indexPathAfterUpdate, at: .afterUpdate)
+                    afterUpdateModel.removeRow(by: itemId)
+                    afterUpdateModel.insertItem(item, at: indexPathAfterUpdate)
                 }
             case .insert:
                 guard let indexPath = indexPathAfterUpdate else {
@@ -403,12 +403,12 @@ final class StateController {
                         footer = nil
                     }
                     let section = SectionModel(header: header, footer: footer, items: items, collectionLayout: collectionLayout)
-                    afterUpdateModel.insertSection(section, at: indexPath.section, at: .afterUpdate)
+                    afterUpdateModel.insertSection(section, at: indexPath.section)
                     insertedSectionsIndexes.insert(indexPath.section)
                 } else {
                     let item = ItemModel(with: collectionLayout.configuration(for: .cell, at: indexPath))
                     insertedIndexes.insert(indexPath)
-                    afterUpdateModel.insertItem(item, at: indexPath, at: .afterUpdate)
+                    afterUpdateModel.insertItem(item, at: indexPath)
                 }
             case .delete:
                 guard let indexPath = indexPathBeforeUpdate else {
@@ -419,10 +419,10 @@ final class StateController {
                 if indexPath.item == NSNotFound {
                     let section = layout(at: .beforeUpdate).sections[indexPath.section]
                     deletedSectionsIndexes.insert(indexPath.section)
-                    afterUpdateModel.removeSection(by: section.id, at: .afterUpdate)
+                    afterUpdateModel.removeSection(by: section.id)
                 } else {
                     let itemId = itemIdentifier(for: indexPath, kind: .cell, at: .beforeUpdate)!
-                    afterUpdateModel.removeRow(by: itemId, at: .afterUpdate)
+                    afterUpdateModel.removeRow(by: itemId)
                     deletedIndexes.insert(indexPath)
                 }
             case .reload:
@@ -468,8 +468,8 @@ final class StateController {
                         return newItem
                     }
                     section.set(items: items)
-                    afterUpdateModel.removeSection(for: indexPath.section, at: .afterUpdate)
-                    afterUpdateModel.insertSection(section, at: indexPath.section, at: .afterUpdate)
+                    afterUpdateModel.removeSection(for: indexPath.section)
+                    afterUpdateModel.insertSection(section, at: indexPath.section)
                 } else {
                     guard var item = self.item(for: indexPath, kind: .cell, at: .beforeUpdate) else {
                         assertionFailure("Internal inconsistency")
@@ -477,8 +477,7 @@ final class StateController {
                     }
                     item.resetSize()
 
-                    afterUpdateModel.removeItem(for: indexPath, at: .afterUpdate)
-                    afterUpdateModel.insertItem(item, at: indexPath, at: .afterUpdate)
+                    afterUpdateModel.replaceItem(item, at: indexPath)
                     reloadedIndexes.insert(indexPath)
                 }
             default:

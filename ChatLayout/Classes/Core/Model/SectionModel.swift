@@ -155,6 +155,14 @@ struct SectionModel {
         items.insert(item, at: index)
     }
 
+    mutating func replace(_ item: ItemModel, at index: Int) {
+        guard index <= count else {
+            assertionFailure("Internal inconsistency")
+            return
+        }
+        items[index] = item
+    }
+
     mutating func remove(at index: Int) {
         guard index < count else {
             assertionFailure("Internal inconsistency")

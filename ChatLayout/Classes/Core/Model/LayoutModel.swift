@@ -90,7 +90,7 @@ struct LayoutModel {
 
     // MARK: To use only withing process(updateItems:)
 
-    mutating func insertSection(_ section: SectionModel, at sectionIndex: Int, at state: ModelState) {
+    mutating func insertSection(_ section: SectionModel, at sectionIndex: Int) {
         var sections = self.sections
         guard sectionIndex <= sections.count else {
             assertionFailure("Internal inconsistency")
@@ -101,7 +101,7 @@ struct LayoutModel {
         self.sections = sections
     }
 
-    mutating func removeSection(by sectionIdentifier: UUID, at state: ModelState) {
+    mutating func removeSection(by sectionIdentifier: UUID) {
         guard let sectionIndex = sections.firstIndex(where: { $0.id == sectionIdentifier }) else {
             assertionFailure("Internal inconsistency")
             return
@@ -109,11 +109,11 @@ struct LayoutModel {
         sections.remove(at: sectionIndex)
     }
 
-    mutating func removeSection(for sectionIndex: Int, at state: ModelState) {
+    mutating func removeSection(for sectionIndex: Int) {
         sections.remove(at: sectionIndex)
     }
 
-    mutating func removeRow(by itemId: UUID, at state: ModelState) {
+    mutating func removeRow(by itemId: UUID) {
         guard let sectionIndex = sections.firstIndex(where: { $0.items.firstIndex(where: { $0.id == itemId }) != nil }) else {
             assertionFailure("Internal inconsistency")
             return
@@ -121,12 +121,16 @@ struct LayoutModel {
         sections[sectionIndex].remove(by: itemId)
     }
 
-    mutating func removeItem(for indexPath: IndexPath, at state: ModelState) {
+    mutating func removeItem(for indexPath: IndexPath) {
         sections[indexPath.section].remove(at: indexPath.item)
     }
 
-    mutating func insertItem(_ item: ItemModel, at indexPath: IndexPath, at state: ModelState) {
+    mutating func insertItem(_ item: ItemModel, at indexPath: IndexPath) {
         sections[indexPath.section].insert(item, at: indexPath.item)
+    }
+
+    mutating func replaceItem(_ item: ItemModel, at indexPath: IndexPath) {
+        sections[indexPath.section].replace(item, at: indexPath.item)
     }
 
 }
