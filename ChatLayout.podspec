@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ChatLayout'
-  s.version          = '0.2.5'
+  s.version          = '0.2.6'
   s.summary          = 'An alternative solution to MessageKit. It uses custom UICollectionViewLayout to provide you full control over the presentation.'
   s.swift_version    = '5.2'
 
@@ -32,8 +32,6 @@ UICollectionView. It supports dynamic cells and supplementary view sizes.
       extras.source_files = 'ChatLayout/Classes/Extras/**/*'
       extras.dependency "ChatLayout/Core"
   end
-
-  s.frameworks = 'UIKit'
 
   s.frameworks = 'UIKit'
 end
