@@ -49,7 +49,7 @@ to get better performance.
 - `ChatLayout` doesn't enforce you to use any specific data model. You can store your messages and update `UICollectionView`
 the way you like. The only thing you need is to respect the natural boundaries that `UICollectionView` have and correctly
 implement `UICollectionViewDataSource`. The Example app uses [DifferenceKit](https://github.com/ra1028/DifferenceKit) to 
-process changes in the data model for the compatibility with IOs 12.
+process changes in the data model.
 
 - `ChatLayout` doesn't enforce you to use any specific `UIView`s to create your collection cells. You can create them the way 
 you like. It can be any `UICollectionViewCell` or `UICollectionReusableView`. There are some generic `UIView`s bundled with

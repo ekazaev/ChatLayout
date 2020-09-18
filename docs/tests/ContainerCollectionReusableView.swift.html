@@ -260,12 +260,12 @@
 <tr class="covered">
 <td class="num">50</td>
 <td class="src"><pre><code class="objc">    public override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -&gt; UICollectionViewLayoutAttributes {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">51</td>
 <td class="src"><pre><code class="objc">        guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="missed">
 <td class="num">52</td>
@@ -275,27 +275,27 @@
 <tr class="covered">
 <td class="num">53</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">54</td>
 <td class="src"><pre><code class="objc">        delegate?.apply(chatLayoutAttributes)</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">55</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">56</td>
 <td class="src"><pre><code class="objc">        let resultingLayoutAttributes: ChatLayoutAttributes</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">57</td>
 <td class="src"><pre><code class="objc">        if let preferredLayoutAttributes = delegate?.preferredLayoutAttributesFitting(chatLayoutAttributes) {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="missed">
 <td class="num">58</td>
@@ -305,22 +305,22 @@
 <tr class="covered">
 <td class="num">59</td>
 <td class="src"><pre><code class="objc">        } else if let chatLayoutAttributes = super.preferredLayoutAttributesFitting(chatLayoutAttributes) as? ChatLayoutAttributes {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">60</td>
 <td class="src"><pre><code class="objc">            delegate?.modifyPreferredLayoutAttributesFitting(chatLayoutAttributes)</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">61</td>
 <td class="src"><pre><code class="objc">            resultingLayoutAttributes = chatLayoutAttributes</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">62</td>
 <td class="src"><pre><code class="objc">        } else {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="missed">
 <td class="num">63</td>
@@ -330,17 +330,17 @@
 <tr class="covered">
 <td class="num">64</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">65</td>
 <td class="src"><pre><code class="objc">        return resultingLayoutAttributes</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">66</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="never">
 <td class="num">67</td>
@@ -360,12 +360,12 @@
 <tr class="covered">
 <td class="num">70</td>
 <td class="src"><pre><code class="objc">    public override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {</code></pre></td>
-<td class="coverage">6x</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">71</td>
 <td class="src"><pre><code class="objc">        guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {</code></pre></td>
-<td class="coverage">6x</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="missed">
 <td class="num">72</td>
@@ -375,22 +375,22 @@
 <tr class="covered">
 <td class="num">73</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">6x</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">74</td>
 <td class="src"><pre><code class="objc">        super.apply(layoutAttributes)</code></pre></td>
-<td class="coverage">6x</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">75</td>
 <td class="src"><pre><code class="objc">        delegate?.apply(chatLayoutAttributes)</code></pre></td>
-<td class="coverage">6x</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">76</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">6x</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="never">
 <td class="num">77</td>

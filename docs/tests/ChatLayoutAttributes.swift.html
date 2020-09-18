@@ -95,7 +95,7 @@
 <tr class="covered">
 <td class="num">17</td>
 <td class="src"><pre><code class="objc">    public var alignment: ChatItemAlignment = .full</code></pre></td>
-<td class="coverage">1320x</td>
+<td class="coverage">1440x</td>
 </tr>
 <tr class="never">
 <td class="num">18</td>
@@ -110,7 +110,7 @@
 <tr class="covered">
 <td class="num">20</td>
 <td class="src"><pre><code class="objc">    public internal(set) var additionalInsets: UIEdgeInsets = .zero</code></pre></td>
-<td class="coverage">1320x</td>
+<td class="coverage">1440x</td>
 </tr>
 <tr class="never">
 <td class="num">21</td>
@@ -125,7 +125,7 @@
 <tr class="covered">
 <td class="num">23</td>
 <td class="src"><pre><code class="objc">    public internal(set) var viewSize: CGSize = .zero</code></pre></td>
-<td class="coverage">1320x</td>
+<td class="coverage">1440x</td>
 </tr>
 <tr class="never">
 <td class="num">24</td>
@@ -140,7 +140,7 @@
 <tr class="covered">
 <td class="num">26</td>
 <td class="src"><pre><code class="objc">    public internal(set) var adjustedContentInsets: UIEdgeInsets = .zero</code></pre></td>
-<td class="coverage">1320x</td>
+<td class="coverage">1440x</td>
 </tr>
 <tr class="never">
 <td class="num">27</td>
@@ -155,7 +155,7 @@
 <tr class="covered">
 <td class="num">29</td>
 <td class="src"><pre><code class="objc">    public internal(set) var visibleBoundsSize: CGSize = .zero</code></pre></td>
-<td class="coverage">1320x</td>
+<td class="coverage">1440x</td>
 </tr>
 <tr class="never">
 <td class="num">30</td>
@@ -170,7 +170,7 @@
 <tr class="covered">
 <td class="num">32</td>
 <td class="src"><pre><code class="objc">    public internal(set) var layoutFrame: CGRect = .zero</code></pre></td>
-<td class="coverage">1320x</td>
+<td class="coverage">1440x</td>
 </tr>
 <tr class="never">
 <td class="num">33</td>
@@ -250,57 +250,57 @@
 <tr class="covered">
 <td class="num">48</td>
 <td class="src"><pre><code class="objc">    public override func copy(with zone: NSZone? = nil) -&gt; Any {</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">49</td>
 <td class="src"><pre><code class="objc">        let copy = super.copy(with: zone) as! ChatLayoutAttributes</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">50</td>
 <td class="src"><pre><code class="objc">        copy.alignment = alignment</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">51</td>
 <td class="src"><pre><code class="objc">        copy.additionalInsets = additionalInsets</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">52</td>
 <td class="src"><pre><code class="objc">        copy.viewSize = viewSize</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">53</td>
 <td class="src"><pre><code class="objc">        copy.adjustedContentInsets = adjustedContentInsets</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">54</td>
 <td class="src"><pre><code class="objc">        copy.visibleBoundsSize = visibleBoundsSize</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">55</td>
 <td class="src"><pre><code class="objc">        copy.layoutFrame = layoutFrame</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">56</td>
 <td class="src"><pre><code class="objc">        copy.id = id</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">57</td>
 <td class="src"><pre><code class="objc">        return copy</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="covered">
 <td class="num">58</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">562x</td>
+<td class="coverage">616x</td>
 </tr>
 <tr class="never">
 <td class="num">59</td>
@@ -315,22 +315,22 @@
 <tr class="covered">
 <td class="num">61</td>
 <td class="src"><pre><code class="objc">    public override func isEqual(_ object: Any?) -&gt; Bool {</code></pre></td>
-<td class="coverage">191x</td>
+<td class="coverage">185x</td>
 </tr>
 <tr class="covered">
 <td class="num">62</td>
 <td class="src"><pre><code class="objc">        return super.isEqual(object)</code></pre></td>
-<td class="coverage">191x</td>
+<td class="coverage">185x</td>
 </tr>
 <tr class="covered">
 <td class="num">63</td>
 <td class="src"><pre><code class="objc">            &amp;&amp; alignment == (object as? ChatLayoutAttributes)?.alignment</code></pre></td>
-<td class="coverage">191x</td>
+<td class="coverage">185x</td>
 </tr>
 <tr class="covered">
 <td class="num">64</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">191x</td>
+<td class="coverage">185x</td>
 </tr>
 <tr class="never">
 <td class="num">65</td>
@@ -340,27 +340,27 @@
 <tr class="covered">
 <td class="num">66</td>
 <td class="src"><pre><code class="objc">    var kind: ItemKind {</code></pre></td>
-<td class="coverage">135x</td>
+<td class="coverage">130x</td>
 </tr>
 <tr class="covered">
 <td class="num">67</td>
 <td class="src"><pre><code class="objc">        switch (representedElementCategory, representedElementKind) {</code></pre></td>
-<td class="coverage">135x</td>
+<td class="coverage">130x</td>
 </tr>
 <tr class="covered">
 <td class="num">68</td>
 <td class="src"><pre><code class="objc">        case (.cell, nil):</code></pre></td>
-<td class="coverage">135x</td>
+<td class="coverage">130x</td>
 </tr>
 <tr class="covered">
 <td class="num">69</td>
 <td class="src"><pre><code class="objc">            return .cell</code></pre></td>
-<td class="coverage">125x</td>
+<td class="coverage">120x</td>
 </tr>
 <tr class="covered">
 <td class="num">70</td>
 <td class="src"><pre><code class="objc">        case (.supplementaryView, .some(UICollectionView.elementKindSectionHeader)):</code></pre></td>
-<td class="coverage">135x</td>
+<td class="coverage">130x</td>
 </tr>
 <tr class="covered">
 <td class="num">71</td>
@@ -370,7 +370,7 @@
 <tr class="covered">
 <td class="num">72</td>
 <td class="src"><pre><code class="objc">        case (.supplementaryView, .some(UICollectionView.elementKindSectionFooter)):</code></pre></td>
-<td class="coverage">135x</td>
+<td class="coverage">130x</td>
 </tr>
 <tr class="covered">
 <td class="num">73</td>
@@ -380,7 +380,7 @@
 <tr class="covered">
 <td class="num">74</td>
 <td class="src"><pre><code class="objc">        default:</code></pre></td>
-<td class="coverage">135x</td>
+<td class="coverage">130x</td>
 </tr>
 <tr class="missed">
 <td class="num">75</td>
@@ -390,12 +390,12 @@
 <tr class="covered">
 <td class="num">76</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">135x</td>
+<td class="coverage">130x</td>
 </tr>
 <tr class="covered">
 <td class="num">77</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">135x</td>
+<td class="coverage">130x</td>
 </tr>
 <tr class="never">
 <td class="num">78</td>
