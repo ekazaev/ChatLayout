@@ -15,21 +15,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        guard !ProcessInfo.isRunningTests else {
+            return false
+        }
         if #available(iOS 13.0, *) {
         } else {
             let window = UIWindow()
-            let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [1, 2, 3])
-            let messageController = DefaultChatController(dataProvider: dataProvider, userId: 0)
-            dataProvider.delegate = messageController
 
-            let messageViewController = ChatViewController(chatController: messageController)
-            messageController.delegate = messageViewController
-            let viewController = UINavigationController(rootViewController: messageViewController)
+            let chatViewController = ChatViewControllerBuilder().build()
+            let viewController = UINavigationController(rootViewController: chatViewController)
 
             self.window = window
             window.rootViewController = viewController
             window.makeKeyAndVisible()
-
         }
         return true
     }

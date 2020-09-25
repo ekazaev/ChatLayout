@@ -32,18 +32,7 @@ struct LayoutModel {
 
     // MARK: To use when its is important to make the correct insertion
 
-    mutating func setAndAssemble(section: SectionModel, sectionIndex: Int) {
-        guard sectionIndex < sections.count else {
-            assertionFailure("Internal inconsistency")
-            return
-        }
-        let oldSection = sections[sectionIndex]
-        sections[sectionIndex] = section
-        let heightDiff = sections[sectionIndex].height - oldSection.height
-        offsetEverything(below: sectionIndex, by: heightDiff)
-    }
-
-    mutating func setAndAssemble(header: ItemModel?, sectionIndex: Int) {
+    mutating func setAndAssemble(header: ItemModel, sectionIndex: Int) {
         guard sectionIndex < sections.count else {
             assertionFailure("Internal inconsistency")
             return
@@ -66,7 +55,7 @@ struct LayoutModel {
         offsetEverything(below: sectionIndex, by: heightDiff)
     }
 
-    mutating func setAndAssemble(footer: ItemModel?, sectionIndex: Int) {
+    mutating func setAndAssemble(footer: ItemModel, sectionIndex: Int) {
         guard sectionIndex < sections.count else {
             assertionFailure("Internal inconsistency")
             return

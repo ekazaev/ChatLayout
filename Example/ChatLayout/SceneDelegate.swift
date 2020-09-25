@@ -15,6 +15,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     @available(iOS 13.0, *)
     func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options _: UIScene.ConnectionOptions) {
+        guard !ProcessInfo.isRunningTests else {
+            return
+        }
+
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
@@ -22,16 +26,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
 
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let viewController = storyboard.instantiateInitialViewController()
-
-        let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [1, 2, 3])
-        let messageController = DefaultChatController(dataProvider: dataProvider, userId: 0)
-        dataProvider.delegate = messageController
-
-        let messageViewController = ChatViewController(chatController: messageController)
-        messageController.delegate = messageViewController
-        let viewController = UINavigationController(rootViewController: messageViewController)
+        let chatViewController = ChatViewControllerBuilder().build()
+        let viewController = UINavigationController(rootViewController: chatViewController)
 
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = viewController

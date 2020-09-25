@@ -15,6 +15,6 @@ protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegat
 
     var sections: [Section] { get set }
 
-    func registerCells()
+    func prepare(with collectionView: UICollectionView)
 
 }

@@ -22,8 +22,6 @@ typealias TextTitleView = ContainerCollectionReusableView<UILabel>
 
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
 
-    private unowned var collectionView: UICollectionView
-
     private unowned var reloadDelegate: ReloadDelegate
 
     private unowned var editingDelegate: EditingAccessoryControllerDelegate
@@ -32,21 +30,13 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
 
     var sections: [Section] = []
 
-    fileprivate var chatLayout: ChatLayout {
-        guard let chatLayout = collectionView.collectionViewLayout as? ChatLayout else {
-            fatalError("Only ChatLayout is supported")
-        }
-        return chatLayout
-    }
-
-    init(collectionView: UICollectionView, editNotifier: EditNotifier, reloadDelegate: ReloadDelegate, editingDelegate: EditingAccessoryControllerDelegate) {
-        self.collectionView = collectionView
+    init(editNotifier: EditNotifier, reloadDelegate: ReloadDelegate, editingDelegate: EditingAccessoryControllerDelegate) {
         self.reloadDelegate = reloadDelegate
         self.editingDelegate = editingDelegate
         self.editNotifier = editNotifier
     }
 
-    func registerCells() {
+    func prepare(with collectionView: UICollectionView) {
         collectionView.register(TextMessageCollectionCell.self, forCellWithReuseIdentifier: TextMessageCollectionCell.reuseIdentifier)
         collectionView.register(ImageCollectionCell.self, forCellWithReuseIdentifier: ImageCollectionCell.reuseIdentifier)
         collectionView.register(TitleCollectionCell.self, forCellWithReuseIdentifier: TitleCollectionCell.reuseIdentifier)
@@ -58,7 +48,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         }
     }
 
-    private func createTextCell(messageId: UUID, indexPath: IndexPath, text: String, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
+    private func createTextCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, text: String, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextMessageCollectionCell.reuseIdentifier, for: indexPath) as! TextMessageCollectionCell
         setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)
         setupCellLayoutView(cell.customView.customView, user: user, alignment: alignment, bubble: bubbleType, status: status)
@@ -75,7 +65,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
     }
 
     @available(iOS 13, *)
-    private func createURLCell(messageId: UUID, indexPath: IndexPath, url: URL, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
+    private func createURLCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, url: URL, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: URLCollectionCell.reuseIdentifier, for: indexPath) as! URLCollectionCell
         setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)
         setupCellLayoutView(cell.customView.customView, user: user, alignment: alignment, bubble: bubbleType, status: status)
@@ -93,7 +83,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createImageCell(messageId: UUID, indexPath: IndexPath, alignment: ChatItemAlignment, user: User, source: ImageMessageSource, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> ImageCollectionCell {
+    private func createImageCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, alignment: ChatItemAlignment, user: User, source: ImageMessageSource, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> ImageCollectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionCell.reuseIdentifier, for: indexPath) as! ImageCollectionCell
 
         setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)
@@ -112,7 +102,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createTypingIndicatorCell(indexPath: IndexPath) -> UICollectionViewCell {
+    private func createTypingIndicatorCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TypingIndicatorCollectionCell.reuseIdentifier, for: indexPath) as! TypingIndicatorCollectionCell
         let alignment = ChatItemAlignment.leading
         cell.customView.alignment = alignment
@@ -127,10 +117,10 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createGroupTitle(indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
+    private func createGroupTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionCell.reuseIdentifier, for: indexPath) as! TitleCollectionCell
         cell.customView.text = title
-        cell.customView.preferredMaxLayoutWidth = chatLayout.layoutFrame.width
+        cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? ChatLayout)?.layoutFrame.width ?? collectionView.frame.width
         cell.customView.textColor = .gray
         cell.customView.numberOfLines = 0
         cell.customView.font = .preferredFont(forTextStyle: .caption2)
@@ -138,9 +128,9 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createDateTitle(indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
+    private func createDateTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionCell.reuseIdentifier, for: indexPath) as! TitleCollectionCell
-        cell.customView.preferredMaxLayoutWidth = chatLayout.layoutFrame.width
+        cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? ChatLayout)?.layoutFrame.width ?? collectionView.frame.width
         cell.customView.text = title
         cell.customView.textColor = .gray
         cell.customView.numberOfLines = 0
@@ -209,26 +199,26 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
         case let .message(message, bubbleType: bubbleType):
             switch message.data {
             case let .text(text):
-                let cell = createTextCell(messageId: message.id, indexPath: indexPath, text: text, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
+                let cell = createTextCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, text: text, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
                 return cell
             case let .url(url, isLocallyStored: _):
                 if #available(iOS 13.0, *) {
-                    return createURLCell(messageId: message.id, indexPath: indexPath, url: url, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
+                    return createURLCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, url: url, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
                 } else {
-                    return createTextCell(messageId: message.id, indexPath: indexPath, text: url.absoluteString, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
+                    return createTextCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, text: url.absoluteString, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
                 }
             case let .image(source, isLocallyStored: _):
-                let cell = createImageCell(messageId: message.id, indexPath: indexPath, alignment: cell.alignment, user: message.owner, source: source, bubbleType: bubbleType, status: message.status, messageType: message.type)
+                let cell = createImageCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, alignment: cell.alignment, user: message.owner, source: source, bubbleType: bubbleType, status: message.status, messageType: message.type)
                 return cell
             }
         case let .messageGroup(group):
-            let cell = createGroupTitle(indexPath: indexPath, alignment: cell.alignment, title: group.title)
+            let cell = createGroupTitle(collectionView: collectionView, indexPath: indexPath, alignment: cell.alignment, title: group.title)
             return cell
         case let .date(group):
-            let cell = createDateTitle(indexPath: indexPath, alignment: cell.alignment, title: group.value)
+            let cell = createDateTitle(collectionView: collectionView, indexPath: indexPath, alignment: cell.alignment, title: group.value)
             return cell
         case .typingIndicator:
-            return createTypingIndicatorCell(indexPath: indexPath)
+            return createTypingIndicatorCell(collectionView: collectionView, indexPath: indexPath)
         default:
             fatalError()
         }
@@ -265,15 +255,15 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
 
 extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
 
-    public func shouldPresentHeader(at sectionIndex: Int) -> Bool {
+    public func shouldPresentHeader(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool {
         return true
     }
 
-    public func shouldPresentFooter(at sectionIndex: Int) -> Bool {
+    public func shouldPresentFooter(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool {
         return true
     }
 
-    public func sizeForItem(of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
+    public func sizeForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
         switch kind {
         case .cell:
             let item = sections[indexPath.section].cells[indexPath.item]
@@ -301,7 +291,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func alignmentForItem(of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
+    public func alignmentForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
         switch kind {
         case .header:
             return .center

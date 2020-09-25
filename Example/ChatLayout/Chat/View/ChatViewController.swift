@@ -43,19 +43,20 @@ final class ChatViewController: UIViewController {
 
     private var currentInterfaceActions: SetActor<Set<InterfaceActions>, ReactionTypes> = SetActor()
     private var currentControllerActions: SetActor<Set<ControllerActions>, ReactionTypes> = SetActor()
-    private let editNotifier = EditNotifier()
+    private let editNotifier: EditNotifier
     private var collectionView: UICollectionView!
     private var chatLayout = ChatLayout()
     private let inputBarView = InputBarAccessoryView()
     private let chatController: ChatController
 
-    private lazy var dataSource: ChatCollectionDataSource = DefaultChatCollectionDataSource(collectionView: collectionView,
-                                                                                            editNotifier: editNotifier,
-                                                                                            reloadDelegate: chatController as! DefaultChatController,
-                                                                                            editingDelegate: chatController as! DefaultChatController)
+    private let dataSource: ChatCollectionDataSource
 
-    init(chatController: ChatController) {
+    init(chatController: ChatController,
+         dataSource: ChatCollectionDataSource,
+         editNotifier: EditNotifier) {
         self.chatController = chatController
+        self.dataSource = dataSource
+        self.editNotifier = editNotifier
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -110,7 +111,7 @@ final class ChatViewController: UIViewController {
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
-        dataSource.registerCells()
+        dataSource.prepare(with: collectionView)
         collectionView.backgroundColor = .clear
 
         currentControllerActions.options.insert(.loadingInitialMessages)

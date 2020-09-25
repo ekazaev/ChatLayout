@@ -10,11 +10,8 @@
 import Foundation
 import UIKit
 
-private let enableCaching = true
-
+/// This protocol exists only to serve an ability to unit test.
 protocol ChatLayoutRepresentation: AnyObject {
-
-    var delegate: ChatLayoutDelegate? { get }
 
     var settings: ChatLayoutSettings { get }
 
@@ -32,6 +29,10 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration
 
+    func shouldPresentHeader(at sectionIndex: Int) -> Bool
+
+    func shouldPresentFooter(at sectionIndex: Int) -> Bool
+
 }
 
 final class StateController {
@@ -44,7 +45,7 @@ final class StateController {
 
     var totalProposedCompensatingOffset: CGFloat = 0
 
-    private(set) lazy var storage: [ModelState: LayoutModel] = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.collectionLayout)]
+    private(set) lazy var storage: [ModelState: LayoutModel] = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]
 
     private(set) var reloadedIndexes: Set<IndexPath> = []
 
@@ -64,14 +65,14 @@ final class StateController {
 
     private var cachedAttributesState: (rect: CGRect, attributes: [ChatLayoutAttributes])?
 
-    private unowned var collectionLayout: ChatLayoutRepresentation
+    private unowned var layoutRepresentation: ChatLayoutRepresentation
 
-    init(collectionLayout: ChatLayoutRepresentation) {
-        self.collectionLayout = collectionLayout
+    init(layoutRepresentation: ChatLayoutRepresentation) {
+        self.layoutRepresentation = layoutRepresentation
     }
 
     func set(_ sections: [SectionModel], at state: ModelState) {
-        var layoutModel = LayoutModel(sections: sections, collectionLayout: collectionLayout)
+        var layoutModel = LayoutModel(sections: sections, collectionLayout: layoutRepresentation)
         layoutModel.assembleLayout()
         storage[state] = layoutModel
     }
@@ -80,28 +81,18 @@ final class StateController {
         guard let locationHeight = storage[state]?.sections.last?.locationHeight else {
             return 0
         }
-        return locationHeight + collectionLayout.settings.additionalInsets.bottom
+        return locationHeight + layoutRepresentation.settings.additionalInsets.bottom
     }
 
     func layoutAttributesForElements(in rect: CGRect, state: ModelState) -> [ChatLayoutAttributes] {
-        guard enableCaching else {
-            return allAttributes(at: state).filter {
-                $0.frame.intersects(rect)
-            }
-        }
-
         if let cachedAttributesState = cachedAttributesState,
             cachedAttributesState.rect.contains(rect) {
-            return cachedAttributesState.attributes
+            return cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
         } else {
             let totalRect = rect.inset(by: UIEdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))
-            var visibleAttributes = [ChatLayoutAttributes]()
             let attributes = allAttributes(at: state, visibleRect: totalRect)
-            for attributes in attributes where attributes.frame.intersects(rect) {
-                visibleAttributes.append(attributes)
-            }
-
             cachedAttributesState = (rect: totalRect, attributes: attributes)
+            let visibleAttributes = attributes.filter { $0.frame.intersects(rect) }
             return visibleAttributes
         }
     }
@@ -159,11 +150,11 @@ final class StateController {
             attributes.zIndex = 0
             attributes.alignment = item.alignment
         }
-        attributes.viewSize = collectionLayout.viewSize
-        attributes.adjustedContentInsets = collectionLayout.adjustedContentInset
-        attributes.visibleBoundsSize = collectionLayout.visibleBounds.size
-        attributes.layoutFrame = collectionLayout.layoutFrame
-        attributes.additionalInsets = collectionLayout.settings.additionalInsets
+        attributes.viewSize = layoutRepresentation.viewSize
+        attributes.adjustedContentInsets = layoutRepresentation.adjustedContentInset
+        attributes.visibleBoundsSize = layoutRepresentation.visibleBounds.size
+        attributes.layoutFrame = layoutRepresentation.layoutFrame
+        attributes.additionalInsets = layoutRepresentation.settings.additionalInsets
         return attributes
     }
 
@@ -178,18 +169,18 @@ final class StateController {
         let section = layout(at: state).sections[indexPath.section]
         var itemFrame = item.frame
         let dx: CGFloat
-        let visibleBounds = collectionLayout.visibleBounds
+        let visibleBounds = layoutRepresentation.visibleBounds
 
         switch item.alignment {
         case .leading:
-            dx = collectionLayout.settings.additionalInsets.left
+            dx = layoutRepresentation.settings.additionalInsets.left
         case .trailing:
-            dx = visibleBounds.size.width - itemFrame.width - collectionLayout.settings.additionalInsets.right
+            dx = visibleBounds.size.width - itemFrame.width - layoutRepresentation.settings.additionalInsets.right
         case .center:
-            dx = collectionLayout.settings.additionalInsets.left + (visibleBounds.size.width - collectionLayout.settings.additionalInsets.right - collectionLayout.settings.additionalInsets.left) / 2 - itemFrame.width / 2
+            dx = layoutRepresentation.settings.additionalInsets.left + (visibleBounds.size.width - layoutRepresentation.settings.additionalInsets.right - layoutRepresentation.settings.additionalInsets.left) / 2 - itemFrame.width / 2
         case .full:
-            dx = collectionLayout.settings.additionalInsets.left
-            itemFrame.size.width = collectionLayout.layoutFrame.size.width
+            dx = layoutRepresentation.settings.additionalInsets.left
+            itemFrame.size.width = layoutRepresentation.layoutFrame.size.width
         }
 
         itemFrame = itemFrame.offsetBy(dx: dx, dy: section.offsetY)
@@ -384,29 +375,29 @@ final class StateController {
                 }
 
                 if indexPath.item == NSNotFound {
-                    let items = (0..<collectionLayout.numberOfItems(inSection: indexPath.section)).map { index -> ItemModel in
+                    let items = (0..<layoutRepresentation.numberOfItems(inSection: indexPath.section)).map { index -> ItemModel in
                         let itemIndexPath = IndexPath(item: index, section: indexPath.section)
-                        return ItemModel(with: collectionLayout.configuration(for: .cell, at: itemIndexPath))
+                        return ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath))
                     }
                     let header: ItemModel?
-                    if collectionLayout.delegate?.shouldPresentHeader(at: indexPath.section) == true {
+                    if layoutRepresentation.shouldPresentHeader(at: indexPath.section) == true {
                         let headerIndexPath = IndexPath(item: 0, section: indexPath.section)
-                        header = ItemModel(with: collectionLayout.configuration(for: .header, at: headerIndexPath))
+                        header = ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath))
                     } else {
                         header = nil
                     }
                     let footer: ItemModel?
-                    if collectionLayout.delegate?.shouldPresentFooter(at: indexPath.section) == true {
+                    if layoutRepresentation.shouldPresentFooter(at: indexPath.section) == true {
                         let footerIndexPath = IndexPath(item: 0, section: indexPath.section)
-                        footer = ItemModel(with: collectionLayout.configuration(for: .footer, at: footerIndexPath))
+                        footer = ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath))
                     } else {
                         footer = nil
                     }
-                    let section = SectionModel(header: header, footer: footer, items: items, collectionLayout: collectionLayout)
+                    let section = SectionModel(header: header, footer: footer, items: items, collectionLayout: layoutRepresentation)
                     afterUpdateModel.insertSection(section, at: indexPath.section)
                     insertedSectionsIndexes.insert(indexPath.section)
                 } else {
-                    let item = ItemModel(with: collectionLayout.configuration(for: .cell, at: indexPath))
+                    let item = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: indexPath))
                     insertedIndexes.insert(indexPath)
                     afterUpdateModel.insertItem(item, at: indexPath)
                 }
@@ -436,9 +427,9 @@ final class StateController {
                     var section = layout(at: .beforeUpdate).sections[indexPath.section]
 
                     var header: ItemModel?
-                    if collectionLayout.delegate?.shouldPresentHeader(at: indexPath.section) == true {
+                    if layoutRepresentation.shouldPresentHeader(at: indexPath.section) == true {
                         let headerIndexPath = IndexPath(item: 0, section: indexPath.section)
-                        header = section.header ?? ItemModel(with: collectionLayout.configuration(for: .header, at: headerIndexPath))
+                        header = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath))
                         header?.resetSize()
                     } else {
                         header = nil
@@ -446,9 +437,9 @@ final class StateController {
                     section.set(header: header)
 
                     var footer: ItemModel?
-                    if collectionLayout.delegate?.shouldPresentFooter(at: indexPath.section) == true {
+                    if layoutRepresentation.shouldPresentFooter(at: indexPath.section) == true {
                         let footerIndexPath = IndexPath(item: 0, section: indexPath.section)
-                        footer = section.footer ?? ItemModel(with: collectionLayout.configuration(for: .footer, at: footerIndexPath))
+                        footer = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath))
                         footer?.resetSize()
                     } else {
                         footer = nil
@@ -456,13 +447,13 @@ final class StateController {
                     section.set(footer: footer)
 
                     let oldItems = section.items
-                    let items: [ItemModel] = (0..<collectionLayout.numberOfItems(inSection: indexPath.section)).map { index in
+                    let items: [ItemModel] = (0..<layoutRepresentation.numberOfItems(inSection: indexPath.section)).map { index in
                         var newItem: ItemModel
                         if index < oldItems.count {
                             newItem = oldItems[index]
                         } else {
                             let itemIndexPath = IndexPath(item: index, section: indexPath.section)
-                            newItem = ItemModel(with: collectionLayout.configuration(for: .cell, at: itemIndexPath))
+                            newItem = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath))
                         }
                         newItem.resetSize()
                         return newItem
@@ -489,7 +480,7 @@ final class StateController {
             var section = section
             section.assembleLayout()
             return section
-        }, collectionLayout: collectionLayout)
+        }, collectionLayout: layoutRepresentation)
         afterUpdateModel.assembleLayout()
         storage[.afterUpdate] = afterUpdateModel
 
@@ -556,20 +547,20 @@ final class StateController {
         // incorrect, internal collection view `CGRect` checks, without introducing any visual
         // differences for elements in the collection view.
         // See https://openradar.appspot.com/radar?id=5025850143539200 for more details.
-        let contentSize = CGSize(width: collectionLayout.visibleBounds.size.width - 0.0001, height: contentHeight)
+        let contentSize = CGSize(width: layoutRepresentation.visibleBounds.size.width - 0.0001, height: contentHeight)
         return contentSize
     }
 
     func offsetByTotalCompensation(attributes: UICollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
-        guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates,
+        guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
             state == .afterUpdate,
             let attributes = attributes else {
             return
         }
         if backward,
-            contentHeight(at: .beforeUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() {
+            contentHeight(at: .beforeUpdate).rounded() > layoutRepresentation.visibleBounds.height.rounded() {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset * -1)
-        } else if !backward, contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() {
+        } else if !backward, contentHeight(at: .afterUpdate).rounded() > layoutRepresentation.visibleBounds.height.rounded() {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset)
         }
     }
@@ -577,7 +568,7 @@ final class StateController {
     func layout(at state: ModelState) -> LayoutModel {
         guard let layout = storage[state] else {
             assertionFailure("Internal inconsistency. Layout at \(state) is missing.")
-            return LayoutModel(sections: [], collectionLayout: collectionLayout)
+            return LayoutModel(sections: [], collectionLayout: layoutRepresentation)
         }
         return layout
     }
@@ -662,7 +653,7 @@ final class StateController {
                                         let item = self.item(for: initialIndexPath, kind: .cell, at: .beforeUpdate),
                                         item.calculatedOnce == true,
                                         let itemFrame = self.itemFrame(for: initialIndexPath, kind: .cell, at: .beforeUpdate, isFinal: false),
-                                        itemFrame.intersects(collectionLayout.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
+                                        itemFrame.intersects(layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
                                         return false
                                     }
                                     return true
@@ -670,14 +661,14 @@ final class StateController {
                                 var itemWillBeVisible: Bool {
                                     if insertedIndexes.contains(indexPath),
                                         let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
-                                        itemFrame.intersects(collectionLayout.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
+                                        itemFrame.intersects(layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
                                         return true
                                     }
                                     if let itemIdentifier = self.itemIdentifier(for: indexPath, kind: .cell, at: .afterUpdate),
                                         let initialIndexPath = self.indexPath(by: itemIdentifier, at: .beforeUpdate),
                                         self.movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
                                         let itemFrame = self.itemFrame(for: indexPath, kind: .cell, at: state, isFinal: true),
-                                        itemFrame.intersects(collectionLayout.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
+                                        itemFrame.intersects(layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
                                         return true
                                     }
                                     return false
@@ -733,82 +724,82 @@ final class StateController {
     }
 
     private func compensateOffsetIfNeeded(for indexPath: IndexPath, kind: ItemKind, action: CompensatingAction) {
-        guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates else {
+        guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
         switch action {
         case .insert:
-            guard contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.size.height.rounded(),
+            guard contentHeight(at: .afterUpdate).rounded() > layoutRepresentation.visibleBounds.size.height.rounded(),
                 let itemFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) else {
                 return
             }
-            if itemFrame.minY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
-                proposedCompensatingOffset += itemFrame.height + collectionLayout.settings.interItemSpacing
+            if itemFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+                proposedCompensatingOffset += itemFrame.height + layoutRepresentation.settings.interItemSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):
-            guard contentHeight(at: .afterUpdate).rounded() > (collectionLayout.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
+            guard contentHeight(at: .afterUpdate).rounded() > (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
             /* let newFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) */ else {
                 return
             }
-            if newFrame.minY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if newFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
             }
         case .delete:
-            guard contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.size.height.rounded(),
+            guard contentHeight(at: .afterUpdate).rounded() > layoutRepresentation.visibleBounds.size.height.rounded(),
                 let deletedFrame = itemFrame(for: indexPath, kind: kind, at: .beforeUpdate) else {
                 return
             }
-            if deletedFrame.minY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if deletedFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
                 // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.
                 // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.
-                proposedCompensatingOffset -= (deletedFrame.height + collectionLayout.settings.interItemSpacing)
+                proposedCompensatingOffset -= (deletedFrame.height + layoutRepresentation.settings.interItemSpacing)
             }
         }
 
     }
 
     private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int, action: CompensatingAction) {
-        guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates else {
+        guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
         switch action {
         case .insert:
             guard sectionIndex < layout(at: .afterUpdate).sections.count,
-                contentHeight(at: .afterUpdate).rounded() >= collectionLayout.visibleBounds.size.height.rounded() else {
+                contentHeight(at: .afterUpdate).rounded() >= layoutRepresentation.visibleBounds.size.height.rounded() else {
                 return
             }
             let section = layout(at: .afterUpdate).sections[sectionIndex]
 
-            if section.offsetY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
-                proposedCompensatingOffset += section.height + collectionLayout.settings.interSectionSpacing
+            if section.offsetY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+                proposedCompensatingOffset += section.height + layoutRepresentation.settings.interSectionSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):
             guard sectionIndex < layout(at: .afterUpdate).sections.count,
-                contentHeight(at: .afterUpdate).rounded() >= (collectionLayout.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {
+                contentHeight(at: .afterUpdate).rounded() >= (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {
                 return
             }
-            if newFrame.minY.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if newFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
             }
         case .delete:
-            guard contentHeight(at: .afterUpdate).rounded() >= collectionLayout.visibleBounds.size.height.rounded(),
+            guard contentHeight(at: .afterUpdate).rounded() >= layoutRepresentation.visibleBounds.size.height.rounded(),
                 sectionIndex < layout(at: .afterUpdate).sections.count else {
                 return
             }
             let section = layout(at: .beforeUpdate).sections[sectionIndex]
-            if section.locationHeight.rounded() <= (collectionLayout.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if section.locationHeight.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
                 // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.
                 // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.
-                proposedCompensatingOffset -= (section.height + collectionLayout.settings.interSectionSpacing)
+                proposedCompensatingOffset -= (section.height + layoutRepresentation.settings.interSectionSpacing)
             }
         }
 
     }
 
     private func offsetByCompensation(frame: CGRect, indexPath: IndexPath, for state: ModelState, backward: Bool = false) -> CGRect {
-        guard collectionLayout.keepContentOffsetAtBottomOnBatchUpdates,
+        guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
             state == .afterUpdate,
-            contentHeight(at: .afterUpdate).rounded() > collectionLayout.visibleBounds.height.rounded() else {
+            contentHeight(at: .afterUpdate).rounded() > layoutRepresentation.visibleBounds.height.rounded() else {
             return frame
         }
         return frame.offsetBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))

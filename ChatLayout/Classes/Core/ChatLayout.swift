@@ -135,7 +135,7 @@ public final class ChatLayout: UICollectionViewLayout {
         static let shouldInvalidateOnBoundsChange = InvalidationActions(rawValue: 1 << 0)
     }
 
-    private lazy var controller = StateController(collectionLayout: self)
+    private lazy var controller = StateController(layoutRepresentation: self)
 
     private var state: ModelState = .beforeUpdate
 
@@ -250,7 +250,7 @@ public final class ChatLayout: UICollectionViewLayout {
             for sectionIndex in 0..<collectionView.numberOfSections {
                 // Header
                 let header: ItemModel?
-                if delegate?.shouldPresentHeader(at: sectionIndex) == true {
+                if delegate?.shouldPresentHeader(self, at: sectionIndex) == true {
                     let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
                     header = ItemModel(with: configuration(for: .header, at: headerIndexPath))
                 } else {
@@ -266,7 +266,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
                 // Footer
                 let footer: ItemModel?
-                if delegate?.shouldPresentFooter(at: sectionIndex) == true {
+                if delegate?.shouldPresentFooter(self, at: sectionIndex) == true {
                     let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
                     footer = ItemModel(with: configuration(for: .footer, at: footerIndexPath))
                 } else {
@@ -288,7 +288,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 var section = controller.section(at: sectionIndex, at: state)
 
                 // Header
-                if delegate?.shouldPresentHeader(at: sectionIndex) == true {
+                if delegate?.shouldPresentHeader(self, at: sectionIndex) == true {
                     var header = section.header
                     header?.resetSize()
                     let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
@@ -312,7 +312,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 section.set(items: items)
 
                 // Footer
-                if delegate?.shouldPresentFooter(at: sectionIndex) == true {
+                if delegate?.shouldPresentFooter(self, at: sectionIndex) == true {
                     var footer = section.footer
                     let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
                     footer?.alignment = alignment(for: .footer, at: footerIndexPath)
@@ -745,7 +745,7 @@ extension ChatLayout {
             return (estimated: estimatedItemSize, exact: nil)
         }
 
-        let itemSize = delegate.sizeForItem(of: element, at: indexPath)
+        let itemSize = delegate.sizeForItem(self, of: element, at: indexPath)
 
         switch itemSize {
         case .auto:
@@ -761,7 +761,7 @@ extension ChatLayout {
         guard let delegate = delegate else {
             return .full
         }
-        return delegate.alignmentForItem(of: element, at: indexPath)
+        return delegate.alignmentForItem(self, of: element, at: indexPath)
     }
 
     private var estimatedItemSize: CGSize {
@@ -796,6 +796,14 @@ extension ChatLayout: ChatLayoutRepresentation {
             return .zero
         }
         return collectionView.numberOfItems(inSection: section)
+    }
+
+    func shouldPresentHeader(at sectionIndex: Int) -> Bool {
+        return delegate?.shouldPresentHeader(self, at: sectionIndex) ?? false
+    }
+
+    func shouldPresentFooter(at sectionIndex: Int) -> Bool {
+        return delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false
     }
 
 }

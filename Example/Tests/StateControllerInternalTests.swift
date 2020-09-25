@@ -67,4 +67,62 @@ class StateControllerInternalTests: XCTestCase {
         XCTAssertEqual(layout.controller.sectionIdentifier(for: 1, at: .beforeUpdate), layout.controller.storage[.beforeUpdate]?.sections[1].id)
     }
 
+    func testLayoutAttributesInRect() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection[0] = 5
+        layout.numberOfItemsInSection[1] = 5
+        layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+
+        let rect = CGRect(origin: .zero, size: CGSize(width: 300, height: 400))
+        let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
+        XCTAssertEqual(attributes.count, 9)
+        attributes.forEach { attributes in
+            XCTAssertTrue(attributes.frame.intersects(rect))
+        }
+    }
+
+    func testLayoutAttributesInRectCaching() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection[0] = 5
+        layout.numberOfItemsInSection[1] = 5
+        layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+
+        let rect = CGRect(origin: .zero, size: CGSize(width: 300, height: 400))
+        let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
+        let cachedAttributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
+        XCTAssertEqual(cachedAttributes.count, attributes.count)
+        if cachedAttributes.count == attributes.count {
+            cachedAttributes.enumerated().forEach { index, cachedAttributes in
+                XCTAssertTrue(cachedAttributes === attributes[index])
+            }
+        }
+
+        layout.controller.resetCachedAttributes()
+
+        let notCachedAttributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
+        XCTAssertEqual(notCachedAttributes.count, attributes.count)
+        XCTAssertEqual(notCachedAttributes.count, cachedAttributes.count)
+        if notCachedAttributes.count == attributes.count {
+            notCachedAttributes.enumerated().forEach { index, nonCachedAttributes in
+                XCTAssertTrue(nonCachedAttributes !== attributes[index])
+                XCTAssertTrue(nonCachedAttributes !== cachedAttributes[index])
+            }
+        }
+    }
+
+    func testContentSize() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection[0] = 5
+        layout.numberOfItemsInSection[1] = 5
+        layout.numberOfItemsInSection[2] = 5
+        layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+
+        let estimatedContentHeight = layout.settings.additionalInsets.top + layout.settings.additionalInsets.bottom + layout.settings.estimatedItemSize!.height * (7 * 3) + layout.settings.interItemSpacing * (5 * 3) + layout.settings.interSectionSpacing * 2
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), estimatedContentHeight)
+        XCTAssertEqual(layout.controller.contentSize(for: .beforeUpdate), CGSize(width: layout.viewSize.width - 0.0001, height: estimatedContentHeight))
+    }
+
 }

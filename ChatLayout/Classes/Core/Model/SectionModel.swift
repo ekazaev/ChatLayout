@@ -79,19 +79,14 @@ struct SectionModel {
 
     // MARK: To use when its is important to make the correct insertion
 
-    mutating func setAndAssemble(header: ItemModel?) {
-        guard let oldHeader = self.header,
-            let newHeader = header else {
-            if let header = header, self.header == nil {
-                offsetEverything(below: -1, by: header.height)
-            } else if let oldHeader = self.header, header == nil {
-                offsetEverything(below: -1, by: -oldHeader.height)
-            }
+    mutating func setAndAssemble(header: ItemModel) {
+        guard let oldHeader = self.header else {
             self.header = header
+            offsetEverything(below: -1, by: header.height)
             return
         }
-        self.header = newHeader
-        let heightDiff = newHeader.height - oldHeader.height
+        self.header = header
+        let heightDiff = header.height - oldHeader.height
         offsetEverything(below: -1, by: heightDiff)
     }
 
@@ -107,11 +102,7 @@ struct SectionModel {
         offsetEverything(below: index, by: heightDiff)
     }
 
-    mutating func setAndAssemble(footer: ItemModel?) {
-        guard let _ = self.footer, let _ = footer else {
-            self.footer = footer
-            return
-        }
+    mutating func setAndAssemble(footer: ItemModel) {
         self.footer = footer
     }
 

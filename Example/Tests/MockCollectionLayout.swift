@@ -25,7 +25,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
 
     var state: ModelState = .beforeUpdate
 
-    lazy var controller = StateController(collectionLayout: self)
+    lazy var controller = StateController(layoutRepresentation: self)
 
     /// Represent the rectangle where all the items are aligned.
     public var layoutFrame: CGRect {
