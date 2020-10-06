@@ -36,7 +36,7 @@ public final class ChatLayout: UICollectionViewLayout {
     public weak var delegate: ChatLayoutDelegate?
 
     /// Additional settings for `ChatLayout`.
-    public var settings: ChatLayoutSettings = ChatLayoutSettings() {
+    public var settings = ChatLayoutSettings() {
         didSet {
             guard collectionView != nil else {
                 return
@@ -150,8 +150,6 @@ public final class ChatLayout: UICollectionViewLayout {
     private var cachedCollectionViewSize: CGSize?
 
     private var cachedCollectionViewInset: UIEdgeInsets?
-
-    private var cachedContentOffsetFromBottom: CGPoint?
 
     private var isAnimatedBoundsChange = false
 
@@ -542,8 +540,6 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Invalidates the current layout and triggers a layout update.
     public override func invalidateLayout() {
-        /// Saving that here for the bounds change compensation as it will change before `prepare` will be called
-        cachedContentOffsetFromBottom = currentContentOffsetFromBottom
         super.invalidateLayout()
     }
 
@@ -813,13 +809,6 @@ extension ChatLayout {
     private var maxPossibleContentOffset: CGPoint {
         let maxContentOffset = max(0, controller.contentHeight(at: state) - collectionView!.bounds.height) + collectionView!.adjustedContentInset.bottom
         return CGPoint(x: 0, y: maxContentOffset)
-    }
-
-    private var currentContentOffsetFromBottom: CGPoint {
-        guard let collectionView = collectionView else {
-            return .zero
-        }
-        return CGPoint(x: 0, y: maxPossibleContentOffset.y - collectionView.contentOffset.y)
     }
 
     private var isUserInitiatedScrolling: Bool {

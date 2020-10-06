@@ -365,7 +365,7 @@ final class StateController {
                     let itemId = itemIdentifier(for: indexPathBeforeUpdate, kind: .cell, at: .beforeUpdate)!
                     let item = layout(at: .beforeUpdate).sections[indexPathBeforeUpdate.section].items[indexPathBeforeUpdate.item]
                     movedIndexes.insert(indexPathBeforeUpdate)
-                    afterUpdateModel.removeRow(by: itemId)
+                    afterUpdateModel.removeItem(by: itemId)
                     afterUpdateModel.insertItem(item, at: indexPathAfterUpdate)
                 }
             case .insert:
@@ -413,7 +413,7 @@ final class StateController {
                     afterUpdateModel.removeSection(by: section.id)
                 } else {
                     let itemId = itemIdentifier(for: indexPath, kind: .cell, at: .beforeUpdate)!
-                    afterUpdateModel.removeRow(by: itemId)
+                    afterUpdateModel.removeItem(by: itemId)
                     deletedIndexes.insert(indexPath)
                 }
             case .reload:

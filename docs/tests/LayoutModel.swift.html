@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "LayoutModel.swift" : </span><span class="cov_low">60.49%</span>
+<span>Coverage for "LayoutModel.swift" : </span><span class="cov_medium">84.62%</span>
 </h2>
-<h4 class="cov_subtitle">(49 of 81 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(66 of 78 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/Model/LayoutModel.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -105,22 +105,22 @@
 <tr class="covered">
 <td class="num">19</td>
 <td class="src"><pre><code class="objc">    init(sections: [SectionModel], collectionLayout: ChatLayoutRepresentation) {</code></pre></td>
-<td class="coverage">73x</td>
+<td class="coverage">79x</td>
 </tr>
 <tr class="covered">
 <td class="num">20</td>
 <td class="src"><pre><code class="objc">        self.sections = sections</code></pre></td>
-<td class="coverage">73x</td>
+<td class="coverage">79x</td>
 </tr>
 <tr class="covered">
 <td class="num">21</td>
 <td class="src"><pre><code class="objc">        self.collectionLayout = collectionLayout</code></pre></td>
-<td class="coverage">73x</td>
+<td class="coverage">79x</td>
 </tr>
 <tr class="covered">
 <td class="num">22</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">73x</td>
+<td class="coverage">79x</td>
 </tr>
 <tr class="never">
 <td class="num">23</td>
@@ -130,42 +130,42 @@
 <tr class="covered">
 <td class="num">24</td>
 <td class="src"><pre><code class="objc">    mutating func assembleLayout() {</code></pre></td>
-<td class="coverage">56x</td>
+<td class="coverage">59x</td>
 </tr>
 <tr class="covered">
 <td class="num">25</td>
 <td class="src"><pre><code class="objc">        var offset: CGFloat = collectionLayout.settings.additionalInsets.top</code></pre></td>
-<td class="coverage">56x</td>
+<td class="coverage">59x</td>
 </tr>
 <tr class="covered">
 <td class="num">26</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">56x</td>
+<td class="coverage">59x</td>
 </tr>
 <tr class="covered">
 <td class="num">27</td>
 <td class="src"><pre><code class="objc">        for index in 0..&lt;sections.count {</code></pre></td>
-<td class="coverage">100x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">28</td>
 <td class="src"><pre><code class="objc">            sections[index].offsetY = offset</code></pre></td>
-<td class="coverage">100x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">29</td>
 <td class="src"><pre><code class="objc">            offset += sections[index].height + collectionLayout.settings.interSectionSpacing</code></pre></td>
-<td class="coverage">100x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">30</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">100x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">31</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">56x</td>
+<td class="coverage">59x</td>
 </tr>
 <tr class="never">
 <td class="num">32</td>
@@ -182,15 +182,15 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">35</td>
 <td class="src"><pre><code class="objc">    mutating func setAndAssemble(header: ItemModel, sectionIndex: Int) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">36</td>
 <td class="src"><pre><code class="objc">        guard sectionIndex &lt; sections.count else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
 <tr class="missed">
 <td class="num">37</td>
@@ -202,40 +202,40 @@
 <td class="src"><pre><code class="objc">            return</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">39</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">40</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">41</td>
 <td class="src"><pre><code class="objc">        let oldSection = sections[sectionIndex]</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">42</td>
 <td class="src"><pre><code class="objc">        sections[sectionIndex].setAndAssemble(header: header)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">43</td>
 <td class="src"><pre><code class="objc">        let heightDiff = sections[sectionIndex].height - oldSection.height</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">44</td>
 <td class="src"><pre><code class="objc">        offsetEverything(below: sectionIndex, by: heightDiff)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">45</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
 <tr class="never">
 <td class="num">46</td>
@@ -297,15 +297,15 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">58</td>
 <td class="src"><pre><code class="objc">    mutating func setAndAssemble(footer: ItemModel, sectionIndex: Int) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">59</td>
 <td class="src"><pre><code class="objc">        guard sectionIndex &lt; sections.count else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
 <tr class="missed">
 <td class="num">60</td>
@@ -317,35 +317,35 @@
 <td class="src"><pre><code class="objc">            return</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">62</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">63</td>
 <td class="src"><pre><code class="objc">        let oldSection = sections[sectionIndex]</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">64</td>
 <td class="src"><pre><code class="objc">        sections[sectionIndex].setAndAssemble(footer: footer)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">65</td>
 <td class="src"><pre><code class="objc">        let heightDiff = sections[sectionIndex].height - oldSection.height</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">66</td>
 <td class="src"><pre><code class="objc">        offsetEverything(below: sectionIndex, by: heightDiff)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">67</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
 <tr class="never">
 <td class="num">68</td>
@@ -365,7 +365,7 @@
 <tr class="covered">
 <td class="num">71</td>
 <td class="src"><pre><code class="objc">            return</code></pre></td>
-<td class="coverage">29x</td>
+<td class="coverage">23x</td>
 </tr>
 <tr class="covered">
 <td class="num">72</td>
@@ -534,72 +534,72 @@
 </tr>
 <tr class="never">
 <td class="num">105</td>
-<td class="src"><pre><code class="objc">    mutating func removeRow(by itemId: UUID) {</code></pre></td>
+<td class="src"><pre><code class="objc">    mutating func insertItem(_ item: ItemModel, at indexPath: IndexPath) {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">106</td>
-<td class="src"><pre><code class="objc">        guard let sectionIndex = sections.firstIndex(where: { $0.items.firstIndex(where: { $0.id == itemId }) != nil }) else {</code></pre></td>
+<td class="src"><pre><code class="objc">        sections[indexPath.section].insert(item, at: indexPath.item)</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">107</td>
-<td class="src"><pre><code class="objc">            assertionFailure("Internal inconsistency")</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">108</td>
-<td class="src"><pre><code class="objc">            return</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="never">
-<td class="num">109</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">110</td>
-<td class="src"><pre><code class="objc">        sections[sectionIndex].remove(by: itemId)</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">111</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">108</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="covered">
+<td class="num">109</td>
+<td class="src"><pre><code class="objc">    mutating func replaceItem(_ item: ItemModel, at indexPath: IndexPath) {</code></pre></td>
+<td class="coverage">10300x</td>
+</tr>
+<tr class="covered">
+<td class="num">110</td>
+<td class="src"><pre><code class="objc">        sections[indexPath.section].replace(item, at: indexPath.item)</code></pre></td>
+<td class="coverage">10300x</td>
+</tr>
+<tr class="covered">
+<td class="num">111</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage">10300x</td>
 </tr>
 <tr class="never">
 <td class="num">112</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
-<td class="num">113</td>
-<td class="src"><pre><code class="objc">    mutating func removeItem(for indexPath: IndexPath) {</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">114</td>
-<td class="src"><pre><code class="objc">        sections[indexPath.section].remove(at: indexPath.item)</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">115</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
-</tr>
 <tr class="never">
-<td class="num">116</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="num">113</td>
+<td class="src"><pre><code class="objc">    mutating func removeItem(by itemId: UUID) {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
+<td class="num">114</td>
+<td class="src"><pre><code class="objc">        guard let sectionIndex = sections.firstIndex(where: { $0.items.firstIndex(where: { $0.id == itemId }) != nil }) else {</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="missed">
+<td class="num">115</td>
+<td class="src"><pre><code class="objc">            assertionFailure("Internal inconsistency")</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">116</td>
+<td class="src"><pre><code class="objc">            return</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="never">
 <td class="num">117</td>
-<td class="src"><pre><code class="objc">    mutating func insertItem(_ item: ItemModel, at indexPath: IndexPath) {</code></pre></td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">118</td>
-<td class="src"><pre><code class="objc">        sections[indexPath.section].insert(item, at: indexPath.item)</code></pre></td>
+<td class="src"><pre><code class="objc">        sections[sectionIndex].remove(by: itemId)</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -612,28 +612,8 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">121</td>
-<td class="src"><pre><code class="objc">    mutating func replaceItem(_ item: ItemModel, at indexPath: IndexPath) {</code></pre></td>
-<td class="coverage">10300x</td>
-</tr>
-<tr class="covered">
-<td class="num">122</td>
-<td class="src"><pre><code class="objc">        sections[indexPath.section].replace(item, at: indexPath.item)</code></pre></td>
-<td class="coverage">10300x</td>
-</tr>
-<tr class="covered">
-<td class="num">123</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">10300x</td>
-</tr>
-<tr class="never">
-<td class="num">124</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">125</td>
 <td class="src"><pre><code class="objc">}</code></pre></td>
 <td class="coverage"></td>
 </tr>

@@ -45,7 +45,7 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
     public lazy var leadingView: LeadingAccessory.View? = LeadingAccessory.buildView(within: bounds)
 
     /// Main view.
-    public lazy var customView: CustomView = CustomView(frame: bounds)
+    public lazy var customView = CustomView(frame: bounds)
 
     /// Trailing accessory view.
     public lazy var trailingView: TrailingAccessory.View? = TrailingAccessory.buildView(within: bounds)

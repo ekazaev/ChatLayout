@@ -15,7 +15,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
 
     private var viewPortWidth: CGFloat = 300
 
-    private lazy var label: UILabel = UILabel()
+    private lazy var label = UILabel()
 
     private var controller: TextMessageController?
 

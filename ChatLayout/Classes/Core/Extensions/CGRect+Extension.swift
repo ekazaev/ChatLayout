@@ -12,7 +12,6 @@ import UIKit
 
 extension CGRect {
 
-    // Had to introduce this comparision as the numbers slightly change on the actual device.
     func equalRounded(to rect: CGRect) -> Bool {
         return abs(origin.x - rect.origin.x) <= 1 &&
             abs(origin.y - rect.origin.y) <= 1 &&

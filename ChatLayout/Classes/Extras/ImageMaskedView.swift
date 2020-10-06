@@ -25,7 +25,7 @@ public enum ImageMaskedViewTransformation {
 public final class ImageMaskedView<CustomView: UIView>: UIView {
 
     /// Contained view.
-    public lazy var customView: CustomView = CustomView(frame: bounds)
+    public lazy var customView = CustomView(frame: bounds)
 
     /// An Image to be used as a mask for the `customView`.
     public var maskingImage: UIImage? {
@@ -99,14 +99,14 @@ public final class ImageMaskedView<CustomView: UIView>: UIView {
     }
 
     /// The frame rectangle, which describes the view’s location and size in its superview’s coordinate system.
-    public final override var frame: CGRect {
+    public override final var frame: CGRect {
         didSet {
             imageView.frame = bounds
         }
     }
 
     /// The bounds rectangle, which describes the view’s location and size in its own coordinate system.
-    public final override var bounds: CGRect {
+    public override final var bounds: CGRect {
         didSet {
             imageView.frame = bounds
         }

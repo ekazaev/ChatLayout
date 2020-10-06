@@ -102,24 +102,20 @@ struct LayoutModel {
         sections.remove(at: sectionIndex)
     }
 
-    mutating func removeRow(by itemId: UUID) {
-        guard let sectionIndex = sections.firstIndex(where: { $0.items.firstIndex(where: { $0.id == itemId }) != nil }) else {
-            assertionFailure("Internal inconsistency")
-            return
-        }
-        sections[sectionIndex].remove(by: itemId)
-    }
-
-    mutating func removeItem(for indexPath: IndexPath) {
-        sections[indexPath.section].remove(at: indexPath.item)
-    }
-
     mutating func insertItem(_ item: ItemModel, at indexPath: IndexPath) {
         sections[indexPath.section].insert(item, at: indexPath.item)
     }
 
     mutating func replaceItem(_ item: ItemModel, at indexPath: IndexPath) {
         sections[indexPath.section].replace(item, at: indexPath.item)
+    }
+
+    mutating func removeItem(by itemId: UUID) {
+        guard let sectionIndex = sections.firstIndex(where: { $0.items.firstIndex(where: { $0.id == itemId }) != nil }) else {
+            assertionFailure("Internal inconsistency")
+            return
+        }
+        sections[sectionIndex].remove(by: itemId)
     }
 
 }

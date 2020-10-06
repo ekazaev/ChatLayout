@@ -5,6 +5,7 @@
 --conflictmarkers reject
 --decimalgrouping none
 --elseposition same-line
+--guardelse same-line
 --empty void
 --exponentcase lowercase
 --exponentgrouping disabled
@@ -33,6 +34,7 @@
 --wraparguments preserve
 --wrapcollections preserve
 --xcodeindentation disabled
---disable blankLinesAtEndOfScope,blankLinesAtStartOfScope,redundantReturn
+--modifierorder public,override
+--disable blankLinesAtEndOfScope,blankLinesAtStartOfScope,redundantReturn,wrapMultilineStatementBraces
 --enable isEmpty
---exclude Pods,docs
+--exclude Pods,docs,Example/Pods
