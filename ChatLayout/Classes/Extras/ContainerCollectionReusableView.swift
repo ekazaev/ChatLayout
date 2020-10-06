@@ -19,7 +19,7 @@ public final class ContainerCollectionReusableView<CustomView: UIView>: UICollec
     }
 
     /// Contained view.
-    public lazy var customView: CustomView = CustomView(frame: bounds)
+    public lazy var customView = CustomView(frame: bounds)
 
     /// An instance of `ContainerCollectionViewCellDelegate`
     public weak var delegate: ContainerCollectionViewCellDelegate?

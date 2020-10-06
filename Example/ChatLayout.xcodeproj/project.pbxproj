@@ -256,7 +256,6 @@
 			isa = PBXGroup;
 			children = (
 				4504F3BA24FA66F500385590 /* Image */,
-				4504F3BD24FA66F500385590 /* Type Erasure */,
 				4504F3BE24FA66F500385590 /* AsyncKeyValueCaching.swift */,
 				4504F3BF24FA66F500385590 /* KeyValueCaching.swift */,
 				4504F3C024FA66F500385590 /* Data */,
@@ -273,13 +272,6 @@
 				4504F3BC24FA66F500385590 /* ImageForUrlCache.swift */,
 			);
 			path = Image;
-			sourceTree = "<group>";
-		};
-		4504F3BD24FA66F500385590 /* Type Erasure */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Type Erasure";
 			sourceTree = "<group>";
 		};
 		4504F3C024FA66F500385590 /* Data */ = {

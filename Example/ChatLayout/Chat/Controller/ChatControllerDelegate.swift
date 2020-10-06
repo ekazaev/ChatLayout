@@ -11,6 +11,6 @@ import Foundation
 
 protocol ChatControllerDelegate: AnyObject {
 
-    func update(with messages: [Section])
+    func update(with sections: [Section])
 
 }

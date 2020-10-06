@@ -12,7 +12,6 @@ import UIKit
 
 extension CGSize {
 
-    // Had to introduce this comparision as the numbers slightly change on the actual device.
     func equalRounded(to size: CGSize) -> Bool {
         return abs(size.width - size.width) <= 1 &&
             abs(size.height - size.height) <= 1

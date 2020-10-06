@@ -18,10 +18,10 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     var shouldPresentFooterAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
 
     lazy var delegate: ChatLayoutDelegate? = self
-    var settings: ChatLayoutSettings = ChatLayoutSettings(estimatedItemSize: CGSize(width: 300, height: 40), interItemSpacing: 7, interSectionSpacing: 3)
-    var viewSize: CGSize = CGSize(width: 300, height: 400)
+    var settings = ChatLayoutSettings(estimatedItemSize: CGSize(width: 300, height: 40), interItemSpacing: 7, interSectionSpacing: 3)
+    var viewSize = CGSize(width: 300, height: 400)
 
-    lazy var visibleBounds: CGRect = CGRect(origin: .zero, size: viewSize)
+    lazy var visibleBounds = CGRect(origin: .zero, size: viewSize)
 
     var state: ModelState = .beforeUpdate
 

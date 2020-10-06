@@ -39,7 +39,7 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
         }
     }
 
-    private lazy var internalContentView: EdgeAligningView<MainView> = EdgeAligningView<MainView>(frame: bounds)
+    private lazy var internalContentView = EdgeAligningView<MainView>(frame: bounds)
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative

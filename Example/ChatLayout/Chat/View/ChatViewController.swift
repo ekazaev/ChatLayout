@@ -61,7 +61,7 @@ final class ChatViewController: UIViewController {
     }
 
     @available(*, unavailable, message: "Use init(messageController:) instead")
-    convenience override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    override convenience init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         fatalError()
     }
 
@@ -252,7 +252,7 @@ extension ChatViewController: ChatControllerDelegate {
                                                                                            return
                                                                                        }
                                                                                        self.processUpdates(with: sections, animated: animated, completion: completion)
-                })
+                                                                                   })
             currentInterfaceActions.add(reaction: reaction)
             return
         }
