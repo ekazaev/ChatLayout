@@ -28,16 +28,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let chatViewController = ChatViewControllerBuilder().build()
         let viewController = UINavigationController(rootViewController: chatViewController)
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let viewController = storyboard.instantiateInitialViewController()
-
-        let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [1, 2, 3])
-        let chatController = DefaultChatController(dataProvider: dataProvider, userId: 0)
-        dataProvider.delegate = chatController
-        let dataSource = DiffableChatCollectionDataSource(reloadDelegate: chatController, editingDelegate: chatController)
-        let messageViewController = ChatViewController(chatController: chatController, dataSource: dataSource)
-        chatController.delegate = messageViewController
-        let viewController = UINavigationController(rootViewController: messageViewController)
 
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = viewController

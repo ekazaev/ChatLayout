@@ -51,7 +51,7 @@ struct DiffableCell: Hashable {
 @available(iOS 13.0, *)
 final class DiffableChatCollectionDataSource: NSObject, ChatCollectionDataSource {
 
-    var collectionView: UICollectionView {
+    private var collectionView: UICollectionView {
         didSet {
             let diffableDataSource = DataSource(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, cell -> UICollectionViewCell? in
                 guard let self = self else {
@@ -89,7 +89,7 @@ final class DiffableChatCollectionDataSource: NSObject, ChatCollectionDataSource
 
     private unowned var editingDelegate: EditingAccessoryControllerDelegate
 
-    let editNotifier = EditNotifier()
+    let editNotifier: EditNotifier
 
     var sections: [Section] = [] {
         didSet {
@@ -100,7 +100,7 @@ final class DiffableChatCollectionDataSource: NSObject, ChatCollectionDataSource
                 snapshot.appendItems(section.section.cells.map({ DiffableCell(cell: $0) }), toSection: section)
             }
             dataSource.apply(snapshot, animatingDifferences: true, completion: {
-                print("Hell")
+                print("Applied \(snapshot)")
             })
         }
     }
@@ -114,13 +114,15 @@ final class DiffableChatCollectionDataSource: NSObject, ChatCollectionDataSource
         return chatLayout
     }
 
-    init(reloadDelegate: ReloadDelegate, editingDelegate: EditingAccessoryControllerDelegate) {
+    init(editNotifier: EditNotifier, reloadDelegate: ReloadDelegate, editingDelegate: EditingAccessoryControllerDelegate) {
         self.reloadDelegate = reloadDelegate
+        self.editNotifier = editNotifier
         self.editingDelegate = editingDelegate
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     }
 
-    func registerCells() {
+    func prepare(with collectionView: UICollectionView) {
+        self.collectionView = collectionView
         collectionView.register(TextMessageCollectionCell.self, forCellWithReuseIdentifier: TextMessageCollectionCell.reuseIdentifier)
         collectionView.register(ImageCollectionCell.self, forCellWithReuseIdentifier: ImageCollectionCell.reuseIdentifier)
         collectionView.register(TitleCollectionCell.self, forCellWithReuseIdentifier: TitleCollectionCell.reuseIdentifier)

@@ -17,9 +17,16 @@ struct ChatViewControllerBuilder {
         let messageController = DefaultChatController(dataProvider: dataProvider, userId: 0)
 
         let editNotifier = EditNotifier()
-        let dataSource = DefaultChatCollectionDataSource(editNotifier: editNotifier,
-                                                         reloadDelegate: messageController,
-                                                         editingDelegate: messageController)
+        let dataSource: ChatCollectionDataSource
+        if #available(iOS 13.0, *) {
+            dataSource = DiffableChatCollectionDataSource(editNotifier: editNotifier,
+                reloadDelegate: messageController,
+                editingDelegate: messageController)
+        } else {
+            dataSource = DefaultChatCollectionDataSource(editNotifier: editNotifier,
+                reloadDelegate: messageController,
+                editingDelegate: messageController)
+        }
 
         dataProvider.delegate = messageController
 
