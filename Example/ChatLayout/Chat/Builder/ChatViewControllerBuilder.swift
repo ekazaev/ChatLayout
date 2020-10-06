@@ -13,7 +13,7 @@ import UIKit
 struct ChatViewControllerBuilder {
 
     func build() -> UIViewController {
-        let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [1, 2, 3])
+        let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [])
         let messageController = DefaultChatController(dataProvider: dataProvider, userId: 0)
 
         let editNotifier = EditNotifier()

@@ -38,13 +38,13 @@ struct DiffableCell: Hashable {
         self.cell = cell
     }
 
-//    func hash(into hasher: inout Hasher) {
-//        return hasher.combine(cell.differenceIdentifier)
-//    }
-//
-//    static func ==(lhs: DiffableCell, rhs: DiffableCell) -> Bool {
-//        return lhs.cell.differenceIdentifier == rhs.cell.differenceIdentifier
-//    }
+    func hash(into hasher: inout Hasher) {
+        return hasher.combine(cell.differenceIdentifier)
+    }
+
+    static func ==(lhs: DiffableCell, rhs: DiffableCell) -> Bool {
+        return lhs.cell.differenceIdentifier == rhs.cell.differenceIdentifier
+    }
 
 }
 
@@ -96,11 +96,23 @@ final class DiffableChatCollectionDataSource: NSObject, ChatCollectionDataSource
             var snapshot = Snapshot()
             let diffableSections = sections.map({ DiffableSection(section: $0) })
             snapshot.appendSections(diffableSections)
+            var reloadItems = [DiffableCell]()
             diffableSections.forEach { section in
                 snapshot.appendItems(section.section.cells.map({ DiffableCell(cell: $0) }), toSection: section)
+                section.section.cells.forEach({ cell in
+                    guard let oldSection = oldValue.first(where: { $0.id == section.section.id }),
+                          let oldCell = oldSection.cells.first(where: { $0.differenceIdentifier == cell.differenceIdentifier }),
+                          !oldCell.isContentEqual(to: cell) else {
+                        return
+                    }
+                    reloadItems.append(DiffableCell(cell: cell))
+                })
             }
             dataSource.apply(snapshot, animatingDifferences: true, completion: {
-                print("Applied \(snapshot)")
+                var snapshot = self.dataSource.snapshot()
+                snapshot.reloadItems(reloadItems)
+                self.dataSource.apply(snapshot, animatingDifferences: true, completion: {
+                })
             })
         }
     }
@@ -281,7 +293,7 @@ extension DiffableChatCollectionDataSource: UICollectionViewDataSource {
     }
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return  dataSource.collectionView(collectionView, cellForItemAt: indexPath)
+        return dataSource.collectionView(collectionView, cellForItemAt: indexPath)
     }
 
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -316,15 +328,15 @@ extension DiffableChatCollectionDataSource: UICollectionViewDataSource {
 @available(iOS 13.0, *)
 extension DiffableChatCollectionDataSource: ChatLayoutDelegate {
 
-    public func shouldPresentHeader(at sectionIndex: Int) -> Bool {
+    public func shouldPresentHeader(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool {
         return false
     }
 
-    public func shouldPresentFooter(at sectionIndex: Int) -> Bool {
+    public func shouldPresentFooter(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool {
         return false
     }
 
-    public func sizeForItem(of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
+    public func sizeForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
         switch kind {
         case .cell:
             let item = sections[indexPath.section].cells[indexPath.item]
@@ -352,7 +364,7 @@ extension DiffableChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func alignmentForItem(of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
+    public func alignmentForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
         switch kind {
         case .header:
             return .center
