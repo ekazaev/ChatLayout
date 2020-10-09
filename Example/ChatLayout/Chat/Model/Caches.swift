@@ -9,6 +9,8 @@
 
 import Foundation
 
+let loader = CachingImageLoader(cache: imageCache, loader: DefaultImageLoader())
+
 @available(iOS 13, *)
 var metadataCache = IterativeCache(mainCache: MetaDataCache(cache: MemoryDataCache<URL>()),
                                    backupCache: MetaDataCache(cache: PersistentDataCache<URL>(cacheFileExtension: "metadataCache")))
@@ -16,6 +18,7 @@ var metadataCache = IterativeCache(mainCache: MetaDataCache(cache: MemoryDataCac
 let imageCache = IterativeCache(mainCache: ImageForUrlCache(cache: MemoryDataCache<CacheableImageKey>()),
                                 backupCache: ImageForUrlCache(cache: PersistentDataCache<CacheableImageKey>()))
 
-// let imageCache = ImageForUrlCache(cache: MemoryDataCache<CacheableImageKey>())
+// @available(iOS 13, *)
+// var metadataCache = MetaDataCache(cache: MemoryDataCache<URL>())
 
-let loader = CachingImageLoader(cache: imageCache, loader: DefaultImageLoader())
+// let imageCache = ImageForUrlCache(cache: MemoryDataCache<CacheableImageKey>())

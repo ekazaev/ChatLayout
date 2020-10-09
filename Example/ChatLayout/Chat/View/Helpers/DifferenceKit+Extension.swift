@@ -99,4 +99,5 @@ public extension UICollectionView {
             completion!(true)
         }
     }
+
 }

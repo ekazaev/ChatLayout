@@ -59,7 +59,7 @@ public final class ChatLayout: UICollectionViewLayout {
         guard let collectionView = collectionView else {
             return .zero
         }
-        return CGRect(x: adjustedContentInset.top,
+        return CGRect(x: adjustedContentInset.left,
                       y: collectionView.contentOffset.y + adjustedContentInset.top,
                       width: collectionView.bounds.width - adjustedContentInset.left - adjustedContentInset.right,
                       height: collectionView.bounds.height - adjustedContentInset.top - adjustedContentInset.bottom)
@@ -69,8 +69,8 @@ public final class ChatLayout: UICollectionViewLayout {
     public var layoutFrame: CGRect {
         return CGRect(x: adjustedContentInset.left + settings.additionalInsets.left,
                       y: adjustedContentInset.top + settings.additionalInsets.top,
-                      width: visibleBounds.width - settings.additionalInsets.left - settings.additionalInsets.right,
-                      height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom)
+                      width: visibleBounds.width - settings.additionalInsets.left - settings.additionalInsets.right - adjustedContentInset.left - adjustedContentInset.right,
+                      height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom - adjustedContentInset.top - adjustedContentInset.bottom)
     }
 
     // MARK: Inherited Properties
@@ -120,6 +120,7 @@ public final class ChatLayout: UICollectionViewLayout {
     // MARK: Private Properties
 
     private struct PrepareActions: OptionSet {
+
         let rawValue: UInt
 
         static let recreateSectionModels = PrepareActions(rawValue: 1 << 0)
@@ -127,12 +128,15 @@ public final class ChatLayout: UICollectionViewLayout {
         static let cachePreviousWidth = PrepareActions(rawValue: 1 << 2)
         static let cachePreviousContentInsets = PrepareActions(rawValue: 1 << 3)
         static let switchStates = PrepareActions(rawValue: 1 << 4)
+
     }
 
     private struct InvalidationActions: OptionSet {
+
         let rawValue: UInt
 
         static let shouldInvalidateOnBoundsChange = InvalidationActions(rawValue: 1 << 0)
+
     }
 
     private lazy var controller = StateController(layoutRepresentation: self)

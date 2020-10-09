@@ -10,68 +10,6 @@
 import Foundation
 import UIKit
 
-protocol KeyboardListenerDelegate: AnyObject {
-
-    func keyboardWillShow(info: KeyboardInfo)
-    func keyboardDidShow(info: KeyboardInfo)
-    func keyboardWillHide(info: KeyboardInfo)
-    func keyboardDidHide(info: KeyboardInfo)
-    func keyboardWillChangeFrame(info: KeyboardInfo)
-    func keyboardDidChangeFrame(info: KeyboardInfo)
-
-}
-
-extension KeyboardListenerDelegate {
-
-    func keyboardWillShow(info: KeyboardInfo) {}
-
-    func keyboardDidShow(info: KeyboardInfo) {}
-
-    func keyboardWillHide(info: KeyboardInfo) {}
-
-    func keyboardDidHide(info: KeyboardInfo) {}
-
-    func keyboardWillChangeFrame(info: KeyboardInfo) {}
-
-    func keyboardDidChangeFrame(info: KeyboardInfo) {}
-
-}
-
-struct KeyboardInfo: Equatable {
-
-    let animationDuration: Double
-
-    let animationCurve: UIView.AnimationCurve
-
-    let frameBegin: CGRect
-
-    let frameEnd: CGRect
-
-    let isLocal: Bool
-
-    fileprivate init?(_ notification: Notification) {
-        guard let userInfo: NSDictionary = notification.userInfo as NSDictionary?,
-            let keyboardAnimationCurve = (userInfo.object(forKey: UIResponder.keyboardAnimationCurveUserInfoKey) as? NSValue) as? Int,
-            let keyboardAnimationDuration = (userInfo.object(forKey: UIResponder.keyboardAnimationDurationUserInfoKey) as? NSValue) as? Double,
-            let keyboardIsLocal = (userInfo.object(forKey: UIResponder.keyboardIsLocalUserInfoKey) as? NSValue) as? Bool,
-            let keyboardFrameBegin = (userInfo.object(forKey: UIResponder.keyboardFrameBeginUserInfoKey) as? NSValue)?.cgRectValue,
-            let keyboardFrameEnd = (userInfo.object(forKey: UIResponder.keyboardFrameEndUserInfoKey) as? NSValue)?.cgRectValue else {
-            return nil
-        }
-
-        self.animationDuration = keyboardAnimationDuration
-        var animationCurve = UIView.AnimationCurve.easeInOut
-        NSNumber(value: keyboardAnimationCurve).getValue(&animationCurve)
-        self.animationCurve = animationCurve
-        self.isLocal = keyboardIsLocal
-        self.frameBegin = keyboardFrameBegin
-        self.frameEnd = keyboardFrameEnd
-    }
-
-}
-
-/// As there is no way in IOS to get the keyboard frame size at anytime, shared listener stays active even when
-/// the scroll view controlled by `KeyboardController` is not active/visible.
 final class KeyboardListener {
 
     static let shared = KeyboardListener()

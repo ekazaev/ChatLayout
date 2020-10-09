@@ -40,4 +40,5 @@ public struct CachingImageLoader<C: AsyncKeyValueCaching>: ImageLoader where C.C
             })
         })
     }
+
 }

@@ -11,8 +11,10 @@ import Foundation
 import UIKit
 
 public enum ActionDuration {
+
     case notAnimated
     case animated(duration: TimeInterval)
+
 }
 
 public protocol EditNotifierDelegate: AnyObject {
