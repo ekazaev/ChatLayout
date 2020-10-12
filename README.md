@@ -4,6 +4,7 @@
 [![Release](https://img.shields.io/github/release/ekazaev/ChatLayout.svg?style=flat&color=darkcyan)](https://github.com/ekazaev/ChatLayout/releases)
 [![Version](https://img.shields.io/cocoapods/v/ChatLayout.svg?style=flat)](https://cocoapods.org/pods/ChatLayout)
 [![Documentation](https://ekazaev.github.io/ChatLayout/badge.svg)](https://ekazaev.github.io/ChatLayout/)
+[![Codecov](https://codecov.io/gh/ekazaev/ChatLayout/branch/master/graph/badge.svg)](https://codecov.io/gh/ekazaev/ChatLayout)
 [![Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BA51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Swift 5.2](https://img.shields.io/badge/language-Swift5.2-orange.svg?style=flat)](https://developer.apple.com/swift)

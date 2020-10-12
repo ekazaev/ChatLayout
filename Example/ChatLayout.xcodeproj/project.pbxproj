@@ -18,6 +18,7 @@
 		1BE54BC5C70CB9FA1260B54D /* ChatDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE544BF8E723F3D86B4D774 /* ChatDateFormatter.swift */; };
 		1BE54DBD5F84AF25128B6789 /* MockUICollectionViewUpdateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */; };
 		1BE54E0ABF0E8D9E61D2662B /* ChatViewControllerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54241EB5DD7BC464607EE /* ChatViewControllerBuilder.swift */; };
+		1BE54FDB9836397E2694B9D7 /* HelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE542A452EBF25EC59440C0 /* HelpersTests.swift */; };
 		4504F3F324FA66F600385590 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3AB24FA66F500385590 /* Constants.swift */; };
 		4504F3F424FA66F600385590 /* ChatControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3AD24FA66F500385590 /* ChatControllerDelegate.swift */; };
 		4504F3F524FA66F600385590 /* DefaultChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3AE24FA66F500385590 /* DefaultChatController.swift */; };
@@ -93,6 +94,7 @@
 		187B89468A68AF411025A59A /* Pods_ChatLayout_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatLayout_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BE540C02DE173F57D1A9630 /* KeyboardInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardInfo.swift; sourceTree = "<group>"; };
 		1BE54241EB5DD7BC464607EE /* ChatViewControllerBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewControllerBuilder.swift; sourceTree = "<group>"; };
+		1BE542A452EBF25EC59440C0 /* HelpersTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpersTests.swift; sourceTree = "<group>"; };
 		1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockUICollectionViewUpdateItem.swift; sourceTree = "<group>"; };
 		1BE544BF8E723F3D86B4D774 /* ChatDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDateFormatter.swift; sourceTree = "<group>"; };
 		1BE545B9B5F30BA7924D9582 /* ProcessInfo+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProcessInfo+Extension.swift"; sourceTree = "<group>"; };
@@ -477,6 +479,7 @@
 				1BE5467A07C249BDD8C03D51 /* MockCollectionLayout.swift */,
 				1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */,
 				1BE54A1413D0DCF3036C9508 /* StateControllerInternalTests.swift */,
+				1BE542A452EBF25EC59440C0 /* HelpersTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -758,6 +761,7 @@
 				1BE5486E03A837AE2F8457DA /* MockCollectionLayout.swift in Sources */,
 				1BE54DBD5F84AF25128B6789 /* MockUICollectionViewUpdateItem.swift in Sources */,
 				1BE544269CC3DC62CEB1D56E /* StateControllerInternalTests.swift in Sources */,
+				1BE54FDB9836397E2694B9D7 /* HelpersTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

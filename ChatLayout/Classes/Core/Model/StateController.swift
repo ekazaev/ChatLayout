@@ -292,9 +292,6 @@ final class StateController {
         }
         var layout = self.layout(at: state)
         let previousFrame = item.frame
-        guard preferredSize.equalRounded(to: previousFrame.size) else {
-            return
-        }
         cachedAttributesState = nil
         item.calculatedSize = preferredSize
 
@@ -317,10 +314,6 @@ final class StateController {
             return
         }
         var layout = self.layout(at: state)
-
-        guard item.alignment != alignment else {
-            return
-        }
         cachedAttributesState = nil
         item.alignment = alignment
 
