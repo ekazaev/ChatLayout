@@ -1,9 +1,9 @@
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/ChatLayout" "${PODS_CONFIGURATION_BUILD_DIR}/DifferenceKit" "${PODS_CONFIGURATION_BUILD_DIR}/InputBarAccessoryView"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/ChatLayout" "${PODS_CONFIGURATION_BUILD_DIR}/DifferenceKit" "${PODS_CONFIGURATION_BUILD_DIR}/FPSCounter" "${PODS_CONFIGURATION_BUILD_DIR}/InputBarAccessoryView"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/ChatLayout/ChatLayout.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/DifferenceKit/DifferenceKit.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/InputBarAccessoryView/InputBarAccessoryView.framework/Headers"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/ChatLayout/ChatLayout.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/DifferenceKit/DifferenceKit.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/FPSCounter/FPSCounter.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/InputBarAccessoryView/InputBarAccessoryView.framework/Headers"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_LDFLAGS = $(inherited) -framework "ChatLayout" -framework "DifferenceKit" -framework "InputBarAccessoryView" -framework "UIKit"
+OTHER_LDFLAGS = $(inherited) -framework "ChatLayout" -framework "DifferenceKit" -framework "FPSCounter" -framework "Foundation" -framework "InputBarAccessoryView" -framework "UIKit"
 OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)

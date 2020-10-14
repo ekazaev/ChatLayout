@@ -13,6 +13,7 @@ PODS:
   - DifferenceKit/Core (1.1.5)
   - DifferenceKit/UIKitExtension (1.1.5):
     - DifferenceKit/Core
+  - FPSCounter (4.0.1)
   - InputBarAccessoryView (5.0.0):
     - InputBarAccessoryView/Core (= 5.0.0)
   - InputBarAccessoryView/Core (5.0.0)
@@ -20,11 +21,13 @@ PODS:
 DEPENDENCIES:
   - ChatLayout (from `../`)
   - DifferenceKit
+  - FPSCounter (~> 4.0)
   - InputBarAccessoryView
 
 SPEC REPOS:
   trunk:
     - DifferenceKit
+    - FPSCounter
     - InputBarAccessoryView
 
 EXTERNAL SOURCES:
@@ -34,8 +37,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   ChatLayout: b5aaffda81df936e8af372e271ac11f45867bea5
   DifferenceKit: 516f12e336ed65a3a0665847b5c3cb5cad4bd4ea
+  FPSCounter: 262ec30f9f5a2fd7843b593ea80016fece7c809c
   InputBarAccessoryView: cbc0b2d9456058e1166898897865f9f4960fac81
 
-PODFILE CHECKSUM: f230988da6958787685b4e622158e210ca181bf9
+PODFILE CHECKSUM: 1e6a0021ca452d0f6476b3aa287aa69a81a26c4b
 
 COCOAPODS: 1.9.3

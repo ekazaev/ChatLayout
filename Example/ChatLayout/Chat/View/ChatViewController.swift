@@ -12,6 +12,7 @@ import DifferenceKit
 import Foundation
 import InputBarAccessoryView
 import UIKit
+import FPSCounter
 
 final class ChatViewController: UIViewController {
 
@@ -50,6 +51,8 @@ final class ChatViewController: UIViewController {
     private let chatController: ChatController
 
     private let dataSource: ChatCollectionDataSource
+    private let fpsCounter = FPSCounter()
+    private let fpsView = EdgeAligningView<UILabel>(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))
 
     init(chatController: ChatController,
          dataSource: ChatCollectionDataSource,
@@ -72,7 +75,8 @@ final class ChatViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        fpsCounter.delegate = self
+        fpsCounter.startTracking()
         if #available(iOS 13.0, *) {
             view.backgroundColor = .systemBackground
         } else {
@@ -81,6 +85,13 @@ final class ChatViewController: UIViewController {
 
         inputBarView.delegate = self
 
+        fpsView.translatesAutoresizingMaskIntoConstraints = false
+        fpsView.flexibleEdges = [.trailing]
+        fpsView.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 0, right: 16)
+        fpsView.customView.font = .preferredFont(forTextStyle: .caption2)
+        fpsView.customView.textColor = .lightGray
+
+        inputBarView.topStackView.addArrangedSubview(fpsView)
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Show Keyboard", style: .plain, target: self, action: #selector(ChatViewController.showHideKeyboard))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
 
@@ -171,8 +182,8 @@ extension ChatViewController: UIScrollViewDelegate {
 
     public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         // Blocking the call of loadPreviousMessages() as UIScrollView behaves the way that it will scroll to the top even if we keep adding
-        // content there and keep changing the content offset until it actually reaches the top. So instead we wait until it reaches the top and initialte
-        // the loading then.
+        // content there and keep changing the content offset until it actually reaches the top. So instead we wait until it reaches the top and initiate
+        // the loading after.
         currentInterfaceActions.options.insert(.scrollingToTop)
         return true
     }
@@ -257,28 +268,27 @@ extension ChatViewController: ChatControllerDelegate {
             return
         }
 
-        let changeSet = StagedChangeset(source: dataSource.sections, target: sections)
-
         func process() {
-            collectionView.reload(using: changeSet,
-                                  interrupt: { changeSet in
-                                      guard changeSet.sectionInserted.isEmpty else {
-                                          return true
-                                      }
-                                      return false
-                                  },
-                                  onInterruptedReload: {
-                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
-                                      self.collectionView.reloadData()
-                                      // We want so that user on reload appeared at the very bottom of the layout
-                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                                  },
-                                  completion: { _ in
-                                      completion?()
-                                  },
-                                  setData: { data in
-                                      self.dataSource.sections = data
-                                  })
+            let changeSet = StagedChangeset(source: self.dataSource.sections, target: sections)
+            self.collectionView.reload(using: changeSet,
+                interrupt: { changeSet in
+                    guard changeSet.sectionInserted.isEmpty else {
+                        return true
+                    }
+                    return false
+                },
+                onInterruptedReload: {
+                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
+                    self.collectionView.reloadData()
+                    // We want so that user on reload appeared at the very bottom of the layout
+                    self.chatLayout.restoreContentOffset(with: positionSnapshot)
+                },
+                completion: { _ in
+                    completion?()
+                },
+                setData: { data in
+                    self.dataSource.sections = data
+                })
         }
 
         if animated {
@@ -360,6 +370,14 @@ extension ChatViewController: KeyboardListenerDelegate {
             return
         }
         currentInterfaceActions.options.remove(.changingKeyboardFrame)
+    }
+
+}
+
+extension ChatViewController: FPSCounterDelegate {
+
+    public func fpsCounter(_ counter: FPSCounter, didUpdateFramesPerSecond fps: Int) {
+        fpsView.customView.text = "FPS: \(fps)"
     }
 
 }

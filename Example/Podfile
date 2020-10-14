@@ -5,6 +5,7 @@ target 'ChatLayout_Example' do
   pod 'ChatLayout', :path => '../'
   pod 'InputBarAccessoryView'
   pod 'DifferenceKit'
+  pod 'FPSCounter', '~> 4.0'
 
   target 'ChatLayout_Tests' do
     inherit! :search_paths

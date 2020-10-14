@@ -199,11 +199,13 @@ fi
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/ChatLayout/ChatLayout.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DifferenceKit/DifferenceKit.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/FPSCounter/FPSCounter.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/InputBarAccessoryView/InputBarAccessoryView.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/ChatLayout/ChatLayout.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DifferenceKit/DifferenceKit.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/FPSCounter/FPSCounter.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/InputBarAccessoryView/InputBarAccessoryView.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
