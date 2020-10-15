@@ -90,6 +90,7 @@ final class ChatViewController: UIViewController {
         fpsView.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 0, right: 16)
         fpsView.customView.font = .preferredFont(forTextStyle: .caption2)
         fpsView.customView.textColor = .lightGray
+        fpsView.customView.text = "FPS: unknown"
 
         inputBarView.topStackView.addArrangedSubview(fpsView)
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Show Keyboard", style: .plain, target: self, action: #selector(ChatViewController.showHideKeyboard))

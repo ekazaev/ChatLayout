@@ -67,9 +67,12 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Represent the rectangle where all the items are aligned.
     public var layoutFrame: CGRect {
+        guard let collectionView = collectionView else {
+            return .zero
+        }
         return CGRect(x: adjustedContentInset.left + settings.additionalInsets.left,
                       y: adjustedContentInset.top + settings.additionalInsets.top,
-                      width: visibleBounds.width - settings.additionalInsets.left - settings.additionalInsets.right - adjustedContentInset.left - adjustedContentInset.right,
+                      width: collectionView.bounds.width - settings.additionalInsets.left - settings.additionalInsets.right - adjustedContentInset.left - adjustedContentInset.right,
                       height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom - adjustedContentInset.top - adjustedContentInset.bottom)
     }
 
@@ -678,7 +681,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
         let kind = ItemKind(elementKind)
         if state == .afterUpdate {
-            if controller.insertedIndexes.contains(elementIndexPath) || controller.insertedSectionsIndexes.contains(elementIndexPath.section) {
+            if controller.insertedSectionsIndexes.contains(elementIndexPath.section) {
                 attributes = controller.itemAttributes(for: elementIndexPath, kind: kind, at: .afterUpdate)
                 attributes?.alpha = 0
                 attributesForPendingAnimations[kind]?[elementIndexPath] = attributes
@@ -710,7 +713,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
         let kind = ItemKind(elementKind)
         if state == .afterUpdate {
-            if controller.deletedIndexes.contains(elementIndexPath) || controller.deletedSectionsIndexes.contains(elementIndexPath.section) {
+            if controller.deletedSectionsIndexes.contains(elementIndexPath.section) {
                 attributes = controller.itemAttributes(for: elementIndexPath, kind: kind, at: .beforeUpdate) ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 attributes?.alpha = 0
             } else if let itemIdentifier = controller.itemIdentifier(for: elementIndexPath, kind: kind, at: .beforeUpdate),

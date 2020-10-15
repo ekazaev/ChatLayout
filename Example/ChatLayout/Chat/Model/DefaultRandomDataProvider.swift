@@ -83,7 +83,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Limerick-King-Johns-Castle-2012.JPG/1920px-Limerick-King-Johns-Castle-2012.JPG")!
     ]
 
-    private let images: [UIImage] = [UIImage(named: "demo1"), UIImage(named: "demo2"), UIImage(named: "demo3")].compactMap { $0 }
+    private let images: [UIImage] = (1...8).compactMap { UIImage(named: "demo\($0)") }
 
     private var allUsersIds: [Int] {
         return Array([users, [receiverId]].joined())
