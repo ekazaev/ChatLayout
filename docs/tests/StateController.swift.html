@@ -1494,52 +1494,52 @@
 </tr>
 <tr class="covered">
 <td class="num">297</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">        item.calculatedOnce = true</code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">298</td>
-<td class="src"><pre><code class="objc">        switch kind {</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">299</td>
-<td class="src"><pre><code class="objc">        case .header:</code></pre></td>
+<td class="src"><pre><code class="objc">        switch kind {</code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">300</td>
-<td class="src"><pre><code class="objc">            layout.setAndAssemble(header: item, sectionIndex: indexPath.section)</code></pre></td>
+<td class="src"><pre><code class="objc">        case .header:</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">301</td>
-<td class="src"><pre><code class="objc">        case .footer:</code></pre></td>
+<td class="src"><pre><code class="objc">            layout.setAndAssemble(header: item, sectionIndex: indexPath.section)</code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">302</td>
-<td class="src"><pre><code class="objc">            layout.setAndAssemble(footer: item, sectionIndex: indexPath.section)</code></pre></td>
+<td class="src"><pre><code class="objc">        case .footer:</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">303</td>
-<td class="src"><pre><code class="objc">        case .cell:</code></pre></td>
+<td class="src"><pre><code class="objc">            layout.setAndAssemble(footer: item, sectionIndex: indexPath.section)</code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">304</td>
-<td class="src"><pre><code class="objc">            layout.setAndAssemble(item: item, sectionIndex: indexPath.section, itemIndex: indexPath.item)</code></pre></td>
+<td class="src"><pre><code class="objc">        case .cell:</code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">305</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="src"><pre><code class="objc">            layout.setAndAssemble(item: item, sectionIndex: indexPath.section, itemIndex: indexPath.item)</code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">306</td>
-<td class="src"><pre><code class="objc">        item.calculatedOnce = true</code></pre></td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
@@ -3034,7 +3034,7 @@
 </tr>
 <tr class="covered">
 <td class="num">605</td>
-<td class="src"><pre><code class="objc">            // I dont thing there can be more then a 200 elements on the screen simultaneously</code></pre></td>
+<td class="src"><pre><code class="objc">            // I dont think there can be more then a 200 elements on the screen simultaneously</code></pre></td>
 <td class="coverage">3x</td>
 </tr>
 <tr class="covered">
@@ -3674,346 +3674,341 @@
 </tr>
 <tr class="covered">
 <td class="num">733</td>
-<td class="src"><pre><code class="objc">            guard contentHeight(at: .afterUpdate).rounded() &gt; (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()</code></pre></td>
+<td class="src"><pre><code class="objc">            guard contentHeight(at: .afterUpdate).rounded() &gt; (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {</code></pre></td>
 <td class="coverage">20300x</td>
 </tr>
 <tr class="covered">
 <td class="num">734</td>
-<td class="src"><pre><code class="objc">            /* let newFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) */ else {</code></pre></td>
+<td class="src"><pre><code class="objc">                return</code></pre></td>
 <td class="coverage">20300x</td>
 </tr>
 <tr class="covered">
 <td class="num">735</td>
-<td class="src"><pre><code class="objc">                return</code></pre></td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">736</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
+<td class="src"><pre><code class="objc">            if newFrame.minY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
 <td class="coverage">10300x</td>
 </tr>
 <tr class="covered">
 <td class="num">737</td>
-<td class="src"><pre><code class="objc">            if newFrame.minY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
+<td class="src"><pre><code class="objc">                batchUpdateCompensatingOffset += newFrame.height - previousFrame.height</code></pre></td>
 <td class="coverage">10300x</td>
 </tr>
 <tr class="covered">
 <td class="num">738</td>
-<td class="src"><pre><code class="objc">                batchUpdateCompensatingOffset += newFrame.height - previousFrame.height</code></pre></td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">104x</td>
 </tr>
 <tr class="never">
 <td class="num">739</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
+<td class="src"><pre><code class="objc">        case .delete:</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">740</td>
-<td class="src"><pre><code class="objc">        case .delete:</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">741</td>
 <td class="src"><pre><code class="objc">            guard contentHeight(at: .afterUpdate).rounded() &gt; layoutRepresentation.visibleBounds.size.height.rounded(),</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">742</td>
+<td class="num">741</td>
 <td class="src"><pre><code class="objc">                let deletedFrame = itemFrame(for: indexPath, kind: kind, at: .beforeUpdate) else {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">743</td>
+<td class="num">742</td>
 <td class="src"><pre><code class="objc">                return</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">743</td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">744</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
+<td class="src"><pre><code class="objc">            if deletedFrame.minY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="covered">
 <td class="num">745</td>
-<td class="src"><pre><code class="objc">            if deletedFrame.minY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
+<td class="src"><pre><code class="objc">                // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.</code></pre></td>
 <td class="coverage">3x</td>
 </tr>
 <tr class="missed">
 <td class="num">746</td>
-<td class="src"><pre><code class="objc">                // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.</code></pre></td>
+<td class="src"><pre><code class="objc">                // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">747</td>
-<td class="src"><pre><code class="objc">                // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.</code></pre></td>
+<td class="src"><pre><code class="objc">                proposedCompensatingOffset -= (deletedFrame.height + layoutRepresentation.settings.interItemSpacing)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">748</td>
-<td class="src"><pre><code class="objc">                proposedCompensatingOffset -= (deletedFrame.height + layoutRepresentation.settings.interItemSpacing)</code></pre></td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">749</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">750</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">751</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">752</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">753</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">    private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int, action: CompensatingAction) {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="covered">
 <td class="num">754</td>
-<td class="src"><pre><code class="objc">    private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int, action: CompensatingAction) {</code></pre></td>
+<td class="src"><pre><code class="objc">        guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">755</td>
-<td class="src"><pre><code class="objc">        guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {</code></pre></td>
+<td class="src"><pre><code class="objc">            return</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="missed">
 <td class="num">756</td>
-<td class="src"><pre><code class="objc">            return</code></pre></td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="covered">
 <td class="num">757</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">9x</td>
-</tr>
-<tr class="covered">
-<td class="num">758</td>
 <td class="src"><pre><code class="objc">        switch action {</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="covered">
-<td class="num">759</td>
+<td class="num">758</td>
 <td class="src"><pre><code class="objc">        case .insert:</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="covered">
-<td class="num">760</td>
+<td class="num">759</td>
 <td class="src"><pre><code class="objc">            guard sectionIndex &lt; layout(at: .afterUpdate).sections.count,</code></pre></td>
+<td class="coverage">9x</td>
+</tr>
+<tr class="covered">
+<td class="num">760</td>
+<td class="src"><pre><code class="objc">                contentHeight(at: .afterUpdate).rounded() &gt;= layoutRepresentation.visibleBounds.size.height.rounded() else {</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">761</td>
-<td class="src"><pre><code class="objc">                contentHeight(at: .afterUpdate).rounded() &gt;= layoutRepresentation.visibleBounds.size.height.rounded() else {</code></pre></td>
+<td class="src"><pre><code class="objc">                return</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="missed">
 <td class="num">762</td>
-<td class="src"><pre><code class="objc">                return</code></pre></td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="covered">
 <td class="num">763</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">2x</td>
-</tr>
-<tr class="covered">
-<td class="num">764</td>
 <td class="src"><pre><code class="objc">            let section = layout(at: .afterUpdate).sections[sectionIndex]</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
-<td class="num">765</td>
+<td class="num">764</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage">2x</td>
+</tr>
+<tr class="covered">
+<td class="num">765</td>
+<td class="src"><pre><code class="objc">            if section.offsetY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">766</td>
-<td class="src"><pre><code class="objc">            if section.offsetY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
+<td class="src"><pre><code class="objc">                proposedCompensatingOffset += section.height + layoutRepresentation.settings.interSectionSpacing</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="missed">
 <td class="num">767</td>
-<td class="src"><pre><code class="objc">                proposedCompensatingOffset += section.height + layoutRepresentation.settings.interSectionSpacing</code></pre></td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="covered">
 <td class="num">768</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">9x</td>
-</tr>
-<tr class="covered">
-<td class="num">769</td>
 <td class="src"><pre><code class="objc">        case let .frameUpdate(previousFrame, newFrame):</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="covered">
-<td class="num">770</td>
+<td class="num">769</td>
 <td class="src"><pre><code class="objc">            guard sectionIndex &lt; layout(at: .afterUpdate).sections.count,</code></pre></td>
+<td class="coverage">9x</td>
+</tr>
+<tr class="covered">
+<td class="num">770</td>
+<td class="src"><pre><code class="objc">                contentHeight(at: .afterUpdate).rounded() &gt;= (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {</code></pre></td>
 <td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">771</td>
-<td class="src"><pre><code class="objc">                contentHeight(at: .afterUpdate).rounded() &gt;= (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {</code></pre></td>
+<td class="src"><pre><code class="objc">                return</code></pre></td>
 <td class="coverage">5x</td>
 </tr>
 <tr class="missed">
 <td class="num">772</td>
-<td class="src"><pre><code class="objc">                return</code></pre></td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="covered">
 <td class="num">773</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">5x</td>
-</tr>
-<tr class="covered">
-<td class="num">774</td>
 <td class="src"><pre><code class="objc">            if newFrame.minY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
 <td class="coverage">5x</td>
 </tr>
 <tr class="covered">
-<td class="num">775</td>
+<td class="num">774</td>
 <td class="src"><pre><code class="objc">                batchUpdateCompensatingOffset += newFrame.height - previousFrame.height</code></pre></td>
+<td class="coverage">5x</td>
+</tr>
+<tr class="covered">
+<td class="num">775</td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">776</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">9x</td>
-</tr>
-<tr class="covered">
-<td class="num">777</td>
 <td class="src"><pre><code class="objc">        case .delete:</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="covered">
-<td class="num">778</td>
+<td class="num">777</td>
 <td class="src"><pre><code class="objc">            guard contentHeight(at: .afterUpdate).rounded() &gt;= layoutRepresentation.visibleBounds.size.height.rounded(),</code></pre></td>
-<td class="coverage">2x</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
-<td class="num">779</td>
+<td class="num">778</td>
 <td class="src"><pre><code class="objc">                sectionIndex &lt; layout(at: .afterUpdate).sections.count else {</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
-<td class="num">780</td>
+<td class="num">779</td>
 <td class="src"><pre><code class="objc">                return</code></pre></td>
+<td class="coverage">2x</td>
+</tr>
+<tr class="covered">
+<td class="num">780</td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">1x</td>
 </tr>
 <tr class="covered">
 <td class="num">781</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">1x</td>
-</tr>
-<tr class="covered">
-<td class="num">782</td>
 <td class="src"><pre><code class="objc">            let section = layout(at: .beforeUpdate).sections[sectionIndex]</code></pre></td>
 <td class="coverage">1x</td>
 </tr>
 <tr class="covered">
-<td class="num">783</td>
+<td class="num">782</td>
 <td class="src"><pre><code class="objc">            if section.locationHeight.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
+<td class="coverage">1x</td>
+</tr>
+<tr class="covered">
+<td class="num">783</td>
+<td class="src"><pre><code class="objc">                // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.</code></pre></td>
 <td class="coverage">1x</td>
 </tr>
 <tr class="missed">
 <td class="num">784</td>
-<td class="src"><pre><code class="objc">                // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">785</td>
 <td class="src"><pre><code class="objc">                // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">786</td>
+<td class="num">785</td>
 <td class="src"><pre><code class="objc">                proposedCompensatingOffset -= (section.height + layoutRepresentation.settings.interSectionSpacing)</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">786</td>
+<td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="covered">
 <td class="num">787</td>
-<td class="src"><pre><code class="objc">            }</code></pre></td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">788</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">789</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">790</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage">9x</td>
 </tr>
 <tr class="never">
 <td class="num">791</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">    private func offsetByCompensation(frame: CGRect, indexPath: IndexPath, for state: ModelState, backward: Bool = false) -&gt; CGRect {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="covered">
 <td class="num">792</td>
-<td class="src"><pre><code class="objc">    private func offsetByCompensation(frame: CGRect, indexPath: IndexPath, for state: ModelState, backward: Bool = false) -&gt; CGRect {</code></pre></td>
-<td class="coverage">361x</td>
-</tr>
-<tr class="covered">
-<td class="num">793</td>
 <td class="src"><pre><code class="objc">        guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,</code></pre></td>
 <td class="coverage">361x</td>
 </tr>
 <tr class="covered">
-<td class="num">794</td>
+<td class="num">793</td>
 <td class="src"><pre><code class="objc">            state == .afterUpdate,</code></pre></td>
 <td class="coverage">361x</td>
 </tr>
 <tr class="covered">
-<td class="num">795</td>
+<td class="num">794</td>
 <td class="src"><pre><code class="objc">            contentHeight(at: .afterUpdate).rounded() &gt; layoutRepresentation.visibleBounds.height.rounded() else {</code></pre></td>
 <td class="coverage">361x</td>
 </tr>
 <tr class="covered">
-<td class="num">796</td>
+<td class="num">795</td>
 <td class="src"><pre><code class="objc">            return frame</code></pre></td>
 <td class="coverage">361x</td>
 </tr>
 <tr class="covered">
-<td class="num">797</td>
+<td class="num">796</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="coverage">361x</td>
+</tr>
+<tr class="covered">
+<td class="num">797</td>
+<td class="src"><pre><code class="objc">        return frame.offsetBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))</code></pre></td>
 <td class="coverage">361x</td>
 </tr>
 <tr class="missed">
 <td class="num">798</td>
-<td class="src"><pre><code class="objc">        return frame.offsetBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))</code></pre></td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="covered">
 <td class="num">799</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage">361x</td>
 </tr>
 <tr class="never">
 <td class="num">800</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">801</td>
 <td class="src"><pre><code class="objc">}</code></pre></td>
 <td class="coverage"></td>
 </tr>

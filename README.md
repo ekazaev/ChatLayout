@@ -1,3 +1,7 @@
+<p align="right">
+<a href="https://websummit.com"><img src="https://habrastorage.org/webt/jh/an/e-/jhane-_nukqskoq49iqidftm0-4.png" alt="Websummit"/></a>
+</p>
+
 # ChatLayout
 
 [![CI Status](https://travis-ci.org/ekazaev/ChatLayout.svg?branch=master&style=flat)](https://travis-ci.org/github/ekazaev/ChatLayout)
