@@ -294,6 +294,7 @@ final class StateController {
         let previousFrame = item.frame
         cachedAttributesState = nil
         item.calculatedSize = preferredSize
+        item.calculatedOnce = true
 
         switch kind {
         case .header:
@@ -303,7 +304,6 @@ final class StateController {
         case .cell:
             layout.setAndAssemble(item: item, sectionIndex: indexPath.section, itemIndex: indexPath.item)
         }
-        item.calculatedOnce = true
         storage[state] = layout
         compensateOffsetIfNeeded(for: indexPath, kind: kind, action: .frameUpdate(previousFrame: previousFrame, newFrame: item.frame))
     }
@@ -602,7 +602,7 @@ final class StateController {
             }
 
             var allRects = [(frame: CGRect, indexPath: IndexPath, kind: ItemKind)]()
-            // I dont thing there can be more then a 200 elements on the screen simultaneously
+            // I dont think there can be more then a 200 elements on the screen simultaneously
             allRects.reserveCapacity(200)
             let skipIndex = 100
             for sectionIndex in 0..<layout.sections.count {
@@ -730,8 +730,7 @@ final class StateController {
                 proposedCompensatingOffset += itemFrame.height + layoutRepresentation.settings.interItemSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):
-            guard contentHeight(at: .afterUpdate).rounded() > (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
-            /* let newFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) */ else {
+            guard contentHeight(at: .afterUpdate).rounded() > (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {
                 return
             }
             if newFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
