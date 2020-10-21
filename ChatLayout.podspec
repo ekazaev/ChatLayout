@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ChatLayout'
-  s.version          = '0.4.4'
+  s.version          = '0.4.5'
   s.summary          = 'An alternative solution to MessageKit. It uses custom UICollectionViewLayout to provide you full control over the presentation.'
   s.swift_version    = '5.2'
 

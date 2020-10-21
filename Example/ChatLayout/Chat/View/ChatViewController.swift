@@ -10,9 +10,9 @@
 import ChatLayout
 import DifferenceKit
 import Foundation
+import FPSCounter
 import InputBarAccessoryView
 import UIKit
-import FPSCounter
 
 final class ChatViewController: UIViewController {
 
@@ -89,9 +89,14 @@ final class ChatViewController: UIViewController {
         fpsView.flexibleEdges = [.trailing]
         fpsView.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 0, right: 16)
         fpsView.customView.font = .preferredFont(forTextStyle: .caption2)
-        fpsView.customView.textColor = .lightGray
         fpsView.customView.text = "FPS: unknown"
-
+        if #available(iOS 13.0, *) {
+            fpsView.backgroundColor = .systemBackground
+            fpsView.customView.textColor = .systemGray3
+        } else {
+            fpsView.backgroundColor = .white
+            fpsView.customView.textColor = .lightGray
+        }
         inputBarView.topStackView.addArrangedSubview(fpsView)
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Show Keyboard", style: .plain, target: self, action: #selector(ChatViewController.showHideKeyboard))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
@@ -150,12 +155,27 @@ final class ChatViewController: UIViewController {
         coordinator.animate(alongsideTransition: { _ in
             // Gives nicer transition behaviour
             self.collectionView.performBatchUpdates({})
-        }, completion: { _ in
-            if let positionSnapshot = positionSnapshot {
-                self.chatLayout.restoreContentOffset(with: positionSnapshot)
+        }, completion: { [weak self] _ in
+            guard let self = self else {
+                return
             }
-            self.collectionView.collectionViewLayout.invalidateLayout()
-            self.currentInterfaceActions.options.remove(.changingFrameSize)
+            if let positionSnapshot = positionSnapshot,
+                !self.isUserInitiatedScrolling {
+                // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
+                // to compact and back. `ChatLayout` may not properly predict the final position of the element. So we try
+                // to restore it after the rotation manually.
+                UIView.animate(withDuration: 0.15,
+                               animations: { [weak self] in
+                                   self?.chatLayout.restoreContentOffset(with: positionSnapshot)
+                               },
+                               completion: { _ in
+                                   self.collectionView.collectionViewLayout.invalidateLayout()
+                                   self.currentInterfaceActions.options.remove(.changingFrameSize)
+                               })
+            } else {
+                self.collectionView.collectionViewLayout.invalidateLayout()
+                self.currentInterfaceActions.options.remove(.changingFrameSize)
+            }
         })
         super.viewWillTransition(to: size, with: coordinator)
     }
@@ -218,12 +238,16 @@ extension ChatViewController: UIScrollViewDelegate {
             guard let self = self else {
                 return
             }
-            let animated = !self.collectionView.isDragging && !self.collectionView.isDecelerating
             // Reloading the content without animation just because it looks better is the scrolling is in process.
+            let animated = !self.isUserInitiatedScrolling
             self.processUpdates(with: sections, animated: animated) {
                 self.currentControllerActions.options.remove(.loadingPreviousMessages)
             }
         }
+    }
+
+    fileprivate var isUserInitiatedScrolling: Bool {
+        return collectionView.isDragging || collectionView.isDecelerating
     }
 
     func scrollToBottom(completion: (() -> Void)? = nil) {
@@ -270,26 +294,26 @@ extension ChatViewController: ChatControllerDelegate {
         }
 
         func process() {
-            let changeSet = StagedChangeset(source: self.dataSource.sections, target: sections)
-            self.collectionView.reload(using: changeSet,
-                interrupt: { changeSet in
-                    guard changeSet.sectionInserted.isEmpty else {
-                        return true
-                    }
-                    return false
-                },
-                onInterruptedReload: {
-                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
-                    self.collectionView.reloadData()
-                    // We want so that user on reload appeared at the very bottom of the layout
-                    self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                },
-                completion: { _ in
-                    completion?()
-                },
-                setData: { data in
-                    self.dataSource.sections = data
-                })
+            let changeSet = StagedChangeset(source: dataSource.sections, target: sections)
+            collectionView.reload(using: changeSet,
+                                  interrupt: { changeSet in
+                                      guard changeSet.sectionInserted.isEmpty else {
+                                          return true
+                                      }
+                                      return false
+                                  },
+                                  onInterruptedReload: {
+                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
+                                      self.collectionView.reloadData()
+                                      // We want so that user on reload appeared at the very bottom of the layout
+                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
+                                  },
+                                  completion: { _ in
+                                      completion?()
+                                  },
+                                  setData: { data in
+                                      self.dataSource.sections = data
+                                  })
         }
 
         if animated {
@@ -352,7 +376,7 @@ extension ChatViewController: KeyboardListenerDelegate {
                     self.collectionView.scrollIndicatorInsets.bottom = newBottomInset
                 }, completion: nil)
 
-                if let positionSnapshot = positionSnapshot {
+                if let positionSnapshot = positionSnapshot, !self.isUserInitiatedScrolling {
                     self.chatLayout.restoreContentOffset(with: positionSnapshot)
                 }
                 if #available(iOS 13.0, *) {

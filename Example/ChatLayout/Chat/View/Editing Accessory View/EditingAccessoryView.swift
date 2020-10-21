@@ -64,6 +64,7 @@ extension EditingAccessoryView: EditNotifierDelegate {
                 return
             }
             isHidden = !newValue
+            alpha = newValue ? 1 : 0
         }
     }
 

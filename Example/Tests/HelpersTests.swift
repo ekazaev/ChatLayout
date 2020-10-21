@@ -1,6 +1,6 @@
 //
 // ChatLayout
-// RoundingTests.swift
+// HelpersTests.swift
 // https://github.com/ekazaev/ChatLayout
 //
 // Created by Eugene Kazaev in 2020.

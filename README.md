@@ -14,13 +14,28 @@
 [![Swift 5.2](https://img.shields.io/badge/language-Swift5.2-orange.svg?style=flat)](https://developer.apple.com/swift)
 [![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2014-yellow.svg)](https://www.apple.com/ios)
 
+## Table of contents
+
+- [About](#about)
+- [Features](#features)
+    - [What ChatLayout doesn't provide (And why it is good)](#what-chatlayout-doesnt-provide-and-why-it-is-good)
+- [Requirements](#requirements)
+- [Example](#example)
+- [Installation](#installation)
+- [About `UICollectionViewDiffableDataSource`](#about-uicollectionviewdiffabledatasource)
+- [Contributing](#contributing)
+- [Todo](#todo)
+- [License](#license)
+- [Articles](#articles)
+- [Author](#author)
+
 ## About
 
 `ChatLayout` is an alternative solution to [MessageKit](https://github.com/MessageKit/MessageKit). It uses custom 
 `UICollectionViewLayout` to provide you full control over the presentation as well as all the tools available in 
 `UICollectionView`.
 
-### Features
+## Features
 
 - Supports dynamic cells and supplementary view sizes.
 - Animated insertion/deletion/reloading/moving of the items.
@@ -112,6 +127,13 @@ read [the contribution guidelines](https://github.com/ekazaev/route-composer/blo
 `ChatLayout` is provided for your use, free-of-charge, on an as-is basis. We make no guarantees, promises or
 apologies. *Caveat developer.*
 
+## Articles
+
+Russian:
+  - [Мой Covid-19 lockdown проект, или, как я полез в кастомный UICollectionViewLayout и получил ChatLayout](https://habr.com/ru/post/523492/)
+
+## Author
+  
 Evgeny Kazaev, eugene.kazaev@gmail.com. Twitter [ekazaev](https://twitter.com/EKazaev)
 
 *I am happy to answer any questions you may have. Just create a [new issue](https://github.com/ekazaev/ChatLayout/issues/new).*

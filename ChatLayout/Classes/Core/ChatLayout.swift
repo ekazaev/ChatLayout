@@ -219,6 +219,8 @@ public final class ChatLayout: UICollectionViewLayout {
     /// Invalidates layout of the `UICollectionView` and trying to keep the offset of the item provided in `ChatLayoutPositionSnapshot`
     /// - Parameter snapshot: `ChatLayoutPositionSnapshot`
     public func restoreContentOffset(with snapshot: ChatLayoutPositionSnapshot) {
+        collectionView?.setNeedsLayout()
+        collectionView?.layoutIfNeeded()
         currentPositionSnapshot = snapshot
         let context = ChatLayoutInvalidationContext()
         context.invalidateLayoutMetrics = false
@@ -452,12 +454,14 @@ public final class ChatLayout: UICollectionViewLayout {
 
         let layoutAttributesForPendingAnimation = attributesForPendingAnimations[preferredMessageAttributes.kind]?[preferredAttributes.indexPath]
 
-        controller.update(preferredSize: preferredAttributes.frame.size, for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)
+        let newItemSize = itemSize(with: preferredMessageAttributes)
+
+        controller.update(preferredSize: newItemSize, for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)
         controller.update(alignment: preferredMessageAttributes.alignment, for: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)
 
         let context = super.invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes) as! ChatLayoutInvalidationContext
 
-        let heightDifference = preferredAttributes.size.height - originalAttributes.size.height
+        let heightDifference = newItemSize.height - originalAttributes.size.height
         let isAboveBottomEdge = originalAttributes.frame.minY.rounded() <= visibleBounds.maxY.rounded()
 
         if heightDifference != 0,
@@ -475,7 +479,7 @@ public final class ChatLayout: UICollectionViewLayout {
             }
             layoutAttributesForPendingAnimation?.frame = attributes.frame
         } else {
-            layoutAttributesForPendingAnimation?.frame.size = preferredAttributes.frame.size
+            layoutAttributesForPendingAnimation?.frame.size = newItemSize
         }
 
         context.invalidateLayoutMetrics = false
@@ -758,6 +762,17 @@ extension ChatLayout {
         case let .exact(size):
             return (estimated: size, exact: size)
         }
+    }
+
+    fileprivate func itemSize(with preferredAttributes: ChatLayoutAttributes) -> CGSize {
+        let itemSize: CGSize
+        if let delegate = delegate,
+            case let .exact(size) = delegate.sizeForItem(self, of: preferredAttributes.kind, at: preferredAttributes.indexPath) {
+            itemSize = size
+        } else {
+            itemSize = preferredAttributes.frame.size
+        }
+        return itemSize
     }
 
     private func alignment(for element: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
