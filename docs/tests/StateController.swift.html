@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "StateController.swift" : </span><span class="cov_medium">76.79%</span>
+<span>Coverage for "StateController.swift" : </span><span class="cov_medium">76.75%</span>
 </h2>
-<h4 class="cov_subtitle">(450 of 586 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(449 of 585 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/Model/StateController.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -1510,22 +1510,22 @@
 <tr class="covered">
 <td class="num">300</td>
 <td class="src"><pre><code class="objc">        case .header:</code></pre></td>
-<td class="coverage">2x</td>
+<td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">301</td>
 <td class="src"><pre><code class="objc">            layout.setAndAssemble(header: item, sectionIndex: indexPath.section)</code></pre></td>
-<td class="coverage">10000x</td>
+<td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">302</td>
 <td class="src"><pre><code class="objc">        case .footer:</code></pre></td>
-<td class="coverage">2x</td>
+<td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">303</td>
 <td class="src"><pre><code class="objc">            layout.setAndAssemble(footer: item, sectionIndex: indexPath.section)</code></pre></td>
-<td class="coverage">10000x</td>
+<td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">304</td>
@@ -2545,7 +2545,7 @@
 <tr class="covered">
 <td class="num">507</td>
 <td class="src"><pre><code class="objc">        insertedIndexes.sorted(by: { $0 &lt; $1 }).forEach {</code></pre></td>
-<td class="coverage">1860000x</td>
+<td class="coverage">1850000x</td>
 </tr>
 <tr class="never">
 <td class="num">508</td>
@@ -2560,7 +2560,7 @@
 <tr class="covered">
 <td class="num">510</td>
 <td class="src"><pre><code class="objc">        deletedIndexes.sorted(by: { $0 &lt; $1 }).forEach {</code></pre></td>
-<td class="coverage">1840000x</td>
+<td class="coverage">1860000x</td>
 </tr>
 <tr class="never">
 <td class="num">511</td>
@@ -3680,12 +3680,12 @@
 <tr class="covered">
 <td class="num">734</td>
 <td class="src"><pre><code class="objc">                return</code></pre></td>
-<td class="coverage">20300x</td>
+<td class="coverage">10000x</td>
 </tr>
 <tr class="covered">
 <td class="num">735</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">10000x</td>
+<td class="coverage">10300x</td>
 </tr>
 <tr class="covered">
 <td class="num">736</td>
@@ -3695,12 +3695,12 @@
 <tr class="covered">
 <td class="num">737</td>
 <td class="src"><pre><code class="objc">                batchUpdateCompensatingOffset += newFrame.height - previousFrame.height</code></pre></td>
-<td class="coverage">10300x</td>
+<td class="coverage">104x</td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">738</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">104x</td>
+<td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">739</td>
@@ -3727,15 +3727,15 @@
 <td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">744</td>
 <td class="src"><pre><code class="objc">            if deletedFrame.minY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">745</td>
 <td class="src"><pre><code class="objc">                // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.</code></pre></td>
-<td class="coverage">3x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">746</td>
@@ -3747,10 +3747,10 @@
 <td class="src"><pre><code class="objc">                proposedCompensatingOffset -= (deletedFrame.height + layoutRepresentation.settings.interItemSpacing)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">748</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">749</td>
@@ -3772,25 +3772,25 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">753</td>
 <td class="src"><pre><code class="objc">    private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int, action: CompensatingAction) {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">754</td>
 <td class="src"><pre><code class="objc">        guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">755</td>
 <td class="src"><pre><code class="objc">            return</code></pre></td>
-<td class="coverage">9x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">756</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">757</td>
@@ -3805,22 +3805,22 @@
 <tr class="covered">
 <td class="num">759</td>
 <td class="src"><pre><code class="objc">            guard sectionIndex &lt; layout(at: .afterUpdate).sections.count,</code></pre></td>
-<td class="coverage">9x</td>
+<td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">760</td>
 <td class="src"><pre><code class="objc">                contentHeight(at: .afterUpdate).rounded() &gt;= layoutRepresentation.visibleBounds.size.height.rounded() else {</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">761</td>
 <td class="src"><pre><code class="objc">                return</code></pre></td>
-<td class="coverage">2x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">762</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">763</td>
@@ -3837,15 +3837,15 @@
 <td class="src"><pre><code class="objc">            if section.offsetY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">766</td>
 <td class="src"><pre><code class="objc">                proposedCompensatingOffset += section.height + layoutRepresentation.settings.interSectionSpacing</code></pre></td>
-<td class="coverage">2x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">767</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">768</td>
@@ -3855,22 +3855,22 @@
 <tr class="covered">
 <td class="num">769</td>
 <td class="src"><pre><code class="objc">            guard sectionIndex &lt; layout(at: .afterUpdate).sections.count,</code></pre></td>
-<td class="coverage">9x</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">770</td>
 <td class="src"><pre><code class="objc">                contentHeight(at: .afterUpdate).rounded() &gt;= (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {</code></pre></td>
 <td class="coverage">5x</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">771</td>
 <td class="src"><pre><code class="objc">                return</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">772</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">5x</td>
 </tr>
 <tr class="covered">
 <td class="num">773</td>
@@ -3880,12 +3880,12 @@
 <tr class="covered">
 <td class="num">774</td>
 <td class="src"><pre><code class="objc">                batchUpdateCompensatingOffset += newFrame.height - previousFrame.height</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">775</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">2x</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">776</td>
@@ -3895,7 +3895,7 @@
 <tr class="covered">
 <td class="num">777</td>
 <td class="src"><pre><code class="objc">            guard contentHeight(at: .afterUpdate).rounded() &gt;= layoutRepresentation.visibleBounds.size.height.rounded(),</code></pre></td>
-<td class="coverage">9x</td>
+<td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">778</td>
@@ -3905,7 +3905,7 @@
 <tr class="covered">
 <td class="num">779</td>
 <td class="src"><pre><code class="objc">                return</code></pre></td>
-<td class="coverage">2x</td>
+<td class="coverage">1x</td>
 </tr>
 <tr class="covered">
 <td class="num">780</td>
@@ -3922,10 +3922,10 @@
 <td class="src"><pre><code class="objc">            if section.locationHeight.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
 <td class="coverage">1x</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">783</td>
 <td class="src"><pre><code class="objc">                // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.</code></pre></td>
-<td class="coverage">1x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">784</td>
@@ -3937,10 +3937,10 @@
 <td class="src"><pre><code class="objc">                proposedCompensatingOffset -= (section.height + layoutRepresentation.settings.interSectionSpacing)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">786</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">9x</td>
 </tr>
 <tr class="covered">
 <td class="num">787</td>
@@ -3957,15 +3957,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">9x</td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">790</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">9x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">791</td>
 <td class="src"><pre><code class="objc">    private func offsetByCompensation(frame: CGRect, indexPath: IndexPath, for state: ModelState, backward: Bool = false) -&gt; CGRect {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">361x</td>
 </tr>
 <tr class="covered">
 <td class="num">792</td>
@@ -3992,20 +3992,20 @@
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">361x</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">797</td>
 <td class="src"><pre><code class="objc">        return frame.offsetBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))</code></pre></td>
-<td class="coverage">361x</td>
-</tr>
-<tr class="missed">
-<td class="num">798</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="covered">
+<td class="num">798</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage">361x</td>
+</tr>
+<tr class="never">
 <td class="num">799</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">361x</td>
+<td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">800</td>
