@@ -331,7 +331,6 @@ final class StateController {
     func process(updateItems: [UICollectionViewUpdateItem]) {
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
-        let updateItems = updateItems.sorted(by: { $0.indexPathAfterUpdate?.item ?? -1 < $1.indexPathAfterUpdate?.item ?? -1 })
 
         var afterUpdateModel = layout(at: .beforeUpdate)
 

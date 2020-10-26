@@ -275,9 +275,9 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
                 case .text:
                     return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 36))
                 case let .image(_, isLocallyStored: isDownloaded):
-                    return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 200 : 80))
+                    return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 120 : 80))
                 case let .url(_, isLocallyStored: isDownloaded):
-                    return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 200 : 80))
+                    return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 60 : 36))
                 }
             case .date:
                 return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 18))

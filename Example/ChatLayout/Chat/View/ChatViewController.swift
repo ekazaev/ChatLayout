@@ -157,7 +157,7 @@ final class ChatViewController: UIViewController {
             self.collectionView.performBatchUpdates({})
         }, completion: { _ in
             if let positionSnapshot = positionSnapshot,
-               !self.isUserInitiatedScrolling {
+                !self.isUserInitiatedScrolling {
                 // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
                 // to compact and back. `ChatLayout` may not properly predict the final position of the element. So we try
                 // to restore it after the rotation manually.
