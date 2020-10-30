@@ -73,7 +73,6 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
 
         if let accessoryView = accessoryView {
             stackView.addArrangedSubview(accessoryView)
-            accessoryView.isHidden = true
             accessoryView.translatesAutoresizingMaskIntoConstraints = false
         }
 

@@ -19,6 +19,9 @@ public protocol ContainerCollectionViewCellDelegate: AnyObject {
 
     /// Allows to override the call of `ContainerCollectionViewCell`/`ContainerCollectionReusableView`
     /// `UICollectionReusableView.preferredLayoutAttributesFitting(...)` and make the layout calculations.
+    ///
+    /// **NB**: You must override it to avoid unnecessary autolayout calculations if you are providing exact cell size
+    /// in `ChatLayoutDelegate.sizeForItem(...)` and return `layoutAttributes` without modifications.
     /// - Parameter layoutAttributes: `ChatLayoutAttributes` provided by `ChatLayout`
     /// - Returns: Modified `ChatLayoutAttributes` on nil if `UICollectionReusableView.preferredLayoutAttributesFitting(...)`
     ///            should be called instead.

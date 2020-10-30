@@ -606,6 +606,8 @@ public final class ChatLayout: UICollectionViewLayout {
         super.finalizeCollectionViewUpdates()
     }
 
+    // MARK: - Cell Appearance Animation
+
     /// Retrieves the starting layout information for an item being inserted into the collection view.
     public override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
@@ -679,6 +681,8 @@ public final class ChatLayout: UICollectionViewLayout {
         return attributes
     }
 
+    // MARK: - Supplementary View Appearance Animation
+
     /// Retrieves the starting layout information for a supplementary view being inserted into the collection view.
     public override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
@@ -696,7 +700,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
                 if #available(iOS 13.0, *) {
                 } else {
-                    if controller.reloadedIndexes.contains(initialIndexPath) || controller.reloadedSectionsIndexes.contains(elementIndexPath.section) {
+                    if controller.reloadedSectionsIndexes.contains(elementIndexPath.section) {
                         // It is needed to position the new cell in the middle of the old cell on ios 12
                         attributesForPendingAnimations[.cell]?[initialIndexPath] = attributes
                     }
@@ -725,7 +729,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: finalIndexPath, kind: kind, at: .afterUpdate) ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 attributes?.indexPath = elementIndexPath
                 attributesForPendingAnimations[kind]?[elementIndexPath] = attributes
-                if controller.reloadedIndexes.contains(elementIndexPath) || controller.reloadedSectionsIndexes.contains(elementIndexPath.section) || finalIndexPath != elementIndexPath {
+                if controller.reloadedSectionsIndexes.contains(elementIndexPath.section) || finalIndexPath != elementIndexPath {
                     attributes?.alpha = 0
                     attributes?.transform = CGAffineTransform(scaleX: 0, y: 0)
                 }

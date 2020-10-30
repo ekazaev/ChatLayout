@@ -46,6 +46,23 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
         setupSize()
     }
 
+    // Uncomment to demonstrate the manual cell size calculation.
+    // NB: Keep in mind that the cell itself is still using autolayout to layout it content. If you really want to speed up the
+    // performance, You must layout the entire!!! `UICollectionCell` manually or using the tools
+    // like [LayoutKit](https://github.com/linkedin/LayoutKit)
+//    func preferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) -> ChatLayoutAttributes? {
+//        viewPortWidth = layoutAttributes.layoutFrame.width
+//        switch controller.state {
+//        case .loading:
+//            layoutAttributes.frame.size.height = 100
+//            return layoutAttributes
+//        case let .image(image):
+//            let maxWidth = min(viewPortWidth * Constants.maxWidth, image.size.width)
+//            layoutAttributes.frame.size.height = image.size.height * maxWidth / image.size.width
+//            return layoutAttributes
+//        }
+//    }
+
     func setup(with controller: ImageController) {
         self.controller = controller
     }

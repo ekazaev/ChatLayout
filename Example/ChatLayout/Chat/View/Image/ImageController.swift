@@ -53,7 +53,6 @@ final class ImageController {
                     guard let self = self else {
                         return
                     }
-                    self.image = try? result.get()
                     self.delegate?.reloadMessage(with: self.messageId)
                 }
             }
