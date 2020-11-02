@@ -514,15 +514,21 @@ final class StateController {
     }
 
     func commitUpdates() {
-        reloadedIndexes = []
-        movedSectionsIndexes = []
-        deletedSectionsIndexes = []
-        insertedSectionsIndexes = []
         insertedIndexes = []
+        insertedSectionsIndexes = []
+
+        reloadedIndexes = []
+        reloadedSectionsIndexes = []
+
         movedIndexes = []
+        movedSectionsIndexes = []
+
         deletedIndexes = []
+        deletedSectionsIndexes = []
+
         storage[.beforeUpdate] = layout(at: .afterUpdate)
         storage[.afterUpdate] = nil
+
         totalProposedCompensatingOffset = 0
     }
 

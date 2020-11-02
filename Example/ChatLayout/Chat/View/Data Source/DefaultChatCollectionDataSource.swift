@@ -113,6 +113,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
                                                bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: .incoming, bubbleType: .tailed))
         bubbleView.customView.setup(with: controller)
         controller.view = bubbleView.customView
+        cell.customView.accessoryView?.isHidden = true
 
         return cell
     }

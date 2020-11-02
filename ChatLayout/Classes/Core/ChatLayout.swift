@@ -182,11 +182,15 @@ public final class ChatLayout: UICollectionViewLayout {
     public init(flipsHorizontallyInOppositeLayoutDirection: Bool = true) {
         self._flipsHorizontallyInOppositeLayoutDirection = flipsHorizontallyInOppositeLayoutDirection
         super.init()
+        resetAttributesForPendingAnimations()
+        resetInvalidatedAttributes()
     }
 
     required init?(coder aDecoder: NSCoder) {
         self._flipsHorizontallyInOppositeLayoutDirection = true
         super.init(coder: aDecoder)
+        resetAttributesForPendingAnimations()
+        resetInvalidatedAttributes()
     }
 
     // MARK: Custom Methods
