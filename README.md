@@ -22,9 +22,10 @@
 - [Requirements](#requirements)
 - [Example](#example)
 - [Installation](#installation)
-- [About `UICollectionViewDiffableDataSource`](#about-uicollectionviewdiffabledatasource)
 - [Contributing](#contributing)
 - [Todo](#todo)
+    - [About `UICollectionViewDiffableDataSource`](#about-uicollectionviewdiffabledatasource)
+    - [About Supplementary Views](#about-supplementary-views)
 - [License](#license)
 - [Articles](#articles)
 - [Author](#author)
@@ -98,16 +99,6 @@ components provided, you can install only the layout itself using `pod 'ChatLayo
 this moment and may introduce breaking changes in further versions. It is recommended to link the dependency to
 the exact version number in the dependency manager you use and increase the release version manually.**
 
-## About `UICollectionViewDiffableDataSource`
-
-`ChatLayout` can process any update commands that you send to your `UICollectionView`, so you can use 
-`UICollectionViewDiffableDataSource` as well. But you have to keep in mind that `UICollectionViewDiffableDataSource` 
-does not support the reloading of cells out of the box if you are relying on the `Hashable` protocol implementation.
-It will delete the changed cell and insert the new version of said cell. That may lead to strange animations on 
-the screen, especially when the reloaded cell changes its size. In order to get the best behaviour of the update animation 
-I would strongly recommend you rely on [DifferenceKit](https://github.com/ra1028/DifferenceKit) to process the model changes.
-The Example app does it as well.
-
 ## Contributing
 
 `ChatLayout` is in active development, and we welcome your contributions.
@@ -119,6 +110,22 @@ read [the contribution guidelines](https://github.com/ekazaev/route-composer/blo
 
 - [ ] Improve the test coverage
 - [ ] Provide proper documentation
+
+### About `UICollectionViewDiffableDataSource`
+
+`ChatLayout` can process any update commands that you send to your `UICollectionView`, so you can use 
+`UICollectionViewDiffableDataSource` as well. But you have to keep in mind that `UICollectionViewDiffableDataSource` 
+does not support the reloading of cells out of the box if you are relying on the `Hashable` protocol implementation.
+It will delete the changed cell and insert the new version of said cell. That may lead to strange animations on 
+the screen, especially when the reloaded cell changes its size. In order to get the best behaviour of the update animation 
+I would strongly recommend you rely on [DifferenceKit](https://github.com/ra1028/DifferenceKit) to process the model changes.
+The Example app does it as well.
+
+### About Supplementary Views
+
+It can be tempting and it may look like it is the right way to go, but **do not** use supplementary views to decorate your
+messages or groups of them. `UICollectionView` processes them in a different order: `UICollectionViewCell`s first and 
+only after switches to `UICollectionReusableView`s. You will most likely face some unexpected behaviour during the animation.
 
 ## License
 

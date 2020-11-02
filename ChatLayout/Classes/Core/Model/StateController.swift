@@ -65,10 +65,13 @@ final class StateController {
 
     private var cachedAttributesState: (rect: CGRect, attributes: [ChatLayoutAttributes])?
 
+    private var cachedAttributeObjects = [ModelState: [ItemKind: [IndexPath: ChatLayoutAttributes]]]()
+
     private unowned var layoutRepresentation: ChatLayoutRepresentation
 
     init(layoutRepresentation: ChatLayoutRepresentation) {
         self.layoutRepresentation = layoutRepresentation
+        resetCachedAttributeObjects()
     }
 
     func set(_ sections: [SectionModel], at state: ModelState) {
@@ -101,6 +104,15 @@ final class StateController {
         cachedAttributesState = nil
     }
 
+    func resetCachedAttributeObjects() {
+        ModelState.allCases.forEach { state in
+            cachedAttributeObjects[state] = [:]
+            ItemKind.allCases.forEach { kind in
+                cachedAttributeObjects[state]?[kind] = [:]
+            }
+        }
+    }
+
     func itemAttributes(for indexPath: IndexPath, kind: ItemKind, predefinedFrame: CGRect? = nil, at state: ModelState) -> ChatLayoutAttributes? {
         let attributes: ChatLayoutAttributes
         switch kind {
@@ -114,9 +126,15 @@ final class StateController {
                 let item = item(for: indexPath, kind: kind, at: state) else {
                 return nil
             }
-            attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: indexPath)
+            if let cachedAttributes = cachedAttributeObjects[state]?[.header]?[indexPath] {
+                attributes = cachedAttributes
+            } else {
+                attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: indexPath)
+                cachedAttributeObjects[state]?[.header]?[indexPath] = attributes
+            }
             attributes.id = item.id
             attributes.frame = headerFrame
+            attributes.indexPath = indexPath
             attributes.zIndex = 10
             attributes.alignment = item.alignment
         case .footer:
@@ -129,9 +147,15 @@ final class StateController {
                 let item = item(for: indexPath, kind: kind, at: state) else {
                 return nil
             }
-            attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: indexPath)
+            if let cachedAttributes = cachedAttributeObjects[state]?[.footer]?[indexPath] {
+                attributes = cachedAttributes
+            } else {
+                attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: indexPath)
+                cachedAttributeObjects[state]?[.footer]?[indexPath] = attributes
+            }
             attributes.id = item.id
             attributes.frame = footerFrame
+            attributes.indexPath = indexPath
             attributes.zIndex = 10
             attributes.alignment = item.alignment
         case .cell:
@@ -144,9 +168,15 @@ final class StateController {
                 let item = item(for: indexPath, kind: kind, at: state) else {
                 return nil
             }
-            attributes = ChatLayoutAttributes(forCellWith: indexPath)
+            if let cachedAttributes = cachedAttributeObjects[state]?[.cell]?[indexPath] {
+                attributes = cachedAttributes
+            } else {
+                attributes = ChatLayoutAttributes(forCellWith: indexPath)
+                cachedAttributeObjects[state]?[.cell]?[indexPath] = attributes
+            }
             attributes.id = item.id
             attributes.frame = itemFrame
+            attributes.indexPath = indexPath
             attributes.zIndex = 0
             attributes.alignment = item.alignment
         }
@@ -333,6 +363,7 @@ final class StateController {
         proposedCompensatingOffset = 0
 
         var afterUpdateModel = layout(at: .beforeUpdate)
+        resetCachedAttributeObjects()
 
         updateItems.forEach { updateItem in
             let updateAction = updateItem.updateAction
@@ -530,6 +561,8 @@ final class StateController {
         storage[.afterUpdate] = nil
 
         totalProposedCompensatingOffset = 0
+
+        resetCachedAttributeObjects()
     }
 
     func contentSize(for state: ModelState) -> CGSize {
@@ -731,7 +764,7 @@ final class StateController {
                 let itemFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) else {
                 return
             }
-            if itemFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if itemFrame.minY.rounded() - layoutRepresentation.settings.interItemSpacing <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
                 proposedCompensatingOffset += itemFrame.height + layoutRepresentation.settings.interItemSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):
@@ -767,7 +800,7 @@ final class StateController {
             }
             let section = layout(at: .afterUpdate).sections[sectionIndex]
 
-            if section.offsetY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if section.offsetY.rounded() - layoutRepresentation.settings.interSectionSpacing <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
                 proposedCompensatingOffset += section.height + layoutRepresentation.settings.interSectionSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):

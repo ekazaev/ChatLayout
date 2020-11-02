@@ -101,9 +101,21 @@ class StateControllerInternalTests: XCTestCase {
 
         layout.controller.resetCachedAttributes()
 
+        let cachedInObjectsAttributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
+        XCTAssertEqual(cachedInObjectsAttributes.count, attributes.count)
+        XCTAssertEqual(cachedInObjectsAttributes.count, cachedAttributes.count)
+        if cachedInObjectsAttributes.count == attributes.count {
+            cachedInObjectsAttributes.enumerated().forEach { index, nonCachedAttributes in
+                XCTAssertTrue(nonCachedAttributes == attributes[index])
+                XCTAssertTrue(nonCachedAttributes == cachedAttributes[index])
+            }
+        }
+
+        layout.controller.resetCachedAttributes()
+        layout.controller.resetCachedAttributeObjects()
+
         let notCachedAttributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
-        XCTAssertEqual(notCachedAttributes.count, attributes.count)
-        XCTAssertEqual(notCachedAttributes.count, cachedAttributes.count)
+
         if notCachedAttributes.count == attributes.count {
             notCachedAttributes.enumerated().forEach { index, nonCachedAttributes in
                 XCTAssertTrue(nonCachedAttributes !== attributes[index])

@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "ChatLayoutAttributes.swift" : </span><span class="cov_low">13.95%</span>
+<span>Coverage for "ChatLayoutAttributes.swift" : </span><span class="cov_low">20.41%</span>
 </h2>
-<h4 class="cov_subtitle">(6 of 43 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(10 of 49 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/ChatLayoutAttributes.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -95,7 +95,7 @@
 <tr class="covered">
 <td class="num">17</td>
 <td class="src"><pre><code class="objc">    public var alignment: ChatItemAlignment = .full</code></pre></td>
-<td class="coverage">355x</td>
+<td class="coverage">350x</td>
 </tr>
 <tr class="never">
 <td class="num">18</td>
@@ -110,7 +110,7 @@
 <tr class="covered">
 <td class="num">20</td>
 <td class="src"><pre><code class="objc">    public internal(set) var additionalInsets: UIEdgeInsets = .zero</code></pre></td>
-<td class="coverage">355x</td>
+<td class="coverage">350x</td>
 </tr>
 <tr class="never">
 <td class="num">21</td>
@@ -125,7 +125,7 @@
 <tr class="covered">
 <td class="num">23</td>
 <td class="src"><pre><code class="objc">    public internal(set) var viewSize: CGSize = .zero</code></pre></td>
-<td class="coverage">355x</td>
+<td class="coverage">350x</td>
 </tr>
 <tr class="never">
 <td class="num">24</td>
@@ -140,7 +140,7 @@
 <tr class="covered">
 <td class="num">26</td>
 <td class="src"><pre><code class="objc">    public internal(set) var adjustedContentInsets: UIEdgeInsets = .zero</code></pre></td>
-<td class="coverage">355x</td>
+<td class="coverage">350x</td>
 </tr>
 <tr class="never">
 <td class="num">27</td>
@@ -155,7 +155,7 @@
 <tr class="covered">
 <td class="num">29</td>
 <td class="src"><pre><code class="objc">    public internal(set) var visibleBoundsSize: CGSize = .zero</code></pre></td>
-<td class="coverage">355x</td>
+<td class="coverage">350x</td>
 </tr>
 <tr class="never">
 <td class="num">30</td>
@@ -170,7 +170,7 @@
 <tr class="covered">
 <td class="num">32</td>
 <td class="src"><pre><code class="objc">    public internal(set) var layoutFrame: CGRect = .zero</code></pre></td>
-<td class="coverage">355x</td>
+<td class="coverage">350x</td>
 </tr>
 <tr class="never">
 <td class="num">33</td>
@@ -312,25 +312,25 @@
 <td class="src"><pre><code class="objc">    /// Returns a Boolean value indicating whether two `ChatLayoutAttributes` are considered equal.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">61</td>
 <td class="src"><pre><code class="objc">    public override func isEqual(_ object: Any?) -&gt; Bool {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">62</td>
 <td class="src"><pre><code class="objc">        return super.isEqual(object)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">63</td>
 <td class="src"><pre><code class="objc">            &amp;&amp; alignment == (object as? ChatLayoutAttributes)?.alignment</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">64</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">18x</td>
 </tr>
 <tr class="never">
 <td class="num">65</td>
@@ -402,8 +402,43 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">79</td>
+<td class="src"><pre><code class="objc">    func typedCopy() -&gt; ChatLayoutAttributes {</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">80</td>
+<td class="src"><pre><code class="objc">        guard let typedCopy = copy() as? ChatLayoutAttributes else {</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">81</td>
+<td class="src"><pre><code class="objc">            fatalError("InternalInconsistency")</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">82</td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">83</td>
+<td class="src"><pre><code class="objc">        return typedCopy</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">84</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="never">
+<td class="num">85</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">86</td>
 <td class="src"><pre><code class="objc">}</code></pre></td>
 <td class="coverage"></td>
 </tr>

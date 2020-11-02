@@ -76,4 +76,11 @@ public class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         }
     }
 
+    func typedCopy() -> ChatLayoutAttributes {
+        guard let typedCopy = copy() as? ChatLayoutAttributes else {
+            fatalError("InternalInconsistency")
+        }
+        return typedCopy
+    }
+
 }

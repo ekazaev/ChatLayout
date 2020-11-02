@@ -20,7 +20,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          ChatLayout 0.4.6 Docs
+          ChatLayout 0.5.0 Docs
         </a>
          (100% documented)
       </p>
@@ -171,9 +171,13 @@
 <li><a href="#requirements">Requirements</a></li>
 <li><a href="#example">Example</a></li>
 <li><a href="#installation">Installation</a></li>
-<li><a href="#about-uicollectionviewdiffabledatasource">About <code>UICollectionViewDiffableDataSource</code></a></li>
 <li><a href="#contributing">Contributing</a></li>
-<li><a href="#todo">Todo</a></li>
+<li><a href="#todo">Todo</a>
+
+<ul>
+<li><a href="#about-uicollectionviewdiffabledatasource">About <code>UICollectionViewDiffableDataSource</code></a></li>
+<li><a href="#about-supplementary-views">About Supplementary Views</a></li>
+</ul></li>
 <li><a href="#license">License</a></li>
 <li><a href="#articles">Articles</a></li>
 <li><a href="#author">Author</a></li>
@@ -240,15 +244,6 @@ components provided, you can install only the layout itself using <code>pod &#39
 <p><strong>NB: <code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is in pre-release state, so it doesn&rsquo;t respect the <a href="https://semver.org">semantic versioning</a> at
 this moment and may introduce breaking changes in further versions. It is recommended to link the dependency to
 the exact version number in the dependency manager you use and increase the release version manually.</strong></p>
-<h2 id='about-code-uicollectionviewdiffabledatasource-code' class='heading'>About <code>UICollectionViewDiffableDataSource</code></h2>
-
-<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> can process any update commands that you send to your <code>UICollectionView</code>, so you can use 
-<code>UICollectionViewDiffableDataSource</code> as well. But you have to keep in mind that <code>UICollectionViewDiffableDataSource</code> 
-does not support the reloading of cells out of the box if you are relying on the <code>Hashable</code> protocol implementation.
-It will delete the changed cell and insert the new version of said cell. That may lead to strange animations on 
-the screen, especially when the reloaded cell changes its size. In order to get the best behaviour of the update animation 
-I would strongly recommend you rely on <a href="https://github.com/ra1028/DifferenceKit">DifferenceKit</a> to process the model changes.
-The Example app does it as well.</p>
 <h2 id='contributing' class='heading'>Contributing</h2>
 
 <p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is in active development, and we welcome your contributions.</p>
@@ -261,6 +256,20 @@ read <a href="https://github.com/ekazaev/route-composer/blob/master/CONTRIBUTING
 <li>[ ] Improve the test coverage</li>
 <li>[ ] Provide proper documentation</li>
 </ul>
+<h3 id='about-code-uicollectionviewdiffabledatasource-code' class='heading'>About <code>UICollectionViewDiffableDataSource</code></h3>
+
+<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> can process any update commands that you send to your <code>UICollectionView</code>, so you can use 
+<code>UICollectionViewDiffableDataSource</code> as well. But you have to keep in mind that <code>UICollectionViewDiffableDataSource</code> 
+does not support the reloading of cells out of the box if you are relying on the <code>Hashable</code> protocol implementation.
+It will delete the changed cell and insert the new version of said cell. That may lead to strange animations on 
+the screen, especially when the reloaded cell changes its size. In order to get the best behaviour of the update animation 
+I would strongly recommend you rely on <a href="https://github.com/ra1028/DifferenceKit">DifferenceKit</a> to process the model changes.
+The Example app does it as well.</p>
+<h3 id='about-supplementary-views' class='heading'>About Supplementary Views</h3>
+
+<p>It can be tempting and it may look like it is the right way to go, but <strong>do not</strong> use supplementary views to decorate your
+messages or groups of them. <code>UICollectionView</code> processes them in a different order: <code>UICollectionViewCell</code>s first and 
+only after switches to <code>UICollectionReusableView</code>s. You will most likely face some unexpected behaviour during the animation.</p>
 <h2 id='license' class='heading'>License</h2>
 
 <p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is distributed under <a href="https://github.com/ekazaev/ChatLayout/blob/master/LICENSE">the MIT license</a>.</p>
@@ -287,7 +296,7 @@ apologies. <em>Caveat developer.</em></p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-10-30)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-11-02)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

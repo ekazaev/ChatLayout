@@ -49,7 +49,7 @@ final class ImageController {
                 self.image = image
                 view?.reloadData()
             } else {
-                loader.loadImage(from: url) { [weak self] result in
+                loader.loadImage(from: url) { [weak self] _ in
                     guard let self = self else {
                         return
                     }

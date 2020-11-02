@@ -9,7 +9,7 @@
 
 import Foundation
 
-enum ModelState: Hashable {
+enum ModelState: Hashable, CaseIterable {
 
     case beforeUpdate
 
