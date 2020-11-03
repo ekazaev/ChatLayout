@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          ChatLayout 0.5.0 Docs
+          ChatLayout 0.5.1 Docs
         </a>
          (100% documented)
       </p>
@@ -128,6 +128,14 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../readme.html">README</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Enums.html">Other Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/InitialAttributesRequestType.html">InitialAttributesRequestType</a>
               </li>
             </ul>
           </li>
@@ -465,6 +473,89 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB8DelegateP07initialB25AttributesForInsertedItem_2of2at9modifying2onyA2AC_AA0H4KindO10Foundation9IndexPathVAA0abE0CAA07InitialE11RequestTypeOtF"></a>
+                    <a name="//apple_ref/swift/Method/initialLayoutAttributesForInsertedItem(_:of:at:modifying:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP07initialB25AttributesForInsertedItem_2of2at9modifying2onyA2AC_AA0H4KindO10Foundation9IndexPathVAA0abE0CAA07InitialE11RequestTypeOtF">initialLayoutAttributesForInsertedItem(_:<wbr>of:<wbr>at:<wbr>modifying:<wbr>on:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asks the delegate to modify a layout attributes instance so that it represents the initial visual state of an item
+  being inserted.</p>
+
+<p>The <code>originalAttributes</code> instance is a reference type, and therefore can be modified directly.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation sets a <code>ChatLayoutAttributes.alpha</code> to zero.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">initialLayoutAttributesForInsertedItem</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayout.html">ChatLayout</a></span><span class="p">,</span>
+                                            <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
+                                            <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
+                                            <span class="n">modifying</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></span><span class="p">,</span>
+                                            <span class="n">on</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/InitialAttributesRequestType.html">InitialAttributesRequestType</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB8DelegateP05finalB24AttributesForDeletedItem_2of2at9modifyingyA2AC_AA0H4KindO10Foundation9IndexPathVAA0abE0CtF"></a>
+                    <a name="//apple_ref/swift/Method/finalLayoutAttributesForDeletedItem(_:of:at:modifying:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP05finalB24AttributesForDeletedItem_2of2at9modifyingyA2AC_AA0H4KindO10Foundation9IndexPathVAA0abE0CtF">finalLayoutAttributesForDeletedItem(_:<wbr>of:<wbr>at:<wbr>modifying:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asks the delegate to modify a layout attributes instance so that it represents the final visual state of an item
+  being removed via <code>UICollectionView.deleteSections(_:)</code>.</p>
+
+<p>The <code>originalAttributes</code> instance is a reference type, and therefore can be modified directly.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation sets a <code>ChatLayoutAttributes.alpha</code> to zero.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">finalLayoutAttributesForDeletedItem</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayout.html">ChatLayout</a></span><span class="p">,</span>
+                                         <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
+                                         <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
+                                         <span class="n">modifying</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -473,7 +564,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-11-02)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2020-11-03)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

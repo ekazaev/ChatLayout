@@ -562,7 +562,8 @@ final class StateController {
 
         totalProposedCompensatingOffset = 0
 
-        resetCachedAttributeObjects()
+        cachedAttributeObjects[.beforeUpdate] = cachedAttributeObjects[.afterUpdate]
+        cachedAttributeObjects[.afterUpdate] = nil
     }
 
     func contentSize(for state: ModelState) -> CGSize {

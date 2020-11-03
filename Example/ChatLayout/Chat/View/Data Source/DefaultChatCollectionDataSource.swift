@@ -28,7 +28,13 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
 
     private let editNotifier: EditNotifier
 
-    var sections: [Section] = []
+    var sections: [Section] = [] {
+        didSet {
+            oldSections = oldValue
+        }
+    }
+
+    private var oldSections: [Section] = []
 
     init(editNotifier: EditNotifier, reloadDelegate: ReloadDelegate, editingDelegate: EditingAccessoryControllerDelegate) {
         self.reloadDelegate = reloadDelegate
@@ -114,6 +120,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         bubbleView.customView.setup(with: controller)
         controller.view = bubbleView.customView
         cell.customView.accessoryView?.isHidden = true
+        cell.delegate = bubbleView.customView
 
         return cell
     }
@@ -283,7 +290,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             case .date:
                 return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 18))
             case .typingIndicator:
-                return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 36))
+                return .estimated(CGSize(width: 60, height: 36))
             case .messageGroup:
                 return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 18))
             case .deliveryStatus:
@@ -303,11 +310,51 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             switch item {
             case .date:
                 return .center
-            case .message, .deliveryStatus, .messageGroup, .typingIndicator:
+            case .message, .deliveryStatus:
                 return .full
+            case .messageGroup, .typingIndicator:
+                return .leading
             }
         case .footer:
             return .trailing
+        }
+    }
+
+    public func initialLayoutAttributesForInsertedItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes, on state: InitialAttributesRequestType) {
+        originalAttributes.alpha = 0
+        guard state == .invalidation,
+            kind == .cell else {
+            return
+        }
+        switch sections[indexPath.section].cells[indexPath.item] {
+//        case let .message(message, bubbleType: _):
+//            break
+//            originalAttributes.transform = .init(scaleX: 0.9, y: 0.9)
+//            originalAttributes.transform = originalAttributes.transform.concatenating(.init(rotationAngle: message.type == .incoming ? -0.05 : 0.05))
+//            originalAttributes.center.x += (message.type == .incoming ? -20 : 20)
+        case .typingIndicator:
+            originalAttributes.transform = .init(scaleX: 0.1, y: 0.1)
+            originalAttributes.center.x -= originalAttributes.bounds.width / 5
+        default:
+            break
+        }
+    }
+
+    public func finalLayoutAttributesForDeletedItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes) {
+        originalAttributes.alpha = 0
+        guard kind == .cell else {
+            return
+        }
+        switch oldSections[indexPath.section].cells[indexPath.item] {
+//        case let .message(message, bubbleType: _):
+//            originalAttributes.transform = .init(scaleX: 0.9, y: 0.9)
+//            originalAttributes.transform = originalAttributes.transform.concatenating(.init(rotationAngle: message.type == .incoming ? -0.05 : 0.05))
+//            originalAttributes.center.x += (message.type == .incoming ? -20 : 20)
+        case .typingIndicator:
+            originalAttributes.transform = .init(scaleX: 0.1, y: 0.1)
+            originalAttributes.center.x -= originalAttributes.bounds.width / 5
+        default:
+            break
         }
     }
 

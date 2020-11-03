@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>CellLayoutContainerViewAlignment Enumeration Reference</title>
+    <title>InitialAttributesRequestType Enumeration Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/CellLayoutContainerViewAlignment" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Enum/InitialAttributesRequestType" class="dashAnchor"></a>
 
-    <a title="CellLayoutContainerViewAlignment Enumeration Reference"></a>
+    <a title="InitialAttributesRequestType Enumeration Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">ChatLayout Reference</a>
       <img class="carat" src="../img/carat.png" />
-      CellLayoutContainerViewAlignment Enumeration Reference
+      InitialAttributesRequestType Enumeration Reference
     </p>
 
     <div class="content-wrapper">
@@ -153,14 +153,14 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>CellLayoutContainerViewAlignment</h1>
+            <h1>InitialAttributesRequestType</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">CellLayoutContainerViewAlignment</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">InitialAttributesRequestType</span></code></pre>
 
                 </div>
               </div>
-            <p>Alignment for <code><a href="../Classes/CellLayoutContainerView.html">CellLayoutContainerView</a></code> that corresponds to <code>UIStackView.Alignment</code></p>
+            <p>Represents the point in time <code><a href="../Classes/ChatLayout.html">ChatLayout</a></code> when chat layout asks about layout attributes modification.</p>
 
           </div>
         </section>
@@ -172,9 +172,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout04CellB22ContainerViewAlignmentO4fillyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/fill" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout04CellB22ContainerViewAlignmentO4fillyA2CmF">fill</a>
+                    <a name="/s:10ChatLayout28InitialAttributesRequestTypeO7initialyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/initial" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout28InitialAttributesRequestTypeO7initialyA2CmF">initial</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -182,14 +182,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Align the top and bottom edges of horizontally stacked items tightly to the container.</p>
+                        <p><code>UICollectionView</code> initially asks about the layout of an item.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">fill</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">initial</span></code></pre>
 
                         </div>
                       </div>
@@ -199,9 +199,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout04CellB22ContainerViewAlignmentO3topyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/top" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout04CellB22ContainerViewAlignmentO3topyA2CmF">top</a>
+                    <a name="/s:10ChatLayout28InitialAttributesRequestTypeO12invalidationyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/invalidation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout28InitialAttributesRequestTypeO12invalidationyA2CmF">invalidation</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -209,68 +209,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Align the top edges of horizontally stacked items tightly to the container.</p>
+                        <p>An item is being invalidated.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">top</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ChatLayout04CellB22ContainerViewAlignmentO6centeryA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/center" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout04CellB22ContainerViewAlignmentO6centeryA2CmF">center</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Center items in a horizontal stack vertically.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">center</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ChatLayout04CellB22ContainerViewAlignmentO6bottomyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/bottom" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout04CellB22ContainerViewAlignmentO6bottomyA2CmF">bottom</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Align the bottom edges of horizontally stacked items tightly to the container.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">bottom</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">invalidation</span></code></pre>
 
                         </div>
                       </div>
