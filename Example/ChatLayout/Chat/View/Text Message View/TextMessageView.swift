@@ -74,6 +74,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isScrollEnabled = false
         textView.isEditable = false
+        textView.spellCheckingType = .no
         textView.backgroundColor = .clear
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
