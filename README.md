@@ -49,6 +49,7 @@
 ![](https://habrastorage.org/webt/sv/ul/cq/svulcqg5ompgyhp-pjxy1tyiie4.gif)
 ![](https://habrastorage.org/webt/bq/kw/xg/bqkwxgggxnxlqyzau36utlwcyui.gif)
 ![](https://habrastorage.org/webt/hn/ez/gq/hnezgqezp8vxg8vy8z7_ozetra0.gif)
+![](https://habrastorage.org/webt/gn/ny/qe/gnnyqepf46r4zdhyb4oug8vywvc.gif)
 
 ### What ChatLayout doesn't provide (And why it is good)
 
