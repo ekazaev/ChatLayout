@@ -292,7 +292,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             case .typingIndicator:
                 return .estimated(CGSize(width: 60, height: 36))
             case .messageGroup:
-                return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 18))
+                return .estimated(CGSize(width: chatLayout.layoutFrame.width / 3, height: 18))
             case .deliveryStatus:
                 return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 18))
             }
@@ -327,8 +327,9 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             return
         }
         switch sections[indexPath.section].cells[indexPath.item] {
+//        case .messageGroup:
+//            originalAttributes.center.x -= originalAttributes.frame.width
 //        case let .message(message, bubbleType: _):
-//            break
 //            originalAttributes.transform = .init(scaleX: 0.9, y: 0.9)
 //            originalAttributes.transform = originalAttributes.transform.concatenating(.init(rotationAngle: message.type == .incoming ? -0.05 : 0.05))
 //            originalAttributes.center.x += (message.type == .incoming ? -20 : 20)
@@ -346,6 +347,8 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             return
         }
         switch oldSections[indexPath.section].cells[indexPath.item] {
+//        case .messageGroup:
+//            originalAttributes.center.x -= originalAttributes.frame.width
 //        case let .message(message, bubbleType: _):
 //            originalAttributes.transform = .init(scaleX: 0.9, y: 0.9)
 //            originalAttributes.transform = originalAttributes.transform.concatenating(.init(rotationAngle: message.type == .incoming ? -0.05 : 0.05))

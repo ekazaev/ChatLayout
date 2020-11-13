@@ -411,7 +411,7 @@ public final class ChatLayout: UICollectionViewLayout {
         guard let collectionView = collectionView,
             oldBounds.width != collectionView.bounds.width,
             keepContentOffsetAtBottomOnBatchUpdates,
-            controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded() else {
+            controller.isLayoutBiggerThanScreen(at: state) else {
             return
         }
         controller.proposedCompensatingOffset += oldBounds.origin.y - collectionView.bounds.origin.y + (oldBounds.height - collectionView.bounds.height)
@@ -559,7 +559,8 @@ public final class ChatLayout: UICollectionViewLayout {
                     let desiredOffset = frame.minY - currentPositionSnapshot.offset - collectionView.adjustedContentInset.top - settings.additionalInsets.top
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 case .bottom:
-                    let desiredOffset = max(min(maxPossibleContentOffset.y, frame.maxY + currentPositionSnapshot.offset - collectionView.bounds.height + collectionView.adjustedContentInset.bottom + settings.additionalInsets.bottom), -collectionView.adjustedContentInset.top)
+                    let maxAllowed = max(0, contentHeight - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
+                    let desiredOffset = max(min(maxAllowed, frame.maxY + currentPositionSnapshot.offset - collectionView.bounds.height + collectionView.adjustedContentInset.bottom + settings.additionalInsets.bottom), -collectionView.adjustedContentInset.top)
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 }
             }
@@ -599,7 +600,7 @@ public final class ChatLayout: UICollectionViewLayout {
         controller.proposedCompensatingOffset = 0
 
         if keepContentOffsetAtBottomOnBatchUpdates,
-            controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded(),
+            controller.isLayoutBiggerThanScreen(at: state),
             controller.batchUpdateCompensatingOffset != 0,
             let collectionView = collectionView {
             let compensatingOffset: CGFloat
@@ -672,7 +673,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: itemIndexPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
-                    controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded(),
+                    controller.isLayoutBiggerThanScreen(at: state),
                     let attributes = attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height / 2)
                 }
@@ -762,7 +763,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: elementIndexPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
-                    controller.contentHeight(at: state).rounded() > visibleBounds.height.rounded(),
+                    controller.isLayoutBiggerThanScreen(at: state),
                     let attributes = attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height / 2)
                 }
@@ -882,7 +883,10 @@ extension ChatLayout: ChatLayoutRepresentation {
 extension ChatLayout {
 
     private var maxPossibleContentOffset: CGPoint {
-        let maxContentOffset = max(0, controller.contentHeight(at: state) - collectionView!.bounds.height) + collectionView!.adjustedContentInset.bottom
+        guard let collectionView = collectionView else {
+            return .zero
+        }
+        let maxContentOffset = max(0, controller.contentHeight(at: state) - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
         return CGPoint(x: 0, y: maxContentOffset)
     }
 

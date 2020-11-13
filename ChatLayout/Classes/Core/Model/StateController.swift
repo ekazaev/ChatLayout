@@ -589,10 +589,9 @@ final class StateController {
             let attributes = attributes else {
             return
         }
-        if backward,
-            contentHeight(at: .beforeUpdate).rounded() > layoutRepresentation.visibleBounds.height.rounded() {
+        if backward, isLayoutBiggerThanScreen(at: .beforeUpdate) {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset * -1)
-        } else if !backward, contentHeight(at: .afterUpdate).rounded() > layoutRepresentation.visibleBounds.height.rounded() {
+        } else if !backward, isLayoutBiggerThanScreen(at: .afterUpdate) {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset)
         }
     }
@@ -603,6 +602,10 @@ final class StateController {
             return LayoutModel(sections: [], collectionLayout: layoutRepresentation)
         }
         return layout
+    }
+
+    func isLayoutBiggerThanScreen(at state: ModelState, withFullCompensation: Bool = false) -> Bool {
+        return contentHeight(at: state).rounded() > (layoutRepresentation.visibleBounds.height + (withFullCompensation ? batchUpdateCompensatingOffset + proposedCompensatingOffset : 0)).rounded()
     }
 
     private func allAttributes(at state: ModelState, visibleRect: CGRect? = nil) -> [ChatLayoutAttributes] {
@@ -761,7 +764,7 @@ final class StateController {
         }
         switch action {
         case .insert:
-            guard contentHeight(at: .afterUpdate).rounded() > layoutRepresentation.visibleBounds.size.height.rounded(),
+            guard isLayoutBiggerThanScreen(at: .afterUpdate),
                 let itemFrame = itemFrame(for: indexPath, kind: kind, at: .afterUpdate) else {
                 return
             }
@@ -769,14 +772,14 @@ final class StateController {
                 proposedCompensatingOffset += itemFrame.height + layoutRepresentation.settings.interItemSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):
-            guard contentHeight(at: .afterUpdate).rounded() > (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {
+            guard isLayoutBiggerThanScreen(at: .afterUpdate, withFullCompensation: true) else {
                 return
             }
             if newFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
             }
         case .delete:
-            guard contentHeight(at: .afterUpdate).rounded() > layoutRepresentation.visibleBounds.size.height.rounded(),
+            guard isLayoutBiggerThanScreen(at: .afterUpdate),
                 let deletedFrame = itemFrame(for: indexPath, kind: kind, at: .beforeUpdate) else {
                 return
             }
@@ -795,8 +798,8 @@ final class StateController {
         }
         switch action {
         case .insert:
-            guard sectionIndex < layout(at: .afterUpdate).sections.count,
-                contentHeight(at: .afterUpdate).rounded() >= layoutRepresentation.visibleBounds.size.height.rounded() else {
+            guard isLayoutBiggerThanScreen(at: .afterUpdate),
+                sectionIndex < layout(at: .afterUpdate).sections.count else {
                 return
             }
             let section = layout(at: .afterUpdate).sections[sectionIndex]
@@ -806,14 +809,14 @@ final class StateController {
             }
         case let .frameUpdate(previousFrame, newFrame):
             guard sectionIndex < layout(at: .afterUpdate).sections.count,
-                contentHeight(at: .afterUpdate).rounded() >= (layoutRepresentation.visibleBounds.size.height + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() else {
+                isLayoutBiggerThanScreen(at: .afterUpdate, withFullCompensation: true) else {
                 return
             }
             if newFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
             }
         case .delete:
-            guard contentHeight(at: .afterUpdate).rounded() >= layoutRepresentation.visibleBounds.size.height.rounded(),
+            guard isLayoutBiggerThanScreen(at: .afterUpdate),
                 sectionIndex < layout(at: .afterUpdate).sections.count else {
                 return
             }
@@ -830,7 +833,7 @@ final class StateController {
     private func offsetByCompensation(frame: CGRect, indexPath: IndexPath, for state: ModelState, backward: Bool = false) -> CGRect {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
             state == .afterUpdate,
-            contentHeight(at: .afterUpdate).rounded() > layoutRepresentation.visibleBounds.height.rounded() else {
+            isLayoutBiggerThanScreen(at: .afterUpdate) else {
             return frame
         }
         return frame.offsetBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))
