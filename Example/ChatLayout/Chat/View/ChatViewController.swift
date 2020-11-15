@@ -154,7 +154,7 @@ final class ChatViewController: UIViewController {
         let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
         coordinator.animate(alongsideTransition: { _ in
             // Gives nicer transition behaviour
-            self.collectionView.performBatchUpdates({})
+            self.collectionView.collectionViewLayout.invalidateLayout()
         }, completion: { _ in
             if let positionSnapshot = positionSnapshot,
                 !self.isUserInitiatedScrolling {
@@ -360,10 +360,11 @@ extension ChatViewController: KeyboardListenerDelegate {
             let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
 
             UIView.animate(withDuration: info.animationDuration, animations: {
-                self.collectionView.performBatchUpdates({
+//                self.collectionView.performBatchUpdates({
                     self.collectionView.contentInset.bottom = newBottomInset
                     self.collectionView.scrollIndicatorInsets.bottom = newBottomInset
-                }, completion: nil)
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+//                }, completion: nil)
 
                 if let positionSnapshot = positionSnapshot, !self.isUserInitiatedScrolling {
                     self.chatLayout.restoreContentOffset(with: positionSnapshot)

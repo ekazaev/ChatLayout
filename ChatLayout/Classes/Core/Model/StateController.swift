@@ -45,6 +45,8 @@ final class StateController {
 
     var totalProposedCompensatingOffset: CGFloat = 0
 
+    var isAnimatedBoundsChange = false
+
     private(set) lazy var storage: [ModelState: LayoutModel] = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]
 
     private(set) var reloadedIndexes: Set<IndexPath> = []
@@ -87,14 +89,17 @@ final class StateController {
         return locationHeight + layoutRepresentation.settings.additionalInsets.bottom
     }
 
-    func layoutAttributesForElements(in rect: CGRect, state: ModelState) -> [ChatLayoutAttributes] {
-        if let cachedAttributesState = cachedAttributesState,
+    func layoutAttributesForElements(in rect: CGRect, state: ModelState, ignoreCache: Bool = false) -> [ChatLayoutAttributes] {
+        if !ignoreCache,
+           let cachedAttributesState = cachedAttributesState,
             cachedAttributesState.rect.contains(rect) {
             return cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
         } else {
             let totalRect = rect.inset(by: UIEdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))
             let attributes = allAttributes(at: state, visibleRect: totalRect)
-            cachedAttributesState = (rect: totalRect, attributes: attributes)
+            if !ignoreCache {
+                cachedAttributesState = (rect: totalRect, attributes: attributes)
+            }
             let visibleAttributes = attributes.filter { $0.frame.intersects(rect) }
             return visibleAttributes
         }
@@ -611,7 +616,8 @@ final class StateController {
     private func allAttributes(at state: ModelState, visibleRect: CGRect? = nil) -> [ChatLayoutAttributes] {
         let layout = self.layout(at: state)
 
-        if let visibleRect = visibleRect {
+        if !isAnimatedBoundsChange,
+           let visibleRect = visibleRect {
             enum TraverseState {
                 case notFound
                 case found

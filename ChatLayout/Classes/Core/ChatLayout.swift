@@ -156,9 +156,9 @@ public final class ChatLayout: UICollectionViewLayout {
 
     private var cachedCollectionViewSize: CGSize?
 
-    private var cachedCollectionViewInset: UIEdgeInsets?
+    private var cachedMaxPossibleOffset: CGPoint?
 
-    private var isAnimatedBoundsChange = false
+    private var cachedCollectionViewInset: UIEdgeInsets?
 
     // These properties are used to keep the layout attributes copies used for insert/delete
     // animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
@@ -202,7 +202,7 @@ public final class ChatLayout: UICollectionViewLayout {
         guard let collectionView = collectionView else {
             return nil
         }
-        let layoutAttributes = controller.layoutAttributesForElements(in: visibleBounds.inset(by: UIEdgeInsets(top: -collectionView.frame.height, left: 0, bottom: -collectionView.frame.height, right: 0)), state: state).sorted(by: { $0.frame.maxY < $1.frame.maxY })
+        let layoutAttributes = controller.layoutAttributesForElements(in: visibleBounds.inset(by: UIEdgeInsets(top: -collectionView.frame.height, left: 0, bottom: -collectionView.frame.height, right: 0)), state: state, ignoreCache: true).sorted(by: { $0.frame.maxY < $1.frame.maxY })
 
         switch edge {
         case .top:
@@ -345,6 +345,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
         if prepareActions.contains(.cachePreviousWidth) {
             cachedCollectionViewSize = collectionView.bounds.size
+            cachedMaxPossibleOffset = maxPossibleContentOffset
         }
 
         prepareActions = []
@@ -408,19 +409,62 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Prepares the layout object for animated changes to the view’s bounds or the insertion or deletion of items.
     public override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
+        print("\(#function)")
+        controller.isAnimatedBoundsChange = true
+        controller.process(updateItems: [])
+        state = .afterUpdate
+        prepareActions.remove(.switchStates)
         guard let collectionView = collectionView,
             oldBounds.width != collectionView.bounds.width,
             keepContentOffsetAtBottomOnBatchUpdates,
             controller.isLayoutBiggerThanScreen(at: state) else {
             return
         }
-        controller.proposedCompensatingOffset += oldBounds.origin.y - collectionView.bounds.origin.y + (oldBounds.height - collectionView.bounds.height)
-        isAnimatedBoundsChange = true
+//        controller.proposedCompensatingOffset += oldBounds.origin.y - collectionView.bounds.origin.y + (oldBounds.height - collectionView.bounds.height)
+        print("current: \(collectionView.contentOffset) oldHeight:\(oldBounds) newHeight: \(collectionView.bounds)")
+        print("heightChange: \(oldBounds.height - collectionView.bounds.height) compenstaion:\((oldBounds.origin.y - collectionView.bounds.origin.y))")
+        print("adjustedContentInset: \(adjustedContentInset) contentInset: \(collectionView.contentInset) cached:\((cachedCollectionViewInset))\n------")
+        //controller.proposedCompensatingOffset += oldBounds.origin.y - collectionView.bounds.origin.y + oldBounds.origin.x + (oldBounds.height - collectionView.bounds.height)
+        controller.proposedCompensatingOffset += oldBounds.height - collectionView.bounds.height + (oldBounds.origin.y - collectionView.bounds.origin.y)
+        let currentPositionSnapshot = getContentOffsetSnapshot(from: .bottom)
+        print(currentPositionSnapshot!)
     }
 
     /// Cleans up after any animated changes to the view’s bounds or after the insertion or deletion of items.
     public override func finalizeAnimatedBoundsChange() {
-        isAnimatedBoundsChange = false
+        print("\(#function)")
+        if controller.isAnimatedBoundsChange {
+            controller.isAnimatedBoundsChange = false
+            currentPositionSnapshot = nil
+//            prepareActions.formUnion(.switchStates)
+//
+//            if keepContentOffsetAtBottomOnBatchUpdates,
+//               controller.isLayoutBiggerThanScreen(at: state),
+//               controller.batchUpdateCompensatingOffset != 0,
+//               let collectionView = collectionView {
+//                let compensatingOffset: CGFloat
+//                if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
+//                    compensatingOffset = controller.batchUpdateCompensatingOffset
+//                } else {
+//                    compensatingOffset = maxPossibleContentOffset.y - collectionView.contentOffset.y
+//                }
+//                controller.batchUpdateCompensatingOffset = 0
+//                let context = ChatLayoutInvalidationContext()
+//                context.contentOffsetAdjustment.y = compensatingOffset
+//                context.contentSizeAdjustment.height = controller.contentSize(for: .afterUpdate).height - controller.contentSize(for: .beforeUpdate).height
+//                invalidateLayout(with: context)
+//            } else {
+//                controller.batchUpdateCompensatingOffset = 0
+//                let context = ChatLayoutInvalidationContext()
+//                invalidateLayout(with: context)
+//            }
+
+            controller.proposedCompensatingOffset = 0
+            controller.commitUpdates()
+            state = .beforeUpdate
+            resetAttributesForPendingAnimations()
+            resetInvalidatedAttributes()
+        }
     }
 
     // MARK: Context Invalidation
@@ -432,17 +476,14 @@ public final class ChatLayout: UICollectionViewLayout {
             return true
         }
         var shouldInvalidateLayout: Bool
-        if isAnimatedBoundsChange {
-            shouldInvalidateLayout = false
-        } else {
-            shouldInvalidateLayout = item.calculatedSize == nil
+        shouldInvalidateLayout = item.calculatedSize == nil
 
-            if item.alignment != preferredMessageAttributes.alignment {
-                controller.update(alignment: preferredMessageAttributes.alignment, for: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)
-                shouldInvalidateLayout = true
-            }
+        if item.alignment != preferredMessageAttributes.alignment {
+            controller.update(alignment: preferredMessageAttributes.alignment, for: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)
+            shouldInvalidateLayout = true
         }
 
+        print("\(#function) \(shouldInvalidateLayout)")
         return shouldInvalidateLayout
     }
 
@@ -470,9 +511,12 @@ public final class ChatLayout: UICollectionViewLayout {
 
         if heightDifference != 0,
             (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded())
-            || isUserInitiatedScrolling || isAnimatedBoundsChange,
+            || isUserInitiatedScrolling/* || controller.isAnimatedBoundsChange*/,
             isAboveBottomEdge {
             context.contentOffsetAdjustment.y += heightDifference
+            context.contentSizeAdjustment.height += heightDifference
+            invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
+            print("\(#function) \(heightDifference) \(preferredAttributes)")
         }
 
         if let attributes = controller.itemAttributes(for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)?.typedCopy() {
@@ -511,6 +555,7 @@ public final class ChatLayout: UICollectionViewLayout {
     public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) || cachedCollectionViewInset != .some(adjustedContentInset) || invalidationActions.contains(.shouldInvalidateOnBoundsChange)
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
+        print("\(#function) \(shouldInvalidateLayout)")
         return shouldInvalidateLayout
     }
 
@@ -518,6 +563,20 @@ public final class ChatLayout: UICollectionViewLayout {
     public override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext
         invalidationContext.invalidateLayoutMetrics = false
+//        if controller.batchUpdateCompensatingOffset != 0 {
+//            let compensatingOffset: CGFloat
+//            if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
+//                compensatingOffset = controller.batchUpdateCompensatingOffset
+//            } else {
+//                compensatingOffset = maxPossibleContentOffset.y - collectionView!.contentOffset.y
+//            }
+//            invalidationContext.contentOffsetAdjustment.y = compensatingOffset
+//            controller.batchUpdateCompensatingOffset = 0
+//            print("\(#function) \(compensatingOffset)")
+//        } else {
+//            print("\(#function)")
+//        }
+        print("\(#function)")
         return invalidationContext
     }
 
@@ -528,6 +587,7 @@ public final class ChatLayout: UICollectionViewLayout {
             return
         }
 
+        print("\(#function)")
         controller.resetCachedAttributes()
 
         dontReturnAttributes = context.invalidateDataSourceCounts && !context.invalidateEverything
@@ -577,12 +637,33 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Retrieves the content offset to use after an animated layout update or change.
     public override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+//        if controller.isAnimatedBoundsChange, controller.proposedCompensatingOffset + controller.batchUpdateCompensatingOffset != 0 {
+//            let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: min(proposedContentOffset.y + controller.proposedCompensatingOffset + controller.batchUpdateCompensatingOffset, maxPossibleContentOffset.y))
+//            print("\(#function) OVERRIDEN ANIMATED \(controller.batchUpdateCompensatingOffset) \(controller.proposedCompensatingOffset)")
+//            controller.batchUpdateCompensatingOffset = 0
+//            controller.proposedCompensatingOffset = 0
+//            invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
+//            return newProposedContentOffset
+//        } else
+//        if !controller.isAnimatedBoundsChange, controller.proposedCompensatingOffset != 0 {
+//            let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y))
+//            controller.proposedCompensatingOffset = 0
+//            invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
+//            print("\(#function) OVERRIDEN")
+//            return newProposedContentOffset
+//        }
+//        print("\(#function)")
+//        return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
+
         if controller.proposedCompensatingOffset != 0 {
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y))
+            print("\(#function) current: \(collectionView!.contentOffset) proposed: \(proposedContentOffset) new: \(newProposedContentOffset) controller: \(controller.proposedCompensatingOffset)")
             controller.proposedCompensatingOffset = 0
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
             return newProposedContentOffset
         }
+        print("\(#function) current: \(collectionView!.contentOffset) proposed: \(proposedContentOffset)")
+        invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
     }
 
