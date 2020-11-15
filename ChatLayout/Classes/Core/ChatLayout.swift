@@ -493,11 +493,13 @@ public final class ChatLayout: UICollectionViewLayout {
             layoutAttributesForPendingAnimation?.frame.size = newItemSize
         }
 
-        switch preferredMessageAttributes.kind {
-        case .cell:
-            context.invalidateItems(at: [preferredMessageAttributes.indexPath])
-        case .header, .footer:
-            context.invalidateSupplementaryElements(ofKind: preferredMessageAttributes.kind.supplementaryElementStringType, at: [preferredMessageAttributes.indexPath])
+        if #available(iOS 13.0, *) {
+            switch preferredMessageAttributes.kind {
+            case .cell:
+                context.invalidateItems(at: [preferredMessageAttributes.indexPath])
+            case .header, .footer:
+                context.invalidateSupplementaryElements(ofKind: preferredMessageAttributes.kind.supplementaryElementStringType, at: [preferredMessageAttributes.indexPath])
+            }
         }
 
         context.invalidateLayoutMetrics = false
