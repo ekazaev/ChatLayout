@@ -154,7 +154,8 @@ final class ChatViewController: UIViewController {
         let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
         coordinator.animate(alongsideTransition: { _ in
             // Gives nicer transition behaviour
-            self.collectionView.performBatchUpdates({})
+            // self.collectionView.collectionViewLayout.invalidateLayout()
+            self.collectionView.performBatchUpdates(nil)
         }, completion: { _ in
             if let positionSnapshot = positionSnapshot,
                 !self.isUserInitiatedScrolling {

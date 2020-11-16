@@ -158,8 +158,6 @@ public final class ChatLayout: UICollectionViewLayout {
 
     private var cachedCollectionViewInset: UIEdgeInsets?
 
-    private var isAnimatedBoundsChange = false
-
     // These properties are used to keep the layout attributes copies used for insert/delete
     // animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
     // animations will start from the estimated height.
@@ -202,7 +200,14 @@ public final class ChatLayout: UICollectionViewLayout {
         guard let collectionView = collectionView else {
             return nil
         }
-        let layoutAttributes = controller.layoutAttributesForElements(in: visibleBounds.inset(by: UIEdgeInsets(top: -collectionView.frame.height, left: 0, bottom: -collectionView.frame.height, right: 0)), state: state).sorted(by: { $0.frame.maxY < $1.frame.maxY })
+        let insets = UIEdgeInsets(top: -collectionView.frame.height,
+                                  left: 0,
+                                  bottom: -collectionView.frame.height,
+                                  right: 0)
+        let layoutAttributes = controller.layoutAttributesForElements(in: visibleBounds.inset(by: insets),
+                                                                      state: state,
+                                                                      ignoreCache: true)
+            .sorted(by: { $0.frame.maxY < $1.frame.maxY })
 
         switch edge {
         case .top:
@@ -408,19 +413,32 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Prepares the layout object for animated changes to the view’s bounds or the insertion or deletion of items.
     public override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
+        controller.isAnimatedBoundsChange = true
+        controller.process(updateItems: [])
+        state = .afterUpdate
+        prepareActions.remove(.switchStates)
         guard let collectionView = collectionView,
             oldBounds.width != collectionView.bounds.width,
             keepContentOffsetAtBottomOnBatchUpdates,
             controller.isLayoutBiggerThanScreen(at: state) else {
             return
         }
-        controller.proposedCompensatingOffset += oldBounds.origin.y - collectionView.bounds.origin.y + (oldBounds.height - collectionView.bounds.height)
-        isAnimatedBoundsChange = true
+        let newBounds = collectionView.bounds
+        let heightDifference = oldBounds.height - newBounds.height
+        controller.proposedCompensatingOffset += heightDifference + (oldBounds.origin.y - newBounds.origin.y)
     }
 
     /// Cleans up after any animated changes to the view’s bounds or after the insertion or deletion of items.
     public override func finalizeAnimatedBoundsChange() {
-        isAnimatedBoundsChange = false
+        if controller.isAnimatedBoundsChange {
+            controller.isAnimatedBoundsChange = false
+            controller.proposedCompensatingOffset = 0
+            controller.batchUpdateCompensatingOffset = 0
+            controller.commitUpdates()
+            state = .beforeUpdate
+            resetAttributesForPendingAnimations()
+            resetInvalidatedAttributes()
+        }
     }
 
     // MARK: Context Invalidation
@@ -432,15 +450,11 @@ public final class ChatLayout: UICollectionViewLayout {
             return true
         }
         var shouldInvalidateLayout: Bool
-        if isAnimatedBoundsChange {
-            shouldInvalidateLayout = false
-        } else {
-            shouldInvalidateLayout = item.calculatedSize == nil
+        shouldInvalidateLayout = item.calculatedSize == nil
 
-            if item.alignment != preferredMessageAttributes.alignment {
-                controller.update(alignment: preferredMessageAttributes.alignment, for: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)
-                shouldInvalidateLayout = true
-            }
+        if item.alignment != preferredMessageAttributes.alignment {
+            controller.update(alignment: preferredMessageAttributes.alignment, for: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)
+            shouldInvalidateLayout = true
         }
 
         return shouldInvalidateLayout
@@ -470,9 +484,10 @@ public final class ChatLayout: UICollectionViewLayout {
 
         if heightDifference != 0,
             (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded())
-            || isUserInitiatedScrolling || isAnimatedBoundsChange,
+            || isUserInitiatedScrolling,
             isAboveBottomEdge {
             context.contentOffsetAdjustment.y += heightDifference
+            invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
 
         if let attributes = controller.itemAttributes(for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)?.typedCopy() {
