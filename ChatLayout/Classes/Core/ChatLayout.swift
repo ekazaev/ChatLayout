@@ -200,7 +200,14 @@ public final class ChatLayout: UICollectionViewLayout {
         guard let collectionView = collectionView else {
             return nil
         }
-        let layoutAttributes = controller.layoutAttributesForElements(in: visibleBounds.inset(by: UIEdgeInsets(top: -collectionView.frame.height, left: 0, bottom: -collectionView.frame.height, right: 0)), state: state, ignoreCache: true).sorted(by: { $0.frame.maxY < $1.frame.maxY })
+        let insets = UIEdgeInsets(top: -collectionView.frame.height,
+                                  left: 0,
+                                  bottom: -collectionView.frame.height,
+                                  right: 0)
+        let layoutAttributes = controller.layoutAttributesForElements(in: visibleBounds.inset(by: insets),
+                                                                      state: state,
+                                                                      ignoreCache: true)
+            .sorted(by: { $0.frame.maxY < $1.frame.maxY })
 
         switch edge {
         case .top:
@@ -416,17 +423,13 @@ public final class ChatLayout: UICollectionViewLayout {
             controller.isLayoutBiggerThanScreen(at: state) else {
             return
         }
-        print("current: \(collectionView.contentOffset) oldHeight:\(oldBounds) newHeight: \(collectionView.bounds)")
-        print("heightChange: \(oldBounds.height - collectionView.bounds.height) compenstaion:\((oldBounds.origin.y - collectionView.bounds.origin.y))")
-        print("adjustedContentInset: \(adjustedContentInset) contentInset: \(collectionView.contentInset) cached:\((cachedCollectionViewInset))\n------")
-        controller.proposedCompensatingOffset += oldBounds.height - collectionView.bounds.height + (oldBounds.origin.y - collectionView.bounds.origin.y)
-        let currentPositionSnapshot = getContentOffsetSnapshot(from: .bottom)
-        print(currentPositionSnapshot!)
+        let newBounds = collectionView.bounds
+        let heightDifference = oldBounds.height - newBounds.height
+        controller.proposedCompensatingOffset += heightDifference + (oldBounds.origin.y - newBounds.origin.y)
     }
 
     /// Cleans up after any animated changes to the view’s bounds or after the insertion or deletion of items.
     public override func finalizeAnimatedBoundsChange() {
-        print("\(#function)")
         if controller.isAnimatedBoundsChange {
             controller.isAnimatedBoundsChange = false
             controller.proposedCompensatingOffset = 0
@@ -454,7 +457,6 @@ public final class ChatLayout: UICollectionViewLayout {
             shouldInvalidateLayout = true
         }
 
-        print("\(#function) \(shouldInvalidateLayout)")
         return shouldInvalidateLayout
     }
 
@@ -485,8 +487,7 @@ public final class ChatLayout: UICollectionViewLayout {
             || isUserInitiatedScrolling,
             isAboveBottomEdge {
             context.contentOffsetAdjustment.y += heightDifference
-            context.contentSizeAdjustment.height += heightDifference
-            print("\(#function) \(heightDifference) \(preferredAttributes)")
+            invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
 
         if let attributes = controller.itemAttributes(for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)?.typedCopy() {
@@ -525,7 +526,6 @@ public final class ChatLayout: UICollectionViewLayout {
     public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) || cachedCollectionViewInset != .some(adjustedContentInset) || invalidationActions.contains(.shouldInvalidateOnBoundsChange)
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
-        print("\(#function) \(newBounds) \(shouldInvalidateLayout)")
         return shouldInvalidateLayout
     }
 
@@ -533,7 +533,6 @@ public final class ChatLayout: UICollectionViewLayout {
     public override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext
         invalidationContext.invalidateLayoutMetrics = false
-        print("\(#function)")
         return invalidationContext
     }
 
@@ -544,7 +543,6 @@ public final class ChatLayout: UICollectionViewLayout {
             return
         }
 
-        print("\(#function)")
         controller.resetCachedAttributes()
 
         dontReturnAttributes = context.invalidateDataSourceCounts && !context.invalidateEverything
@@ -594,33 +592,12 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Retrieves the content offset to use after an animated layout update or change.
     public override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-//        if controller.isAnimatedBoundsChange, controller.proposedCompensatingOffset + controller.batchUpdateCompensatingOffset != 0 {
-//            let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: min(proposedContentOffset.y + controller.proposedCompensatingOffset + controller.batchUpdateCompensatingOffset, maxPossibleContentOffset.y))
-//            print("\(#function) OVERRIDEN ANIMATED \(controller.batchUpdateCompensatingOffset) \(controller.proposedCompensatingOffset)")
-//            controller.batchUpdateCompensatingOffset = 0
-//            controller.proposedCompensatingOffset = 0
-//            invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
-//            return newProposedContentOffset
-//        } else
-//        if !controller.isAnimatedBoundsChange, controller.proposedCompensatingOffset != 0 {
-//            let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y))
-//            controller.proposedCompensatingOffset = 0
-//            invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
-//            print("\(#function) OVERRIDEN")
-//            return newProposedContentOffset
-//        }
-//        print("\(#function)")
-//        return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
-
         if controller.proposedCompensatingOffset != 0 {
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y))
-            print("\(#function) current: \(collectionView!.contentOffset) proposed: \(proposedContentOffset) new: \(newProposedContentOffset) controller: \(controller.proposedCompensatingOffset)")
             controller.proposedCompensatingOffset = 0
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
             return newProposedContentOffset
         }
-        print("\(#function) current: \(collectionView!.contentOffset) proposed: \(proposedContentOffset)")
-        invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
     }
 

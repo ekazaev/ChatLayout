@@ -89,9 +89,11 @@ final class StateController {
         return locationHeight + layoutRepresentation.settings.additionalInsets.bottom
     }
 
-    func layoutAttributesForElements(in rect: CGRect, state: ModelState, ignoreCache: Bool = false) -> [ChatLayoutAttributes] {
+    func layoutAttributesForElements(in rect: CGRect,
+                                     state: ModelState,
+                                     ignoreCache: Bool = false) -> [ChatLayoutAttributes] {
         if !ignoreCache,
-           let cachedAttributesState = cachedAttributesState,
+            let cachedAttributesState = cachedAttributesState,
             cachedAttributesState.rect.contains(rect) {
             return cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
         } else {
@@ -617,7 +619,7 @@ final class StateController {
         let layout = self.layout(at: state)
 
         if !isAnimatedBoundsChange,
-           let visibleRect = visibleRect {
+            let visibleRect = visibleRect {
             enum TraverseState {
                 case notFound
                 case found

@@ -15,7 +15,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
 
     private var viewPortWidth: CGFloat = 300
 
-    private lazy var textView = UITextView()
+    private lazy var textView = MessageTextView()
 
     private var controller: TextMessageController?
 
@@ -34,6 +34,24 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
     func prepareForReuse() {
         textView.resignFirstResponder()
     }
+
+    // Uncomment this method to test the performance without calculating text cell size using autolayout
+    // For the better illustration set DefaultRandomDataProvider.enableRichContent/enableNewMessages/enableRichContent
+    // to false
+//    func preferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) -> ChatLayoutAttributes? {
+//        viewPortWidth = layoutAttributes.layoutFrame.width
+//        guard let text = controller?.text as NSString? else {
+//            return layoutAttributes
+//        }
+//        let maxWidth = viewPortWidth * Constants.maxWidth
+//        var rect = text.boundingRect(with: CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude),
+//            options: [.usesLineFragmentOrigin, .usesFontLeading],
+//            attributes: [NSAttributedString.Key.font: textView.font as Any], context: nil)
+//        rect = rect.insetBy(dx: 0, dy: -8)
+//        layoutAttributes.size = CGSize(width: layoutAttributes.layoutFrame.width, height: rect.height)
+//        setupSize()
+//        return layoutAttributes
+//    }
 
     func apply(_ layoutAttributes: ChatLayoutAttributes) {
         viewPortWidth = layoutAttributes.layoutFrame.width
@@ -54,15 +72,17 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
             return
         }
         textView.text = controller.text
-        if #available(iOS 13.0, *) {
-            textView.textColor = controller.type.isIncoming ? UIColor.label : .systemBackground
-            textView.linkTextAttributes = [.foregroundColor: controller.type.isIncoming ? UIColor.systemBlue : .systemGray6,
-                                           .underlineStyle: 1]
-        } else {
-            let color = controller.type.isIncoming ? UIColor.black : .white
-            textView.textColor = color
-            textView.linkTextAttributes = [.foregroundColor: color,
-                                           .underlineStyle: 1]
+        UIView.performWithoutAnimation {
+            if #available(iOS 13.0, *) {
+                textView.textColor = controller.type.isIncoming ? UIColor.label : .systemBackground
+                textView.linkTextAttributes = [.foregroundColor: controller.type.isIncoming ? UIColor.systemBlue : .systemGray6,
+                                               .underlineStyle: 1]
+            } else {
+                let color = controller.type.isIncoming ? UIColor.black : .white
+                textView.textColor = color
+                textView.linkTextAttributes = [.foregroundColor: color,
+                                               .underlineStyle: 1]
+            }
         }
     }
 
@@ -81,6 +101,12 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         textView.dataDetectorTypes = .all
         textView.font = .preferredFont(forTextStyle: .body)
         textView.layoutManager.allowsNonContiguousLayout = true
+        textView.scrollsToTop = false
+        textView.bounces = false
+        textView.bouncesZoom = false
+        textView.showsHorizontalScrollIndicator = false
+        textView.showsVerticalScrollIndicator = false
+        textView.isExclusiveTouch = true
 
         addSubview(textView)
         textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
@@ -98,6 +124,27 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
             self.textViewWidthConstraint?.constant = viewPortWidth * Constants.maxWidth
             setNeedsLayout()
         }
+    }
+
+}
+
+/// UITextView with hacks to avoid selection, loupe, define...
+private final class MessageTextView: UITextView {
+
+    override var isFocused: Bool {
+        return false
+    }
+
+    override var canBecomeFirstResponder: Bool {
+        return false
+    }
+
+    override var canBecomeFocused: Bool {
+        return false
+    }
+
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        return false
     }
 
 }

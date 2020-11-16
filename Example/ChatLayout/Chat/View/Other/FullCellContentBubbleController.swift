@@ -29,8 +29,10 @@ final class FullCellContentBubbleController<CustomView: UIView>: BubbleControlle
             return
         }
 
-        bubbleView.backgroundColor = .clear
-        bubbleView.customView.layoutMargins = .zero
+        UIView.performWithoutAnimation {
+            bubbleView.backgroundColor = .clear
+            bubbleView.customView.layoutMargins = .zero
+        }
     }
 
 }
