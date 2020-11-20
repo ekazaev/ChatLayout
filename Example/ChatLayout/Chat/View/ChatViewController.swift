@@ -284,7 +284,7 @@ extension ChatViewController: ChatControllerDelegate {
         }
 
         func process() {
-            let changeSet = StagedChangeset(source: dataSource.sections, target: sections)
+            let changeSet = StagedChangeset(source: dataSource.sections, target: sections).flattenIfPossible()
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
                                       guard changeSet.sectionInserted.isEmpty else {

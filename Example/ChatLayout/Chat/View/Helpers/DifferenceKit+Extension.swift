@@ -101,3 +101,22 @@ public extension UICollectionView {
     }
 
 }
+
+extension StagedChangeset {
+
+    // DifferenceKit splits different type of actions into the different change sets to avoid the limitations of UICollectionView
+    // But it may lead to the situations that `UICollectionViewLayout` doesnt know what change will happen next within the single portion
+    // of changes. As we know that at least insertions and deletions can be processed together, we fix that in the StagedChangeset we got from
+    // DifferenceKit.
+    func flattenIfPossible() -> StagedChangeset {
+        if count == 2,
+           self[0].sectionChangeCount == 0,
+           self[1].sectionChangeCount == 0,
+           self[0].elementDeleted.count == self[0].elementChangeCount,
+           self[1].elementInserted.count == self[1].elementChangeCount {
+            return StagedChangeset(arrayLiteral: Changeset(data: self[1].data, elementDeleted: self[0].elementDeleted, elementInserted: self[1].elementInserted))
+        }
+        return self
+    }
+
+}

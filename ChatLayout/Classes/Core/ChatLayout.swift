@@ -596,7 +596,8 @@ public final class ChatLayout: UICollectionViewLayout {
     public override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
         if controller.proposedCompensatingOffset != 0,
            let collectionView = collectionView {
-            let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(-collectionView.adjustedContentInset.top, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
+            let minPossibleContentOffset = -collectionView.adjustedContentInset.top
+            let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
             controller.proposedCompensatingOffset = 0
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
             return newProposedContentOffset
