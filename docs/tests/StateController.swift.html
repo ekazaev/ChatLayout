@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "StateController.swift" : </span><span class="cov_medium">78.43%</span>
+<span>Coverage for "StateController.swift" : </span><span class="cov_medium">78.92%</span>
 </h2>
-<h4 class="cov_subtitle">(491 of 626 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(498 of 631 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/Model/StateController.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -2730,7 +2730,7 @@
 <tr class="covered">
 <td class="num">544</td>
 <td class="src"><pre><code class="objc">        insertedIndexes.sorted(by: { $0 &lt; $1 }).forEach {</code></pre></td>
-<td class="coverage">1850000x</td>
+<td class="coverage">1860000x</td>
 </tr>
 <tr class="never">
 <td class="num">545</td>
@@ -2745,7 +2745,7 @@
 <tr class="covered">
 <td class="num">547</td>
 <td class="src"><pre><code class="objc">        deletedIndexes.sorted(by: { $0 &lt; $1 }).forEach {</code></pre></td>
-<td class="coverage">1840000x</td>
+<td class="coverage">1850000x</td>
 </tr>
 <tr class="never">
 <td class="num">548</td>
@@ -3004,7 +3004,7 @@
 </tr>
 <tr class="missed">
 <td class="num">599</td>
-<td class="src"><pre><code class="objc">        if backward, isLayoutBiggerThanScreen(at: .beforeUpdate) {</code></pre></td>
+<td class="src"><pre><code class="objc">        if backward, isLayoutBiggerThanScreen(at: .afterUpdate) {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
@@ -3037,15 +3037,15 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">606</td>
 <td class="src"><pre><code class="objc">    func layout(at state: ModelState) -&gt; LayoutModel {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1440000x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">607</td>
 <td class="src"><pre><code class="objc">        guard let layout = storage[state] else {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1440000x</td>
 </tr>
 <tr class="missed">
 <td class="num">608</td>
@@ -3057,20 +3057,20 @@
 <td class="src"><pre><code class="objc">            return LayoutModel(sections: [], collectionLayout: layoutRepresentation)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">610</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1440000x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">611</td>
 <td class="src"><pre><code class="objc">        return layout</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1440000x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">612</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1440000x</td>
 </tr>
 <tr class="never">
 <td class="num">613</td>
@@ -3959,7 +3959,7 @@
 </tr>
 <tr class="never">
 <td class="num">790</td>
-<td class="src"><pre><code class="objc">            guard isLayoutBiggerThanScreen(at: .afterUpdate),</code></pre></td>
+<td class="src"><pre><code class="objc">            guard isLayoutBiggerThanScreen(at: .beforeUpdate),</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -3967,35 +3967,35 @@
 <td class="src"><pre><code class="objc">                let deletedFrame = itemFrame(for: indexPath, kind: kind, at: .beforeUpdate) else {</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">792</td>
 <td class="src"><pre><code class="objc">                return</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">793</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">794</td>
 <td class="src"><pre><code class="objc">            if deletedFrame.minY.rounded() &lt;= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {</code></pre></td>
-<td class="coverage">3x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">795</td>
 <td class="src"><pre><code class="objc">                // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">40x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">796</td>
 <td class="src"><pre><code class="objc">                // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">40x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">797</td>
 <td class="src"><pre><code class="objc">                proposedCompensatingOffset -= (deletedFrame.height + layoutRepresentation.settings.interItemSpacing)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">40x</td>
 </tr>
 <tr class="never">
 <td class="num">798</td>
