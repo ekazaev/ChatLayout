@@ -144,263 +144,263 @@
 </tr>
 <tr class="never">
 <td class="num">27</td>
-<td class="src"><pre><code class="objc">    init(id: UUID = UUID(),</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">28</td>
-<td class="src"><pre><code class="objc">         header: ItemModel?,</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">29</td>
-<td class="src"><pre><code class="objc">         footer: ItemModel?,</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">30</td>
-<td class="src"><pre><code class="objc">         items: [ItemModel] = [],</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="covered">
-<td class="num">31</td>
-<td class="src"><pre><code class="objc">         collectionLayout: ChatLayoutRepresentation) {</code></pre></td>
-<td class="coverage">54x</td>
-</tr>
-<tr class="covered">
-<td class="num">32</td>
-<td class="src"><pre><code class="objc">        self.id = id</code></pre></td>
-<td class="coverage">54x</td>
-</tr>
-<tr class="covered">
-<td class="num">33</td>
-<td class="src"><pre><code class="objc">        self.items = items</code></pre></td>
-<td class="coverage">54x</td>
-</tr>
-<tr class="covered">
-<td class="num">34</td>
-<td class="src"><pre><code class="objc">        self.collectionLayout = collectionLayout</code></pre></td>
-<td class="coverage">54x</td>
-</tr>
-<tr class="covered">
-<td class="num">35</td>
-<td class="src"><pre><code class="objc">        self.header = header</code></pre></td>
-<td class="coverage">54x</td>
-</tr>
-<tr class="covered">
-<td class="num">36</td>
-<td class="src"><pre><code class="objc">        self.footer = footer</code></pre></td>
-<td class="coverage">54x</td>
-</tr>
-<tr class="covered">
-<td class="num">37</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">54x</td>
-</tr>
-<tr class="never">
-<td class="num">38</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="covered">
-<td class="num">39</td>
-<td class="src"><pre><code class="objc">    mutating func assembleLayout() {</code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="covered">
-<td class="num">40</td>
-<td class="src"><pre><code class="objc">        var offsetY: CGFloat = 0</code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="covered">
-<td class="num">41</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="covered">
-<td class="num">42</td>
-<td class="src"><pre><code class="objc">        if header != nil {</code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="covered">
-<td class="num">43</td>
-<td class="src"><pre><code class="objc">            header?.offsetY = 0</code></pre></td>
-<td class="coverage">106x</td>
-</tr>
-<tr class="covered">
-<td class="num">44</td>
-<td class="src"><pre><code class="objc">            offsetY += header?.frame.height ?? 0</code></pre></td>
-<td class="coverage">106x</td>
-</tr>
-<tr class="covered">
-<td class="num">45</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="covered">
-<td class="num">46</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="never">
-<td class="num">47</td>
-<td class="src"><pre><code class="objc">        for rowIndex in 0..&lt;items.count {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">48</td>
-<td class="src"><pre><code class="objc">            items[rowIndex].offsetY = offsetY</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">49</td>
-<td class="src"><pre><code class="objc">            offsetY += items[rowIndex].height + collectionLayout.settings.interItemSpacing</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">50</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="covered">
-<td class="num">51</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="covered">
-<td class="num">52</td>
-<td class="src"><pre><code class="objc">        if footer != nil {</code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="covered">
-<td class="num">53</td>
-<td class="src"><pre><code class="objc">            footer?.offsetY = offsetY</code></pre></td>
-<td class="coverage">108x</td>
-</tr>
-<tr class="covered">
-<td class="num">54</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="covered">
-<td class="num">55</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">109x</td>
-</tr>
-<tr class="never">
-<td class="num">56</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">57</td>
 <td class="src"><pre><code class="objc">    var count: Int {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">58</td>
+<td class="num">28</td>
 <td class="src"><pre><code class="objc">        return items.count</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">59</td>
+<td class="num">29</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">60</td>
+<td class="num">30</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="covered">
-<td class="num">61</td>
+<td class="num">31</td>
 <td class="src"><pre><code class="objc">    var frame: CGRect {</code></pre></td>
 <td class="coverage">10x</td>
 </tr>
 <tr class="covered">
-<td class="num">62</td>
+<td class="num">32</td>
 <td class="src"><pre><code class="objc">        return CGRect(x: 0, y: offsetY, width: collectionLayout.visibleBounds.width - collectionLayout.settings.additionalInsets.left - collectionLayout.settings.additionalInsets.right, height: height)</code></pre></td>
 <td class="coverage">10x</td>
 </tr>
 <tr class="covered">
-<td class="num">63</td>
+<td class="num">33</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">10x</td>
 </tr>
 <tr class="never">
-<td class="num">64</td>
+<td class="num">34</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">65</td>
+<td class="num">35</td>
 <td class="src"><pre><code class="objc">    var height: CGFloat {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">66</td>
+<td class="num">36</td>
 <td class="src"><pre><code class="objc">        if let footer = footer {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">67</td>
+<td class="num">37</td>
 <td class="src"><pre><code class="objc">            return footer.frame.maxY</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">68</td>
+<td class="num">38</td>
 <td class="src"><pre><code class="objc">        } else {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="covered">
-<td class="num">69</td>
+<td class="num">39</td>
 <td class="src"><pre><code class="objc">            guard let lastItem = items.last else {</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="missed">
-<td class="num">70</td>
+<td class="num">40</td>
 <td class="src"><pre><code class="objc">                return header?.frame.maxY ?? .zero</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="covered">
-<td class="num">71</td>
+<td class="num">41</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
-<td class="num">72</td>
+<td class="num">42</td>
 <td class="src"><pre><code class="objc">            return lastItem.locationHeight</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
-<td class="num">73</td>
+<td class="num">43</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="missed">
-<td class="num">74</td>
+<td class="num">44</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="never">
-<td class="num">75</td>
+<td class="num">45</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">76</td>
+<td class="num">46</td>
 <td class="src"><pre><code class="objc">    var locationHeight: CGFloat {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">77</td>
+<td class="num">47</td>
 <td class="src"><pre><code class="objc">        return offsetY + height</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">78</td>
+<td class="num">48</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">49</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">50</td>
+<td class="src"><pre><code class="objc">    init(id: UUID = UUID(),</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">51</td>
+<td class="src"><pre><code class="objc">         header: ItemModel?,</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">52</td>
+<td class="src"><pre><code class="objc">         footer: ItemModel?,</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">53</td>
+<td class="src"><pre><code class="objc">         items: [ItemModel] = [],</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="covered">
+<td class="num">54</td>
+<td class="src"><pre><code class="objc">         collectionLayout: ChatLayoutRepresentation) {</code></pre></td>
+<td class="coverage">54x</td>
+</tr>
+<tr class="covered">
+<td class="num">55</td>
+<td class="src"><pre><code class="objc">        self.id = id</code></pre></td>
+<td class="coverage">54x</td>
+</tr>
+<tr class="covered">
+<td class="num">56</td>
+<td class="src"><pre><code class="objc">        self.items = items</code></pre></td>
+<td class="coverage">54x</td>
+</tr>
+<tr class="covered">
+<td class="num">57</td>
+<td class="src"><pre><code class="objc">        self.collectionLayout = collectionLayout</code></pre></td>
+<td class="coverage">54x</td>
+</tr>
+<tr class="covered">
+<td class="num">58</td>
+<td class="src"><pre><code class="objc">        self.header = header</code></pre></td>
+<td class="coverage">54x</td>
+</tr>
+<tr class="covered">
+<td class="num">59</td>
+<td class="src"><pre><code class="objc">        self.footer = footer</code></pre></td>
+<td class="coverage">54x</td>
+</tr>
+<tr class="covered">
+<td class="num">60</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage">54x</td>
+</tr>
+<tr class="never">
+<td class="num">61</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="covered">
+<td class="num">62</td>
+<td class="src"><pre><code class="objc">    mutating func assembleLayout() {</code></pre></td>
+<td class="coverage">109x</td>
+</tr>
+<tr class="covered">
+<td class="num">63</td>
+<td class="src"><pre><code class="objc">        var offsetY: CGFloat = 0</code></pre></td>
+<td class="coverage">109x</td>
+</tr>
+<tr class="covered">
+<td class="num">64</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage">109x</td>
+</tr>
+<tr class="covered">
+<td class="num">65</td>
+<td class="src"><pre><code class="objc">        if header != nil {</code></pre></td>
+<td class="coverage">109x</td>
+</tr>
+<tr class="covered">
+<td class="num">66</td>
+<td class="src"><pre><code class="objc">            header?.offsetY = 0</code></pre></td>
+<td class="coverage">106x</td>
+</tr>
+<tr class="covered">
+<td class="num">67</td>
+<td class="src"><pre><code class="objc">            offsetY += header?.frame.height ?? 0</code></pre></td>
+<td class="coverage">106x</td>
+</tr>
+<tr class="covered">
+<td class="num">68</td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="coverage">109x</td>
+</tr>
+<tr class="covered">
+<td class="num">69</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage">109x</td>
+</tr>
+<tr class="never">
+<td class="num">70</td>
+<td class="src"><pre><code class="objc">        for rowIndex in 0..&lt;items.count {</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">71</td>
+<td class="src"><pre><code class="objc">            items[rowIndex].offsetY = offsetY</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">72</td>
+<td class="src"><pre><code class="objc">            offsetY += items[rowIndex].height + collectionLayout.settings.interItemSpacing</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">73</td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="covered">
+<td class="num">74</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage">109x</td>
+</tr>
+<tr class="covered">
+<td class="num">75</td>
+<td class="src"><pre><code class="objc">        if footer != nil {</code></pre></td>
+<td class="coverage">109x</td>
+</tr>
+<tr class="covered">
+<td class="num">76</td>
+<td class="src"><pre><code class="objc">            footer?.offsetY = offsetY</code></pre></td>
+<td class="coverage">108x</td>
+</tr>
+<tr class="covered">
+<td class="num">77</td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="coverage">109x</td>
+</tr>
+<tr class="covered">
+<td class="num">78</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="never">
 <td class="num">79</td>
@@ -655,7 +655,7 @@
 <tr class="covered">
 <td class="num">129</td>
 <td class="src"><pre><code class="objc">            return</code></pre></td>
-<td class="coverage">21x</td>
+<td class="coverage">23x</td>
 </tr>
 <tr class="covered">
 <td class="num">130</td>

@@ -194,32 +194,32 @@
 </tr>
 <tr class="never">
 <td class="num">37</td>
-<td class="src"><pre><code class="objc">    init(id: UUID = UUID(), with configuration: Configuration) {</code></pre></td>
+<td class="src"><pre><code class="objc">    var origin: CGPoint {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">38</td>
-<td class="src"><pre><code class="objc">        self.id = id</code></pre></td>
+<td class="src"><pre><code class="objc">        return CGPoint(x: 0, y: offsetY)</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">39</td>
-<td class="src"><pre><code class="objc">        self.alignment = configuration.alignment</code></pre></td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">40</td>
-<td class="src"><pre><code class="objc">        self.preferredSize = configuration.preferredSize</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">41</td>
-<td class="src"><pre><code class="objc">        self.calculatedSize = configuration.calculatedSize</code></pre></td>
+<td class="src"><pre><code class="objc">    var height: CGFloat {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">42</td>
-<td class="src"><pre><code class="objc">        self.calculatedOnce = configuration.calculatedSize != nil</code></pre></td>
+<td class="src"><pre><code class="objc">        return size.height</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -232,20 +232,20 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">45</td>
-<td class="src"><pre><code class="objc">    var origin: CGPoint {</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">    var locationHeight: CGFloat {</code></pre></td>
+<td class="coverage">2x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">46</td>
-<td class="src"><pre><code class="objc">        return CGPoint(x: 0, y: offsetY)</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">        return offsetY + height</code></pre></td>
+<td class="coverage">2x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">47</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">2x</td>
 </tr>
 <tr class="never">
 <td class="num">48</td>
@@ -254,38 +254,38 @@
 </tr>
 <tr class="never">
 <td class="num">49</td>
-<td class="src"><pre><code class="objc">    var height: CGFloat {</code></pre></td>
+<td class="src"><pre><code class="objc">    var size: CGSize {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">50</td>
-<td class="src"><pre><code class="objc">        return size.height</code></pre></td>
+<td class="src"><pre><code class="objc">        guard let calculatedSize = calculatedSize else {</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">51</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">            return preferredSize</code></pre></td>
+<td class="coverage">21200x</td>
 </tr>
 <tr class="never">
 <td class="num">52</td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">53</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
-<td class="num">53</td>
-<td class="src"><pre><code class="objc">    var locationHeight: CGFloat {</code></pre></td>
-<td class="coverage">2x</td>
-</tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">54</td>
-<td class="src"><pre><code class="objc">        return offsetY + height</code></pre></td>
-<td class="coverage">2x</td>
+<td class="src"><pre><code class="objc">        return calculatedSize</code></pre></td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">55</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">2x</td>
+<td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">56</td>
@@ -294,52 +294,52 @@
 </tr>
 <tr class="never">
 <td class="num">57</td>
-<td class="src"><pre><code class="objc">    var size: CGSize {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">58</td>
-<td class="src"><pre><code class="objc">        guard let calculatedSize = calculatedSize else {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="covered">
-<td class="num">59</td>
-<td class="src"><pre><code class="objc">            return preferredSize</code></pre></td>
-<td class="coverage">21200x</td>
-</tr>
-<tr class="never">
-<td class="num">60</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">61</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">62</td>
-<td class="src"><pre><code class="objc">        return calculatedSize</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">63</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">64</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">65</td>
 <td class="src"><pre><code class="objc">    var frame: CGRect {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">66</td>
+<td class="num">58</td>
 <td class="src"><pre><code class="objc">        return CGRect(origin: origin, size: size)</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">59</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">60</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">61</td>
+<td class="src"><pre><code class="objc">    init(id: UUID = UUID(), with configuration: Configuration) {</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">62</td>
+<td class="src"><pre><code class="objc">        self.id = id</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">63</td>
+<td class="src"><pre><code class="objc">        self.alignment = configuration.alignment</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">64</td>
+<td class="src"><pre><code class="objc">        self.preferredSize = configuration.preferredSize</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">65</td>
+<td class="src"><pre><code class="objc">        self.calculatedSize = configuration.calculatedSize</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">66</td>
+<td class="src"><pre><code class="objc">        self.calculatedOnce = configuration.calculatedSize != nil</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
