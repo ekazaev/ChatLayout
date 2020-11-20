@@ -596,7 +596,7 @@ final class StateController {
             let attributes = attributes else {
             return
         }
-        if backward, isLayoutBiggerThanScreen(at: .beforeUpdate) {
+        if backward, isLayoutBiggerThanScreen(at: .afterUpdate) {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset * -1)
         } else if !backward, isLayoutBiggerThanScreen(at: .afterUpdate) {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset)
@@ -787,7 +787,7 @@ final class StateController {
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
             }
         case .delete:
-            guard isLayoutBiggerThanScreen(at: .afterUpdate),
+            guard isLayoutBiggerThanScreen(at: .beforeUpdate),
                 let deletedFrame = itemFrame(for: indexPath, kind: kind, at: .beforeUpdate) else {
                 return
             }

@@ -115,8 +115,6 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
         textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
         textViewWidthConstraint?.isActive = true
-
-        setupSize()
     }
 
     private func setupSize() {

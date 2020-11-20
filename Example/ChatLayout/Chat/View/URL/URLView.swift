@@ -94,8 +94,6 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
             linkHeightConstraint?.priority = UILayoutPriority(999)
             linkHeightConstraint?.isActive = true
 
-            setupSize()
-
             self.linkView = newLinkView
         }
 

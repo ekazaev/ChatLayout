@@ -119,19 +119,15 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
 
         let loadingWidthConstraint = loadingIndicator.widthAnchor.constraint(equalToConstant: 100)
         loadingWidthConstraint.priority = UILayoutPriority(999)
-        loadingWidthConstraint.isActive = true
 
         let loadingHeightConstraint = loadingIndicator.heightAnchor.constraint(equalToConstant: 100)
         loadingHeightConstraint.priority = UILayoutPriority(999)
-        loadingHeightConstraint.isActive = true
 
         imageWidthConstraint = imageView.widthAnchor.constraint(equalToConstant: 310)
         imageWidthConstraint?.priority = UILayoutPriority(999)
-        imageWidthConstraint?.isActive = true
 
         imageHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: 40)
         imageHeightConstraint?.priority = UILayoutPriority(999)
-        imageHeightConstraint?.isActive = true
     }
 
     private func setupSize() {

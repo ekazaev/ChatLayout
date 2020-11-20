@@ -493,7 +493,9 @@ public final class ChatLayout: UICollectionViewLayout {
         if let attributes = controller.itemAttributes(for: preferredAttributes.indexPath, kind: preferredMessageAttributes.kind, at: state)?.typedCopy() {
             controller.totalProposedCompensatingOffset += heightDifference
             layoutAttributesForPendingAnimation?.frame = attributes.frame
-            controller.offsetByTotalCompensation(attributes: layoutAttributesForPendingAnimation, for: state, backward: true)
+            if keepContentOffsetAtBottomOnBatchUpdates {
+                controller.offsetByTotalCompensation(attributes: layoutAttributesForPendingAnimation, for: state, backward: true)
+            }
             if state == .afterUpdate,
                 controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) || controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
                 layoutAttributesForPendingAnimation.map { attributes in
@@ -592,8 +594,9 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Retrieves the content offset to use after an animated layout update or change.
     public override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        if controller.proposedCompensatingOffset != 0 {
-            let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y))
+        if controller.proposedCompensatingOffset != 0,
+           let collectionView = collectionView {
+            let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(-collectionView.adjustedContentInset.top, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
             controller.proposedCompensatingOffset = 0
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
             return newProposedContentOffset
@@ -903,7 +906,7 @@ extension ChatLayout {
         guard let collectionView = collectionView else {
             return .zero
         }
-        let maxContentOffset = max(0, controller.contentHeight(at: state) - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
+        let maxContentOffset = max(0 - collectionView.adjustedContentInset.top, controller.contentHeight(at: state) - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
         return CGPoint(x: 0, y: maxContentOffset)
     }
 
