@@ -1,9 +1,0 @@
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/ChatLayout" "${PODS_CONFIGURATION_BUILD_DIR}/DifferenceKit" "${PODS_CONFIGURATION_BUILD_DIR}/FPSCounter" "${PODS_CONFIGURATION_BUILD_DIR}/InputBarAccessoryView"
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/ChatLayout/ChatLayout.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/DifferenceKit/DifferenceKit.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/FPSCounter/FPSCounter.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/InputBarAccessoryView/InputBarAccessoryView.framework/Headers"
-OTHER_LDFLAGS = $(inherited) -framework "ChatLayout" -framework "DifferenceKit" -framework "FPSCounter" -framework "Foundation" -framework "InputBarAccessoryView" -framework "UIKit"
-PODS_BUILD_DIR = ${BUILD_DIR}
-PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
-PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
-PODS_ROOT = ${SRCROOT}/Pods
-USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES

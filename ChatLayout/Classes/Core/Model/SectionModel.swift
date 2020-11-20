@@ -24,6 +24,29 @@ struct SectionModel {
 
     private unowned var collectionLayout: ChatLayoutRepresentation
 
+    var count: Int {
+        return items.count
+    }
+
+    var frame: CGRect {
+        return CGRect(x: 0, y: offsetY, width: collectionLayout.visibleBounds.width - collectionLayout.settings.additionalInsets.left - collectionLayout.settings.additionalInsets.right, height: height)
+    }
+
+    var height: CGFloat {
+        if let footer = footer {
+            return footer.frame.maxY
+        } else {
+            guard let lastItem = items.last else {
+                return header?.frame.maxY ?? .zero
+            }
+            return lastItem.locationHeight
+        }
+    }
+
+    var locationHeight: CGFloat {
+        return offsetY + height
+    }
+
     init(id: UUID = UUID(),
          header: ItemModel?,
          footer: ItemModel?,
@@ -52,29 +75,6 @@ struct SectionModel {
         if footer != nil {
             footer?.offsetY = offsetY
         }
-    }
-
-    var count: Int {
-        return items.count
-    }
-
-    var frame: CGRect {
-        return CGRect(x: 0, y: offsetY, width: collectionLayout.visibleBounds.width - collectionLayout.settings.additionalInsets.left - collectionLayout.settings.additionalInsets.right, height: height)
-    }
-
-    var height: CGFloat {
-        if let footer = footer {
-            return footer.frame.maxY
-        } else {
-            guard let lastItem = items.last else {
-                return header?.frame.maxY ?? .zero
-            }
-            return lastItem.locationHeight
-        }
-    }
-
-    var locationHeight: CGFloat {
-        return offsetY + height
     }
 
     // MARK: To use when its is important to make the correct insertion

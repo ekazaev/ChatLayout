@@ -1,6 +1,0 @@
-framework module Pods_ChatLayout_Example {
-  umbrella header "Pods-ChatLayout_Example-umbrella.h"
-
-  export *
-  module * { export * }
-}

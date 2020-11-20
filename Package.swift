@@ -13,11 +13,11 @@ let package = Package(
             targets: ["ChatLayout"]
         ),
         .library(name: "ChatLayoutStatic",
-                type: .static,
-                targets: ["ChatLayout"]),
+                 type: .static,
+                 targets: ["ChatLayout"]),
         .library(name: "ChatLayoutDynamic",
-            type: .dynamic,
-            targets: ["ChatLayout"])
+                 type: .dynamic,
+                 targets: ["ChatLayout"])
     ],
     targets: [
         .target(

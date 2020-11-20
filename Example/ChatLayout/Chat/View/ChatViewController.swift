@@ -97,6 +97,7 @@ final class ChatViewController: UIViewController {
             fpsView.customView.textColor = .lightGray
         }
         inputBarView.topStackView.addArrangedSubview(fpsView)
+        inputBarView.shouldAnimateTextDidChangeLayout = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Show Keyboard", style: .plain, target: self, action: #selector(ChatViewController.showHideKeyboard))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
 

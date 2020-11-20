@@ -1,6 +1,6 @@
 //
 // ChatLayout
-// String+Extensions.swift
+// IndexPath+Extension.swift
 // https://github.com/ekazaev/ChatLayout
 //
 // Created by Eugene Kazaev in 2020.
@@ -9,9 +9,10 @@
 
 import Foundation
 
-internal extension Character {
+extension IndexPath {
 
-    static var space: Character {
-        return " "
+    var itemPath: ItemPath {
+        return ItemPath(for: self)
     }
+
 }

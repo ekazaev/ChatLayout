@@ -34,14 +34,6 @@ struct ItemModel: Equatable {
 
     var alignment: ChatItemAlignment
 
-    init(id: UUID = UUID(), with configuration: Configuration) {
-        self.id = id
-        self.alignment = configuration.alignment
-        self.preferredSize = configuration.preferredSize
-        self.calculatedSize = configuration.calculatedSize
-        self.calculatedOnce = configuration.calculatedSize != nil
-    }
-
     var origin: CGPoint {
         return CGPoint(x: 0, y: offsetY)
     }
@@ -64,6 +56,14 @@ struct ItemModel: Equatable {
 
     var frame: CGRect {
         return CGRect(origin: origin, size: size)
+    }
+
+    init(id: UUID = UUID(), with configuration: Configuration) {
+        self.id = id
+        self.alignment = configuration.alignment
+        self.preferredSize = configuration.preferredSize
+        self.calculatedSize = configuration.calculatedSize
+        self.calculatedOnce = configuration.calculatedSize != nil
     }
 
     // We are just resetting `calculatedSize` if needed as the actual size will be found in invalidationContext(forPreferredLayoutAttributes:, withOriginalAttributes:)
