@@ -137,6 +137,9 @@ apologies. *Caveat developer.*
 
 ## Articles
 
+English:
+- [My COVID-19 lockdown project or how I started to dig into a custom UICollectionViewLayout to get a ChatLayout](https://eugenenekhoroshiy.medium.com/my-covid-19-lockdown-project-or-how-i-started-to-dig-into-a-custom-uicollectionviewlayout-to-get-a-d053e1ad3aa0)
+
 Russian:
   - [Мой Covid-19 lockdown проект, или, как я полез в кастомный UICollectionViewLayout и получил ChatLayout](https://habr.com/ru/post/523492/)
 
