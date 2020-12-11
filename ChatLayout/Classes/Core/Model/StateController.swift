@@ -709,8 +709,8 @@ final class StateController {
                                         return true
                                     }
                                     if let itemIdentifier = self.itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
-                                        let initialIndexPath = self.itemPath(by: itemIdentifier, at: .beforeUpdate),
-                                        self.movedIndexes.contains(initialIndexPath.indexPath) || reloadedIndexes.contains(initialIndexPath.indexPath),
+                                        let initialIndexPath = self.itemPath(by: itemIdentifier, at: .beforeUpdate)?.indexPath,
+                                        movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
                                         let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
                                         itemFrame.intersects(layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
                                         return true

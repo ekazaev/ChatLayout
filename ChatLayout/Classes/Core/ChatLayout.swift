@@ -438,15 +438,16 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Asks the layout object if changes to a self-sizing cell require a layout update.
     public override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
+        let preferedAttributesItemPath = preferredAttributes.indexPath.itemPath
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
-            let item = controller.item(for: preferredMessageAttributes.indexPath.itemPath, kind: preferredMessageAttributes.kind, at: state) else {
+            let item = controller.item(for: preferedAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
             return true
         }
         var shouldInvalidateLayout: Bool
         shouldInvalidateLayout = item.calculatedSize == nil
 
         if item.alignment != preferredMessageAttributes.alignment {
-            controller.update(alignment: preferredMessageAttributes.alignment, for: preferredMessageAttributes.indexPath.itemPath, kind: preferredMessageAttributes.kind, at: state)
+            controller.update(alignment: preferredMessageAttributes.alignment, for: preferedAttributesItemPath, kind: preferredMessageAttributes.kind, at: state)
             shouldInvalidateLayout = true
         }
 
