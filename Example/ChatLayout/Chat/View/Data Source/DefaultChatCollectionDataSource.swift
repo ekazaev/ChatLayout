@@ -132,7 +132,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         cell.customView.textColor = .gray
         cell.customView.numberOfLines = 0
         cell.customView.font = .preferredFont(forTextStyle: .caption2)
-        cell.contentView.layoutMargins = UIEdgeInsets(top: 2, left: 16, bottom: 2, right: 16)
+        cell.contentView.layoutMargins = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
         return cell
     }
 
@@ -311,7 +311,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             case .date:
                 return .center
             case .message, .deliveryStatus:
-                return .full
+                return .fullWidth
             case .messageGroup, .typingIndicator:
                 return .leading
             }

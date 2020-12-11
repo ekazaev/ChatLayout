@@ -216,7 +216,7 @@ final class StateController {
             dx = visibleBounds.size.width - itemFrame.width - layoutRepresentation.settings.additionalInsets.right
         case .center:
             dx = layoutRepresentation.settings.additionalInsets.left + (visibleBounds.size.width - layoutRepresentation.settings.additionalInsets.right - layoutRepresentation.settings.additionalInsets.left) / 2 - itemFrame.width / 2
-        case .full:
+        case .fullWidth:
             dx = layoutRepresentation.settings.additionalInsets.left
             itemFrame.size.width = layoutRepresentation.layoutFrame.size.width
         }
@@ -255,7 +255,7 @@ final class StateController {
 
     func section(at index: Int, at state: ModelState) -> SectionModel {
         guard index < layout(at: state).sections.count else {
-            fatalError("Internal inconsistency")
+            preconditionFailure("Section index \(index) is bigger than the amount of sections \(layout(at: state).sections.count)")
         }
         return layout(at: state).sections[index]
     }

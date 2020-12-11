@@ -24,7 +24,7 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
     }
 
     /// An alignment of the contained views within the `MessageContainerView`,
-    public var alignment: ChatItemAlignment = .full {
+    public var alignment: ChatItemAlignment = .fullWidth {
         didSet {
             switch alignment {
             case .leading:
@@ -33,7 +33,7 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
                 internalContentView.flexibleEdges = [.leading]
             case .center:
                 internalContentView.flexibleEdges = [.leading, .trailing]
-            case .full:
+            case .fullWidth:
                 internalContentView.flexibleEdges = []
             }
         }

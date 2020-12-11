@@ -23,6 +23,6 @@ public enum ChatItemAlignment: Hashable {
     case trailing
 
     /// Should be aligned using the full width of the available content width.
-    case full
+    case fullWidth
 
 }

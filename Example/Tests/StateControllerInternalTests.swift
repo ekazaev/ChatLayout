@@ -37,13 +37,13 @@ class StateControllerInternalTests: XCTestCase {
         layout.controller.update(alignment: .leading, for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)
         layout.controller.update(alignment: .trailing, for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)
         layout.controller.update(alignment: .center, for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)
-        layout.controller.update(alignment: .full, for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)
+        layout.controller.update(alignment: .fullWidth, for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)
 
         XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.alignment, .trailing)
         XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)?.alignment, .leading)
         XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.alignment, .center)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)?.alignment, .full)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 2, section: 0), kind: .cell, at: .beforeUpdate)?.alignment, .full)
+        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)?.alignment, .fullWidth)
+        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 2, section: 0), kind: .cell, at: .beforeUpdate)?.alignment, .fullWidth)
 
         XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.frame.origin.x, 300 - 100 - layout.settings.additionalInsets.right)
         XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)?.frame.origin.x, layout.settings.additionalInsets.left)

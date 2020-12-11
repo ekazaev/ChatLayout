@@ -29,14 +29,14 @@ public enum ItemKind: CaseIterable, Hashable {
         case UICollectionView.elementKindSectionFooter:
             self = .footer
         default:
-            fatalError("Unsupported supplementary view kind")
+            preconditionFailure("Unsupported supplementary view kind")
         }
     }
 
     var supplementaryElementStringType: String {
         switch self {
         case .cell:
-            fatalError("Cell type is not a supplementary view")
+            preconditionFailure("Cell type is not a supplementary view")
         case .header:
             return UICollectionView.elementKindSectionHeader
         case .footer:

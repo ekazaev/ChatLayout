@@ -108,7 +108,7 @@ public extension ChatLayoutDelegate {
 
     /// Default implementation returns: `ChatItemAlignment.full`.
     func alignmentForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
-        return .full
+        return .fullWidth
     }
 
     /// Default implementation sets a `ChatLayoutAttributes.alpha` to zero.

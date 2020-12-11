@@ -44,7 +44,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     }
 
     func configuration(for element: ItemKind, at itemPath: ItemPath) -> ItemModel.Configuration {
-        return .init(alignment: .full, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!)
+        return .init(alignment: .fullWidth, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!)
     }
 
     func shouldPresentHeader(at sectionIndex: Int) -> Bool {
@@ -56,7 +56,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     }
 
     func alignmentForItem(of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
-        .full
+        .fullWidth
     }
 
     func sizeForItem(of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {

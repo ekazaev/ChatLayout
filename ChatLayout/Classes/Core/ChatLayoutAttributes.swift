@@ -14,7 +14,7 @@ import UIKit
 public class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
 
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
-    public var alignment: ChatItemAlignment = .full
+    public var alignment: ChatItemAlignment = .fullWidth
 
     /// `ChatLayout`s additional insets setup using `ChatLayoutSettings`. Added for convenience.
     public internal(set) var additionalInsets: UIEdgeInsets = .zero
@@ -72,13 +72,13 @@ public class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         case (.supplementaryView, .some(UICollectionView.elementKindSectionFooter)):
             return .footer
         default:
-            fatalError("Unsupported element kind")
+            preconditionFailure("Unsupported element kind")
         }
     }
 
     func typedCopy() -> ChatLayoutAttributes {
         guard let typedCopy = copy() as? ChatLayoutAttributes else {
-            fatalError("InternalInconsistency")
+            fatalError("Internal inconsistency")
         }
         return typedCopy
     }

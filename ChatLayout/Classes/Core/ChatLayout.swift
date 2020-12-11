@@ -852,7 +852,7 @@ extension ChatLayout {
 
     private func alignment(for element: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
         guard let delegate = delegate else {
-            return .full
+            return .fullWidth
         }
         return delegate.alignmentForItem(self, of: element, at: indexPath)
     }
