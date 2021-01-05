@@ -3,14 +3,16 @@
 // IterativeCache.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
 import Foundation
 import UIKit
 
-public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: AsyncKeyValueCaching>: AsyncKeyValueCaching where FastCache.CachingKey == SlowCache.CachingKey, FastCache.Entity == SlowCache.Entity {
+public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: AsyncKeyValueCaching>: AsyncKeyValueCaching
+    where
+    FastCache.CachingKey == SlowCache.CachingKey, FastCache.Entity == SlowCache.Entity {
 
     public let mainCache: FastCache
 

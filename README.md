@@ -9,10 +9,15 @@
 [![Version](https://img.shields.io/cocoapods/v/ChatLayout.svg?style=flat)](https://cocoapods.org/pods/ChatLayout)
 [![Documentation](https://ekazaev.github.io/ChatLayout/badge.svg)](https://ekazaev.github.io/ChatLayout/)
 [![Codecov](https://codecov.io/gh/ekazaev/ChatLayout/branch/master/graph/badge.svg)](https://codecov.io/gh/ekazaev/ChatLayout)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b97c279a50984376ab2649f5a7d09e69)](https://www.codacy.com/gh/ekazaev/ChatLayout/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ekazaev/ChatLayout&amp;utm_campaign=Badge_Grade)
 [![Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BA51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Swift 5.2](https://img.shields.io/badge/language-Swift5.2-orange.svg?style=flat)](https://developer.apple.com/swift)
 [![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2014-yellow.svg)](https://www.apple.com/ios)
+
+<p align="center">
+<img src="https://habrastorage.org/webt/ji/ba/dj/jibadjc0hul-fzfwxm2w0ywdutg.png" />
+</p>
 
 ## Table of contents
 
@@ -96,10 +101,6 @@ and [SwiftPM](https://github.com/apple/swift-package-manager). See the `Example`
 If you are using cocoapods you can install the whole package using `pod 'ChatLayout'`. If you do not need the additional
 components provided, you can install only the layout itself using `pod 'ChatLayout/Core'`
 
-**NB: `ChatLayout` is in pre-release state, so it doesn't respect the [semantic versioning](https://semver.org) at
-this moment and may introduce breaking changes in further versions. It is recommended to link the dependency to
-the exact version number in the dependency manager you use and increase the release version manually.**
-
 ## Contributing
 
 `ChatLayout` is in active development, and we welcome your contributions.
@@ -110,7 +111,6 @@ read [the contribution guidelines](https://github.com/ekazaev/route-composer/blo
 ## Todo
 
 - [ ] Improve the test coverage
-- [ ] Provide proper documentation
 
 ### About `UICollectionViewDiffableDataSource`
 
@@ -119,8 +119,8 @@ read [the contribution guidelines](https://github.com/ekazaev/route-composer/blo
 does not support the reloading of cells out of the box if you are relying on the `Hashable` protocol implementation.
 It will delete the changed cell and insert the new version of said cell. That may lead to strange animations on 
 the screen, especially when the reloaded cell changes its size. In order to get the best behaviour of the update animation 
-I would strongly recommend you rely on [DifferenceKit](https://github.com/ra1028/DifferenceKit) to process the model changes.
-The Example app does it as well.
+I would strongly recommend you rely on [DifferenceKit](https://github.com/ra1028/DifferenceKit) or a similar library 
+to process the model changes. The Example app does it as well.
 
 ### About Supplementary Views
 

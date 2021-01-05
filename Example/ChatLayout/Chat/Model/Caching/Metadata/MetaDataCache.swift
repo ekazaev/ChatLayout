@@ -3,7 +3,7 @@
 // MetaDataCache.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
@@ -26,7 +26,9 @@ final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching whe
 
     func getEntity(for url: URL) throws -> LPLinkMetadata {
         let data = try cache.getEntity(for: url)
+        // swiftlint:disable force_try force_cast
         let entity = try! NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as! LPLinkMetadata
+        // swiftlint:enable force_try force_cast
         return entity
     }
 
@@ -46,7 +48,9 @@ final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching whe
     }
 
     func store(entity: LPLinkMetadata, for key: URL) throws {
+        // swiftlint:disable force_try
         let codedData = try! NSKeyedArchiver.archivedData(withRootObject: entity, requiringSecureCoding: true)
+        // swiftlint:enable force_try
         try cache.store(entity: codedData, for: key)
     }
 

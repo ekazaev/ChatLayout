@@ -3,14 +3,14 @@
 // StateController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
 import Foundation
 import UIKit
 
-/// This protocol exists only to serve an ability to unit test.
+/// This protocol exists only to serve an ability to unit test `StateController`.
 protocol ChatLayoutRepresentation: AnyObject {
 
     var settings: ChatLayoutSettings { get }
@@ -25,7 +25,7 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     var keepContentOffsetAtBottomOnBatchUpdates: Bool { get }
 
-    func numberOfItems(inSection section: Int) -> Int
+    func numberOfItems(in section: Int) -> Int
 
     func configuration(for element: ItemKind, at itemPath: ItemPath) -> ItemModel.Configuration
 
@@ -36,6 +36,12 @@ protocol ChatLayoutRepresentation: AnyObject {
 }
 
 final class StateController {
+
+    private enum CompensatingAction {
+        case insert
+        case delete
+        case frameUpdate(previousFrame: CGRect, newFrame: CGRect)
+    }
 
     // This thing exists here as `UICollectionView` calls `targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint)` only once at the
     // beginning of the animated updates. But we must compensate the other changes that happened during the update.
@@ -120,7 +126,10 @@ final class StateController {
         }
     }
 
-    func itemAttributes(for itemPath: ItemPath, kind: ItemKind, predefinedFrame: CGRect? = nil, at state: ModelState) -> ChatLayoutAttributes? {
+    func itemAttributes(for itemPath: ItemPath,
+                        kind: ItemKind,
+                        predefinedFrame: CGRect? = nil,
+                        at state: ModelState) -> ChatLayoutAttributes? {
         let attributes: ChatLayoutAttributes
         let itemIndexPath = itemPath.indexPath
         switch kind {
@@ -204,20 +213,23 @@ final class StateController {
             // This occurs when getting layout attributes for initial / final animations
             return nil
         }
+
         let section = layout(at: state).sections[itemPath.section]
         var itemFrame = item.frame
         let dx: CGFloat
         let visibleBounds = layoutRepresentation.visibleBounds
+        let additionalInsets = layoutRepresentation.settings.additionalInsets
 
         switch item.alignment {
         case .leading:
-            dx = layoutRepresentation.settings.additionalInsets.left
+            dx = additionalInsets.left
         case .trailing:
-            dx = visibleBounds.size.width - itemFrame.width - layoutRepresentation.settings.additionalInsets.right
+            dx = visibleBounds.size.width - itemFrame.width - additionalInsets.right
         case .center:
-            dx = layoutRepresentation.settings.additionalInsets.left + (visibleBounds.size.width - layoutRepresentation.settings.additionalInsets.right - layoutRepresentation.settings.additionalInsets.left) / 2 - itemFrame.width / 2
+            let availableWidth = visibleBounds.size.width - additionalInsets.right - additionalInsets.left
+            dx = additionalInsets.left + availableWidth / 2 - itemFrame.width / 2
         case .fullWidth:
-            dx = layoutRepresentation.settings.additionalInsets.left
+            dx = additionalInsets.left
             itemFrame.size.width = layoutRepresentation.layoutFrame.size.width
         }
 
@@ -343,7 +355,8 @@ final class StateController {
             layout.setAndAssemble(item: item, sectionIndex: itemPath.section, itemIndex: itemPath.item)
         }
         storage[state] = layout
-        compensateOffsetIfNeeded(for: itemPath, kind: kind, action: .frameUpdate(previousFrame: previousFrame, newFrame: item.frame))
+        let frameUpdateAction = CompensatingAction.frameUpdate(previousFrame: previousFrame, newFrame: item.frame)
+        compensateOffsetIfNeeded(for: itemPath, kind: kind, action: frameUpdateAction)
     }
 
     func update(alignment: ChatItemAlignment, for itemPath: ItemPath, kind: ItemKind, at state: ModelState) {
@@ -406,7 +419,7 @@ final class StateController {
                 }
 
                 if indexPath.item == NSNotFound {
-                    let items = (0..<layoutRepresentation.numberOfItems(inSection: indexPath.section)).map { index -> ItemModel in
+                    let items = (0..<layoutRepresentation.numberOfItems(in: indexPath.section)).map { index -> ItemModel in
                         let itemIndexPath = IndexPath(item: index, section: indexPath.section)
                         return ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath))
                     }
@@ -478,7 +491,7 @@ final class StateController {
                     section.set(footer: footer)
 
                     let oldItems = section.items
-                    let items: [ItemModel] = (0..<layoutRepresentation.numberOfItems(inSection: indexPath.section)).map { index in
+                    let items: [ItemModel] = (0..<layoutRepresentation.numberOfItems(in: indexPath.section)).map { index in
                         var newItem: ItemModel
                         if index < oldItems.count {
                             newItem = oldItems[index]
@@ -597,9 +610,9 @@ final class StateController {
             let attributes = attributes else {
             return
         }
-        if backward, isLayoutBiggerThanScreen(at: .afterUpdate) {
+        if backward, isLayoutBiggerThanVisibleBounds(at: .afterUpdate) {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset * -1)
-        } else if !backward, isLayoutBiggerThanScreen(at: .afterUpdate) {
+        } else if !backward, isLayoutBiggerThanVisibleBounds(at: .afterUpdate) {
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset)
         }
     }
@@ -612,8 +625,9 @@ final class StateController {
         return layout
     }
 
-    func isLayoutBiggerThanScreen(at state: ModelState, withFullCompensation: Bool = false) -> Bool {
-        return contentHeight(at: state).rounded() > (layoutRepresentation.visibleBounds.height + (withFullCompensation ? batchUpdateCompensatingOffset + proposedCompensatingOffset : 0)).rounded()
+    func isLayoutBiggerThanVisibleBounds(at state: ModelState, withFullCompensation: Bool = false) -> Bool {
+        let visibleBoundsHeight = layoutRepresentation.visibleBounds.height + (withFullCompensation ? batchUpdateCompensatingOffset + proposedCompensatingOffset : 0)
+        return contentHeight(at: state).rounded() > visibleBoundsHeight.rounded()
     }
 
     private func allAttributes(at state: ModelState, visibleRect: CGRect? = nil) -> [ChatLayoutAttributes] {
@@ -703,16 +717,17 @@ final class StateController {
                                     return true
                                 }
                                 var itemWillBeVisible: Bool {
+                                    let offsetVisibleBounds = layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)
                                     if insertedIndexes.contains(itemPath.indexPath),
                                         let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
-                                        itemFrame.intersects(layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
+                                        itemFrame.intersects(offsetVisibleBounds) {
                                         return true
                                     }
                                     if let itemIdentifier = self.itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
                                         let initialIndexPath = self.itemPath(by: itemIdentifier, at: .beforeUpdate)?.indexPath,
                                         movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
                                         let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
-                                        itemFrame.intersects(layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)) {
+                                        itemFrame.intersects(offsetVisibleBounds) {
                                         return true
                                     }
                                     return false
@@ -738,8 +753,7 @@ final class StateController {
                 return self.itemAttributes(for: path, kind: kind, predefinedFrame: frame, at: state)
             }
         } else {
-            // Here just to test without caching just in case
-            var attributes = ContiguousArray<ChatLayoutAttributes>()
+            var attributes = [ChatLayoutAttributes]()
             attributes.reserveCapacity(layout.sections.count * 1000)
             layout.sections.enumerated().forEach { sectionIndex, section in
                 let sectionPath = ItemPath(item: 0, section: sectionIndex)
@@ -757,42 +771,37 @@ final class StateController {
                 }
             }
 
-            return Array(attributes)
+            return attributes
         }
-    }
-
-    private enum CompensatingAction {
-        case insert
-        case delete
-        case frameUpdate(previousFrame: CGRect, newFrame: CGRect)
     }
 
     private func compensateOffsetIfNeeded(for itemPath: ItemPath, kind: ItemKind, action: CompensatingAction) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
+        let minY = (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
         switch action {
         case .insert:
-            guard isLayoutBiggerThanScreen(at: .afterUpdate),
+            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate),
                 let itemFrame = itemFrame(for: itemPath, kind: kind, at: .afterUpdate) else {
                 return
             }
-            if itemFrame.minY.rounded() - layoutRepresentation.settings.interItemSpacing <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if itemFrame.minY.rounded() - layoutRepresentation.settings.interItemSpacing <= minY {
                 proposedCompensatingOffset += itemFrame.height + layoutRepresentation.settings.interItemSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):
-            guard isLayoutBiggerThanScreen(at: .afterUpdate, withFullCompensation: true) else {
+            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, withFullCompensation: true) else {
                 return
             }
-            if newFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if newFrame.minY.rounded() <= minY {
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
             }
         case .delete:
-            guard isLayoutBiggerThanScreen(at: .beforeUpdate),
+            guard isLayoutBiggerThanVisibleBounds(at: .beforeUpdate),
                 let deletedFrame = itemFrame(for: itemPath, kind: kind, at: .beforeUpdate) else {
                 return
             }
-            if deletedFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if deletedFrame.minY.rounded() <= minY {
                 // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.
                 // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.
                 proposedCompensatingOffset -= (deletedFrame.height + layoutRepresentation.settings.interItemSpacing)
@@ -805,32 +814,33 @@ final class StateController {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
+        let minY = (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
         switch action {
         case .insert:
-            guard isLayoutBiggerThanScreen(at: .afterUpdate),
+            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate),
                 sectionIndex < layout(at: .afterUpdate).sections.count else {
                 return
             }
             let section = layout(at: .afterUpdate).sections[sectionIndex]
 
-            if section.offsetY.rounded() - layoutRepresentation.settings.interSectionSpacing <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if section.offsetY.rounded() - layoutRepresentation.settings.interSectionSpacing <= minY {
                 proposedCompensatingOffset += section.height + layoutRepresentation.settings.interSectionSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):
             guard sectionIndex < layout(at: .afterUpdate).sections.count,
-                isLayoutBiggerThanScreen(at: .afterUpdate, withFullCompensation: true) else {
+                isLayoutBiggerThanVisibleBounds(at: .afterUpdate, withFullCompensation: true) else {
                 return
             }
-            if newFrame.minY.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if newFrame.minY.rounded() <= minY {
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
             }
         case .delete:
-            guard isLayoutBiggerThanScreen(at: .afterUpdate),
+            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate),
                 sectionIndex < layout(at: .afterUpdate).sections.count else {
                 return
             }
             let section = layout(at: .beforeUpdate).sections[sectionIndex]
-            if section.locationHeight.rounded() <= (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded() {
+            if section.locationHeight.rounded() <= minY {
                 // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.
                 // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.
                 proposedCompensatingOffset -= (section.height + layoutRepresentation.settings.interSectionSpacing)
@@ -839,10 +849,13 @@ final class StateController {
 
     }
 
-    private func offsetByCompensation(frame: CGRect, at itemPath: ItemPath, for state: ModelState, backward: Bool = false) -> CGRect {
+    private func offsetByCompensation(frame: CGRect,
+                                      at itemPath: ItemPath,
+                                      for state: ModelState,
+                                      backward: Bool = false) -> CGRect {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
             state == .afterUpdate,
-            isLayoutBiggerThanScreen(at: .afterUpdate) else {
+            isLayoutBiggerThanVisibleBounds(at: .afterUpdate) else {
             return frame
         }
         return frame.offsetBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))

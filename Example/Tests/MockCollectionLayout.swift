@@ -3,7 +3,7 @@
 // MockCollectionLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
@@ -17,7 +17,10 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     var shouldPresentHeaderAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
     var shouldPresentFooterAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
 
+    // swiftlint:disable weak_delegate
     lazy var delegate: ChatLayoutDelegate? = self
+    // swiftlint:enable weak_delegate
+
     var settings = ChatLayoutSettings(estimatedItemSize: CGSize(width: 300, height: 40), interItemSpacing: 7, interSectionSpacing: 3)
     var viewSize = CGSize(width: 300, height: 400)
 
@@ -39,7 +42,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
 
     let keepContentOffsetAtBottomOnBatchUpdates: Bool = true
 
-    func numberOfItems(inSection section: Int) -> Int {
+    func numberOfItems(in section: Int) -> Int {
         return numberOfItemsInSection[section] ?? 0
     }
 
@@ -71,7 +74,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
             let footer = ItemModel(with: configuration(for: .footer, at: headerIndexPath))
 
             var items: [ItemModel] = []
-            for itemIndex in 0..<numberOfItems(inSection: sectionIndex) {
+            for itemIndex in 0..<numberOfItems(in: sectionIndex) {
                 let indexPath = ItemPath(item: itemIndex, section: sectionIndex)
                 items.append(ItemModel(with: configuration(for: .cell, at: indexPath)))
             }

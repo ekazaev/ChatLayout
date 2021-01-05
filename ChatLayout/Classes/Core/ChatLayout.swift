@@ -3,7 +3,7 @@
 // ChatLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
@@ -413,7 +413,7 @@ public final class ChatLayout: UICollectionViewLayout {
         guard let collectionView = collectionView,
             oldBounds.width != collectionView.bounds.width,
             keepContentOffsetAtBottomOnBatchUpdates,
-            controller.isLayoutBiggerThanScreen(at: state) else {
+            controller.isLayoutBiggerThanVisibleBounds(at: state) else {
             return
         }
         let newBounds = collectionView.bounds
@@ -617,7 +617,7 @@ public final class ChatLayout: UICollectionViewLayout {
         controller.proposedCompensatingOffset = 0
 
         if keepContentOffsetAtBottomOnBatchUpdates,
-            controller.isLayoutBiggerThanScreen(at: state),
+            controller.isLayoutBiggerThanVisibleBounds(at: state),
             controller.batchUpdateCompensatingOffset != 0,
             let collectionView = collectionView {
             let compensatingOffset: CGFloat
@@ -692,7 +692,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
-                    controller.isLayoutBiggerThanScreen(at: state),
+                    controller.isLayoutBiggerThanVisibleBounds(at: state),
                     let attributes = attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height / 2)
                 }
@@ -784,7 +784,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
-                    controller.isLayoutBiggerThanScreen(at: state),
+                    controller.isLayoutBiggerThanVisibleBounds(at: state),
                     let attributes = attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height / 2)
                 }
@@ -885,7 +885,7 @@ extension ChatLayout {
 
 extension ChatLayout: ChatLayoutRepresentation {
 
-    func numberOfItems(inSection section: Int) -> Int {
+    func numberOfItems(in section: Int) -> Int {
         guard let collectionView = collectionView else {
             return .zero
         }

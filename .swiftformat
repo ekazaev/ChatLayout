@@ -11,7 +11,7 @@
 --exponentgrouping disabled
 --fractiongrouping disabled
 --fragment false
---header "\nChatLayout\n{file}\nhttps://github.com/ekazaev/ChatLayout\n\nCreated by Eugene Kazaev in {year}.\nDistributed under the MIT license.\n"
+--header "\nChatLayout\n{file}\nhttps://github.com/ekazaev/ChatLayout\n\nCreated by Eugene Kazaev in 2020-{year}.\nDistributed under the MIT license.\n"
 --hexgrouping none
 --hexliteralcase uppercase
 --ifdef no-indent

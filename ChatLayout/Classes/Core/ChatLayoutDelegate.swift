@@ -3,7 +3,7 @@
 // ChatLayoutDelegate.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
@@ -106,7 +106,7 @@ public extension ChatLayoutDelegate {
         return .auto
     }
 
-    /// Default implementation returns: `ChatItemAlignment.full`.
+    /// Default implementation returns: `ChatItemAlignment.fullWidth`.
     func alignmentForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
         return .fullWidth
     }
