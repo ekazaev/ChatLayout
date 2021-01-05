@@ -3,7 +3,7 @@
 // ChatViewController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
@@ -243,7 +243,8 @@ extension ChatViewController: UIScrollViewDelegate {
 
     func scrollToBottom(completion: (() -> Void)? = nil) {
         // I ask content size from the layout because on IOs 12 collection view contains not updated one
-        let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x, y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
+        let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x,
+                                            y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
 
         currentInterfaceActions.options.insert(.scrollingToTop)
         UIView.animate(withDuration: 0.25, animations: { [weak self] in

@@ -3,7 +3,7 @@
 // DefaultRandomDataProvider.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
@@ -190,7 +190,12 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         case (7, true):
             return RawMessage(id: UUID(), date: date, data: .image(.image(images[Int.random(in: 0..<images.count)])), userId: sender)
         case (8, true):
-            return RawMessage(id: UUID(), date: date, data: .text(TextGenerator.getString(of: 5) + " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " + TextGenerator.getString(of: 5)), userId: sender)
+            return RawMessage(id: UUID(),
+                              date: date,
+                              data: .text(TextGenerator.getString(of: 5) +
+                                  " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " +
+                                  TextGenerator.getString(of: 5)),
+                              userId: sender)
         default:
             return RawMessage(id: UUID(), date: date, data: .text(TextGenerator.getString(of: 20)), userId: sender)
         }

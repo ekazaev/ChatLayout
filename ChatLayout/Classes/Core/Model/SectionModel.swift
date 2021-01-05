@@ -3,7 +3,7 @@
 // SectionModel.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
@@ -29,7 +29,11 @@ struct SectionModel {
     }
 
     var frame: CGRect {
-        return CGRect(x: 0, y: offsetY, width: collectionLayout.visibleBounds.width - collectionLayout.settings.additionalInsets.left - collectionLayout.settings.additionalInsets.right, height: height)
+        let additionalInsets = collectionLayout.settings.additionalInsets
+        return CGRect(x: 0,
+                      y: offsetY,
+                      width: collectionLayout.visibleBounds.width - additionalInsets.left - additionalInsets.right,
+                      height: height)
     }
 
     var height: CGFloat {

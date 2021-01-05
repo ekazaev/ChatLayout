@@ -3,7 +3,7 @@
 // StateControllerProcessUpdatesTests.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
@@ -53,7 +53,7 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         var updateItems: [UICollectionViewUpdateItem] = []
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
         for sectionIndex in 0..<layout.numberOfItemsInSection.count {
-            for itemIndex in 0..<layout.numberOfItems(inSection: sectionIndex) {
+            for itemIndex in 0..<layout.numberOfItems(in: sectionIndex) {
                 let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
                 let updateItem = MockUICollectionViewUpdateItem(indexPathBeforeUpdate: indexPath, indexPathAfterUpdate: indexPath, action: .reload)
                 updateItems.append(updateItem)

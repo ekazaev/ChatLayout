@@ -96,10 +96,6 @@ and [SwiftPM](https://github.com/apple/swift-package-manager). See the `Example`
 If you are using cocoapods you can install the whole package using `pod 'ChatLayout'`. If you do not need the additional
 components provided, you can install only the layout itself using `pod 'ChatLayout/Core'`
 
-**NB: `ChatLayout` is in pre-release state, so it doesn't respect the [semantic versioning](https://semver.org) at
-this moment and may introduce breaking changes in further versions. It is recommended to link the dependency to
-the exact version number in the dependency manager you use and increase the release version manually.**
-
 ## Contributing
 
 `ChatLayout` is in active development, and we welcome your contributions.
@@ -110,7 +106,6 @@ read [the contribution guidelines](https://github.com/ekazaev/route-composer/blo
 ## Todo
 
 - [ ] Improve the test coverage
-- [ ] Provide proper documentation
 
 ### About `UICollectionViewDiffableDataSource`
 

@@ -3,7 +3,7 @@
 // DefaultChatCollectionDataSource.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020.
+// Created by Eugene Kazaev in 2020-2021.
 // Distributed under the MIT license.
 //
 
@@ -327,6 +327,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             return
         }
         switch sections[indexPath.section].cells[indexPath.item] {
+        // Uncomment to see the effect
 //        case .messageGroup:
 //            originalAttributes.center.x -= originalAttributes.frame.width
 //        case let .message(message, bubbleType: _):
@@ -347,6 +348,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             return
         }
         switch oldSections[indexPath.section].cells[indexPath.item] {
+        // Uncomment to see the effect
 //        case .messageGroup:
 //            originalAttributes.center.x -= originalAttributes.frame.width
 //        case let .message(message, bubbleType: _):
