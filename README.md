@@ -15,6 +15,10 @@
 [![Swift 5.2](https://img.shields.io/badge/language-Swift5.2-orange.svg?style=flat)](https://developer.apple.com/swift)
 [![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2014-yellow.svg)](https://www.apple.com/ios)
 
+<p align="center">
+<img src="https://habrastorage.org/webt/ji/ba/dj/jibadjc0hul-fzfwxm2w0ywdutg.png" />
+</p>
+
 ## Table of contents
 
 - [About](#about)
