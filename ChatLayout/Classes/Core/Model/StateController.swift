@@ -267,10 +267,7 @@ final class StateController {
 
     func section(at index: Int, at state: ModelState) -> SectionModel {
         guard index < layout(at: state).sections.count else {
-            preconditionFailure("""
-            Section index \(index) is bigger than the amount of 
-            sections \(layout(at: state).sections.count)
-            """)
+            preconditionFailure("Section index \(index) is bigger than the amount of sections \(layout(at: state).sections.count)")
         }
         return layout(at: state).sections[index]
     }
