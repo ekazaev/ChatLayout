@@ -119,8 +119,8 @@ read [the contribution guidelines](https://github.com/ekazaev/route-composer/blo
 does not support the reloading of cells out of the box if you are relying on the `Hashable` protocol implementation.
 It will delete the changed cell and insert the new version of said cell. That may lead to strange animations on 
 the screen, especially when the reloaded cell changes its size. In order to get the best behaviour of the update animation 
-I would strongly recommend you rely on [DifferenceKit](https://github.com/ra1028/DifferenceKit) to process the model changes.
-The Example app does it as well.
+I would strongly recommend you rely on [DifferenceKit](https://github.com/ra1028/DifferenceKit) or a similar library 
+to process the model changes. The Example app does it as well.
 
 ### About Supplementary Views
 
