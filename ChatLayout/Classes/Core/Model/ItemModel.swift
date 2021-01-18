@@ -10,7 +10,7 @@
 import Foundation
 import UIKit
 
-struct ItemModel: Equatable {
+struct ItemModel {
 
     struct Configuration {
 

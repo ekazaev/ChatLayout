@@ -150,10 +150,6 @@ public final class ChatLayout: UICollectionViewLayout {
 
     private var invalidationActions: InvalidationActions = []
 
-    private var contentOffsetObserver: NSKeyValueObservation?
-
-    private var contentInsetObserver: NSKeyValueObservation?
-
     private var cachedCollectionViewSize: CGSize?
 
     private var cachedCollectionViewInset: UIEdgeInsets?
