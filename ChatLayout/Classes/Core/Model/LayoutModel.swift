@@ -12,9 +12,13 @@ import UIKit
 
 struct LayoutModel {
 
-    var sections: [SectionModel]
+    private(set) var sections: [SectionModel]
 
     private unowned var collectionLayout: ChatLayoutRepresentation
+
+    private var sectionIndexByIdentifierCache: [UUID: Int]?
+
+    private var itemPathByIdentifierCache: [UUID: ItemPath]?
 
     init(sections: [SectionModel], collectionLayout: ChatLayoutRepresentation) {
         self.sections = sections
@@ -24,10 +28,19 @@ struct LayoutModel {
     mutating func assembleLayout() {
         var offset: CGFloat = collectionLayout.settings.additionalInsets.top
 
-        for index in 0..<sections.count {
-            sections[index].offsetY = offset
-            offset += sections[index].height + collectionLayout.settings.interSectionSpacing
+        var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
+        var itemPathByIdentifierCache = [UUID: ItemPath]()
+
+        for sectionIndex in 0..<sections.count {
+            sectionIndexByIdentifierCache[sections[sectionIndex].id] = sectionIndex
+            sections[sectionIndex].offsetY = offset
+            offset += sections[sectionIndex].height + collectionLayout.settings.interSectionSpacing
+            for itemIndex in 0..<sections[sectionIndex].items.count {
+                itemPathByIdentifierCache[sections[sectionIndex].items[itemIndex].id] = ItemPath(item: itemIndex, section: sectionIndex)
+            }
         }
+        self.itemPathByIdentifierCache = itemPathByIdentifierCache
+        self.sectionIndexByIdentifierCache = sectionIndexByIdentifierCache
     }
 
     // MARK: To use when its is important to make the correct insertion
@@ -66,6 +79,27 @@ struct LayoutModel {
         offsetEverything(below: sectionIndex, by: heightDiff)
     }
 
+    func sectionIndex(by sectionId: UUID) -> Int? {
+        guard let sectionIndexByIdentifierCache = sectionIndexByIdentifierCache else {
+            assertionFailure("Internal inconsistency")
+            return sections.firstIndex(where: { $0.id == sectionId })
+        }
+        return sectionIndexByIdentifierCache[sectionId]
+    }
+
+    func itemPath(by itemId: UUID) -> ItemPath? {
+        guard let itemPathByIdentifierCache = itemPathByIdentifierCache else {
+            assertionFailure("Internal inconsistency")
+            for (sectionIndex, section) in sections.enumerated() {
+                if let itemIndex = section.items.firstIndex(where: { $0.id == itemId })  {
+                    return ItemPath(item: itemIndex, section: sectionIndex)
+                }
+            }
+            return nil
+        }
+        return itemPathByIdentifierCache[itemId]
+    }
+
     private mutating func offsetEverything(below index: Int, by heightDiff: CGFloat) {
         guard heightDiff != 0 else {
             return
@@ -88,6 +122,7 @@ struct LayoutModel {
 
         sections.insert(section, at: sectionIndex)
         self.sections = sections
+        resetCache()
     }
 
     mutating func removeSection(by sectionIdentifier: UUID) {
@@ -96,18 +131,22 @@ struct LayoutModel {
             return
         }
         sections.remove(at: sectionIndex)
+        resetCache()
     }
 
     mutating func removeSection(for sectionIndex: Int) {
         sections.remove(at: sectionIndex)
+        resetCache()
     }
 
     mutating func insertItem(_ item: ItemModel, at indexPath: IndexPath) {
         sections[indexPath.section].insert(item, at: indexPath.item)
+        resetCache()
     }
 
     mutating func replaceItem(_ item: ItemModel, at indexPath: IndexPath) {
         sections[indexPath.section].replace(item, at: indexPath.item)
+        resetCache()
     }
 
     mutating func removeItem(by itemId: UUID) {
@@ -116,6 +155,12 @@ struct LayoutModel {
             return
         }
         sections[sectionIndex].remove(by: itemId)
+        resetCache()
+    }
+
+    private mutating func resetCache() {
+        itemPathByIdentifierCache = nil
+        sectionIndexByIdentifierCache = nil
     }
 
 }

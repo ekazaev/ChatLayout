@@ -53,7 +53,7 @@ final class StateController {
 
     var isAnimatedBoundsChange = false
 
-    private(set) lazy var storage: [ModelState: LayoutModel] = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]
+    private(set) var storage: [ModelState: LayoutModel]
 
     private(set) var reloadedIndexes: Set<IndexPath> = []
 
@@ -79,6 +79,7 @@ final class StateController {
 
     init(layoutRepresentation: ChatLayoutRepresentation) {
         self.layoutRepresentation = layoutRepresentation
+        self.storage = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]
         resetCachedAttributeObjects()
     }
 
@@ -119,10 +120,14 @@ final class StateController {
 
     func resetCachedAttributeObjects() {
         ModelState.allCases.forEach { state in
-            cachedAttributeObjects[state] = [:]
-            ItemKind.allCases.forEach { kind in
-                cachedAttributeObjects[state]?[kind] = [:]
-            }
+            resetCachedAttributeObjects(at: state)
+        }
+    }
+
+    private func resetCachedAttributeObjects(at state: ModelState) {
+        cachedAttributeObjects[state] = [:]
+        ItemKind.allCases.forEach { kind in
+            cachedAttributeObjects[state]?[kind] = [:]
         }
     }
 
@@ -247,12 +252,7 @@ final class StateController {
     }
 
     func itemPath(by itemId: UUID, at state: ModelState) -> ItemPath? {
-        for (sectionIndex, section) in layout(at: state).sections.enumerated() {
-            if let itemIndex = section.items.firstIndex(where: { $0.id == itemId }) {
-                return ItemPath(item: itemIndex, section: sectionIndex)
-            }
-        }
-        return nil
+        return layout(at: state).itemPath(by: itemId)
     }
 
     func sectionIdentifier(for index: Int, at state: ModelState) -> UUID? {
@@ -264,7 +264,7 @@ final class StateController {
     }
 
     func sectionIndex(for sectionIdentifier: UUID, at state: ModelState) -> Int? {
-        guard let sectionIndex = layout(at: state).sections.firstIndex(where: { $0.id == sectionIdentifier }) else {
+        guard let sectionIndex = layout(at: state).sectionIndex(by: sectionIdentifier) else {
             // This occurs when getting layout attributes for initial / final animations
             return nil
         }
@@ -590,7 +590,7 @@ final class StateController {
         totalProposedCompensatingOffset = 0
 
         cachedAttributeObjects[.beforeUpdate] = cachedAttributeObjects[.afterUpdate]
-        cachedAttributeObjects[.afterUpdate] = nil
+        resetCachedAttributeObjects(at: .afterUpdate)
     }
 
     func contentSize(for state: ModelState) -> CGSize {
@@ -639,8 +639,7 @@ final class StateController {
     private func allAttributes(at state: ModelState, visibleRect: CGRect? = nil) -> [ChatLayoutAttributes] {
         let layout = self.layout(at: state)
 
-        if !isAnimatedBoundsChange,
-            let visibleRect = visibleRect {
+        if let visibleRect = visibleRect {
             enum TraverseState {
                 case notFound
                 case found
@@ -708,7 +707,7 @@ final class StateController {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
                         if let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
                             check(rect: itemFrame) {
-                            if state == .beforeUpdate {
+                            if state == .beforeUpdate || isAnimatedBoundsChange {
                                 allRects.append((frame: itemFrame, indexPath: itemPath, kind: .cell))
                             } else {
                                 var itemWasVisibleBefore: Bool {
