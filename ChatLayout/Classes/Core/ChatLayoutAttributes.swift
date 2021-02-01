@@ -31,7 +31,9 @@ public class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// `ChatLayout`s visible bounds size excluding `adjustedContentInsets` and `additionalInsets`. Added for convenience.
     public internal(set) var layoutFrame: CGRect = .zero
 
-    var id: UUID? // Debug purposes only
+    #if DEBUG
+    var id: UUID?
+    #endif
 
     convenience init(kind: ItemKind, indexPath: IndexPath = IndexPath(item: 0, section: 0)) {
         switch kind {
@@ -44,7 +46,7 @@ public class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         }
     }
 
-    /// Returns an exact copy of `ChatLayoutAttributes`
+    /// Returns an exact copy of `ChatLayoutAttributes`.
     public override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! ChatLayoutAttributes
         copy.alignment = alignment
@@ -53,7 +55,9 @@ public class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         copy.adjustedContentInsets = adjustedContentInsets
         copy.visibleBoundsSize = visibleBoundsSize
         copy.layoutFrame = layoutFrame
+        #if DEBUG
         copy.id = id
+        #endif
         return copy
     }
 
@@ -63,7 +67,8 @@ public class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
             && alignment == (object as? ChatLayoutAttributes)?.alignment
     }
 
-    var kind: ItemKind {
+    /// `ItemKind` represented by this attributes object.
+    public var kind: ItemKind {
         switch (representedElementCategory, representedElementKind) {
         case (.cell, nil):
             return .cell

@@ -33,6 +33,16 @@ public enum ItemKind: CaseIterable, Hashable {
         }
     }
 
+    /// Returns: `true` if this `ItemKind` is equal to `ItemKind.header` or `ItemKind.footer`
+    public var isSupplementaryItem: Bool {
+        switch self {
+        case .cell:
+            return false
+        case .header, .footer:
+            return true
+        }
+    }
+
     var supplementaryElementStringType: String {
         switch self {
         case .cell:

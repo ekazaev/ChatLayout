@@ -149,7 +149,9 @@ final class StateController {
                 attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: itemIndexPath)
                 cachedAttributeObjects[state]?[.header]?[itemPath] = attributes
             }
+            #if DEBUG
             attributes.id = item.id
+            #endif
             attributes.frame = headerFrame
             attributes.indexPath = itemIndexPath
             attributes.zIndex = 10
@@ -170,7 +172,9 @@ final class StateController {
                 attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: itemIndexPath)
                 cachedAttributeObjects[state]?[.footer]?[itemPath] = attributes
             }
+            #if DEBUG
             attributes.id = item.id
+            #endif
             attributes.frame = footerFrame
             attributes.indexPath = itemIndexPath
             attributes.zIndex = 10
@@ -191,7 +195,9 @@ final class StateController {
                 attributes = ChatLayoutAttributes(forCellWith: itemIndexPath)
                 cachedAttributeObjects[state]?[.cell]?[itemPath] = attributes
             }
+            #if DEBUG
             attributes.id = item.id
+            #endif
             attributes.frame = itemFrame
             attributes.indexPath = itemIndexPath
             attributes.zIndex = 0

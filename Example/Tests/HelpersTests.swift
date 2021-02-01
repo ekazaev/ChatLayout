@@ -37,6 +37,17 @@ final class HelpersTests: XCTestCase {
         XCTAssertTrue(footer == ItemKind.footer)
     }
 
+    func testItemKindSupplementaryType() {
+        let header = ItemKind.header
+        XCTAssertTrue(header.isSupplementaryItem)
+
+        let footer = ItemKind.footer
+        XCTAssertTrue(footer.isSupplementaryItem)
+
+        let cell = ItemKind.cell
+        XCTAssertFalse(cell.isSupplementaryItem)
+    }
+
     func testSupplementaryElementStringType() {
         let header = ItemKind(UICollectionView.elementKindSectionHeader)
         XCTAssertTrue(header.supplementaryElementStringType == UICollectionView.elementKindSectionHeader)

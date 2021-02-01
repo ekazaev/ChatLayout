@@ -48,7 +48,6 @@ final class ChatViewController: UIViewController {
     private var chatLayout = ChatLayout()
     private let inputBarView = InputBarAccessoryView()
     private let chatController: ChatController
-
     private let dataSource: ChatCollectionDataSource
     private let fpsCounter = FPSCounter()
     private let fpsView = EdgeAligningView<UILabel>(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))

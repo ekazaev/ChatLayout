@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "ItemKind.swift" : </span><span class="cov_high">90.00%</span>
+<span>Coverage for "ItemKind.swift" : </span><span class="cov_high">92.86%</span>
 </h2>
-<h4 class="cov_subtitle">(18 of 20 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(26 of 28 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/Model/ItemKind.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -187,63 +187,113 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">36</td>
-<td class="src"><pre><code class="objc">    var supplementaryElementStringType: String {</code></pre></td>
-<td class="coverage">2x</td>
+<td class="src"><pre><code class="objc">    /// Returns: `true` if this `ItemKind` is equal to `ItemKind.header` or `ItemKind.footer`</code></pre></td>
+<td class="coverage"></td>
 </tr>
 <tr class="covered">
 <td class="num">37</td>
-<td class="src"><pre><code class="objc">        switch self {</code></pre></td>
-<td class="coverage">2x</td>
+<td class="src"><pre><code class="objc">    public var isSupplementaryItem: Bool {</code></pre></td>
+<td class="coverage">3x</td>
 </tr>
 <tr class="covered">
 <td class="num">38</td>
-<td class="src"><pre><code class="objc">        case .cell:</code></pre></td>
-<td class="coverage">2x</td>
+<td class="src"><pre><code class="objc">        switch self {</code></pre></td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">39</td>
-<td class="src"><pre><code class="objc">            preconditionFailure("Cell type is not a supplementary view")</code></pre></td>
-<td class="coverage">!</td>
+<td class="src"><pre><code class="objc">        case .cell:</code></pre></td>
+<td class="coverage">3x</td>
 </tr>
 <tr class="covered">
 <td class="num">40</td>
-<td class="src"><pre><code class="objc">        case .header:</code></pre></td>
-<td class="coverage">2x</td>
-</tr>
-<tr class="covered">
-<td class="num">41</td>
-<td class="src"><pre><code class="objc">            return UICollectionView.elementKindSectionHeader</code></pre></td>
+<td class="src"><pre><code class="objc">            return false</code></pre></td>
 <td class="coverage">1x</td>
 </tr>
 <tr class="covered">
+<td class="num">41</td>
+<td class="src"><pre><code class="objc">        case .header, .footer:</code></pre></td>
+<td class="coverage">3x</td>
+</tr>
+<tr class="covered">
 <td class="num">42</td>
-<td class="src"><pre><code class="objc">        case .footer:</code></pre></td>
+<td class="src"><pre><code class="objc">            return true</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">43</td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="coverage">3x</td>
+</tr>
+<tr class="covered">
+<td class="num">44</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage">3x</td>
+</tr>
+<tr class="never">
+<td class="num">45</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="covered">
+<td class="num">46</td>
+<td class="src"><pre><code class="objc">    var supplementaryElementStringType: String {</code></pre></td>
+<td class="coverage">2x</td>
+</tr>
+<tr class="covered">
+<td class="num">47</td>
+<td class="src"><pre><code class="objc">        switch self {</code></pre></td>
+<td class="coverage">2x</td>
+</tr>
+<tr class="covered">
+<td class="num">48</td>
+<td class="src"><pre><code class="objc">        case .cell:</code></pre></td>
+<td class="coverage">2x</td>
+</tr>
+<tr class="missed">
+<td class="num">49</td>
+<td class="src"><pre><code class="objc">            preconditionFailure("Cell type is not a supplementary view")</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="covered">
+<td class="num">50</td>
+<td class="src"><pre><code class="objc">        case .header:</code></pre></td>
+<td class="coverage">2x</td>
+</tr>
+<tr class="covered">
+<td class="num">51</td>
+<td class="src"><pre><code class="objc">            return UICollectionView.elementKindSectionHeader</code></pre></td>
+<td class="coverage">1x</td>
+</tr>
+<tr class="covered">
+<td class="num">52</td>
+<td class="src"><pre><code class="objc">        case .footer:</code></pre></td>
+<td class="coverage">2x</td>
+</tr>
+<tr class="covered">
+<td class="num">53</td>
 <td class="src"><pre><code class="objc">            return UICollectionView.elementKindSectionFooter</code></pre></td>
 <td class="coverage">1x</td>
 </tr>
 <tr class="covered">
-<td class="num">44</td>
+<td class="num">54</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
-<td class="num">45</td>
+<td class="num">55</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="never">
-<td class="num">46</td>
+<td class="num">56</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">47</td>
+<td class="num">57</td>
 <td class="src"><pre><code class="objc">}</code></pre></td>
 <td class="coverage"></td>
 </tr>

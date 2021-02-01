@@ -126,7 +126,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
 
 }
 
-/// UITextView with hacks to avoid selection, loupe, define...
+/// UITextView with hacks to avoid selection
 private final class MessageTextView: UITextView {
 
     override var isFocused: Bool {

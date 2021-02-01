@@ -17,7 +17,7 @@ public protocol StaticViewFactory {
     associatedtype View: UIView
 
     /// Factory method that will be called by the corresponding container `UIView`
-    /// - Parameter bounds: A bouds rect of the container.
+    /// - Parameter bounds: A bounds rect of the container.
     /// - Returns: Build `UIView` instance.
     static func buildView(within bounds: CGRect) -> View?
 
@@ -32,7 +32,7 @@ public extension StaticViewFactory where Self: UIView {
 
 }
 
-/// Use this factory to specify that this view should not be build and should be equla to nil within the container.
+/// Use this factory to specify that this view should not be build and should be equal to nil within the container.
 public struct VoidViewFactory: StaticViewFactory {
 
     /// Nil view placeholder type.
