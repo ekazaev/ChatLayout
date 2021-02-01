@@ -134,7 +134,7 @@ only after switches to `UICollectionReusableView`s. You will most likely face so
 `ChatLayout` can be used together with [Texture](https://github.com/TextureGroup/Texture) to improve the auto-layout performance. 
 But keep in mind that it's default wrapper is hardcoded to work exclusively with `UICollectionViewFlowLayout`. 
 [See issue](https://github.com/TextureGroup/Texture/issues/1959).
-You wil have to implement `ChatLayoutDelegate` yourself and propagate the node size manually.
+You will have to implement `ChatLayoutDelegate` yourself and propagate the node size manually.
 
 ## License
 
