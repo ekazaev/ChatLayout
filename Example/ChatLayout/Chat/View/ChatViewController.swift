@@ -285,6 +285,8 @@ extension ChatViewController: ChatControllerDelegate {
         }
 
         func process() {
+            // If there is a big amount of changes, it is better to move that calculation out of the main thread.
+            // Here is on the main thread for the simplicity.
             let changeSet = StagedChangeset(source: dataSource.sections, target: sections).flattenIfPossible()
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in

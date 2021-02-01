@@ -15,4 +15,13 @@ enum ModelState: Hashable, CaseIterable {
 
     case afterUpdate
 
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .afterUpdate:
+            hasher.combine(1)
+        case .beforeUpdate:
+            hasher.combine(0)
+        }
+    }
+
 }

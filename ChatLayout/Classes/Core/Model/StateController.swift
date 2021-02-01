@@ -53,7 +53,7 @@ final class StateController {
 
     var isAnimatedBoundsChange = false
 
-    private(set) lazy var storage: [ModelState: LayoutModel] = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]
+    private(set) var storage: [ModelState: LayoutModel]
 
     private(set) var reloadedIndexes: Set<IndexPath> = []
 
@@ -79,6 +79,7 @@ final class StateController {
 
     init(layoutRepresentation: ChatLayoutRepresentation) {
         self.layoutRepresentation = layoutRepresentation
+        self.storage = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]
         resetCachedAttributeObjects()
     }
 
@@ -119,10 +120,14 @@ final class StateController {
 
     func resetCachedAttributeObjects() {
         ModelState.allCases.forEach { state in
-            cachedAttributeObjects[state] = [:]
-            ItemKind.allCases.forEach { kind in
-                cachedAttributeObjects[state]?[kind] = [:]
-            }
+            resetCachedAttributeObjects(at: state)
+        }
+    }
+
+    private func resetCachedAttributeObjects(at state: ModelState) {
+        cachedAttributeObjects[state] = [:]
+        ItemKind.allCases.forEach { kind in
+            cachedAttributeObjects[state]?[kind] = [:]
         }
     }
 
@@ -246,13 +251,8 @@ final class StateController {
         return itemFrame
     }
 
-    func itemPath(by itemId: UUID, at state: ModelState) -> ItemPath? {
-        for (sectionIndex, section) in layout(at: state).sections.enumerated() {
-            if let itemIndex = section.items.firstIndex(where: { $0.id == itemId }) {
-                return ItemPath(item: itemIndex, section: sectionIndex)
-            }
-        }
-        return nil
+    func itemPath(by itemId: UUID, kind: ItemKind, at state: ModelState) -> ItemPath? {
+        return layout(at: state).itemPath(by: itemId, kind: kind)
     }
 
     func sectionIdentifier(for index: Int, at state: ModelState) -> UUID? {
@@ -264,7 +264,7 @@ final class StateController {
     }
 
     func sectionIndex(for sectionIdentifier: UUID, at state: ModelState) -> Int? {
-        guard let sectionIndex = layout(at: state).sections.firstIndex(where: { $0.id == sectionIdentifier }) else {
+        guard let sectionIndex = layout(at: state).sectionIndex(by: sectionIdentifier) else {
             // This occurs when getting layout attributes for initial / final animations
             return nil
         }
@@ -388,6 +388,13 @@ final class StateController {
     func process(updateItems: [UICollectionViewUpdateItem]) {
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
+        let updateItems = updateItems.sorted(by: {
+            if $0.updateAction != $1.updateAction {
+                return $0.updateAction.rawValue > $1.updateAction.rawValue
+            } else {
+                return $0.indexPathAfterUpdate?.item ?? -1 < $1.indexPathAfterUpdate?.item ?? -1
+            }
+        })
 
         var afterUpdateModel = layout(at: .beforeUpdate)
         resetCachedAttributeObjects()
@@ -467,8 +474,8 @@ final class StateController {
                     deletedIndexes.insert(indexPath)
                 }
             case .reload:
-                guard let indexPath = indexPathBeforeUpdate else {
-                    assertionFailure("`indexPathBeforeUpdate` cannot be `nil` for a `.reload` update action")
+                guard let indexPath = indexPathAfterUpdate else {
+                    assertionFailure("`indexPathAfterUpdate` cannot be `nil` for a `.reload` update action")
                     return
                 }
 
@@ -553,7 +560,7 @@ final class StateController {
 
         reloadedIndexes.sorted(by: { $0 < $1 }).forEach {
             guard let oldItem = self.item(for: $0.itemPath, kind: .cell, at: .beforeUpdate),
-                let newItemIndexPath = self.itemPath(by: oldItem.id, at: .afterUpdate),
+                let newItemIndexPath = self.itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
                 let newItem = self.item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
                 assertionFailure("Internal inconsistency")
                 return
@@ -590,7 +597,7 @@ final class StateController {
         totalProposedCompensatingOffset = 0
 
         cachedAttributeObjects[.beforeUpdate] = cachedAttributeObjects[.afterUpdate]
-        cachedAttributeObjects[.afterUpdate] = nil
+        resetCachedAttributeObjects(at: .afterUpdate)
     }
 
     func contentSize(for state: ModelState) -> CGSize {
@@ -639,8 +646,7 @@ final class StateController {
     private func allAttributes(at state: ModelState, visibleRect: CGRect? = nil) -> [ChatLayoutAttributes] {
         let layout = self.layout(at: state)
 
-        if !isAnimatedBoundsChange,
-            let visibleRect = visibleRect {
+        if let visibleRect = visibleRect {
             enum TraverseState {
                 case notFound
                 case found
@@ -708,12 +714,12 @@ final class StateController {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
                         if let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
                             check(rect: itemFrame) {
-                            if state == .beforeUpdate {
+                            if state == .beforeUpdate || isAnimatedBoundsChange {
                                 allRects.append((frame: itemFrame, indexPath: itemPath, kind: .cell))
                             } else {
                                 var itemWasVisibleBefore: Bool {
                                     guard let itemIdentifier = self.itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
-                                        let initialIndexPath = self.itemPath(by: itemIdentifier, at: .beforeUpdate),
+                                        let initialIndexPath = self.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate),
                                         let item = self.item(for: initialIndexPath, kind: .cell, at: .beforeUpdate),
                                         item.calculatedOnce == true,
                                         let itemFrame = self.itemFrame(for: initialIndexPath, kind: .cell, at: .beforeUpdate, isFinal: false),
@@ -730,7 +736,7 @@ final class StateController {
                                         return true
                                     }
                                     if let itemIdentifier = self.itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
-                                        let initialIndexPath = self.itemPath(by: itemIdentifier, at: .beforeUpdate)?.indexPath,
+                                        let initialIndexPath = self.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate)?.indexPath,
                                         movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
                                         let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
                                         itemFrame.intersects(offsetVisibleBounds) {
