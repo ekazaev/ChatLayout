@@ -89,6 +89,11 @@ struct SectionModel {
             offsetEverything(below: -1, by: header.height)
             return
         }
+        #if DEBUG
+        if header.id != oldHeader.id {
+            assertionFailure("Internal inconsistency")
+        }
+        #endif
         self.header = header
         let heightDiff = header.height - oldHeader.height
         offsetEverything(below: -1, by: heightDiff)
@@ -100,6 +105,11 @@ struct SectionModel {
             return
         }
         let oldItem = items[index]
+        #if DEBUG
+        if item.id != oldItem.id {
+            assertionFailure("Internal inconsistency")
+        }
+        #endif
         items[index] = item
 
         let heightDiff = item.height - oldItem.height
@@ -107,6 +117,12 @@ struct SectionModel {
     }
 
     mutating func setAndAssemble(footer: ItemModel) {
+        #if DEBUG
+        if let oldFooter = self.footer,
+            footer.id != oldFooter.id {
+            assertionFailure("Internal inconsistency")
+        }
+        #endif
         self.footer = footer
     }
 

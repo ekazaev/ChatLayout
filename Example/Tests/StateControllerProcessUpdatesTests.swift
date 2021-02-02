@@ -65,8 +65,12 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.controller.contentHeight(at: .afterUpdate))
         layout.controller.commitUpdates()
 
-        layout.controller.process(updateItems: [MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 0), indexPathAfterUpdate: IndexPath(item: NSNotFound, section: 0), action: .reload),
-                                                MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 1), indexPathAfterUpdate: IndexPath(item: NSNotFound, section: 1), action: .reload)])
+        layout.controller.process(updateItems: [MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 0),
+                                                                               indexPathAfterUpdate: IndexPath(item: NSNotFound, section: 0),
+                                                                               action: .reload),
+                                                MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 1),
+                                                                               indexPathAfterUpdate: IndexPath(item: NSNotFound, section: 1),
+                                                                               action: .reload)])
 
         XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.controller.contentHeight(at: .afterUpdate))
         layout.controller.commitUpdates()
@@ -77,9 +81,15 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
         var updateItems: [UICollectionViewUpdateItem] = []
-        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 0), indexPathAfterUpdate: nil, action: .reload))
-        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 1), indexPathAfterUpdate: nil, action: .reload))
-        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 2), indexPathAfterUpdate: nil, action: .reload))
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 0),
+                                                          indexPathAfterUpdate: IndexPath(item: NSNotFound, section: 0),
+                                                          action: .reload))
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 1),
+                                                          indexPathAfterUpdate: IndexPath(item: NSNotFound, section: 1),
+                                                          action: .reload))
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: NSNotFound, section: 2),
+                                                          indexPathAfterUpdate: IndexPath(item: NSNotFound, section: 2),
+                                                          action: .reload))
 
         layout.settings.estimatedItemSize = .init(width: 300, height: 50)
         layout.shouldPresentHeaderAtSection[0] = false
@@ -270,8 +280,14 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 1), kind: .cell, at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemPath(by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate)!, at: .afterUpdate), ItemPath(item: 0, section: 0))
-        XCTAssertEqual(layout.controller.itemPath(by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)!, at: .afterUpdate), ItemPath(item: 0, section: 2))
+        XCTAssertEqual(layout.controller.itemPath(by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate)!,
+                                                  kind: .cell,
+                                                  at: .afterUpdate),
+                       ItemPath(item: 0, section: 0))
+        XCTAssertEqual(layout.controller.itemPath(by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)!,
+                                                  kind: .cell,
+                                                  at: .afterUpdate),
+                       ItemPath(item: 0, section: 2))
         layout.controller.commitUpdates()
     }
 
@@ -325,6 +341,63 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
 
         layout.controller.commitUpdates()
+    }
+
+    func testDeleteReloadProcessOrder() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection = [0: 3]
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        var updateItems: [UICollectionViewUpdateItem] = []
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 0, section: 0),
+                                                          indexPathAfterUpdate: nil,
+                                                          action: .delete))
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 1, section: 0),
+                                                          indexPathAfterUpdate: nil,
+                                                          action: .delete))
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 2, section: 0),
+                                                          indexPathAfterUpdate: IndexPath(item: 2, section: 0),
+                                                          action: .reload))
+        layout.controller.process(updateItems: updateItems)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 1)
+    }
+
+    func testDeleteInsertProcessOrder() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection = [0: 3]
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        var updateItems: [UICollectionViewUpdateItem] = []
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 0, section: 0),
+                                                          indexPathAfterUpdate: nil,
+                                                          action: .delete))
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 1, section: 0),
+                                                          indexPathAfterUpdate: nil,
+                                                          action: .delete))
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: nil,
+                                                          indexPathAfterUpdate: IndexPath(item: 0, section: 0),
+                                                          action: .insert))
+        layout.controller.process(updateItems: updateItems)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 2)
+    }
+
+    func testMoveInsertReloadProcessOrder() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection = [0: 3]
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        var updateItems: [UICollectionViewUpdateItem] = []
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 2, section: 0),
+                                                          indexPathAfterUpdate: IndexPath(item: 0, section: 0),
+                                                          action: .move))
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: nil,
+                                                          indexPathAfterUpdate: IndexPath(item: 0, section: 0),
+                                                          action: .insert))
+        updateItems.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: IndexPath(item: 1, section: 0),
+                                                          indexPathAfterUpdate: IndexPath(item: 1, section: 0),
+                                                          action: .reload))
+        layout.controller.process(updateItems: updateItems)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 4)
     }
 
     func testInsertionPerformance() {

@@ -601,7 +601,6 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Notifies the layout object that the contents of the collection view are about to change.
     public override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
-        let updateItems = updateItems.sorted(by: { $0.indexPathAfterUpdate?.item ?? -1 < $1.indexPathAfterUpdate?.item ?? -1 })
         controller.process(updateItems: updateItems)
         state = .afterUpdate
         dontReturnAttributes = false
@@ -658,7 +657,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 }
                 attributesForPendingAnimations[.cell]?[itemPath] = attributes
             } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
-                let initialIndexPath = controller.itemPath(by: itemIdentifier, at: .beforeUpdate) {
+                let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate) {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 attributes?.indexPath = itemIndexPath
                 if #available(iOS 13.0, *) {
@@ -700,7 +699,7 @@ public final class ChatLayout: UICollectionViewLayout {
                     delegate.finalLayoutAttributesForDeletedItem(self, of: .cell, at: itemIndexPath, modifying: attributes)
                 }
             } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, kind: .cell, at: .beforeUpdate),
-                let finalIndexPath = controller.itemPath(by: itemIdentifier, at: .afterUpdate) {
+                let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .afterUpdate) {
                 if controller.movedIndexes.contains(itemIndexPath) || controller.movedSectionsIndexes.contains(itemPath.section) ||
                     controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
                     attributes = controller.itemAttributes(for: finalIndexPath, kind: .cell, at: .afterUpdate)?.typedCopy()
@@ -747,8 +746,8 @@ public final class ChatLayout: UICollectionViewLayout {
                     delegate.initialLayoutAttributesForInsertedItem(self, of: kind, at: elementIndexPath, modifying: attributes, on: .initial)
                 }
                 attributesForPendingAnimations[kind]?[elementPath] = attributes
-            } else if let itemIdentifier = controller.itemIdentifier(for: elementPath, kind: .cell, at: .afterUpdate),
-                let initialIndexPath = controller.itemPath(by: itemIdentifier, at: .beforeUpdate) {
+            } else if let itemIdentifier = controller.itemIdentifier(for: elementPath, kind: kind, at: .afterUpdate),
+                let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .beforeUpdate) {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 attributes?.indexPath = elementIndexPath
 
@@ -792,7 +791,7 @@ public final class ChatLayout: UICollectionViewLayout {
                     delegate.finalLayoutAttributesForDeletedItem(self, of: kind, at: elementIndexPath, modifying: attributes)
                 }
             } else if let itemIdentifier = controller.itemIdentifier(for: elementPath, kind: kind, at: .beforeUpdate),
-                let finalIndexPath = controller.itemPath(by: itemIdentifier, at: .afterUpdate) {
+                let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .afterUpdate) {
                 attributes = controller.itemAttributes(for: finalIndexPath, kind: kind, at: .afterUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 attributes?.indexPath = elementIndexPath
                 attributesForPendingAnimations[kind]?[elementPath] = attributes
