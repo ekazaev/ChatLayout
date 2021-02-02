@@ -175,11 +175,18 @@ struct LayoutModel {
     }
 
     mutating func removeItem(by itemId: UUID) {
-        guard let sectionIndex = sections.firstIndex(where: { $0.items.firstIndex(where: { $0.id == itemId }) != nil }) else {
+        var itemPath: ItemPath?
+        for (sectionIndex, section) in sections.enumerated() {
+            if let itemIndex = section.items.firstIndex(where: { $0.id == itemId }) {
+                itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                break
+            }
+        }
+        guard let path = itemPath else {
             assertionFailure("Internal inconsistency")
             return
         }
-        sections[sectionIndex].remove(by: itemId)
+        sections[path.section].remove(at: path.item)
         resetCache()
     }
 

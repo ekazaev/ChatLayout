@@ -443,7 +443,6 @@ public final class ChatLayout: UICollectionViewLayout {
         shouldInvalidateLayout = item.calculatedSize == nil
 
         if item.alignment != preferredMessageAttributes.alignment {
-            controller.update(alignment: preferredMessageAttributes.alignment, for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state)
             shouldInvalidateLayout = true
         }
 
@@ -466,8 +465,11 @@ public final class ChatLayout: UICollectionViewLayout {
 
         let newItemSize = itemSize(with: preferredMessageAttributes)
 
-        controller.update(preferredSize: newItemSize, for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state)
-        controller.update(alignment: preferredMessageAttributes.alignment, for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state)
+        controller.update(preferredSize: newItemSize,
+                          alignment: preferredMessageAttributes.alignment,
+                          for: preferredAttributesItemPath,
+                          kind: preferredMessageAttributes.kind,
+                          at: state)
 
         let context = super.invalidationContext(forPreferredLayoutAttributes: preferredMessageAttributes, withOriginalAttributes: originalAttributes) as! ChatLayoutInvalidationContext
 

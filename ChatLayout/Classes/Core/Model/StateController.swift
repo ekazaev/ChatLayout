@@ -341,7 +341,7 @@ final class StateController {
         }
     }
 
-    func update(preferredSize: CGSize, for itemPath: ItemPath, kind: ItemKind, at state: ModelState) {
+    func update(preferredSize: CGSize, alignment: ChatItemAlignment, for itemPath: ItemPath, kind: ItemKind, at state: ModelState) {
         guard var item = item(for: itemPath, kind: kind, at: state) else {
             assertionFailure("Internal inconsistency")
             return
@@ -349,6 +349,7 @@ final class StateController {
         var layout = self.layout(at: state)
         let previousFrame = item.frame
         cachedAttributesState = nil
+        item.alignment = alignment
         item.calculatedSize = preferredSize
         item.calculatedOnce = true
 
@@ -363,26 +364,6 @@ final class StateController {
         storage[state] = layout
         let frameUpdateAction = CompensatingAction.frameUpdate(previousFrame: previousFrame, newFrame: item.frame)
         compensateOffsetIfNeeded(for: itemPath, kind: kind, action: frameUpdateAction)
-    }
-
-    func update(alignment: ChatItemAlignment, for itemPath: ItemPath, kind: ItemKind, at state: ModelState) {
-        guard var item = item(for: itemPath, kind: kind, at: state) else {
-            assertionFailure("Internal inconsistency")
-            return
-        }
-        var layout = self.layout(at: state)
-        cachedAttributesState = nil
-        item.alignment = alignment
-
-        switch kind {
-        case .header:
-            layout.setAndAssemble(header: item, sectionIndex: itemPath.section)
-        case .footer:
-            layout.setAndAssemble(footer: item, sectionIndex: itemPath.section)
-        case .cell:
-            layout.setAndAssemble(item: item, sectionIndex: itemPath.section, itemIndex: itemPath.item)
-        }
-        storage[state] = layout
     }
 
     func process(updateItems: [UICollectionViewUpdateItem]) {

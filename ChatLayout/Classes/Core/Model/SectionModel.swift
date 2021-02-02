@@ -182,12 +182,4 @@ struct SectionModel {
         items.remove(at: index)
     }
 
-    mutating func remove(by itemId: UUID) {
-        guard let index = items.firstIndex(where: { $0.id == itemId }) else {
-            assertionFailure("Internal inconsistency")
-            return
-        }
-        items.remove(at: index)
-    }
-
 }

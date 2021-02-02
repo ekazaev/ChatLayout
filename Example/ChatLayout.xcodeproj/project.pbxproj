@@ -24,6 +24,7 @@
 		1BE54BC5C70CB9FA1260B54D /* ChatDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE544BF8E723F3D86B4D774 /* ChatDateFormatter.swift */; };
 		1BE54DBD5F84AF25128B6789 /* MockUICollectionViewUpdateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */; };
 		1BE54E0ABF0E8D9E61D2662B /* ChatViewControllerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54241EB5DD7BC464607EE /* ChatViewControllerBuilder.swift */; };
+		1BE54ECBD0FC824B71DE1044 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */; };
 		1BE54FDB9836397E2694B9D7 /* HelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE542A452EBF25EC59440C0 /* HelpersTests.swift */; };
 		4504F3F324FA66F600385590 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3AB24FA66F500385590 /* Constants.swift */; };
 		4504F3F424FA66F600385590 /* ChatControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3AD24FA66F500385590 /* ChatControllerDelegate.swift */; };
@@ -92,6 +93,7 @@
 /* Begin PBXFileReference section */
 		12FB56A5FF321AA24C456635 /* Pods_ChatLayout_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatLayout_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		187B89468A68AF411025A59A /* Pods_ChatLayout_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatLayout_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		1BE54241EB5DD7BC464607EE /* ChatViewControllerBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewControllerBuilder.swift; sourceTree = "<group>"; };
 		1BE542A452EBF25EC59440C0 /* HelpersTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpersTests.swift; sourceTree = "<group>"; };
 		1BE54438EB2C5DAB78ACB5F8 /* KeyboardInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardInfo.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 				4504F3D724FA66F500385590 /* EditNotifier.swift */,
 				4504F3D824FA66F500385590 /* DefaultBubbleController.swift */,
 				4504F3D924FA66F500385590 /* EditNotifierDelegate.swift */,
+				1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -755,6 +758,7 @@
 				1BE546BC2257F3C448BA54F2 /* KeyboardListener.swift in Sources */,
 				1BE5475E09C9696745B113F1 /* KeyboardListenerDelegate.swift in Sources */,
 				1BE5496732EAB127C8019477 /* KeyboardInfo.swift in Sources */,
+				1BE54ECBD0FC824B71DE1044 /* UIView+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

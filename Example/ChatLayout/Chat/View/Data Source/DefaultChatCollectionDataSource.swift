@@ -119,7 +119,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
                                                bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: .incoming, bubbleType: .tailed))
         bubbleView.customView.setup(with: controller)
         controller.view = bubbleView.customView
-        cell.customView.accessoryView?.isHidden = true
+        cell.customView.accessoryView?.isHiddenSafe = true
         cell.delegate = bubbleView.customView
 
         return cell
@@ -166,9 +166,9 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
                                                  bubble: Cell.BubbleType,
                                                  status: MessageStatus) {
         cellView.alignment = .bottom
-        cellView.leadingView?.isHidden = !alignment.isIncoming
+        cellView.leadingView?.isHiddenSafe = !alignment.isIncoming
         cellView.leadingView?.alpha = alignment.isIncoming ? 1 : 0
-        cellView.trailingView?.isHidden = alignment.isIncoming
+        cellView.trailingView?.isHiddenSafe = alignment.isIncoming
         cellView.trailingView?.alpha = alignment.isIncoming ? 0 : 1
         cellView.trailingView?.setup(with: status)
 
