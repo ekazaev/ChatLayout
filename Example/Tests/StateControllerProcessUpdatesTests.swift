@@ -448,7 +448,7 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
         measure {
             for i in 0..<1000 {
-                layout.controller.update(preferredSize: CGSize(width: Int(arc4random_uniform(200)) + 100, height: Int(arc4random_uniform(500)) + 100), for: ItemPath(item: i, section: 0), kind: .cell, at: .beforeUpdate)
+                layout.controller.update(preferredSize: CGSize(width: 300, height: 300), alignment: .center, for: ItemPath(item: i, section: 0), kind: .cell, at: .beforeUpdate)
             }
         }
     }
