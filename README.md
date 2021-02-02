@@ -32,6 +32,7 @@
     - [About `UICollectionViewDiffableDataSource`](#about-uicollectionviewdiffabledatasource)
     - [About Supplementary Views](#about-supplementary-views)
     - [About Texture](#about-texture)
+    - [About animation](#about-animation)
 - [License](#license)
 - [Articles](#articles)
 - [Author](#author)
@@ -135,6 +136,14 @@ only after switches to `UICollectionReusableView`s. You will most likely face so
 But keep in mind that it's default wrapper is hardcoded to work exclusively with `UICollectionViewFlowLayout`. 
 [See issue](https://github.com/TextureGroup/Texture/issues/1959).
 You will have to implement `ChatLayoutDelegate` yourself and propagate the node size manually.
+
+### About animation
+
+If you see a strange or unexpected animation during the updates, check your data model and **the commands you send to the
+`UICollectionView`'s `performBatchUpdates`**. Especialy if you are using some diffing algorithms like [DifferenceKit](https://github.com/ra1028/DifferenceKit).
+It is very possible that you are sending delete/insert commands when you expect to see reload. The easiest way to check it is by adding
+`print("\(updateItems)")` into `ChatLayout.prepare(forCollectionViewUpdates:)` method. `ChatLayout` doesn't know what you expected to see. 
+It just processes your changes according to the commands it has received.
 
 ## License
 
