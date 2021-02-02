@@ -192,6 +192,9 @@ final class ChatViewController: UIViewController {
 extension ChatViewController: UIScrollViewDelegate {
 
     public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        guard scrollView.contentSize.height > 0 else {
+            return false
+        }
         // Blocking the call of loadPreviousMessages() as UIScrollView behaves the way that it will scroll to the top even if we keep adding
         // content there and keep changing the content offset until it actually reaches the top. So instead we wait until it reaches the top and initiate
         // the loading after.
