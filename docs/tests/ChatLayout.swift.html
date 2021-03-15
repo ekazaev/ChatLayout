@@ -2884,7 +2884,7 @@
 </tr>
 <tr class="missed">
 <td class="num">575</td>
-<td class="src"><pre><code class="objc">                    let maxAllowed = max(0, contentHeight - collectionView.frame.height + collectionView.adjustedContentInset.bottom)</code></pre></td>
+<td class="src"><pre><code class="objc">                    let maxAllowed = max(-collectionView.adjustedContentInset.top, contentHeight - collectionView.frame.height + collectionView.adjustedContentInset.bottom)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
