@@ -56,9 +56,9 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let dispatchQueue = DispatchQueue.global(qos: .userInteractive)
 
-    private let enableTyping = true
+    private let enableTyping = false
 
-    private let enableNewMessages = true
+    private let enableNewMessages = false
 
     private let enableRichContent = true
 
@@ -101,7 +101,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
             guard let self = self else {
                 return
             }
-            let messages = self.createBunchOfMessages(number: 50)
+            let messages = self.createBunchOfMessages(number: 500)
             if messages.count > 10 {
                 self.lastReceivedUUID = messages[messages.count - 10].id
             }

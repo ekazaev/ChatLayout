@@ -93,6 +93,7 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
     /// - Parameter layoutAttributes: The attributes provided by the layout object. These attributes represent the values that the layout intends to apply to the cell.
     /// - Returns: Modified `UICollectionViewLayoutAttributes`
     public override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        log("\(#function) \(layoutAttributes)")
         guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {
             return super.preferredLayoutAttributesFitting(layoutAttributes)
         }

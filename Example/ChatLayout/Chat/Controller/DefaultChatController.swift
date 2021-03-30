@@ -92,7 +92,7 @@ final class DefaultChatController: ChatController {
                         result.append(section)
                         return
                     }
-                    if Calendar.current.isDate(prevMessage.date, equalTo: message.date, toGranularity: .hour) {
+                    if Calendar.current.isDate(prevMessage.date, equalTo: message.date, toGranularity: .year) {
                         section.append(message)
                         result[result.count - 1] = section
                     } else {
@@ -120,20 +120,20 @@ final class DefaultChatController: ChatController {
                     if let lastMessage = lastMessageStorage {
                         if lastMessage.owner != message.owner {
                             lastMessageStorage = message
-                            return [titleCell, .message(message, bubbleType: bubble)]
+                            return [.message(message, bubbleType: bubble)]
                         } else {
                             lastMessageStorage = message
                             return [.message(message, bubbleType: bubble)]
                         }
                     } else {
                         lastMessageStorage = message
-                        return [titleCell, .message(message, bubbleType: bubble)]
+                        return [.message(message, bubbleType: bubble)]
                     }
                 }.joined())
 
                 if let firstMessage = messages.first {
                     let dateCell = Cell.date(DateGroup(id: firstMessage.id, date: firstMessage.date))
-                    cells.insert(dateCell, at: 0)
+                    //cells.insert(dateCell, at: 0)
                 }
 
                 if self.typingState == .typing,
@@ -305,7 +305,14 @@ extension DefaultChatController: ReloadDelegate {
 extension DefaultChatController: EditingAccessoryControllerDelegate {
 
     func deleteMessage(with id: UUID) {
-        messages = Array(messages.filter { $0.id != id })
+        let index = messages.firstIndex(where: {  $0.id == id })!
+        //messages = Array(messages.filter { $0.id != id })
+        messages = Array(messages.enumerated().compactMap({ offset, message in
+            guard (offset < index) || (offset > index + 10) else {
+                return nil
+            }
+            return message
+        }))
         propagateLatestMessages(completion: { sections in
             self.delegate?.update(with: sections)
         })

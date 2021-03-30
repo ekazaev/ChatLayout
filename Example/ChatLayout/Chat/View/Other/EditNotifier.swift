@@ -11,7 +11,7 @@ import Foundation
 
 final class EditNotifier {
 
-    private(set) var isEditing = false
+    private(set) var isEditing = true
 
     private var delegates = NSHashTable<AnyObject>.weakObjects()
 

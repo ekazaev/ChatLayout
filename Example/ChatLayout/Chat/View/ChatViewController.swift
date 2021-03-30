@@ -103,7 +103,7 @@ final class ChatViewController: UIViewController {
         chatLayout.settings.interItemSpacing = 8
         chatLayout.settings.interSectionSpacing = 8
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
-        chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
+        chatLayout.keepContentOffsetAtBottomOnBatchUpdates = false
 
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: chatLayout)
         view.addSubview(collectionView)
@@ -302,7 +302,7 @@ extension ChatViewController: ChatControllerDelegate {
                                       let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
                                       self.collectionView.reloadData()
                                       // We want so that user on reload appeared at the very bottom of the layout
-                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
+                                      //self.chatLayout.restoreContentOffset(with: positionSnapshot)
                                   },
                                   completion: { _ in
                                       completion?()

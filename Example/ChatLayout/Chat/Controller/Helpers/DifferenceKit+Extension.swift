@@ -10,6 +10,7 @@
 import DifferenceKit
 import Foundation
 import UIKit
+import ChatLayout
 
 public extension UICollectionView {
 
@@ -51,6 +52,41 @@ public extension UICollectionView {
                 completion?(false)
                 return
             }
+
+            var updateItems = [CollectionViewUpdateItem]()
+            if !changeset.sectionDeleted.isEmpty {
+                updateItems.append(contentsOf: changeset.sectionDeleted.map({ .sectionDelete(sectionIndex: $0) }))
+            }
+
+            if !changeset.sectionInserted.isEmpty {
+                updateItems.append(contentsOf: changeset.sectionInserted.map({ .sectionInsert(sectionIndex: $0) }))
+            }
+
+            if !changeset.sectionUpdated.isEmpty {
+                updateItems.append(contentsOf: changeset.sectionUpdated.map({ .sectionReload(sectionIndex: $0) }))
+            }
+
+            if !changeset.sectionMoved.isEmpty {
+                updateItems.append(contentsOf: changeset.sectionMoved.map({ .sectionMove(initialSectionIndex: $0, finalSectionIndex: $1) }))
+            }
+
+            if !changeset.elementDeleted.isEmpty {
+                updateItems.append(contentsOf: changeset.elementDeleted.map({ .itemDelete(itemIndexPath: IndexPath(item: $0.element, section: $0.section)) }))
+            }
+
+            if !changeset.elementInserted.isEmpty {
+                updateItems.append(contentsOf: changeset.elementInserted.map({ .itemInsert(itemIndexPath: IndexPath(item: $0.element, section: $0.section)) }))
+            }
+
+            if !changeset.elementUpdated.isEmpty {
+                updateItems.append(contentsOf: changeset.elementUpdated.map({ .itemReload(itemIndexPath: IndexPath(item: $0.element, section: $0.section)) }))
+            }
+
+            if !changeset.elementMoved.isEmpty {
+                updateItems.append(contentsOf: changeset.elementMoved.map({ .itemMove(initialItemIndexPath: IndexPath(item: $0.element, section: $0.section), finalItemIndexPath: IndexPath(item: $1.element, section: $1.section)) }))
+            }
+
+            //(collectionViewLayout as? ChatLayout)?.preloadChanges(forCollectionViewUpdates: updateItems)
 
             performBatchUpdates({
                 setData(changeset.data)
