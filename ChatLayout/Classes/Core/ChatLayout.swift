@@ -403,7 +403,7 @@ public final class ChatLayout: UICollectionViewLayout {
     /// Prepares the layout object for animated changes to the view’s bounds or the insertion or deletion of items.
     public override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
         controller.isAnimatedBoundsChange = true
-        controller.process(updateItems: [])
+        controller.process(changeItems: [])
         state = .afterUpdate
         prepareActions.remove(.switchStates)
         guard let collectionView = collectionView,
@@ -603,7 +603,8 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Notifies the layout object that the contents of the collection view are about to change.
     public override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
-        controller.process(updateItems: updateItems)
+        let changeItems = updateItems.compactMap { ChangeItem(with: $0) }
+        controller.process(changeItems: changeItems)
         state = .afterUpdate
         dontReturnAttributes = false
         super.prepare(forCollectionViewUpdates: updateItems)

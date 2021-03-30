@@ -366,151 +366,109 @@ final class StateController {
         compensateOffsetIfNeeded(for: itemPath, kind: kind, action: frameUpdateAction)
     }
 
-    func process(updateItems: [UICollectionViewUpdateItem]) {
+    func process(changeItems: [ChangeItem]) {
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
-        let updateItems = updateItems.sorted(by: {
-            if $0.updateAction != $1.updateAction {
-                return $0.updateAction.rawValue > $1.updateAction.rawValue
-            } else {
-                return $0.indexPathAfterUpdate?.item ?? -1 < $1.indexPathAfterUpdate?.item ?? -1
-            }
-        })
+        let changeItems = changeItems.sorted()
 
         var afterUpdateModel = layout(at: .beforeUpdate)
         resetCachedAttributeObjects()
 
-        updateItems.forEach { updateItem in
-            let updateAction = updateItem.updateAction
-            let indexPathBeforeUpdate = updateItem.indexPathBeforeUpdate
-            let indexPathAfterUpdate = updateItem.indexPathAfterUpdate
+        changeItems.forEach { updateItem in
+            switch updateItem {
+            case let .sectionInsert(sectionIndex: sectionIndex):
+                let items = (0..<layoutRepresentation.numberOfItems(in: sectionIndex)).map { index -> ItemModel in
+                    let itemIndexPath = IndexPath(item: index, section: sectionIndex)
+                    return ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath))
+                }
+                let header: ItemModel?
+                if layoutRepresentation.shouldPresentHeader(at: sectionIndex) == true {
+                    let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
+                    header = ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath))
+                } else {
+                    header = nil
+                }
+                let footer: ItemModel?
+                if layoutRepresentation.shouldPresentFooter(at: sectionIndex) == true {
+                    let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
+                    footer = ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath))
+                } else {
+                    footer = nil
+                }
+                let section = SectionModel(header: header, footer: footer, items: items, collectionLayout: layoutRepresentation)
+                afterUpdateModel.insertSection(section, at: sectionIndex)
+                insertedSectionsIndexes.insert(sectionIndex)
+            case let .itemInsert(itemIndexPath: indexPath):
+                let item = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: indexPath.itemPath))
+                insertedIndexes.insert(indexPath)
+                afterUpdateModel.insertItem(item, at: indexPath)
+            case let .sectionDelete(sectionIndex: sectionIndex):
+                let section = layout(at: .beforeUpdate).sections[sectionIndex]
+                deletedSectionsIndexes.insert(sectionIndex)
+                afterUpdateModel.removeSection(by: section.id)
+            case let .itemDelete(itemIndexPath: indexPath):
+                let itemId = itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate)!
+                afterUpdateModel.removeItem(by: itemId)
+                deletedIndexes.insert(indexPath)
+            case let .sectionReload(sectionIndex: sectionIndex):
+                reloadedSectionsIndexes.insert(sectionIndex)
+                var section = layout(at: .beforeUpdate).sections[sectionIndex]
 
-            switch updateAction {
-            case .none:
-                break
-            case .move:
-                guard let indexPathBeforeUpdate = indexPathBeforeUpdate,
-                    let indexPathAfterUpdate = indexPathAfterUpdate else {
-                    assertionFailure("`indexPathBeforeUpdate` and `indexPathAfterUpdate` cannot be `nil` for a `.move` update action")
+                var header: ItemModel?
+                if layoutRepresentation.shouldPresentHeader(at: sectionIndex) == true {
+                    let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
+                    header = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath))
+                    header?.resetSize()
+                } else {
+                    header = nil
+                }
+                section.set(header: header)
+
+                var footer: ItemModel?
+                if layoutRepresentation.shouldPresentFooter(at: sectionIndex) == true {
+                    let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
+                    footer = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath))
+                    footer?.resetSize()
+                } else {
+                    footer = nil
+                }
+                section.set(footer: footer)
+
+                let oldItems = section.items
+                let items: [ItemModel] = (0..<layoutRepresentation.numberOfItems(in: sectionIndex)).map { index in
+                    var newItem: ItemModel
+                    if index < oldItems.count {
+                        newItem = oldItems[index]
+                    } else {
+                        let itemIndexPath = IndexPath(item: index, section: sectionIndex)
+                        newItem = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath))
+                    }
+                    newItem.resetSize()
+                    return newItem
+                }
+                section.set(items: items)
+                afterUpdateModel.removeSection(for: sectionIndex)
+                afterUpdateModel.insertSection(section, at: sectionIndex)
+            case let .itemReload(itemIndexPath: indexPath):
+                guard var item = self.item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
+                    assertionFailure("Internal inconsistency")
                     return
                 }
-                if indexPathBeforeUpdate.item == NSNotFound, indexPathAfterUpdate.item == NSNotFound {
-                    let section = layout(at: .beforeUpdate).sections[indexPathBeforeUpdate.section]
-                    movedSectionsIndexes.insert(indexPathBeforeUpdate.section)
-                    afterUpdateModel.removeSection(by: section.id)
-                    afterUpdateModel.insertSection(section, at: indexPathAfterUpdate.section)
-                } else {
-                    let itemId = itemIdentifier(for: indexPathBeforeUpdate.itemPath, kind: .cell, at: .beforeUpdate)!
-                    let item = layout(at: .beforeUpdate).sections[indexPathBeforeUpdate.section].items[indexPathBeforeUpdate.item]
-                    movedIndexes.insert(indexPathBeforeUpdate)
-                    afterUpdateModel.removeItem(by: itemId)
-                    afterUpdateModel.insertItem(item, at: indexPathAfterUpdate)
-                }
-            case .insert:
-                guard let indexPath = indexPathAfterUpdate else {
-                    assertionFailure("`indexPathAfterUpdate` cannot be `nil` for an `.insert` update action")
-                    return
-                }
+                item.resetSize()
 
-                if indexPath.item == NSNotFound {
-                    let items = (0..<layoutRepresentation.numberOfItems(in: indexPath.section)).map { index -> ItemModel in
-                        let itemIndexPath = IndexPath(item: index, section: indexPath.section)
-                        return ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath))
-                    }
-                    let header: ItemModel?
-                    if layoutRepresentation.shouldPresentHeader(at: indexPath.section) == true {
-                        let headerIndexPath = IndexPath(item: 0, section: indexPath.section)
-                        header = ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath))
-                    } else {
-                        header = nil
-                    }
-                    let footer: ItemModel?
-                    if layoutRepresentation.shouldPresentFooter(at: indexPath.section) == true {
-                        let footerIndexPath = IndexPath(item: 0, section: indexPath.section)
-                        footer = ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath))
-                    } else {
-                        footer = nil
-                    }
-                    let section = SectionModel(header: header, footer: footer, items: items, collectionLayout: layoutRepresentation)
-                    afterUpdateModel.insertSection(section, at: indexPath.section)
-                    insertedSectionsIndexes.insert(indexPath.section)
-                } else {
-                    let item = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: indexPath.itemPath))
-                    insertedIndexes.insert(indexPath)
-                    afterUpdateModel.insertItem(item, at: indexPath)
-                }
-            case .delete:
-                guard let indexPath = indexPathBeforeUpdate else {
-                    assertionFailure("`indexPathBeforeUpdate` cannot be `nil` for a `.delete` update action")
-                    return
-                }
-
-                if indexPath.item == NSNotFound {
-                    let section = layout(at: .beforeUpdate).sections[indexPath.section]
-                    deletedSectionsIndexes.insert(indexPath.section)
-                    afterUpdateModel.removeSection(by: section.id)
-                } else {
-                    let itemId = itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate)!
-                    afterUpdateModel.removeItem(by: itemId)
-                    deletedIndexes.insert(indexPath)
-                }
-            case .reload:
-                guard let indexPath = indexPathAfterUpdate else {
-                    assertionFailure("`indexPathAfterUpdate` cannot be `nil` for a `.reload` update action")
-                    return
-                }
-
-                if indexPath.item == NSNotFound {
-                    reloadedSectionsIndexes.insert(indexPath.section)
-                    var section = layout(at: .beforeUpdate).sections[indexPath.section]
-
-                    var header: ItemModel?
-                    if layoutRepresentation.shouldPresentHeader(at: indexPath.section) == true {
-                        let headerIndexPath = IndexPath(item: 0, section: indexPath.section)
-                        header = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath))
-                        header?.resetSize()
-                    } else {
-                        header = nil
-                    }
-                    section.set(header: header)
-
-                    var footer: ItemModel?
-                    if layoutRepresentation.shouldPresentFooter(at: indexPath.section) == true {
-                        let footerIndexPath = IndexPath(item: 0, section: indexPath.section)
-                        footer = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath))
-                        footer?.resetSize()
-                    } else {
-                        footer = nil
-                    }
-                    section.set(footer: footer)
-
-                    let oldItems = section.items
-                    let items: [ItemModel] = (0..<layoutRepresentation.numberOfItems(in: indexPath.section)).map { index in
-                        var newItem: ItemModel
-                        if index < oldItems.count {
-                            newItem = oldItems[index]
-                        } else {
-                            let itemIndexPath = IndexPath(item: index, section: indexPath.section)
-                            newItem = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath))
-                        }
-                        newItem.resetSize()
-                        return newItem
-                    }
-                    section.set(items: items)
-                    afterUpdateModel.removeSection(for: indexPath.section)
-                    afterUpdateModel.insertSection(section, at: indexPath.section)
-                } else {
-                    guard var item = self.item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
-                        assertionFailure("Internal inconsistency")
-                        return
-                    }
-                    item.resetSize()
-
-                    afterUpdateModel.replaceItem(item, at: indexPath)
-                    reloadedIndexes.insert(indexPath)
-                }
-            default:
-                assertionFailure("Unexpected action to process")
+                afterUpdateModel.replaceItem(item, at: indexPath)
+                reloadedIndexes.insert(indexPath)
+            case let .sectionMove(initialSectionIndex: initialSectionIndex, finalSectionIndex: finalSectionIndex):
+                let section = layout(at: .beforeUpdate).sections[initialSectionIndex]
+                movedSectionsIndexes.insert(finalSectionIndex)
+                afterUpdateModel.removeSection(by: section.id)
+                afterUpdateModel.insertSection(section, at: finalSectionIndex)
+            case let .itemMove(initialItemIndexPath: initialItemIndexPath, finalItemIndexPath: finalItemIndexPath):
+                let itemId = itemIdentifier(for: initialItemIndexPath.itemPath, kind: .cell, at: .beforeUpdate)!
+                let item = layout(at: .beforeUpdate).sections[initialItemIndexPath.section].items[initialItemIndexPath.item]
+                movedIndexes.insert(initialItemIndexPath)
+                afterUpdateModel.removeItem(by: itemId)
+                afterUpdateModel.insertItem(item, at: finalItemIndexPath)
             }
         }
 

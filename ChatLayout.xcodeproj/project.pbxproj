@@ -32,6 +32,7 @@
 		455ED4562534BF1B00F4A83F /* ContainerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455ED43F2534BF1B00F4A83F /* ContainerCollectionViewCell.swift */; };
 		45A45FEE256856ED00F0A68A /* ItemPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A45FED256856ED00F0A68A /* ItemPath.swift */; };
 		45A45FF12568570300F0A68A /* IndexPath+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A45FF02568570300F0A68A /* IndexPath+Extension.swift */; };
+		45E987C8261340C9008ECE6E /* ChangeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E987C7261340C9008ECE6E /* ChangeItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		45A45FF02568570300F0A68A /* IndexPath+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IndexPath+Extension.swift"; sourceTree = "<group>"; };
 		45AF499F24D9F30D00B5BBC2 /* ChatLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChatLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		45AF49BA24D9F3C000B5BBC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		45E987C7261340C9008ECE6E /* ChangeItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,14 +106,15 @@
 		455ED42E2534BF1B00F4A83F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				455ED42F2534BF1B00F4A83F /* SectionModel.swift */,
+				45E987C7261340C9008ECE6E /* ChangeItem.swift */,
 				455ED4302534BF1B00F4A83F /* ItemModel.swift */,
 				45A45FED256856ED00F0A68A /* ItemPath.swift */,
 				455ED4312534BF1B00F4A83F /* ItemKind.swift */,
 				455ED4322534BF1B00F4A83F /* ItemSize.swift */,
-				455ED4332534BF1B00F4A83F /* StateController.swift */,
 				455ED4342534BF1B00F4A83F /* LayoutModel.swift */,
 				455ED4352534BF1B00F4A83F /* ModelState.swift */,
+				455ED4332534BF1B00F4A83F /* StateController.swift */,
+				455ED42F2534BF1B00F4A83F /* SectionModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -196,7 +199,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1160;
-				LastUpgradeCheck = 1160;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = "Eugene Kazaev";
 				TargetAttributes = {
 					45AF499E24D9F30D00B5BBC2 = {
@@ -245,6 +248,7 @@
 				455ED4532534BF1B00F4A83F /* MessageContainerView.swift in Sources */,
 				455ED44F2534BF1B00F4A83F /* CellLayoutContainerView.swift in Sources */,
 				455ED4522534BF1B00F4A83F /* ImageMaskedView.swift in Sources */,
+				45E987C8261340C9008ECE6E /* ChangeItem.swift in Sources */,
 				455ED4512534BF1B00F4A83F /* ContainerCollectionReusableView.swift in Sources */,
 				45A45FF12568570300F0A68A /* IndexPath+Extension.swift in Sources */,
 				455ED44C2534BF1B00F4A83F /* LayoutModel.swift in Sources */,
@@ -294,6 +298,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -357,6 +362,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
