@@ -328,8 +328,8 @@ extension ChatViewController: UICollectionViewDelegate {
                 center.x += (message.type.isIncoming ? Constants.tailSize : -Constants.tailSize)
 
                 return UITargetedPreview(view: cell.customView.customView.customView,
-                    parameters: parameters,
-                    target: UIPreviewTarget(container: cell.customView.customView, center: center))
+                                         parameters: parameters,
+                                         target: UIPreviewTarget(container: cell.customView.customView, center: center))
             default:
                 return nil
             }

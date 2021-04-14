@@ -61,7 +61,7 @@ class ManualAnimator {
         if percentage < 0.0 {
             percentage = 0.0
         } else if percentage >= 1.0 {
-            percentage = 1.0;
+            percentage = 1.0
             reset()
         }
         closure?(percentage)
