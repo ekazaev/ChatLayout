@@ -22,6 +22,7 @@
 		1BE54AC173D67905A2EF727B /* DefaultImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54A4C633608F47B961133 /* DefaultImageLoader.swift */; };
 		1BE54BA96464B328D52322A1 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5493CC008EE770BA9A22F /* ImageLoader.swift */; };
 		1BE54BC5C70CB9FA1260B54D /* ChatDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE544BF8E723F3D86B4D774 /* ChatDateFormatter.swift */; };
+		1BE54C3A0AEA8365F02479C3 /* ManualAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5499F258CDCA615EA3460 /* ManualAnimator.swift */; };
 		1BE54DBD5F84AF25128B6789 /* MockUICollectionViewUpdateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */; };
 		1BE54E0ABF0E8D9E61D2662B /* ChatViewControllerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54241EB5DD7BC464607EE /* ChatViewControllerBuilder.swift */; };
 		1BE54ECBD0FC824B71DE1044 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */; };
@@ -106,6 +107,7 @@
 		1BE5493CC008EE770BA9A22F /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		1BE5496755DDC7FEAAF20F00 /* KeyboardListenerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardListenerDelegate.swift; sourceTree = "<group>"; };
 		1BE549842603653F31E6555B /* KeyboardListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardListener.swift; sourceTree = "<group>"; };
+		1BE5499F258CDCA615EA3460 /* ManualAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualAnimator.swift; sourceTree = "<group>"; };
 		1BE54A1413D0DCF3036C9508 /* StateControllerInternalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateControllerInternalTests.swift; sourceTree = "<group>"; };
 		1BE54A4C633608F47B961133 /* DefaultImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultImageLoader.swift; sourceTree = "<group>"; };
 		1BE54C4BD41AD5FD82FFEB64 /* SetActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetActor.swift; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 				4504F3D824FA66F500385590 /* DefaultBubbleController.swift */,
 				4504F3D924FA66F500385590 /* EditNotifierDelegate.swift */,
 				1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */,
+				1BE5499F258CDCA615EA3460 /* ManualAnimator.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -759,6 +762,7 @@
 				1BE5475E09C9696745B113F1 /* KeyboardListenerDelegate.swift in Sources */,
 				1BE5496732EAB127C8019477 /* KeyboardInfo.swift in Sources */,
 				1BE54ECBD0FC824B71DE1044 /* UIView+Extension.swift in Sources */,
+				1BE54C3A0AEA8365F02479C3 /* ManualAnimator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

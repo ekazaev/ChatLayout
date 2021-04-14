@@ -292,7 +292,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             case .typingIndicator:
                 return .estimated(CGSize(width: 60, height: 36))
             case .messageGroup:
-                return .estimated(CGSize(width: chatLayout.layoutFrame.width / 3, height: 18))
+                return .estimated(CGSize(width: min(85, chatLayout.layoutFrame.width / 3), height: 18))
             case .deliveryStatus:
                 return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 18))
             }

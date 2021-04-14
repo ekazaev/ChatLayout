@@ -112,6 +112,9 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
         linkHeightConstraint?.constant = newContentRect.height
 
         linkView.bounds = newContentRect
+        // It is funny that since IOS 14 it can give slightly different values depending if it was drawn before or not.
+        // Thank you Apple. Dont be surprised that the web preview may lightly jump and cause the small jumps
+        // of the whole layout.
         linkView.sizeToFit()
 
         setNeedsLayout()
