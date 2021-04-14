@@ -27,6 +27,7 @@ final class ChatViewController: UIViewController {
         case sendingMessage
         case scrollingToTop
         case scrollingToBottom
+        case showingPreview
     }
 
     private enum ControllerActions {
@@ -291,7 +292,94 @@ extension ChatViewController: UIScrollViewDelegate {
 
 }
 
-extension ChatViewController: UICollectionViewDelegate {}
+extension ChatViewController: UICollectionViewDelegate {
+
+    @available(iOS 13.0, *)
+    private func preview(for configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        guard let identifier = configuration.identifier as? String else {
+            return nil
+        }
+        let components = identifier.split(separator: "|")
+        guard components.count == 2,
+            let sectionIndex = Int(components[0]),
+            let itemIndex = Int(components[1]),
+            let cell = collectionView.cellForItem(at: IndexPath(item: itemIndex, section: sectionIndex)) as? TextMessageCollectionCell else {
+            return nil
+        }
+
+        let item = dataSource.sections[0].cells[itemIndex]
+        switch item {
+        case let .message(message, bubbleType: _):
+            switch message.data {
+            case .text:
+                print(cell.customView.customView.customView.layoutMargins)
+                let parameters = UIPreviewParameters()
+
+                // `UITargetedPreview` doesnt support image mask (Why?) like the one we use to mask the message bubble in the example app.
+                // Ideally `BubbleController` should use `UIBezierPath` to create the mask - then we can reuse it here.
+                // As it is just an example app, we just create similar `UIBezierPath` here.
+                //
+                // NB: This way of creating the preview is not valid for long texts as `UITextView` within message view uses `CATiledLayer`
+                // to render its content, so it may not render itself fully when it is partly outside the collection view. You will have to
+                // recreate a brand new view that will behave as a preview. It is outside of the scope of the example app.
+                let rect = cell.customView.customView.customView.bounds
+                parameters.visiblePath = UIBezierPath(roundedRect: rect.inset(by: cell.customView.customView.customView.layoutMargins).inset(by: UIEdgeInsets(top: -8, left: -8, bottom: -8, right: -8)), cornerRadius: 16)
+                var center = cell.customView.customView.customView.center
+                center.x += (message.type.isIncoming ? Constants.tailSize : -Constants.tailSize)
+
+                return UITargetedPreview(view: cell.customView.customView.customView,
+                    parameters: parameters,
+                    target: UIPreviewTarget(container: cell.customView.customView, center: center))
+            default:
+                return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    @available(iOS 13.0, *)
+    public func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        return preview(for: configuration)
+    }
+
+    @available(iOS 13.0, *)
+    public func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        return preview(for: configuration)
+    }
+
+    @available(iOS 13.0, *)
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let item = dataSource.sections[indexPath.section].cells[indexPath.item]
+        switch item {
+        case let .message(message, bubbleType: _):
+            switch message.data {
+            case let .text(body):
+                let actions = [UIAction(title: "Copy", image: nil, identifier: nil) { [body] _ in
+                    let pasteboard = UIPasteboard.general
+                    pasteboard.string = body
+                }]
+                let menu = UIMenu(title: "", children: actions)
+                // Custom NSCopying identifier leads to the crash. No other requirements for the identifier to avoid the crash are provided.
+                let identifier: NSString = "\(indexPath.section)|\(indexPath.item)" as NSString
+                currentInterfaceActions.options.insert(.showingPreview)
+                return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil, actionProvider: { _ in return menu })
+            default:
+                return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    @available(iOS 13.2, *)
+    func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+        animator?.addCompletion {
+            self.currentInterfaceActions.options.remove(.showingPreview)
+        }
+    }
+
+}
 
 extension ChatViewController: ChatControllerDelegate {
 
