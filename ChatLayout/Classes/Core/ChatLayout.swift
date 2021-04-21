@@ -791,14 +791,22 @@ public final class ChatLayout: UICollectionViewLayout {
                         attributes.alpha = 0
                         return
                     }
-                    delegate.finalLayoutAttributesForDeletedItem(self, of: kind, at: elementIndexPath, modifying: attributes)
+                    delegate.finalLayoutAttributesForDeletedItem(self, of: .cell, at: elementIndexPath, modifying: attributes)
                 }
             } else if let itemIdentifier = controller.itemIdentifier(for: elementPath, kind: kind, at: .beforeUpdate),
                 let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .afterUpdate) {
-                attributes = controller.itemAttributes(for: finalIndexPath, kind: kind, at: .afterUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
+                if controller.movedSectionsIndexes.contains(elementPath.section) || controller.reloadedSectionsIndexes.contains(elementPath.section) {
+                    attributes = controller.itemAttributes(for: finalIndexPath, kind: kind, at: .afterUpdate)?.typedCopy()
+                } else {
+                    attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)?.typedCopy()
+                }
+                if invalidatedAttributes[kind]?.contains(elementPath) ?? false {
+                    attributes = nil
+                }
+
                 attributes?.indexPath = elementIndexPath
                 attributesForPendingAnimations[kind]?[elementPath] = attributes
-                if controller.reloadedSectionsIndexes.contains(elementPath.section) || finalIndexPath != elementPath {
+                if controller.reloadedSectionsIndexes.contains(elementPath.section) {
                     attributes?.alpha = 0
                     attributes?.transform = CGAffineTransform(scaleX: 0, y: 0)
                 }
