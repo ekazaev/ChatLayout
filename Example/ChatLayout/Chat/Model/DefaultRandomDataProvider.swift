@@ -56,9 +56,9 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let dispatchQueue = DispatchQueue.global(qos: .userInteractive)
 
-    private let enableTyping = true
+    private let enableTyping = false
 
-    private let enableNewMessages = true
+    private let enableNewMessages = false
 
     private let enableRichContent = true
 
@@ -180,7 +180,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     }
 
     private func createRandomMessage(date: Date = Date()) -> RawMessage {
-        let sender = allUsersIds[Int.random(in: 0..<allUsersIds.count)]
+        let sender = allUsersIds[Int.random(in: 0..<allUsersIds.count)] // allUsersIds.first!//
         lastMessageIndex += 1
         switch (Int.random(in: 0...8), enableRichContent) {
         case (5, true):

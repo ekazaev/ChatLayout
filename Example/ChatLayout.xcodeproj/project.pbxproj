@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		017E5EA5A707CF0065C9C060 /* Pods_ChatLayout_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187B89468A68AF411025A59A /* Pods_ChatLayout_Example.framework */; };
+		1BE5414502ACF8741EF496CD /* BezierBubbleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54F26FB528AA26139CF57 /* BezierBubbleController.swift */; };
 		1BE5423ADDEC30417584C100 /* ImageMessageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54555707622F43D0F70CF /* ImageMessageSource.swift */; };
 		1BE542E819F317921A21472A /* CachingImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE545A58CC88CC261D6D6EB /* CachingImageLoader.swift */; };
 		1BE544096F4D8B22904E10BE /* DifferenceKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54E2968B01DBE7ACF5737 /* DifferenceKit+Extension.swift */; };
@@ -26,6 +27,7 @@
 		1BE54DBD5F84AF25128B6789 /* MockUICollectionViewUpdateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */; };
 		1BE54E0ABF0E8D9E61D2662B /* ChatViewControllerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54241EB5DD7BC464607EE /* ChatViewControllerBuilder.swift */; };
 		1BE54ECBD0FC824B71DE1044 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */; };
+		1BE54F39DA113D0A9C7F54E7 /* BezierMaskedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE544EA57EC941CB029E3BB /* BezierMaskedView.swift */; };
 		1BE54FDB9836397E2694B9D7 /* HelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE542A452EBF25EC59440C0 /* HelpersTests.swift */; };
 		4504F3F324FA66F600385590 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3AB24FA66F500385590 /* Constants.swift */; };
 		4504F3F424FA66F600385590 /* ChatControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3AD24FA66F500385590 /* ChatControllerDelegate.swift */; };
@@ -100,6 +102,7 @@
 		1BE54438EB2C5DAB78ACB5F8 /* KeyboardInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardInfo.swift; sourceTree = "<group>"; };
 		1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockUICollectionViewUpdateItem.swift; sourceTree = "<group>"; };
 		1BE544BF8E723F3D86B4D774 /* ChatDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDateFormatter.swift; sourceTree = "<group>"; };
+		1BE544EA57EC941CB029E3BB /* BezierMaskedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BezierMaskedView.swift; sourceTree = "<group>"; };
 		1BE54555707622F43D0F70CF /* ImageMessageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageMessageSource.swift; sourceTree = "<group>"; };
 		1BE545A58CC88CC261D6D6EB /* CachingImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingImageLoader.swift; sourceTree = "<group>"; };
 		1BE545B9B5F30BA7924D9582 /* ProcessInfo+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProcessInfo+Extension.swift"; sourceTree = "<group>"; };
@@ -112,6 +115,7 @@
 		1BE54A4C633608F47B961133 /* DefaultImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultImageLoader.swift; sourceTree = "<group>"; };
 		1BE54C4BD41AD5FD82FFEB64 /* SetActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetActor.swift; sourceTree = "<group>"; };
 		1BE54E2968B01DBE7ACF5737 /* DifferenceKit+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DifferenceKit+Extension.swift"; sourceTree = "<group>"; };
+		1BE54F26FB528AA26139CF57 /* BezierBubbleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BezierBubbleController.swift; sourceTree = "<group>"; };
 		1BE54F6AA8FA6A399EC2FC22 /* PersistentlyCacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentlyCacheable.swift; sourceTree = "<group>"; };
 		1E094931D1426F33B8D1D082 /* Pods-ChatLayout_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatLayout_Tests.debug.xcconfig"; path = "Target Support Files/Pods-ChatLayout_Tests/Pods-ChatLayout_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		4504F3AB24FA66F500385590 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -391,6 +395,8 @@
 				4504F3D924FA66F500385590 /* EditNotifierDelegate.swift */,
 				1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */,
 				1BE5499F258CDCA615EA3460 /* ManualAnimator.swift */,
+				1BE544EA57EC941CB029E3BB /* BezierMaskedView.swift */,
+				1BE54F26FB528AA26139CF57 /* BezierBubbleController.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -763,6 +769,8 @@
 				1BE5496732EAB127C8019477 /* KeyboardInfo.swift in Sources */,
 				1BE54ECBD0FC824B71DE1044 /* UIView+Extension.swift in Sources */,
 				1BE54C3A0AEA8365F02479C3 /* ManualAnimator.swift in Sources */,
+				1BE54F39DA113D0A9C7F54E7 /* BezierMaskedView.swift in Sources */,
+				1BE5414502ACF8741EF496CD /* BezierBubbleController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

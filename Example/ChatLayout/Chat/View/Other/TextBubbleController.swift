@@ -17,13 +17,13 @@ final class TextBubbleController<CustomView: UIView>: BubbleController {
 
     private let bubbleType: Cell.BubbleType
 
-    weak var bubbleView: ImageMaskedView<CustomView>? {
+    weak var bubbleView: UIView? {
         didSet {
             setupBubbleView()
         }
     }
 
-    init(bubbleView: ImageMaskedView<CustomView>, type: MessageType, bubbleType: Cell.BubbleType) {
+    init(bubbleView: UIView, type: MessageType, bubbleType: Cell.BubbleType) {
         self.type = type
         self.bubbleType = bubbleType
         self.bubbleView = bubbleView

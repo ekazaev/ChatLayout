@@ -153,6 +153,9 @@ final class ChatViewController: UIViewController {
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        guard isViewLoaded else {
+            return
+        }
         currentInterfaceActions.options.insert(.changingFrameSize)
         let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
         collectionView.collectionViewLayout.invalidateLayout()
@@ -312,20 +315,17 @@ extension ChatViewController: UICollectionViewDelegate {
         case let .message(message, bubbleType: _):
             switch message.data {
             case .text:
-                print(cell.customView.customView.customView.layoutMargins)
                 let parameters = UIPreviewParameters()
-
-                // `UITargetedPreview` doesnt support image mask (Why?) like the one we use to mask the message bubble in the example app.
-                // Ideally `BubbleController` should use `UIBezierPath` to create the mask - then we can reuse it here.
-                // As it is just an example app, we just create similar `UIBezierPath` here.
+                // `UITargetedPreview` doesnt support image mask (Why?) like the one I use to mask the message bubble in the example app.
+                // So I replaced default `ImageMaskedView` with `BezierMaskedView` that can uses `UIBezierPath` to mask the message view
+                // instead. So we are reusing that path here.
                 //
                 // NB: This way of creating the preview is not valid for long texts as `UITextView` within message view uses `CATiledLayer`
                 // to render its content, so it may not render itself fully when it is partly outside the collection view. You will have to
                 // recreate a brand new view that will behave as a preview. It is outside of the scope of the example app.
-                let rect = cell.customView.customView.customView.bounds
-                parameters.visiblePath = UIBezierPath(roundedRect: rect.inset(by: cell.customView.customView.customView.layoutMargins).inset(by: UIEdgeInsets(top: -8, left: -8, bottom: -8, right: -8)), cornerRadius: 16)
+                parameters.visiblePath = cell.customView.customView.customView.maskingPath
                 var center = cell.customView.customView.customView.center
-                center.x += (message.type.isIncoming ? Constants.tailSize : -Constants.tailSize)
+                center.x += (message.type.isIncoming ? cell.customView.customView.customView.offset : -cell.customView.customView.customView.offset) / 2
 
                 return UITargetedPreview(view: cell.customView.customView.customView,
                                          parameters: parameters,

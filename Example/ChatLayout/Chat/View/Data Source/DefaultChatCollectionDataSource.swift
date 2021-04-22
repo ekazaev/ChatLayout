@@ -11,12 +11,12 @@ import ChatLayout
 import Foundation
 import UIKit
 
-typealias TextMessageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, CellLayoutContainerView<AvatarView, ImageMaskedView<TextMessageView>, StatusView>>>
+typealias TextMessageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, CellLayoutContainerView<AvatarView, BezierMaskedView<TextMessageView>, StatusView>>>
 @available(iOS 13, *)
 typealias URLCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, CellLayoutContainerView<AvatarView, ImageMaskedView<URLView>, StatusView>>>
 typealias ImageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, CellLayoutContainerView<AvatarView, ImageMaskedView<ImageView>, StatusView>>>
 typealias TitleCollectionCell = ContainerCollectionViewCell<UILabel>
-typealias TypingIndicatorCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, CellLayoutContainerView<AvatarPlaceholderView, ImageMaskedView<TextMessageView>, VoidViewFactory>>>
+typealias TypingIndicatorCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, CellLayoutContainerView<AvatarPlaceholderView, BezierMaskedView<TextMessageView>, VoidViewFactory>>>
 
 typealias TextTitleView = ContainerCollectionReusableView<UILabel>
 
@@ -179,9 +179,9 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         }
     }
 
-    private func buildTextBubbleController<CustomView>(bubbleView: ImageMaskedView<CustomView>, messageType: MessageType, bubbleType: Cell.BubbleType) -> BubbleController {
+    private func buildTextBubbleController<CustomView>(bubbleView: BezierMaskedView<CustomView>, messageType: MessageType, bubbleType: Cell.BubbleType) -> BubbleController {
         let textBubbleController = TextBubbleController(bubbleView: bubbleView, type: messageType, bubbleType: bubbleType)
-        let bubbleController = DefaultBubbleController(bubbleView: bubbleView, controllerProxy: textBubbleController, type: messageType, bubbleType: bubbleType)
+        let bubbleController = BezierBubbleController(bubbleView: bubbleView, controllerProxy: textBubbleController, type: messageType, bubbleType: bubbleType)
         return bubbleController
     }
 
