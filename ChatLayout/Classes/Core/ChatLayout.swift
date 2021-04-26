@@ -504,7 +504,7 @@ public final class ChatLayout: UICollectionViewLayout {
             layoutAttributesForPendingAnimation?.frame.size = newItemSize
         }
 
-        if #available(iOS 13.0, *) {
+        if isIOS13orHigher {
             switch preferredMessageAttributes.kind {
             case .cell:
                 context.invalidateItems(at: [preferredMessageAttributes.indexPath])
@@ -663,8 +663,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate) {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 attributes?.indexPath = itemIndexPath
-                if #available(iOS 13.0, *) {
-                } else {
+                if !isIOS13orHigher {
                     if controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
                         // It is needed to position the new cell in the middle of the old cell on ios 12
                         attributesForPendingAnimations[.cell]?[itemPath] = attributes
@@ -754,8 +753,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 attributes?.indexPath = elementIndexPath
 
-                if #available(iOS 13.0, *) {
-                } else {
+                if !isIOS13orHigher {
                     if controller.reloadedSectionsIndexes.contains(elementPath.section) {
                         // It is needed to position the new cell in the middle of the old cell on ios 12
                         attributesForPendingAnimations[kind]?[elementPath] = attributes
@@ -925,4 +923,13 @@ extension ChatLayout {
         return collectionView.isDragging || collectionView.isDecelerating
     }
 
+}
+
+@inline(__always)
+var isIOS13orHigher: Bool {
+    if #available(iOS 13.0, *) {
+        return true
+    } else {
+        return false
+    }
 }

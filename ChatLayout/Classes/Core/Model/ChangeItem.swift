@@ -91,7 +91,7 @@ enum ChangeItem: Equatable {
         }
     }
 
-    var rawValue: Int {
+    private var rawValue: Int {
         switch self {
         case .sectionReload:
             return 0
