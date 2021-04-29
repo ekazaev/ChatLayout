@@ -15,7 +15,7 @@
             <subviews>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
                     <rect key="frame" x="20" y="419" width="440" height="41"/>
-                    <string key="text">  Copyright (c) 2021 Eugene Kazaev. 
+                    <string key="text">  Copyright (c) 2020-2021 Eugene Kazaev. 
 Distributed under the MIT license.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" systemColor="darkTextColor"/>

@@ -169,6 +169,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
     // MARK: Constructors
 
+    /// Default constructor.
     /// - Parameters:
     ///   - flipsHorizontallyInOppositeLayoutDirection: Indicates whether the horizontal coordinate
     ///     system is automatically flipped at appropriate times. In practice, this is used to support
@@ -180,7 +181,8 @@ public final class ChatLayout: UICollectionViewLayout {
         resetInvalidatedAttributes()
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    /// Returns an object initialized from data in a given unarchiver.
+    public required init?(coder aDecoder: NSCoder) {
         self._flipsHorizontallyInOppositeLayoutDirection = true
         super.init(coder: aDecoder)
         resetAttributesForPendingAnimations()
@@ -224,14 +226,17 @@ public final class ChatLayout: UICollectionViewLayout {
     /// Invalidates layout of the `UICollectionView` and trying to keep the offset of the item provided in `ChatLayoutPositionSnapshot`
     /// - Parameter snapshot: `ChatLayoutPositionSnapshot`
     public func restoreContentOffset(with snapshot: ChatLayoutPositionSnapshot) {
-        collectionView?.setNeedsLayout()
-        collectionView?.layoutIfNeeded()
+        guard let collectionView = collectionView else {
+            return
+        }
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
         currentPositionSnapshot = snapshot
         let context = ChatLayoutInvalidationContext()
         context.invalidateLayoutMetrics = false
         invalidateLayout(with: context)
-        collectionView?.setNeedsLayout()
-        collectionView?.layoutIfNeeded()
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
         currentPositionSnapshot = nil
     }
 
@@ -491,7 +496,8 @@ public final class ChatLayout: UICollectionViewLayout {
                 controller.offsetByTotalCompensation(attributes: layoutAttributesForPendingAnimation, for: state, backward: true)
             }
             if state == .afterUpdate,
-                controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) || controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
+                controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) ||
+                controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
                 layoutAttributesForPendingAnimation.map { attributes in
                     guard let delegate = delegate else {
                         attributes.alpha = 0
@@ -520,7 +526,10 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Asks the layout object if the new bounds require a layout update.
     public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) || cachedCollectionViewInset != .some(adjustedContentInset) || invalidationActions.contains(.shouldInvalidateOnBoundsChange)
+        let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) ||
+            cachedCollectionViewInset != .some(adjustedContentInset) ||
+            invalidationActions.contains(.shouldInvalidateOnBoundsChange)
+
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
         return shouldInvalidateLayout
     }
@@ -534,6 +543,11 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Invalidates the current layout using the information in the provided context object.
     public override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        guard let collectionView = collectionView else {
+            super.invalidateLayout(with: context)
+            return
+        }
+
         guard let context = context as? ChatLayoutInvalidationContext else {
             assertionFailure("`context` must be an instance of `ChatLayoutInvalidationContext`")
             return
@@ -547,9 +561,9 @@ public final class ChatLayout: UICollectionViewLayout {
             prepareActions.formUnion([.recreateSectionModels])
         }
 
-        // Checking `cachedCollectionViewWidth != collectionView?.bounds.size.width` is necessary
+        // Checking `cachedCollectionViewWidth != collectionView.bounds.size.width` is necessary
         // because the collection view's width can change without a `contentSizeAdjustment` occurring.
-        if context.contentSizeAdjustment.width != 0 || cachedCollectionViewSize != collectionView?.bounds.size {
+        if context.contentSizeAdjustment.width != 0 || cachedCollectionViewSize != collectionView.bounds.size {
             prepareActions.formUnion([.cachePreviousWidth])
         }
 
@@ -561,8 +575,7 @@ public final class ChatLayout: UICollectionViewLayout {
             prepareActions.formUnion([.updateLayoutMetrics])
         }
 
-        if let currentPositionSnapshot = currentPositionSnapshot,
-            let collectionView = collectionView {
+        if let currentPositionSnapshot = currentPositionSnapshot {
             let contentHeight = controller.contentHeight(at: state)
             if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, kind: currentPositionSnapshot.kind, at: state, isFinal: true),
                 contentHeight != 0,

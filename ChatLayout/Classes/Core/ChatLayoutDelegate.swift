@@ -29,22 +29,34 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - chatLayout: ChatLayout reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
-    func shouldPresentHeader(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool
+    func shouldPresentHeader(_ chatLayout: ChatLayout,
+                             at sectionIndex: Int) -> Bool
 
     /// `ChatLayout` will call this method to ask if it should present the footer in the current layout.
     /// - Parameters:
     ///   - chatLayout: ChatLayout reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
-    func shouldPresentFooter(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool
+    func shouldPresentFooter(_ chatLayout: ChatLayout,
+                             at sectionIndex: Int) -> Bool
 
     /// `ChatLayout` will call this method to ask what size the item should have.
+    ///
+    /// **NB:**
+    ///
+    /// If you are trying to speed up the layout process by returning exact item sizes in this method -
+    /// do not forget to change `UICollectionReusableView.preferredLayoutAttributesFitting(...)` method and do not
+    /// call `super.preferredLayoutAttributesFitting(...)` there as it will measure the `UIView`
+    /// using Autolayout Engine anyway.
+    ///
     /// - Parameters:
     ///   - chatLayout: ChatLayout reference.
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
     /// - Returns: `ItemSize`.
-    func sizeForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize
+    func sizeForItem(_ chatLayout: ChatLayout,
+                     of kind: ItemKind,
+                     at indexPath: IndexPath) -> ItemSize
 
     /// `ChatLayout` will call this method to ask what type of alignment the item should have.
     /// - Parameters:
@@ -52,7 +64,9 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
     /// - Returns: `ChatItemAlignment`.
-    func alignmentForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment
+    func alignmentForItem(_ chatLayout: ChatLayout,
+                          of kind: ItemKind,
+                          at indexPath: IndexPath) -> ChatItemAlignment
 
     ///   Asks the delegate to modify a layout attributes instance so that it represents the initial visual state of an item
     ///   being inserted.
@@ -92,22 +106,28 @@ public protocol ChatLayoutDelegate: AnyObject {
 public extension ChatLayoutDelegate {
 
     /// Default implementation returns: `false`.
-    func shouldPresentHeader(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool {
+    func shouldPresentHeader(_ chatLayout: ChatLayout,
+                             at sectionIndex: Int) -> Bool {
         return false
     }
 
     /// Default implementation returns: `false`.
-    func shouldPresentFooter(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool {
+    func shouldPresentFooter(_ chatLayout: ChatLayout,
+                             at sectionIndex: Int) -> Bool {
         return false
     }
 
     /// Default implementation returns: `ItemSize.auto`.
-    func sizeForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
+    func sizeForItem(_ chatLayout: ChatLayout,
+                     of kind: ItemKind,
+                     at indexPath: IndexPath) -> ItemSize {
         return .auto
     }
 
     /// Default implementation returns: `ChatItemAlignment.fullWidth`.
-    func alignmentForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
+    func alignmentForItem(_ chatLayout: ChatLayout,
+                          of kind: ItemKind,
+                          at indexPath: IndexPath) -> ChatItemAlignment {
         return .fullWidth
     }
 

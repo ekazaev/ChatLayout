@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 
 /// Custom implementation of `UICollectionViewLayoutAttributes`
-public class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
+public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
 
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var alignment: ChatItemAlignment = .fullWidth
