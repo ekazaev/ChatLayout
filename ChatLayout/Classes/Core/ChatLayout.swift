@@ -70,10 +70,11 @@ public final class ChatLayout: UICollectionViewLayout {
         guard let collectionView = collectionView else {
             return .zero
         }
-        return CGRect(x: adjustedContentInset.left + settings.additionalInsets.left,
-                      y: adjustedContentInset.top + settings.additionalInsets.top,
-                      width: collectionView.bounds.width - settings.additionalInsets.left - settings.additionalInsets.right - adjustedContentInset.left - adjustedContentInset.right,
-                      height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom - adjustedContentInset.top - adjustedContentInset.bottom)
+        let additionalInsets = settings.additionalInsets
+        return CGRect(x: adjustedContentInset.left + additionalInsets.left,
+                      y: adjustedContentInset.top + additionalInsets.top,
+                      width: collectionView.bounds.width - additionalInsets.left - additionalInsets.right - adjustedContentInset.left - adjustedContentInset.right,
+                      height: controller.contentHeight(at: state) - additionalInsets.top - additionalInsets.bottom - adjustedContentInset.top - adjustedContentInset.bottom)
     }
 
     // MARK: Inherited Properties
@@ -444,12 +445,8 @@ public final class ChatLayout: UICollectionViewLayout {
             let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
             return true
         }
-        var shouldInvalidateLayout: Bool
-        shouldInvalidateLayout = item.calculatedSize == nil
 
-        if item.alignment != preferredMessageAttributes.alignment {
-            shouldInvalidateLayout = true
-        }
+        let shouldInvalidateLayout = item.calculatedSize == nil || item.alignment != preferredMessageAttributes.alignment
 
         return shouldInvalidateLayout
     }
