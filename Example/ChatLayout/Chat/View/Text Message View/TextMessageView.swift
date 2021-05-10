@@ -107,7 +107,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         textView.showsHorizontalScrollIndicator = false
         textView.showsVerticalScrollIndicator = false
         textView.isExclusiveTouch = true
-
+        textView.font = UIFont.preferredFont(forTextStyle: .body)
         addSubview(textView)
         textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
         textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true

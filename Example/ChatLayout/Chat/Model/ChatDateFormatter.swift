@@ -49,3 +49,26 @@ public final class ChatDateFormatter {
     }
 
 }
+
+public final class MessageDateFormatter {
+
+    public static let shared = MessageDateFormatter()
+
+    private let formatter = DateFormatter()
+
+    private init() {
+        formatter.doesRelativeDateFormatting = true
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+    }
+
+    public func string(from date: Date) -> String {
+        return formatter.string(from: date)
+    }
+
+    public func attributedString(from date: Date, with attributes: [NSAttributedString.Key: Any]) -> NSAttributedString {
+        let dateString = string(from: date)
+        return NSAttributedString(string: dateString, attributes: attributes)
+    }
+
+}

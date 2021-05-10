@@ -17,13 +17,15 @@ struct ChatViewControllerBuilder {
         let messageController = DefaultChatController(dataProvider: dataProvider, userId: 0)
 
         let editNotifier = EditNotifier()
+        let swipeNotifier = SwipeNotifier()
         let dataSource = DefaultChatCollectionDataSource(editNotifier: editNotifier,
+                                                         swipeNotifier: swipeNotifier,
                                                          reloadDelegate: messageController,
                                                          editingDelegate: messageController)
 
         dataProvider.delegate = messageController
 
-        let messageViewController = ChatViewController(chatController: messageController, dataSource: dataSource, editNotifier: editNotifier)
+        let messageViewController = ChatViewController(chatController: messageController, dataSource: dataSource, editNotifier: editNotifier, swipeNotifier: swipeNotifier)
         messageController.delegate = messageViewController
 
         return messageViewController
