@@ -28,6 +28,7 @@ final class ChatViewController: UIViewController {
         case scrollingToTop
         case scrollingToBottom
         case showingPreview
+        case showingAccessory
     }
 
     private enum ControllerActions {
@@ -46,6 +47,7 @@ final class ChatViewController: UIViewController {
     private var currentInterfaceActions: SetActor<Set<InterfaceActions>, ReactionTypes> = SetActor()
     private var currentControllerActions: SetActor<Set<ControllerActions>, ReactionTypes> = SetActor()
     private let editNotifier: EditNotifier
+    private let swipeNotifier: SwipeNotifier
     private var collectionView: UICollectionView!
     private var chatLayout = ChatLayout()
     private let inputBarView = InputBarAccessoryView()
@@ -55,12 +57,23 @@ final class ChatViewController: UIViewController {
     private let fpsView = EdgeAligningView<UILabel>(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))
     private var animator: ManualAnimator?
 
+    private var translationX: CGFloat = 0
+    private var currentOffset: CGFloat = 0
+
+    private lazy var panGesture: UIPanGestureRecognizer = {
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handleRevealPan(_:)))
+        gesture.delegate = self
+        return gesture
+    }()
+
     init(chatController: ChatController,
          dataSource: ChatCollectionDataSource,
-         editNotifier: EditNotifier) {
+         editNotifier: EditNotifier,
+         swipeNotifier: SwipeNotifier) {
         self.chatController = chatController
         self.dataSource = dataSource
         self.editNotifier = editNotifier
+        self.swipeNotifier = swipeNotifier
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -141,6 +154,8 @@ final class ChatViewController: UIViewController {
         }
 
         KeyboardListener.shared.add(delegate: self)
+        collectionView.addGestureRecognizer(panGesture)
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -195,12 +210,22 @@ final class ChatViewController: UIViewController {
         chatLayout.invalidateLayout()
     }
 
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        swipeNotifier.setAccessoryOffset(UIEdgeInsets(top: view.safeAreaInsets.top,
+                                                      left: view.safeAreaInsets.left + chatLayout.settings.additionalInsets.left,
+                                                      bottom: view.safeAreaInsets.bottom,
+                                                      right: view.safeAreaInsets.right + chatLayout.settings.additionalInsets.right))
+    }
+
 }
 
 extension ChatViewController: UIScrollViewDelegate {
 
     public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         guard scrollView.contentSize.height > 0,
+            !currentInterfaceActions.options.contains(.showingAccessory),
+            !currentInterfaceActions.options.contains(.showingPreview),
             !currentInterfaceActions.options.contains(.scrollingToTop),
             !currentInterfaceActions.options.contains(.scrollingToBottom) else {
             return false
@@ -439,6 +464,65 @@ extension ChatViewController: ChatControllerDelegate {
                 process()
             }
         }
+    }
+
+}
+
+extension ChatViewController: UIGestureRecognizerDelegate {
+
+    @objc private func handleRevealPan(_ gesture: UIPanGestureRecognizer) {
+        guard let tableView = gesture.view as? UICollectionView else {
+            return
+        }
+
+        switch gesture.state {
+        case .began:
+            currentInterfaceActions.options.insert(.showingAccessory)
+        case .changed:
+            translationX = gesture.translation(in: gesture.view).x
+            currentOffset += translationX
+
+            gesture.setTranslation(.zero, in: gesture.view)
+            updateTransforms(in: tableView)
+        default:
+            UIView.animate(withDuration: 0.25, animations: { () -> Void in
+                self.translationX = 0
+                self.currentOffset = 0
+                self.updateTransforms(in: tableView, transform: .identity)
+            }, completion: { _ in
+                self.currentInterfaceActions.options.remove(.showingAccessory)
+            })
+        }
+    }
+
+    private func updateTransforms(in tableView: UICollectionView, transform: CGAffineTransform? = nil) {
+        (tableView.indexPathsForVisibleItems ?? []).forEach {
+            guard let cell = tableView.cellForItem(at: $0) else { return }
+            updateTransform(transform: transform, cell: cell, indexPath: $0)
+        }
+    }
+
+    fileprivate func updateTransform(transform: CGAffineTransform?, cell: UICollectionViewCell, indexPath: IndexPath) {
+        var x = currentOffset
+
+        let maxOffset: CGFloat = -100
+        x = max(x, maxOffset)
+        x = min(x, 0)
+
+        swipeNotifier.setSwipeCompletionRate(x / maxOffset)
+    }
+
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return [gestureRecognizer, otherGestureRecognizer].contains(panGesture)
+    }
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let gesture = gestureRecognizer as? UIPanGestureRecognizer, gesture == panGesture {
+            let translation = gesture.translation(in: gesture.view)
+            return (abs(translation.x) > abs(translation.y)) && (gesture == panGesture)
+        }
+
+        return true
     }
 
 }

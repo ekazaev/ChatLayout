@@ -36,3 +36,29 @@ final class FullCellContentBubbleController<CustomView: UIView>: BubbleControlle
     }
 
 }
+
+final class BezierFullCellContentBubbleController<CustomView: UIView>: BubbleController {
+
+    weak var bubbleView: BezierMaskedView<CustomView>? {
+        didSet {
+            setupBubbleView()
+        }
+    }
+
+    init(bubbleView: BezierMaskedView<CustomView>) {
+        self.bubbleView = bubbleView
+        setupBubbleView()
+    }
+
+    private func setupBubbleView() {
+        guard let bubbleView = bubbleView else {
+            return
+        }
+
+        UIView.performWithoutAnimation {
+            bubbleView.backgroundColor = .clear
+            bubbleView.customView.layoutMargins = .zero
+        }
+    }
+
+}
