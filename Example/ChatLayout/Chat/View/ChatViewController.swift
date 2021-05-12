@@ -375,6 +375,9 @@ extension ChatViewController: UICollectionViewDelegate {
 
     @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard !currentInterfaceActions.options.contains(.showingPreview) else {
+            return nil
+        }
         let item = dataSource.sections[indexPath.section].cells[indexPath.item]
         switch item {
         case let .message(message, bubbleType: _):
