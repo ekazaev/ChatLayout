@@ -224,14 +224,8 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return bubbleController
     }
 
-    private func buildDefaultBubbleController<CustomView>(for bubbleView: ImageMaskedView<CustomView>, messageType: MessageType, bubbleType: Cell.BubbleType) -> BubbleController {
-        let contentBubbleController = FullCellContentBubbleController(bubbleView: bubbleView)
-        let bubbleController = DefaultBubbleController(bubbleView: bubbleView, controllerProxy: contentBubbleController, type: messageType, bubbleType: bubbleType)
-        return bubbleController
-    }
-
     private func buildBezierBubbleController<CustomView>(for bubbleView: BezierMaskedView<CustomView>, messageType: MessageType, bubbleType: Cell.BubbleType) -> BubbleController {
-        let contentBubbleController = BezierFullCellContentBubbleController(bubbleView: bubbleView)
+        let contentBubbleController = FullCellContentBubbleController(bubbleView: bubbleView)
         let bubbleController = BezierBubbleController(bubbleView: bubbleView, controllerProxy: contentBubbleController, type: messageType, bubbleType: bubbleType)
         return bubbleController
     }

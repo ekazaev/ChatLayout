@@ -190,6 +190,12 @@ final class DefaultChatController: ChatController {
         }
     }
 
+    private func repopulateMessages() {
+        propagateLatestMessages { sections in
+            self.delegate?.update(with: sections)
+        }
+    }
+
 }
 
 extension DefaultChatController: RandomDataProviderDelegate {
@@ -198,35 +204,27 @@ extension DefaultChatController: RandomDataProviderDelegate {
         appendConvertingToMessages(messages)
         markAllMessagesAsReceived {
             self.markAllMessagesAsRead {
-                self.propagateLatestMessages { sections in
-                    self.delegate?.update(with: sections)
-                }
+                self.repopulateMessages()
             }
         }
     }
 
     func typingStateChanged(to state: TypingState) {
         typingState = state
-        propagateLatestMessages { sections in
-            self.delegate?.update(with: sections)
-        }
+        repopulateMessages()
     }
 
     func lastReadIdChanged(to id: UUID) {
         lastReadUUID = id
         markAllMessagesAsRead {
-            self.propagateLatestMessages { sections in
-                self.delegate?.update(with: sections)
-            }
+            self.repopulateMessages()
         }
     }
 
     func lastReceivedIdChanged(to id: UUID) {
         lastReceivedUUID = id
         markAllMessagesAsReceived {
-            self.propagateLatestMessages { sections in
-                self.delegate?.update(with: sections)
-            }
+            self.repopulateMessages()
         }
     }
 
@@ -295,9 +293,7 @@ extension DefaultChatController: RandomDataProviderDelegate {
 extension DefaultChatController: ReloadDelegate {
 
     func reloadMessage(with id: UUID) {
-        propagateLatestMessages(completion: { sections in
-            self.delegate?.update(with: sections)
-        })
+        repopulateMessages()
     }
 
 }
@@ -306,9 +302,7 @@ extension DefaultChatController: EditingAccessoryControllerDelegate {
 
     func deleteMessage(with id: UUID) {
         messages = Array(messages.filter { $0.id != id })
-        propagateLatestMessages(completion: { sections in
-            self.delegate?.update(with: sections)
-        })
+        repopulateMessages()
     }
 
 }

@@ -53,16 +53,3 @@ final class DateAccessoryView: UIView {
     }
 
 }
-
-final class DateAccessoryController {
-
-    private let date: Date
-
-    let accessoryText: String
-
-    init(date: Date) {
-        self.date = date
-        self.accessoryText = MessageDateFormatter.shared.string(from: date)
-    }
-
-}

@@ -13,32 +13,6 @@ import UIKit
 
 final class FullCellContentBubbleController<CustomView: UIView>: BubbleController {
 
-    weak var bubbleView: ImageMaskedView<CustomView>? {
-        didSet {
-            setupBubbleView()
-        }
-    }
-
-    init(bubbleView: ImageMaskedView<CustomView>) {
-        self.bubbleView = bubbleView
-        setupBubbleView()
-    }
-
-    private func setupBubbleView() {
-        guard let bubbleView = bubbleView else {
-            return
-        }
-
-        UIView.performWithoutAnimation {
-            bubbleView.backgroundColor = .clear
-            bubbleView.customView.layoutMargins = .zero
-        }
-    }
-
-}
-
-final class BezierFullCellContentBubbleController<CustomView: UIView>: BubbleController {
-
     weak var bubbleView: BezierMaskedView<CustomView>? {
         didSet {
             setupBubbleView()
