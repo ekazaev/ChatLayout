@@ -61,7 +61,7 @@ struct LayoutModel {
 
     mutating func setAndAssemble(header: ItemModel, sectionIndex: Int) {
         guard sectionIndex < sections.count else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect section index.")
             return
         }
 
@@ -73,7 +73,7 @@ struct LayoutModel {
 
     mutating func setAndAssemble(item: ItemModel, sectionIndex: Int, itemIndex: Int) {
         guard sectionIndex < sections.count else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect section index.")
             return
         }
         let oldSection = sections[sectionIndex]
@@ -84,7 +84,7 @@ struct LayoutModel {
 
     mutating func setAndAssemble(footer: ItemModel, sectionIndex: Int) {
         guard sectionIndex < sections.count else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect section index.")
             return
         }
         let oldSection = sections[sectionIndex]
@@ -95,7 +95,7 @@ struct LayoutModel {
 
     func sectionIndex(by sectionId: UUID) -> Int? {
         guard let sectionIndexByIdentifierCache = sectionIndexByIdentifierCache else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Internal inconsistency. Cache is not prepared.")
             return sections.firstIndex(where: { $0.id == sectionId })
         }
         return sectionIndexByIdentifierCache[sectionId]
@@ -103,7 +103,7 @@ struct LayoutModel {
 
     func itemPath(by itemId: UUID, kind: ItemKind) -> ItemPath? {
         guard let itemPathByIdentifierCache = itemPathByIdentifierCache else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Internal inconsistency. Cache is not prepared.")
             for (sectionIndex, section) in sections.enumerated() {
                 switch kind {
                 case .header:
@@ -141,7 +141,7 @@ struct LayoutModel {
     mutating func insertSection(_ section: SectionModel, at sectionIndex: Int) {
         var sections = self.sections
         guard sectionIndex <= sections.count else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect section index.")
             return
         }
 
@@ -152,7 +152,7 @@ struct LayoutModel {
 
     mutating func removeSection(by sectionIdentifier: UUID) {
         guard let sectionIndex = sections.firstIndex(where: { $0.id == sectionIdentifier }) else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect section identifier.")
             return
         }
         sections.remove(at: sectionIndex)
@@ -183,7 +183,7 @@ struct LayoutModel {
             }
         }
         guard let path = itemPath else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect item identifier.")
             return
         }
         sections[path.section].remove(at: path.item)

@@ -474,7 +474,9 @@ extension ChatViewController: ChatControllerDelegate {
 extension ChatViewController: UIGestureRecognizerDelegate {
 
     @objc private func handleRevealPan(_ gesture: UIPanGestureRecognizer) {
-        guard let tableView = gesture.view as? UICollectionView else {
+        guard let collectionView = gesture.view as? UICollectionView,
+            !editNotifier.isEditing else {
+            currentInterfaceActions.options.remove(.showingAccessory)
             return
         }
 
@@ -486,26 +488,26 @@ extension ChatViewController: UIGestureRecognizerDelegate {
             currentOffset += translationX
 
             gesture.setTranslation(.zero, in: gesture.view)
-            updateTransforms(in: tableView)
+            updateTransforms(in: collectionView)
         default:
             UIView.animate(withDuration: 0.25, animations: { () -> Void in
                 self.translationX = 0
                 self.currentOffset = 0
-                self.updateTransforms(in: tableView, transform: .identity)
+                self.updateTransforms(in: collectionView, transform: .identity)
             }, completion: { _ in
                 self.currentInterfaceActions.options.remove(.showingAccessory)
             })
         }
     }
 
-    private func updateTransforms(in tableView: UICollectionView, transform: CGAffineTransform? = nil) {
-        (tableView.indexPathsForVisibleItems ?? []).forEach {
-            guard let cell = tableView.cellForItem(at: $0) else { return }
+    private func updateTransforms(in collectionView: UICollectionView, transform: CGAffineTransform? = nil) {
+        collectionView.indexPathsForVisibleItems.forEach {
+            guard let cell = collectionView.cellForItem(at: $0) else { return }
             updateTransform(transform: transform, cell: cell, indexPath: $0)
         }
     }
 
-    fileprivate func updateTransform(transform: CGAffineTransform?, cell: UICollectionViewCell, indexPath: IndexPath) {
+    private func updateTransform(transform: CGAffineTransform?, cell: UICollectionViewCell, indexPath: IndexPath) {
         var x = currentOffset
 
         let maxOffset: CGFloat = -100

@@ -101,7 +101,7 @@ struct SectionModel {
 
     mutating func setAndAssemble(item: ItemModel, at index: Int) {
         guard index < count else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect item index.")
             return
         }
         let oldItem = items[index]
@@ -160,7 +160,7 @@ struct SectionModel {
 
     mutating func insert(_ item: ItemModel, at index: Int) {
         guard index <= count else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect item index.")
             return
         }
         items.insert(item, at: index)
@@ -168,7 +168,7 @@ struct SectionModel {
 
     mutating func replace(_ item: ItemModel, at index: Int) {
         guard index <= count else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect item index.")
             return
         }
         items[index] = item
@@ -176,7 +176,7 @@ struct SectionModel {
 
     mutating func remove(at index: Int) {
         guard index < count else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Incorrect item index.")
             return
         }
         items.remove(at: index)

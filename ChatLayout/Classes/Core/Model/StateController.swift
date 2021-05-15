@@ -343,7 +343,7 @@ final class StateController {
 
     func update(preferredSize: CGSize, alignment: ChatItemAlignment, for itemPath: ItemPath, kind: ItemKind, at state: ModelState) {
         guard var item = item(for: itemPath, kind: kind, at: state) else {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Item at index path (\(itemPath.section) - \(itemPath.item)) does not exist.")
             return
         }
         var layout = self.layout(at: state)
@@ -451,7 +451,7 @@ final class StateController {
                 afterUpdateModel.insertSection(section, at: sectionIndex)
             case let .itemReload(itemIndexPath: indexPath):
                 guard var item = self.item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
-                    assertionFailure("Internal inconsistency")
+                    assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
                     return
                 }
                 item.resetSize()
@@ -487,7 +487,7 @@ final class StateController {
         reloadedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
             let oldSection = self.section(at: $0, at: .beforeUpdate)
             guard let newSectionIndex = self.sectionIndex(for: oldSection.id, at: .afterUpdate) else {
-                assertionFailure("Internal inconsistency")
+                assertionFailure("Section with identifier \(oldSection.id) does not exist.")
                 return
             }
             let newSection = self.section(at: newSectionIndex, at: .afterUpdate)
