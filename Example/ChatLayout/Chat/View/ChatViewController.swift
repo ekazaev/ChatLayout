@@ -29,6 +29,8 @@ final class ChatViewController: UIViewController {
         case scrollingToBottom
         case showingPreview
         case showingAccessory
+        @available(iOS 15, *)
+        case updatingCollection
     }
 
     private enum ControllerActions {
@@ -181,7 +183,7 @@ final class ChatViewController: UIViewController {
             self.collectionView.performBatchUpdates(nil)
         }, completion: { _ in
             if let positionSnapshot = positionSnapshot,
-                !self.isUserInitiatedScrolling {
+               !self.isUserInitiatedScrolling {
                 // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
                 // to compact and back. `ChatLayout` may not properly predict the final position of the element. So we try
                 // to restore it after the rotation manually.
@@ -224,10 +226,10 @@ extension ChatViewController: UIScrollViewDelegate {
 
     public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         guard scrollView.contentSize.height > 0,
-            !currentInterfaceActions.options.contains(.showingAccessory),
-            !currentInterfaceActions.options.contains(.showingPreview),
-            !currentInterfaceActions.options.contains(.scrollingToTop),
-            !currentInterfaceActions.options.contains(.scrollingToBottom) else {
+              !currentInterfaceActions.options.contains(.showingAccessory),
+              !currentInterfaceActions.options.contains(.showingPreview),
+              !currentInterfaceActions.options.contains(.scrollingToTop),
+              !currentInterfaceActions.options.contains(.scrollingToBottom) else {
             return false
         }
         // Blocking the call of loadPreviousMessages() as UIScrollView behaves the way that it will scroll to the top even if we keep adding
@@ -239,7 +241,7 @@ extension ChatViewController: UIScrollViewDelegate {
 
     public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         guard !currentControllerActions.options.contains(.loadingInitialMessages),
-            !currentControllerActions.options.contains(.loadingPreviousMessages) else {
+              !currentControllerActions.options.contains(.loadingPreviousMessages) else {
             return
         }
         currentInterfaceActions.options.remove(.scrollingToTop)
@@ -248,9 +250,9 @@ extension ChatViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard !currentControllerActions.options.contains(.loadingInitialMessages),
-            !currentControllerActions.options.contains(.loadingPreviousMessages),
-            !currentInterfaceActions.options.contains(.scrollingToTop),
-            !currentInterfaceActions.options.contains(.scrollingToBottom) else {
+              !currentControllerActions.options.contains(.loadingPreviousMessages),
+              !currentInterfaceActions.options.contains(.scrollingToTop),
+              !currentInterfaceActions.options.contains(.scrollingToBottom) else {
             return
         }
 
@@ -329,9 +331,9 @@ extension ChatViewController: UICollectionViewDelegate {
         }
         let components = identifier.split(separator: "|")
         guard components.count == 2,
-            let sectionIndex = Int(components[0]),
-            let itemIndex = Int(components[1]),
-            let cell = collectionView.cellForItem(at: IndexPath(item: itemIndex, section: sectionIndex)) as? TextMessageCollectionCell else {
+              let sectionIndex = Int(components[0]),
+              let itemIndex = Int(components[1]),
+              let cell = collectionView.cellForItem(at: IndexPath(item: itemIndex, section: sectionIndex)) as? TextMessageCollectionCell else {
             return nil
         }
 
@@ -439,6 +441,12 @@ extension ChatViewController: ChatControllerDelegate {
             // If there is a big amount of changes, it is better to move that calculation out of the main thread.
             // Here is on the main thread for the simplicity.
             let changeSet = StagedChangeset(source: dataSource.sections, target: sections).flattenIfPossible()
+
+            // In IOS 15 Apple again changed something in the UICollectionViewLayout and if simultaneous updates happen when the previous animation is not finished,
+            // it doesnt caclulate content offset correctly. So we are blocking processing checnges while the previoues batch update is in progress.
+            if #available(iOS 15.0, *) {
+                currentInterfaceActions.options.insert(.updatingCollection)
+            }
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
                                       guard changeSet.sectionInserted.isEmpty else {
@@ -453,7 +461,14 @@ extension ChatViewController: ChatControllerDelegate {
                                       self.chatLayout.restoreContentOffset(with: positionSnapshot)
                                   },
                                   completion: { _ in
-                                      completion?()
+                                      if #available(iOS 15.0, *) {
+                                          DispatchQueue.main.async {
+                                              completion?()
+                                              self.currentInterfaceActions.options.remove(.updatingCollection)
+                                          }
+                                      } else {
+                                          completion?()
+                                      }
                                   },
                                   setData: { data in
                                       self.dataSource.sections = data
@@ -475,7 +490,7 @@ extension ChatViewController: UIGestureRecognizerDelegate {
 
     @objc private func handleRevealPan(_ gesture: UIPanGestureRecognizer) {
         guard let collectionView = gesture.view as? UICollectionView,
-            !editNotifier.isEditing else {
+              !editNotifier.isEditing else {
             currentInterfaceActions.options.remove(.showingAccessory)
             return
         }
@@ -569,15 +584,15 @@ extension ChatViewController: KeyboardListenerDelegate {
 
     func keyboardWillChangeFrame(info: KeyboardInfo) {
         guard !currentInterfaceActions.options.contains(.changingFrameSize),
-            collectionView.contentInsetAdjustmentBehavior != .never,
-            let keyboardFrame = UIApplication.shared.keyWindow?.convert(info.frameEnd, to: view),
-            collectionView.convert(collectionView.bounds, to: UIApplication.shared.keyWindow).maxY > info.frameEnd.minY else {
+              collectionView.contentInsetAdjustmentBehavior != .never,
+              let keyboardFrame = UIApplication.shared.keyWindow?.convert(info.frameEnd, to: view),
+              collectionView.convert(collectionView.bounds, to: UIApplication.shared.keyWindow).maxY > info.frameEnd.minY else {
             return
         }
         currentInterfaceActions.options.insert(.changingKeyboardFrame)
         let newBottomInset = collectionView.frame.minY + collectionView.frame.size.height - keyboardFrame.minY - collectionView.safeAreaInsets.bottom
         if newBottomInset > 0,
-            collectionView.contentInset.bottom != newBottomInset {
+           collectionView.contentInset.bottom != newBottomInset {
             let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
 
             // Blocks possible updates when keyboard is being hidden interactively

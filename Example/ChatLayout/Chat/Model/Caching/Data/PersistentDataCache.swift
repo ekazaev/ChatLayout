@@ -93,7 +93,7 @@ class PersistentDataCache<CachingKey: PersistentlyCacheable>: AsyncKeyValueCachi
             for fileName in files {
                 let identifier = identifierFromFileName(fileName)
                 guard let life = remainingLife(for: identifier),
-                    life <= 0 else {
+                      life <= 0 else {
                     continue
                 }
 

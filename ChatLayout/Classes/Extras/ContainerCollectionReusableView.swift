@@ -77,7 +77,6 @@ public final class ContainerCollectionReusableView<CustomView: UIView>: UICollec
 
     private func setupSubviews() {
         addSubview(customView)
-        translatesAutoresizingMaskIntoConstraints = false
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
 

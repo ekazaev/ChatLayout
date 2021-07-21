@@ -74,9 +74,9 @@ class ManualAnimator {
 
 }
 
-extension CGFloat {
+private extension CGFloat {
 
-    fileprivate var parametric: CGFloat {
+    var parametric: CGFloat {
         guard self > 0.0 else {
             return 0.0
         }
@@ -86,7 +86,7 @@ extension CGFloat {
         return ((self * self) / (2.0 * ((self * self) - self) + 1.0))
     }
 
-    fileprivate var quadraticEaseInOut: CGFloat {
+    var quadraticEaseInOut: CGFloat {
         guard self > 0.0 else {
             return 0.0
         }
@@ -99,7 +99,7 @@ extension CGFloat {
         return (-2 * self * self) + (4 * self) - 1
     }
 
-    fileprivate var quadraticEaseOut: CGFloat {
+    var quadraticEaseOut: CGFloat {
         guard self > 0.0 else {
             return 0.0
         }
@@ -109,7 +109,7 @@ extension CGFloat {
         return -self * (self - 2)
     }
 
-    fileprivate var quadraticEaseIn: CGFloat {
+    var quadraticEaseIn: CGFloat {
         guard self > 0.0 else {
             return 0.0
         }

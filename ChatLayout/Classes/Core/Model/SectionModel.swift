@@ -119,7 +119,7 @@ struct SectionModel {
     mutating func setAndAssemble(footer: ItemModel) {
         #if DEBUG
         if let oldFooter = self.footer,
-            footer.id != oldFooter.id {
+           footer.id != oldFooter.id {
             assertionFailure("Internal inconsistency")
         }
         #endif

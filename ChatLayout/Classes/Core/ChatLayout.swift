@@ -248,7 +248,7 @@ public final class ChatLayout: UICollectionViewLayout {
         super.prepare()
 
         guard let collectionView = collectionView,
-            !prepareActions.isEmpty else {
+              !prepareActions.isEmpty else {
             return
         }
 
@@ -298,7 +298,7 @@ public final class ChatLayout: UICollectionViewLayout {
         }
 
         if prepareActions.contains(.updateLayoutMetrics),
-            !prepareActions.contains(.recreateSectionModels) {
+           !prepareActions.contains(.recreateSectionModels) {
 
             var sections: [SectionModel] = []
             sections.reserveCapacity(controller.numberOfSections(at: state))
@@ -413,9 +413,9 @@ public final class ChatLayout: UICollectionViewLayout {
         state = .afterUpdate
         prepareActions.remove(.switchStates)
         guard let collectionView = collectionView,
-            oldBounds.width != collectionView.bounds.width,
-            keepContentOffsetAtBottomOnBatchUpdates,
-            controller.isLayoutBiggerThanVisibleBounds(at: state) else {
+              oldBounds.width != collectionView.bounds.width,
+              keepContentOffsetAtBottomOnBatchUpdates,
+              controller.isLayoutBiggerThanVisibleBounds(at: state) else {
             return
         }
         let newBounds = collectionView.bounds
@@ -442,7 +442,7 @@ public final class ChatLayout: UICollectionViewLayout {
     public override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
         let preferredAttributesItemPath = preferredAttributes.indexPath.itemPath
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
-            let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
+              let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
             return true
         }
 
@@ -479,9 +479,9 @@ public final class ChatLayout: UICollectionViewLayout {
         let isAboveBottomEdge = originalAttributes.frame.minY.rounded() <= visibleBounds.maxY.rounded()
 
         if heightDifference != 0,
-            (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded())
-            || isUserInitiatedScrolling,
-            isAboveBottomEdge {
+           (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded())
+           || isUserInitiatedScrolling,
+           isAboveBottomEdge {
             context.contentOffsetAdjustment.y += heightDifference
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
@@ -493,8 +493,8 @@ public final class ChatLayout: UICollectionViewLayout {
                 controller.offsetByTotalCompensation(attributes: layoutAttributesForPendingAnimation, for: state, backward: true)
             }
             if state == .afterUpdate,
-                controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) ||
-                controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
+               controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) ||
+               controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
                 layoutAttributesForPendingAnimation.map { attributes in
                     guard let delegate = delegate else {
                         attributes.alpha = 0
@@ -575,8 +575,8 @@ public final class ChatLayout: UICollectionViewLayout {
         if let currentPositionSnapshot = currentPositionSnapshot {
             let contentHeight = controller.contentHeight(at: state)
             if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, kind: currentPositionSnapshot.kind, at: state, isFinal: true),
-                contentHeight != 0,
-                contentHeight > visibleBounds.size.height {
+               contentHeight != 0,
+               contentHeight > visibleBounds.size.height {
                 switch currentPositionSnapshot.edge {
                 case .top:
                     let desiredOffset = frame.minY - currentPositionSnapshot.offset - collectionView.adjustedContentInset.top - settings.additionalInsets.top
@@ -599,7 +599,7 @@ public final class ChatLayout: UICollectionViewLayout {
     /// Retrieves the content offset to use after an animated layout update or change.
     public override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
         if controller.proposedCompensatingOffset != 0,
-            let collectionView = collectionView {
+           let collectionView = collectionView {
             let minPossibleContentOffset = -collectionView.adjustedContentInset.top
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
             controller.proposedCompensatingOffset = 0
@@ -625,9 +625,9 @@ public final class ChatLayout: UICollectionViewLayout {
         controller.proposedCompensatingOffset = 0
 
         if keepContentOffsetAtBottomOnBatchUpdates,
-            controller.isLayoutBiggerThanVisibleBounds(at: state),
-            controller.batchUpdateCompensatingOffset != 0,
-            let collectionView = collectionView {
+           controller.isLayoutBiggerThanVisibleBounds(at: state),
+           controller.batchUpdateCompensatingOffset != 0,
+           let collectionView = collectionView {
             let compensatingOffset: CGFloat
             if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
                 compensatingOffset = controller.batchUpdateCompensatingOffset
@@ -637,7 +637,10 @@ public final class ChatLayout: UICollectionViewLayout {
             controller.batchUpdateCompensatingOffset = 0
             let context = ChatLayoutInvalidationContext()
             context.contentOffsetAdjustment.y = compensatingOffset
-            context.contentSizeAdjustment.height = controller.contentSize(for: .afterUpdate).height - controller.contentSize(for: .beforeUpdate).height
+            if !isIOS15orHigher {
+                let contentHeightAdjustment: CGFloat = controller.contentSize(for: .afterUpdate).height - controller.contentSize(for: .beforeUpdate).height
+                context.contentSizeAdjustment.height = contentHeightAdjustment
+            }
             invalidateLayout(with: context)
         } else {
             controller.batchUpdateCompensatingOffset = 0
@@ -670,7 +673,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 }
                 attributesForPendingAnimations[.cell]?[itemPath] = attributes
             } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
-                let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate) {
+                      let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate) {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 attributes?.indexPath = itemIndexPath
                 if !isIOS13orHigher {
@@ -699,8 +702,8 @@ public final class ChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
-                    controller.isLayoutBiggerThanVisibleBounds(at: state),
-                    let attributes = attributes {
+                   controller.isLayoutBiggerThanVisibleBounds(at: state),
+                   let attributes = attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height / 2)
                 }
                 attributes.map { attributes in
@@ -711,7 +714,7 @@ public final class ChatLayout: UICollectionViewLayout {
                     delegate.finalLayoutAttributesForDeletedItem(self, of: .cell, at: itemIndexPath, modifying: attributes)
                 }
             } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, kind: .cell, at: .beforeUpdate),
-                let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .afterUpdate) {
+                      let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .afterUpdate) {
                 if controller.movedIndexes.contains(itemIndexPath) || controller.movedSectionsIndexes.contains(itemPath.section) ||
                     controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
                     attributes = controller.itemAttributes(for: finalIndexPath, kind: .cell, at: .afterUpdate)?.typedCopy()
@@ -759,7 +762,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 }
                 attributesForPendingAnimations[kind]?[elementPath] = attributes
             } else if let itemIdentifier = controller.itemIdentifier(for: elementPath, kind: kind, at: .afterUpdate),
-                let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .beforeUpdate) {
+                      let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .beforeUpdate) {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 attributes?.indexPath = elementIndexPath
 
@@ -790,8 +793,8 @@ public final class ChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
-                    controller.isLayoutBiggerThanVisibleBounds(at: state),
-                    let attributes = attributes {
+                   controller.isLayoutBiggerThanVisibleBounds(at: state),
+                   let attributes = attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height / 2)
                 }
                 attributes.map { attributes in
@@ -802,7 +805,7 @@ public final class ChatLayout: UICollectionViewLayout {
                     delegate.finalLayoutAttributesForDeletedItem(self, of: .cell, at: elementIndexPath, modifying: attributes)
                 }
             } else if let itemIdentifier = controller.itemIdentifier(for: elementPath, kind: kind, at: .beforeUpdate),
-                let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .afterUpdate) {
+                      let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .afterUpdate) {
                 if controller.movedSectionsIndexes.contains(elementPath.section) || controller.reloadedSectionsIndexes.contains(elementPath.section) {
                     attributes = controller.itemAttributes(for: finalIndexPath, kind: kind, at: .afterUpdate)?.typedCopy()
                 } else {
@@ -854,10 +857,10 @@ extension ChatLayout {
         }
     }
 
-    fileprivate func itemSize(with preferredAttributes: ChatLayoutAttributes) -> CGSize {
+    private func itemSize(with preferredAttributes: ChatLayoutAttributes) -> CGSize {
         let itemSize: CGSize
         if let delegate = delegate,
-            case let .exact(size) = delegate.sizeForItem(self, of: preferredAttributes.kind, at: preferredAttributes.indexPath) {
+           case let .exact(size) = delegate.sizeForItem(self, of: preferredAttributes.kind, at: preferredAttributes.indexPath) {
             itemSize = size
         } else {
             itemSize = preferredAttributes.size
@@ -938,6 +941,15 @@ extension ChatLayout {
 @inline(__always)
 var isIOS13orHigher: Bool {
     if #available(iOS 13.0, *) {
+        return true
+    } else {
+        return false
+    }
+}
+
+@inline(__always)
+var isIOS15orHigher: Bool {
+    if #available(iOS 15.0, *) {
         return true
     } else {
         return false

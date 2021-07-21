@@ -86,7 +86,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
     private func updateAccessoryView() {
         accessoryView.removeFromSuperview()
         guard let avatarConnectingView = accessoryConnectingView,
-            let avatarConnectingSuperview = avatarConnectingView.superview else {
+              let avatarConnectingSuperview = avatarConnectingView.superview else {
             return
         }
         avatarConnectingSuperview.addSubview(accessoryView)
@@ -97,7 +97,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
 
     private func updateOffsets() {
         if let avatarView = avatarView,
-            !avatarView.isHidden {
+           !avatarView.isHidden {
             avatarView.transform = CGAffineTransform(translationX: -((avatarView.bounds.width + accessorySafeAreaInsets.left) * swipeCompletionRate), y: 0)
         }
         switch containerView.customView.messageType {
@@ -109,7 +109,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
             customView.transform = .identity
             customView.transform = CGAffineTransform(translationX: -(maxOffset * swipeCompletionRate), y: 0)
             if let statusView = statusView,
-                !statusView.isHidden {
+               !statusView.isHidden {
                 statusView.transform = CGAffineTransform(translationX: -(maxOffset * swipeCompletionRate), y: 0)
             }
         }

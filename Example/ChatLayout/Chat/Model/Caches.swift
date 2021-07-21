@@ -21,5 +21,5 @@ let imageCache = IterativeCache(mainCache: ImageForUrlCache(cache: MemoryDataCac
 // Uncomment to reload dynamic content on every start.
 // @available(iOS 13, *)
 // var metadataCache = MetaDataCache(cache: MemoryDataCache<URL>())
-
+//
 // let imageCache = ImageForUrlCache(cache: MemoryDataCache<CacheableImageKey>())

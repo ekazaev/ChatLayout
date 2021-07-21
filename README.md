@@ -13,7 +13,7 @@
 [![Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BA51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Swift 5.2](https://img.shields.io/badge/language-Swift5.2-orange.svg?style=flat)](https://developer.apple.com/swift)
-[![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2014-yellow.svg)](https://www.apple.com/ios)
+[![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2015-yellow.svg)](https://www.apple.com/ios)
 
 <p align="center">
 <img src="https://habrastorage.org/webt/ji/ba/dj/jibadjc0hul-fzfwxm2w0ywdutg.png" />
@@ -33,6 +33,7 @@
     - [About Supplementary Views](#about-supplementary-views)
     - [About Texture](#about-texture)
     - [About animation](#about-animation)
+    - [About IOS 15 Beta](#about-ios-15-beta)
 - [License](#license)
 - [Articles](#articles)
 - [Author](#author)
@@ -146,6 +147,12 @@ If you see a strange or unexpected animation during the updates, check your data
 It is very possible that you are sending delete/insert commands when you expect to see reload. The easiest way to check it is by adding
 `print("\(updateItems)")` into `ChatLayout.prepare(forCollectionViewUpdates:)` method. `ChatLayout` doesn't know what you expected to see. 
 It just processes your changes according to the commands it has received.
+
+### About IOS 15 Beta
+
+It seems that in the latest release of IOS 15 it is impossible to call `UICollectionView`'s `performBatchUpdates` while 
+another is still processing animation and keep the content offset in the correct place. Please check to the Example 
+app `ChatViewController` how to avoid that issue.
 
 ## License
 

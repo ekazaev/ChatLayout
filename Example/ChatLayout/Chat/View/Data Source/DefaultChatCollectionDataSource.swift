@@ -362,7 +362,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     public func initialLayoutAttributesForInsertedItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes, on state: InitialAttributesRequestType) {
         originalAttributes.alpha = 0
         guard state == .invalidation,
-            kind == .cell else {
+              kind == .cell else {
             return
         }
         switch sections[indexPath.section].cells[indexPath.item] {

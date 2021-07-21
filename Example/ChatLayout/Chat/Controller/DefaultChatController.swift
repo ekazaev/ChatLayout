@@ -87,7 +87,7 @@ final class DefaultChatController: ChatController {
                                status: $0.status) }
                 .reduce(into: [[Message]]()) { result, message in
                     guard var section = result.last,
-                        let prevMessage = section.last else {
+                          let prevMessage = section.last else {
                         let section = [message]
                         result.append(section)
                         return
@@ -137,7 +137,7 @@ final class DefaultChatController: ChatController {
                 }
 
                 if self.typingState == .typing,
-                    index == messagesSplitByDay.count - 1 {
+                   index == messagesSplitByDay.count - 1 {
                     cells.append(.typingIndicator)
                 }
 

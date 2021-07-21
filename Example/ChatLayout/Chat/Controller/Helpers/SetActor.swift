@@ -115,7 +115,7 @@ public final class SetActor<Option: SetAlgebra, ReactionType> {
         for option in [insertedOptions] {
             let onEmptyReactions = reactions.filter {
                 guard case let .onInsertion(newOption) = $0.action,
-                    newOption == option else {
+                      newOption == option else {
                     return false
                 }
                 return true
@@ -132,7 +132,7 @@ public final class SetActor<Option: SetAlgebra, ReactionType> {
         for option in [removedOptions] {
             let onEmptyReactions = reactions.filter {
                 guard case let .onRemoval(newOption) = $0.action,
-                    newOption == option else {
+                      newOption == option else {
                     return false
                 }
                 return true
@@ -149,9 +149,9 @@ public final class SetActor<Option: SetAlgebra, ReactionType> {
 
 }
 
-extension SetActor where ReactionType: Equatable {
+public extension SetActor where ReactionType: Equatable {
 
-    public func removeAllReactions(_ type: ReactionType) {
+    func removeAllReactions(_ type: ReactionType) {
         reactions.removeAll(where: { $0.type == type })
     }
 
