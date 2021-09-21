@@ -29,7 +29,6 @@ final class ChatViewController: UIViewController {
         case scrollingToBottom
         case showingPreview
         case showingAccessory
-        @available(iOS 15, *)
         case updatingCollection
     }
 
@@ -377,7 +376,8 @@ extension ChatViewController: UICollectionViewDelegate {
 
     @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        guard !currentInterfaceActions.options.contains(.showingPreview) else {
+        guard !currentInterfaceActions.options.contains(.showingPreview),
+              !currentInterfaceActions.options.contains(.updatingCollection) else {
             return nil
         }
         let item = dataSource.sections[indexPath.section].cells[indexPath.item]
@@ -442,11 +442,10 @@ extension ChatViewController: ChatControllerDelegate {
             // Here is on the main thread for the simplicity.
             let changeSet = StagedChangeset(source: dataSource.sections, target: sections).flattenIfPossible()
 
-            // In IOS 15 Apple again changed something in the UICollectionViewLayout and if simultaneous updates happen when the previous animation is not finished,
-            // it doesnt caclulate content offset correctly. So we are blocking processing checnges while the previoues batch update is in progress.
-            if #available(iOS 15.0, *) {
-                currentInterfaceActions.options.insert(.updatingCollection)
-            }
+            // In IOS 15 Apple as usual broke something in the UICollectionViewLayout and if simultaneous updates happen when the previous animation is not finished,
+            // it doesnt caclulate content offset correctly. So we are blocking processing changes whilest the previoues batch update is in progress.
+            currentInterfaceActions.options.insert(.updatingCollection)
+
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
                                       guard changeSet.sectionInserted.isEmpty else {
@@ -461,13 +460,9 @@ extension ChatViewController: ChatControllerDelegate {
                                       self.chatLayout.restoreContentOffset(with: positionSnapshot)
                                   },
                                   completion: { _ in
-                                      if #available(iOS 15.0, *) {
-                                          DispatchQueue.main.async {
-                                              completion?()
-                                              self.currentInterfaceActions.options.remove(.updatingCollection)
-                                          }
-                                      } else {
+                                      DispatchQueue.main.async {
                                           completion?()
+                                          self.currentInterfaceActions.options.remove(.updatingCollection)
                                       }
                                   },
                                   setData: { data in

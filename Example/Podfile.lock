@@ -1,22 +1,22 @@
 PODS:
-  - ChatLayout (1.1.8):
-    - ChatLayout/Ultimate (= 1.1.8)
-  - ChatLayout/Core (1.1.8)
-  - ChatLayout/Extras (1.1.8):
+  - ChatLayout (1.1.9):
+    - ChatLayout/Ultimate (= 1.1.9)
+  - ChatLayout/Core (1.1.9)
+  - ChatLayout/Extras (1.1.9):
     - ChatLayout/Core
-  - ChatLayout/Ultimate (1.1.8):
+  - ChatLayout/Ultimate (1.1.9):
     - ChatLayout/Core
     - ChatLayout/Extras
-  - DifferenceKit (1.1.5):
-    - DifferenceKit/Core (= 1.1.5)
-    - DifferenceKit/UIKitExtension (= 1.1.5)
-  - DifferenceKit/Core (1.1.5)
-  - DifferenceKit/UIKitExtension (1.1.5):
+  - DifferenceKit (1.2.0):
+    - DifferenceKit/Core (= 1.2.0)
+    - DifferenceKit/UIKitExtension (= 1.2.0)
+  - DifferenceKit/Core (1.2.0)
+  - DifferenceKit/UIKitExtension (1.2.0):
     - DifferenceKit/Core
   - FPSCounter (4.1.0)
-  - InputBarAccessoryView (5.2.2):
-    - InputBarAccessoryView/Core (= 5.2.2)
-  - InputBarAccessoryView/Core (5.2.2)
+  - InputBarAccessoryView (5.4.0):
+    - InputBarAccessoryView/Core (= 5.4.0)
+  - InputBarAccessoryView/Core (5.4.0)
 
 DEPENDENCIES:
   - ChatLayout (from `../`)
@@ -35,10 +35,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ChatLayout: 08ed19d6dfce3d4b5a71de694f36e61bc5c18a2b
-  DifferenceKit: 516f12e336ed65a3a0665847b5c3cb5cad4bd4ea
+  ChatLayout: c947b3240dc782d0a90f9a47abfca735bd8c4098
+  DifferenceKit: 5659c430bb7fe45876fa32ce5cba5d6167f0c805
   FPSCounter: 884afec377de66637808c4f52ecc3b85a404732b
-  InputBarAccessoryView: 8ec44fced9840957831f7ab842e9c4fe6ff9a252
+  InputBarAccessoryView: 74d471ab1fa1736806be50328df79257e52865a9
 
 PODFILE CHECKSUM: 8c714139f0a07a1f2169fe35aa2829ae446d122a
 
