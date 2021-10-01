@@ -440,7 +440,9 @@ extension ChatViewController: ChatControllerDelegate {
         func process() {
             // If there is a big amount of changes, it is better to move that calculation out of the main thread.
             // Here is on the main thread for the simplicity.
-            let changeSet = StagedChangeset(source: dataSource.sections, target: sections).flattenIfPossible().mergeChangesIfPossible()
+            let changeSet = StagedChangeset(source: dataSource.sections, target: sections)
+                .flattenIfPossible()
+                .mergeChangesIfPossible(finalNumberOfElements: sections.last?.elements.count)
 
             // In IOS 15 Apple as usual broke something in the UICollectionViewLayout and if simultaneous updates happen when the previous animation is not finished,
             // it doesnt caclulate content offset correctly. So we are blocking processing changes whilest the previoues batch update is in progress.

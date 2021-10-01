@@ -11,7 +11,7 @@ import DifferenceKit
 import Foundation
 import UIKit
 
-extension UICollectionView {
+public extension UICollectionView {
 
     func reload<C>(
         using stagedChangeset: StagedChangeset<C>,
@@ -128,35 +128,35 @@ extension StagedChangeset {
     // DifferenceKit.
     func flattenIfPossible() -> StagedChangeset {
         if count == 2,
-            self[0].sectionChangeCount == 0,
-            self[1].sectionChangeCount == 0,
-            self[0].elementDeleted.count == self[0].elementChangeCount,
-            self[1].elementInserted.count == self[1].elementChangeCount {
+           self[0].sectionChangeCount == 0,
+           self[1].sectionChangeCount == 0,
+           self[0].elementDeleted.count == self[0].elementChangeCount,
+           self[1].elementInserted.count == self[1].elementChangeCount {
             return StagedChangeset(arrayLiteral: Changeset(data: self[1].data, elementDeleted: self[0].elementDeleted, elementInserted: self[1].elementInserted))
         }
         return self
     }
 
-    func mergeChangesIfPossible() -> StagedChangeset {
+    /// Useful in iOS15 to merge the changes in order to execute the minimum number of performBatchUpdates
+    ///
+    /// - Parameter finalNumberOfElements: the number of the element of the last target sections (useful only when using sections)
+    /// - Returns: A collection changes (StageChangeset)
+    func mergeChangesIfPossible(finalNumberOfElements: Int? = nil) -> StagedChangeset {
         if #available(iOS 15, *), var lastItem = self.last {
             var stagedChangeset = self
-            let numberOfData = lastItem.data.count
+            let numberOfData = finalNumberOfElements ?? lastItem.data.count
 
-            let sectionDeleted = stagedChangeset.flatMap({ $0.sectionDeleted })
-            let sectionInserted = stagedChangeset.flatMap({ $0.sectionInserted })
-            let sectionUpdated = stagedChangeset.flatMap({ $0.sectionUpdated })
-            let sectionMoved = stagedChangeset.flatMap({ $0.sectionMoved })
-
+            let hasSectionChanges = stagedChangeset.contains(where: { $0.hasSectionChanges })
             var elementDeleted = stagedChangeset.flatMap({ $0.elementDeleted })
             var elementInserted = stagedChangeset.flatMap({ $0.elementInserted })
             let elementUpdated = stagedChangeset.flatMap({ $0.elementUpdated })
             let elementMoved = stagedChangeset.flatMap({ $0.elementMoved })
 
-            guard sectionDeleted.count == 0, sectionInserted.count == 0, sectionUpdated.count == 0, sectionMoved.count == 0,
+            guard !hasSectionChanges,
+                  elementMoved.isEmpty,
                   !elementDeleted.map({ $0.element }).contains(where: { $0 >= numberOfData }),
                   !elementInserted.map({ $0.element }).contains(where: { $0 >= numberOfData }),
-                  !elementUpdated.map({ $0.element }).contains(where: { $0 >= numberOfData }),
-                  elementMoved.count == 0 else {
+                  !elementUpdated.map({ $0.element }).contains(where: { $0 >= numberOfData }) else {
                 // too complicated to merge
                 return self
             }
@@ -180,8 +180,7 @@ extension StagedChangeset {
     }
 }
 
-
-private extension Changeset {
+extension Changeset {
     mutating func removeElements() {
         self.elementDeleted.removeAll()
         self.elementInserted.removeAll()
