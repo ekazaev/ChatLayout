@@ -32,6 +32,10 @@ public final class ChatLayout: UICollectionViewLayout {
 
     // MARK: Custom Properties
 
+    private var contentOffsetObserver: NSKeyValueObservation?
+
+    private var contentInsetObserver: NSKeyValueObservation?
+
     /// `ChatLayout` delegate.
     public weak var delegate: ChatLayoutDelegate?
 
@@ -99,9 +103,23 @@ public final class ChatLayout: UICollectionViewLayout {
         return ChatLayoutInvalidationContext.self
     }
 
+    var cachedCollectionViewContentSize: CGSize?
+    
     /// The width and height of the collection view’s contents.
     public override var collectionViewContentSize: CGSize {
-        let contentSize = controller.contentSize(for: .beforeUpdate)
+        //let contentSize = reallyCachedContentSize ?? controller.contentSize(for: .beforeUpdate)
+        let contentSize: CGSize
+        if state == .beforeUpdate {
+            contentSize = controller.contentSize(for: .beforeUpdate)
+        } else {
+            var size = controller.contentSize(for: .beforeUpdate)
+            size.height += controller.totalProposedCompensatingOffset
+            contentSize = size
+        }
+        if cachedCollectionViewContentSize != contentSize {
+            cachedCollectionViewContentSize = contentSize
+            //print("\(#function) - \(contentSize)")
+        }
         return contentSize
     }
 
@@ -251,7 +269,6 @@ public final class ChatLayout: UICollectionViewLayout {
               !prepareActions.isEmpty else {
             return
         }
-
         if collectionView.isPrefetchingEnabled {
             preconditionFailure("UICollectionView with prefetching enabled is not supported due to https://openradar.appspot.com/40926834 bug.")
         }
@@ -262,6 +279,7 @@ public final class ChatLayout: UICollectionViewLayout {
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
         }
+        //print("\(#function) \(state)")
 
         if prepareActions.contains(.recreateSectionModels) {
             var sections: [SectionModel] = []
@@ -538,11 +556,27 @@ public final class ChatLayout: UICollectionViewLayout {
         return invalidationContext
     }
 
+    func setupOffsetObserver() {
+        guard let collectionView = collectionView else {
+            return
+        }
+        contentOffsetObserver = collectionView.observe(\.contentOffset, options: [.old, .new], changeHandler: { _, change in
+//            print("CONTENT OFFSET OBSERVER: \(self.state) > |old: \(change.oldValue) -> new: \(change.newValue)| \(self.collectionView?.contentOffset) ***\(self.currentContentOffsetFromBottom)***")
+        })
+        contentInsetObserver = collectionView.observe(\.contentInset, options: [.old, .new], changeHandler: { _, change in
+//            print("CONTENT INSET OBSERVER: \(self.state) > |old: \(change.oldValue) -> new: \(change.newValue)| \(self.collectionView?.contentInset) ***\(self.currentContentOffsetFromBottom)***")
+        })
+    }
+
     /// Invalidates the current layout using the information in the provided context object.
     public override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
         guard let collectionView = collectionView else {
             super.invalidateLayout(with: context)
             return
+        }
+
+        if collectionView != nil, contentOffsetObserver == nil {
+            setupOffsetObserver()
         }
 
         guard let context = context as? ChatLayoutInvalidationContext else {
@@ -588,6 +622,7 @@ public final class ChatLayout: UICollectionViewLayout {
                 }
             }
         }
+        //print("\(#function)")
         super.invalidateLayout(with: context)
     }
 
@@ -604,8 +639,10 @@ public final class ChatLayout: UICollectionViewLayout {
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
             controller.proposedCompensatingOffset = 0
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
+            //print("\(#function) - \(newProposedContentOffset)|\(proposedContentOffset)")
             return newProposedContentOffset
         }
+        //print("\(#function) - \(proposedContentOffset)")
         return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
     }
 
@@ -613,6 +650,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// Notifies the layout object that the contents of the collection view are about to change.
     public override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+        //print("\(#function) - \(updateItems)")
         let changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         controller.process(changeItems: changeItems)
         state = .afterUpdate
@@ -623,28 +661,32 @@ public final class ChatLayout: UICollectionViewLayout {
     /// Performs any additional animations or clean up needed during a collection view update.
     public override func finalizeCollectionViewUpdates() {
         controller.proposedCompensatingOffset = 0
-
         if keepContentOffsetAtBottomOnBatchUpdates,
            controller.isLayoutBiggerThanVisibleBounds(at: state),
            controller.batchUpdateCompensatingOffset != 0,
            let collectionView = collectionView {
-            let compensatingOffset: CGFloat
+            var compensatingOffset: CGFloat
             if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
                 compensatingOffset = controller.batchUpdateCompensatingOffset
             } else {
                 compensatingOffset = maxPossibleContentOffset.y - collectionView.contentOffset.y
             }
+            //compensatingOffset = controller.totalProposedCompensatingOffset
+            //print("\(#function)1:\(compensatingOffset) - \(controller.totalProposedCompensatingOffset) - \(controller.batchUpdateCompensatingOffset) - \(controller.proposedCompensatingOffset)")
             controller.batchUpdateCompensatingOffset = 0
             let context = ChatLayoutInvalidationContext()
             context.contentOffsetAdjustment.y = compensatingOffset
-            if !isIOS15orHigher {
-                let contentHeightAdjustment: CGFloat = controller.contentSize(for: .afterUpdate).height - controller.contentSize(for: .beforeUpdate).height
-                context.contentSizeAdjustment.height = contentHeightAdjustment
-            }
+            //if !isIOS15orHigher {
+//                let contentHeightAdjustment: CGFloat = controller.contentSize(for: .afterUpdate).height - controller.contentSize(for: .beforeUpdate).height
+//                context.contentSizeAdjustment.height = contentHeightAdjustment
+            //}
             invalidateLayout(with: context)
         } else {
+//            print("\(#function)2: \(controller.totalProposedCompensatingOffset) - \(controller.batchUpdateCompensatingOffset) - \(controller.proposedCompensatingOffset)")
             controller.batchUpdateCompensatingOffset = 0
             let context = ChatLayoutInvalidationContext()
+//            let contentHeightAdjustment: CGFloat = controller.contentSize(for: .afterUpdate).height - controller.contentSize(for: .beforeUpdate).height
+//            context.contentSizeAdjustment.height = -contentHeightAdjustment
             invalidateLayout(with: context)
         }
 
@@ -920,6 +962,13 @@ extension ChatLayout: ChatLayoutRepresentation {
 }
 
 extension ChatLayout {
+
+    private var currentContentOffsetFromBottom: CGPoint {
+        guard let collectionView = collectionView else {
+            return .zero
+        }
+        return CGPoint(x: 0, y: maxPossibleContentOffset.y - collectionView.contentOffset.y)
+    }
 
     private var maxPossibleContentOffset: CGPoint {
         guard let collectionView = collectionView else {

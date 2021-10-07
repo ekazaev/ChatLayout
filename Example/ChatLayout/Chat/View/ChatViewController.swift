@@ -14,6 +14,17 @@ import FPSCounter
 import InputBarAccessoryView
 import UIKit
 
+class MyCollectionView: UICollectionView {
+    override var contentSize: CGSize {
+        get {
+            super.contentSize
+        }
+        set {
+            //print("\(Self.self) \(#function) - \(newValue)")
+            super.contentSize = newValue
+        }
+    }
+}
 final class ChatViewController: UIViewController {
 
     private enum ReactionTypes {
@@ -41,8 +52,17 @@ final class ChatViewController: UIViewController {
         return inputBarView
     }
 
+    private var canBecomeFirstResponderStorage: Bool = true
     override var canBecomeFirstResponder: Bool {
-        return true
+        get {
+            canBecomeFirstResponderStorage
+            
+        }
+        set(newValue) {
+            print("\(Self.self) \(#function) - \(newValue)")
+            canBecomeFirstResponderStorage = newValue
+            
+        }
     }
 
     private var currentInterfaceActions: SetActor<Set<InterfaceActions>, ReactionTypes> = SetActor()
@@ -122,7 +142,7 @@ final class ChatViewController: UIViewController {
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
 
-        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: chatLayout)
+        collectionView = MyCollectionView(frame: view.frame, collectionViewLayout: chatLayout)
         view.addSubview(collectionView)
         collectionView.alwaysBounceVertical = true
         collectionView.dataSource = dataSource
@@ -260,20 +280,35 @@ extension ChatViewController: UIScrollViewDelegate {
         }
     }
 
+    public override func becomeFirstResponder() -> Bool {
+        print("\(#function)")
+        return super.becomeFirstResponder()
+    }
+
+    public override func resignFirstResponder() -> Bool {
+        print("\(#function)")
+        return super.resignFirstResponder()
+    }
+
+    public override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> ())?) {
+        print("\(#function) \(viewControllerToPresent)")
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
+
     private func loadPreviousMessages() {
-        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
-        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
-        currentControllerActions.options.insert(.loadingPreviousMessages)
-        chatController.loadPreviousMessages { [weak self] sections in
-            guard let self = self else {
-                return
-            }
-            // Reloading the content without animation just because it looks better is the scrolling is in process.
-            let animated = !self.isUserInitiatedScrolling
-            self.processUpdates(with: sections, animated: animated) {
-                self.currentControllerActions.options.remove(.loadingPreviousMessages)
-            }
-        }
+//        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
+//        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
+//        currentControllerActions.options.insert(.loadingPreviousMessages)
+//        chatController.loadPreviousMessages { [weak self] sections in
+//            guard let self = self else {
+//                return
+//            }
+//            // Reloading the content without animation just because it looks better is the scrolling is in process.
+//            let animated = !self.isUserInitiatedScrolling
+//            self.processUpdates(with: sections, animated: animated) {
+//                self.currentControllerActions.options.remove(.loadingPreviousMessages)
+//            }
+//        }
     }
 
     fileprivate var isUserInitiatedScrolling: Bool {
@@ -285,7 +320,7 @@ extension ChatViewController: UIScrollViewDelegate {
         let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x,
                                             y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
 
-        guard contentOffsetAtBottom != collectionView.contentOffset else {
+        guard contentOffsetAtBottom.y > collectionView.contentOffset.y else {
             completion?()
             return
         }
@@ -444,8 +479,9 @@ extension ChatViewController: ChatControllerDelegate {
 
             // In IOS 15 Apple as usual broke something in the UICollectionViewLayout and if simultaneous updates happen when the previous animation is not finished,
             // it doesnt caclulate content offset correctly. So we are blocking processing changes whilest the previoues batch update is in progress.
-            currentInterfaceActions.options.insert(.updatingCollection)
+            // currentInterfaceActions.options.insert(.updatingCollection)
 
+            //print("\(#function) \(self.collectionView.contentOffset.y) \(changeSet.count)")
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
                                       guard changeSet.sectionInserted.isEmpty else {
@@ -462,6 +498,7 @@ extension ChatViewController: ChatControllerDelegate {
                                   completion: { _ in
                                       DispatchQueue.main.async {
                                           completion?()
+                                          //print("\(#function) \(self.collectionView.contentOffset.y)")
                                           self.currentInterfaceActions.options.remove(.updatingCollection)
                                       }
                                   },

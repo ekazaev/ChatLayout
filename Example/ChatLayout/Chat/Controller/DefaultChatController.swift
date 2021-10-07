@@ -60,6 +60,9 @@ final class DefaultChatController: ChatController {
     }
 
     func sendMessage(_ data: Message.Data, completion: @escaping ([Section]) -> Void) {
+        if !messages.isEmpty {
+            messages.removeLast()
+        }
         messages.append(RawMessage(id: UUID(), date: Date(), data: convert(data), userId: userId))
         propagateLatestMessages { sections in
             completion(sections)
