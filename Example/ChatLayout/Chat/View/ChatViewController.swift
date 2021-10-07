@@ -29,12 +29,12 @@ final class ChatViewController: UIViewController {
         case scrollingToBottom
         case showingPreview
         case showingAccessory
-        case updatingCollection
     }
 
     private enum ControllerActions {
         case loadingInitialMessages
         case loadingPreviousMessages
+        case updatingCollection
     }
 
     override var inputAccessoryView: UIView? {
@@ -377,7 +377,7 @@ extension ChatViewController: UICollectionViewDelegate {
     @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         guard !currentInterfaceActions.options.contains(.showingPreview),
-              !currentInterfaceActions.options.contains(.updatingCollection) else {
+              !currentControllerActions.options.contains(.updatingCollection) else {
             return nil
         }
         let item = dataSource.sections[indexPath.section].cells[indexPath.item]
@@ -442,9 +442,7 @@ extension ChatViewController: ChatControllerDelegate {
             // Here is on the main thread for the simplicity.
             let changeSet = StagedChangeset(source: dataSource.sections, target: sections).flattenIfPossible()
 
-            // In IOS 15 Apple as usual broke something in the UICollectionViewLayout and if simultaneous updates happen when the previous animation is not finished,
-            // it doesnt caclulate content offset correctly. So we are blocking processing changes whilest the previoues batch update is in progress.
-            currentInterfaceActions.options.insert(.updatingCollection)
+            currentControllerActions.options.insert(.updatingCollection)
 
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
@@ -462,7 +460,7 @@ extension ChatViewController: ChatControllerDelegate {
                                   completion: { _ in
                                       DispatchQueue.main.async {
                                           completion?()
-                                          self.currentInterfaceActions.options.remove(.updatingCollection)
+                                          self.currentControllerActions.options.remove(.updatingCollection)
                                       }
                                   },
                                   setData: { data in

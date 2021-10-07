@@ -33,7 +33,6 @@
     - [About Supplementary Views](#about-supplementary-views)
     - [About Texture](#about-texture)
     - [About animation](#about-animation)
-    - [About IOS 15 Beta](#about-ios-15-beta)
 - [License](#license)
 - [Articles](#articles)
 - [Author](#author)
@@ -147,12 +146,6 @@ If you see a strange or unexpected animation during the updates, check your data
 It is very possible that you are sending delete/insert commands when you expect to see reload. The easiest way to check it is by adding
 `print("\(updateItems)")` into `ChatLayout.prepare(forCollectionViewUpdates:)` method. `ChatLayout` doesn't know what you expected to see. 
 It just processes your changes according to the commands it has received.
-
-### About IOS 15 Beta
-
-It seems that in the latest release of IOS 15 it is impossible to call `UICollectionView`'s `performBatchUpdates` while 
-another is still processing animation and keep the content offset in the correct place. Please check to the Example 
-app `ChatViewController` how to avoid that issue.
 
 ## License
 

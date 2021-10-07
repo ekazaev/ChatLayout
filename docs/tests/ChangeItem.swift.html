@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "ChangeItem.swift" : </span><span class="cov_low">16.67%</span>
+<span>Coverage for "ChangeItem.swift" : </span><span class="cov_low">36.36%</span>
 </h2>
-<h4 class="cov_subtitle">(15 of 90 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(36 of 99 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/Model/ChangeItem.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -254,7 +254,7 @@
 </tr>
 <tr class="missed">
 <td class="num">49</td>
-<td class="src"><pre><code class="objc">                let indexPathAfterUpdate = indexPathAfterUpdate else {</code></pre></td>
+<td class="src"><pre><code class="objc">                  let indexPathAfterUpdate = indexPathAfterUpdate else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
@@ -477,15 +477,15 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">94</td>
 <td class="src"><pre><code class="objc">    private var rawValue: Int {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">12x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">95</td>
 <td class="src"><pre><code class="objc">        switch self {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">12x</td>
 </tr>
 <tr class="missed">
 <td class="num">96</td>
@@ -497,15 +497,15 @@
 <td class="src"><pre><code class="objc">            return 0</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">98</td>
 <td class="src"><pre><code class="objc">        case .itemReload:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">4x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">99</td>
 <td class="src"><pre><code class="objc">            return 1</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">4x</td>
 </tr>
 <tr class="missed">
 <td class="num">100</td>
@@ -517,15 +517,15 @@
 <td class="src"><pre><code class="objc">            return 2</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">102</td>
 <td class="src"><pre><code class="objc">        case .itemDelete:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">103</td>
 <td class="src"><pre><code class="objc">            return 3</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
 <tr class="missed">
 <td class="num">104</td>
@@ -537,15 +537,15 @@
 <td class="src"><pre><code class="objc">            return 4</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">106</td>
 <td class="src"><pre><code class="objc">        case .itemInsert:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">107</td>
 <td class="src"><pre><code class="objc">            return 5</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">3x</td>
 </tr>
 <tr class="missed">
 <td class="num">108</td>
@@ -557,25 +557,25 @@
 <td class="src"><pre><code class="objc">            return 6</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">110</td>
 <td class="src"><pre><code class="objc">        case .itemMove:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">111</td>
 <td class="src"><pre><code class="objc">            return 7</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">112</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">12x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">113</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">12x</td>
 </tr>
 <tr class="never">
 <td class="num">114</td>
@@ -612,70 +612,70 @@
 <td class="src"><pre><code class="objc">        switch (lhs, rhs) {</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">121</td>
 <td class="src"><pre><code class="objc">        case let (.sectionDelete(sectionIndex: lIndex), .sectionDelete(sectionIndex: rIndex)):</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1x</td>
 </tr>
 <tr class="covered">
 <td class="num">122</td>
 <td class="src"><pre><code class="objc">            return lIndex &lt; rIndex</code></pre></td>
 <td class="coverage">1x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">123</td>
 <td class="src"><pre><code class="objc">        case let (.itemDelete(itemIndexPath: lIndexPath), .itemDelete(itemIndexPath: rIndexPath)):</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">99900x</td>
 </tr>
 <tr class="covered">
 <td class="num">124</td>
 <td class="src"><pre><code class="objc">            return lIndexPath &lt; rIndexPath</code></pre></td>
 <td class="coverage">99900x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">125</td>
 <td class="src"><pre><code class="objc">        case let (.sectionInsert(sectionIndex: lIndex), .sectionInsert(sectionIndex: rIndex)):</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1x</td>
 </tr>
 <tr class="covered">
 <td class="num">126</td>
 <td class="src"><pre><code class="objc">            return lIndex &lt; rIndex</code></pre></td>
 <td class="coverage">1x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">127</td>
 <td class="src"><pre><code class="objc">        case let (.itemInsert(itemIndexPath: lIndexPath), .itemInsert(itemIndexPath: rIndexPath)):</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">99900x</td>
 </tr>
 <tr class="covered">
 <td class="num">128</td>
 <td class="src"><pre><code class="objc">            return lIndexPath &lt; rIndexPath</code></pre></td>
 <td class="coverage">99900x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">129</td>
 <td class="src"><pre><code class="objc">        case let (.sectionReload(sectionIndex: lIndex), .sectionReload(sectionIndex: rIndex)):</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">3x</td>
 </tr>
 <tr class="covered">
 <td class="num">130</td>
 <td class="src"><pre><code class="objc">            return lIndex &lt; rIndex</code></pre></td>
 <td class="coverage">3x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">131</td>
 <td class="src"><pre><code class="objc">        case let (.itemReload(itemIndexPath: lIndexPath), .itemReload(itemIndexPath: rIndexPath)):</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">10200x</td>
 </tr>
 <tr class="covered">
 <td class="num">132</td>
 <td class="src"><pre><code class="objc">            return lIndexPath &lt; rIndexPath</code></pre></td>
 <td class="coverage">10200x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">133</td>
 <td class="src"><pre><code class="objc">        case let (.sectionMove(initialSectionIndex: lInitialSectionIndex, finalSectionIndex: lFinalSectionIndex),</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1x</td>
 </tr>
 <tr class="covered">
 <td class="num">134</td>
@@ -707,10 +707,10 @@
 <td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">140</td>
 <td class="src"><pre><code class="objc">        case let (.itemMove(initialItemIndexPath: lInitialIndexPath, finalItemIndexPath: lFinalIndexPath),</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">2x</td>
 </tr>
 <tr class="covered">
 <td class="num">141</td>
@@ -742,10 +742,10 @@
 <td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">147</td>
 <td class="src"><pre><code class="objc">        default:</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">6x</td>
 </tr>
 <tr class="covered">
 <td class="num">148</td>
