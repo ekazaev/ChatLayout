@@ -101,7 +101,14 @@ public final class ChatLayout: UICollectionViewLayout {
 
     /// The width and height of the collection view’s contents.
     public override var collectionViewContentSize: CGSize {
-        let contentSize = controller.contentSize(for: .beforeUpdate)
+        let contentSize: CGSize
+        if state == .beforeUpdate {
+            contentSize = controller.contentSize(for: .beforeUpdate)
+        } else {
+            var size = controller.contentSize(for: .beforeUpdate)
+            size.height += controller.totalProposedCompensatingOffset
+            contentSize = size
+        }
         return contentSize
     }
 
@@ -637,10 +644,6 @@ public final class ChatLayout: UICollectionViewLayout {
             controller.batchUpdateCompensatingOffset = 0
             let context = ChatLayoutInvalidationContext()
             context.contentOffsetAdjustment.y = compensatingOffset
-            if !isIOS15orHigher {
-                let contentHeightAdjustment: CGFloat = controller.contentSize(for: .afterUpdate).height - controller.contentSize(for: .beforeUpdate).height
-                context.contentSizeAdjustment.height = contentHeightAdjustment
-            }
             invalidateLayout(with: context)
         } else {
             controller.batchUpdateCompensatingOffset = 0
@@ -941,15 +944,6 @@ extension ChatLayout {
 @inline(__always)
 var isIOS13orHigher: Bool {
     if #available(iOS 13.0, *) {
-        return true
-    } else {
-        return false
-    }
-}
-
-@inline(__always)
-var isIOS15orHigher: Bool {
-    if #available(iOS 15.0, *) {
         return true
     } else {
         return false
