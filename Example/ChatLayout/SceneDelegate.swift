@@ -9,6 +9,37 @@
 
 import UIKit
 
+final class MyNavigationController: UINavigationController {
+    override func becomeFirstResponder() -> Bool {
+        let canBecomeFirstResponder2 = viewControllers.last!.becomeFirstResponder()
+        print("\(self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+
+    override var canResignFirstResponder: Bool {
+        let canBecomeFirstResponder2 = viewControllers.last!.canResignFirstResponder
+        print("\(self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+
+    override func resignFirstResponder() -> Bool {
+        let canBecomeFirstResponder2 = viewControllers.last!.resignFirstResponder()
+        print("\(self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+
+    override var isFirstResponder: Bool {
+        let canBecomeFirstResponder2 = viewControllers.last!.isFirstResponder
+        print("\(self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+
+    override var canBecomeFirstResponder: Bool {
+        let canBecomeFirstResponder2 = viewControllers.last!.canBecomeFirstResponder
+        print("\(self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+}
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -27,7 +58,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         let chatViewController = ChatViewControllerBuilder().build()
-        let viewController = UINavigationController(rootViewController: chatViewController)
+        let viewController = MyNavigationController(rootViewController: chatViewController)
 
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = viewController

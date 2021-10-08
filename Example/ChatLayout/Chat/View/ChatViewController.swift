@@ -20,11 +20,57 @@ class MyCollectionView: UICollectionView {
             super.contentSize
         }
         set {
-            //print("\(Self.self) \(#function) - \(newValue)")
+            print("\(Self.self) \(#function) - \(newValue)")
             super.contentSize = newValue
         }
     }
 }
+
+class MyInputBarAccessoryView: InputBarAccessoryView {
+    override func becomeFirstResponder() -> Bool {
+        let canBecomeFirstResponder2 = super.becomeFirstResponder()
+        print("\(Self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+
+    override var canResignFirstResponder: Bool {
+        let canBecomeFirstResponder2 = super.canResignFirstResponder
+        print("\(Self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+
+    override func resignFirstResponder() -> Bool {
+        let canBecomeFirstResponder2 = super.resignFirstResponder()
+        print("\(Self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+
+    override var isFirstResponder: Bool {
+        let canBecomeFirstResponder2 = super.isFirstResponder
+        print("\(Self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+
+    override var canBecomeFirstResponder: Bool {
+        let canBecomeFirstResponder2 = super.canBecomeFirstResponder
+        print("\(Self.self) \(#function) \(canBecomeFirstResponder2)")
+        return canBecomeFirstResponder2
+    }
+
+    override func willMove(toSuperview newSuperview: UIView?) {
+        if newSuperview == nil {
+            self.resignFirstResponder()
+        }
+        print("\(Self.self) \(#function) \(newSuperview)")
+        super.willMove(toSuperview: newSuperview)
+    }
+
+    override func willMove(toWindow newWindow: UIWindow?) {
+        print("\(Self.self) \(#function) \(newWindow)")
+        super.willMove(toWindow: newWindow)
+    }
+}
+
 final class ChatViewController: UIViewController {
 
     private enum ReactionTypes {
@@ -56,13 +102,17 @@ final class ChatViewController: UIViewController {
     override var canBecomeFirstResponder: Bool {
         get {
             canBecomeFirstResponderStorage
-            
+
         }
         set(newValue) {
             print("\(Self.self) \(#function) - \(newValue)")
             canBecomeFirstResponderStorage = newValue
-            
+
         }
+    }
+
+    override var canResignFirstResponder: Bool {
+        return true
     }
 
     private var currentInterfaceActions: SetActor<Set<InterfaceActions>, ReactionTypes> = SetActor()
@@ -71,7 +121,7 @@ final class ChatViewController: UIViewController {
     private let swipeNotifier: SwipeNotifier
     private var collectionView: UICollectionView!
     private var chatLayout = ChatLayout()
-    private let inputBarView = InputBarAccessoryView()
+    private let inputBarView = MyInputBarAccessoryView()
     private let chatController: ChatController
     private let dataSource: ChatCollectionDataSource
     private let fpsCounter = FPSCounter()
@@ -615,14 +665,22 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 extension ChatViewController: KeyboardListenerDelegate {
 
     func keyboardWillChangeFrame(info: KeyboardInfo) {
+        print("\(Self.self) - \( UIApplication.shared.windows)")
         guard !currentInterfaceActions.options.contains(.changingFrameSize),
               collectionView.contentInsetAdjustmentBehavior != .never,
-              let keyboardFrame = UIApplication.shared.keyWindow?.convert(info.frameEnd, to: view),
-              collectionView.convert(collectionView.bounds, to: UIApplication.shared.keyWindow).maxY > info.frameEnd.minY else {
+              let keyboardFrame = collectionView.window?.convert(info.frameEnd, to: view),
+              collectionView.convert(collectionView.bounds, to: collectionView.window).maxY > info.frameEnd.minY,
+              keyboardFrame.minY != 0 else {
+            if let k = collectionView.window?.convert(info.frameEnd, to: view), k.minY == 0 {
+                self.inputBarView.resignFirstResponder()
+                self.view.setNeedsLayout()
+                self.view.layoutIfNeeded()
+            }
             return
         }
         currentInterfaceActions.options.insert(.changingKeyboardFrame)
         let newBottomInset = collectionView.frame.minY + collectionView.frame.size.height - keyboardFrame.minY - collectionView.safeAreaInsets.bottom
+        print("\(newBottomInset)")
         if newBottomInset > 0,
            collectionView.contentInset.bottom != newBottomInset {
             let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
