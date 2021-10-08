@@ -578,8 +578,9 @@ extension ChatViewController: KeyboardListenerDelegate {
     func keyboardWillChangeFrame(info: KeyboardInfo) {
         guard !currentInterfaceActions.options.contains(.changingFrameSize),
               collectionView.contentInsetAdjustmentBehavior != .never,
-              let keyboardFrame = UIApplication.shared.keyWindow?.convert(info.frameEnd, to: view),
-              collectionView.convert(collectionView.bounds, to: UIApplication.shared.keyWindow).maxY > info.frameEnd.minY else {
+              let keyboardFrame = collectionView.window?.convert(info.frameEnd, to: view),
+              keyboardFrame.minY > 0,
+              collectionView.convert(collectionView.bounds, to: collectionView.window).maxY > info.frameEnd.minY else {
             return
         }
         currentInterfaceActions.options.insert(.changingKeyboardFrame)
