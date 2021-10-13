@@ -285,7 +285,7 @@ extension ChatViewController: UIScrollViewDelegate {
         let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x,
                                             y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
 
-        guard contentOffsetAtBottom != collectionView.contentOffset else {
+        guard contentOffsetAtBottom.y > collectionView.contentOffset.y else {
             completion?()
             return
         }
