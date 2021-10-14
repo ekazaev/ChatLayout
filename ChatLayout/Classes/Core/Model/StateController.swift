@@ -620,7 +620,6 @@ final class StateController {
             var allRects = [(frame: CGRect, indexPath: ItemPath, kind: ItemKind)]()
             // I dont think there can be more then a 200 elements on the screen simultaneously
             allRects.reserveCapacity(200)
-            let skipIndex = 100
             for sectionIndex in 0..<layout.sections.count {
                 let section = layout.sections[sectionIndex]
                 let sectionPath = ItemPath(item: 0, section: sectionIndex)
@@ -632,22 +631,33 @@ final class StateController {
                     break
                 }
 
-                var startingIndex = 0
-                // Lets try to skip some calculations as visible rect most often is at the bottom of the layout
-                if traverseState == .notFound {
-                    var iterationIndex = skipIndex
-                    while iterationIndex < section.items.count {
-                        let itemPath = ItemPath(item: iterationIndex, section: sectionIndex)
-                        let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true)
-                        if itemFrame == nil || itemFrame.map({ $0.maxY < visibleRect.minY ? true : false }) == true {
-                            startingIndex = iterationIndex
-                            iterationIndex += skipIndex
-                            continue
-                        } else {
-                            break
-                        }
+                guard let firstMatchIndex = Array(section.items.enumerated()).binarySearch(predicate: { itemIndex, _ in
+                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                    guard let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
+                        return .orderedDescending
                     }
+                    if itemFrame.intersects(visibleRect) {
+                        return .orderedSame
+                    }
+                    if itemFrame.minY > visibleRect.maxY {
+                        return .orderedDescending
+                    }
+                    return .orderedAscending
+                }) else {
+                    break
                 }
+                var startingIndex = firstMatchIndex
+                for itemIndex in (0..<firstMatchIndex).reversed() {
+                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                    guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
+                        continue
+                    }
+                    guard itemFrame.maxY >= visibleRect.minY else {
+                        break
+                    }
+                    startingIndex = itemIndex
+                }
+
                 if startingIndex < section.items.count {
                     for itemIndex in startingIndex..<section.items.count {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
@@ -810,6 +820,27 @@ final class StateController {
             return frame
         }
         return frame.offsetBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))
+    }
+
+}
+
+private extension RandomAccessCollection where Index == Int {
+
+    func binarySearch(predicate: (Element) -> ComparisonResult) -> Index? {
+        var lowerBound = startIndex
+        var upperBound = endIndex
+
+        while lowerBound < upperBound {
+            let midIndex = lowerBound + (upperBound - lowerBound) / 2
+            if predicate(self[midIndex]) == .orderedSame {
+                return midIndex
+            } else if predicate(self[midIndex]) == .orderedAscending {
+                lowerBound = midIndex + 1
+            } else {
+                upperBound = midIndex
+            }
+        }
+        return nil
     }
 
 }
