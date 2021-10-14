@@ -219,6 +219,18 @@ final class ChatViewController: UIViewController {
                                                       right: view.safeAreaInsets.right + chatLayout.settings.additionalInsets.right))
     }
 
+    // Apple doesnt return sometimes inputBarView back to the app. This is an attempt to fix that
+    // See: https://github.com/ekazaev/ChatLayout/issues/24
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        if inputBarView.superview == nil,
+           topMostViewController() is ChatViewController {
+            DispatchQueue.main.async { [weak self] in
+                self?.reloadInputViews()
+            }
+        }
+    }
 }
 
 extension ChatViewController: UIScrollViewDelegate {
