@@ -631,31 +631,39 @@ final class StateController {
                     break
                 }
 
-                guard let firstMatchIndex = Array(section.items.enumerated()).binarySearch(predicate: { itemIndex, _ in
-                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                    guard let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
-                        return .orderedDescending
+                var startingIndex = 0
+                // If header is not visible
+                if traverseState == .notFound {
+                    // Find if any of the items of the section is visible
+                    if let firstMatchIndex = Array(section.items.enumerated()).binarySearch(predicate: { itemIndex, _ in
+                        let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                        guard let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
+                            return .orderedDescending
+                        }
+                        if itemFrame.intersects(visibleRect) {
+                            return .orderedSame
+                        }
+                        if itemFrame.minY > visibleRect.maxY {
+                            return .orderedDescending
+                        }
+                        return .orderedAscending
+                    }) {
+                        // Find first item that is visible
+                        startingIndex = firstMatchIndex
+                        for itemIndex in (0..<firstMatchIndex).reversed() {
+                            let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                            guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
+                                continue
+                            }
+                            guard itemFrame.maxY >= visibleRect.minY else {
+                                break
+                            }
+                            startingIndex = itemIndex
+                        }
+                    } else {
+                        // Otherwise we can safely skip all the items in the section and go to footer.
+                        startingIndex = section.items.count - 1
                     }
-                    if itemFrame.intersects(visibleRect) {
-                        return .orderedSame
-                    }
-                    if itemFrame.minY > visibleRect.maxY {
-                        return .orderedDescending
-                    }
-                    return .orderedAscending
-                }) else {
-                    break
-                }
-                var startingIndex = firstMatchIndex
-                for itemIndex in (0..<firstMatchIndex).reversed() {
-                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                    guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
-                        continue
-                    }
-                    guard itemFrame.maxY >= visibleRect.minY else {
-                        break
-                    }
-                    startingIndex = itemIndex
                 }
 
                 if startingIndex < section.items.count {

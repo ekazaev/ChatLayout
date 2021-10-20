@@ -464,7 +464,7 @@ extension ChatViewController: ChatControllerDelegate {
                                       return false
                                   },
                                   onInterruptedReload: {
-                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
+                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
                                       self.collectionView.reloadData()
                                       // We want so that user on reload appeared at the very bottom of the layout
                                       self.chatLayout.restoreContentOffset(with: positionSnapshot)
