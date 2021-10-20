@@ -633,11 +633,10 @@ final class StateController {
 
                 var startingIndex = 0
                 // If header is not visible
-                if traverseState == .notFound {
-                    // Find if any of the items of the section is visible
-                    if let firstMatchIndex = Array(section.items.enumerated()).binarySearch(predicate: { itemIndex, _ in
+                if traverseState == .notFound, !section.items.isEmpty {
+                    func predicate(itemIndex: Int) -> ComparisonResult {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                        guard let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
+                        guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
                             return .orderedDescending
                         }
                         if itemFrame.intersects(visibleRect) {
@@ -647,7 +646,11 @@ final class StateController {
                             return .orderedDescending
                         }
                         return .orderedAscending
-                    }) {
+                    }
+
+                    // Find if any of the items of the section is visible
+                    if [ComparisonResult.orderedSame, .orderedDescending].contains(predicate(itemIndex: section.items.count - 1)),
+                       let firstMatchIndex = Array(0...section.items.count - 1).binarySearch(predicate: predicate) {
                         // Find first item that is visible
                         startingIndex = firstMatchIndex
                         for itemIndex in (0..<firstMatchIndex).reversed() {
@@ -662,7 +665,7 @@ final class StateController {
                         }
                     } else {
                         // Otherwise we can safely skip all the items in the section and go to footer.
-                        startingIndex = section.items.count - 1
+                        startingIndex = section.items.count
                     }
                 }
 
