@@ -112,6 +112,11 @@ public final class ChatLayout: UICollectionViewLayout {
         return contentSize
     }
 
+    /// There is an issue in IOS 15.1 that proposed content offset is being ignored by the UICollectionView when user is scrolling.
+    /// This flag enables a hack to compensate this offset later. You can disable it if necessary.
+    /// Bug reported: https://feedbackassistant.apple.com/feedback/9727104
+    public var enableIOS15_1Fix: Bool = true
+
     // MARK: Internal Properties
 
     var adjustedContentInset: UIEdgeInsets {
@@ -174,6 +179,12 @@ public final class ChatLayout: UICollectionViewLayout {
     private var currentPositionSnapshot: ChatLayoutPositionSnapshot?
 
     private let _flipsHorizontallyInOppositeLayoutDirection: Bool
+
+    // MARK: IOS 15.1 fix flags
+
+    private var needsIOS15_1IssueFix: Bool {
+        return enableIOS15_1Fix && isIOS15_1orHigher && isUserInitiatedScrolling && !controller.isAnimatedBoundsChange
+    }
 
     // MARK: Constructors
 
@@ -609,9 +620,16 @@ public final class ChatLayout: UICollectionViewLayout {
            let collectionView = collectionView {
             let minPossibleContentOffset = -collectionView.adjustedContentInset.top
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
-            controller.proposedCompensatingOffset = 0
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
-            return newProposedContentOffset
+            if needsIOS15_1IssueFix {
+                // This fix affects performance as UICollectionView will request cells event though they wont be visible on the screen.
+                // It also causes a small flickering as content offset is being fixed at `finalizeCollectionViewUpdates` instead.
+                controller.batchUpdateCompensatingOffset += controller.proposedCompensatingOffset
+                return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
+            } else {
+                controller.proposedCompensatingOffset = 0
+                return newProposedContentOffset
+            }
         }
         return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
     }
@@ -944,6 +962,15 @@ extension ChatLayout {
 @inline(__always)
 var isIOS13orHigher: Bool {
     if #available(iOS 13.0, *) {
+        return true
+    } else {
+        return false
+    }
+}
+
+@inline(__always)
+var isIOS15_1orHigher: Bool {
+    if #available(iOS 15.1, *) {
         return true
     } else {
         return false
