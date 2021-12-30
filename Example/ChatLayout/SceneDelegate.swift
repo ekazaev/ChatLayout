@@ -26,7 +26,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
 
-        let chatViewController = ChatViewControllerBuilder().build()
+        let chatViewController = ScrollViewController()
+//        let chatViewController = ChatViewControllerBuilder().build()
         let viewController = UINavigationController(rootViewController: chatViewController)
 
         let window = UIWindow(windowScene: windowScene)

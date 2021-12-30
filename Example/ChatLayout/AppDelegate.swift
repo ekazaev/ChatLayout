@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             let window = UIWindow()
 
-            let chatViewController = ChatViewControllerBuilder().build()
+            let chatViewController = ScrollViewController()//ChatViewControllerBuilder().build()
             let viewController = UINavigationController(rootViewController: chatViewController)
 
             self.window = window
