@@ -26,15 +26,15 @@ final class ScrollViewController: UIViewController {
 }
 
 extension ScrollViewController: LayoutViewDataSource {
-    typealias Identifier = UUID
+    typealias Identifier = String
 
     typealias Attributes = SimpleLayoutAttributes
 
 
-    func layoutView(viewForItemAt identifier: UUID) -> UIView {
+    func layoutView(viewForItemAt identifier: String) -> UIView {
         let view = UILabel()
         view.backgroundColor = identifier.hashValue % 2 == 0 ? .red : .blue
-        view.text = "\(identifier)"
+        view.text = "Coolaboola \(identifier)"
         return view
     }
 
@@ -92,7 +92,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
     private final class ItemView: UIView {
         let identifier: Engine.Identifier
-        let attributes: Engine.Attributes
+        private(set) var attributes: Engine.Attributes
         let customView: UIView
 
         init(identifier: Engine.Identifier, attributes: Engine.Attributes, customView: UIView) {
@@ -101,6 +101,12 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             self.customView = customView
             super.init(frame: attributes.frame)
             addSubview(customView)
+            customView.frame = CGRect(origin: .zero, size: attributes.frame.size)
+        }
+
+        func updateAttributes(_ attributes: Engine.Attributes) {
+            self.attributes = attributes
+            self.frame = attributes.frame
             customView.frame = CGRect(origin: .zero, size: attributes.frame.size)
         }
 
@@ -117,6 +123,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         self.engine = engine
         self.layoutDataSource = layoutDataSource
         super.init(frame: frame)
+        oldSize = frame.size
         engine.prepare()
     }
 
@@ -148,59 +155,111 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         }
     }
 
+    private var oldSize: CGSize?
+
     override func layoutSubviews() {
         super.layoutSubviews()
         guard let layoutDataSource = layoutDataSource else {
             return
         }
 
-        var done = false
-        let disappearingItems = currentItems.filter({ !$0.attributes.frame.intersects(bounds) })
-        repeat {
-            let descriptors = engine.descriptors(in: bounds)
-            let currentIdentifier = Set(currentItems.map({ $0.identifier }))
-            let appearingDescriptors = descriptors.filter({ !currentIdentifier.contains($0.identifier) })
+        if oldSize != frame.size {
+            oldSize = frame.size
+            print("\(#function) ROTATION")
+        }
 
+        print("\(#function)")
+        let scrollViewRepresentation = ScrollViewRepresentation(scrollView: self)
+        engine.prepareLayoutSubviews(with: scrollViewRepresentation)
+
+        var done = false
+        var disappearingItems: [ItemView] = []
+        let currentParameters = ScrollViewParameters(scrollView: self)
+        var newParameters = currentParameters
+        var itemsToAdd: [ItemView] = []
+        repeat {
+            print("\(#function) - \(bounds)")
+            itemsToAdd = []
+            newParameters = engine.scrollViewParameters(with: scrollViewRepresentation, and: currentParameters)
+
+            var viewPort = bounds
+            if newParameters != currentParameters {
+                print("Modifying view port")
+                viewPort = viewPort.offsetBy(dx: newParameters.contentOffset.x - currentParameters.contentOffset.x, dy: newParameters.contentOffset.y - currentParameters.contentOffset.y)
+            }
+            print("\(#function) viewPort:\(viewPort)")
+
+            let screenDescriptors = engine.descriptors(in: viewPort)
             var finalized = true
-            for descriptor in appearingDescriptors {
-                let newAttributes = engine.descriptorForAppearingItem(with: descriptor.identifier)
-                if newAttributes != descriptor.attributes {
-                    let invalidIdentifiers = Set(engine.invalidIdentifiers(in: bounds))
-                    if !invalidIdentifiers.isEmpty {
-                        currentItems = currentItems.filter({ item in
-                            if invalidIdentifiers.contains(item.identifier) {
-                                item.removeFromSuperview()
-                                return false
-                            } else {
-                                return true
-                            }
-                        })
-                    }
+
+            // Items currently on the screen
+            let screenDescriptorsIdentifiers = screenDescriptors.compactMap({ $0.identifier })
+            let currentlyPresentItems = currentItems.filter({ screenDescriptorsIdentifiers.contains($0.identifier) })
+            for item in currentlyPresentItems {
+                let newAttributes = engine.attributes(for: item.customView, with: item.identifier)
+                if newAttributes != item.attributes {
+                    item.updateAttributes(newAttributes)
                     finalized = false
+                    print("Current attributes changed \(item.identifier)")
                     break
                 }
-                let view = layoutDataSource.layoutView(viewForItemAt: descriptor.identifier)
-                let item = ItemView(identifier: descriptor.identifier, attributes: newAttributes, customView: view)
-                currentItems.append(item)
-                addSubview(item)
             }
             if !finalized {
                 continue
             }
+
+            // Items that are appearing
+            let currentIdentifiers = Set(currentItems.map({ $0.identifier }))
+            let appearingDescriptors = screenDescriptors.filter({ !currentIdentifiers.contains($0.identifier) })
+
+            for descriptor in appearingDescriptors {
+                let view = layoutDataSource.layoutView(viewForItemAt: descriptor.identifier)
+
+                let newAttributes = engine.attributes(for: view, with: descriptor.identifier)
+                if newAttributes != descriptor.attributes {
+                    finalized = false
+                    print("Attributes changed")
+                    break
+                }
+                UIView.performWithoutAnimation {
+                    let item = ItemView(identifier: descriptor.identifier, attributes: newAttributes, customView: view)
+                    itemsToAdd.append(item)
+                }
+            }
+            if !finalized {
+                continue
+            }
+
             done = true
+            disappearingItems = currentItems.filter({ !$0.attributes.frame.intersects(viewPort) })
         } while !done
 
-        disappearingItems.forEach({ item in
-            _ = engine.descriptorForDisappearingItem(with: item.identifier)
-            item.removeFromSuperview()
-        })
-        currentItems = currentItems.filter({ !disappearingItems.contains($0) })
+        engine.commitLayoutSubviews(with: scrollViewRepresentation)
 
-        let newContentSize = engine.contentSize
-        if contentSize != newContentSize {
-            contentSize = newContentSize
+        currentItems = currentItems.filter({ !disappearingItems.contains($0) })
+        itemsToAdd.forEach({ item in
+            addSubview(item)
+        })
+        currentItems.append(contentsOf: itemsToAdd)
+
+        if currentParameters != newParameters {
+            self.contentSize = newParameters.contentSize
+            if self.contentOffset != newParameters.contentOffset {
+                print("\(#function) NEW: \(newParameters.contentOffset) | OLD: \(self.contentOffset) ")
+                self.contentOffset = newParameters.contentOffset
+            }
         }
-        // print("\(#function) \(visibleSize) \(bounds)")
+
+        CATransaction.setCompletionBlock({ [weak self] in
+            print("COMPLETION block")
+            guard let self = self else {
+                return
+            }
+            disappearingItems.forEach({ item in
+                print("\(item.identifier) disappeared")
+                item.removeFromSuperview()
+            })
+        })
     }
 }
 
@@ -221,18 +280,45 @@ struct Descriptor<Identifier: Hashable, Attributes: LayoutAttributes> {
     }
 }
 
+struct ScrollViewRepresentation: Equatable {
+    let size: CGSize
+
+    init(scrollView: UIScrollView) {
+        self.size = scrollView.frame.size
+    }
+}
+
+struct ScrollViewParameters: Equatable {
+    var contentSize: CGSize
+    var contentOffset: CGPoint
+
+    init(contentSize: CGSize, contentOffset: CGPoint) {
+        self.contentSize = contentSize
+        self.contentOffset = contentOffset
+    }
+
+    init(scrollView: UIScrollView) {
+        self.contentSize = scrollView.contentSize
+        self.contentOffset = scrollView.contentOffset
+    }
+}
+
 protocol LayoutViewEngine {
     associatedtype Identifier: Hashable
     associatedtype Attributes: LayoutAttributes
 
-    var contentSize: CGSize { get }
+    // Prepare layout
     func prepare()
+
+    func prepareLayoutSubviews(with representation: ScrollViewRepresentation)
+    func commitLayoutSubviews(with representation: ScrollViewRepresentation)
+
+    // View will ask for the attributes in some rect
+    func scrollViewParameters(with representation: ScrollViewRepresentation, and currentParameters: ScrollViewParameters) -> ScrollViewParameters
+
     func descriptors(in rect: CGRect) -> [Descriptor<Identifier, Attributes>]
 
-    func invalidIdentifiers(in rect: CGRect) -> [Identifier]
-
-    func descriptorForAppearingItem(with identifier: Identifier) -> Attributes
-    func descriptorForDisappearingItem(with identifier: Identifier) -> Attributes
+    func attributes(for view: UIView, with identifier: Identifier) -> Attributes
 }
 
 struct SimpleLayoutAttributes: LayoutAttributes {
@@ -242,50 +328,63 @@ struct SimpleLayoutAttributes: LayoutAttributes {
     var isHidden: Bool = false
 }
 
-let totalItems = 50
+let totalItems = 150
 
 final class SimpleLayoutEngine: LayoutViewEngine {
-    var contentSize: CGSize {
-        guard let lastDescriptor = attributes.last else {
+    private var contentSize: CGSize {
+        guard let lastModel = items.last else {
             return .zero
         }
-        return CGSize(width: lastDescriptor.frame.maxX, height: lastDescriptor.frame.maxY)
+        return CGSize(width: lastModel.frame.maxX, height: lastModel.frame.maxY)
     }
-    let identifiers = (0...totalItems).map({ _ in UUID() })
-    var attributes: [SimpleLayoutAttributes] = []
+
+    let identifiers: [String] = (0...totalItems).map({ "\($0)" })
+    var items: [ModelItem] = []
 
     func prepare() {
-        attributes = (0...totalItems).map({ index in SimpleLayoutAttributes(frame: CGRect(origin: CGPoint(x: 100, y: index * 100), size: CGSize(width: 50, height: 100))) })
+        self.items = (0...totalItems).reduce(into: [ModelItem](), { result, value in
+            let item = ModelItem(prev: result.last, size: CGSize(width: 50, height: 100))
+            result.append(item)
+        })
     }
 
-    func descriptors(in rect: CGRect) -> [Descriptor<UUID, SimpleLayoutAttributes>] {
-        return identifiers.enumerated().map({ Descriptor(identifier: $0.element, attributes: attributes[$0.offset])}).filter({ $0.attributes.frame.intersects(rect) })
+    func prepareLayoutSubviews(with representation: ScrollViewRepresentation) {
+        currentRepresentation = representation
     }
 
-    func invalidIdentifiers(in rect: CGRect) -> [UUID] {
-        return []
+    func commitLayoutSubviews(with representation: ScrollViewRepresentation) {
+        currentRepresentation = representation
+        lastRepresentation = representation
+        offsetCompensation = 0
     }
 
-    func descriptorForAppearingItem(with identifier: UUID) -> SimpleLayoutAttributes {
-        print("\(#function) \(identifier)")
-        let index = identifiers.firstIndex(where: { $0 == identifier })!
-        var descriptor = attributes[index]
-        if descriptor.frame.height != 50 {
-            let difference = 50 - descriptor.frame.height
-            descriptor.frame = CGRect(origin: CGPoint(x: 0, y: descriptor.frame.origin.y), size: CGSize(width: 100, height: 50))
-            attributes[index] = descriptor
-            for i in (index+1..<attributes.count) {
-                var descriptor = attributes[i]
-                descriptor.frame = descriptor.frame.offsetBy(dx: 0, dy: difference)
-                attributes[i] = descriptor
-            }
+    private var offsetCompensation: CGFloat = 0
+    private var currentRepresentation: ScrollViewRepresentation?
+    private var lastRepresentation: ScrollViewRepresentation?
+
+    func scrollViewParameters(with representation: ScrollViewRepresentation, and currentParameters: ScrollViewParameters) -> ScrollViewParameters {
+        if representation != lastRepresentation {
+            return ScrollViewParameters(contentSize: contentSize, contentOffset: CGPoint(x: 0, y: contentSize.height - representation.size.height + 30))
         }
-        return descriptor
+        return ScrollViewParameters(contentSize: contentSize, contentOffset: CGPoint(x: 0, y: currentParameters.contentOffset.y + offsetCompensation))
     }
 
-    func descriptorForDisappearingItem(with identifier: UUID) -> SimpleLayoutAttributes {
-        print("\(#function) \(identifier)")
+    func descriptors(in rect: CGRect) -> [Descriptor<String, SimpleLayoutAttributes>] {
+        return identifiers.enumerated().map({ Descriptor(identifier: $0.element, attributes: SimpleLayoutAttributes(frame: items[$0.offset].frame ))}).filter({ $0.attributes.frame.intersects(rect) })
+    }
+
+    func attributes(for view: UIView, with identifier: String) -> SimpleLayoutAttributes {
+        var size = view.systemLayoutSizeFitting(.zero, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .fittingSizeLevel)
+        if let currentRepresentation = currentRepresentation {
+            size.width = currentRepresentation.size.width
+        }
         let index = identifiers.firstIndex(where: { $0 == identifier })!
-        return attributes[index]
+        let model = items[index]
+        if model.size != size {
+            offsetCompensation += (size.height - model.size.height)
+            model.size = size
+            items[index] = model
+        }
+        return SimpleLayoutAttributes(frame: model.frame )
     }
 }
