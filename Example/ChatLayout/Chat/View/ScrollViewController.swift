@@ -31,10 +31,10 @@ extension ScrollViewController: LayoutViewDataSource {
     typealias Attributes = SimpleLayoutAttributes
 
 
-    func layoutView(viewForItemAt identifier: String) -> UIView {
-        let view = UILabel()
+    func layoutView(viewForItemAt identifier: String) -> LayoutableView {
+        let view = DefaultLayoutableView()
         view.backgroundColor = identifier.hashValue % 2 == 0 ? .red : .blue
-        view.text = "Coolaboola \(identifier)"
+        view.label.text = "Coolaboola \(identifier)"
         return view
     }
 
@@ -53,41 +53,9 @@ protocol LayoutViewDataSource: AnyObject {
     associatedtype Identifier: Hashable
     associatedtype Attributes: LayoutAttributes
 
-    func layoutView(viewForItemAt identifier: Identifier) -> UIView
+    func layoutView(viewForItemAt identifier: Identifier) -> LayoutableView
 }
 
-/*
-final class AnyLayoutViewDataSource<Identifier: Hashable, Attributes: LayoutAttributes>: LayoutViewDataSource {
-    private var box: AnyLayoutViewDataSourceBox
-
-    init<DataSource: LayoutViewDataSource>(with dataSource: DataSource) where DataSource.Identifier == Identifier, DataSource.Attributes == Attributes {
-        self.box = LayoutViewDataSourceBox(with: dataSource)
-    }
-
-    func layoutView(viewForItemAt identifier: Identifier) -> UIView {
-        box.layoutView(viewForItemAt: identifier)
-    }
-}
-
-private protocol AnyLayoutViewDataSourceBox {
-    func layoutView<Identifier>(viewForItemAt identifier: Identifier) -> UIView
-}
-
-private final class LayoutViewDataSourceBox<DataSource: LayoutViewDataSource>: AnyLayoutViewDataSourceBox {
-    private var dataSource: DataSource
-
-    init(with dataSource: DataSource) {
-        self.dataSource = dataSource
-    }
-
-    func layoutView<Identifier>(viewForItemAt identifier: Identifier) -> UIView {
-        guard let typedIdentifier = identifier as? DataSource.Identifier else {
-            fatalError("Impossible situation")
-        }
-        return dataSource.layoutView(viewForItemAt: typedIdentifier)
-    }
-}
-*/
 final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSource>: UIScrollView where DataSource.Identifier == Engine.Identifier, DataSource.Attributes == Engine.Attributes {
 
     private final class ItemView: UIView {
@@ -102,12 +70,14 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             super.init(frame: attributes.frame)
             addSubview(customView)
             customView.frame = CGRect(origin: .zero, size: attributes.frame.size)
+            customView.alpha = attributes.alpha
         }
 
         func updateAttributes(_ attributes: Engine.Attributes) {
             self.attributes = attributes
             self.frame = attributes.frame
             customView.frame = CGRect(origin: .zero, size: attributes.frame.size)
+            customView.alpha = attributes.alpha
         }
 
         required init?(coder: NSCoder) {
@@ -168,7 +138,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             print("\(#function) ROTATION")
         }
 
-        print("\(#function)")
+        print("\(#function) START")
         let scrollViewRepresentation = ScrollViewRepresentation(scrollView: self)
         engine.prepareLayoutSubviews(with: scrollViewRepresentation)
 
@@ -176,7 +146,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         var disappearingItems: [ItemView] = []
         let currentParameters = ScrollViewParameters(scrollView: self)
         var newParameters = currentParameters
-        var itemsToAdd: [ItemView] = []
+        var itemsToAdd: [(item: ItemView, finalAttributes: Engine.Attributes)] = []
         repeat {
             print("\(#function) - \(bounds)")
             itemsToAdd = []
@@ -196,7 +166,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             let screenDescriptorsIdentifiers = screenDescriptors.compactMap({ $0.identifier })
             let currentlyPresentItems = currentItems.filter({ screenDescriptorsIdentifiers.contains($0.identifier) })
             for item in currentlyPresentItems {
-                let newAttributes = engine.attributes(for: item.customView, with: item.identifier)
+                let newAttributes = engine.attributes(with: item.identifier)
                 if newAttributes != item.attributes {
                     item.updateAttributes(newAttributes)
                     finalized = false
@@ -214,16 +184,15 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
             for descriptor in appearingDescriptors {
                 let view = layoutDataSource.layoutView(viewForItemAt: descriptor.identifier)
-
-                let newAttributes = engine.attributes(for: view, with: descriptor.identifier)
+                let newAttributes = engine.preferredAttributes(for: view, with: descriptor.identifier)
                 if newAttributes != descriptor.attributes {
                     finalized = false
                     print("Attributes changed")
                     break
                 }
                 UIView.performWithoutAnimation {
-                    let item = ItemView(identifier: descriptor.identifier, attributes: newAttributes, customView: view)
-                    itemsToAdd.append(item)
+                    let item = ItemView(identifier: descriptor.identifier, attributes: engine.initialAttributesForAppearingViewWith(descriptor.identifier) ?? newAttributes, customView: view)
+                    itemsToAdd.append((item: item, finalAttributes: newAttributes))
                 }
             }
             if !finalized {
@@ -237,10 +206,15 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         engine.commitLayoutSubviews(with: scrollViewRepresentation)
 
         currentItems = currentItems.filter({ !disappearingItems.contains($0) })
-        itemsToAdd.forEach({ item in
-            addSubview(item)
+
+        itemsToAdd.forEach({ itemToAdd in
+            print("\(itemToAdd.item.identifier) appeared")
+            addSubview(itemToAdd.item)
+            if itemToAdd.item.attributes != itemToAdd.finalAttributes {
+                itemToAdd.item.updateAttributes(itemToAdd.finalAttributes)
+            }
         })
-        currentItems.append(contentsOf: itemsToAdd)
+        currentItems.append(contentsOf: itemsToAdd.map(\.item))
 
         if currentParameters != newParameters {
             self.contentSize = newParameters.contentSize
@@ -249,6 +223,13 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 self.contentOffset = newParameters.contentOffset
             }
         }
+
+        disappearingItems.forEach({ item in
+            guard let attributes = engine.finalAttributesForDisappearingViewWith(item.identifier) else {
+                return
+            }
+            item.updateAttributes(attributes)
+        })
 
         CATransaction.setCompletionBlock({ [weak self] in
             print("COMPLETION block")
@@ -260,6 +241,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 item.removeFromSuperview()
             })
         })
+        print("\(#function) FINISH")
     }
 }
 
@@ -318,12 +300,17 @@ protocol LayoutViewEngine {
 
     func descriptors(in rect: CGRect) -> [Descriptor<Identifier, Attributes>]
 
-    func attributes(for view: UIView, with identifier: Identifier) -> Attributes
+    func preferredAttributes(for view: UIView, with identifier: Identifier) -> Attributes
+
+    func attributes(with identifier: Identifier) -> Attributes
+
+    func initialAttributesForAppearingViewWith( _ identifier: Identifier) -> Attributes?
+    func finalAttributesForDisappearingViewWith( _ identifier: Identifier) -> Attributes?
 }
 
 struct SimpleLayoutAttributes: LayoutAttributes {
     var frame: CGRect
-    var alpha: CGFloat = 0
+    var alpha: CGFloat = 1
     var zIndex: Int = 0
     var isHidden: Bool = false
 }
@@ -373,7 +360,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
         return identifiers.enumerated().map({ Descriptor(identifier: $0.element, attributes: SimpleLayoutAttributes(frame: items[$0.offset].frame ))}).filter({ $0.attributes.frame.intersects(rect) })
     }
 
-    func attributes(for view: UIView, with identifier: String) -> SimpleLayoutAttributes {
+    func preferredAttributes(for view: UIView, with identifier: String) -> SimpleLayoutAttributes {
         var size = view.systemLayoutSizeFitting(.zero, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .fittingSizeLevel)
         if let currentRepresentation = currentRepresentation {
             size.width = currentRepresentation.size.width
@@ -387,4 +374,111 @@ final class SimpleLayoutEngine: LayoutViewEngine {
         }
         return SimpleLayoutAttributes(frame: model.frame )
     }
+
+    func attributes(with identifier: String) -> SimpleLayoutAttributes {
+        let index = identifiers.firstIndex(where: { $0 == identifier })!
+        let model = items[index]
+        if let currentRepresentation = currentRepresentation {
+            model.size.width = currentRepresentation.size.width
+        }
+        return SimpleLayoutAttributes(frame: model.frame )
+    }
+
+    func initialAttributesForAppearingViewWith(_ identifier: String) -> SimpleLayoutAttributes? {
+        var attributes = attributes(with: identifier)
+        attributes.alpha = 0
+        if let lastRepresentation = lastRepresentation {
+            attributes.frame.size.width = lastRepresentation.size.width
+        }
+        return attributes
+    }
+
+    func finalAttributesForDisappearingViewWith(_ identifier: String) -> SimpleLayoutAttributes? {
+        var attributes = attributes(with: identifier)
+        attributes.alpha = 0
+        return attributes
+    }
 }
+
+
+protocol LayoutableView: UIView {
+
+    func preferredLayoutAttributesFitting<LA: LayoutAttributes>(_ layoutAttributes: LA) -> LA
+}
+
+final class DefaultLayoutableView: UIView, LayoutableView {
+
+    lazy var label = UILabel(frame: frame)
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSubviews()
+    }
+
+    @available(*, unavailable, message: "Use init(reuseIdentifier:) instead")
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func preferredLayoutAttributesFitting<LA: LayoutAttributes>(_ layoutAttributes: LA) -> LA {
+        guard let layoutAttributes = layoutAttributes as? SimpleLayoutAttributes else {
+            return layoutAttributes
+        }
+        let size = self.systemLayoutSizeFitting(.zero, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .fittingSizeLevel)
+        if layoutAttributes.frame.size != size {
+            var layoutAttributes = layoutAttributes
+            layoutAttributes.frame = CGRect(origin: layoutAttributes.frame.origin, size: size)
+            return layoutAttributes as! LA
+        }
+        return layoutAttributes as! LA
+    }
+
+    private func setupSubviews() {
+        addSubview(label)
+
+        insetsLayoutMarginsFromSafeArea = false
+        layoutMargins = .zero
+
+        label.insetsLayoutMarginsFromSafeArea = false
+
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.leadingAnchor.constraint(equalTo: self.layoutMarginsGuide.leadingAnchor).isActive = true
+        label.trailingAnchor.constraint(equalTo: self.layoutMarginsGuide.trailingAnchor).isActive = true
+        label.topAnchor.constraint(equalTo: self.layoutMarginsGuide.topAnchor).isActive = true
+        label.bottomAnchor.constraint(equalTo: self.layoutMarginsGuide.bottomAnchor).isActive = true
+
+    }
+}
+
+/*
+final class AnyLayoutViewDataSource<Identifier: Hashable, Attributes: LayoutAttributes>: LayoutViewDataSource {
+    private var box: AnyLayoutViewDataSourceBox
+
+    init<DataSource: LayoutViewDataSource>(with dataSource: DataSource) where DataSource.Identifier == Identifier, DataSource.Attributes == Attributes {
+        self.box = LayoutViewDataSourceBox(with: dataSource)
+    }
+
+    func layoutView(viewForItemAt identifier: Identifier) -> UIView {
+        box.layoutView(viewForItemAt: identifier)
+    }
+}
+
+private protocol AnyLayoutViewDataSourceBox {
+    func layoutView<Identifier>(viewForItemAt identifier: Identifier) -> UIView
+}
+
+private final class LayoutViewDataSourceBox<DataSource: LayoutViewDataSource>: AnyLayoutViewDataSourceBox {
+    private var dataSource: DataSource
+
+    init(with dataSource: DataSource) {
+        self.dataSource = dataSource
+    }
+
+    func layoutView<Identifier>(viewForItemAt identifier: Identifier) -> UIView {
+        guard let typedIdentifier = identifier as? DataSource.Identifier else {
+            fatalError("Impossible situation")
+        }
+        return dataSource.layoutView(viewForItemAt: typedIdentifier)
+    }
+}
+*/
