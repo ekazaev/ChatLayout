@@ -86,6 +86,7 @@
 		65D4D44932474631D9677C50 /* Pods_ChatLayout_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12FB56A5FF321AA24C456635 /* Pods_ChatLayout_Tests.framework */; };
 		D5A31262AE5EED96F640C602 /* StrangeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A3126697FD74F22AE01936 /* StrangeHelper.swift */; };
 		D5A319A1EE9B71D33CAA12B6 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A3158482AC14814C50798E /* ScrollViewController.swift */; };
+		D5A31DB1EFFFF2166DA93FCE /* Deque.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A31FEAF8CCAB2293BA712C /* Deque.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -190,6 +191,7 @@
 		CFE0D61EDC4670E905EC3EF0 /* Pods-ChatLayout_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatLayout_Example.debug.xcconfig"; path = "Target Support Files/Pods-ChatLayout_Example/Pods-ChatLayout_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		D5A3126697FD74F22AE01936 /* StrangeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrangeHelper.swift; sourceTree = "<group>"; };
 		D5A3158482AC14814C50798E /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
+		D5A31FEAF8CCAB2293BA712C /* Deque.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deque.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -376,6 +378,7 @@
 				1BE54045B95D5085108FD967 /* Date Accessory View */,
 				D5A3158482AC14814C50798E /* ScrollViewController.swift */,
 				D5A3126697FD74F22AE01936 /* StrangeHelper.swift */,
+				D5A31FEAF8CCAB2293BA712C /* Deque.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -799,6 +802,7 @@
 				1BE54AF532AEF1F560A5A912 /* DateAccessoryController.swift in Sources */,
 				D5A319A1EE9B71D33CAA12B6 /* ScrollViewController.swift in Sources */,
 				D5A31262AE5EED96F640C602 /* StrangeHelper.swift in Sources */,
+				D5A31DB1EFFFF2166DA93FCE /* Deque.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

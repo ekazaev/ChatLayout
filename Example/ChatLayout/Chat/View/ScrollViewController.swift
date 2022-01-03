@@ -32,7 +32,7 @@ extension ScrollViewController: LayoutViewDataSource {
 
 
     func layoutView(viewForItemAt identifier: String) -> LayoutableView {
-        let view = DefaultLayoutableView()
+        let view = scrollView.dequeuView() as! DefaultLayoutableView // DefaultLayoutableView()
         view.backgroundColor = identifier.hashValue % 2 == 0 ? .red : .blue
         view.label.text = "Coolaboola \(identifier)"
         return view
@@ -89,6 +89,8 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
     private let engine: Engine
     private var currentItems = [ItemView]()
 
+    private var dequeu = Deque<DefaultLayoutableView>()
+
     init(frame: CGRect, engine: Engine, layoutDataSource : DataSource) {
         self.engine = engine
         self.layoutDataSource = layoutDataSource
@@ -125,6 +127,15 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         }
     }
 
+    func dequeuView() -> LayoutableView {
+        guard let view = dequeu.popLast() else {
+            print("CREATED NEW")
+            return DefaultLayoutableView(frame: CGRect.zero)
+        }
+        print("DEQUEUED")
+        return view
+    }
+
     private var oldSize: CGSize?
 
     override func layoutSubviews() {
@@ -147,8 +158,10 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         let currentParameters = ScrollViewParameters(scrollView: self)
         var newParameters = currentParameters
         var itemsToAdd: [(item: ItemView, finalAttributes: Engine.Attributes)] = []
+
+        var localCustomViews: [Engine.Identifier: DefaultLayoutableView] = [:]
         repeat {
-            print("\(#function) - \(bounds)")
+            print("\(#function) - \(bounds) CYCLE START")
             itemsToAdd = []
             newParameters = engine.scrollViewParameters(with: scrollViewRepresentation, and: currentParameters)
 
@@ -169,9 +182,9 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 let newAttributes = engine.attributes(with: item.identifier)
                 if newAttributes != item.attributes {
                     item.updateAttributes(newAttributes)
-                    finalized = false
+//                    finalized = false
                     print("Current attributes changed \(item.identifier)")
-                    break
+//                    break
                 }
             }
             if !finalized {
@@ -183,7 +196,14 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             let appearingDescriptors = screenDescriptors.filter({ !currentIdentifiers.contains($0.identifier) })
 
             for descriptor in appearingDescriptors {
-                let view = layoutDataSource.layoutView(viewForItemAt: descriptor.identifier)
+                let view: UIView
+                if let localView = localCustomViews[descriptor.identifier] {
+                    view = localView
+                } else {
+                    view = layoutDataSource.layoutView(viewForItemAt: descriptor.identifier)
+                    localCustomViews[descriptor.identifier] = (view as! DefaultLayoutableView)
+                }
+                localCustomViews[descriptor.identifier] = (view as! DefaultLayoutableView)
                 let newAttributes = engine.preferredAttributes(for: view, with: descriptor.identifier)
                 if newAttributes != descriptor.attributes {
                     finalized = false
@@ -239,6 +259,10 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             disappearingItems.forEach({ item in
                 print("\(item.identifier) disappeared")
                 item.removeFromSuperview()
+                if let dv = item.customView as? DefaultLayoutableView {
+                    print("SAVED")
+                    self.dequeu.append(dv)
+                }
             })
         })
         print("\(#function) FINISH")
