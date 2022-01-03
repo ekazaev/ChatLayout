@@ -157,7 +157,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         var disappearingItems: [ItemView] = []
         let currentParameters = ScrollViewParameters(scrollView: self)
         var newParameters = currentParameters
-        var itemsToAdd: [(item: ItemView, finalAttributes: Engine.Attributes)] = []
+        var itemsToAdd: [(identifier: Engine.Identifier, initialAttributes: Engine.Attributes, customView: UIView, finalAttributes: Engine.Attributes)] = []
 
         var localCustomViews: [Engine.Identifier: DefaultLayoutableView] = [:]
         repeat {
@@ -183,7 +183,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 if newAttributes != item.attributes {
                     item.updateAttributes(newAttributes)
 //                    finalized = false
-                    print("Current attributes changed \(item.identifier)")
+                    print("Current attributes changed \(item.identifier) \(newAttributes)")
 //                    break
                 }
             }
@@ -207,13 +207,11 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 let newAttributes = engine.preferredAttributes(for: view, with: descriptor.identifier)
                 if newAttributes != descriptor.attributes {
                     finalized = false
-                    print("Attributes changed")
+                    print("Appeared Attributes changed \(descriptor.identifier) \(newAttributes)")
                     break
                 }
-                UIView.performWithoutAnimation {
-                    let item = ItemView(identifier: descriptor.identifier, attributes: engine.initialAttributesForAppearingViewWith(descriptor.identifier) ?? newAttributes, customView: view)
-                    itemsToAdd.append((item: item, finalAttributes: newAttributes))
-                }
+                let initialAttributes = engine.initialAttributesForAppearingViewWith(descriptor.identifier) ?? newAttributes
+                itemsToAdd.append((identifier: descriptor.identifier, initialAttributes: initialAttributes, customView: view, finalAttributes: newAttributes))
             }
             if !finalized {
                 continue
@@ -228,13 +226,24 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         currentItems = currentItems.filter({ !disappearingItems.contains($0) })
 
         itemsToAdd.forEach({ itemToAdd in
-            print("\(itemToAdd.item.identifier) appeared")
-            addSubview(itemToAdd.item)
-            if itemToAdd.item.attributes != itemToAdd.finalAttributes {
-                itemToAdd.item.updateAttributes(itemToAdd.finalAttributes)
+            var item: ItemView!
+            UIView.performWithoutAnimation {
+                print("APPEARED \(itemToAdd.identifier) \(itemToAdd.initialAttributes) - \(itemToAdd.finalAttributes)")
+                /*
+                // Actually if you add something and then change content offset/content size it wont appear at this coordinates.
+                // That helps to compensate it but probably should be in the engine intead/
+                var initialAttributes = itemToAdd.initialAttributes as! SimpleLayoutAttributes
+                initialAttributes.frame = initialAttributes.frame.offsetBy(dx: 0, dy: currentParameters.contentOffset.y - newParameters.contentOffset.y)
+                */
+                item = ItemView(identifier: itemToAdd.identifier, attributes: itemToAdd.initialAttributes, customView: itemToAdd.customView)
+                addSubview(item)
             }
+            print("\(item.identifier) appeared")
+            if item.attributes != itemToAdd.finalAttributes {
+                item.updateAttributes(itemToAdd.finalAttributes)
+            }
+            currentItems.append(item)
         })
-        currentItems.append(contentsOf: itemsToAdd.map(\.item))
 
         if currentParameters != newParameters {
             self.contentSize = newParameters.contentSize
