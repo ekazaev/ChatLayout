@@ -96,6 +96,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         self.layoutDataSource = layoutDataSource
         super.init(frame: frame)
         oldSize = frame.size
+        engine.setup(WeakScrollViewRepresentation(scrollView: self))
         engine.prepare()
     }
 
@@ -150,8 +151,8 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         }
 
         print("\(#function) START")
-        let scrollViewRepresentation = ScrollViewRepresentation(scrollView: self)
-        engine.prepareLayoutSubviews(with: scrollViewRepresentation)
+        let scrollViewRepresentation = WeakScrollViewRepresentation(scrollView: self)
+        engine.prepareLayoutSubviews()
 
         var done = false
         var disappearingItems: [ItemView] = []
@@ -163,7 +164,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         repeat {
             print("\(#function) - \(bounds) CYCLE START")
             itemsToAdd = []
-            newParameters = engine.scrollViewParameters(with: scrollViewRepresentation, and: currentParameters)
+            newParameters = engine.scrollViewParameters(with: currentParameters)
 
             var viewPort = bounds
             if newParameters != currentParameters {
@@ -221,7 +222,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             disappearingItems = currentItems.filter({ !$0.attributes.frame.intersects(viewPort) })
         } while !done
 
-        engine.commitLayoutSubviews(with: scrollViewRepresentation)
+        engine.commitLayoutSubviews()
 
         currentItems = currentItems.filter({ !disappearingItems.contains($0) })
 
@@ -295,11 +296,57 @@ struct Descriptor<Identifier: Hashable, Attributes: LayoutAttributes> {
     }
 }
 
-struct ScrollViewRepresentation: Equatable {
-    let size: CGSize
+protocol ScrollViewRepresentation {
+    var size: CGSize { get }
+    var contentOffset: CGPoint { get }
+    var contentSize: CGSize { get }
+    var visibleRect: CGRect { get }
+}
+
+struct WeakScrollViewRepresentation: ScrollViewRepresentation, Equatable {
+    var size: CGSize {
+        return scrollView?.frame.size ?? .zero
+    }
+
+    var contentOffset: CGPoint {
+        return scrollView?.contentOffset ?? .zero
+    }
+
+    var contentSize: CGSize {
+        return scrollView?.contentSize ?? .zero
+    }
+
+    var visibleRect: CGRect {
+        guard let scrollView = scrollView else {
+            return .zero
+        }
+        return CGRect(x: scrollView.adjustedContentInset.left,
+                y: scrollView.contentOffset.y + scrollView.adjustedContentInset.top,
+                width: scrollView.bounds.width - scrollView.adjustedContentInset.left - scrollView.adjustedContentInset.right,
+                height: scrollView.bounds.height - scrollView.adjustedContentInset.top - scrollView.adjustedContentInset.bottom)
+    }
+
+    weak var scrollView: UIScrollView?
 
     init(scrollView: UIScrollView) {
-        self.size = scrollView.frame.size
+        self.scrollView = scrollView
+    }
+}
+
+struct ScrollViewRepresentationSnapshot: ScrollViewRepresentation, Equatable {
+    var size: CGSize
+
+    var contentOffset: CGPoint
+
+    var contentSize: CGSize
+
+    var visibleRect: CGRect
+
+    init(representation: ScrollViewRepresentation) {
+        self.size = representation.size
+        self.contentOffset = representation.contentOffset
+        self.contentSize = representation.contentSize
+        self.visibleRect = representation.visibleRect
     }
 }
 
@@ -322,14 +369,16 @@ protocol LayoutViewEngine {
     associatedtype Identifier: Hashable
     associatedtype Attributes: LayoutAttributes
 
+    func setup(_ representation: ScrollViewRepresentation)
+
     // Prepare layout
     func prepare()
 
-    func prepareLayoutSubviews(with representation: ScrollViewRepresentation)
-    func commitLayoutSubviews(with representation: ScrollViewRepresentation)
+    func prepareLayoutSubviews()
+    func commitLayoutSubviews()
 
     // View will ask for the attributes in some rect
-    func scrollViewParameters(with representation: ScrollViewRepresentation, and currentParameters: ScrollViewParameters) -> ScrollViewParameters
+    func scrollViewParameters(with currentParameters: ScrollViewParameters) -> ScrollViewParameters
 
     func descriptors(in rect: CGRect) -> [Descriptor<Identifier, Attributes>]
 
@@ -361,29 +410,32 @@ final class SimpleLayoutEngine: LayoutViewEngine {
     let identifiers: [String] = (0...totalItems).map({ "\($0)" })
     var items: [ModelItem] = []
 
+    private var representation: ScrollViewRepresentation!
+
+    func setup(_ representation: ScrollViewRepresentation) {
+        self.representation = representation
+    }
+
     func prepare() {
         self.items = (0...totalItems).reduce(into: [ModelItem](), { result, value in
-            let item = ModelItem(prev: result.last, size: CGSize(width: 50, height: 100))
+            let item = ModelItem(prev: result.last, size: CGSize(width: 50, height: 1000))
             result.append(item)
         })
     }
 
-    func prepareLayoutSubviews(with representation: ScrollViewRepresentation) {
-        currentRepresentation = representation
+    func prepareLayoutSubviews() {
     }
 
-    func commitLayoutSubviews(with representation: ScrollViewRepresentation) {
-        currentRepresentation = representation
-        lastRepresentation = representation
+    func commitLayoutSubviews() {
+        lastRepresentation = ScrollViewRepresentationSnapshot(representation: representation)
         offsetCompensation = 0
     }
 
     private var offsetCompensation: CGFloat = 0
-    private var currentRepresentation: ScrollViewRepresentation?
     private var lastRepresentation: ScrollViewRepresentation?
 
-    func scrollViewParameters(with representation: ScrollViewRepresentation, and currentParameters: ScrollViewParameters) -> ScrollViewParameters {
-        if representation != lastRepresentation {
+    func scrollViewParameters(with currentParameters: ScrollViewParameters) -> ScrollViewParameters {
+        if representation.size != lastRepresentation?.size {
             return ScrollViewParameters(contentSize: contentSize, contentOffset: CGPoint(x: 0, y: contentSize.height - representation.size.height + 30))
         }
         return ScrollViewParameters(contentSize: contentSize, contentOffset: CGPoint(x: 0, y: currentParameters.contentOffset.y + offsetCompensation))
@@ -395,9 +447,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
 
     func preferredAttributes(for view: UIView, with identifier: String) -> SimpleLayoutAttributes {
         var size = view.systemLayoutSizeFitting(.zero, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .fittingSizeLevel)
-        if let currentRepresentation = currentRepresentation {
-            size.width = currentRepresentation.size.width
-        }
+        size.width = representation.size.width
         let index = identifiers.firstIndex(where: { $0 == identifier })!
         let model = items[index]
         if model.size != size {
@@ -411,9 +461,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
     func attributes(with identifier: String) -> SimpleLayoutAttributes {
         let index = identifiers.firstIndex(where: { $0 == identifier })!
         let model = items[index]
-        if let currentRepresentation = currentRepresentation {
-            model.size.width = currentRepresentation.size.width
-        }
+        model.size.width = representation.size.width
         return SimpleLayoutAttributes(frame: model.frame )
     }
 
@@ -479,7 +527,6 @@ final class DefaultLayoutableView: UIView, LayoutableView {
         label.trailingAnchor.constraint(equalTo: self.layoutMarginsGuide.trailingAnchor).isActive = true
         label.topAnchor.constraint(equalTo: self.layoutMarginsGuide.topAnchor).isActive = true
         label.bottomAnchor.constraint(equalTo: self.layoutMarginsGuide.bottomAnchor).isActive = true
-
     }
 }
 
