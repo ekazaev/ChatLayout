@@ -27,15 +27,18 @@ final class ScrollViewController: UIViewController {
     }
 
     @objc private func reload() {
-        /*
+
         for i in 0...5 {
-            UIView.animate(withDuration: 0.25, animations: {
-                self.scrollView.performBatchUpdates([.insert("1.\(i) \(UUID().uuidString)", at: 1)])
-                self.scrollView.layoutSubviews()
-            })
+            self.scrollView.performBatchUpdates([.insert("1.\(i) \(UUID().uuidString)", at: 1)])
         }
-         */
+
+
+//        self.scrollView.performBatchUpdates((0...5).map({.insert("1.\($0) \(UUID().uuidString)", at: 1)}))
+
+        /*
         self.scrollView.performBatchUpdates([.delete(self.texts.keys.first!)])
+        self.texts[texts.keys.first!] = nil
+         */
     }
 }
 
@@ -167,11 +170,13 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
     }
 
     func performBatchUpdates(_ updateItems: [ChangeItem<Engine.Identifier>]) {
+//        CATransaction.begin()
         UIView.animate(withDuration: 0.25, animations: {
             self.engine.prepareForUpdates(updateItems)
             self.layoutSubviews()
             self.engine.finalizeUpdates()
         })
+//        CATransaction.commit()
     }
 
     private var oldSize: CGSize?
@@ -192,6 +197,9 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
         engine.prepareLayoutSubviews()
 
+        // UICollectionView most likely uses transaction. Otherwise all modifications become to appear on top of easother.
+        // CATransaction.begin()
+
         var done = false
         var disappearingItems: [ItemView] = []
         let currentParameters = ScrollViewParameters(scrollView: self)
@@ -209,8 +217,8 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             newParameters = engine.scrollViewParameters(with: currentParameters)
 
             // Getting all visible items in a visible rect
-            var viewPort = bounds
-            if newParameters != currentParameters {
+            var viewPort = bounds // UICollectionView asks for a bigger layout for a reason!!!!
+            if newParameters.contentOffset != currentParameters.contentOffset {
                 print("Modifying view port")
                 viewPort = viewPort.offsetBy(dx: newParameters.contentOffset.x - currentParameters.contentOffset.x, dy: newParameters.contentOffset.y - currentParameters.contentOffset.y)
             }
@@ -334,6 +342,9 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 }
             })
         })
+
+        // CATransaction.commit()
+
         print("\(#function) FINISH")
     }
 }
@@ -465,29 +476,31 @@ struct SimpleLayoutAttributes: LayoutAttributes {
 }
 
 let totalItems = 150
+let itemHeight = 50
 
 final class SimpleLayoutEngine: LayoutViewEngine {
     private var contentSize: CGSize {
-        guard let lastModel = items.last else {
+        guard let lastModel = controller.storage[state]?.models.last else {
             return .zero
         }
         return CGSize(width: lastModel.frame.maxX, height: lastModel.frame.maxY)
     }
 
-    var identifiers: [String] = (0...totalItems).map({ "\($0)" })
-    var items: [ModelItem] = []
+    private var controller: ItemController<String>!
 
     private var representation: ScrollViewRepresentation!
+
+    private var state: ModelState = .beforeUpdate
 
     func setup(_ representation: ScrollViewRepresentation) {
         self.representation = representation
     }
 
     func prepare() {
-        self.items = (0...totalItems).reduce(into: [ModelItem](), { result, value in
-            let item = ModelItem(prev: result.last, size: CGSize(width: 50, height: 1000))
+        controller = ItemController(original: ItemStorage(identifiers: (0...totalItems).map({ "\($0)" }), models: (0...totalItems).reduce(into: [ModelItem](), { result, value in
+            let item = ModelItem(prev: result.last, size: CGSize(width: 50, height: itemHeight))
             result.append(item)
-        })
+        })))
     }
 
     func prepareLayoutSubviews() {
@@ -502,83 +515,81 @@ final class SimpleLayoutEngine: LayoutViewEngine {
     private var lastRepresentation: ScrollViewRepresentation?
 
     func scrollViewParameters(with currentParameters: ScrollViewParameters) -> ScrollViewParameters {
-        if representation.size != lastRepresentation?.size {
-            return ScrollViewParameters(contentSize: contentSize, contentOffset: CGPoint(x: 0, y: contentSize.height - representation.size.height + 30))
-        }
+//        if representation.size != lastRepresentation?.size {
+//            return ScrollViewParameters(contentSize: contentSize, contentOffset: CGPoint(x: 0, y: contentSize.height - representation.size.height + 30))
+//        }
         return ScrollViewParameters(contentSize: contentSize, contentOffset: CGPoint(x: 0, y: currentParameters.contentOffset.y + offsetCompensation))
     }
 
     func descriptors(in rect: CGRect) -> [Descriptor<String, SimpleLayoutAttributes>] {
-        return identifiers.enumerated().map({ Descriptor(identifier: $0.element, attributes: SimpleLayoutAttributes(frame: items[$0.offset].frame ))}).filter({ $0.attributes.frame.intersects(rect) })
+        return controller.storage[state]!.identifiers.enumerated().map({ Descriptor(identifier: $0.element, attributes: SimpleLayoutAttributes(frame: controller.storage[state]!.models[$0.offset].frame ))}).filter({ $0.attributes.frame.intersects(rect) })
     }
 
     func preferredAttributes(for view: UIView, with identifier: String) -> SimpleLayoutAttributes {
         var size = view.systemLayoutSizeFitting(CGSize(width: representation.size.width, height: 0), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
         size.width = representation.size.width
-        let index = identifiers.firstIndex(where: { $0 == identifier })!
-        let model = items[index]
+        let model = controller.storage[state]!.modelWithIdentifier(identifier)
         if model.size != size {
             // offsetCompensation += (size.height - model.size.height)
             model.size = size
-            items[index] = model
+
+            if state == .afterUpdate, !controller.insertedIdentifiers.contains(identifier) {
+                let model = controller.storage[.beforeUpdate]!.modelWithIdentifier(identifier)
+                model.size = size
+            }
         }
         return SimpleLayoutAttributes(frame: model.frame )
     }
 
-    private var isAnimatedUpdates = false
-
     func prepareForUpdates(_ updateItems: [ChatLayout_Example.ChangeItem<String>]) {
-        isAnimatedUpdates = true
-        updateItems.forEach({ updateItem in
-            switch updateItem {
-            case let .insert(newIdentifier, at: index):
-                let oldModel = items[index]
-                let oldModelPrev = oldModel.prev
-                let newModel = ModelItem(size: CGSize(width: 50, height: 1000))
-                //offsetCompensation += 1000
-                items.insert(newModel, at: index)
-                identifiers.insert(newIdentifier, at: index)
-                oldModel.prev = newModel
-                newModel.prev = oldModelPrev
-            case let .delete(identifier):
-                guard let index = identifiers.firstIndex(of: identifier) else {
-                    fatalError()
-                }
-                let modelToDelete = items[index]
-                if index < identifiers.count - 1 {
-                    let nextModel = items[index + 1]
-                    nextModel.prev = modelToDelete.prev
-                }
-                identifiers.remove(at: index)
-                items.remove(at: index)
-            }
-        })
+        controller.prepareForUpdates(updateItems)
+        state = .afterUpdate
     }
 
     func finalizeUpdates() {
-        isAnimatedUpdates = false
+        controller.finishUpdates()
+        state = .beforeUpdate
     }
 
     func attributes(with identifier: String) -> SimpleLayoutAttributes {
-        let index = identifiers.firstIndex(where: { $0 == identifier })!
-        let model = items[index]
+        let model = controller.storage[state]!.modelWithIdentifier(identifier)
         model.size.width = representation.size.width
         return SimpleLayoutAttributes(frame: model.frame )
     }
 
     func initialAttributesForAppearingViewWith(_ identifier: String) -> SimpleLayoutAttributes? {
-        var attributes = attributes(with: identifier)
-        attributes.alpha = 0
-        if let lastRepresentation = lastRepresentation {
-            attributes.frame.size.width = lastRepresentation.size.width
+        if state == .beforeUpdate || controller.insertedIdentifiers.contains(identifier) {
+            var attributes = attributes(with: identifier)
+            attributes.alpha = 0
+            if let lastRepresentation = lastRepresentation {
+                attributes.frame.size.width = lastRepresentation.size.width
+            }
+            return attributes
+        } else {
+            let model = controller.storage[.beforeUpdate]!.modelWithIdentifier(identifier)
+            var attributes = SimpleLayoutAttributes(frame: model.frame)
+            attributes.alpha = 0
+            return attributes
         }
-        return attributes
     }
 
     func finalAttributesForDisappearingViewWith(_ identifier: String) -> SimpleLayoutAttributes? {
-        var attributes = attributes(with: identifier)
-        attributes.alpha = 0
-        return attributes
+        if state == .beforeUpdate {
+            var attributes = attributes(with: identifier)
+            attributes.alpha = 0
+            return attributes
+        } else {
+            if controller.deletedIdentifiers.contains(identifier) {
+                let model = controller.storage[.beforeUpdate]!.modelWithIdentifier(identifier)
+                var attributes = SimpleLayoutAttributes(frame: model.frame)
+                attributes.alpha = 0
+                attributes.frame = attributes.frame.offsetBy(dx: 0, dy: -model.frame.size.height / 2)
+                return attributes
+            } else {
+                let attributes = attributes(with: identifier)
+                return attributes
+            }
+        }
     }
 }
 
