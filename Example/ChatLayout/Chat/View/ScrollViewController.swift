@@ -19,12 +19,24 @@ final class ScrollViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reload", style: .plain, target: self, action: #selector(ScrollViewController.reload))
 
         scrollView.backgroundColor = .white
         scrollView.contentSize.height = UIScreen.main.bounds.height * 2
         scrollView.delegate = self
     }
 
+    @objc private func reload() {
+        /*
+        for i in 0...5 {
+            UIView.animate(withDuration: 0.25, animations: {
+                self.scrollView.performBatchUpdates([.insert("1.\(i) \(UUID().uuidString)", at: 1)])
+                self.scrollView.layoutSubviews()
+            })
+        }
+         */
+        self.scrollView.performBatchUpdates([.delete(self.texts.keys.first!)])
+    }
 }
 
 extension ScrollViewController: LayoutViewDataSource {
@@ -154,6 +166,14 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         return view
     }
 
+    func performBatchUpdates(_ updateItems: [ChangeItem<Engine.Identifier>]) {
+        UIView.animate(withDuration: 0.25, animations: {
+            self.engine.prepareForUpdates(updateItems)
+            self.layoutSubviews()
+            self.engine.finalizeUpdates()
+        })
+    }
+
     private var oldSize: CGSize?
 
     override func layoutSubviews() {
@@ -244,7 +264,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             }
 
             done = true
-            disappearingItems = currentItems.filter({ !$0.attributes.frame.intersects(viewPort) })
+            disappearingItems = currentItems.filter({ !$0.attributes.frame.intersects(viewPort) || !screenDescriptorsIdentifiers.contains($0.identifier) })
         } while !done
 
         engine.commitLayoutSubviews()
@@ -404,6 +424,11 @@ struct ScrollViewParameters: Equatable {
     }
 }
 
+enum ChangeItem<Identifier: Hashable> {
+    case insert(Identifier, at: Int)
+    case delete(Identifier)
+}
+
 protocol LayoutViewEngine {
     associatedtype Identifier: Hashable
     associatedtype Attributes: LayoutAttributes
@@ -415,6 +440,9 @@ protocol LayoutViewEngine {
 
     func prepareLayoutSubviews()
     func commitLayoutSubviews()
+
+    func prepareForUpdates(_ updateItems: [ChangeItem<Identifier>])
+    func finalizeUpdates()
 
     // View will ask for the attributes in some rect
     func scrollViewParameters(with currentParameters: ScrollViewParameters) -> ScrollViewParameters
@@ -446,7 +474,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
         return CGSize(width: lastModel.frame.maxX, height: lastModel.frame.maxY)
     }
 
-    let identifiers: [String] = (0...totalItems).map({ "\($0)" })
+    var identifiers: [String] = (0...totalItems).map({ "\($0)" })
     var items: [ModelItem] = []
 
     private var representation: ScrollViewRepresentation!
@@ -490,11 +518,45 @@ final class SimpleLayoutEngine: LayoutViewEngine {
         let index = identifiers.firstIndex(where: { $0 == identifier })!
         let model = items[index]
         if model.size != size {
-            offsetCompensation += (size.height - model.size.height)
+            // offsetCompensation += (size.height - model.size.height)
             model.size = size
             items[index] = model
         }
         return SimpleLayoutAttributes(frame: model.frame )
+    }
+
+    private var isAnimatedUpdates = false
+
+    func prepareForUpdates(_ updateItems: [ChatLayout_Example.ChangeItem<String>]) {
+        isAnimatedUpdates = true
+        updateItems.forEach({ updateItem in
+            switch updateItem {
+            case let .insert(newIdentifier, at: index):
+                let oldModel = items[index]
+                let oldModelPrev = oldModel.prev
+                let newModel = ModelItem(size: CGSize(width: 50, height: 1000))
+                //offsetCompensation += 1000
+                items.insert(newModel, at: index)
+                identifiers.insert(newIdentifier, at: index)
+                oldModel.prev = newModel
+                newModel.prev = oldModelPrev
+            case let .delete(identifier):
+                guard let index = identifiers.firstIndex(of: identifier) else {
+                    fatalError()
+                }
+                let modelToDelete = items[index]
+                if index < identifiers.count - 1 {
+                    let nextModel = items[index + 1]
+                    nextModel.prev = modelToDelete.prev
+                }
+                identifiers.remove(at: index)
+                items.remove(at: index)
+            }
+        })
+    }
+
+    func finalizeUpdates() {
+        isAnimatedUpdates = false
     }
 
     func attributes(with identifier: String) -> SimpleLayoutAttributes {

@@ -25,4 +25,8 @@ final class ModelItem {
         self.prev = prev
         self.size = size
     }
+
+    func copy() -> ModelItem {
+        return ModelItem(size: size)
+    }
 }
