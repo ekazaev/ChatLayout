@@ -12,7 +12,7 @@ final class ModelItem {
         guard let prev = prev else {
             return .zero
         }
-        return CGPoint(x: 0, y: prev.origin.y + prev.size.height)
+        return CGPoint(x: 0, y: prev.origin.y + prev.size.height + 5)
     }
 
     var frame: CGRect {

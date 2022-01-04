@@ -75,6 +75,8 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         controller.view = bubbleView.customView
         cell.delegate = bubbleView.customView
 
+        cell.customView.backgroundColor = .blue
+
         return cell
     }
 

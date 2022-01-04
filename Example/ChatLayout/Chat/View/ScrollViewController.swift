@@ -11,6 +11,8 @@ final class ScrollViewController: UIViewController {
 
     lazy var scrollView = LayoutView(frame: UIScreen.main.bounds, engine: SimpleLayoutEngine(), layoutDataSource: self)
 
+    var texts: [String: String] = [:]
+
     override func loadView() {
         view = scrollView
     }
@@ -34,7 +36,16 @@ extension ScrollViewController: LayoutViewDataSource {
     func layoutView(viewForItemAt identifier: String) -> LayoutableView {
         let view = scrollView.dequeuView() as! DefaultLayoutableView // DefaultLayoutableView()
         view.backgroundColor = identifier.hashValue % 2 == 0 ? .red : .blue
-        view.label.text = "Coolaboola \(identifier)"
+
+        let text: String
+        switch texts[identifier] {
+        case let .some(savedText):
+            text = savedText
+        case .none:
+            text = TextGenerator.getString(of: 20)
+            texts[identifier] = text
+        }
+        view.label.text = "\(identifier) - \(text)"
         return view
     }
 
@@ -75,6 +86,11 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
         func updateAttributes(_ attributes: Engine.Attributes) {
             self.attributes = attributes
+            //commitAttributeUpdate()
+        }
+
+        // Questionable decision!!!
+        func commitAttributeUpdate() {
             self.frame = attributes.frame
             customView.frame = CGRect(origin: .zero, size: attributes.frame.size)
             customView.alpha = attributes.alpha
@@ -89,7 +105,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
     private let engine: Engine
     private var currentItems = [ItemView]()
 
-    private var dequeu = Deque<DefaultLayoutableView>()
+    private var dequeu = Set<DefaultLayoutableView>()
 
     init(frame: CGRect, engine: Engine, layoutDataSource : DataSource) {
         self.engine = engine
@@ -129,10 +145,11 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
     }
 
     func dequeuView() -> LayoutableView {
-        guard let view = dequeu.popLast() else {
+        guard let view = dequeu.first else {
             print("CREATED NEW")
             return DefaultLayoutableView(frame: CGRect.zero)
         }
+        dequeu.remove(view)
         print("DEQUEUED")
         return view
     }
@@ -151,21 +168,27 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         }
 
         print("\(#function) START")
-        let scrollViewRepresentation = WeakScrollViewRepresentation(scrollView: self)
+        print("\(#function) contentSize: \(contentSize) contentOffset:\(contentOffset)")
+
         engine.prepareLayoutSubviews()
 
         var done = false
         var disappearingItems: [ItemView] = []
         let currentParameters = ScrollViewParameters(scrollView: self)
         var newParameters = currentParameters
+
+        var currentlyPresentItems:[ItemView] = []
         var itemsToAdd: [(identifier: Engine.Identifier, initialAttributes: Engine.Attributes, customView: UIView, finalAttributes: Engine.Attributes)] = []
 
         var localCustomViews: [Engine.Identifier: DefaultLayoutableView] = [:]
         repeat {
             print("\(#function) - \(bounds) CYCLE START")
             itemsToAdd = []
+
+            // Getting final parameters of scrollView
             newParameters = engine.scrollViewParameters(with: currentParameters)
 
+            // Getting all visible items in a visible rect
             var viewPort = bounds
             if newParameters != currentParameters {
                 print("Modifying view port")
@@ -174,18 +197,20 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             print("\(#function) viewPort:\(viewPort)")
 
             let screenDescriptors = engine.descriptors(in: viewPort)
+
+            // Starting update cycle
             var finalized = true
 
             // Items currently on the screen
             let screenDescriptorsIdentifiers = screenDescriptors.compactMap({ $0.identifier })
-            let currentlyPresentItems = currentItems.filter({ screenDescriptorsIdentifiers.contains($0.identifier) })
+            currentlyPresentItems = currentItems.filter({ screenDescriptorsIdentifiers.contains($0.identifier) })
             for item in currentlyPresentItems {
-                let newAttributes = engine.attributes(with: item.identifier)
+                let newAttributes = engine.preferredAttributes(for: item.customView, with: item.identifier)
                 if newAttributes != item.attributes {
                     item.updateAttributes(newAttributes)
-//                    finalized = false
+                    finalized = false
                     print("Current attributes changed \(item.identifier) \(newAttributes)")
-//                    break
+                    break
                 }
             }
             if !finalized {
@@ -224,7 +249,16 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
         engine.commitLayoutSubviews()
 
+        currentlyPresentItems.forEach({ item in
+            item.commitAttributeUpdate()
+        })
+
         currentItems = currentItems.filter({ !disappearingItems.contains($0) })
+
+        /// TODO: Find out why! Most likely because more disappeared.
+//        if currentItems.count != currentlyPresentItems.count {
+//            assertionFailure()
+//        }
 
         itemsToAdd.forEach({ itemToAdd in
             var item: ItemView!
@@ -242,14 +276,18 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             print("\(item.identifier) appeared")
             if item.attributes != itemToAdd.finalAttributes {
                 item.updateAttributes(itemToAdd.finalAttributes)
+                item.commitAttributeUpdate()
             }
             currentItems.append(item)
         })
 
         if currentParameters != newParameters {
-            self.contentSize = newParameters.contentSize
+            if self.contentSize != newParameters.contentSize {
+                print("contentSize: \(#function) NEW: \(newParameters.contentSize) | OLD: \(self.contentSize) ")
+                self.contentSize = newParameters.contentSize
+            }
             if self.contentOffset != newParameters.contentOffset {
-                print("\(#function) NEW: \(newParameters.contentOffset) | OLD: \(self.contentOffset) ")
+                print("contentOffset: \(#function) NEW: \(newParameters.contentOffset) | OLD: \(self.contentOffset) ")
                 self.contentOffset = newParameters.contentOffset
             }
         }
@@ -259,6 +297,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 return
             }
             item.updateAttributes(attributes)
+            item.commitAttributeUpdate()
         })
 
         CATransaction.setCompletionBlock({ [weak self] in
@@ -271,7 +310,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 item.removeFromSuperview()
                 if let dv = item.customView as? DefaultLayoutableView {
                     print("SAVED")
-                    self.dequeu.append(dv)
+                    self.dequeu.insert(dv)
                 }
             })
         })
@@ -446,7 +485,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
     }
 
     func preferredAttributes(for view: UIView, with identifier: String) -> SimpleLayoutAttributes {
-        var size = view.systemLayoutSizeFitting(.zero, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .fittingSizeLevel)
+        var size = view.systemLayoutSizeFitting(CGSize(width: representation.size.width, height: 0), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
         size.width = representation.size.width
         let index = identifiers.firstIndex(where: { $0 == identifier })!
         let model = items[index]
@@ -521,7 +560,7 @@ final class DefaultLayoutableView: UIView, LayoutableView {
         layoutMargins = .zero
 
         label.insetsLayoutMarginsFromSafeArea = false
-
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.leadingAnchor.constraint(equalTo: self.layoutMarginsGuide.leadingAnchor).isActive = true
         label.trailingAnchor.constraint(equalTo: self.layoutMarginsGuide.trailingAnchor).isActive = true
