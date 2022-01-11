@@ -292,9 +292,9 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         currentItems = currentItems.filter({ !disappearingItems.contains($0) })
 
         /// TODO: Find out why! Most likely because more disappeared.
-//        if currentItems.count != currentlyPresentItems.count {
-//            assertionFailure()
-//        }
+        if currentItems.count != currentlyPresentItems.count {
+            assertionFailure()
+        }
 
         itemsToAdd.forEach({ itemToAdd in
             var item: ItemView!
@@ -321,16 +321,25 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
         if currentParameters != newParameters {
             print("\(#function)\n    frame:\(frame)\n    contentSize: \(contentSize)\n    contentOffset:\(contentOffset)\n    contentInset:\(contentInset)\n    adjustedContentInset:\(adjustedContentInset)\n    safeAreaInsets:\(safeAreaInsets)")
-            if currentParameters.contentSize != newParameters.contentSize {
-                print("contentSize: \(#function) NEW: \(newParameters.contentSize) | OLD: \(currentParameters.contentSize) | REAL: \(self.contentSize)")
-                // REMEMBER: CHANGINCG CONTENT SIZE CHANGES CONTENT OFFSET SOMETIMES FOR WHATEVER REASON
-                self.contentSize.width += newParameters.contentSize.width - currentParameters.contentSize.width
-                self.contentSize.height += newParameters.contentSize.height - currentParameters.contentSize.height
-            }
             if currentParameters.contentOffset != newParameters.contentOffset {
                 print("contentOffset: \(#function) NEW: \(newParameters.contentOffset) | OLD: \(currentParameters.contentOffset) | REAL: \(self.contentOffset)")
-                self.contentOffset.x += newParameters.contentOffset.x - currentParameters.contentOffset.x
-                self.contentOffset.y += newParameters.contentOffset.y - currentParameters.contentOffset.y
+                self.contentOffset = newParameters.contentOffset
+//                self.contentOffset.x += newParameters.contentOffset.x - currentParameters.contentOffset.x
+//                self.contentOffset.y += newParameters.contentOffset.y - currentParameters.contentOffset.y
+            }
+            if currentParameters.contentSize != newParameters.contentSize {
+                // REMEMBER: CHANGINCG CONTENT SIZE CHANGES CONTENT OFFSET SOMETIMES FOR WHATEVER REASON
+                // Probably it has sense to introduce contentSizeAdjustment/contentOffsetAdjustment properties like real invalidation context
+//                print("CHANGING CONTENT SIZE")
+//                print("contentSize: \(#function) NEW: \(newParameters.contentSize) | OLD: \(currentParameters.contentSize) | REAL: \(self.contentSize)")
+//                print("contentOffset: \(#function) NEW: \(newParameters.contentOffset) | OLD: \(currentParameters.contentOffset) | REAL: \(self.contentOffset)")
+                self.contentSize = newParameters.contentSize
+//                print("AFTER CHANGING SIZE")
+//                print("contentSize: \(#function) NEW: \(newParameters.contentSize) | OLD: \(currentParameters.contentSize) | REAL: \(self.contentSize)")
+//                print("contentOffset: \(#function) NEW: \(newParameters.contentOffset) | OLD: \(currentParameters.contentOffset) | REAL: \(self.contentOffset)")
+//                print("")
+//                self.contentSize.width += newParameters.contentSize.width - currentParameters.contentSize.width
+//                self.contentSize.height += newParameters.contentSize.height - currentParameters.contentSize.height
             }
         }
 
@@ -596,7 +605,6 @@ final class SimpleLayoutEngine: LayoutViewEngine {
                 attributes.frame.size.width = modelWidth(lastRepresentation)
             }
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: -visibleSizeCompensation)
-            attributes.alpha = 1
             return attributes
         } else {
             if controller.insertedIdentifiers.contains(identifier) {
@@ -609,7 +617,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
             } else {
                 let model = controller.storage[.beforeUpdate]!.modelWithIdentifier(identifier)
                 var attributes = SimpleLayoutAttributes(frame: model.frame)
-                attributes.alpha = 1
+                attributes.alpha = 0
                 return attributes
             }
         }
