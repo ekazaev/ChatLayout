@@ -24,6 +24,7 @@ final class ScrollViewController: UIViewController {
         scrollView.backgroundColor = .white
         scrollView.contentSize.height = UIScreen.main.bounds.height * 2
         scrollView.delegate = self
+//        scrollView.contentInsetAdjustmentBehavior = .never
     }
 
     @objc private func reload() {
@@ -189,13 +190,14 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             return
         }
 
+        print("\n\n\n\(#function) START")
+
         if oldSize != frame.size {
             oldSize = frame.size
             print("\(#function) ROTATION")
         }
 
-        print("\(#function) START")
-        print("\(#function) contentSize: \(contentSize) contentOffset:\(contentOffset)")
+        print("\(#function)\n    frame:\(frame)\n    contentSize: \(contentSize)\n    contentOffset:\(contentOffset)\n    contentInset:\(contentInset)\n    adjustedContentInset:\(adjustedContentInset)\n    safeAreaInsets:\(safeAreaInsets)")
 
         engine.prepareLayoutSubviews()
 
@@ -212,7 +214,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
         var localCustomViews: [Engine.Identifier: DefaultLayoutableView] = [:]
         repeat {
-            print("\(#function) - \(bounds) CYCLE START")
+            // print("\(#function) - \(bounds) CYCLE START")
             itemsToAdd = []
 
             // Getting final parameters of scrollView
@@ -241,7 +243,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 if newAttributes != item.attributes {
                     item.updateAttributes(newAttributes)
                     finalized = false
-                    print("Current attributes changed \(item.identifier) \(newAttributes)")
+                    // print("Current attributes changed \(item.identifier) \(newAttributes)")
                     break
                 }
             }
@@ -265,7 +267,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 let newAttributes = engine.preferredAttributes(for: view, with: descriptor.identifier)
                 if newAttributes != descriptor.attributes {
                     finalized = false
-                    print("Appeared Attributes changed \(descriptor.identifier) \(newAttributes)")
+                    // print("Appeared Attributes changed \(descriptor.identifier) \(newAttributes)")
                     break
                 }
                 let initialAttributes = engine.initialAttributesForAppearingViewWith(descriptor.identifier) ?? newAttributes
@@ -277,6 +279,8 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
             done = true
             disappearingItems = currentItems.filter({ !$0.attributes.frame.intersects(viewPort) || !screenDescriptorsIdentifiers.contains($0.identifier) })
+
+            // print("\(#function) - \(bounds) CYCLE FINISHED")
         } while !done
 
         engine.commitLayoutSubviews()
@@ -295,7 +299,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         itemsToAdd.forEach({ itemToAdd in
             var item: ItemView!
             UIView.performWithoutAnimation {
-                print("APPEARED \(itemToAdd.identifier) \(itemToAdd.initialAttributes) - \(itemToAdd.finalAttributes)")
+                // print("APPEARED \(itemToAdd.identifier) \(itemToAdd.initialAttributes) - \(itemToAdd.finalAttributes)")
                 /*
                 // Actually if you add something and then change content offset/content size it wont appear at this coordinates.
                 // That helps to compensate it but probably should be in the engine intead/
@@ -308,7 +312,6 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 addSubview(item)
 //                CATransaction.commit()
             }
-            print("\(item.identifier) appeared")
             if item.attributes != itemToAdd.finalAttributes {
                 item.updateAttributes(itemToAdd.finalAttributes)
                 item.commitAttributeUpdate()
@@ -317,13 +320,17 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         })
 
         if currentParameters != newParameters {
+            print("\(#function)\n    frame:\(frame)\n    contentSize: \(contentSize)\n    contentOffset:\(contentOffset)\n    contentInset:\(contentInset)\n    adjustedContentInset:\(adjustedContentInset)\n    safeAreaInsets:\(safeAreaInsets)")
             if currentParameters.contentSize != newParameters.contentSize {
-                print("contentSize: \(#function) NEW: \(newParameters.contentSize) | OLD: \(self.contentSize) ")
-                self.contentSize = newParameters.contentSize
+                print("contentSize: \(#function) NEW: \(newParameters.contentSize) | OLD: \(currentParameters.contentSize) | REAL: \(self.contentSize)")
+                // REMEMBER: CHANGINCG CONTENT SIZE CHANGES CONTENT OFFSET SOMETIMES FOR WHATEVER REASON
+                self.contentSize.width += newParameters.contentSize.width - currentParameters.contentSize.width
+                self.contentSize.height += newParameters.contentSize.height - currentParameters.contentSize.height
             }
             if currentParameters.contentOffset != newParameters.contentOffset {
-                print("contentOffset: \(#function) NEW: \(newParameters.contentOffset) | OLD: \(self.contentOffset) ")
-                self.contentOffset = newParameters.contentOffset
+                print("contentOffset: \(#function) NEW: \(newParameters.contentOffset) | OLD: \(currentParameters.contentOffset) | REAL: \(self.contentOffset)")
+                self.contentOffset.x += newParameters.contentOffset.x - currentParameters.contentOffset.x
+                self.contentOffset.y += newParameters.contentOffset.y - currentParameters.contentOffset.y
             }
         }
 
@@ -353,7 +360,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         })
 
 
-        print("\(#function) FINISH")
+        print("\(#function) FINISH\n----------")
     }
 }
 
@@ -534,7 +541,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
 //            return ScrollViewParameters(contentSize: contentSize, contentOffset: CGPoint(x: 0, y: contentSize.height - representation.size.height + 30))
 //        }
         let newParameters = ScrollViewParameters(contentSize: contentSize, contentOffset: CGPoint(x: currentParameters.contentOffset.x, y: currentParameters.contentOffset.y + offsetCompensation))
-        print("new: \(newParameters) old: \(currentParameters)")
+        // print("new: \(newParameters) old: \(currentParameters)")
         return newParameters
     }
 
@@ -543,8 +550,8 @@ final class SimpleLayoutEngine: LayoutViewEngine {
     }
 
     func preferredAttributes(for view: UIView, with identifier: String) -> SimpleLayoutAttributes {
-        var size = view.systemLayoutSizeFitting(CGSize(width: representation.visibleRect.width, height: 0), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-        size.width = representation.size.width
+        var size = view.systemLayoutSizeFitting(CGSize(width: modelWidth(representation), height: 0), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        size.width = modelWidth(representation)
         let model = controller.storage[state]!.modelWithIdentifier(identifier)
         //let isAboveBottomEdge = model.frame.minY.rounded() <= representation.visibleRect.maxY.rounded()
         let isAboveTopEdge = model.frame.maxY.rounded() <= representation.visibleRect.minY.rounded()
@@ -577,7 +584,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
 
     func attributes(with identifier: String) -> SimpleLayoutAttributes {
         let model = controller.storage[state]!.modelWithIdentifier(identifier)
-        model.size.width = representation.size.width
+        model.size.width = modelWidth(representation)
         return SimpleLayoutAttributes(frame: model.frame)
     }
 
@@ -586,7 +593,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
             var attributes = attributes(with: identifier)
             attributes.alpha = 0
             if let lastRepresentation = lastRepresentation {
-                attributes.frame.size.width = lastRepresentation.size.width
+                attributes.frame.size.width = modelWidth(lastRepresentation)
             }
             attributes.frame = attributes.frame.offsetBy(dx: 0, dy: -visibleSizeCompensation)
             attributes.alpha = 1
@@ -596,7 +603,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
                 var attributes = attributes(with: identifier)
                 attributes.alpha = 0
                 if let lastRepresentation = lastRepresentation {
-                    attributes.frame.size.width = lastRepresentation.size.width
+                    attributes.frame.size.width = modelWidth(lastRepresentation)
                 }
                 return attributes
             } else {
@@ -622,12 +629,16 @@ final class SimpleLayoutEngine: LayoutViewEngine {
                 return attributes
             } else {
                 let model = controller.storage[.afterUpdate]!.modelWithIdentifier(identifier)
-                model.size.width = representation.size.width
+                model.size.width = modelWidth(representation)
                 var attributes = SimpleLayoutAttributes(frame: model.frame)
                 attributes.frame = attributes.frame.offsetBy(dx: 0, dy: -visibleSizeCompensation)
                 return attributes
             }
         }
+    }
+
+    private func modelWidth(_ representation: ScrollViewRepresentation) -> CGFloat {
+        return representation.visibleRect.width
     }
 }
 
