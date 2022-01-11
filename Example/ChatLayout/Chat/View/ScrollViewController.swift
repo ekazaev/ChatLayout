@@ -28,11 +28,11 @@ final class ScrollViewController: UIViewController {
     }
 
     @objc private func reload() {
-        for i in 0...5 {
-            self.scrollView.performBatchUpdates([.insert("1.\(i) \(UUID().uuidString)", at: 1)])
-        }
+//        for i in 0...5 {
+//            self.scrollView.performBatchUpdates([.insert("1.\(i) \(UUID().uuidString)", at: 1)])
+//        }
 
-//        self.scrollView.performBatchUpdates((0...5).map({.insert("1.\($0) \(UUID().uuidString)", at: 1)}))
+        self.scrollView.performBatchUpdates((0...5).map({.insert("1.\($0) \(UUID().uuidString)", at: 1)}))
 
 //        self.scrollView.performBatchUpdates([.delete(self.texts.keys.first!)])
 //        self.texts[texts.keys.first!] = nil
@@ -163,20 +163,21 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
     }
 
     func dequeuView() -> LayoutableView {
-//        guard let view = dequeu.first else {
-        print("CREATED NEW")
-        return DefaultLayoutableView(frame: CGRect.zero)
-//        }
-//        dequeu.remove(view)
-//        print("DEQUEUED")
-//        return view
+        guard let view = dequeu.first else {
+            // print("CREATED NEW")
+            return DefaultLayoutableView(frame: CGRect.zero)
+        }
+        dequeu.remove(view)
+        // print("DEQUEUED")
+        return view
     }
 
     func performBatchUpdates(_ updateItems: [ChangeItem<Engine.Identifier>]) {
 //        CATransaction.begin()
         UIView.animate(withDuration: 0.25, animations: {
             self.engine.prepareForUpdates(updateItems)
-            self.layoutSubviews()
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
             self.engine.finalizeUpdates()
         })
 //        CATransaction.commit()
@@ -190,14 +191,14 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             return
         }
 
-        print("\n\n\n\(#function) START")
+        // print("\n\n\n\(#function) START")
 
         if oldSize != frame.size {
             oldSize = frame.size
-            print("\(#function) ROTATION")
+            // print("\(#function) ROTATION")
         }
 
-        print("\(#function)\n    frame:\(frame)\n    contentSize: \(contentSize)\n    contentOffset:\(contentOffset)\n    contentInset:\(contentInset)\n    adjustedContentInset:\(adjustedContentInset)\n    safeAreaInsets:\(safeAreaInsets)")
+        // print("\(#function)\n    frame:\(frame)\n    contentSize: \(contentSize)\n    contentOffset:\(contentOffset)\n    contentInset:\(contentInset)\n    adjustedContentInset:\(adjustedContentInset)\n    safeAreaInsets:\(safeAreaInsets)")
 
         engine.prepareLayoutSubviews()
 
@@ -221,14 +222,14 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             newParameters = engine.scrollViewParameters(with: currentParameters)
 
             // Getting all visible items in a visible rect
-            var viewPort = bounds // UICollectionView asks for a bigger layout for a reason!!!!
+            var viewPort = bounds.insetBy(dx: -1000, dy: -1000) // UICollectionView asks for a bigger layout for a reason!!!!
             if newParameters.contentOffset != currentParameters.contentOffset {
-                print("Modifying view port current: \(currentParameters.contentOffset) new:\(newParameters.contentOffset)")
+                // print("Modifying view port current: \(currentParameters.contentOffset) new:\(newParameters.contentOffset)")
                 let diffX = newParameters.contentOffset.x - currentParameters.contentOffset.x
                 let diffY = newParameters.contentOffset.y - currentParameters.contentOffset.y
                 viewPort = viewPort.offsetBy(dx: diffX, dy: diffY)
             }
-            print("\(#function) viewPort:\(viewPort)")
+            // print("\(#function) viewPort:\(viewPort)")
 
             let screenDescriptors = engine.descriptors(in: viewPort)
 
@@ -320,9 +321,9 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         })
 
         if currentParameters != newParameters {
-            print("\(#function)\n    frame:\(frame)\n    contentSize: \(contentSize)\n    contentOffset:\(contentOffset)\n    contentInset:\(contentInset)\n    adjustedContentInset:\(adjustedContentInset)\n    safeAreaInsets:\(safeAreaInsets)")
+            // print("\(#function)\n    frame:\(frame)\n    contentSize: \(contentSize)\n    contentOffset:\(contentOffset)\n    contentInset:\(contentInset)\n    adjustedContentInset:\(adjustedContentInset)\n    safeAreaInsets:\(safeAreaInsets)")
             if currentParameters.contentOffset != newParameters.contentOffset {
-                print("contentOffset: \(#function) NEW: \(newParameters.contentOffset) | OLD: \(currentParameters.contentOffset) | REAL: \(self.contentOffset)")
+                // print("contentOffset: \(#function) NEW: \(newParameters.contentOffset) | OLD: \(currentParameters.contentOffset) | REAL: \(self.contentOffset)")
                 self.contentOffset = newParameters.contentOffset
 //                self.contentOffset.x += newParameters.contentOffset.x - currentParameters.contentOffset.x
 //                self.contentOffset.y += newParameters.contentOffset.y - currentParameters.contentOffset.y
@@ -354,22 +355,22 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         CATransaction.commit()
 
         CATransaction.setCompletionBlock({ [weak self] in
-            print("COMPLETION block")
+            // print("COMPLETION block")
             guard let self = self else {
                 return
             }
             disappearingItems.forEach({ item in
-                print("\(item.identifier) disappeared")
+                // print("\(item.identifier) disappeared")
                 item.removeFromSuperview()
                 if let dv = item.customView as? DefaultLayoutableView {
-                    print("SAVED")
+                    // print("SAVED")
                     self.dequeu.insert(dv)
                 }
             })
         })
 
 
-        print("\(#function) FINISH\n----------")
+        // print("\(#function) FINISH\n----------")
     }
 }
 
@@ -567,7 +568,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
         if model.size != size {
             if isAboveTopEdge {
                 offsetCompensation += (size.height - model.size.height)
-                print("\(#function) offsetCompensation: \(offsetCompensation)")
+                // print("\(#function) offsetCompensation: \(offsetCompensation)")
             }
             visibleSizeCompensation += (size.height - model.size.height)
             model.size = size
