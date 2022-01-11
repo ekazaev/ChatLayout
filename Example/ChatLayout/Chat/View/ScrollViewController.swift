@@ -27,18 +27,14 @@ final class ScrollViewController: UIViewController {
     }
 
     @objc private func reload() {
-
         for i in 0...5 {
             self.scrollView.performBatchUpdates([.insert("1.\(i) \(UUID().uuidString)", at: 1)])
         }
 
-
 //        self.scrollView.performBatchUpdates((0...5).map({.insert("1.\($0) \(UUID().uuidString)", at: 1)}))
 
-        /*
-        self.scrollView.performBatchUpdates([.delete(self.texts.keys.first!)])
-        self.texts[texts.keys.first!] = nil
-         */
+//        self.scrollView.performBatchUpdates([.delete(self.texts.keys.first!)])
+//        self.texts[texts.keys.first!] = nil
     }
 }
 
@@ -65,6 +61,7 @@ extension ScrollViewController: LayoutViewDataSource {
     }
 
 }
+
 extension ScrollViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 //        if scrollView.contentOffset.y > scrollView.bounds.height {
@@ -94,9 +91,11 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             self.attributes = attributes
             self.customView = customView
             super.init(frame: attributes.frame)
-            addSubview(customView)
             UIView.performWithoutAnimation {
+                addSubview(customView)
                 customView.frame = CGRect(origin: .zero, size: attributes.frame.size)
+                customView.setNeedsLayout()
+                customView.layoutIfNeeded()
                 customView.alpha = attributes.alpha
             }
 //            self.backgroundColor = .cyan
@@ -119,13 +118,13 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         }
     }
 
-    private weak var layoutDataSource : DataSource?
+    private weak var layoutDataSource: DataSource?
     private let engine: Engine
     private var currentItems = [ItemView]()
 
     private var dequeu = Set<DefaultLayoutableView>()
 
-    init(frame: CGRect, engine: Engine, layoutDataSource : DataSource) {
+    init(frame: CGRect, engine: Engine, layoutDataSource: DataSource) {
         self.engine = engine
         self.layoutDataSource = layoutDataSource
         super.init(frame: frame)
@@ -163,13 +162,13 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
     }
 
     func dequeuView() -> LayoutableView {
-        guard let view = dequeu.first else {
-            print("CREATED NEW")
-            return DefaultLayoutableView(frame: CGRect.zero)
-        }
-        dequeu.remove(view)
-        print("DEQUEUED")
-        return view
+//        guard let view = dequeu.first else {
+        print("CREATED NEW")
+        return DefaultLayoutableView(frame: CGRect.zero)
+//        }
+//        dequeu.remove(view)
+//        print("DEQUEUED")
+//        return view
     }
 
     func performBatchUpdates(_ updateItems: [ChangeItem<Engine.Identifier>]) {
@@ -201,14 +200,14 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
         engine.prepareLayoutSubviews()
 
         // UICollectionView most likely uses transaction. Otherwise all modifications become to appear on top of easother.
-//        CATransaction.begin()
+        CATransaction.begin()
 
         var done = false
         var disappearingItems: [ItemView] = []
         let currentParameters = ScrollViewParameters(scrollView: self)
         var newParameters = currentParameters
 
-        var currentlyPresentItems:[ItemView] = []
+        var currentlyPresentItems: [ItemView] = []
         var itemsToAdd: [(identifier: Engine.Identifier, initialAttributes: Engine.Attributes, customView: UIView, finalAttributes: Engine.Attributes)] = []
 
         var localCustomViews: [Engine.Identifier: DefaultLayoutableView] = [:]
@@ -336,7 +335,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             item.commitAttributeUpdate()
         })
 
-//        CATransaction.commit()
+        CATransaction.commit()
 
         CATransaction.setCompletionBlock({ [weak self] in
             print("COMPLETION block")
@@ -360,9 +359,9 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
 protocol LayoutAttributes: Equatable {
     var frame: CGRect { get }
-    var alpha: CGFloat  { get }
-    var zIndex: Int  { get }
-    var isHidden: Bool  { get }
+    var alpha: CGFloat { get }
+    var zIndex: Int { get }
+    var isHidden: Bool { get }
 }
 
 struct Descriptor<Identifier: Hashable, Attributes: LayoutAttributes> {
@@ -473,8 +472,8 @@ protocol LayoutViewEngine {
 
     func attributes(with identifier: Identifier) -> Attributes
 
-    func initialAttributesForAppearingViewWith( _ identifier: Identifier) -> Attributes?
-    func finalAttributesForDisappearingViewWith( _ identifier: Identifier) -> Attributes?
+    func initialAttributesForAppearingViewWith(_ identifier: Identifier) -> Attributes?
+    func finalAttributesForDisappearingViewWith(_ identifier: Identifier) -> Attributes?
 }
 
 struct SimpleLayoutAttributes: LayoutAttributes {
@@ -540,7 +539,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
     }
 
     func descriptors(in rect: CGRect) -> [Descriptor<String, SimpleLayoutAttributes>] {
-        return controller.storage[state]!.identifiers.enumerated().map({ Descriptor(identifier: $0.element, attributes: SimpleLayoutAttributes(frame: controller.storage[state]!.models[$0.offset].frame ))}).filter({ $0.attributes.frame.intersects(rect) })
+        return controller.storage[state]!.identifiers.enumerated().map({ Descriptor(identifier: $0.element, attributes: SimpleLayoutAttributes(frame: controller.storage[state]!.models[$0.offset].frame)) }).filter({ $0.attributes.frame.intersects(rect) })
     }
 
     func preferredAttributes(for view: UIView, with identifier: String) -> SimpleLayoutAttributes {
@@ -562,7 +561,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
                 model.size = size
             }
         }
-        return SimpleLayoutAttributes(frame: model.frame )
+        return SimpleLayoutAttributes(frame: model.frame)
     }
 
     func prepareForUpdates(_ updateItems: [ChatLayout_Example.ChangeItem<String>]) {
@@ -579,7 +578,7 @@ final class SimpleLayoutEngine: LayoutViewEngine {
     func attributes(with identifier: String) -> SimpleLayoutAttributes {
         let model = controller.storage[state]!.modelWithIdentifier(identifier)
         model.size.width = representation.size.width
-        return SimpleLayoutAttributes(frame: model.frame )
+        return SimpleLayoutAttributes(frame: model.frame)
     }
 
     func initialAttributesForAppearingViewWith(_ identifier: String) -> SimpleLayoutAttributes? {
@@ -624,9 +623,8 @@ final class SimpleLayoutEngine: LayoutViewEngine {
             } else {
                 let model = controller.storage[.afterUpdate]!.modelWithIdentifier(identifier)
                 model.size.width = representation.size.width
-                var attributes = SimpleLayoutAttributes(frame: model.frame )
+                var attributes = SimpleLayoutAttributes(frame: model.frame)
                 attributes.frame = attributes.frame.offsetBy(dx: 0, dy: -visibleSizeCompensation)
-                print("BLA \(identifier) \(offsetCompensation) \(visibleSizeCompensation)")
                 return attributes
             }
         }
