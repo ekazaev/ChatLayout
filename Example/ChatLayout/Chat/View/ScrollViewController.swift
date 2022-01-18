@@ -200,10 +200,10 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
         // print("\(#function)\n    frame:\(frame)\n    contentSize: \(contentSize)\n    contentOffset:\(contentOffset)\n    contentInset:\(contentInset)\n    adjustedContentInset:\(adjustedContentInset)\n    safeAreaInsets:\(safeAreaInsets)")
 
-        engine.prepareLayoutSubviews()
-
         // UICollectionView most likely uses transaction. Otherwise all modifications become to appear on top of easother.
         CATransaction.begin()
+
+        engine.prepareLayoutSubviews()
 
         var done = false
         var disappearingItems: [ItemView] = []
@@ -222,7 +222,7 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
             newParameters = engine.scrollViewParameters(with: currentParameters)
 
             // Getting all visible items in a visible rect
-            var viewPort = bounds.insetBy(dx: -1000, dy: -1000) // UICollectionView asks for a bigger layout for a reason!!!!
+            var viewPort = bounds.insetBy(dx: -bounds.width, dy: -bounds.height) // UICollectionView asks for a bigger layout for a reason!!!!
             if newParameters.contentOffset != currentParameters.contentOffset {
                 // print("Modifying view port current: \(currentParameters.contentOffset) new:\(newParameters.contentOffset)")
                 let diffX = newParameters.contentOffset.x - currentParameters.contentOffset.x
@@ -243,9 +243,11 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 let newAttributes = engine.preferredAttributes(for: item.customView, with: item.identifier)
                 if newAttributes != item.attributes {
                     item.updateAttributes(newAttributes)
-                    finalized = false
-                    // print("Current attributes changed \(item.identifier) \(newAttributes)")
-                    break
+                    if engine.shouldRestartLayout() {
+                        finalized = false
+                        // print("Current attributes changed \(item.identifier) \(newAttributes)")
+                        break
+                    }
                 }
             }
             if !finalized {
@@ -266,9 +268,10 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
                 }
                 localCustomViews[descriptor.identifier] = (view as! DefaultLayoutableView)
                 let newAttributes = engine.preferredAttributes(for: view, with: descriptor.identifier)
-                if newAttributes != descriptor.attributes {
+                if newAttributes != descriptor.attributes,
+                   engine.shouldRestartLayout() {
                     finalized = false
-                    // print("Appeared Attributes changed \(descriptor.identifier) \(newAttributes)")
+                    print("Appeared Attributes changed \(descriptor.identifier) \(newAttributes)")
                     break
                 }
                 let initialAttributes = engine.initialAttributesForAppearingViewWith(descriptor.identifier) ?? newAttributes
@@ -294,8 +297,17 @@ final class LayoutView<Engine: LayoutViewEngine, DataSource: LayoutViewDataSourc
 
         /// TODO: Find out why! Most likely because more disappeared.
         if currentItems.count != currentlyPresentItems.count {
+            let missingItems = currentItems.first(where: { !currentlyPresentItems.map(\.identifier).contains($0.identifier) })
+            print("EXTRAS: \(missingItems)")
             assertionFailure()
         }
+
+        let itemsToAddIdentifiers = itemsToAdd.map(\.identifier)
+        localCustomViews.forEach({ tuple in
+            if !itemsToAddIdentifiers.contains(tuple.key) {
+                self.dequeu.insert(tuple.value)
+            }
+        })
 
         itemsToAdd.forEach({ itemToAdd in
             var item: ItemView!
@@ -475,6 +487,7 @@ protocol LayoutViewEngine {
     func prepare()
 
     func prepareLayoutSubviews()
+    func shouldRestartLayout() -> Bool
     func commitLayoutSubviews()
 
     func prepareForUpdates(_ updateItems: [ChangeItem<Identifier>])
@@ -532,6 +545,10 @@ final class SimpleLayoutEngine: LayoutViewEngine {
         if let lastRepresentation = lastRepresentation {
             visibleBeforeLayout = descriptors(in: lastRepresentation.visibleRect)
         }
+    }
+
+    func shouldRestartLayout() -> Bool {
+        return false
     }
 
     func commitLayoutSubviews() {
