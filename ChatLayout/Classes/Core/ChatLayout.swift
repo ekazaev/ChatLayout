@@ -622,10 +622,6 @@ public final class ChatLayout: UICollectionViewLayout {
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
             if needsIOS15_1IssueFix {
-                // This fix affects performance as UICollectionView will request cells event though they wont be visible on the screen.
-                // It also causes a small flickering as content offset is being fixed at `finalizeCollectionViewUpdates` instead.
-                //controller.batchUpdateCompensatingOffset += controller.proposedCompensatingOffset
-                //return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
                 controller.proposedCompensatingOffset = 0
                 collectionView.contentOffset = newProposedContentOffset
                 return newProposedContentOffset
