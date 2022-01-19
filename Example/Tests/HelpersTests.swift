@@ -3,7 +3,7 @@
 // HelpersTests.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2021.
+// Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
 
@@ -54,6 +54,24 @@ final class HelpersTests: XCTestCase {
 
         let footer = ItemKind(UICollectionView.elementKindSectionFooter)
         XCTAssertTrue(footer.supplementaryElementStringType == UICollectionView.elementKindSectionFooter)
+    }
+
+    func testSearchInRange() {
+        let predicate: (Int) -> ComparisonResult = { integer in
+            if integer < 100 {
+                return .orderedAscending
+            } else if integer > 200 {
+                return .orderedDescending
+            } else {
+                return .orderedSame
+            }
+        }
+        XCTAssertEqual((0...1000).map { $0 }.binarySearchRange(predicate: predicate), (100...200).map { $0 })
+        XCTAssertEqual((100...200).map { $0 }.binarySearchRange(predicate: predicate), (100...200).map { $0 })
+        XCTAssertEqual((0...0).map { $0 }.binarySearchRange(predicate: predicate), [])
+        XCTAssertEqual((0...150).map { $0 }.binarySearchRange(predicate: predicate), (100...150).map { $0 })
+        XCTAssertEqual((150...200).map { $0 }.binarySearchRange(predicate: predicate), (150...200).map { $0 })
+        XCTAssertEqual((150...170).map { $0 }.binarySearchRange(predicate: predicate), (150...170).map { $0 })
     }
 
 }

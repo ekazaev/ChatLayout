@@ -3,7 +3,7 @@
 // StateController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2021.
+// Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
 
@@ -99,17 +99,33 @@ final class StateController {
     func layoutAttributesForElements(in rect: CGRect,
                                      state: ModelState,
                                      ignoreCache: Bool = false) -> [ChatLayoutAttributes] {
+        let predicate: (ChatLayoutAttributes) -> ComparisonResult = { attributes in
+            if attributes.frame.intersects(rect) {
+                return .orderedSame
+            }
+            if attributes.frame.minY > rect.maxY {
+                return .orderedDescending
+            }
+            return .orderedAscending
+        }
+
         if !ignoreCache,
            let cachedAttributesState = cachedAttributesState,
            cachedAttributesState.rect.contains(rect) {
-            return cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
+            return cachedAttributesState.attributes.binarySearchRange(predicate: predicate)
         } else {
-            let totalRect = rect.inset(by: UIEdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))
+            let totalRect: CGRect
+            switch state {
+            case .beforeUpdate:
+                totalRect = rect.inset(by: UIEdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))
+            case .afterUpdate:
+                totalRect = rect
+            }
             let attributes = allAttributes(at: state, visibleRect: totalRect)
             if !ignoreCache {
                 cachedAttributesState = (rect: totalRect, attributes: attributes)
             }
-            let visibleAttributes = attributes.filter { $0.frame.intersects(rect) }
+            let visibleAttributes = rect != totalRect ? attributes.binarySearchRange(predicate: predicate) : attributes
             return visibleAttributes
         }
     }
@@ -650,10 +666,10 @@ final class StateController {
 
                     // Find if any of the items of the section is visible
                     if [ComparisonResult.orderedSame, .orderedDescending].contains(predicate(itemIndex: section.items.count - 1)),
-                       let firstMatchIndex = Array(0...section.items.count - 1).binarySearch(predicate: predicate) {
+                       let firstMatchingIndex = Array(0...section.items.count - 1).binarySearch(predicate: predicate) {
                         // Find first item that is visible
-                        startingIndex = firstMatchIndex
-                        for itemIndex in (0..<firstMatchIndex).reversed() {
+                        startingIndex = firstMatchingIndex
+                        for itemIndex in (0..<firstMatchingIndex).reversed() {
                             let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
                             guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
                                 continue
@@ -725,6 +741,7 @@ final class StateController {
                 return self.itemAttributes(for: path, kind: kind, predefinedFrame: frame, at: state)
             }
         } else {
+            // Debug purposes only.
             var attributes = [ChatLayoutAttributes]()
             attributes.reserveCapacity(layout.sections.count * 1000)
             layout.sections.enumerated().forEach { sectionIndex, section in
@@ -835,7 +852,7 @@ final class StateController {
 
 }
 
-private extension RandomAccessCollection where Index == Int {
+extension RandomAccessCollection where Index == Int {
 
     func binarySearch(predicate: (Element) -> ComparisonResult) -> Index? {
         var lowerBound = startIndex
@@ -852,6 +869,31 @@ private extension RandomAccessCollection where Index == Int {
             }
         }
         return nil
+    }
+
+    func binarySearchRange(predicate: (Element) -> ComparisonResult) -> [Element] {
+        guard let firstMatchingIndex = binarySearch(predicate: predicate) else {
+            return []
+        }
+
+        var startingIndex = firstMatchingIndex
+        for index in (0..<firstMatchingIndex).reversed() {
+            let attributes = self[index]
+            guard predicate(attributes) == .orderedSame else {
+                break
+            }
+            startingIndex = index
+        }
+
+        var lastIndex = firstMatchingIndex
+        for index in (firstMatchingIndex + 1)..<count {
+            let attributes = self[index]
+            guard predicate(attributes) == .orderedSame else {
+                break
+            }
+            lastIndex = index
+        }
+        return Array(self[startingIndex...lastIndex])
     }
 
 }

@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "ChatLayoutAttributes.swift" : </span><span class="cov_low">19.61%</span>
+<span>Coverage for "ChatLayoutAttributes.swift" : </span><span class="cov_low">0.00%</span>
 </h2>
-<h4 class="cov_subtitle">(10 of 51 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(0 of 51 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/ChatLayoutAttributes.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -39,7 +39,7 @@
 </tr>
 <tr class="never">
 <td class="num">6</td>
-<td class="src"><pre><code class="objc">// Created by Eugene Kazaev in 2020-2021.</code></pre></td>
+<td class="src"><pre><code class="objc">// Created by Eugene Kazaev in 2020-2022.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -92,10 +92,10 @@
 <td class="src"><pre><code class="objc">    /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">17</td>
 <td class="src"><pre><code class="objc">    public var alignment: ChatItemAlignment = .fullWidth</code></pre></td>
-<td class="coverage">350x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">18</td>
@@ -107,10 +107,10 @@
 <td class="src"><pre><code class="objc">    /// `ChatLayout`s additional insets setup using `ChatLayoutSettings`. Added for convenience.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">20</td>
 <td class="src"><pre><code class="objc">    public internal(set) var additionalInsets: UIEdgeInsets = .zero</code></pre></td>
-<td class="coverage">350x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">21</td>
@@ -122,10 +122,10 @@
 <td class="src"><pre><code class="objc">    /// `UICollectionView`s frame size. Added for convenience.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">23</td>
 <td class="src"><pre><code class="objc">    public internal(set) var viewSize: CGSize = .zero</code></pre></td>
-<td class="coverage">350x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">24</td>
@@ -137,10 +137,10 @@
 <td class="src"><pre><code class="objc">    /// `UICollectionView`s adjusted content insets. Added for convenience.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">26</td>
 <td class="src"><pre><code class="objc">    public internal(set) var adjustedContentInsets: UIEdgeInsets = .zero</code></pre></td>
-<td class="coverage">350x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">27</td>
@@ -152,10 +152,10 @@
 <td class="src"><pre><code class="objc">    /// `ChatLayout`s visible bounds size excluding `adjustedContentInsets`. Added for convenience.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">29</td>
 <td class="src"><pre><code class="objc">    public internal(set) var visibleBoundsSize: CGSize = .zero</code></pre></td>
-<td class="coverage">350x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">30</td>
@@ -167,10 +167,10 @@
 <td class="src"><pre><code class="objc">    /// `ChatLayout`s visible bounds size excluding `adjustedContentInsets` and `additionalInsets`. Added for convenience.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">32</td>
 <td class="src"><pre><code class="objc">    public internal(set) var layoutFrame: CGRect = .zero</code></pre></td>
-<td class="coverage">350x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">33</td>
@@ -332,25 +332,25 @@
 <td class="src"><pre><code class="objc">    /// Returns a Boolean value indicating whether two `ChatLayoutAttributes` are considered equal.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">65</td>
 <td class="src"><pre><code class="objc">    public override func isEqual(_ object: Any?) -&gt; Bool {</code></pre></td>
-<td class="coverage">18x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">66</td>
 <td class="src"><pre><code class="objc">        return super.isEqual(object)</code></pre></td>
-<td class="coverage">18x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">67</td>
 <td class="src"><pre><code class="objc">            &amp;&amp; alignment == (object as? ChatLayoutAttributes)?.alignment</code></pre></td>
-<td class="coverage">18x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">68</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">18x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">69</td>
@@ -471,7 +471,7 @@
 </div></div>
 <footer><div class="row">
 <p><a href="https://github.com/SlatherOrg/slather">Fork me on Github</a></p>
-<p>&copy; 2021 Slather</p>
+<p>&copy; 2022 Slather</p>
 </div></footer><script src="highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
