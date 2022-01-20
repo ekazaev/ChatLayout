@@ -115,6 +115,8 @@ public final class ChatLayout: UICollectionViewLayout {
     /// There is an issue in IOS 15.1 that proposed content offset is being ignored by the UICollectionView when user is scrolling.
     /// This flag enables a hack to compensate this offset later. You can disable it if necessary.
     /// Bug reported: https://feedbackassistant.apple.com/feedback/9727104
+    ///
+    /// PS: This issue was fixed in 15.2
     public var enableIOS15_1Fix: Bool = true
 
     // MARK: Internal Properties
@@ -183,7 +185,7 @@ public final class ChatLayout: UICollectionViewLayout {
     // MARK: IOS 15.1 fix flags
 
     private var needsIOS15_1IssueFix: Bool {
-        return enableIOS15_1Fix && isIOS15_1orHigher && isUserInitiatedScrolling && !controller.isAnimatedBoundsChange
+        return enableIOS15_1Fix && isIOS15_1orHigher && !isIOS15_2orHigher && isUserInitiatedScrolling && !controller.isAnimatedBoundsChange
     }
 
     // MARK: Constructors
@@ -497,8 +499,7 @@ public final class ChatLayout: UICollectionViewLayout {
         let isAboveBottomEdge = originalAttributes.frame.minY.rounded() <= visibleBounds.maxY.rounded()
 
         if heightDifference != 0,
-           (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded())
-           || isUserInitiatedScrolling,
+           (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded()) || isUserInitiatedScrolling,
            isAboveBottomEdge {
             context.contentOffsetAdjustment.y += heightDifference
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
@@ -958,20 +959,26 @@ extension ChatLayout {
 
 }
 
-@inline(__always)
-var isIOS13orHigher: Bool {
+var isIOS13orHigher: Bool = {
     if #available(iOS 13.0, *) {
         return true
     } else {
         return false
     }
-}
+}()
 
-@inline(__always)
-var isIOS15_1orHigher: Bool {
+var isIOS15_1orHigher: Bool = {
     if #available(iOS 15.1, *) {
         return true
     } else {
         return false
     }
-}
+}()
+
+var isIOS15_2orHigher: Bool = {
+    if #available(iOS 15.2, *) {
+        return true
+    } else {
+        return false
+    }
+}()
