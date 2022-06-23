@@ -121,11 +121,11 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
         stackView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(stackView)
 
-        stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
         stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
-
+        stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+        
         if let leadingAccessoryView = leadingView {
             stackView.addArrangedSubview(leadingAccessoryView)
             leadingAccessoryView.translatesAutoresizingMaskIntoConstraints = false
