@@ -147,6 +147,10 @@ It is very possible that you are sending delete/insert commands when you expect 
 `print("\(updateItems)")` into `ChatLayout.prepare(forCollectionViewUpdates:)` method. `ChatLayout` doesn't know what you expected to see. 
 It just processes your changes according to the commands it has received.
 
+### About sticky headers or footers
+
+Sticky headers or footers are not supported by `ChatLayout` but your contributions are welcome.
+
 ## License
 
 `ChatLayout` is distributed under [the MIT license](https://github.com/ekazaev/ChatLayout/blob/master/LICENSE).
