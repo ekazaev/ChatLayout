@@ -446,13 +446,13 @@ public final class ChatLayout: UICollectionViewLayout {
     /// Cleans up after any animated changes to the view’s bounds or after the insertion or deletion of items.
     public override func finalizeAnimatedBoundsChange() {
         if controller.isAnimatedBoundsChange {
+            state = .beforeUpdate
+            resetInvalidatedAttributes()
+            resetAttributesForPendingAnimations()
+            controller.commitUpdates()
             controller.isAnimatedBoundsChange = false
             controller.proposedCompensatingOffset = 0
             controller.batchUpdateCompensatingOffset = 0
-            controller.commitUpdates()
-            state = .beforeUpdate
-            resetAttributesForPendingAnimations()
-            resetInvalidatedAttributes()
         }
     }
 

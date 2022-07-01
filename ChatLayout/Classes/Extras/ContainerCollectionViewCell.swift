@@ -83,10 +83,10 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
         contentView.layoutMargins = .zero
 
         customView.translatesAutoresizingMaskIntoConstraints = false
-        customView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
-        customView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
         customView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
         customView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
+        customView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
+        customView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
     }
 
 }

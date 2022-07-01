@@ -49,12 +49,12 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Returns an exact copy of `ChatLayoutAttributes`.
     public override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! ChatLayoutAttributes
-        copy.alignment = alignment
-        copy.additionalInsets = additionalInsets
         copy.viewSize = viewSize
-        copy.adjustedContentInsets = adjustedContentInsets
-        copy.visibleBoundsSize = visibleBoundsSize
+        copy.alignment = alignment
         copy.layoutFrame = layoutFrame
+        copy.additionalInsets = additionalInsets
+        copy.visibleBoundsSize = visibleBoundsSize
+        copy.adjustedContentInsets = adjustedContentInsets
         #if DEBUG
         copy.id = id
         #endif
