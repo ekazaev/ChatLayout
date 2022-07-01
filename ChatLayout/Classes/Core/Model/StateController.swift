@@ -236,7 +236,7 @@ final class StateController {
         guard itemPath.section < layout(at: state).sections.count else {
             return nil
         }
-        guard let item = self.item(for: itemPath, kind: kind, at: state) else {
+        guard let item = item(for: itemPath, kind: kind, at: state) else {
             // This occurs when getting layout attributes for initial / final animations
             return nil
         }
@@ -688,15 +688,15 @@ final class StateController {
                 if startingIndex < section.items.count {
                     for itemIndex in startingIndex..<section.items.count {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                        if let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
+                        if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
                            check(rect: itemFrame) {
                             if state == .beforeUpdate || isAnimatedBoundsChange {
                                 allRects.append((frame: itemFrame, indexPath: itemPath, kind: .cell))
                             } else {
                                 var itemWasVisibleBefore: Bool {
-                                    guard let itemIdentifier = self.itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
+                                    guard let itemIdentifier = itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
                                           let initialIndexPath = self.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate),
-                                          let item = self.item(for: initialIndexPath, kind: .cell, at: .beforeUpdate),
+                                          let item = item(for: initialIndexPath, kind: .cell, at: .beforeUpdate),
                                           item.calculatedOnce == true,
                                           let itemFrame = self.itemFrame(for: initialIndexPath, kind: .cell, at: .beforeUpdate, isFinal: false),
                                           itemFrame.intersects(layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
@@ -711,7 +711,7 @@ final class StateController {
                                        itemFrame.intersects(offsetVisibleBounds) {
                                         return true
                                     }
-                                    if let itemIdentifier = self.itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
+                                    if let itemIdentifier = itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
                                        let initialIndexPath = self.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate)?.indexPath,
                                        movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
                                        let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),

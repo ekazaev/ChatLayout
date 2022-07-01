@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 
 /// `ChatLayout` settings.
-public struct ChatLayoutSettings {
+public struct ChatLayoutSettings: Equatable {
 
     /// Estimated item size for `ChatLayout`. This value will be used as the initial size of the item and the final size
     /// will be calculated using `UICollectionViewCell.preferredLayoutAttributesFitting(...)`.

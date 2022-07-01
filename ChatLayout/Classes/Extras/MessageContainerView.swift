@@ -70,7 +70,7 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
         stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
         stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-        
+
         if let accessoryView = accessoryView {
             stackView.addArrangedSubview(accessoryView)
             accessoryView.translatesAutoresizingMaskIntoConstraints = false

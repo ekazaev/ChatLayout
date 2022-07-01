@@ -510,7 +510,7 @@ extension ChatViewController: UIGestureRecognizerDelegate {
             gesture.setTranslation(.zero, in: gesture.view)
             updateTransforms(in: collectionView)
         default:
-            UIView.animate(withDuration: 0.25, animations: { () -> Void in
+            UIView.animate(withDuration: 0.25, animations: { () in
                 self.translationX = 0
                 self.currentOffset = 0
                 self.updateTransforms(in: collectionView, transform: .identity)
