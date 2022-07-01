@@ -9,7 +9,7 @@ theme: fullwidth
 custom_categories:
   - name: Core
     children:
-      - ChatLayout
+      - CollectionViewChatLayout
       - ChatLayoutDelegate
       - ChatLayoutAttributes
       - ChatLayoutSettings

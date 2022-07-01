@@ -47,6 +47,9 @@
             <a class="nav-group-name-link" href="Core.html">Core</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/ChatLayoutDelegate.html">ChatLayoutDelegate</a>
               </li>
               <li class="nav-group-task">
@@ -127,14 +130,6 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="readme.html">README</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
-            <a class="nav-group-name-link" href="Other%20Classes.html">Other Classes</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a>
               </li>
             </ul>
           </li>
@@ -296,6 +291,9 @@ You will have to implement <code><a href="Protocols/ChatLayoutDelegate.html">Cha
 It is very possible that you are sending delete/insert commands when you expect to see reload. The easiest way to check it is by adding
 <code>print(&quot;\(updateItems)&quot;)</code> into <code>ChatLayout.prepare(forCollectionViewUpdates:)</code> method. <code>ChatLayout</code> doesn&rsquo;t know what you expected to see. 
 It just processes your changes according to the commands it has received.</p>
+<h3 id='about-sticky-headers-or-footers' class='heading'>About sticky headers or footers</h3>
+
+<p>Sticky headers or footers are not supported by <code>ChatLayout</code> but your contributions are welcome.</p>
 <h2 id='license' class='heading'>License</h2>
 
 <p><code>ChatLayout</code> is distributed under <a href="https://github.com/ekazaev/ChatLayout/blob/master/LICENSE">the MIT license</a>.</p>
