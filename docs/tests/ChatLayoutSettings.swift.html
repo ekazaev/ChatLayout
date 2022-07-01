@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "ChatLayoutSettings.swift" : </span><span class="cov_low">0.00%</span>
+<span>Coverage for "ChatLayoutSettings.swift" : </span><span class="cov_high">100.00%</span>
 </h2>
-<h4 class="cov_subtitle">(0 of 1 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(1 of 1 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/ChatLayoutSettings.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -74,12 +74,12 @@
 </tr>
 <tr class="never">
 <td class="num">13</td>
-<td class="src"><pre><code class="objc">/// `ChatLayout` settings.</code></pre></td>
+<td class="src"><pre><code class="objc">/// `CollectionViewChatLayout` settings.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">14</td>
-<td class="src"><pre><code class="objc">public struct ChatLayoutSettings {</code></pre></td>
+<td class="src"><pre><code class="objc">public struct ChatLayoutSettings: Equatable {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -89,7 +89,7 @@
 </tr>
 <tr class="never">
 <td class="num">16</td>
-<td class="src"><pre><code class="objc">    /// Estimated item size for `ChatLayout`. This value will be used as the initial size of the item and the final size</code></pre></td>
+<td class="src"><pre><code class="objc">    /// Estimated item size for `CollectionViewChatLayout`. This value will be used as the initial size of the item and the final size</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -139,13 +139,13 @@
 </tr>
 <tr class="never">
 <td class="num">26</td>
-<td class="src"><pre><code class="objc">    /// Additional insets for the `ChatLayout` content.</code></pre></td>
+<td class="src"><pre><code class="objc">    /// Additional insets for the `CollectionViewChatLayout` content.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">27</td>
 <td class="src"><pre><code class="objc">    public var additionalInsets: UIEdgeInsets = .zero</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">23x</td>
 </tr>
 <tr class="never">
 <td class="num">28</td>

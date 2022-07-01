@@ -139,7 +139,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
     private func createGroupTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionCell.reuseIdentifier, for: indexPath) as! TitleCollectionCell
         cell.customView.text = title
-        cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? ChatLayout)?.layoutFrame.width ?? collectionView.frame.width
+        cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
         cell.customView.textColor = .gray
         cell.customView.numberOfLines = 0
         cell.customView.font = .preferredFont(forTextStyle: .caption2)
@@ -149,7 +149,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
 
     private func createDateTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionCell.reuseIdentifier, for: indexPath) as! TitleCollectionCell
-        cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? ChatLayout)?.layoutFrame.width ?? collectionView.frame.width
+        cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
         cell.customView.text = title
         cell.customView.textColor = .gray
         cell.customView.numberOfLines = 0
@@ -304,15 +304,15 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
 
 extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
 
-    public func shouldPresentHeader(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool {
+    public func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
         return true
     }
 
-    public func shouldPresentFooter(_ chatLayout: ChatLayout, at sectionIndex: Int) -> Bool {
+    public func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
         return true
     }
 
-    public func sizeForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
+    public func sizeForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
         switch kind {
         case .cell:
             let item = sections[indexPath.section].cells[indexPath.item]
@@ -340,7 +340,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func alignmentForItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
+    public func alignmentForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
         switch kind {
         case .header:
             return .center
@@ -359,7 +359,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func initialLayoutAttributesForInsertedItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes, on state: InitialAttributesRequestType) {
+    public func initialLayoutAttributesForInsertedItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes, on state: InitialAttributesRequestType) {
         originalAttributes.alpha = 0
         guard state == .invalidation,
               kind == .cell else {
@@ -381,7 +381,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func finalLayoutAttributesForDeletedItem(_ chatLayout: ChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes) {
+    public func finalLayoutAttributesForDeletedItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes) {
         originalAttributes.alpha = 0
         guard kind == .cell else {
             return

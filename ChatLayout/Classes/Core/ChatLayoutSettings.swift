@@ -10,10 +10,10 @@
 import Foundation
 import UIKit
 
-/// `ChatLayout` settings.
+/// `CollectionViewChatLayout` settings.
 public struct ChatLayoutSettings: Equatable {
 
-    /// Estimated item size for `ChatLayout`. This value will be used as the initial size of the item and the final size
+    /// Estimated item size for `CollectionViewChatLayout`. This value will be used as the initial size of the item and the final size
     /// will be calculated using `UICollectionViewCell.preferredLayoutAttributesFitting(...)`.
     public var estimatedItemSize: CGSize?
 
@@ -23,7 +23,7 @@ public struct ChatLayoutSettings: Equatable {
     /// Spacing between the sections.
     public var interSectionSpacing: CGFloat = 0
 
-    /// Additional insets for the `ChatLayout` content.
+    /// Additional insets for the `CollectionViewChatLayout` content.
     public var additionalInsets: UIEdgeInsets = .zero
 
 }

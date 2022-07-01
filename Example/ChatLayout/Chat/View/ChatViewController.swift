@@ -50,7 +50,7 @@ final class ChatViewController: UIViewController {
     private let editNotifier: EditNotifier
     private let swipeNotifier: SwipeNotifier
     private var collectionView: UICollectionView!
-    private var chatLayout = ChatLayout()
+    private var chatLayout = CollectionViewChatLayout()
     private let inputBarView = InputBarAccessoryView()
     private let chatController: ChatController
     private let dataSource: ChatCollectionDataSource
@@ -184,7 +184,7 @@ final class ChatViewController: UIViewController {
             if let positionSnapshot = positionSnapshot,
                !self.isUserInitiatedScrolling {
                 // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
-                // to compact and back. `ChatLayout` may not properly predict the final position of the element. So we try
+                // to compact and back. `CollectionViewChatLayout` may not properly predict the final position of the element. So we try
                 // to restore it after the rotation manually.
                 self.chatLayout.restoreContentOffset(with: positionSnapshot)
             }

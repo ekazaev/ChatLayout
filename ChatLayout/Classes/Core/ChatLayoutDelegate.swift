@@ -10,7 +10,7 @@
 import Foundation
 import UIKit
 
-/// Represents the point in time `ChatLayout` when chat layout asks about layout attributes modification.
+/// Represents the point in time when `CollectionViewChatLayout` asks about layout attributes modification.
 public enum InitialAttributesRequestType {
 
     /// `UICollectionView` initially asks about the layout of an item.
@@ -21,26 +21,26 @@ public enum InitialAttributesRequestType {
 
 }
 
-/// `ChatLayout` delegate
+/// `CollectionViewChatLayout` delegate
 public protocol ChatLayoutDelegate: AnyObject {
 
-    /// `ChatLayout` will call this method to ask if it should present the header in the current layout.
+    /// `CollectionViewChatLayout` will call this method to ask if it should present the header in the current layout.
     /// - Parameters:
-    ///   - chatLayout: ChatLayout reference.
+    ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
-    func shouldPresentHeader(_ chatLayout: ChatLayout,
+    func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool
 
-    /// `ChatLayout` will call this method to ask if it should present the footer in the current layout.
+    /// `CollectionViewChatLayout` will call this method to ask if it should present the footer in the current layout.
     /// - Parameters:
-    ///   - chatLayout: ChatLayout reference.
+    ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
-    func shouldPresentFooter(_ chatLayout: ChatLayout,
+    func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool
 
-    /// `ChatLayout` will call this method to ask what size the item should have.
+    /// `CollectionViewChatLayout` will call this method to ask what size the item should have.
     ///
     /// **NB:**
     ///
@@ -50,21 +50,21 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// using Autolayout Engine anyway.
     ///
     /// - Parameters:
-    ///   - chatLayout: ChatLayout reference.
+    ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
     /// - Returns: `ItemSize`.
-    func sizeForItem(_ chatLayout: ChatLayout,
+    func sizeForItem(_ chatLayout: CollectionViewChatLayout,
                      of kind: ItemKind,
                      at indexPath: IndexPath) -> ItemSize
 
-    /// `ChatLayout` will call this method to ask what type of alignment the item should have.
+    /// `CollectionViewChatLayout` will call this method to ask what type of alignment the item should have.
     /// - Parameters:
-    ///   - chatLayout: ChatLayout reference.
+    ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
     /// - Returns: `ChatItemAlignment`.
-    func alignmentForItem(_ chatLayout: ChatLayout,
+    func alignmentForItem(_ chatLayout: CollectionViewChatLayout,
                           of kind: ItemKind,
                           at indexPath: IndexPath) -> ChatItemAlignment
 
@@ -74,12 +74,12 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   The `originalAttributes` instance is a reference type, and therefore can be modified directly.
     ///
     /// - Parameters:
-    ///   - chatLayout: ChatLayout reference.
+    ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
-    ///   - originalAttributes: `ChatLayoutAttributes` that the `ChatLayout` is going to use.
+    ///   - originalAttributes: `ChatLayoutAttributes` that the `CollectionViewChatLayout` is going to use.
     ///   - state: `InitialAttributesRequestType` instance. Represents when is this method being called.
-    func initialLayoutAttributesForInsertedItem(_ chatLayout: ChatLayout,
+    func initialLayoutAttributesForInsertedItem(_ chatLayout: CollectionViewChatLayout,
                                                 of kind: ItemKind,
                                                 at indexPath: IndexPath,
                                                 modifying originalAttributes: ChatLayoutAttributes,
@@ -91,11 +91,11 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   The `originalAttributes` instance is a reference type, and therefore can be modified directly.
     ///
     /// - Parameters:
-    ///   - chatLayout: ChatLayout reference.
+    ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
-    ///   - originalAttributes: `ChatLayoutAttributes` that the `ChatLayout` is going to use.
-    func finalLayoutAttributesForDeletedItem(_ chatLayout: ChatLayout,
+    ///   - originalAttributes: `ChatLayoutAttributes` that the `CollectionViewChatLayout` is going to use.
+    func finalLayoutAttributesForDeletedItem(_ chatLayout: CollectionViewChatLayout,
                                              of kind: ItemKind,
                                              at indexPath: IndexPath,
                                              modifying originalAttributes: ChatLayoutAttributes)
@@ -106,33 +106,33 @@ public protocol ChatLayoutDelegate: AnyObject {
 public extension ChatLayoutDelegate {
 
     /// Default implementation returns: `false`.
-    func shouldPresentHeader(_ chatLayout: ChatLayout,
+    func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool {
         return false
     }
 
     /// Default implementation returns: `false`.
-    func shouldPresentFooter(_ chatLayout: ChatLayout,
+    func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool {
         return false
     }
 
     /// Default implementation returns: `ItemSize.auto`.
-    func sizeForItem(_ chatLayout: ChatLayout,
+    func sizeForItem(_ chatLayout: CollectionViewChatLayout,
                      of kind: ItemKind,
                      at indexPath: IndexPath) -> ItemSize {
         return .auto
     }
 
     /// Default implementation returns: `ChatItemAlignment.fullWidth`.
-    func alignmentForItem(_ chatLayout: ChatLayout,
+    func alignmentForItem(_ chatLayout: CollectionViewChatLayout,
                           of kind: ItemKind,
                           at indexPath: IndexPath) -> ChatItemAlignment {
         return .fullWidth
     }
 
     /// Default implementation sets a `ChatLayoutAttributes.alpha` to zero.
-    func initialLayoutAttributesForInsertedItem(_ chatLayout: ChatLayout,
+    func initialLayoutAttributesForInsertedItem(_ chatLayout: CollectionViewChatLayout,
                                                 of kind: ItemKind,
                                                 at indexPath: IndexPath,
                                                 modifying originalAttributes: ChatLayoutAttributes,
@@ -141,7 +141,7 @@ public extension ChatLayoutDelegate {
     }
 
     /// Default implementation sets a `ChatLayoutAttributes.alpha` to zero.
-    func finalLayoutAttributesForDeletedItem(_ chatLayout: ChatLayout,
+    func finalLayoutAttributesForDeletedItem(_ chatLayout: CollectionViewChatLayout,
                                              of kind: ItemKind,
                                              at indexPath: IndexPath,
                                              modifying originalAttributes: ChatLayoutAttributes) {

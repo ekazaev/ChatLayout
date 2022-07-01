@@ -1,6 +1,6 @@
 //
 // ChatLayout
-// ChatLayout.swift
+// CollectionViewChatLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
 // Created by Eugene Kazaev in 2020-2022.
@@ -14,28 +14,28 @@ import UIKit
 /// to the leading or trailing edge of the `UICollectionView`. Helps to maintain chat like behavior by keeping
 /// content offset from the bottom constant. Can deal with autosizing cells and supplementary views.
 /// ### Custom Properties:
-/// `ChatLayout.delegate`
+/// `CollectionViewChatLayout.delegate`
 ///
-/// `ChatLayout.settings`
+/// `CollectionViewChatLayout.settings`
 ///
-/// `ChatLayout.keepContentOffsetAtBottomOnBatchUpdates`
+/// `CollectionViewChatLayout.keepContentOffsetAtBottomOnBatchUpdates`
 ///
-/// `ChatLayout.visibleBounds`
+/// `CollectionViewChatLayout.visibleBounds`
 ///
-/// `ChatLayout.layoutFrame`
+/// `CollectionViewChatLayout.layoutFrame`
 ///
 /// ### Custom Methods:
-/// `ChatLayout.getContentOffsetSnapshot(...)`
+/// `CollectionViewChatLayout.getContentOffsetSnapshot(...)`
 ///
-/// `ChatLayout.restoreContentOffset(...)`
-public final class ChatLayout: UICollectionViewLayout {
+/// `CollectionViewChatLayout.restoreContentOffset(...)`
+public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     // MARK: Custom Properties
 
-    /// `ChatLayout` delegate.
+    /// `CollectionViewChatLayout` delegate.
     public weak var delegate: ChatLayoutDelegate?
 
-    /// Additional settings for `ChatLayout`.
+    /// Additional settings for `CollectionViewChatLayout`.
     public var settings = ChatLayoutSettings() {
         didSet {
             guard collectionView != nil,
@@ -47,11 +47,11 @@ public final class ChatLayout: UICollectionViewLayout {
     }
 
     /// Default `UIScrollView` behaviour is to keep content offset constant from the top edge. If this flag is set to `true`
-    /// `ChatLayout` should try to compensate batch update changes to keep the current content at the bottom of the visible
+    /// `CollectionViewChatLayout` should try to compensate batch update changes to keep the current content at the bottom of the visible
     /// part of `UICollectionView`.
     ///
     /// **NB:**
-    /// Keep in mind that if during the batch content inset changes also (e.g. keyboard frame changes), `ChatLayout` will usually get that information after
+    /// Keep in mind that if during the batch content inset changes also (e.g. keyboard frame changes), `CollectionViewChatLayout` will usually get that information after
     /// the animation starts and wont be able to compensate that change too. It should be done manually.
     public var keepContentOffsetAtBottomOnBatchUpdates: Bool = false
 
@@ -80,7 +80,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
     // MARK: Inherited Properties
 
-    /// The direction of the language you used when designing `ChatLayout` layout.
+    /// The direction of the language you used when designing `CollectionViewChatLayout` layout.
     public override var developmentLayoutDirection: UIUserInterfaceLayoutDirection {
         return .leftToRight
     }
@@ -382,8 +382,8 @@ public final class ChatLayout: UICollectionViewLayout {
         // immediately after an update is sent to the collection view via the insert/delete/reload/move
         // functions. Unfortunately, this is impossible - when batch updates occur, `invalidateLayout:`
         // is invoked immediately with a context that has `invalidateDataSourceCounts` set to `true`.
-        // At this time, `ChatLayout` has no way of knowing the details of this data source count
-        // change (where the insert/delete/move took place). `ChatLayout` only gets this additional
+        // At this time, `CollectionViewChatLayout` has no way of knowing the details of this data source count
+        // change (where the insert/delete/move took place). `CollectionViewChatLayout` only gets this additional
         // information once `prepareForCollectionViewUpdates:` is invoked. At that time, we're able to
         // update our layout's source of truth, the `StateController`, which allows us to resolve the
         // post-batch-update layout and return post-batch-update layout attributes from this function.
@@ -857,7 +857,7 @@ public final class ChatLayout: UICollectionViewLayout {
 
 }
 
-extension ChatLayout {
+extension CollectionViewChatLayout {
 
     func configuration(for element: ItemKind, at itemPath: ItemPath) -> ItemModel.Configuration {
         let indexPath = itemPath.indexPath
@@ -925,7 +925,7 @@ extension ChatLayout {
 
 }
 
-extension ChatLayout: ChatLayoutRepresentation {
+extension CollectionViewChatLayout: ChatLayoutRepresentation {
 
     func numberOfItems(in section: Int) -> Int {
         guard let collectionView = collectionView else {
@@ -944,7 +944,7 @@ extension ChatLayout: ChatLayoutRepresentation {
 
 }
 
-extension ChatLayout {
+extension CollectionViewChatLayout {
 
     private var maxPossibleContentOffset: CGPoint {
         guard let collectionView = collectionView else {

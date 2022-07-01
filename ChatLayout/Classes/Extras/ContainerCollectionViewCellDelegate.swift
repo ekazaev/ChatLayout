@@ -22,20 +22,20 @@ public protocol ContainerCollectionViewCellDelegate: AnyObject {
     ///
     /// **NB**: You must override it to avoid unnecessary autolayout calculations if you are providing exact cell size
     /// in `ChatLayoutDelegate.sizeForItem(...)` and return `layoutAttributes` without modifications.
-    /// - Parameter layoutAttributes: `ChatLayoutAttributes` provided by `ChatLayout`
+    /// - Parameter layoutAttributes: `ChatLayoutAttributes` provided by `CollectionViewChatLayout`
     /// - Returns: Modified `ChatLayoutAttributes` on nil if `UICollectionReusableView.preferredLayoutAttributesFitting(...)`
     ///            should be called instead.
     func preferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) -> ChatLayoutAttributes?
 
     /// Allows to additionally modify `ChatLayoutAttributes` after the `UICollectionReusableView.preferredLayoutAttributesFitting(...)`
     /// call.
-    /// - Parameter layoutAttributes: `ChatLayoutAttributes` provided by `ChatLayout`.
+    /// - Parameter layoutAttributes: `ChatLayoutAttributes` provided by `CollectionViewChatLayout`.
     /// - Returns: Modified `ChatLayoutAttributes`
     func modifyPreferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes)
 
     /// Apply the specified layout attributes to the view.
     /// Keep in mind that this method can be called multiple times.
-    /// - Parameter layoutAttributes: `ChatLayoutAttributes` provided by `ChatLayout`.
+    /// - Parameter layoutAttributes: `ChatLayoutAttributes` provided by `CollectionViewChatLayout`.
     func apply(_ layoutAttributes: ChatLayoutAttributes)
 
 }

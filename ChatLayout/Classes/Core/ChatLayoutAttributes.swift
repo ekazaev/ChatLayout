@@ -16,7 +16,7 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var alignment: ChatItemAlignment = .fullWidth
 
-    /// `ChatLayout`s additional insets setup using `ChatLayoutSettings`. Added for convenience.
+    /// `CollectionViewChatLayout`s additional insets setup using `ChatLayoutSettings`. Added for convenience.
     public internal(set) var additionalInsets: UIEdgeInsets = .zero
 
     /// `UICollectionView`s frame size. Added for convenience.
@@ -25,10 +25,10 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// `UICollectionView`s adjusted content insets. Added for convenience.
     public internal(set) var adjustedContentInsets: UIEdgeInsets = .zero
 
-    /// `ChatLayout`s visible bounds size excluding `adjustedContentInsets`. Added for convenience.
+    /// `CollectionViewChatLayout`s visible bounds size excluding `adjustedContentInsets`. Added for convenience.
     public internal(set) var visibleBoundsSize: CGSize = .zero
 
-    /// `ChatLayout`s visible bounds size excluding `adjustedContentInsets` and `additionalInsets`. Added for convenience.
+    /// `CollectionViewChatLayout`s visible bounds size excluding `adjustedContentInsets` and `additionalInsets`. Added for convenience.
     public internal(set) var layoutFrame: CGRect = .zero
 
     #if DEBUG

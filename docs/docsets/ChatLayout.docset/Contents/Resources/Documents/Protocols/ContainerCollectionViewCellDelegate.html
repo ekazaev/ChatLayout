@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          ChatLayout 1.1.17 Docs
+          ChatLayout 1.2.0 Docs
         </a>
          (100% documented)
       </p>
@@ -47,9 +47,6 @@
           <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Core.html">Core</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/ChatLayout.html">ChatLayout</a>
-              </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/ChatLayoutDelegate.html">ChatLayoutDelegate</a>
               </li>
@@ -131,6 +128,14 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../readme.html">README</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Classes.html">Other Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a>
               </li>
             </ul>
           </li>
@@ -221,7 +226,7 @@ it is required to participate in containers lifecycle.</p>
 <code>UICollectionReusableView.preferredLayoutAttributesFitting(...)</code> and make the layout calculations.</p>
 
 <p><strong>NB</strong>: You must override it to avoid unnecessary autolayout calculations if you are providing exact cell size
-in <code><a href="../Protocols/ChatLayoutDelegate.html#/s:10ChatLayout0aB8DelegateP11sizeForItem_2of2atAA0F4SizeOA2AC_AA0F4KindO10Foundation9IndexPathVtF">ChatLayoutDelegate.sizeForItem(...)</a></code> and return <code>layoutAttributes</code> without modifications.</p>
+in <code><a href="../Protocols/ChatLayoutDelegate.html#/s:10ChatLayout0aB8DelegateP11sizeForItem_2of2atAA0F4SizeOAA014CollectionViewaB0C_AA0F4KindO10Foundation9IndexPathVtF">ChatLayoutDelegate.sizeForItem(...)</a></code> and return <code>layoutAttributes</code> without modifications.</p>
 
                       </div>
                       <h4>Default Implementation</h4>
@@ -249,7 +254,7 @@ in <code><a href="../Protocols/ChatLayoutDelegate.html#/s:10ChatLayout0aB8Delega
                               </td>
                               <td>
                                 <div>
-                                  <p><code><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></code> provided by <code><a href="../Classes/ChatLayout.html">ChatLayout</a></code></p>
+                                  <p><code><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></code> provided by <code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code></p>
                                 </div>
                               </td>
                             </tr>
@@ -309,7 +314,7 @@ call.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p><code><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></code> provided by <code><a href="../Classes/ChatLayout.html">ChatLayout</a></code>.</p>
+                                  <p><code><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></code> provided by <code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code>.</p>
                                 </div>
                               </td>
                             </tr>
@@ -368,7 +373,7 @@ Keep in mind that this method can be called multiple times.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p><code><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></code> provided by <code><a href="../Classes/ChatLayout.html">ChatLayout</a></code>.</p>
+                                  <p><code><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></code> provided by <code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code>.</p>
                                 </div>
                               </td>
                             </tr>

@@ -20,7 +20,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          ChatLayout 1.1.17 Docs
+          ChatLayout 1.2.0 Docs
         </a>
          (100% documented)
       </p>
@@ -46,9 +46,6 @@
           <li class="nav-group-name">
             <a class="nav-group-name-link" href="Core.html">Core</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/ChatLayout.html">ChatLayout</a>
-              </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/ChatLayoutDelegate.html">ChatLayoutDelegate</a>
               </li>
@@ -134,6 +131,14 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other%20Classes.html">Other Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a class="nav-group-name-link" href="Other%20Enums.html">Other Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -194,7 +199,7 @@
 </ul>
 <h2 id='about' class='heading'>About</h2>
 
-<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is an alternative solution to <a href="https://github.com/MessageKit/MessageKit">MessageKit</a>. It uses custom 
+<p><code>ChatLayout</code> is an alternative solution to <a href="https://github.com/MessageKit/MessageKit">MessageKit</a>. It uses custom 
 <code>UICollectionViewLayout</code> to provide you full control over the presentation as well as all the tools available in 
 <code>UICollectionView</code>.</p>
 <h2 id='features' class='heading'>Features</h2>
@@ -217,30 +222,30 @@
 <img src="https://habrastorage.org/webt/nv/vr/js/nvvrjsqk0fzutq0y-uubjewyqjm.gif" alt=""></p>
 <h3 id='what-chatlayout-doesn-39-t-provide-and-why-it-is-good' class='heading'>What ChatLayout doesn&rsquo;t provide (And why it is good)</h3>
 
-<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is the custom <code>UICollectionViewLayout</code>, so:</p>
+<p><code>ChatLayout</code> is the custom <code>UICollectionViewLayout</code>, so:</p>
 
 <ul>
 <li><p>You don&rsquo;t have to extend or override any custom <code>UIViewController</code> or <code>UICollectionView</code>. You need to instantiate them 
 yourself and use them the way you like. </p></li>
-<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> does not rely on modified <code>UICollectionViewFlowLayout</code> nor does it rotate your <code>UICollectionView</code> upside-down. 
+<li><p><code>ChatLayout</code> does not rely on modified <code>UICollectionViewFlowLayout</code> nor does it rotate your <code>UICollectionView</code> upside-down. 
 This means you can use your views as if they would be regular cells within <code>UICollectionView</code>. You can benefit from using the 
 default <code>UIKit</code> implementations of <code>adjustedContextInsets</code> (and others) because your view controller is a normal view 
 controller without any hacks or tricks.</p></li>
-<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t require you to calculate all the cell sizes before it renders them on the screen. You can fully use
-auto-layout constraints and rely on the fact that the correct size will be calculated in the runtime. However, <code><a href="Classes/ChatLayout.html">ChatLayout</a></code> 
+<li><p><code>ChatLayout</code> doesn&rsquo;t require you to calculate all the cell sizes before it renders them on the screen. You can fully use
+auto-layout constraints and rely on the fact that the correct size will be calculated in the runtime. However, <code>ChatLayout</code> 
 as any other <code>UICollectionViewLayout</code> will benefit from you providing the estimated sizes of your cells as it will allow you 
 to get better performance. </p></li>
-<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t enforce you to use any specific data model. You can store your messages and update <code>UICollectionView</code>
+<li><p><code>ChatLayout</code> doesn&rsquo;t enforce you to use any specific data model. You can store your messages and update <code>UICollectionView</code>
 the way you like. The only thing you need is to respect the natural boundaries that <code>UICollectionView</code> have and correctly
 implement <code>UICollectionViewDataSource</code>. The Example app uses <a href="https://github.com/ra1028/DifferenceKit">DifferenceKit</a> to 
 process changes in the data model.</p></li>
-<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t enforce you to use any specific <code>UIView</code>s to create your collection cells. You can create them the way 
+<li><p><code>ChatLayout</code> doesn&rsquo;t enforce you to use any specific <code>UIView</code>s to create your collection cells. You can create them the way 
 you like. It can be any <code>UICollectionViewCell</code> or <code>UICollectionReusableView</code>. There are some generic <code>UIView</code>s bundled with
 the library that may help you to build them faster. However, you do not have to use them. </p></li>
-<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t handle the keyboard appearance behavior. You have to implement
+<li><p><code>ChatLayout</code> doesn&rsquo;t handle the keyboard appearance behavior. You have to implement
 that yourself from scratch or use the library you are already using in your project. It gives you full control over the 
 keyboard presentation. The only thing you have to do is to update the <code>contentInsets</code> of your <code>UICollectionView</code>.</p></li>
-<li><p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t provide you any input control. You can use any one you like and customise it the way you like. 
+<li><p><code>ChatLayout</code> doesn&rsquo;t provide you any input control. You can use any one you like and customise it the way you like. 
 The Example app for instance uses <a href="https://github.com/nathantannar4/InputBarAccessoryView">InputBarAccessoryView</a>.</p></li>
 </ul>
 <h2 id='example' class='heading'>Example</h2>
@@ -248,14 +253,14 @@ The Example app for instance uses <a href="https://github.com/nathantannar4/Inpu
 <p>To run the example project, clone the repo, and run <code>pod install</code> from the Example directory first.</p>
 <h2 id='installation' class='heading'>Installation</h2>
 
-<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is available through <a href="https://cocoapods.org">CocoaPods</a>, <a href="https://github.com/Carthage/Carthage">Carthage</a> 
+<p><code>ChatLayout</code> is available through <a href="https://cocoapods.org">CocoaPods</a>, <a href="https://github.com/Carthage/Carthage">Carthage</a> 
 and <a href="https://github.com/apple/swift-package-manager">SwiftPM</a>. See the <code>Example</code> app for the usage details.</p>
 
 <p>If you are using cocoapods you can install the whole package using <code>pod &#39;ChatLayout&#39;</code>. If you do not need the additional
 components provided, you can install only the layout itself using <code>pod &#39;ChatLayout/Core&#39;</code></p>
 <h2 id='contributing' class='heading'>Contributing</h2>
 
-<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is in active development, and we welcome your contributions.</p>
+<p><code>ChatLayout</code> is in active development, and we welcome your contributions.</p>
 
 <p>If you’d like to contribute to this repo, please
 read <a href="https://github.com/ekazaev/route-composer/blob/master/CONTRIBUTING.md">the contribution guidelines</a>.</p>
@@ -266,7 +271,7 @@ read <a href="https://github.com/ekazaev/route-composer/blob/master/CONTRIBUTING
 </ul>
 <h3 id='about-code-uicollectionviewdiffabledatasource-code' class='heading'>About <code>UICollectionViewDiffableDataSource</code></h3>
 
-<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> can process any update commands that you send to your <code>UICollectionView</code>, so you can use 
+<p><code>ChatLayout</code> can process any update commands that you send to your <code>UICollectionView</code>, so you can use 
 <code>UICollectionViewDiffableDataSource</code> as well. But you have to keep in mind that <code>UICollectionViewDiffableDataSource</code> 
 does not support the reloading of cells out of the box if you are relying on the <code>Hashable</code> protocol implementation.
 It will delete the changed cell and insert the new version of said cell. That may lead to strange animations on 
@@ -280,7 +285,7 @@ messages or groups of them. <code>UICollectionView</code> processes them in a di
 only after switches to <code>UICollectionReusableView</code>s. You will most likely face some unexpected behaviour during the animation.</p>
 <h3 id='about-texture' class='heading'>About Texture</h3>
 
-<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> can be used together with <a href="https://github.com/TextureGroup/Texture">Texture</a> to improve the auto-layout performance. 
+<p><code>ChatLayout</code> can be used together with <a href="https://github.com/TextureGroup/Texture">Texture</a> to improve the auto-layout performance. 
 But keep in mind that it&rsquo;s default wrapper is hardcoded to work exclusively with <code>UICollectionViewFlowLayout</code>. 
 <a href="https://github.com/TextureGroup/Texture/issues/1959">See issue</a>.
 You will have to implement <code><a href="Protocols/ChatLayoutDelegate.html">ChatLayoutDelegate</a></code> yourself and propagate the node size manually.</p>
@@ -289,13 +294,13 @@ You will have to implement <code><a href="Protocols/ChatLayoutDelegate.html">Cha
 <p>If you see a strange or unexpected animation during the updates, check your data model and <strong>the commands you send to the
 <code>UICollectionView</code>&lsquo;s <code>performBatchUpdates</code></strong>. Especialy if you are using some diffing algorithms like <a href="https://github.com/ra1028/DifferenceKit">DifferenceKit</a>.
 It is very possible that you are sending delete/insert commands when you expect to see reload. The easiest way to check it is by adding
-<code>print(&quot;\(updateItems)&quot;)</code> into <code><a href="Classes/ChatLayout.html#/c:@M@ChatLayout@objc(cs)ChatLayout(im)prepareForCollectionViewUpdates:">ChatLayout.prepare(forCollectionViewUpdates:)</a></code> method. <code><a href="Classes/ChatLayout.html">ChatLayout</a></code> doesn&rsquo;t know what you expected to see. 
+<code>print(&quot;\(updateItems)&quot;)</code> into <code>ChatLayout.prepare(forCollectionViewUpdates:)</code> method. <code>ChatLayout</code> doesn&rsquo;t know what you expected to see. 
 It just processes your changes according to the commands it has received.</p>
 <h2 id='license' class='heading'>License</h2>
 
-<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is distributed under <a href="https://github.com/ekazaev/ChatLayout/blob/master/LICENSE">the MIT license</a>.</p>
+<p><code>ChatLayout</code> is distributed under <a href="https://github.com/ekazaev/ChatLayout/blob/master/LICENSE">the MIT license</a>.</p>
 
-<p><code><a href="Classes/ChatLayout.html">ChatLayout</a></code> is provided for your use, free-of-charge, on an as-is basis. We make no guarantees, promises or
+<p><code>ChatLayout</code> is provided for your use, free-of-charge, on an as-is basis. We make no guarantees, promises or
 apologies. <em>Caveat developer.</em></p>
 <h2 id='articles' class='heading'>Articles</h2>
 

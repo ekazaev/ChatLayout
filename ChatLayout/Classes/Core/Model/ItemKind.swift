@@ -10,7 +10,7 @@
 import Foundation
 import UIKit
 
-/// Type of the item supported by `ChatLayout`
+/// Type of the item supported by `CollectionViewChatLayout`
 public enum ItemKind: CaseIterable, Hashable {
 
     /// Header item
