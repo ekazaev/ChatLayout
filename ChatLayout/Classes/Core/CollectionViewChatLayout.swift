@@ -490,9 +490,14 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         let layoutAttributesForPendingAnimation = attributesForPendingAnimations[preferredMessageAttributes.kind]?[preferredAttributesItemPath]
 
         let newItemSize = itemSize(with: preferredMessageAttributes)
-
+        let newItemAlignment: ChatItemAlignment
+        if controller.reloadedIndexes.contains(preferredMessageAttributes.indexPath) {
+            newItemAlignment = alignment(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
+        } else {
+            newItemAlignment = preferredMessageAttributes.alignment
+        }
         controller.update(preferredSize: newItemSize,
-                          alignment: preferredMessageAttributes.alignment,
+                          alignment: newItemAlignment,
                           for: preferredAttributesItemPath,
                           kind: preferredMessageAttributes.kind,
                           at: state)
@@ -510,20 +515,19 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         if let attributes = controller.itemAttributes(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state)?.typedCopy() {
-            controller.totalProposedCompensatingOffset += heightDifference
             layoutAttributesForPendingAnimation?.frame = attributes.frame
-            if keepContentOffsetAtBottomOnBatchUpdates {
+            if state == .afterUpdate {
+                controller.totalProposedCompensatingOffset += heightDifference
                 controller.offsetByTotalCompensation(attributes: layoutAttributesForPendingAnimation, for: state, backward: true)
-            }
-            if state == .afterUpdate,
-               controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) ||
-               controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
-                layoutAttributesForPendingAnimation.map { attributes in
-                    guard let delegate = delegate else {
-                        attributes.alpha = 0
-                        return
+                if controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) ||
+                    controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
+                    layoutAttributesForPendingAnimation.map { attributes in
+                        guard let delegate = delegate else {
+                            attributes.alpha = 0
+                            return
+                        }
+                        delegate.initialLayoutAttributesForInsertedItem(self, of: .cell, at: attributes.indexPath, modifying: attributes, on: .invalidation)
                     }
-                    delegate.initialLayoutAttributesForInsertedItem(self, of: .cell, at: attributes.indexPath, modifying: attributes, on: .invalidation)
                 }
             }
         } else {
