@@ -363,7 +363,7 @@ final class StateController {
             assertionFailure("Item at index path (\(itemPath.section) - \(itemPath.item)) does not exist.")
             return
         }
-        var layout = self.layout(at: state)
+        var layout = layout(at: state)
         let previousFrame = item.frame
         cachedAttributesState = nil
         item.alignment = alignment
@@ -557,7 +557,7 @@ final class StateController {
     }
 
     func contentSize(for state: ModelState) -> CGSize {
-        let contentHeight = self.contentHeight(at: state)
+        let contentHeight = contentHeight(at: state)
         guard contentHeight != 0 else {
             return .zero
         }
@@ -600,7 +600,7 @@ final class StateController {
     }
 
     private func allAttributes(at state: ModelState, visibleRect: CGRect? = nil) -> [ChatLayoutAttributes] {
-        let layout = self.layout(at: state)
+        let layout = layout(at: state)
 
         if let visibleRect = visibleRect {
             enum TraverseState {
