@@ -102,11 +102,12 @@ final class StateController {
         let predicate: (ChatLayoutAttributes) -> ComparisonResult = { attributes in
             if attributes.frame.intersects(rect) {
                 return .orderedSame
-            }
-            if attributes.frame.minY > rect.maxY {
+            } else if attributes.frame.minY > rect.maxY {
                 return .orderedDescending
+            } else if attributes.frame.maxY < rect.minY {
+                return .orderedAscending
             }
-            return .orderedAscending
+            return .orderedSame
         }
 
         if !ignoreCache,
@@ -657,11 +658,12 @@ final class StateController {
                         }
                         if itemFrame.intersects(visibleRect) {
                             return .orderedSame
-                        }
-                        if itemFrame.minY > visibleRect.maxY {
+                        } else if itemFrame.minY > visibleRect.maxY {
                             return .orderedDescending
+                        } else if itemFrame.maxX < visibleRect.minY {
+                            return .orderedAscending
                         }
-                        return .orderedAscending
+                        return .orderedSame
                     }
 
                     // Find if any of the items of the section is visible
