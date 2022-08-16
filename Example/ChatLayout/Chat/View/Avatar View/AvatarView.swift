@@ -47,10 +47,12 @@ final class AvatarView: UIView, StaticViewFactory {
         addSubview(circleImageView)
 
         circleImageView.translatesAutoresizingMaskIntoConstraints = false
-        circleImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        circleImageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-        circleImageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        circleImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            circleImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            circleImageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            circleImageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            circleImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+        ])
 
         let constraint = circleImageView.widthAnchor.constraint(equalToConstant: 30)
         constraint.priority = UILayoutPriority(rawValue: 999)

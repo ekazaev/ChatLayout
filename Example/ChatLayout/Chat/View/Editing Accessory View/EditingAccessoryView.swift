@@ -34,10 +34,12 @@ final class EditingAccessoryView: UIView, StaticViewFactory {
         addSubview(button)
 
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        button.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-        button.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            button.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            button.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+        ])
 
         button.setTitle("Delete", for: .normal)
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)

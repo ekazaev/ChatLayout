@@ -73,10 +73,12 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
         layoutMargins = .zero
         clipsToBounds = false
         addSubview(containerView)
-        containerView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        containerView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-        containerView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        containerView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+        ])
 
         accessoryView.translatesAutoresizingMaskIntoConstraints = false
 

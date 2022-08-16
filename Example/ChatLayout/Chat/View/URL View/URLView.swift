@@ -81,10 +81,12 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
             }
             addSubview(newLinkView)
             newLinkView.translatesAutoresizingMaskIntoConstraints = false
-            newLinkView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-            newLinkView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-            newLinkView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-            newLinkView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+            NSLayoutConstraint.activate([
+                newLinkView.topAnchor.constraint(equalTo: self.topAnchor),
+                newLinkView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                newLinkView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                newLinkView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            ])
 
             linkWidthConstraint = newLinkView.widthAnchor.constraint(equalToConstant: 310)
             linkWidthConstraint?.priority = UILayoutPriority(999)

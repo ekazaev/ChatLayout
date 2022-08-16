@@ -41,10 +41,12 @@ final class DateAccessoryView: UIView {
         layoutMargins = .zero
 
         addSubview(accessoryView)
-        accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-        accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+        ])
 
         accessoryView.translatesAutoresizingMaskIntoConstraints = false
 

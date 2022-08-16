@@ -109,10 +109,12 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         textView.isExclusiveTouch = true
         textView.font = UIFont.preferredFont(forTextStyle: .body)
         addSubview(textView)
-        textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
-        textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+            textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+        ])
         textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
         textViewWidthConstraint?.isActive = true
     }

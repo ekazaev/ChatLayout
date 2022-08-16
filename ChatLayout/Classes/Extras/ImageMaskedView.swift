@@ -56,8 +56,8 @@ public final class ImageMaskedView<CustomView: UIView>: UIView {
 
     /// Returns an object initialized from data in a given unarchiver.
     /// - Parameter coder: An unarchiver object.
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
         setupSubviews()
     }
 
@@ -68,10 +68,12 @@ public final class ImageMaskedView<CustomView: UIView>: UIView {
 
         addSubview(customView)
         customView.translatesAutoresizingMaskIntoConstraints = false
-        customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
-        customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+            customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+        ])
     }
 
     private func setupMask() {

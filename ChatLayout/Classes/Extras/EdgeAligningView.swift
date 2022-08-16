@@ -135,9 +135,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
                 addedConstraints.append(view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor))
             }
         }
-        addedConstraints.forEach { constraint in
-            constraint.isActive = true
-        }
+        NSLayoutConstraint.activate(addedConstraints)
         self.addedConstraints.append(contentsOf: addedConstraints)
     }
 
