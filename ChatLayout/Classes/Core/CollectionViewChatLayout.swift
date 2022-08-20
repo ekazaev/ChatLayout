@@ -107,7 +107,13 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
             contentSize = controller.contentSize(for: .beforeUpdate)
         } else {
             var size = controller.contentSize(for: .beforeUpdate)
-            size.height += controller.totalProposedCompensatingOffset
+            if #available(iOS 16.0, *) {
+                if controller.totalProposedCompensatingOffset > 0 {
+                    size.height += controller.totalProposedCompensatingOffset
+                }
+            } else {
+                size.height += controller.totalProposedCompensatingOffset
+            }
             contentSize = size
         }
         return contentSize
