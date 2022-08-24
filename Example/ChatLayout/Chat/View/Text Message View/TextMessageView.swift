@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import ChatLayout
 import Foundation
@@ -132,19 +135,19 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
 private final class MessageTextView: UITextView {
 
     override var isFocused: Bool {
-        return false
+        false
     }
 
     override var canBecomeFirstResponder: Bool {
-        return false
+        false
     }
 
     override var canBecomeFocused: Bool {
-        return false
+        false
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return false
+        false
     }
 
 }

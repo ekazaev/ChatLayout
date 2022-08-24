@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 @testable import ChatLayout
 import Foundation
@@ -32,10 +35,10 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
 
     /// Represent the rectangle where all the items are aligned.
     public var layoutFrame: CGRect {
-        return CGRect(x: adjustedContentInset.left + settings.additionalInsets.left,
-                      y: adjustedContentInset.top + settings.additionalInsets.top,
-                      width: visibleBounds.width - settings.additionalInsets.left - settings.additionalInsets.right,
-                      height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom)
+        CGRect(x: adjustedContentInset.left + settings.additionalInsets.left,
+               y: adjustedContentInset.top + settings.additionalInsets.top,
+               width: visibleBounds.width - settings.additionalInsets.left - settings.additionalInsets.right,
+               height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom)
     }
 
     let adjustedContentInset: UIEdgeInsets = .zero
@@ -43,19 +46,19 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     let keepContentOffsetAtBottomOnBatchUpdates: Bool = true
 
     func numberOfItems(in section: Int) -> Int {
-        return numberOfItemsInSection[section] ?? 0
+        numberOfItemsInSection[section] ?? 0
     }
 
     func configuration(for element: ItemKind, at itemPath: ItemPath) -> ItemModel.Configuration {
-        return .init(alignment: .fullWidth, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!)
+        .init(alignment: .fullWidth, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!)
     }
 
     func shouldPresentHeader(at sectionIndex: Int) -> Bool {
-        return shouldPresentHeaderAtSection[sectionIndex] ?? true
+        shouldPresentHeaderAtSection[sectionIndex] ?? true
     }
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool {
-        return shouldPresentFooterAtSection[sectionIndex] ?? true
+        shouldPresentFooterAtSection[sectionIndex] ?? true
     }
 
     func alignmentForItem(of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
@@ -63,7 +66,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     }
 
     func sizeForItem(of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
-        return .estimated(settings.estimatedItemSize!)
+        .estimated(settings.estimatedItemSize!)
     }
 
     func getPreparedSections() -> [SectionModel] {

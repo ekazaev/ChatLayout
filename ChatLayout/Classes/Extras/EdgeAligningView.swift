@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -30,7 +33,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         case bottom
 
         var otherEdges: [Edge] {
-            return Edge.allCases.filter { $0 != self }
+            Edge.allCases.filter { $0 != self }
         }
 
     }
@@ -60,7 +63,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
 
     /// Initializes and returns a newly allocated `EdgeAligningView`
     /// - Parameters:
-    ///   - alignedView: An instance of `CustomView`
+    ///   - customView: An instance of `CustomView`
     ///   - flexibleEdges: Set of edges to be set as loose.
     public init(with customView: CustomView, flexibleEdges: Set<Edge> = [.top]) {
         self.customView = customView
@@ -73,15 +76,15 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative
     ///   to the superview in which you plan to add it.
     public override init(frame: CGRect) {
-        self.customView = CustomView(frame: frame)
+        customView = CustomView(frame: frame)
         super.init(frame: frame)
         setupSubviews()
     }
 
-    @available(*, unavailable, message: "Use init(with:flexibleEdges:) instead")
+    @available(*, unavailable, message: "Use init(with:flexibleEdges:) instead.")
     /// This constructor is unavailable.
     public required init?(coder: NSCoder) {
-        fatalError("Use init(with:flexibleEdges:) instead")
+        fatalError("Use init(with:flexibleEdges:) instead.")
     }
 
     private func setupSubviews() {

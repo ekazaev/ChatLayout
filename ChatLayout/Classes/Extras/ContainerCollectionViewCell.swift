@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -15,7 +18,7 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
 
     /// Default reuse identifier is set with the class name.
     public static var reuseIdentifier: String {
-        return String(describing: self)
+        String(describing: self)
     }
 
     /// Contained view.
@@ -32,10 +35,10 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
         setupSubviews()
     }
 
-    @available(*, unavailable, message: "Use init(reuseIdentifier:) instead")
+    @available(*, unavailable, message: "Use init(reuseIdentifier:) instead.")
     /// This constructor is unavailable.
     public required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implemented.")
     }
 
     /// Performs any clean up necessary to prepare the view for use again.

@@ -6,15 +6,18 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
 
 /// Represents content offset position expressed by the specific item and it offset from the top or bottom edge.
-public struct ChatLayoutPositionSnapshot {
+public struct ChatLayoutPositionSnapshot: Hashable {
 
     /// Represents the edge.
-    public enum Edge {
+    public enum Edge: Hashable {
 
         /// Top edge of the `UICollectionView`
         case top

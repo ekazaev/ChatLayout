@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -24,7 +27,7 @@ public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: As
     }
 
     public func isEntityCached(for key: FastCache.CachingKey) -> Bool {
-        return mainCache.isEntityCached(for: key) || backupCache.isEntityCached(for: key)
+        mainCache.isEntityCached(for: key) || backupCache.isEntityCached(for: key)
     }
 
     public func getEntity(for key: FastCache.CachingKey) throws -> FastCache.Entity {

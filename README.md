@@ -12,8 +12,8 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b97c279a50984376ab2649f5a7d09e69)](https://www.codacy.com/gh/ekazaev/ChatLayout/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ekazaev/ChatLayout&amp;utm_campaign=Badge_Grade)
 [![Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BA51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Swift 5.2](https://img.shields.io/badge/language-Swift5.2-orange.svg?style=flat)](https://developer.apple.com/swift)
-[![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2015-yellow.svg)](https://www.apple.com/ios)
+[![Swift 5.7](https://img.shields.io/badge/language-Swift5.7-orange.svg?style=flat)](https://developer.apple.com/swift)
+[![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2016-yellow.svg)](https://www.apple.com/ios)
 
 <p align="center">
 <img src="https://habrastorage.org/webt/ji/ba/dj/jibadjc0hul-fzfwxm2w0ywdutg.png" />
@@ -33,8 +33,10 @@
     - [About Supplementary Views](#about-supplementary-views)
     - [About Texture](#about-texture)
     - [About animation](#about-animation)
+    - [About sticky headers or footers](#about-sticky-headers-or-footers)
 - [License](#license)
 - [Articles](#articles)
+- [Sponsor this project](#sponsor-this-project)
 - [Author](#author)
 
 ## About
@@ -166,9 +168,14 @@ English:
 Russian:
   - [Мой Covid-19 lockdown проект, или, как я полез в кастомный UICollectionViewLayout и получил ChatLayout](https://habr.com/ru/post/523492/)
 
+## Sponsor this project
+
+If you like this library and especially if you are using it in production please consider sponsoring this 
+project [here](https://github.com/sponsors/ekazaev). I work on `ChatLayout` in my spare time. Sponsorship 
+will help me to work on this project and continue to contribute to the Open Source community.
+
 ## Author
   
 Evgeny Kazaev, eugene.kazaev@gmail.com. Twitter [ekazaev](https://twitter.com/EKazaev)
 
 *I am happy to answer any questions you may have. Just create a [new issue](https://github.com/ekazaev/ChatLayout/issues/new).*
-

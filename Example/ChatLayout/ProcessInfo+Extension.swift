@@ -6,13 +6,16 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 
 extension ProcessInfo {
 
     static var isRunningTests: Bool {
-        return processInfo.environment["XCTestConfigurationFilePath"] != nil
+        processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
 
 }

@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -47,7 +50,7 @@ enum ChangeItem: Equatable {
         case .move:
             guard let indexPathBeforeUpdate = indexPathBeforeUpdate,
                   let indexPathAfterUpdate = indexPathAfterUpdate else {
-                assertionFailure("`indexPathBeforeUpdate` and `indexPathAfterUpdate` cannot be `nil` for a `.move` update action")
+                assertionFailure("`indexPathBeforeUpdate` and `indexPathAfterUpdate` cannot be `nil` for a `.move` update action.")
                 return nil
             }
             if indexPathBeforeUpdate.item == NSNotFound, indexPathAfterUpdate.item == NSNotFound {
@@ -57,7 +60,7 @@ enum ChangeItem: Equatable {
             }
         case .insert:
             guard let indexPath = indexPathAfterUpdate else {
-                assertionFailure("`indexPathAfterUpdate` cannot be `nil` for an `.insert` update action")
+                assertionFailure("`indexPathAfterUpdate` cannot be `nil` for an `.insert` update action.")
                 return nil
             }
             if indexPath.item == NSNotFound {
@@ -67,7 +70,7 @@ enum ChangeItem: Equatable {
             }
         case .delete:
             guard let indexPath = indexPathBeforeUpdate else {
-                assertionFailure("`indexPathBeforeUpdate` cannot be `nil` for a `.delete` update action")
+                assertionFailure("`indexPathBeforeUpdate` cannot be `nil` for a `.delete` update action.")
                 return nil
             }
             if indexPath.item == NSNotFound {
@@ -77,7 +80,7 @@ enum ChangeItem: Equatable {
             }
         case .reload:
             guard let indexPath = indexPathAfterUpdate else {
-                assertionFailure("`indexPathAfterUpdate` cannot be `nil` for a `.reload` update action")
+                assertionFailure("`indexPathAfterUpdate` cannot be `nil` for a `.reload` update action.")
                 return nil
             }
 

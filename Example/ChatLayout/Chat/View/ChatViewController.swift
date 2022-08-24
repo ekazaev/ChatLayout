@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import ChatLayout
 import DifferenceKit
@@ -38,11 +41,11 @@ final class ChatViewController: UIViewController {
     }
 
     override var inputAccessoryView: UIView? {
-        return inputBarView
+        inputBarView
     }
 
     override var canBecomeFirstResponder: Bool {
-        return true
+        true
     }
 
     private var currentInterfaceActions: SetActor<Set<InterfaceActions>, ReactionTypes> = SetActor()
@@ -291,7 +294,7 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     fileprivate var isUserInitiatedScrolling: Bool {
-        return collectionView.isDragging || collectionView.isDecelerating
+        collectionView.isDragging || collectionView.isDecelerating
     }
 
     func scrollToBottom(completion: (() -> Void)? = nil) {
@@ -380,12 +383,12 @@ extension ChatViewController: UICollectionViewDelegate {
 
     @available(iOS 13.0, *)
     public func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        return preview(for: configuration)
+        preview(for: configuration)
     }
 
     @available(iOS 13.0, *)
     public func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        return preview(for: configuration)
+        preview(for: configuration)
     }
 
     @available(iOS 13.0, *)
@@ -407,7 +410,7 @@ extension ChatViewController: UICollectionViewDelegate {
                 // Custom NSCopying identifier leads to the crash. No other requirements for the identifier to avoid the crash are provided.
                 let identifier: NSString = "\(indexPath.section)|\(indexPath.item)" as NSString
                 currentInterfaceActions.options.insert(.showingPreview)
-                return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil, actionProvider: { _ in return menu })
+                return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil, actionProvider: { _ in menu })
             default:
                 return nil
             }
@@ -540,7 +543,7 @@ extension ChatViewController: UIGestureRecognizerDelegate {
     }
 
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return [gestureRecognizer, otherGestureRecognizer].contains(panGesture)
+        [gestureRecognizer, otherGestureRecognizer].contains(panGesture)
     }
 
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

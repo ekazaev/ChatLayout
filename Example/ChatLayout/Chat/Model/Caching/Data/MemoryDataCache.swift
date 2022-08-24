@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 
@@ -20,7 +23,7 @@ public final class MemoryDataCache<CachingKey: Hashable>: AsyncKeyValueCaching {
         }
 
         override var hash: Int {
-            return key.hashValue
+            key.hashValue
         }
 
         override func isEqual(_ object: Any?) -> Bool {
@@ -52,7 +55,7 @@ public final class MemoryDataCache<CachingKey: Hashable>: AsyncKeyValueCaching {
     }
 
     public func isEntityCached(for key: CachingKey) -> Bool {
-        return cache.object(forKey: WrappedKey(key)) != nil
+        cache.object(forKey: WrappedKey(key)) != nil
     }
 
     public func getEntity(for key: CachingKey) throws -> Data {

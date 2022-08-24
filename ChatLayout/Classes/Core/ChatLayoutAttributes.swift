@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -63,7 +66,7 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
 
     /// Returns a Boolean value indicating whether two `ChatLayoutAttributes` are considered equal.
     public override func isEqual(_ object: Any?) -> Bool {
-        return super.isEqual(object)
+        super.isEqual(object)
             && alignment == (object as? ChatLayoutAttributes)?.alignment
     }
 
@@ -77,13 +80,13 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         case (.supplementaryView, .some(UICollectionView.elementKindSectionFooter)):
             return .footer
         default:
-            preconditionFailure("Unsupported element kind")
+            preconditionFailure("Unsupported element kind.")
         }
     }
 
     func typedCopy() -> ChatLayoutAttributes {
         guard let typedCopy = copy() as? ChatLayoutAttributes else {
-            fatalError("Internal inconsistency")
+            fatalError("Internal inconsistency.")
         }
         return typedCopy
     }

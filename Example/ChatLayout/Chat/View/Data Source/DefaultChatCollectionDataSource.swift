@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import ChatLayout
 import Foundation
@@ -235,11 +238,11 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
 extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
 
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sections.count
+        sections.count
     }
 
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sections[section].cells.count
+        sections[section].cells.count
     }
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -305,11 +308,11 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
 extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
 
     public func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
-        return true
+        true
     }
 
     public func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
-        return true
+        true
     }
 
     public func sizeForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {

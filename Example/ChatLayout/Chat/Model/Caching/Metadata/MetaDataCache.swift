@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import LinkPresentation
@@ -21,7 +24,7 @@ final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching whe
     }
 
     func isEntityCached(for url: URL) -> Bool {
-        return cache.isEntityCached(for: url)
+        cache.isEntityCached(for: url)
     }
 
     func getEntity(for url: URL) throws -> LPLinkMetadata {

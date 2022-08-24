@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -60,7 +63,7 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
     /// Default spacing between the views.
     public var spacing: CGFloat {
         get {
-            return stackView.spacing
+            stackView.spacing
         }
         set {
             stackView.spacing = newValue
@@ -86,10 +89,10 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
     /// Custom spacing between the main and trailing views.
     public var customTrailingSpacing: CGFloat {
         get {
-            return stackView.customSpacing(after: customView)
+            stackView.customSpacing(after: customView)
         }
         set {
-            return stackView.setCustomSpacing(newValue, after: customView)
+            stackView.setCustomSpacing(newValue, after: customView)
         }
     }
 

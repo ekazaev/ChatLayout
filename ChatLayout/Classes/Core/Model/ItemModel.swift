@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -35,15 +38,15 @@ struct ItemModel {
     var alignment: ChatItemAlignment
 
     var origin: CGPoint {
-        return CGPoint(x: 0, y: offsetY)
+        CGPoint(x: 0, y: offsetY)
     }
 
     var height: CGFloat {
-        return size.height
+        size.height
     }
 
     var locationHeight: CGFloat {
-        return offsetY + height
+        offsetY + height
     }
 
     var size: CGSize {
@@ -55,15 +58,15 @@ struct ItemModel {
     }
 
     var frame: CGRect {
-        return CGRect(origin: origin, size: size)
+        CGRect(origin: origin, size: size)
     }
 
     init(id: UUID = UUID(), with configuration: Configuration) {
         self.id = id
-        self.alignment = configuration.alignment
-        self.preferredSize = configuration.preferredSize
-        self.calculatedSize = configuration.calculatedSize
-        self.calculatedOnce = configuration.calculatedSize != nil
+        alignment = configuration.alignment
+        preferredSize = configuration.preferredSize
+        calculatedSize = configuration.calculatedSize
+        calculatedOnce = configuration.calculatedSize != nil
     }
 
     // We are just resetting `calculatedSize` if needed as the actual size will be found in invalidationContext(forPreferredLayoutAttributes:, withOriginalAttributes:)

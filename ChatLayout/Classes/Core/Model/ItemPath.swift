@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 
@@ -21,7 +24,7 @@ struct ItemPath: Hashable {
     let item: Int
 
     var indexPath: IndexPath {
-        return IndexPath(item: item, section: section)
+        IndexPath(item: item, section: section)
     }
 
     init(item: Int, section: Int) {
@@ -30,8 +33,8 @@ struct ItemPath: Hashable {
     }
 
     init(for indexPath: IndexPath) {
-        self.section = indexPath.section
-        self.item = indexPath.item
+        section = indexPath.section
+        item = indexPath.item
     }
 
 }

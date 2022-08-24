@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 @testable import ChatLayout
 import Foundation
@@ -20,22 +23,22 @@ class MockUICollectionViewUpdateItem: UICollectionViewUpdateItem {
     // swiftlint:enable identifier_name
 
     init(indexPathBeforeUpdate: IndexPath?, indexPathAfterUpdate: IndexPath?, action: Action) {
-        self._indexPathBeforeUpdate = indexPathBeforeUpdate
-        self._indexPathAfterUpdate = indexPathAfterUpdate
-        self._updateAction = action
+        _indexPathBeforeUpdate = indexPathBeforeUpdate
+        _indexPathAfterUpdate = indexPathAfterUpdate
+        _updateAction = action
         super.init()
     }
 
     override var indexPathBeforeUpdate: IndexPath? {
-        return _indexPathBeforeUpdate
+        _indexPathBeforeUpdate
     }
 
     override var indexPathAfterUpdate: IndexPath? {
-        return _indexPathAfterUpdate
+        _indexPathAfterUpdate
     }
 
     override var updateAction: Action {
-        return _updateAction
+        _updateAction
     }
 
 }

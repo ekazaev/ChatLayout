@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import ChatLayout
 import Foundation
@@ -20,15 +23,15 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
     }
 
     var avatarView: LeadingAccessory.View? {
-        return containerView.leadingView
+        containerView.leadingView
     }
 
     var customView: BezierMaskedView<CustomView> {
-        return containerView.customView
+        containerView.customView
     }
 
     var statusView: TrailingAccessory.View? {
-        return containerView.trailingView
+        containerView.trailingView
     }
 
     weak var accessoryConnectingView: UIView? {

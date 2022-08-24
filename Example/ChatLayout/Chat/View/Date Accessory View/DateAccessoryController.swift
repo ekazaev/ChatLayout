@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 
@@ -17,7 +20,7 @@ final class DateAccessoryController {
 
     init(date: Date) {
         self.date = date
-        self.accessoryText = MessageDateFormatter.shared.string(from: date)
+        accessoryText = MessageDateFormatter.shared.string(from: date)
     }
 
 }

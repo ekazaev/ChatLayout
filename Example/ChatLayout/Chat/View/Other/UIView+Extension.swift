@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -17,7 +20,7 @@ extension UIView {
     // https://github.com/nkukushkin/StackView-Hiding-With-Animation-Bug-Example
     var isHiddenSafe: Bool {
         get {
-            return isHidden
+            isHidden
         }
         set {
             guard isHidden != newValue else {
@@ -54,6 +57,6 @@ extension UIViewController {
 
 extension UIApplication {
     func topMostViewController() -> UIViewController? {
-        return UIApplication.shared.windows.filter(\.isKeyWindow).first?.rootViewController?.topMostViewController()
+        UIApplication.shared.windows.filter(\.isKeyWindow).first?.rootViewController?.topMostViewController()
     }
 }

@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -32,13 +35,13 @@ struct KeyboardInfo: Equatable {
             return nil
         }
 
-        self.animationDuration = keyboardAnimationDuration
+        animationDuration = keyboardAnimationDuration
         var animationCurve = UIView.AnimationCurve.easeInOut
         NSNumber(value: keyboardAnimationCurve).getValue(&animationCurve)
         self.animationCurve = animationCurve
-        self.isLocal = keyboardIsLocal
-        self.frameBegin = keyboardFrameBegin
-        self.frameEnd = keyboardFrameEnd
+        isLocal = keyboardIsLocal
+        frameBegin = keyboardFrameBegin
+        frameEnd = keyboardFrameEnd
     }
 
 }

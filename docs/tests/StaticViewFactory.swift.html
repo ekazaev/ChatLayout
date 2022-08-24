@@ -54,17 +54,17 @@
 </tr>
 <tr class="never">
 <td class="num">9</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">// Become a sponsor:</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">10</td>
-<td class="src"><pre><code class="objc">import Foundation</code></pre></td>
+<td class="src"><pre><code class="objc">// https://github.com/sponsors/ekazaev</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">11</td>
-<td class="src"><pre><code class="objc">import UIKit</code></pre></td>
+<td class="src"><pre><code class="objc">//</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -74,12 +74,12 @@
 </tr>
 <tr class="never">
 <td class="num">13</td>
-<td class="src"><pre><code class="objc">/// A factory that creates optional contained `UIView`s should conform to this protocol.</code></pre></td>
+<td class="src"><pre><code class="objc">import Foundation</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">14</td>
-<td class="src"><pre><code class="objc">public protocol StaticViewFactory {</code></pre></td>
+<td class="src"><pre><code class="objc">import UIKit</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -89,12 +89,12 @@
 </tr>
 <tr class="never">
 <td class="num">16</td>
-<td class="src"><pre><code class="objc">    /// A type of the view to build.</code></pre></td>
+<td class="src"><pre><code class="objc">/// A factory that creates optional contained `UIView`s should conform to this protocol.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">17</td>
-<td class="src"><pre><code class="objc">    associatedtype View: UIView</code></pre></td>
+<td class="src"><pre><code class="objc">public protocol StaticViewFactory {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -104,47 +104,47 @@
 </tr>
 <tr class="never">
 <td class="num">19</td>
-<td class="src"><pre><code class="objc">    /// Factory method that will be called by the corresponding container `UIView`</code></pre></td>
+<td class="src"><pre><code class="objc">    /// A type of the view to build.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">20</td>
-<td class="src"><pre><code class="objc">    /// - Parameter bounds: A bounds rect of the container.</code></pre></td>
+<td class="src"><pre><code class="objc">    associatedtype View: UIView</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">21</td>
-<td class="src"><pre><code class="objc">    /// - Returns: Build `UIView` instance.</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">22</td>
-<td class="src"><pre><code class="objc">    static func buildView(within bounds: CGRect) -&gt; View?</code></pre></td>
+<td class="src"><pre><code class="objc">    /// Factory method that will be called by the corresponding container `UIView`</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">23</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">    /// - Parameter bounds: A bounds rect of the container.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">24</td>
-<td class="src"><pre><code class="objc">}</code></pre></td>
+<td class="src"><pre><code class="objc">    /// - Returns: Build `UIView` instance.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">25</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">    static func buildView(within bounds: CGRect) -&gt; View?</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">26</td>
-<td class="src"><pre><code class="objc">/// Default extension build the `UIView` using its default constructor.</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">27</td>
-<td class="src"><pre><code class="objc">public extension StaticViewFactory where Self: UIView {</code></pre></td>
+<td class="src"><pre><code class="objc">}</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -152,44 +152,44 @@
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">29</td>
+<td class="src"><pre><code class="objc">/// Default extension build the `UIView` using its default constructor.</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">30</td>
+<td class="src"><pre><code class="objc">public extension StaticViewFactory where Self: UIView {</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">31</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="missed">
+<td class="num">32</td>
 <td class="src"><pre><code class="objc">    static func buildView(within bounds: CGRect) -&gt; Self? {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">30</td>
-<td class="src"><pre><code class="objc">        return Self(frame: bounds)</code></pre></td>
+<td class="num">33</td>
+<td class="src"><pre><code class="objc">        Self(frame: bounds)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">31</td>
+<td class="num">34</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="never">
-<td class="num">32</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">33</td>
-<td class="src"><pre><code class="objc">}</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">34</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
 <td class="num">35</td>
-<td class="src"><pre><code class="objc">/// Use this factory to specify that this view should not be build and should be equal to nil within the container.</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">36</td>
-<td class="src"><pre><code class="objc">public struct VoidViewFactory: StaticViewFactory {</code></pre></td>
+<td class="src"><pre><code class="objc">}</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -199,12 +199,12 @@
 </tr>
 <tr class="never">
 <td class="num">38</td>
-<td class="src"><pre><code class="objc">    /// Nil view placeholder type.</code></pre></td>
+<td class="src"><pre><code class="objc">/// Use this factory to specify that this view should not be build and should be equal to nil within the container.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">39</td>
-<td class="src"><pre><code class="objc">    public final class VoidView: UIView {</code></pre></td>
+<td class="src"><pre><code class="objc">public struct VoidViewFactory: StaticViewFactory {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -214,111 +214,126 @@
 </tr>
 <tr class="never">
 <td class="num">41</td>
-<td class="src"><pre><code class="objc">        @available(*, unavailable, message: "This view can not be instantiated")</code></pre></td>
+<td class="src"><pre><code class="objc">    /// Nil view placeholder type.</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">42</td>
+<td class="src"><pre><code class="objc">    public final class VoidView: UIView {</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">43</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">44</td>
+<td class="src"><pre><code class="objc">        @available(*, unavailable, message: "This view can not be instantiated.")</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="missed">
-<td class="num">42</td>
+<td class="num">45</td>
 <td class="src"><pre><code class="objc">        public required init?(coder aDecoder: NSCoder) {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">43</td>
-<td class="src"><pre><code class="objc">            fatalError("This view can not be instantiated")</code></pre></td>
+<td class="num">46</td>
+<td class="src"><pre><code class="objc">            fatalError("This view can not be instantiated.")</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">44</td>
+<td class="num">47</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="never">
-<td class="num">45</td>
+<td class="num">48</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">46</td>
-<td class="src"><pre><code class="objc">        @available(*, unavailable, message: "This view can not be instantiated")</code></pre></td>
+<td class="num">49</td>
+<td class="src"><pre><code class="objc">        @available(*, unavailable, message: "This view can not be instantiated.")</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="missed">
-<td class="num">47</td>
+<td class="num">50</td>
 <td class="src"><pre><code class="objc">        public override init(frame: CGRect) {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">48</td>
-<td class="src"><pre><code class="objc">            fatalError("This view can not be instantiated")</code></pre></td>
+<td class="num">51</td>
+<td class="src"><pre><code class="objc">            fatalError("This view can not be instantiated.")</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">49</td>
+<td class="num">52</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="never">
-<td class="num">50</td>
+<td class="num">53</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">51</td>
-<td class="src"><pre><code class="objc">        @available(*, unavailable, message: "This view can not be instantiated")</code></pre></td>
+<td class="num">54</td>
+<td class="src"><pre><code class="objc">        @available(*, unavailable, message: "This view can not be instantiated.")</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="missed">
-<td class="num">52</td>
+<td class="num">55</td>
 <td class="src"><pre><code class="objc">        public init() {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">53</td>
-<td class="src"><pre><code class="objc">            fatalError("This view can not be instantiated")</code></pre></td>
+<td class="num">56</td>
+<td class="src"><pre><code class="objc">            fatalError("This view can not be instantiated.")</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">54</td>
+<td class="num">57</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="never">
-<td class="num">55</td>
+<td class="num">58</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">56</td>
+<td class="num">59</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">57</td>
+<td class="num">60</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="missed">
-<td class="num">58</td>
+<td class="num">61</td>
 <td class="src"><pre><code class="objc">    public static func buildView(within bounds: CGRect) -&gt; VoidView? {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">59</td>
-<td class="src"><pre><code class="objc">        return nil</code></pre></td>
+<td class="num">62</td>
+<td class="src"><pre><code class="objc">        nil</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">60</td>
+<td class="num">63</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="never">
-<td class="num">61</td>
+<td class="num">64</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">62</td>
+<td class="num">65</td>
 <td class="src"><pre><code class="objc">}</code></pre></td>
 <td class="coverage"></td>
 </tr>

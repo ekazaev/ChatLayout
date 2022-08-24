@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -25,7 +28,7 @@ struct SectionModel {
     private unowned var collectionLayout: ChatLayoutRepresentation
 
     var count: Int {
-        return items.count
+        items.count
     }
 
     var frame: CGRect {
@@ -48,7 +51,7 @@ struct SectionModel {
     }
 
     var locationHeight: CGFloat {
-        return offsetY + height
+        offsetY + height
     }
 
     init(id: UUID = UUID(),
@@ -91,7 +94,7 @@ struct SectionModel {
         }
         #if DEBUG
         if header.id != oldHeader.id {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Internal inconsistency.")
         }
         #endif
         self.header = header
@@ -107,7 +110,7 @@ struct SectionModel {
         let oldItem = items[index]
         #if DEBUG
         if item.id != oldItem.id {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Internal inconsistency.")
         }
         #endif
         items[index] = item
@@ -120,7 +123,7 @@ struct SectionModel {
         #if DEBUG
         if let oldFooter = self.footer,
            footer.id != oldFooter.id {
-            assertionFailure("Internal inconsistency")
+            assertionFailure("Internal inconsistency.")
         }
         #endif
         self.footer = footer

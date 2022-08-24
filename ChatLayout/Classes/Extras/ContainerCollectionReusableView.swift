@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -15,7 +18,7 @@ public final class ContainerCollectionReusableView<CustomView: UIView>: UICollec
 
     /// Default reuse identifier is set with the class name.
     public static var reuseIdentifier: String {
-        return String(describing: self)
+        String(describing: self)
     }
 
     /// Contained view.

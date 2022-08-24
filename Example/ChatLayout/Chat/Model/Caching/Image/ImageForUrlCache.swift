@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -19,7 +22,7 @@ public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueC
     }
 
     public func isEntityCached(for key: CachingKey) -> Bool {
-        return cache.isEntityCached(for: key)
+        cache.isEntityCached(for: key)
     }
 
     public func getEntity(for key: CachingKey) throws -> UIImage {

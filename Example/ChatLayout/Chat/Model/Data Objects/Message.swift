@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import ChatLayout
 import DifferenceKit
@@ -18,7 +21,7 @@ enum MessageType: Hashable {
     case outgoing
 
     var isIncoming: Bool {
-        return self == .incoming
+        self == .incoming
     }
 
 }
@@ -36,7 +39,7 @@ enum MessageStatus: Hashable {
 extension ChatItemAlignment {
 
     var isIncoming: Bool {
-        return self == .leading
+        self == .leading
     }
 
 }
@@ -48,7 +51,7 @@ struct DateGroup: Hashable {
     var date: Date
 
     var value: String {
-        return ChatDateFormatter.shared.string(from: date)
+        ChatDateFormatter.shared.string(from: date)
     }
 
     init(id: UUID, date: Date) {
@@ -61,7 +64,7 @@ struct DateGroup: Hashable {
 extension DateGroup: Differentiable {
 
     public var differenceIdentifier: Int {
-        return hashValue
+        hashValue
     }
 
     public func isContentEqual(to source: DateGroup) -> Bool {
@@ -89,7 +92,7 @@ struct MessageGroup: Hashable {
 extension MessageGroup: Differentiable {
 
     public var differenceIdentifier: Int {
-        return hashValue
+        hashValue
     }
 
     public func isContentEqual(to source: MessageGroup) -> Bool {
@@ -127,11 +130,11 @@ struct Message: Hashable {
 extension Message: Differentiable {
 
     public var differenceIdentifier: Int {
-        return id.hashValue
+        id.hashValue
     }
 
     public func isContentEqual(to source: Message) -> Bool {
-        return self == source
+        self == source
     }
 
 }

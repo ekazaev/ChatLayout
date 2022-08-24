@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -82,22 +85,22 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// The direction of the language you used when designing `CollectionViewChatLayout` layout.
     public override var developmentLayoutDirection: UIUserInterfaceLayoutDirection {
-        return .leftToRight
+        .leftToRight
     }
 
     /// A Boolean value that indicates whether the horizontal coordinate system is automatically flipped at appropriate times.
     public override var flipsHorizontallyInOppositeLayoutDirection: Bool {
-        return _flipsHorizontallyInOppositeLayoutDirection
+        _flipsHorizontallyInOppositeLayoutDirection
     }
 
     /// Custom layoutAttributesClass is `ChatLayoutAttributes`.
     public override class var layoutAttributesClass: AnyClass {
-        return ChatLayoutAttributes.self
+        ChatLayoutAttributes.self
     }
 
     /// Custom invalidationContextClass is `ChatLayoutInvalidationContext`.
     public override class var invalidationContextClass: AnyClass {
-        return ChatLayoutInvalidationContext.self
+        ChatLayoutInvalidationContext.self
     }
 
     /// The width and height of the collection view’s contents.
@@ -206,7 +209,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     ///     system is automatically flipped at appropriate times. In practice, this is used to support
     ///     right-to-left layout.
     public init(flipsHorizontallyInOppositeLayoutDirection: Bool = true) {
-        self._flipsHorizontallyInOppositeLayoutDirection = flipsHorizontallyInOppositeLayoutDirection
+        _flipsHorizontallyInOppositeLayoutDirection = flipsHorizontallyInOppositeLayoutDirection
         super.init()
         resetAttributesForPendingAnimations()
         resetInvalidatedAttributes()
@@ -214,7 +217,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Returns an object initialized from data in a given unarchiver.
     public required init?(coder aDecoder: NSCoder) {
-        self._flipsHorizontallyInOppositeLayoutDirection = true
+        _flipsHorizontallyInOppositeLayoutDirection = true
         super.init(coder: aDecoder)
         resetAttributesForPendingAnimations()
         resetInvalidatedAttributes()
@@ -579,7 +582,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         guard let context = context as? ChatLayoutInvalidationContext else {
-            assertionFailure("`context` must be an instance of `ChatLayoutInvalidationContext`")
+            assertionFailure("`context` must be an instance of `ChatLayoutInvalidationContext`.")
             return
         }
 
@@ -945,11 +948,11 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
     }
 
     func shouldPresentHeader(at sectionIndex: Int) -> Bool {
-        return delegate?.shouldPresentHeader(self, at: sectionIndex) ?? false
+        delegate?.shouldPresentHeader(self, at: sectionIndex) ?? false
     }
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool {
-        return delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false
+        delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false
     }
 
 }

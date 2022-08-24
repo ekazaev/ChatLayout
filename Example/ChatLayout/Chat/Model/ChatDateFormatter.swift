@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 
@@ -63,7 +66,7 @@ public final class MessageDateFormatter {
     }
 
     public func string(from date: Date) -> String {
-        return formatter.string(from: date)
+        formatter.string(from: date)
     }
 
     public func attributedString(from date: Date, with attributes: [NSAttributedString.Key: Any]) -> NSAttributedString {

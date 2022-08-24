@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import DifferenceKit
 import Foundation
@@ -23,15 +26,15 @@ struct Section: Hashable {
 extension Section: DifferentiableSection {
 
     public var differenceIdentifier: Int {
-        return id
+        id
     }
 
     public func isContentEqual(to source: Section) -> Bool {
-        return id == source.id
+        id == source.id
     }
 
     public var elements: [Cell] {
-        return cells
+        cells
     }
 
     public init<C: Swift.Collection>(source: Section, elements: C) where C.Element == Cell {

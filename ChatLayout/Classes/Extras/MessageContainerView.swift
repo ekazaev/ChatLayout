@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -20,7 +23,7 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
 
     /// Main view.
     public var customView: MainView {
-        return internalContentView.customView
+        internalContentView.customView
     }
 
     /// An alignment of the contained views within the `MessageContainerView`,

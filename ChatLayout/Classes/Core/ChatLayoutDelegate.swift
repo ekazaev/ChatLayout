@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -108,27 +111,27 @@ public extension ChatLayoutDelegate {
     /// Default implementation returns: `false`.
     func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool {
-        return false
+        false
     }
 
     /// Default implementation returns: `false`.
     func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool {
-        return false
+        false
     }
 
     /// Default implementation returns: `ItemSize.auto`.
     func sizeForItem(_ chatLayout: CollectionViewChatLayout,
                      of kind: ItemKind,
                      at indexPath: IndexPath) -> ItemSize {
-        return .auto
+        .auto
     }
 
     /// Default implementation returns: `ChatItemAlignment.fullWidth`.
     func alignmentForItem(_ chatLayout: CollectionViewChatLayout,
                           of kind: ItemKind,
                           at indexPath: IndexPath) -> ChatItemAlignment {
-        return .fullWidth
+        .fullWidth
     }
 
     /// Default implementation sets a `ChatLayoutAttributes.alpha` to zero.

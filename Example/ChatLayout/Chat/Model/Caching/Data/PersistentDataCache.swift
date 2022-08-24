@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 
@@ -103,11 +106,11 @@ class PersistentDataCache<CachingKey: PersistentlyCacheable>: AsyncKeyValueCachi
     }
 
     private func getPath(for fileName: String) -> String {
-        return (persistencePath as NSString).appendingPathComponent("\(fileName).\(cacheFileExtension)")
+        (persistencePath as NSString).appendingPathComponent("\(fileName).\(cacheFileExtension)")
     }
 
     private func identifierFromFileName(_ fileName: String) -> String {
-        return fileName.replacingOccurrences(of: ".\(cacheFileExtension)", with: "")
+        fileName.replacingOccurrences(of: ".\(cacheFileExtension)", with: "")
     }
 
     private func remainingLife(for fileName: String) -> TimeInterval? {

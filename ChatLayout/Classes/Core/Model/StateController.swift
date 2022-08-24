@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -79,7 +82,7 @@ final class StateController {
 
     init(layoutRepresentation: ChatLayoutRepresentation) {
         self.layoutRepresentation = layoutRepresentation
-        self.storage = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]
+        storage = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]
         resetCachedAttributeObjects()
     }
 
@@ -269,7 +272,7 @@ final class StateController {
     }
 
     func itemPath(by itemId: UUID, kind: ItemKind, at state: ModelState) -> ItemPath? {
-        return layout(at: state).itemPath(by: itemId, kind: kind)
+        layout(at: state).itemPath(by: itemId, kind: kind)
     }
 
     func sectionIdentifier(for index: Int, at state: ModelState) -> UUID? {
@@ -290,7 +293,7 @@ final class StateController {
 
     func section(at index: Int, at state: ModelState) -> SectionModel {
         guard index < layout(at: state).sections.count else {
-            preconditionFailure("Section index \(index) is bigger than the amount of sections \(layout(at: state).sections.count)")
+            preconditionFailure("Section index \(index) is bigger than the amount of sections \(layout(at: state).sections.count).")
         }
         return layout(at: state).sections[index]
     }
@@ -319,11 +322,11 @@ final class StateController {
     }
 
     func numberOfSections(at state: ModelState) -> Int {
-        return layout(at: state).sections.count
+        layout(at: state).sections.count
     }
 
     func numberOfItems(in sectionIndex: Int, at state: ModelState) -> Int {
-        return layout(at: state).sections[sectionIndex].items.count
+        layout(at: state).sections[sectionIndex].items.count
     }
 
     func item(for itemPath: ItemPath, kind: ItemKind, at state: ModelState) -> ItemModel? {
@@ -467,7 +470,7 @@ final class StateController {
                 afterUpdateModel.removeSection(for: sectionIndex)
                 afterUpdateModel.insertSection(section, at: sectionIndex)
             case let .itemReload(itemIndexPath: indexPath):
-                guard var item = self.item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
+                guard var item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
                     assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
                     return
                 }
@@ -502,12 +505,12 @@ final class StateController {
             compensateOffsetOfSectionIfNeeded(for: $0, action: .insert)
         }
         reloadedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            let oldSection = self.section(at: $0, at: .beforeUpdate)
-            guard let newSectionIndex = self.sectionIndex(for: oldSection.id, at: .afterUpdate) else {
+            let oldSection = section(at: $0, at: .beforeUpdate)
+            guard let newSectionIndex = sectionIndex(for: oldSection.id, at: .afterUpdate) else {
                 assertionFailure("Section with identifier \(oldSection.id) does not exist.")
                 return
             }
-            let newSection = self.section(at: newSectionIndex, at: .afterUpdate)
+            let newSection = section(at: newSectionIndex, at: .afterUpdate)
             compensateOffsetOfSectionIfNeeded(for: $0, action: .frameUpdate(previousFrame: oldSection.frame, newFrame: newSection.frame))
         }
         deletedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
@@ -515,10 +518,10 @@ final class StateController {
         }
 
         reloadedIndexes.sorted(by: { $0 < $1 }).forEach {
-            guard let oldItem = self.item(for: $0.itemPath, kind: .cell, at: .beforeUpdate),
-                  let newItemIndexPath = self.itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
-                  let newItem = self.item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
-                assertionFailure("Internal inconsistency")
+            guard let oldItem = item(for: $0.itemPath, kind: .cell, at: .beforeUpdate),
+                  let newItemIndexPath = itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
+                  let newItem = item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
+                assertionFailure("Internal inconsistency.")
                 return
             }
             compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .frameUpdate(previousFrame: oldItem.frame, newFrame: newItem.frame))
@@ -740,7 +743,7 @@ final class StateController {
             }
 
             return allRects.compactMap { frame, path, kind -> ChatLayoutAttributes? in
-                return self.itemAttributes(for: path, kind: kind, predefinedFrame: frame, at: state)
+                itemAttributes(for: path, kind: kind, predefinedFrame: frame, at: state)
             }
         } else {
             // Debug purposes only.
@@ -748,15 +751,15 @@ final class StateController {
             attributes.reserveCapacity(layout.sections.count * 1000)
             layout.sections.enumerated().forEach { sectionIndex, section in
                 let sectionPath = ItemPath(item: 0, section: sectionIndex)
-                if let headerAttributes = self.itemAttributes(for: sectionPath, kind: .header, at: state) {
+                if let headerAttributes = itemAttributes(for: sectionPath, kind: .header, at: state) {
                     attributes.append(headerAttributes)
                 }
-                if let footerAttributes = self.itemAttributes(for: sectionPath, kind: .footer, at: state) {
+                if let footerAttributes = itemAttributes(for: sectionPath, kind: .footer, at: state) {
                     attributes.append(footerAttributes)
                 }
                 section.items.enumerated().forEach { itemIndex, _ in
                     let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                    if let itemAttributes = self.itemAttributes(for: itemPath, kind: .cell, at: state) {
+                    if let itemAttributes = itemAttributes(for: itemPath, kind: .cell, at: state) {
                         attributes.append(itemAttributes)
                     }
                 }

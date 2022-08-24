@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -27,7 +30,7 @@ public protocol StaticViewFactory {
 public extension StaticViewFactory where Self: UIView {
 
     static func buildView(within bounds: CGRect) -> Self? {
-        return Self(frame: bounds)
+        Self(frame: bounds)
     }
 
 }
@@ -38,25 +41,25 @@ public struct VoidViewFactory: StaticViewFactory {
     /// Nil view placeholder type.
     public final class VoidView: UIView {
 
-        @available(*, unavailable, message: "This view can not be instantiated")
+        @available(*, unavailable, message: "This view can not be instantiated.")
         public required init?(coder aDecoder: NSCoder) {
-            fatalError("This view can not be instantiated")
+            fatalError("This view can not be instantiated.")
         }
 
-        @available(*, unavailable, message: "This view can not be instantiated")
+        @available(*, unavailable, message: "This view can not be instantiated.")
         public override init(frame: CGRect) {
-            fatalError("This view can not be instantiated")
+            fatalError("This view can not be instantiated.")
         }
 
-        @available(*, unavailable, message: "This view can not be instantiated")
+        @available(*, unavailable, message: "This view can not be instantiated.")
         public init() {
-            fatalError("This view can not be instantiated")
+            fatalError("This view can not be instantiated.")
         }
 
     }
 
     public static func buildView(within bounds: CGRect) -> VoidView? {
-        return nil
+        nil
     }
 
 }

@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import ChatLayout
 import DifferenceKit
@@ -64,7 +67,7 @@ extension Cell: Differentiable {
     }
 
     public func isContentEqual(to source: Cell) -> Bool {
-        return self == source
+        self == source
     }
 
 }

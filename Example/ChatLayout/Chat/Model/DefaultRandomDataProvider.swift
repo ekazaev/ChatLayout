@@ -6,6 +6,9 @@
 // Created by Eugene Kazaev in 2020-2022.
 // Distributed under the MIT license.
 //
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
+//
 
 import Foundation
 import UIKit
@@ -86,11 +89,11 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     private let images: [UIImage] = (1...8).compactMap { UIImage(named: "demo\($0)") }
 
     private var allUsersIds: [Int] {
-        return Array([users, [receiverId]].joined())
+        Array([users, [receiverId]].joined())
     }
 
     init(receiverId: Int, usersIds: [Int]) {
-        self.users = usersIds
+        users = usersIds
         self.receiverId = receiverId
     }
 

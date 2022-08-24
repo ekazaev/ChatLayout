@@ -54,146 +54,161 @@
 </tr>
 <tr class="never">
 <td class="num">9</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">// Become a sponsor:</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">10</td>
-<td class="src"><pre><code class="objc">import Foundation</code></pre></td>
+<td class="src"><pre><code class="objc">// https://github.com/sponsors/ekazaev</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">11</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">//</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">12</td>
-<td class="src"><pre><code class="objc">/// Represents the location of an item in a section.</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">13</td>
-<td class="src"><pre><code class="objc">///</code></pre></td>
+<td class="src"><pre><code class="objc">import Foundation</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">14</td>
-<td class="src"><pre><code class="objc">/// Initializing a `ItemPath` is measurably faster than initializing an `IndexPath`.</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">15</td>
-<td class="src"><pre><code class="objc">/// On an iPhone X, compiled with -Os optimizations, it's about 35x faster to initialize this struct</code></pre></td>
+<td class="src"><pre><code class="objc">/// Represents the location of an item in a section.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">16</td>
-<td class="src"><pre><code class="objc">/// compared to an `IndexPath`.</code></pre></td>
+<td class="src"><pre><code class="objc">///</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">17</td>
-<td class="src"><pre><code class="objc">struct ItemPath: Hashable {</code></pre></td>
+<td class="src"><pre><code class="objc">/// Initializing a `ItemPath` is measurably faster than initializing an `IndexPath`.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">18</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">/// On an iPhone X, compiled with -Os optimizations, it's about 35x faster to initialize this struct</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">19</td>
-<td class="src"><pre><code class="objc">    let section: Int</code></pre></td>
+<td class="src"><pre><code class="objc">/// compared to an `IndexPath`.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">20</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">struct ItemPath: Hashable {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">21</td>
-<td class="src"><pre><code class="objc">    let item: Int</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">22</td>
+<td class="src"><pre><code class="objc">    let section: Int</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">23</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">24</td>
+<td class="src"><pre><code class="objc">    let item: Int</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">25</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="covered">
-<td class="num">23</td>
+<td class="num">26</td>
 <td class="src"><pre><code class="objc">    var indexPath: IndexPath {</code></pre></td>
 <td class="coverage">368x</td>
 </tr>
 <tr class="covered">
-<td class="num">24</td>
-<td class="src"><pre><code class="objc">        return IndexPath(item: item, section: section)</code></pre></td>
+<td class="num">27</td>
+<td class="src"><pre><code class="objc">        IndexPath(item: item, section: section)</code></pre></td>
 <td class="coverage">368x</td>
 </tr>
 <tr class="covered">
-<td class="num">25</td>
+<td class="num">28</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">368x</td>
 </tr>
 <tr class="never">
-<td class="num">26</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">27</td>
-<td class="src"><pre><code class="objc">    init(item: Int, section: Int) {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">28</td>
-<td class="src"><pre><code class="objc">        self.section = section</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
 <td class="num">29</td>
-<td class="src"><pre><code class="objc">        self.item = item</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">30</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="src"><pre><code class="objc">    init(item: Int, section: Int) {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">31</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">        self.section = section</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">32</td>
-<td class="src"><pre><code class="objc">    init(for indexPath: IndexPath) {</code></pre></td>
+<td class="src"><pre><code class="objc">        self.item = item</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">33</td>
-<td class="src"><pre><code class="objc">        self.section = indexPath.section</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">34</td>
-<td class="src"><pre><code class="objc">        self.item = indexPath.item</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">35</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">36</td>
+<td class="num">34</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
+<td class="num">35</td>
+<td class="src"><pre><code class="objc">    init(for indexPath: IndexPath) {</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">36</td>
+<td class="src"><pre><code class="objc">        section = indexPath.section</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
 <td class="num">37</td>
+<td class="src"><pre><code class="objc">        item = indexPath.item</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">38</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">39</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">40</td>
 <td class="src"><pre><code class="objc">}</code></pre></td>
 <td class="coverage"></td>
 </tr>
