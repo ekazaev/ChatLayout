@@ -61,6 +61,10 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
         shouldPresentFooterAtSection[sectionIndex] ?? true
     }
 
+    func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment {
+        alignmentForItem(of: element, at: itemPath.indexPath)
+    }
+
     func alignmentForItem(of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
         .fullWidth
     }

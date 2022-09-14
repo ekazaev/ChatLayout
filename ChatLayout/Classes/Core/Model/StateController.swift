@@ -32,6 +32,8 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     func configuration(for element: ItemKind, at itemPath: ItemPath) -> ItemModel.Configuration
 
+    func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment
+
     func shouldPresentHeader(at sectionIndex: Int) -> Bool
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool
@@ -439,6 +441,9 @@ final class StateController {
                     let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
                     header = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath))
                     header?.resetSize()
+                    if section.header != nil {
+                        header?.alignment = layoutRepresentation.alignment(for: .cell, at: headerIndexPath.itemPath)
+                    }
                 } else {
                     header = nil
                 }
@@ -449,6 +454,9 @@ final class StateController {
                     let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
                     footer = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath))
                     footer?.resetSize()
+                    if section.footer != nil {
+                        footer?.alignment = layoutRepresentation.alignment(for: .cell, at: footerIndexPath.itemPath)
+                    }
                 } else {
                     footer = nil
                 }
@@ -457,10 +465,11 @@ final class StateController {
                 let oldItems = section.items
                 let items: [ItemModel] = (0..<layoutRepresentation.numberOfItems(in: sectionIndex)).map { index in
                     var newItem: ItemModel
+                    let itemIndexPath = IndexPath(item: index, section: sectionIndex)
                     if index < oldItems.count {
                         newItem = oldItems[index]
+                        newItem.alignment = layoutRepresentation.alignment(for: .cell, at: itemIndexPath.itemPath)
                     } else {
-                        let itemIndexPath = IndexPath(item: index, section: sectionIndex)
                         newItem = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath))
                     }
                     newItem.resetSize()
@@ -475,7 +484,7 @@ final class StateController {
                     return
                 }
                 item.resetSize()
-
+                item.alignment = layoutRepresentation.alignment(for: .cell, at: indexPath.itemPath)
                 afterUpdateModel.replaceItem(item, at: indexPath)
                 reloadedIndexes.insert(indexPath)
             case let .sectionMove(initialSectionIndex: initialSectionIndex, finalSectionIndex: finalSectionIndex):
