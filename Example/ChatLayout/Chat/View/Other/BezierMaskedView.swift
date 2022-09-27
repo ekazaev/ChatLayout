@@ -39,6 +39,8 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
         }
     }
 
+    private var cachedBounds: CGRect?
+
     var maskingPath: UIBezierPath {
         let bezierPath: UIBezierPath
         let size = bounds.size
@@ -75,6 +77,10 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        guard cachedBounds != bounds else {
+            return
+        }
+        cachedBounds = bounds
         updateChannelStyle()
     }
 
@@ -94,6 +100,7 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
     }
 
     private func updateChannelStyle() {
+        self.cachedBounds = nil
         UIView.performWithoutAnimation {
             let maskLayer = CAShapeLayer()
             maskLayer.frame = bounds

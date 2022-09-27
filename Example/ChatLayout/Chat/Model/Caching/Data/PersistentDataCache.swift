@@ -81,10 +81,6 @@ class PersistentDataCache<CachingKey: PersistentlyCacheable>: AsyncKeyValueCachi
                 }
             }
 
-            guard !self.fileManager.fileExists(atPath: path) else {
-                return
-            }
-
             try? entity.write(to: URL(fileURLWithPath: path), options: .atomic)
         }
     }

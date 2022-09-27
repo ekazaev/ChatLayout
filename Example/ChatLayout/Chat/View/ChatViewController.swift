@@ -265,6 +265,17 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if currentControllerActions.options.contains(.updatingCollection), collectionView.isDragging {
+            // Interrupting current update animation if user starts to scroll while batchUpdate is performed. It helps to
+            // avoid presenting blank area if user scrolls out of the animation rendering area.
+            UIView.performWithoutAnimation {
+                self.collectionView.performBatchUpdates({}, completion: { _ in
+                    let context = ChatLayoutInvalidationContext()
+                    context.invalidateLayoutMetrics = false
+                    self.collectionView.collectionViewLayout.invalidateLayout(with: context)
+                })
+            }
+        }
         guard !currentControllerActions.options.contains(.loadingInitialMessages),
               !currentControllerActions.options.contains(.loadingPreviousMessages),
               !currentInterfaceActions.options.contains(.scrollingToTop),
@@ -465,7 +476,6 @@ extension ChatViewController: ChatControllerDelegate {
             }
 
             currentControllerActions.options.insert(.updatingCollection)
-
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
                                       guard changeSet.sectionInserted.isEmpty else {
@@ -610,6 +620,13 @@ extension ChatViewController: KeyboardListenerDelegate {
         if newBottomInset > 0,
            collectionView.contentInset.bottom != newBottomInset {
             let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
+
+            // Interrupting current update animation if user starts to scroll while batchUpdate is performed.
+            if currentControllerActions.options.contains(.updatingCollection) {
+                UIView.performWithoutAnimation {
+                    self.collectionView.performBatchUpdates({})
+                }
+            }
 
             // Blocks possible updates when keyboard is being hidden interactively
             currentInterfaceActions.options.insert(.changingContentInsets)
