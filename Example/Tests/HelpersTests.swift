@@ -59,6 +59,28 @@ final class HelpersTests: XCTestCase {
         XCTAssertTrue(footer.supplementaryElementStringType == UICollectionView.elementKindSectionFooter)
     }
 
+    func testBinarySearch() {
+        let predicate: (Int) -> ComparisonResult = { integer in
+            if integer < 100 {
+                return .orderedAscending
+            } else if integer > 100 {
+                return .orderedDescending
+            } else {
+                return .orderedSame
+            }
+        }
+        XCTAssertEqual([Int]().binarySearch(predicate: predicate), nil)
+        XCTAssertEqual((0...1000).map { $0 }.binarySearch(predicate: predicate), 100)
+        XCTAssertEqual((100...200).map { $0 }.binarySearch(predicate: predicate), 0)
+        XCTAssertEqual((0...0).map { $0 }.binarySearch(predicate: predicate), nil)
+        XCTAssertEqual((100...100).map { $0 }.binarySearch(predicate: predicate), 0)
+        XCTAssertEqual((200...200).map { $0 }.binarySearch(predicate: predicate), nil)
+        XCTAssertEqual((99...100).map { $0 }.binarySearch(predicate: predicate), 1)
+        XCTAssertEqual((200...201).map { $0 }.binarySearch(predicate: predicate), nil)
+        XCTAssertEqual((0...150).map { $0 }.binarySearch(predicate: predicate), 100)
+        XCTAssertEqual((150...170).map { $0 }.binarySearch(predicate: predicate), nil)
+    }
+
     func testSearchInRange() {
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < 100 {
@@ -69,12 +91,57 @@ final class HelpersTests: XCTestCase {
                 return .orderedSame
             }
         }
+        XCTAssertEqual([Int]().binarySearchRange(predicate: predicate), [])
         XCTAssertEqual((0...1000).map { $0 }.binarySearchRange(predicate: predicate), (100...200).map { $0 })
         XCTAssertEqual((100...200).map { $0 }.binarySearchRange(predicate: predicate), (100...200).map { $0 })
         XCTAssertEqual((0...0).map { $0 }.binarySearchRange(predicate: predicate), [])
+        XCTAssertEqual((100...100).map { $0 }.binarySearchRange(predicate: predicate), [100])
+        XCTAssertEqual((200...200).map { $0 }.binarySearchRange(predicate: predicate), [200])
+        XCTAssertEqual((99...100).map { $0 }.binarySearchRange(predicate: predicate), [100])
+        XCTAssertEqual((200...201).map { $0 }.binarySearchRange(predicate: predicate), [200])
         XCTAssertEqual((0...150).map { $0 }.binarySearchRange(predicate: predicate), (100...150).map { $0 })
         XCTAssertEqual((150...200).map { $0 }.binarySearchRange(predicate: predicate), (150...200).map { $0 })
+        XCTAssertEqual((150...250).map { $0 }.binarySearchRange(predicate: predicate), (150...200).map { $0 })
         XCTAssertEqual((150...170).map { $0 }.binarySearchRange(predicate: predicate), (150...170).map { $0 })
     }
 
+    func testBinarySearchPerformance() {
+        let constant = 1257
+        let predicate: (Int) -> ComparisonResult = { integer in
+            if integer < constant {
+                return .orderedAscending
+            } else if integer > constant {
+                return .orderedDescending
+            } else {
+                return .orderedSame
+            }
+        }
+        let values = (0...100000).map { $0 }
+        XCTAssertEqual(values.binarySearch(predicate: predicate), constant)
+        measure {
+            for _ in 0..<100000 {
+                _ = values.binarySearch(predicate: predicate)
+            }
+        }
+    }
+
+    func testBinarySearchRangePerformance() {
+        let constant = 1257
+        let predicate: (Int) -> ComparisonResult = { integer in
+            if integer < constant {
+                return .orderedAscending
+            } else if integer > constant + 111 {
+                return .orderedDescending
+            } else {
+                return .orderedSame
+            }
+        }
+        let values = (0...100000).map { $0 }
+        XCTAssertEqual(values.binarySearchRange(predicate: predicate), (constant...(constant + 111)).map { $0 })
+        measure {
+            for _ in 0..<100000 {
+                _ = values.binarySearchRange(predicate: predicate)
+            }
+        }
+    }
 }

@@ -151,8 +151,8 @@ struct SectionModel {
         guard heightDiff != 0 else {
             return
         }
-        if index < items.count - 1 {
-            for index in (index + 1)..<items.count {
+        if index < items.count &- 1 {
+            for index in (index &+ 1)..<items.count {
                 items[index].offsetY += heightDiff
             }
         }

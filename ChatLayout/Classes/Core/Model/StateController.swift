@@ -873,11 +873,11 @@ extension RandomAccessCollection where Index == Int {
         var upperBound = endIndex
 
         while lowerBound < upperBound {
-            let midIndex = lowerBound + (upperBound - lowerBound) / 2
+            let midIndex = lowerBound &+ (upperBound &- lowerBound) / 2
             if predicate(self[midIndex]) == .orderedSame {
                 return midIndex
             } else if predicate(self[midIndex]) == .orderedAscending {
-                lowerBound = midIndex + 1
+                lowerBound = midIndex &+ 1
             } else {
                 upperBound = midIndex
             }
@@ -886,28 +886,50 @@ extension RandomAccessCollection where Index == Int {
     }
 
     func binarySearchRange(predicate: (Element) -> ComparisonResult) -> [Element] {
-        guard let firstMatchingIndex = binarySearch(predicate: predicate) else {
+        func leftMostSearch(lowerBound: Index, upperBound: Index) -> Index? {
+            var lowerBound = lowerBound
+            var upperBound = upperBound
+
+            while lowerBound < upperBound {
+                let midIndex = (lowerBound &+ upperBound) / 2
+                if predicate(self[midIndex]) == .orderedAscending {
+                    lowerBound = midIndex &+ 1
+                } else {
+                    upperBound = midIndex
+                }
+            }
+            if predicate(self[lowerBound]) == .orderedSame {
+                return lowerBound
+            } else {
+                return nil
+            }
+        }
+
+        func rightMostSearch(lowerBound: Index, upperBound: Index) -> Index? {
+            var lowerBound = lowerBound
+            var upperBound = upperBound
+
+            while lowerBound < upperBound {
+                let midIndex = (lowerBound &+ upperBound &+ 1) / 2
+                if predicate(self[midIndex]) == .orderedDescending {
+                    upperBound = midIndex &- 1
+                } else {
+                    lowerBound = midIndex
+                }
+            }
+            if predicate(self[lowerBound]) == .orderedSame {
+                return lowerBound
+            } else {
+                return nil
+            }
+        }
+        guard !isEmpty,
+              let lowerBound = leftMostSearch(lowerBound: startIndex, upperBound: endIndex - 1),
+              let upperBound = rightMostSearch(lowerBound: startIndex, upperBound: endIndex - 1) else {
             return []
         }
 
-        var startingIndex = firstMatchingIndex
-        for index in (0..<firstMatchingIndex).reversed() {
-            let attributes = self[index]
-            guard predicate(attributes) == .orderedSame else {
-                break
-            }
-            startingIndex = index
-        }
-
-        var lastIndex = firstMatchingIndex
-        for index in (firstMatchingIndex + 1)..<count {
-            let attributes = self[index]
-            guard predicate(attributes) == .orderedSame else {
-                break
-            }
-            lastIndex = index
-        }
-        return Array(self[startingIndex...lastIndex])
+        return Array(self[lowerBound...upperBound])
     }
 
 }

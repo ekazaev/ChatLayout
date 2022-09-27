@@ -132,8 +132,8 @@ struct LayoutModel {
         guard heightDiff != 0 else {
             return
         }
-        if index < sections.count - 1 {
-            for index in (index + 1)..<sections.count {
+        if index < sections.count &- 1 {
+            for index in (index &+ 1)..<sections.count {
                 sections[index].offsetY += heightDiff
             }
         }
