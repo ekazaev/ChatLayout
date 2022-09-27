@@ -100,7 +100,7 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
     }
 
     private func updateChannelStyle() {
-        self.cachedBounds = nil
+        cachedBounds = nil
         UIView.performWithoutAnimation {
             let maskLayer = CAShapeLayer()
             maskLayer.frame = bounds
