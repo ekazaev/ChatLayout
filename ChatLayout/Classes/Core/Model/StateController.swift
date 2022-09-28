@@ -118,7 +118,7 @@ final class StateController {
         if !ignoreCache,
            let cachedAttributesState = cachedAttributesState,
            cachedAttributesState.rect.contains(rect) {
-            return cachedAttributesState.attributes.binarySearchRange(predicate: predicate)
+            return cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
         } else {
             let totalRect: CGRect
             switch state {
@@ -131,7 +131,7 @@ final class StateController {
             if !ignoreCache {
                 cachedAttributesState = (rect: totalRect, attributes: attributes)
             }
-            let visibleAttributes = rect != totalRect ? attributes.binarySearchRange(predicate: predicate) : attributes
+            let visibleAttributes = rect != totalRect ? attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) } : attributes
             return visibleAttributes
         }
     }
@@ -294,9 +294,11 @@ final class StateController {
     }
 
     func section(at index: Int, at state: ModelState) -> SectionModel {
+        #if DEBUG
         guard index < layout(at: state).sections.count else {
             preconditionFailure("Section index \(index) is bigger than the amount of sections \(layout(at: state).sections.count).")
         }
+        #endif
         return layout(at: state).sections[index]
     }
 
@@ -355,7 +357,7 @@ final class StateController {
             return footer
         case .cell:
             guard itemPath.section < layout(at: state).sections.count,
-                  itemPath.item < layout(at: state).sections[itemPath.section].count else {
+                  itemPath.item < layout(at: state).sections[itemPath.section].items.count else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
@@ -501,12 +503,15 @@ final class StateController {
             }
         }
 
-        afterUpdateModel = LayoutModel(sections: afterUpdateModel.sections.map { section -> SectionModel in
-            var section = section
-            section.assembleLayout()
-            return section
-        }, collectionLayout: layoutRepresentation)
+        var afterUpdateModelSections = afterUpdateModel.sections
+        afterUpdateModelSections.withUnsafeMutableBufferPointer { directlyMutableSections in
+            for index in 0..<directlyMutableSections.count {
+                directlyMutableSections[index].assembleLayout()
+            }
+        }
+        afterUpdateModel = LayoutModel(sections: afterUpdateModelSections, collectionLayout: layoutRepresentation)
         afterUpdateModel.assembleLayout()
+
         storage[.afterUpdate] = afterUpdateModel
 
         // Calculating potential content offset changes after the updates
@@ -680,7 +685,7 @@ final class StateController {
 
                     // Find if any of the items of the section is visible
                     if [ComparisonResult.orderedSame, .orderedDescending].contains(predicate(itemIndex: section.items.count - 1)),
-                       let firstMatchingIndex = Array(0...section.items.count - 1).binarySearch(predicate: predicate) {
+                       let firstMatchingIndex = Array(0...section.items.count - 1).withUnsafeBufferPointer({ $0.binarySearch(predicate: predicate) }) {
                         // Find first item that is visible
                         startingIndex = firstMatchingIndex
                         for itemIndex in (0..<firstMatchingIndex).reversed() {

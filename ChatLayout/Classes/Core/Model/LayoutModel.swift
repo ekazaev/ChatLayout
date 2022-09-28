@@ -40,22 +40,25 @@ struct LayoutModel {
         var offset: CGFloat = collectionLayout.settings.additionalInsets.top
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
-        var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath]()
+        var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath](minimumCapacity: sections.reduce(into: 0) { $0 += $1.items.count })
 
-        for sectionIndex in 0..<sections.count {
-            sectionIndexByIdentifierCache[sections[sectionIndex].id] = sectionIndex
-            sections[sectionIndex].offsetY = offset
-            offset += sections[sectionIndex].height + collectionLayout.settings.interSectionSpacing
-            if let header = sections[sectionIndex].header {
-                itemPathByIdentifierCache[ItemUUIDKey(kind: .header, id: header.id)] = ItemPath(item: 0, section: sectionIndex)
-            }
-            for itemIndex in 0..<sections[sectionIndex].items.count {
-                itemPathByIdentifierCache[ItemUUIDKey(kind: .cell, id: sections[sectionIndex].items[itemIndex].id)] = ItemPath(item: itemIndex, section: sectionIndex)
-            }
-            if let footer = sections[sectionIndex].footer {
-                itemPathByIdentifierCache[ItemUUIDKey(kind: .footer, id: footer.id)] = ItemPath(item: 0, section: sectionIndex)
+        sections.withUnsafeMutableBufferPointer { directlyMutableSections in
+            for sectionIndex in 0..<directlyMutableSections.count {
+                sectionIndexByIdentifierCache[directlyMutableSections[sectionIndex].id] = sectionIndex
+                directlyMutableSections[sectionIndex].offsetY = offset
+                offset += directlyMutableSections[sectionIndex].height + collectionLayout.settings.interSectionSpacing
+                if let header = directlyMutableSections[sectionIndex].header {
+                    itemPathByIdentifierCache[ItemUUIDKey(kind: .header, id: header.id)] = ItemPath(item: 0, section: sectionIndex)
+                }
+                for itemIndex in 0..<directlyMutableSections[sectionIndex].items.count {
+                    itemPathByIdentifierCache[ItemUUIDKey(kind: .cell, id: directlyMutableSections[sectionIndex].items[itemIndex].id)] = ItemPath(item: itemIndex, section: sectionIndex)
+                }
+                if let footer = directlyMutableSections[sectionIndex].footer {
+                    itemPathByIdentifierCache[ItemUUIDKey(kind: .footer, id: footer.id)] = ItemPath(item: 0, section: sectionIndex)
+                }
             }
         }
+
         self.itemPathByIdentifierCache = itemPathByIdentifierCache
         self.sectionIndexByIdentifierCache = sectionIndexByIdentifierCache
     }
@@ -133,8 +136,10 @@ struct LayoutModel {
             return
         }
         if index < sections.count &- 1 {
-            for index in (index &+ 1)..<sections.count {
-                sections[index].offsetY += heightDiff
+            sections.withUnsafeMutableBufferPointer { directlyMutableSections in
+                for index in (index &+ 1)..<directlyMutableSections.count {
+                    directlyMutableSections[index].offsetY += heightDiff
+                }
             }
         }
     }

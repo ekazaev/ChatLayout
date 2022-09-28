@@ -104,44 +104,4 @@ final class HelpersTests: XCTestCase {
         XCTAssertEqual((150...250).map { $0 }.binarySearchRange(predicate: predicate), (150...200).map { $0 })
         XCTAssertEqual((150...170).map { $0 }.binarySearchRange(predicate: predicate), (150...170).map { $0 })
     }
-
-    func testBinarySearchPerformance() {
-        let constant = 1257
-        let predicate: (Int) -> ComparisonResult = { integer in
-            if integer < constant {
-                return .orderedAscending
-            } else if integer > constant {
-                return .orderedDescending
-            } else {
-                return .orderedSame
-            }
-        }
-        let values = (0...100000).map { $0 }
-        XCTAssertEqual(values.binarySearch(predicate: predicate), constant)
-        measure {
-            for _ in 0..<100000 {
-                _ = values.binarySearch(predicate: predicate)
-            }
-        }
-    }
-
-    func testBinarySearchRangePerformance() {
-        let constant = 1257
-        let predicate: (Int) -> ComparisonResult = { integer in
-            if integer < constant {
-                return .orderedAscending
-            } else if integer > constant + 111 {
-                return .orderedDescending
-            } else {
-                return .orderedSame
-            }
-        }
-        let values = (0...100000).map { $0 }
-        XCTAssertEqual(values.binarySearchRange(predicate: predicate), (constant...(constant + 111)).map { $0 })
-        measure {
-            for _ in 0..<100000 {
-                _ = values.binarySearchRange(predicate: predicate)
-            }
-        }
-    }
 }

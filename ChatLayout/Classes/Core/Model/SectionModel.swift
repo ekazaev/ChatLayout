@@ -27,10 +27,6 @@ struct SectionModel {
 
     private unowned var collectionLayout: ChatLayoutRepresentation
 
-    var count: Int {
-        items.count
-    }
-
     var frame: CGRect {
         let additionalInsets = collectionLayout.settings.additionalInsets
         return CGRect(x: 0,
@@ -74,9 +70,11 @@ struct SectionModel {
             offsetY += header?.frame.height ?? 0
         }
 
-        for rowIndex in 0..<items.count {
-            items[rowIndex].offsetY = offsetY
-            offsetY += items[rowIndex].height + collectionLayout.settings.interItemSpacing
+        items.withUnsafeMutableBufferPointer { directlyMutableItems in
+            for rowIndex in 0..<directlyMutableItems.count {
+                directlyMutableItems[rowIndex].offsetY = offsetY
+                offsetY += directlyMutableItems[rowIndex].height + collectionLayout.settings.interItemSpacing
+            }
         }
 
         if footer != nil {
@@ -103,7 +101,7 @@ struct SectionModel {
     }
 
     mutating func setAndAssemble(item: ItemModel, at index: Int) {
-        guard index < count else {
+        guard index < items.count else {
             assertionFailure("Incorrect item index.")
             return
         }
@@ -152,8 +150,10 @@ struct SectionModel {
             return
         }
         if index < items.count &- 1 {
-            for index in (index &+ 1)..<items.count {
-                items[index].offsetY += heightDiff
+            items.withUnsafeMutableBufferPointer { directlyMutableItems in
+                for index in (index &+ 1)..<directlyMutableItems.count {
+                    directlyMutableItems[index].offsetY += heightDiff
+                }
             }
         }
         footer?.offsetY += heightDiff
@@ -162,7 +162,7 @@ struct SectionModel {
     // MARK: To use only withing process(updateItems:)
 
     mutating func insert(_ item: ItemModel, at index: Int) {
-        guard index <= count else {
+        guard index <= items.count else {
             assertionFailure("Incorrect item index.")
             return
         }
@@ -170,7 +170,7 @@ struct SectionModel {
     }
 
     mutating func replace(_ item: ItemModel, at index: Int) {
-        guard index <= count else {
+        guard index <= items.count else {
             assertionFailure("Incorrect item index.")
             return
         }
@@ -178,7 +178,7 @@ struct SectionModel {
     }
 
     mutating func remove(at index: Int) {
-        guard index < count else {
+        guard index < items.count else {
             assertionFailure("Incorrect item index.")
             return
         }

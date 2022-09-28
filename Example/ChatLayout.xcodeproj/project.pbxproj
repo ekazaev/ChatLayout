@@ -84,6 +84,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift */; };
 		65D4D44932474631D9677C50 /* Pods_ChatLayout_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12FB56A5FF321AA24C456635 /* Pods_ChatLayout_Tests.framework */; };
+		D5A31E60E9BF6F8C13EDFDC5 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A31C93E56F2602C9BA605B /* PerformanceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +187,7 @@
 		B520747F8C032C454221D1EC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		BDD575DC427C1961B83F685C /* Pods-ChatLayout_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatLayout_Example.release.xcconfig"; path = "Target Support Files/Pods-ChatLayout_Example/Pods-ChatLayout_Example.release.xcconfig"; sourceTree = "<group>"; };
 		CFE0D61EDC4670E905EC3EF0 /* Pods-ChatLayout_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatLayout_Example.debug.xcconfig"; path = "Target Support Files/Pods-ChatLayout_Example/Pods-ChatLayout_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		D5A31C93E56F2602C9BA605B /* PerformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -511,6 +513,7 @@
 				1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */,
 				1BE54A1413D0DCF3036C9508 /* StateControllerInternalTests.swift */,
 				1BE542A452EBF25EC59440C0 /* HelpersTests.swift */,
+				D5A31C93E56F2602C9BA605B /* PerformanceTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -803,6 +806,7 @@
 				1BE54DBD5F84AF25128B6789 /* MockUICollectionViewUpdateItem.swift in Sources */,
 				1BE544269CC3DC62CEB1D56E /* StateControllerInternalTests.swift in Sources */,
 				1BE54FDB9836397E2694B9D7 /* HelpersTests.swift in Sources */,
+				D5A31E60E9BF6F8C13EDFDC5 /* PerformanceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
