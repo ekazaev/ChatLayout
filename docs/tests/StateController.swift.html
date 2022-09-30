@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "StateController.swift" : </span><span class="cov_medium">78.90%</span>
+<span>Coverage for "StateController.swift" : </span><span class="cov_medium">82.26%</span>
 </h2>
-<h4 class="cov_subtitle">(561 of 711 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(547 of 665 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/Model/StateController.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -325,7 +325,7 @@
 <tr class="covered">
 <td class="num">63</td>
 <td class="src"><pre><code class="objc">    private(set) var reloadedIndexes: Set&lt;IndexPath&gt; = []</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">64</td>
@@ -335,7 +335,7 @@
 <tr class="covered">
 <td class="num">65</td>
 <td class="src"><pre><code class="objc">    private(set) var insertedIndexes: Set&lt;IndexPath&gt; = []</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">66</td>
@@ -345,7 +345,7 @@
 <tr class="covered">
 <td class="num">67</td>
 <td class="src"><pre><code class="objc">    private(set) var movedIndexes: Set&lt;IndexPath&gt; = []</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">68</td>
@@ -355,7 +355,7 @@
 <tr class="covered">
 <td class="num">69</td>
 <td class="src"><pre><code class="objc">    private(set) var deletedIndexes: Set&lt;IndexPath&gt; = []</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">70</td>
@@ -365,7 +365,7 @@
 <tr class="covered">
 <td class="num">71</td>
 <td class="src"><pre><code class="objc">    private(set) var reloadedSectionsIndexes: Set&lt;Int&gt; = []</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">72</td>
@@ -375,7 +375,7 @@
 <tr class="covered">
 <td class="num">73</td>
 <td class="src"><pre><code class="objc">    private(set) var insertedSectionsIndexes: Set&lt;Int&gt; = []</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">74</td>
@@ -385,7 +385,7 @@
 <tr class="covered">
 <td class="num">75</td>
 <td class="src"><pre><code class="objc">    private(set) var deletedSectionsIndexes: Set&lt;Int&gt; = []</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">76</td>
@@ -395,7 +395,7 @@
 <tr class="covered">
 <td class="num">77</td>
 <td class="src"><pre><code class="objc">    private(set) var movedSectionsIndexes: Set&lt;Int&gt; = []</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">78</td>
@@ -415,7 +415,7 @@
 <tr class="covered">
 <td class="num">81</td>
 <td class="src"><pre><code class="objc">    private var cachedAttributeObjects = [ModelState: [ItemKind: [ItemPath: ChatLayoutAttributes]]]()</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">82</td>
@@ -435,27 +435,27 @@
 <tr class="covered">
 <td class="num">85</td>
 <td class="src"><pre><code class="objc">    init(layoutRepresentation: ChatLayoutRepresentation) {</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="covered">
 <td class="num">86</td>
 <td class="src"><pre><code class="objc">        self.layoutRepresentation = layoutRepresentation</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="covered">
 <td class="num">87</td>
 <td class="src"><pre><code class="objc">        storage = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="covered">
 <td class="num">88</td>
 <td class="src"><pre><code class="objc">        resetCachedAttributeObjects()</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="covered">
 <td class="num">89</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">90</td>
@@ -465,27 +465,27 @@
 <tr class="covered">
 <td class="num">91</td>
 <td class="src"><pre><code class="objc">    func set(_ sections: [SectionModel], at state: ModelState) {</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="covered">
 <td class="num">92</td>
 <td class="src"><pre><code class="objc">        var layoutModel = LayoutModel(sections: sections, collectionLayout: layoutRepresentation)</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="covered">
 <td class="num">93</td>
 <td class="src"><pre><code class="objc">        layoutModel.assembleLayout()</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="covered">
 <td class="num">94</td>
 <td class="src"><pre><code class="objc">        storage[state] = layoutModel</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="covered">
 <td class="num">95</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">23x</td>
+<td class="coverage">24x</td>
 </tr>
 <tr class="never">
 <td class="num">96</td>
@@ -540,27 +540,27 @@
 <tr class="covered">
 <td class="num">106</td>
 <td class="src"><pre><code class="objc">                                     ignoreCache: Bool = false) -&gt; [ChatLayoutAttributes] {</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">106x</td>
 </tr>
 <tr class="covered">
 <td class="num">107</td>
 <td class="src"><pre><code class="objc">        let predicate: (ChatLayoutAttributes) -&gt; ComparisonResult = { attributes in</code></pre></td>
-<td class="coverage">50x</td>
+<td class="coverage">656x</td>
 </tr>
 <tr class="covered">
 <td class="num">108</td>
 <td class="src"><pre><code class="objc">            if attributes.frame.intersects(rect) {</code></pre></td>
-<td class="coverage">50x</td>
+<td class="coverage">656x</td>
 </tr>
 <tr class="covered">
 <td class="num">109</td>
 <td class="src"><pre><code class="objc">                return .orderedSame</code></pre></td>
-<td class="coverage">45x</td>
+<td class="coverage">247x</td>
 </tr>
 <tr class="covered">
 <td class="num">110</td>
 <td class="src"><pre><code class="objc">            } else if attributes.frame.minY &gt; rect.maxY {</code></pre></td>
-<td class="coverage">45x</td>
+<td class="coverage">409x</td>
 </tr>
 <tr class="covered">
 <td class="num">111</td>
@@ -570,47 +570,47 @@
 <tr class="covered">
 <td class="num">112</td>
 <td class="src"><pre><code class="objc">            } else if attributes.frame.maxY &lt; rect.minY {</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">404x</td>
 </tr>
 <tr class="missed">
 <td class="num">113</td>
 <td class="src"><pre><code class="objc">                return .orderedAscending</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">114</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">404x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">115</td>
 <td class="src"><pre><code class="objc">            return .orderedSame</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">404x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">116</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">404x</td>
 </tr>
 <tr class="covered">
 <td class="num">117</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">106x</td>
 </tr>
 <tr class="covered">
 <td class="num">118</td>
 <td class="src"><pre><code class="objc">        if !ignoreCache,</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">106x</td>
 </tr>
 <tr class="covered">
 <td class="num">119</td>
 <td class="src"><pre><code class="objc">           let cachedAttributesState = cachedAttributesState,</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">106x</td>
 </tr>
 <tr class="covered">
 <td class="num">120</td>
 <td class="src"><pre><code class="objc">           cachedAttributesState.rect.contains(rect) {</code></pre></td>
-<td class="coverage">5x</td>
+<td class="coverage">106x</td>
 </tr>
 <tr class="covered">
 <td class="num">121</td>
@@ -620,32 +620,32 @@
 <tr class="covered">
 <td class="num">122</td>
 <td class="src"><pre><code class="objc">        } else {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">123</td>
 <td class="src"><pre><code class="objc">            let totalRect: CGRect</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">124</td>
 <td class="src"><pre><code class="objc">            switch state {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">125</td>
 <td class="src"><pre><code class="objc">            case .beforeUpdate:</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">126</td>
 <td class="src"><pre><code class="objc">                totalRect = rect.inset(by: UIEdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">127</td>
 <td class="src"><pre><code class="objc">            case .afterUpdate:</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="missed">
 <td class="num">128</td>
@@ -655,17 +655,17 @@
 <tr class="covered">
 <td class="num">129</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">130</td>
 <td class="src"><pre><code class="objc">            let attributes = allAttributes(at: state, visibleRect: totalRect)</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">131</td>
 <td class="src"><pre><code class="objc">            if !ignoreCache {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">132</td>
@@ -675,22 +675,22 @@
 <tr class="covered">
 <td class="num">133</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">134</td>
 <td class="src"><pre><code class="objc">            let visibleAttributes = rect != totalRect ? attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) } : attributes</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">135</td>
 <td class="src"><pre><code class="objc">            return visibleAttributes</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">136</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="missed">
 <td class="num">137</td>
@@ -725,27 +725,27 @@
 <tr class="covered">
 <td class="num">143</td>
 <td class="src"><pre><code class="objc">    func resetCachedAttributeObjects() {</code></pre></td>
-<td class="coverage">66x</td>
+<td class="coverage">67x</td>
 </tr>
 <tr class="covered">
 <td class="num">144</td>
 <td class="src"><pre><code class="objc">        ModelState.allCases.forEach { state in</code></pre></td>
-<td class="coverage">132x</td>
+<td class="coverage">134x</td>
 </tr>
 <tr class="covered">
 <td class="num">145</td>
 <td class="src"><pre><code class="objc">            resetCachedAttributeObjects(at: state)</code></pre></td>
-<td class="coverage">132x</td>
+<td class="coverage">134x</td>
 </tr>
 <tr class="covered">
 <td class="num">146</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">132x</td>
+<td class="coverage">134x</td>
 </tr>
 <tr class="covered">
 <td class="num">147</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">66x</td>
+<td class="coverage">67x</td>
 </tr>
 <tr class="never">
 <td class="num">148</td>
@@ -755,32 +755,32 @@
 <tr class="covered">
 <td class="num">149</td>
 <td class="src"><pre><code class="objc">    private func resetCachedAttributeObjects(at state: ModelState) {</code></pre></td>
-<td class="coverage">144x</td>
+<td class="coverage">146x</td>
 </tr>
 <tr class="covered">
 <td class="num">150</td>
 <td class="src"><pre><code class="objc">        cachedAttributeObjects[state] = [:]</code></pre></td>
-<td class="coverage">144x</td>
+<td class="coverage">146x</td>
 </tr>
 <tr class="covered">
 <td class="num">151</td>
 <td class="src"><pre><code class="objc">        ItemKind.allCases.forEach { kind in</code></pre></td>
-<td class="coverage">432x</td>
+<td class="coverage">438x</td>
 </tr>
 <tr class="covered">
 <td class="num">152</td>
 <td class="src"><pre><code class="objc">            cachedAttributeObjects[state]?[kind] = [:]</code></pre></td>
-<td class="coverage">432x</td>
+<td class="coverage">438x</td>
 </tr>
 <tr class="covered">
 <td class="num">153</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">432x</td>
+<td class="coverage">438x</td>
 </tr>
 <tr class="covered">
 <td class="num">154</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">144x</td>
+<td class="coverage">146x</td>
 </tr>
 <tr class="never">
 <td class="num">155</td>
@@ -805,27 +805,27 @@
 <tr class="covered">
 <td class="num">159</td>
 <td class="src"><pre><code class="objc">                        at state: ModelState) -&gt; ChatLayoutAttributes? {</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">160</td>
 <td class="src"><pre><code class="objc">        let attributes: ChatLayoutAttributes</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">161</td>
 <td class="src"><pre><code class="objc">        let itemIndexPath = itemPath.indexPath</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">162</td>
 <td class="src"><pre><code class="objc">        switch kind {</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">163</td>
 <td class="src"><pre><code class="objc">        case .header:</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">164</td>
@@ -940,7 +940,7 @@
 <tr class="covered">
 <td class="num">186</td>
 <td class="src"><pre><code class="objc">        case .footer:</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">187</td>
@@ -1055,17 +1055,17 @@
 <tr class="covered">
 <td class="num">209</td>
 <td class="src"><pre><code class="objc">        case .cell:</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">210</td>
 <td class="src"><pre><code class="objc">            guard itemPath.section &lt; layout(at: state).sections.count,</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">211</td>
 <td class="src"><pre><code class="objc">                  itemPath.item &lt; layout(at: state).sections[itemPath.section].items.count else {</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="missed">
 <td class="num">212</td>
@@ -1080,17 +1080,17 @@
 <tr class="covered">
 <td class="num">214</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">215</td>
 <td class="src"><pre><code class="objc">            guard let itemFrame = predefinedFrame ?? itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">216</td>
 <td class="src"><pre><code class="objc">                  let item = item(for: itemPath, kind: kind, at: state) else {</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="missed">
 <td class="num">217</td>
@@ -1100,112 +1100,112 @@
 <tr class="covered">
 <td class="num">218</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">219</td>
 <td class="src"><pre><code class="objc">            if let cachedAttributes = cachedAttributeObjects[state]?[.cell]?[itemPath] {</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">220</td>
 <td class="src"><pre><code class="objc">                attributes = cachedAttributes</code></pre></td>
-<td class="coverage">13x</td>
+<td class="coverage">413x</td>
 </tr>
 <tr class="covered">
 <td class="num">221</td>
 <td class="src"><pre><code class="objc">            } else {</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">222</td>
 <td class="src"><pre><code class="objc">                attributes = ChatLayoutAttributes(forCellWith: itemIndexPath)</code></pre></td>
-<td class="coverage">333x</td>
+<td class="coverage">337x</td>
 </tr>
 <tr class="covered">
 <td class="num">223</td>
 <td class="src"><pre><code class="objc">                cachedAttributeObjects[state]?[.cell]?[itemPath] = attributes</code></pre></td>
-<td class="coverage">333x</td>
+<td class="coverage">337x</td>
 </tr>
 <tr class="covered">
 <td class="num">224</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">225</td>
 <td class="src"><pre><code class="objc">            #if DEBUG</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">226</td>
 <td class="src"><pre><code class="objc">            attributes.id = item.id</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">227</td>
 <td class="src"><pre><code class="objc">            #endif</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">228</td>
 <td class="src"><pre><code class="objc">            attributes.frame = itemFrame</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">229</td>
 <td class="src"><pre><code class="objc">            attributes.indexPath = itemIndexPath</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">230</td>
 <td class="src"><pre><code class="objc">            attributes.zIndex = 0</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">231</td>
 <td class="src"><pre><code class="objc">            attributes.alignment = item.alignment</code></pre></td>
-<td class="coverage">346x</td>
+<td class="coverage">750x</td>
 </tr>
 <tr class="covered">
 <td class="num">232</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">233</td>
 <td class="src"><pre><code class="objc">        attributes.viewSize = layoutRepresentation.viewSize</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">234</td>
 <td class="src"><pre><code class="objc">        attributes.adjustedContentInsets = layoutRepresentation.adjustedContentInset</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">235</td>
 <td class="src"><pre><code class="objc">        attributes.visibleBoundsSize = layoutRepresentation.visibleBounds.size</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">236</td>
 <td class="src"><pre><code class="objc">        attributes.layoutFrame = layoutRepresentation.layoutFrame</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">237</td>
 <td class="src"><pre><code class="objc">        attributes.additionalInsets = layoutRepresentation.settings.additionalInsets</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">238</td>
 <td class="src"><pre><code class="objc">        return attributes</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="covered">
 <td class="num">239</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">368x</td>
+<td class="coverage">772x</td>
 </tr>
 <tr class="never">
 <td class="num">240</td>
@@ -1365,7 +1365,7 @@
 <tr class="covered">
 <td class="num">271</td>
 <td class="src"><pre><code class="objc">            itemFrame = offsetByCompensation(frame: itemFrame, at: itemPath, for: state, backward: true)</code></pre></td>
-<td class="coverage">376x</td>
+<td class="coverage">4310x</td>
 </tr>
 <tr class="never">
 <td class="num">272</td>
@@ -1695,12 +1695,12 @@
 <tr class="covered">
 <td class="num">337</td>
 <td class="src"><pre><code class="objc">        switch kind {</code></pre></td>
-<td class="coverage">61x</td>
+<td class="coverage">263x</td>
 </tr>
 <tr class="covered">
 <td class="num">338</td>
 <td class="src"><pre><code class="objc">        case .header:</code></pre></td>
-<td class="coverage">61x</td>
+<td class="coverage">263x</td>
 </tr>
 <tr class="covered">
 <td class="num">339</td>
@@ -1715,12 +1715,12 @@
 <tr class="covered">
 <td class="num">341</td>
 <td class="src"><pre><code class="objc">                // This occurs when getting layout attributes for initial / final animations</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">262x</td>
 </tr>
 <tr class="covered">
 <td class="num">342</td>
 <td class="src"><pre><code class="objc">                return nil</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">262x</td>
 </tr>
 <tr class="covered">
 <td class="num">343</td>
@@ -1730,12 +1730,12 @@
 <tr class="covered">
 <td class="num">344</td>
 <td class="src"><pre><code class="objc">            guard let header = layout(at: state).sections[itemPath.section].header else {</code></pre></td>
-<td class="coverage">57x</td>
+<td class="coverage">259x</td>
 </tr>
 <tr class="covered">
 <td class="num">345</td>
 <td class="src"><pre><code class="objc">                return nil</code></pre></td>
-<td class="coverage">57x</td>
+<td class="coverage">259x</td>
 </tr>
 <tr class="never">
 <td class="num">346</td>
@@ -1745,12 +1745,12 @@
 <tr class="covered">
 <td class="num">347</td>
 <td class="src"><pre><code class="objc">            return header</code></pre></td>
-<td class="coverage">46x</td>
+<td class="coverage">147x</td>
 </tr>
 <tr class="covered">
 <td class="num">348</td>
 <td class="src"><pre><code class="objc">        case .footer:</code></pre></td>
-<td class="coverage">46x</td>
+<td class="coverage">147x</td>
 </tr>
 <tr class="covered">
 <td class="num">349</td>
@@ -1765,12 +1765,12 @@
 <tr class="covered">
 <td class="num">351</td>
 <td class="src"><pre><code class="objc">                // This occurs when getting layout attributes for initial / final animations</code></pre></td>
-<td class="coverage">45x</td>
+<td class="coverage">146x</td>
 </tr>
 <tr class="covered">
 <td class="num">352</td>
 <td class="src"><pre><code class="objc">                return nil</code></pre></td>
-<td class="coverage">45x</td>
+<td class="coverage">146x</td>
 </tr>
 <tr class="covered">
 <td class="num">353</td>
@@ -1780,12 +1780,12 @@
 <tr class="covered">
 <td class="num">354</td>
 <td class="src"><pre><code class="objc">            guard let footer = layout(at: state).sections[itemPath.section].footer else {</code></pre></td>
-<td class="coverage">44x</td>
+<td class="coverage">145x</td>
 </tr>
 <tr class="covered">
 <td class="num">355</td>
 <td class="src"><pre><code class="objc">                return nil</code></pre></td>
-<td class="coverage">44x</td>
+<td class="coverage">145x</td>
 </tr>
 <tr class="never">
 <td class="num">356</td>
@@ -2530,27 +2530,27 @@
 <tr class="covered">
 <td class="num">504</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">42x</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">505</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">506</td>
 <td class="src"><pre><code class="objc">        var afterUpdateModelSections = afterUpdateModel.sections</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">507</td>
 <td class="src"><pre><code class="objc">        afterUpdateModelSections.withUnsafeMutableBufferPointer { directlyMutableSections in</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">508</td>
 <td class="src"><pre><code class="objc">            for index in 0..&lt;directlyMutableSections.count {</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="covered">
 <td class="num">509</td>
@@ -2574,12 +2574,12 @@
 </tr>
 <tr class="covered">
 <td class="num">513</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">        afterUpdateModel.assembleLayout()</code></pre></td>
 <td class="coverage">42x</td>
 </tr>
 <tr class="covered">
 <td class="num">514</td>
-<td class="src"><pre><code class="objc">        afterUpdateModel.assembleLayout()</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
@@ -2705,7 +2705,7 @@
 <tr class="covered">
 <td class="num">539</td>
 <td class="src"><pre><code class="objc">                return</code></pre></td>
-<td class="coverage">1850000x</td>
+<td class="coverage">1860000x</td>
 </tr>
 <tr class="never">
 <td class="num">540</td>
@@ -3015,12 +3015,12 @@
 <tr class="covered">
 <td class="num">601</td>
 <td class="src"><pre><code class="objc">        } else if !backward, isLayoutBiggerThanVisibleBounds(at: .afterUpdate) {</code></pre></td>
-<td class="coverage">1440000x</td>
+<td class="coverage">1460000x</td>
 </tr>
 <tr class="covered">
 <td class="num">602</td>
 <td class="src"><pre><code class="objc">            attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset)</code></pre></td>
-<td class="coverage">1440000x</td>
+<td class="coverage">1460000x</td>
 </tr>
 <tr class="missed">
 <td class="num">603</td>
@@ -3035,17 +3035,17 @@
 <tr class="covered">
 <td class="num">605</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">1440000x</td>
+<td class="coverage">1460000x</td>
 </tr>
 <tr class="covered">
 <td class="num">606</td>
 <td class="src"><pre><code class="objc">    func layout(at state: ModelState) -&gt; LayoutModel {</code></pre></td>
-<td class="coverage">1440000x</td>
+<td class="coverage">1460000x</td>
 </tr>
 <tr class="covered">
 <td class="num">607</td>
 <td class="src"><pre><code class="objc">        guard let layout = storage[state] else {</code></pre></td>
-<td class="coverage">1440000x</td>
+<td class="coverage">1460000x</td>
 </tr>
 <tr class="never">
 <td class="num">608</td>
@@ -3080,217 +3080,217 @@
 <tr class="covered">
 <td class="num">614</td>
 <td class="src"><pre><code class="objc">    func isLayoutBiggerThanVisibleBounds(at state: ModelState, withFullCompensation: Bool = false) -&gt; Bool {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">615</td>
 <td class="src"><pre><code class="objc">        let visibleBoundsHeight = layoutRepresentation.visibleBounds.height + (withFullCompensation ? batchUpdateCompensatingOffset + proposedCompensatingOffset : 0)</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">616</td>
 <td class="src"><pre><code class="objc">        return contentHeight(at: state).rounded() &gt; visibleBoundsHeight.rounded()</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">617</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">618</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">619</td>
 <td class="src"><pre><code class="objc">    private func allAttributes(at state: ModelState, visibleRect: CGRect? = nil) -&gt; [ChatLayoutAttributes] {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">620</td>
 <td class="src"><pre><code class="objc">        let layout = layout(at: state)</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">621</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">622</td>
 <td class="src"><pre><code class="objc">        if let visibleRect = visibleRect {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">623</td>
 <td class="src"><pre><code class="objc">            enum TraverseState {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">624</td>
 <td class="src"><pre><code class="objc">                case notFound</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">625</td>
 <td class="src"><pre><code class="objc">                case found</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">626</td>
 <td class="src"><pre><code class="objc">                case done</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">1070x</td>
 </tr>
 <tr class="covered">
 <td class="num">627</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">1070x</td>
 </tr>
 <tr class="covered">
 <td class="num">628</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">1070x</td>
 </tr>
 <tr class="covered">
 <td class="num">629</td>
 <td class="src"><pre><code class="objc">            var traverseState: TraverseState = .notFound</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">307x</td>
 </tr>
 <tr class="covered">
 <td class="num">630</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">631</td>
 <td class="src"><pre><code class="objc">            func check(rect: CGRect) -&gt; Bool {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">632</td>
 <td class="src"><pre><code class="objc">                switch traverseState {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">202x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">633</td>
 <td class="src"><pre><code class="objc">                case .notFound:</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">202x</td>
 </tr>
 <tr class="covered">
 <td class="num">634</td>
 <td class="src"><pre><code class="objc">                    if visibleRect.intersects(rect) {</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">1070x</td>
 </tr>
 <tr class="covered">
 <td class="num">635</td>
 <td class="src"><pre><code class="objc">                        traverseState = .found</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">1070x</td>
 </tr>
 <tr class="covered">
 <td class="num">636</td>
 <td class="src"><pre><code class="objc">                        return true</code></pre></td>
-<td class="coverage">52x</td>
+<td class="coverage">557x</td>
 </tr>
 <tr class="covered">
 <td class="num">637</td>
 <td class="src"><pre><code class="objc">                    } else {</code></pre></td>
-<td class="coverage">48x</td>
+<td class="coverage">351x</td>
 </tr>
 <tr class="covered">
 <td class="num">638</td>
 <td class="src"><pre><code class="objc">                        return false</code></pre></td>
-<td class="coverage">48x</td>
+<td class="coverage">351x</td>
 </tr>
 <tr class="covered">
 <td class="num">639</td>
 <td class="src"><pre><code class="objc">                    }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">206x</td>
 </tr>
 <tr class="covered">
 <td class="num">640</td>
 <td class="src"><pre><code class="objc">                case .found:</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">641</td>
 <td class="src"><pre><code class="objc">                    if visibleRect.intersects(rect) {</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">206x</td>
 </tr>
 <tr class="covered">
 <td class="num">642</td>
 <td class="src"><pre><code class="objc">                        return true</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">206x</td>
 </tr>
 <tr class="covered">
 <td class="num">643</td>
 <td class="src"><pre><code class="objc">                    } else {</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">1070x</td>
 </tr>
 <tr class="covered">
 <td class="num">644</td>
 <td class="src"><pre><code class="objc">                        if rect.minY &gt; visibleRect.maxY + batchUpdateCompensatingOffset + proposedCompensatingOffset {</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">1070x</td>
 </tr>
 <tr class="covered">
 <td class="num">645</td>
 <td class="src"><pre><code class="objc">                            traverseState = .done</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">206x</td>
 </tr>
 <tr class="covered">
 <td class="num">646</td>
 <td class="src"><pre><code class="objc">                        }</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">1070x</td>
 </tr>
 <tr class="covered">
 <td class="num">647</td>
 <td class="src"><pre><code class="objc">                        return false</code></pre></td>
-<td class="coverage">60x</td>
+<td class="coverage">1070x</td>
 </tr>
 <tr class="covered">
 <td class="num">648</td>
 <td class="src"><pre><code class="objc">                    }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">649</td>
 <td class="src"><pre><code class="objc">                case .done:</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">650</td>
 <td class="src"><pre><code class="objc">                    return false</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">651</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">652</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">12x</td>
+<td class="coverage">214x</td>
 </tr>
 <tr class="covered">
 <td class="num">653</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">12x</td>
+<td class="coverage">214x</td>
 </tr>
 <tr class="covered">
 <td class="num">654</td>
 <td class="src"><pre><code class="objc">            var allRects = [(frame: CGRect, indexPath: ItemPath, kind: ItemKind)]()</code></pre></td>
-<td class="coverage">12x</td>
+<td class="coverage">214x</td>
 </tr>
 <tr class="covered">
 <td class="num">655</td>
 <td class="src"><pre><code class="objc">            // I dont think there can be more then a 200 elements on the screen simultaneously</code></pre></td>
-<td class="coverage">12x</td>
+<td class="coverage">214x</td>
 </tr>
 <tr class="covered">
 <td class="num">656</td>
 <td class="src"><pre><code class="objc">            allRects.reserveCapacity(200)</code></pre></td>
-<td class="coverage">12x</td>
+<td class="coverage">214x</td>
 </tr>
 <tr class="covered">
 <td class="num">657</td>
@@ -3300,197 +3300,197 @@
 <tr class="covered">
 <td class="num">658</td>
 <td class="src"><pre><code class="objc">                let section = layout.sections[sectionIndex]</code></pre></td>
-<td class="coverage">12x</td>
+<td class="coverage">214x</td>
 </tr>
 <tr class="covered">
 <td class="num">659</td>
 <td class="src"><pre><code class="objc">                let sectionPath = ItemPath(item: 0, section: sectionIndex)</code></pre></td>
-<td class="coverage">12x</td>
+<td class="coverage">214x</td>
 </tr>
 <tr class="covered">
 <td class="num">660</td>
 <td class="src"><pre><code class="objc">                if let headerFrame = itemFrame(for: sectionPath, kind: .header, at: state, isFinal: true),</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">661</td>
 <td class="src"><pre><code class="objc">                   check(rect: headerFrame) {</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">662</td>
 <td class="src"><pre><code class="objc">                    allRects.append((frame: headerFrame, indexPath: sectionPath, kind: .header))</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">663</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">664</td>
 <td class="src"><pre><code class="objc">                guard traverseState != .done else {</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">665</td>
 <td class="src"><pre><code class="objc">                    break</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">666</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2620x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">667</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2620x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">668</td>
 <td class="src"><pre><code class="objc">                var startingIndex = 0</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2620x</td>
 </tr>
 <tr class="missed">
 <td class="num">669</td>
 <td class="src"><pre><code class="objc">                // If header is not visible</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">670</td>
 <td class="src"><pre><code class="objc">                if traverseState == .notFound, !section.items.isEmpty {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2620x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">671</td>
 <td class="src"><pre><code class="objc">                    func predicate(itemIndex: Int) -&gt; ComparisonResult {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2620x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">672</td>
 <td class="src"><pre><code class="objc">                        let itemPath = ItemPath(item: itemIndex, section: sectionIndex)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">673</td>
 <td class="src"><pre><code class="objc">                        guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2520x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">674</td>
 <td class="src"><pre><code class="objc">                            return .orderedDescending</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">675</td>
 <td class="src"><pre><code class="objc">                        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2420x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">676</td>
 <td class="src"><pre><code class="objc">                        if itemFrame.intersects(visibleRect) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2420x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">677</td>
 <td class="src"><pre><code class="objc">                            return .orderedSame</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2420x</td>
 </tr>
 <tr class="missed">
 <td class="num">678</td>
 <td class="src"><pre><code class="objc">                        } else if itemFrame.minY &gt; visibleRect.maxY {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">679</td>
 <td class="src"><pre><code class="objc">                            return .orderedDescending</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">2420x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">680</td>
 <td class="src"><pre><code class="objc">                        } else if itemFrame.maxX &lt; visibleRect.minY {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">681</td>
 <td class="src"><pre><code class="objc">                            return .orderedAscending</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">682</td>
 <td class="src"><pre><code class="objc">                        }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">683</td>
 <td class="src"><pre><code class="objc">                        return .orderedSame</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">684</td>
 <td class="src"><pre><code class="objc">                    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">685</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">686</td>
 <td class="src"><pre><code class="objc">                    // Find if any of the items of the section is visible</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">303x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">687</td>
 <td class="src"><pre><code class="objc">                    if [ComparisonResult.orderedSame, .orderedDescending].contains(predicate(itemIndex: section.items.count - 1)),</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">303x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">688</td>
 <td class="src"><pre><code class="objc">                       let firstMatchingIndex = Array(0...section.items.count - 1).withUnsafeBufferPointer({ $0.binarySearch(predicate: predicate) }) {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">303x</td>
 </tr>
 <tr class="missed">
 <td class="num">689</td>
 <td class="src"><pre><code class="objc">                        // Find first item that is visible</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">690</td>
 <td class="src"><pre><code class="objc">                        startingIndex = firstMatchingIndex</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">303x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">691</td>
 <td class="src"><pre><code class="objc">                        for itemIndex in (0..&lt;firstMatchingIndex).reversed() {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">303x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">692</td>
 <td class="src"><pre><code class="objc">                            let itemPath = ItemPath(item: itemIndex, section: sectionIndex)</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">693</td>
 <td class="src"><pre><code class="objc">                            guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">202x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">694</td>
 <td class="src"><pre><code class="objc">                                continue</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">202x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">695</td>
 <td class="src"><pre><code class="objc">                            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">202x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">696</td>
 <td class="src"><pre><code class="objc">                            guard itemFrame.maxY &gt;= visibleRect.minY else {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
 <tr class="missed">
 <td class="num">697</td>
@@ -3502,60 +3502,60 @@
 <td class="src"><pre><code class="objc">                            }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">699</td>
 <td class="src"><pre><code class="objc">                            startingIndex = itemIndex</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
 <tr class="covered">
 <td class="num">700</td>
 <td class="src"><pre><code class="objc">                        }</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">701</td>
 <td class="src"><pre><code class="objc">                    } else {</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">702</td>
 <td class="src"><pre><code class="objc">                        // Otherwise we can safely skip all the items in the section and go to footer.</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">703</td>
 <td class="src"><pre><code class="objc">                        startingIndex = section.items.count</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">747x</td>
 </tr>
 <tr class="covered">
 <td class="num">704</td>
 <td class="src"><pre><code class="objc">                    }</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">747x</td>
 </tr>
 <tr class="covered">
 <td class="num">705</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">747x</td>
 </tr>
 <tr class="covered">
 <td class="num">706</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">747x</td>
 </tr>
 <tr class="covered">
 <td class="num">707</td>
 <td class="src"><pre><code class="objc">                if startingIndex &lt; section.items.count {</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">444x</td>
 </tr>
 <tr class="covered">
 <td class="num">708</td>
 <td class="src"><pre><code class="objc">                    for itemIndex in startingIndex..&lt;section.items.count {</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">444x</td>
 </tr>
 <tr class="covered">
 <td class="num">709</td>
 <td class="src"><pre><code class="objc">                        let itemPath = ItemPath(item: itemIndex, section: sectionIndex)</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">444x</td>
 </tr>
 <tr class="missed">
 <td class="num">710</td>
@@ -3710,52 +3710,52 @@
 <tr class="covered">
 <td class="num">740</td>
 <td class="src"><pre><code class="objc">                                    return false</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">444x</td>
 </tr>
 <tr class="covered">
 <td class="num">741</td>
 <td class="src"><pre><code class="objc">                                }</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">747x</td>
 </tr>
 <tr class="covered">
 <td class="num">742</td>
 <td class="src"><pre><code class="objc">                                if itemWillBeVisible || itemWasVisibleBefore {</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">747x</td>
 </tr>
-<tr class="missed">
+<tr class="covered">
 <td class="num">743</td>
 <td class="src"><pre><code class="objc">                                    allRects.append((frame: itemFrame, indexPath: itemPath, kind: .cell))</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage">101x</td>
 </tr>
 <tr class="covered">
 <td class="num">744</td>
 <td class="src"><pre><code class="objc">                                }</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">646x</td>
 </tr>
 <tr class="covered">
 <td class="num">745</td>
 <td class="src"><pre><code class="objc">                            }</code></pre></td>
-<td class="coverage">40x</td>
+<td class="coverage">646x</td>
 </tr>
 <tr class="covered">
 <td class="num">746</td>
 <td class="src"><pre><code class="objc">                        }</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">747</td>
 <td class="src"><pre><code class="objc">                        guard traverseState != .done else {</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">748</td>
 <td class="src"><pre><code class="objc">                            break</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">749</td>
 <td class="src"><pre><code class="objc">                        }</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">750</td>
@@ -3765,37 +3765,37 @@
 <tr class="covered">
 <td class="num">751</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">752</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">8x</td>
+<td class="coverage">109x</td>
 </tr>
 <tr class="covered">
 <td class="num">753</td>
 <td class="src"><pre><code class="objc">                if let footerFrame = itemFrame(for: sectionPath, kind: .footer, at: state, isFinal: true),</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="covered">
 <td class="num">754</td>
 <td class="src"><pre><code class="objc">                   check(rect: footerFrame) {</code></pre></td>
-<td class="coverage">52x</td>
+<td class="coverage">105x</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">755</td>
 <td class="src"><pre><code class="objc">                    allRects.append((frame: footerFrame, indexPath: sectionPath, kind: .footer))</code></pre></td>
-<td class="coverage">52x</td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">756</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage">52x</td>
+<td class="coverage">!</td>
 </tr>
 <tr class="covered">
 <td class="num">757</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">4x</td>
+<td class="coverage">105x</td>
 </tr>
 <tr class="missed">
 <td class="num">758</td>
@@ -4300,32 +4300,32 @@
 <tr class="covered">
 <td class="num">858</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">376x</td>
+<td class="coverage">4310x</td>
 </tr>
 <tr class="covered">
 <td class="num">859</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">376x</td>
+<td class="coverage">4310x</td>
 </tr>
 <tr class="covered">
 <td class="num">860</td>
 <td class="src"><pre><code class="objc">    private func offsetByCompensation(frame: CGRect,</code></pre></td>
-<td class="coverage">376x</td>
+<td class="coverage">4310x</td>
 </tr>
 <tr class="covered">
 <td class="num">861</td>
 <td class="src"><pre><code class="objc">                                      at itemPath: ItemPath,</code></pre></td>
-<td class="coverage">376x</td>
+<td class="coverage">4310x</td>
 </tr>
 <tr class="covered">
 <td class="num">862</td>
 <td class="src"><pre><code class="objc">                                      for state: ModelState,</code></pre></td>
-<td class="coverage">376x</td>
+<td class="coverage">4310x</td>
 </tr>
 <tr class="covered">
 <td class="num">863</td>
 <td class="src"><pre><code class="objc">                                      backward: Bool = false) -&gt; CGRect {</code></pre></td>
-<td class="coverage">376x</td>
+<td class="coverage">4310x</td>
 </tr>
 <tr class="missed">
 <td class="num">864</td>
@@ -4335,7 +4335,7 @@
 <tr class="covered">
 <td class="num">865</td>
 <td class="src"><pre><code class="objc">              state == .afterUpdate,</code></pre></td>
-<td class="coverage">376x</td>
+<td class="coverage">4310x</td>
 </tr>
 <tr class="never">
 <td class="num">866</td>
@@ -4447,235 +4447,235 @@
 <td class="src"><pre><code class="objc">                upperBound = midIndex</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">888</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">889</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">890</td>
 <td class="src"><pre><code class="objc">        return nil</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">891</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">892</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">893</td>
 <td class="src"><pre><code class="objc">    func binarySearchRange(predicate: (Element) -&gt; ComparisonResult) -&gt; [Element] {</code></pre></td>
-<td class="coverage">18000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">894</td>
 <td class="src"><pre><code class="objc">        func leftMostSearch(lowerBound: Index, upperBound: Index) -&gt; Index? {</code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">895</td>
 <td class="src"><pre><code class="objc">            var lowerBound = lowerBound</code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">896</td>
 <td class="src"><pre><code class="objc">            var upperBound = upperBound</code></pre></td>
-<td class="coverage">7000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">897</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">898</td>
 <td class="src"><pre><code class="objc">            while lowerBound &lt; upperBound {</code></pre></td>
-<td class="coverage">10000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">899</td>
 <td class="src"><pre><code class="objc">                let midIndex = (lowerBound &amp;+ upperBound) / 2</code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">900</td>
 <td class="src"><pre><code class="objc">                if predicate(self[midIndex]) == .orderedAscending {</code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">901</td>
 <td class="src"><pre><code class="objc">                    lowerBound = midIndex &amp;+ 1</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">902</td>
 <td class="src"><pre><code class="objc">                } else {</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">903</td>
 <td class="src"><pre><code class="objc">                    upperBound = midIndex</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">904</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage">1x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">905</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">1x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">906</td>
 <td class="src"><pre><code class="objc">            if predicate(self[lowerBound]) == .orderedSame {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">907</td>
 <td class="src"><pre><code class="objc">                return lowerBound</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">908</td>
 <td class="src"><pre><code class="objc">            } else {</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">909</td>
 <td class="src"><pre><code class="objc">                return nil</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">910</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">911</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">912</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">18000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">913</td>
 <td class="src"><pre><code class="objc">        func rightMostSearch(lowerBound: Index, upperBound: Index) -&gt; Index? {</code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">914</td>
 <td class="src"><pre><code class="objc">            var lowerBound = lowerBound</code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">915</td>
 <td class="src"><pre><code class="objc">            var upperBound = upperBound</code></pre></td>
-<td class="coverage">12000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">916</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">917</td>
 <td class="src"><pre><code class="objc">            while lowerBound &lt; upperBound {</code></pre></td>
-<td class="coverage">5000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">918</td>
 <td class="src"><pre><code class="objc">                let midIndex = (lowerBound &amp;+ upperBound &amp;+ 1) / 2</code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">919</td>
 <td class="src"><pre><code class="objc">                if predicate(self[midIndex]) == .orderedDescending {</code></pre></td>
-<td class="coverage">17000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">920</td>
 <td class="src"><pre><code class="objc">                    upperBound = midIndex &amp;- 1</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">921</td>
 <td class="src"><pre><code class="objc">                } else {</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">922</td>
 <td class="src"><pre><code class="objc">                    lowerBound = midIndex</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">923</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">924</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">925</td>
 <td class="src"><pre><code class="objc">            if predicate(self[lowerBound]) == .orderedSame {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">926</td>
 <td class="src"><pre><code class="objc">                return lowerBound</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">927</td>
 <td class="src"><pre><code class="objc">            } else {</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">928</td>
 <td class="src"><pre><code class="objc">                return nil</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">929</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage">2x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">930</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">931</td>
 <td class="src"><pre><code class="objc">        guard !isEmpty,</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">932</td>
 <td class="src"><pre><code class="objc">              let lowerBound = leftMostSearch(lowerBound: startIndex, upperBound: endIndex - 1),</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
-<tr class="covered">
+<tr class="never">
 <td class="num">933</td>
 <td class="src"><pre><code class="objc">              let upperBound = rightMostSearch(lowerBound: startIndex, upperBound: endIndex - 1) else {</code></pre></td>
-<td class="coverage">1000000x</td>
+<td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">934</td>

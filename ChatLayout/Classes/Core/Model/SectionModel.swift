@@ -150,9 +150,10 @@ struct SectionModel {
             return
         }
         if index < items.count &- 1 {
+            let nextIndex = index &+ 1
             items.withUnsafeMutableBufferPointer { directlyMutableItems in
-                for index in (index &+ 1)..<directlyMutableItems.count {
-                    directlyMutableItems[index].offsetY += heightDiff
+                DispatchQueue.concurrentPerform(iterations: directlyMutableItems.count &- nextIndex) { internalIndex in
+                    directlyMutableItems[internalIndex &+ nextIndex].offsetY += heightDiff
                 }
             }
         }

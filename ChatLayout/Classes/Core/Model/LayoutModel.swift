@@ -136,9 +136,10 @@ struct LayoutModel {
             return
         }
         if index < sections.count &- 1 {
+            let nextIndex = index &+ 1
             sections.withUnsafeMutableBufferPointer { directlyMutableSections in
-                for index in (index &+ 1)..<directlyMutableSections.count {
-                    directlyMutableSections[index].offsetY += heightDiff
+                DispatchQueue.concurrentPerform(iterations: directlyMutableSections.count &- nextIndex) { internalIndex in
+                    directlyMutableSections[internalIndex &+ nextIndex].offsetY += heightDiff
                 }
             }
         }

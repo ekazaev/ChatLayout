@@ -103,7 +103,6 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         textView.textContainer.lineFragmentPadding = 0
         textView.dataDetectorTypes = .all
         textView.font = .preferredFont(forTextStyle: .body)
-        textView.layoutManager.allowsNonContiguousLayout = true
         textView.scrollsToTop = false
         textView.bounces = false
         textView.bouncesZoom = false

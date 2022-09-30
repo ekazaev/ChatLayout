@@ -334,42 +334,35 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
         if prepareActions.contains(.updateLayoutMetrics),
            !prepareActions.contains(.recreateSectionModels) {
+            var sections: [SectionModel] = controller.layout(at: state).sections
+            sections.withUnsafeMutableBufferPointer { directlyMutableSections in
+                for sectionIndex in 0..<directlyMutableSections.count {
+                    var section = directlyMutableSections[sectionIndex]
 
-            var sections: [SectionModel] = []
-            sections.reserveCapacity(controller.numberOfSections(at: state))
-            for sectionIndex in 0..<controller.numberOfSections(at: state) {
-                var section = controller.section(at: sectionIndex, at: state)
+                    // Header
+                    if var header = section.header {
+                        header.resetSize()
+                        section.set(header: header)
+                    }
 
-                // Header
-                if delegate?.shouldPresentHeader(self, at: sectionIndex) == true {
-                    var header = section.header
-                    header?.resetSize()
-                    section.set(header: header)
-                } else {
-                    section.set(header: nil)
+                    // Items
+                    var items: [ItemModel] = section.items
+                    items.withUnsafeMutableBufferPointer { directlyMutableItems in
+                        DispatchQueue.concurrentPerform(iterations: directlyMutableItems.count, execute: { rowIndex in
+                            directlyMutableItems[rowIndex].resetSize()
+                        })
+                    }
+                    section.set(items: items)
+
+                    // Footer
+                    if var footer = section.footer {
+                        footer.resetSize()
+                        section.set(footer: footer)
+                    }
+
+                    section.assembleLayout()
+                    directlyMutableSections[sectionIndex] = section
                 }
-
-                // Items
-                var items: [ItemModel] = []
-                items.reserveCapacity(section.items.count)
-                for rowIndex in 0..<section.items.count {
-                    var item = section.items[rowIndex]
-                    item.resetSize()
-                    items.append(item)
-                }
-                section.set(items: items)
-
-                // Footer
-                if delegate?.shouldPresentFooter(self, at: sectionIndex) == true {
-                    var footer = section.footer
-                    footer?.resetSize()
-                    section.set(footer: footer)
-                } else {
-                    section.set(footer: nil)
-                }
-
-                section.assembleLayout()
-                sections.append(section)
             }
             controller.set(sections, at: state)
         }
