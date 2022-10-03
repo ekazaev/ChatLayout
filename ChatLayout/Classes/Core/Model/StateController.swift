@@ -243,7 +243,6 @@ final class StateController {
         return attributes
     }
 
-
     func itemFrame(for itemPath: ItemPath, kind: ItemKind, at state: ModelState, isFinal: Bool = false, additionalAttributes: AdditionalLayoutAttributes? = nil) -> CGRect? {
         let additionalAttributes = additionalAttributes ?? AdditionalLayoutAttributes(layoutRepresentation)
         guard itemPath.section < layout(at: state).sections.count else {
@@ -963,10 +962,10 @@ struct AdditionalLayoutAttributes {
     let layoutFrame: CGRect
 
     fileprivate init(_ layoutRepresentation: ChatLayoutRepresentation) {
-        self.viewSize = layoutRepresentation.viewSize
-        self.adjustedContentInsets = layoutRepresentation.adjustedContentInset
-        self.visibleBounds = layoutRepresentation.visibleBounds
-        self.layoutFrame = layoutRepresentation.layoutFrame
-        self.additionalInsets = layoutRepresentation.settings.additionalInsets
+        viewSize = layoutRepresentation.viewSize
+        adjustedContentInsets = layoutRepresentation.adjustedContentInset
+        visibleBounds = layoutRepresentation.visibleBounds
+        layoutFrame = layoutRepresentation.layoutFrame
+        additionalInsets = layoutRepresentation.settings.additionalInsets
     }
 }
