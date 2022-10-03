@@ -7,9 +7,9 @@
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "LayoutModel.swift" : </span><span class="cov_low">65.96%</span>
+<span>Coverage for "LayoutModel.swift" : </span><span class="cov_medium">74.19%</span>
 </h2>
-<h4 class="cov_subtitle">(62 of 94 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(92 of 124 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/Model/LayoutModel.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -180,92 +180,92 @@
 <tr class="covered">
 <td class="num">34</td>
 <td class="src"><pre><code class="objc">    init(sections: [SectionModel], collectionLayout: ChatLayoutRepresentation) {</code></pre></td>
-<td class="coverage">90x</td>
+<td class="coverage">88x</td>
 </tr>
 <tr class="covered">
 <td class="num">35</td>
 <td class="src"><pre><code class="objc">        self.sections = sections</code></pre></td>
-<td class="coverage">90x</td>
+<td class="coverage">88x</td>
 </tr>
 <tr class="covered">
 <td class="num">36</td>
 <td class="src"><pre><code class="objc">        self.collectionLayout = collectionLayout</code></pre></td>
-<td class="coverage">90x</td>
+<td class="coverage">88x</td>
 </tr>
 <tr class="covered">
 <td class="num">37</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">90x</td>
+<td class="coverage">88x</td>
 </tr>
 <tr class="never">
 <td class="num">38</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">39</td>
 <td class="src"><pre><code class="objc">    mutating func assembleLayout() {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">65x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">40</td>
 <td class="src"><pre><code class="objc">        var offset: CGFloat = collectionLayout.settings.additionalInsets.top</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">65x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">41</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">65x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">42</td>
 <td class="src"><pre><code class="objc">        var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">65x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">43</td>
 <td class="src"><pre><code class="objc">        var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath](minimumCapacity: sections.reduce(into: 0) { $0 += $1.items.count })</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">65x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">44</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">65x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">45</td>
 <td class="src"><pre><code class="objc">        sections.withUnsafeMutableBufferPointer { directlyMutableSections in</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">115x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">46</td>
 <td class="src"><pre><code class="objc">            for sectionIndex in 0..&lt;directlyMutableSections.count {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">115x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">47</td>
 <td class="src"><pre><code class="objc">                sectionIndexByIdentifierCache[directlyMutableSections[sectionIndex].id] = sectionIndex</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">115x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">48</td>
 <td class="src"><pre><code class="objc">                directlyMutableSections[sectionIndex].offsetY = offset</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">115x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">49</td>
 <td class="src"><pre><code class="objc">                offset += directlyMutableSections[sectionIndex].height + collectionLayout.settings.interSectionSpacing</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">115x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">50</td>
 <td class="src"><pre><code class="objc">                if let header = directlyMutableSections[sectionIndex].header {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">112x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">51</td>
 <td class="src"><pre><code class="objc">                    itemPathByIdentifierCache[ItemUUIDKey(kind: .header, id: header.id)] = ItemPath(item: 0, section: sectionIndex)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">115x</td>
 </tr>
 <tr class="never">
 <td class="num">52</td>
@@ -282,40 +282,40 @@
 <td class="src"><pre><code class="objc">                    itemPathByIdentifierCache[ItemUUIDKey(kind: .cell, id: directlyMutableSections[sectionIndex].items[itemIndex].id)] = ItemPath(item: itemIndex, section: sectionIndex)</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">55</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">115x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">56</td>
 <td class="src"><pre><code class="objc">                if let footer = directlyMutableSections[sectionIndex].footer {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">114x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">57</td>
 <td class="src"><pre><code class="objc">                    itemPathByIdentifierCache[ItemUUIDKey(kind: .footer, id: footer.id)] = ItemPath(item: 0, section: sectionIndex)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">115x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">58</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">115x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">59</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">65x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">60</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">65x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">61</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">65x</td>
 </tr>
 <tr class="never">
 <td class="num">62</td>
@@ -662,55 +662,55 @@
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">131</td>
 <td class="src"><pre><code class="objc">        return itemPathByIdentifierCache[ItemUUIDKey(kind: kind, id: itemId)]</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">10000x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">132</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">10000x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">133</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">9000x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">134</td>
 <td class="src"><pre><code class="objc">    private mutating func offsetEverything(below index: Int, by heightDiff: CGFloat) {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">9000x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">135</td>
 <td class="src"><pre><code class="objc">        guard heightDiff != 0 else {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1000x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">136</td>
 <td class="src"><pre><code class="objc">            return</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">137</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">138</td>
 <td class="src"><pre><code class="objc">        if index &lt; sections.count &amp;- 1 {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">16x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">139</td>
 <td class="src"><pre><code class="objc">            let nextIndex = index &amp;+ 1</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1000x</td>
 </tr>
-<tr class="never">
+<tr class="covered">
 <td class="num">140</td>
 <td class="src"><pre><code class="objc">            sections.withUnsafeMutableBufferPointer { directlyMutableSections in</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">1000x</td>
 </tr>
 <tr class="never">
 <td class="num">141</td>

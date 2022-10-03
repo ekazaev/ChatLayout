@@ -156,17 +156,22 @@ final class StateController {
     func itemAttributes(for itemPath: ItemPath,
                         kind: ItemKind,
                         predefinedFrame: CGRect? = nil,
-                        at state: ModelState) -> ChatLayoutAttributes? {
+                        at state: ModelState,
+                        additionalAttributes: AdditionalLayoutAttributes? = nil) -> ChatLayoutAttributes? {
+        let additionalAttributes = additionalAttributes ?? AdditionalLayoutAttributes(layoutRepresentation)
+
         let attributes: ChatLayoutAttributes
         let itemIndexPath = itemPath.indexPath
+        let layout = layout(at: state)
+
         switch kind {
         case .header:
-            guard itemPath.section < layout(at: state).sections.count,
+            guard itemPath.section < layout.sections.count,
                   itemPath.item == 0 else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
-            guard let headerFrame = predefinedFrame ?? itemFrame(for: itemPath, kind: kind, at: state, isFinal: true),
+            guard let headerFrame = predefinedFrame ?? itemFrame(for: itemPath, kind: kind, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                   let item = item(for: itemPath, kind: kind, at: state) else {
                 return nil
             }
@@ -184,12 +189,12 @@ final class StateController {
             attributes.zIndex = 10
             attributes.alignment = item.alignment
         case .footer:
-            guard itemPath.section < layout(at: state).sections.count,
+            guard itemPath.section < layout.sections.count,
                   itemPath.item == 0 else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
-            guard let footerFrame = predefinedFrame ?? itemFrame(for: itemPath, kind: kind, at: state, isFinal: true),
+            guard let footerFrame = predefinedFrame ?? itemFrame(for: itemPath, kind: kind, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                   let item = item(for: itemPath, kind: kind, at: state) else {
                 return nil
             }
@@ -207,12 +212,12 @@ final class StateController {
             attributes.zIndex = 10
             attributes.alignment = item.alignment
         case .cell:
-            guard itemPath.section < layout(at: state).sections.count,
-                  itemPath.item < layout(at: state).sections[itemPath.section].items.count else {
+            guard itemPath.section < layout.sections.count,
+                  itemPath.item < layout.sections[itemPath.section].items.count else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
-            guard let itemFrame = predefinedFrame ?? itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
+            guard let itemFrame = predefinedFrame ?? itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                   let item = item(for: itemPath, kind: kind, at: state) else {
                 return nil
             }
@@ -230,15 +235,17 @@ final class StateController {
             attributes.zIndex = 0
             attributes.alignment = item.alignment
         }
-        attributes.viewSize = layoutRepresentation.viewSize
-        attributes.adjustedContentInsets = layoutRepresentation.adjustedContentInset
-        attributes.visibleBoundsSize = layoutRepresentation.visibleBounds.size
-        attributes.layoutFrame = layoutRepresentation.layoutFrame
-        attributes.additionalInsets = layoutRepresentation.settings.additionalInsets
+        attributes.viewSize = additionalAttributes.viewSize
+        attributes.adjustedContentInsets = additionalAttributes.adjustedContentInsets
+        attributes.visibleBoundsSize = additionalAttributes.visibleBounds.size
+        attributes.layoutFrame = additionalAttributes.layoutFrame
+        attributes.additionalInsets = additionalAttributes.additionalInsets
         return attributes
     }
 
-    func itemFrame(for itemPath: ItemPath, kind: ItemKind, at state: ModelState, isFinal: Bool = false) -> CGRect? {
+
+    func itemFrame(for itemPath: ItemPath, kind: ItemKind, at state: ModelState, isFinal: Bool = false, additionalAttributes: AdditionalLayoutAttributes? = nil) -> CGRect? {
+        let additionalAttributes = additionalAttributes ?? AdditionalLayoutAttributes(layoutRepresentation)
         guard itemPath.section < layout(at: state).sections.count else {
             return nil
         }
@@ -250,8 +257,8 @@ final class StateController {
         let section = layout(at: state).sections[itemPath.section]
         var itemFrame = item.frame
         let dx: CGFloat
-        let visibleBounds = layoutRepresentation.visibleBounds
-        let additionalInsets = layoutRepresentation.settings.additionalInsets
+        let visibleBounds = additionalAttributes.visibleBounds
+        let additionalInsets = additionalAttributes.additionalInsets
 
         switch item.alignment {
         case .leading:
@@ -263,7 +270,7 @@ final class StateController {
             dx = additionalInsets.left + availableWidth / 2 - itemFrame.width / 2
         case .fullWidth:
             dx = additionalInsets.left
-            itemFrame.size.width = layoutRepresentation.layoutFrame.size.width
+            itemFrame.size.width = additionalAttributes.layoutFrame.size.width
         }
 
         itemFrame = itemFrame.offsetBy(dx: dx, dy: section.offsetY)
@@ -303,14 +310,15 @@ final class StateController {
     }
 
     func itemIdentifier(for itemPath: ItemPath, kind: ItemKind, at state: ModelState) -> UUID? {
-        guard itemPath.section < layout(at: state).sections.count else {
+        let layout = layout(at: state)
+        guard itemPath.section < layout.sections.count else {
             // This occurs when getting layout attributes for initial / final animations
             return nil
         }
-        let sectionModel = layout(at: state).sections[itemPath.section]
+        let sectionModel = layout.sections[itemPath.section]
         switch kind {
         case .cell:
-            guard itemPath.item < layout(at: state).sections[itemPath.section].items.count else {
+            guard itemPath.item < layout.sections[itemPath.section].items.count else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
@@ -334,34 +342,35 @@ final class StateController {
     }
 
     func item(for itemPath: ItemPath, kind: ItemKind, at state: ModelState) -> ItemModel? {
+        let layout = layout(at: state)
         switch kind {
         case .header:
-            guard itemPath.section < layout(at: state).sections.count,
+            guard itemPath.section < layout.sections.count,
                   itemPath.item == 0 else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
-            guard let header = layout(at: state).sections[itemPath.section].header else {
+            guard let header = layout.sections[itemPath.section].header else {
                 return nil
             }
             return header
         case .footer:
-            guard itemPath.section < layout(at: state).sections.count,
+            guard itemPath.section < layout.sections.count,
                   itemPath.item == 0 else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
-            guard let footer = layout(at: state).sections[itemPath.section].footer else {
+            guard let footer = layout.sections[itemPath.section].footer else {
                 return nil
             }
             return footer
         case .cell:
-            guard itemPath.section < layout(at: state).sections.count,
-                  itemPath.item < layout(at: state).sections[itemPath.section].items.count else {
+            guard itemPath.section < layout.sections.count,
+                  itemPath.item < layout.sections[itemPath.section].items.count else {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
-            return layout(at: state).sections[itemPath.section].items[itemPath.item]
+            return layout.sections[itemPath.section].items[itemPath.item]
         }
     }
 
@@ -618,6 +627,7 @@ final class StateController {
 
     private func allAttributes(at state: ModelState, visibleRect: CGRect? = nil) -> [ChatLayoutAttributes] {
         let layout = layout(at: state)
+        let additionalAttributes = AdditionalLayoutAttributes(layoutRepresentation)
 
         if let visibleRect = visibleRect {
             enum TraverseState {
@@ -652,12 +662,12 @@ final class StateController {
             }
 
             var allRects = [(frame: CGRect, indexPath: ItemPath, kind: ItemKind)]()
-            // I dont think there can be more then a 200 elements on the screen simultaneously
-            allRects.reserveCapacity(200)
+            allRects.reserveCapacity(layout.sections.reduce(into: 0) { $0 += $1.items.count })
+
             for sectionIndex in 0..<layout.sections.count {
                 let section = layout.sections[sectionIndex]
                 let sectionPath = ItemPath(item: 0, section: sectionIndex)
-                if let headerFrame = itemFrame(for: sectionPath, kind: .header, at: state, isFinal: true),
+                if let headerFrame = itemFrame(for: sectionPath, kind: .header, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                    check(rect: headerFrame) {
                     allRects.append((frame: headerFrame, indexPath: sectionPath, kind: .header))
                 }
@@ -670,7 +680,7 @@ final class StateController {
                 if traverseState == .notFound, !section.items.isEmpty {
                     func predicate(itemIndex: Int) -> ComparisonResult {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                        guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
+                        guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, additionalAttributes: additionalAttributes) else {
                             return .orderedDescending
                         }
                         if itemFrame.intersects(visibleRect) {
@@ -690,7 +700,7 @@ final class StateController {
                         startingIndex = firstMatchingIndex
                         for itemIndex in (0..<firstMatchingIndex).reversed() {
                             let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                            guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true) else {
+                            guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, additionalAttributes: additionalAttributes) else {
                                 continue
                             }
                             guard itemFrame.maxY >= visibleRect.minY else {
@@ -707,7 +717,7 @@ final class StateController {
                 if startingIndex < section.items.count {
                     for itemIndex in startingIndex..<section.items.count {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                        if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
+                        if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                            check(rect: itemFrame) {
                             if state == .beforeUpdate || isAnimatedBoundsChange {
                                 allRects.append((frame: itemFrame, indexPath: itemPath, kind: .cell))
@@ -717,7 +727,7 @@ final class StateController {
                                           let initialIndexPath = self.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate),
                                           let item = item(for: initialIndexPath, kind: .cell, at: .beforeUpdate),
                                           item.calculatedOnce == true,
-                                          let itemFrame = self.itemFrame(for: initialIndexPath, kind: .cell, at: .beforeUpdate, isFinal: false),
+                                          let itemFrame = self.itemFrame(for: initialIndexPath, kind: .cell, at: .beforeUpdate, isFinal: false, additionalAttributes: additionalAttributes),
                                           itemFrame.intersects(layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
                                         return false
                                     }
@@ -726,14 +736,14 @@ final class StateController {
                                 var itemWillBeVisible: Bool {
                                     let offsetVisibleBounds = layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)
                                     if insertedIndexes.contains(itemPath.indexPath),
-                                       let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
+                                       let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                                        itemFrame.intersects(offsetVisibleBounds) {
                                         return true
                                     }
                                     if let itemIdentifier = itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
                                        let initialIndexPath = self.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate)?.indexPath,
                                        movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
-                                       let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true),
+                                       let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                                        itemFrame.intersects(offsetVisibleBounds) {
                                         return true
                                     }
@@ -750,30 +760,30 @@ final class StateController {
                     }
                 }
 
-                if let footerFrame = itemFrame(for: sectionPath, kind: .footer, at: state, isFinal: true),
+                if let footerFrame = itemFrame(for: sectionPath, kind: .footer, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                    check(rect: footerFrame) {
                     allRects.append((frame: footerFrame, indexPath: sectionPath, kind: .footer))
                 }
             }
 
             return allRects.compactMap { frame, path, kind -> ChatLayoutAttributes? in
-                itemAttributes(for: path, kind: kind, predefinedFrame: frame, at: state)
+                itemAttributes(for: path, kind: kind, predefinedFrame: frame, at: state, additionalAttributes: additionalAttributes)
             }
         } else {
             // Debug purposes only.
             var attributes = [ChatLayoutAttributes]()
-            attributes.reserveCapacity(layout.sections.count * 1000)
+            attributes.reserveCapacity(layout.sections.reduce(into: 0) { $0 += $1.items.count })
             layout.sections.enumerated().forEach { sectionIndex, section in
                 let sectionPath = ItemPath(item: 0, section: sectionIndex)
-                if let headerAttributes = itemAttributes(for: sectionPath, kind: .header, at: state) {
+                if let headerAttributes = itemAttributes(for: sectionPath, kind: .header, at: state, additionalAttributes: additionalAttributes) {
                     attributes.append(headerAttributes)
                 }
-                if let footerAttributes = itemAttributes(for: sectionPath, kind: .footer, at: state) {
+                if let footerAttributes = itemAttributes(for: sectionPath, kind: .footer, at: state, additionalAttributes: additionalAttributes) {
                     attributes.append(footerAttributes)
                 }
                 section.items.enumerated().forEach { itemIndex, _ in
                     let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                    if let itemAttributes = itemAttributes(for: itemPath, kind: .cell, at: state) {
+                    if let itemAttributes = itemAttributes(for: itemPath, kind: .cell, at: state, additionalAttributes: additionalAttributes) {
                         attributes.append(itemAttributes)
                     }
                 }
@@ -937,4 +947,26 @@ extension RandomAccessCollection where Index == Int {
         return Array(self[lowerBound...upperBound])
     }
 
+}
+
+// Helps to reduce the amount of looses in bridging calls to objc `UICollectionView` getter methods.
+struct AdditionalLayoutAttributes {
+
+    let additionalInsets: UIEdgeInsets
+
+    let viewSize: CGSize
+
+    let adjustedContentInsets: UIEdgeInsets
+
+    let visibleBounds: CGRect
+
+    let layoutFrame: CGRect
+
+    fileprivate init(_ layoutRepresentation: ChatLayoutRepresentation) {
+        self.viewSize = layoutRepresentation.viewSize
+        self.adjustedContentInsets = layoutRepresentation.adjustedContentInset
+        self.visibleBounds = layoutRepresentation.visibleBounds
+        self.layoutFrame = layoutRepresentation.layoutFrame
+        self.additionalInsets = layoutRepresentation.settings.additionalInsets
+    }
 }

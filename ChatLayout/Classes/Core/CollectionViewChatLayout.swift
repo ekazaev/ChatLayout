@@ -236,6 +236,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                                   left: 0,
                                   bottom: -collectionView.frame.height,
                                   right: 0)
+        let visibleBounds = visibleBounds
         let layoutAttributes = controller.layoutAttributesForElements(in: visibleBounds.inset(by: insets),
                                                                       state: state,
                                                                       ignoreCache: true)
