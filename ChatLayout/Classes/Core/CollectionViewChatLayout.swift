@@ -874,7 +874,7 @@ extension CollectionViewChatLayout {
         return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact)
     }
 
-    func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment {
+    private func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment {
         let indexPath = itemPath.indexPath
         return alignment(for: element, at: indexPath)
     }

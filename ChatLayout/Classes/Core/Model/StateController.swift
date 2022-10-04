@@ -32,8 +32,6 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     func configuration(for element: ItemKind, at itemPath: ItemPath) -> ItemModel.Configuration
 
-    func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment
-
     func shouldPresentHeader(at sectionIndex: Int) -> Bool
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool
@@ -401,6 +399,16 @@ final class StateController {
     }
 
     func process(changeItems: [ChangeItem]) {
+        func applyConfiguration(_ configuration: ItemModel.Configuration, to item: inout ItemModel) {
+            item.alignment = configuration.alignment
+            if let calculatedSize = configuration.calculatedSize {
+                item.calculatedSize = calculatedSize
+                item.calculatedOnce = true
+            } else {
+                item.resetSize()
+            }
+        }
+
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
         let changeItems = changeItems.sorted()
@@ -451,11 +459,10 @@ final class StateController {
                 var header: ItemModel?
                 if layoutRepresentation.shouldPresentHeader(at: sectionIndex) == true {
                     let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    header = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath))
-                    header?.resetSize()
-                    if section.header != nil {
-                        header?.alignment = layoutRepresentation.alignment(for: .cell, at: headerIndexPath.itemPath)
-                    }
+                    var newHeader = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath))
+                    let configuration = layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath)
+                    applyConfiguration(configuration, to: &newHeader)
+                    header = newHeader
                 } else {
                     header = nil
                 }
@@ -464,11 +471,10 @@ final class StateController {
                 var footer: ItemModel?
                 if layoutRepresentation.shouldPresentFooter(at: sectionIndex) == true {
                     let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    footer = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath))
-                    footer?.resetSize()
-                    if section.footer != nil {
-                        footer?.alignment = layoutRepresentation.alignment(for: .cell, at: footerIndexPath.itemPath)
-                    }
+                    var newFooter = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath))
+                    let configuration = layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath)
+                    applyConfiguration(configuration, to: &newFooter)
+                    footer = newFooter
                 } else {
                     footer = nil
                 }
@@ -480,11 +486,11 @@ final class StateController {
                     let itemIndexPath = IndexPath(item: index, section: sectionIndex)
                     if index < oldItems.count {
                         newItem = oldItems[index]
-                        newItem.alignment = layoutRepresentation.alignment(for: .cell, at: itemIndexPath.itemPath)
+                        let configuration = layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath)
+                        applyConfiguration(configuration, to: &newItem)
                     } else {
                         newItem = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath))
                     }
-                    newItem.resetSize()
                     return newItem
                 }
                 section.set(items: ContiguousArray(items))
@@ -495,8 +501,8 @@ final class StateController {
                     assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
                     return
                 }
-                item.resetSize()
-                item.alignment = layoutRepresentation.alignment(for: .cell, at: indexPath.itemPath)
+                let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath.itemPath)
+                applyConfiguration(configuration, to: &item)
                 afterUpdateModel.replaceItem(item, at: indexPath)
                 reloadedIndexes.insert(indexPath)
             case let .sectionMove(initialSectionIndex: initialSectionIndex, finalSectionIndex: finalSectionIndex):

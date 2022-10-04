@@ -65,13 +65,13 @@ class StateControllerProcessUpdatesTests: XCTestCase {
 
         layout.settings.estimatedItemSize = .init(width: 300, height: 50)
         layout.controller.process(changeItems: changeItems)
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.controller.contentHeight(at: .afterUpdate))
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) + CGFloat(changeItems.count * 10), layout.controller.contentHeight(at: .afterUpdate))
         layout.controller.commitUpdates()
 
         layout.controller.process(changeItems: [.sectionReload(sectionIndex: 0),
                                                 .sectionReload(sectionIndex: 1)])
 
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.controller.contentHeight(at: .afterUpdate))
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) + CGFloat(10 * 4), layout.controller.contentHeight(at: .afterUpdate))
         layout.controller.commitUpdates()
     }
 
@@ -113,10 +113,11 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         // Frames
         XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.origin, .zero)
         XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.origin, .zero)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.size, layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.size)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 99, section: 0), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 40))
+        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 40))
+        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 50))
+        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 99, section: 0), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 40))
         XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 100, section: 0), kind: .cell, at: .afterUpdate)?.size, layout.settings.estimatedItemSize)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 49, section: 1), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 40))
+        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 49, section: 1), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 50))
 
         layout.controller.commitUpdates()
     }
