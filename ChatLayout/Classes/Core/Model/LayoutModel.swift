@@ -23,7 +23,7 @@ struct LayoutModel {
 
     }
 
-    private(set) var sections: [SectionModel]
+    private(set) var sections: ContiguousArray<SectionModel>
 
     private unowned var collectionLayout: ChatLayoutRepresentation
 
@@ -31,7 +31,7 @@ struct LayoutModel {
 
     private var itemPathByIdentifierCache: [ItemUUIDKey: ItemPath]?
 
-    init(sections: [SectionModel], collectionLayout: ChatLayoutRepresentation) {
+    init(sections: ContiguousArray<SectionModel>, collectionLayout: ChatLayoutRepresentation) {
         self.sections = sections
         self.collectionLayout = collectionLayout
     }

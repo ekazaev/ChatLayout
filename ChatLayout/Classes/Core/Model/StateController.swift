@@ -88,7 +88,7 @@ final class StateController {
         resetCachedAttributeObjects()
     }
 
-    func set(_ sections: [SectionModel], at state: ModelState) {
+    func set(_ sections: ContiguousArray<SectionModel>, at state: ModelState) {
         var layoutModel = LayoutModel(sections: sections, collectionLayout: layoutRepresentation)
         layoutModel.assembleLayout()
         storage[state] = layoutModel
@@ -245,7 +245,8 @@ final class StateController {
 
     func itemFrame(for itemPath: ItemPath, kind: ItemKind, at state: ModelState, isFinal: Bool = false, additionalAttributes: AdditionalLayoutAttributes? = nil) -> CGRect? {
         let additionalAttributes = additionalAttributes ?? AdditionalLayoutAttributes(layoutRepresentation)
-        guard itemPath.section < layout(at: state).sections.count else {
+        let layout = layout(at: state)
+        guard itemPath.section < layout.sections.count else {
             return nil
         }
         guard let item = item(for: itemPath, kind: kind, at: state) else {
@@ -253,7 +254,7 @@ final class StateController {
             return nil
         }
 
-        let section = layout(at: state).sections[itemPath.section]
+        let section = layout.sections[itemPath.section]
         var itemFrame = item.frame
         let dx: CGFloat
         let visibleBounds = additionalAttributes.visibleBounds
@@ -284,11 +285,12 @@ final class StateController {
     }
 
     func sectionIdentifier(for index: Int, at state: ModelState) -> UUID? {
-        guard index < layout(at: state).sections.count else {
+        let layout = layout(at: state)
+        guard index < layout.sections.count else {
             // This occurs when getting layout attributes for initial / final animations
             return nil
         }
-        return layout(at: state).sections[index].id
+        return layout.sections[index].id
     }
 
     func sectionIndex(for sectionIdentifier: UUID, at state: ModelState) -> Int? {
@@ -427,7 +429,7 @@ final class StateController {
                 } else {
                     footer = nil
                 }
-                let section = SectionModel(header: header, footer: footer, items: items, collectionLayout: layoutRepresentation)
+                let section = SectionModel(header: header, footer: footer, items: ContiguousArray(items), collectionLayout: layoutRepresentation)
                 afterUpdateModel.insertSection(section, at: sectionIndex)
                 insertedSectionsIndexes.insert(sectionIndex)
             case let .itemInsert(itemIndexPath: indexPath):
@@ -485,7 +487,7 @@ final class StateController {
                     newItem.resetSize()
                     return newItem
                 }
-                section.set(items: items)
+                section.set(items: ContiguousArray(items))
                 afterUpdateModel.removeSection(for: sectionIndex)
                 afterUpdateModel.insertSection(section, at: sectionIndex)
             case let .itemReload(itemIndexPath: indexPath):
@@ -522,9 +524,11 @@ final class StateController {
 
         storage[.afterUpdate] = afterUpdateModel
 
+        let visibleBounds = layoutRepresentation.visibleBounds
+
         // Calculating potential content offset changes after the updates
         insertedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            compensateOffsetOfSectionIfNeeded(for: $0, action: .insert)
+            compensateOffsetOfSectionIfNeeded(for: $0, action: .insert, visibleBounds: visibleBounds)
         }
         reloadedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
             let oldSection = section(at: $0, at: .beforeUpdate)
@@ -533,10 +537,10 @@ final class StateController {
                 return
             }
             let newSection = section(at: newSectionIndex, at: .afterUpdate)
-            compensateOffsetOfSectionIfNeeded(for: $0, action: .frameUpdate(previousFrame: oldSection.frame, newFrame: newSection.frame))
+            compensateOffsetOfSectionIfNeeded(for: $0, action: .frameUpdate(previousFrame: oldSection.frame, newFrame: newSection.frame), visibleBounds: visibleBounds)
         }
         deletedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            compensateOffsetOfSectionIfNeeded(for: $0, action: .delete)
+            compensateOffsetOfSectionIfNeeded(for: $0, action: .delete, visibleBounds: visibleBounds)
         }
 
         reloadedIndexes.sorted(by: { $0 < $1 }).forEach {
@@ -546,14 +550,13 @@ final class StateController {
                 assertionFailure("Internal inconsistency.")
                 return
             }
-            compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .frameUpdate(previousFrame: oldItem.frame, newFrame: newItem.frame))
+            compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .frameUpdate(previousFrame: oldItem.frame, newFrame: newItem.frame), visibleBounds: visibleBounds)
         }
-
         insertedIndexes.sorted(by: { $0 < $1 }).forEach {
-            compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .insert)
+            compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .insert, visibleBounds: visibleBounds)
         }
         deletedIndexes.sorted(by: { $0 < $1 }).forEach {
-            compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .delete)
+            compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .delete, visibleBounds: visibleBounds)
         }
 
         totalProposedCompensatingOffset = proposedCompensatingOffset
@@ -619,8 +622,9 @@ final class StateController {
         return layout
     }
 
-    func isLayoutBiggerThanVisibleBounds(at state: ModelState, withFullCompensation: Bool = false) -> Bool {
-        let visibleBoundsHeight = layoutRepresentation.visibleBounds.height + (withFullCompensation ? batchUpdateCompensatingOffset + proposedCompensatingOffset : 0)
+    func isLayoutBiggerThanVisibleBounds(at state: ModelState, withFullCompensation: Bool = false, visibleBounds: CGRect? = nil) -> Bool {
+        let visibleBounds = visibleBounds ?? layoutRepresentation.visibleBounds
+        let visibleBoundsHeight = visibleBounds.height + (withFullCompensation ? batchUpdateCompensatingOffset + proposedCompensatingOffset : 0)
         return contentHeight(at: state).rounded() > visibleBoundsHeight.rounded()
     }
 
@@ -660,8 +664,11 @@ final class StateController {
                 }
             }
 
-            var allRects = [(frame: CGRect, indexPath: ItemPath, kind: ItemKind)]()
-            allRects.reserveCapacity(layout.sections.reduce(into: 0) { $0 += $1.items.count })
+            var allRects = ContiguousArray<(frame: CGRect, indexPath: ItemPath, kind: ItemKind)>()
+            // I dont think there can be more then a 200 elements on the screen simultaneously
+            allRects.reserveCapacity(200)
+
+            let comparisonResults = [ComparisonResult.orderedSame, .orderedDescending]
 
             for sectionIndex in 0..<layout.sections.count {
                 let section = layout.sections[sectionIndex]
@@ -693,8 +700,9 @@ final class StateController {
                     }
 
                     // Find if any of the items of the section is visible
-                    if [ComparisonResult.orderedSame, .orderedDescending].contains(predicate(itemIndex: section.items.count - 1)),
-                       let firstMatchingIndex = Array(0...section.items.count - 1).withUnsafeBufferPointer({ $0.binarySearch(predicate: predicate) }) {
+
+                    if comparisonResults.contains(predicate(itemIndex: section.items.count - 1)),
+                       let firstMatchingIndex = ContiguousArray(0...section.items.count - 1).withUnsafeBufferPointer({ $0.binarySearch(predicate: predicate) }) {
                         // Find first item that is visible
                         startingIndex = firstMatchingIndex
                         for itemIndex in (0..<firstMatchingIndex).reversed() {
@@ -792,67 +800,75 @@ final class StateController {
         }
     }
 
-    private func compensateOffsetIfNeeded(for itemPath: ItemPath, kind: ItemKind, action: CompensatingAction) {
+    private func compensateOffsetIfNeeded(for itemPath: ItemPath, kind: ItemKind, action: CompensatingAction, visibleBounds: CGRect? = nil) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
-        let minY = (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
+
+        let visibleBounds = visibleBounds ?? layoutRepresentation.visibleBounds
+        let minY = (visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
+        let interItemSpacing = layoutRepresentation.settings.interItemSpacing
+
         switch action {
         case .insert:
-            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate),
+            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: visibleBounds),
                   let itemFrame = itemFrame(for: itemPath, kind: kind, at: .afterUpdate) else {
                 return
             }
-            if itemFrame.minY.rounded() - layoutRepresentation.settings.interItemSpacing <= minY {
-                proposedCompensatingOffset += itemFrame.height + layoutRepresentation.settings.interItemSpacing
+            if itemFrame.minY.rounded() - interItemSpacing <= minY {
+                proposedCompensatingOffset += itemFrame.height + interItemSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):
-            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, withFullCompensation: true) else {
+            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, withFullCompensation: true, visibleBounds: visibleBounds) else {
                 return
             }
             if newFrame.minY.rounded() <= minY {
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
             }
         case .delete:
-            guard isLayoutBiggerThanVisibleBounds(at: .beforeUpdate),
+            guard isLayoutBiggerThanVisibleBounds(at: .beforeUpdate, visibleBounds: visibleBounds),
                   let deletedFrame = itemFrame(for: itemPath, kind: kind, at: .beforeUpdate) else {
                 return
             }
             if deletedFrame.minY.rounded() <= minY {
                 // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.
                 // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.
-                proposedCompensatingOffset -= (deletedFrame.height + layoutRepresentation.settings.interItemSpacing)
+                proposedCompensatingOffset -= (deletedFrame.height + interItemSpacing)
             }
         }
 
     }
 
-    private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int, action: CompensatingAction) {
+    private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int, action: CompensatingAction, visibleBounds: CGRect? = nil) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
-        let minY = (layoutRepresentation.visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
+
+        let visibleBounds = visibleBounds ?? layoutRepresentation.visibleBounds
+        let minY = (visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
+        let interSectionSpacing = layoutRepresentation.settings.interSectionSpacing
+
         switch action {
         case .insert:
-            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate),
+            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: visibleBounds),
                   sectionIndex < layout(at: .afterUpdate).sections.count else {
                 return
             }
             let section = layout(at: .afterUpdate).sections[sectionIndex]
 
-            if section.offsetY.rounded() - layoutRepresentation.settings.interSectionSpacing <= minY {
-                proposedCompensatingOffset += section.height + layoutRepresentation.settings.interSectionSpacing
+            if section.offsetY.rounded() - interSectionSpacing <= minY {
+                proposedCompensatingOffset += section.height + interSectionSpacing
             }
         case let .frameUpdate(previousFrame, newFrame):
             guard sectionIndex < layout(at: .afterUpdate).sections.count,
-                  isLayoutBiggerThanVisibleBounds(at: .afterUpdate, withFullCompensation: true) else {
+                  isLayoutBiggerThanVisibleBounds(at: .afterUpdate, withFullCompensation: true, visibleBounds: visibleBounds) else {
                 return
             }
             if newFrame.minY.rounded() <= minY {
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
             }
         case .delete:
-            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate),
+            guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: visibleBounds),
                   sectionIndex < layout(at: .afterUpdate).sections.count else {
                 return
             }
@@ -860,7 +876,7 @@ final class StateController {
             if section.locationHeight.rounded() <= minY {
                 // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.
                 // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.
-                proposedCompensatingOffset -= (section.height + layoutRepresentation.settings.interSectionSpacing)
+                proposedCompensatingOffset -= (section.height + interSectionSpacing)
             }
         }
 

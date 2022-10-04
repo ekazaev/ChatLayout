@@ -300,7 +300,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         if prepareActions.contains(.recreateSectionModels) {
-            var sections: [SectionModel] = []
+            var sections: ContiguousArray<SectionModel> = []
             for sectionIndex in 0..<collectionView.numberOfSections {
                 // Header
                 let header: ItemModel?
@@ -312,7 +312,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 }
 
                 // Items
-                var items: [ItemModel] = []
+                var items: ContiguousArray<ItemModel> = []
                 for itemIndex in 0..<collectionView.numberOfItems(inSection: sectionIndex) {
                     let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
                     items.append(ItemModel(with: configuration(for: .cell, at: itemPath)))
@@ -335,7 +335,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
         if prepareActions.contains(.updateLayoutMetrics),
            !prepareActions.contains(.recreateSectionModels) {
-            var sections: [SectionModel] = controller.layout(at: state).sections
+            var sections: ContiguousArray<SectionModel> = controller.layout(at: state).sections
             sections.withUnsafeMutableBufferPointer { directlyMutableSections in
                 for sectionIndex in 0..<directlyMutableSections.count {
                     var section = directlyMutableSections[sectionIndex]
@@ -347,7 +347,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                     }
 
                     // Items
-                    var items: [ItemModel] = section.items
+                    var items: ContiguousArray<ItemModel> = section.items
                     items.withUnsafeMutableBufferPointer { directlyMutableItems in
                         DispatchQueue.concurrentPerform(iterations: directlyMutableItems.count, execute: { rowIndex in
                             directlyMutableItems[rowIndex].resetSize()

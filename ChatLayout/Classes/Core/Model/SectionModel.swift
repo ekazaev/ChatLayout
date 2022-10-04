@@ -21,7 +21,7 @@ struct SectionModel {
 
     private(set) var footer: ItemModel?
 
-    private(set) var items: [ItemModel]
+    private(set) var items: ContiguousArray<ItemModel>
 
     var offsetY: CGFloat = 0
 
@@ -53,7 +53,7 @@ struct SectionModel {
     init(id: UUID = UUID(),
          header: ItemModel?,
          footer: ItemModel?,
-         items: [ItemModel] = [],
+         items: ContiguousArray<ItemModel> = [],
          collectionLayout: ChatLayoutRepresentation) {
         self.id = id
         self.items = items
@@ -133,7 +133,7 @@ struct SectionModel {
         self.header = header
     }
 
-    mutating func set(items: [ItemModel]) {
+    mutating func set(items: ContiguousArray<ItemModel>) {
         self.items = items
     }
 
