@@ -58,16 +58,16 @@ class StateControllerInternalTests: XCTestCase {
     func testItemIdentifierAtIndexPath() {
         let layout = MockCollectionLayout()
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.storage[.beforeUpdate]?.sections[0].items[0].id)
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate), layout.controller.storage[.beforeUpdate]?.sections[0].header?.id)
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate), layout.controller.storage[.beforeUpdate]?.sections[0].footer?.id)
+        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[0].items[0].id)
+        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[0].header?.id)
+        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[0].footer?.id)
     }
 
     func testSectionIdentifierAtIndexPath() {
         let layout = MockCollectionLayout()
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        XCTAssertEqual(layout.controller.sectionIdentifier(for: 0, at: .beforeUpdate), layout.controller.storage[.beforeUpdate]?.sections[0].id)
-        XCTAssertEqual(layout.controller.sectionIdentifier(for: 1, at: .beforeUpdate), layout.controller.storage[.beforeUpdate]?.sections[1].id)
+        XCTAssertEqual(layout.controller.sectionIdentifier(for: 0, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[0].id)
+        XCTAssertEqual(layout.controller.sectionIdentifier(for: 1, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[1].id)
     }
 
     func testLayoutAttributesInRect() {

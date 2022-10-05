@@ -305,7 +305,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 // Header
                 let header: ItemModel?
                 if delegate?.shouldPresentHeader(self, at: sectionIndex) == true {
-                    let headerPath = ItemPath(item: 0, section: sectionIndex)
+                    let headerPath = IndexPath(item: 0, section: sectionIndex)
                     header = ItemModel(with: configuration(for: .header, at: headerPath))
                 } else {
                     header = nil
@@ -314,14 +314,14 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 // Items
                 var items: ContiguousArray<ItemModel> = []
                 for itemIndex in 0..<collectionView.numberOfItems(inSection: sectionIndex) {
-                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                    let itemPath = IndexPath(item: itemIndex, section: sectionIndex)
                     items.append(ItemModel(with: configuration(for: .cell, at: itemPath)))
                 }
 
                 // Footer
                 let footer: ItemModel?
                 if delegate?.shouldPresentFooter(self, at: sectionIndex) == true {
-                    let footerPath = ItemPath(item: 0, section: sectionIndex)
+                    let footerPath = IndexPath(item: 0, section: sectionIndex)
                     footer = ItemModel(with: configuration(for: .footer, at: footerPath))
                 } else {
                     footer = nil
@@ -868,15 +868,9 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
 extension CollectionViewChatLayout {
 
-    func configuration(for element: ItemKind, at itemPath: ItemPath) -> ItemModel.Configuration {
-        let indexPath = itemPath.indexPath
+    func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
         let itemSize = estimatedSize(for: element, at: indexPath)
         return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact)
-    }
-
-    private func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment {
-        let indexPath = itemPath.indexPath
-        return alignment(for: element, at: indexPath)
     }
 
     private func estimatedSize(for element: ItemKind, at indexPath: IndexPath) -> (estimated: CGSize, exact: CGSize?) {

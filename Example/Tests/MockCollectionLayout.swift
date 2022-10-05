@@ -49,7 +49,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
         numberOfItemsInSection[section] ?? 0
     }
 
-    func configuration(for element: ItemKind, at itemPath: ItemPath) -> ItemModel.Configuration {
+    func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
         .init(alignment: .fullWidth, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!)
     }
 
@@ -76,13 +76,13 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     func getPreparedSections() -> ContiguousArray<SectionModel> {
         var sections: ContiguousArray<SectionModel> = []
         for sectionIndex in 0..<numberOfItemsInSection.count {
-            let headerIndexPath = ItemPath(item: 0, section: sectionIndex)
+            let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
             let header = ItemModel(with: configuration(for: .header, at: headerIndexPath))
             let footer = ItemModel(with: configuration(for: .footer, at: headerIndexPath))
 
             var items: ContiguousArray<ItemModel> = []
             for itemIndex in 0..<numberOfItems(in: sectionIndex) {
-                let indexPath = ItemPath(item: itemIndex, section: sectionIndex)
+                let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
                 items.append(ItemModel(with: configuration(for: .cell, at: indexPath)))
             }
 

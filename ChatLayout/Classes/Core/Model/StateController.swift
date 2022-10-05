@@ -30,7 +30,7 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     func numberOfItems(in section: Int) -> Int
 
-    func configuration(for element: ItemKind, at itemPath: ItemPath) -> ItemModel.Configuration
+    func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration
 
     func shouldPresentHeader(at sectionIndex: Int) -> Bool
 
@@ -38,12 +38,18 @@ protocol ChatLayoutRepresentation: AnyObject {
 
 }
 
-final class StateController {
+final class StateController<Layout: ChatLayoutRepresentation> {
 
     private enum CompensatingAction {
         case insert
         case delete
         case frameUpdate(previousFrame: CGRect, newFrame: CGRect)
+    }
+
+    private enum TraverseState {
+        case notFound
+        case found
+        case done
     }
 
     // This thing exists here as `UICollectionView` calls `targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint)` only once at the
@@ -55,8 +61,6 @@ final class StateController {
     var totalProposedCompensatingOffset: CGFloat = 0
 
     var isAnimatedBoundsChange = false
-
-    private(set) var storage: [ModelState: LayoutModel]
 
     private(set) var reloadedIndexes: Set<IndexPath> = []
 
@@ -78,22 +82,39 @@ final class StateController {
 
     private var cachedAttributeObjects = [ModelState: [ItemKind: [ItemPath: ChatLayoutAttributes]]]()
 
-    private unowned var layoutRepresentation: ChatLayoutRepresentation
+    private var layoutBeforeUpdate: LayoutModel
 
-    init(layoutRepresentation: ChatLayoutRepresentation) {
+    private var layoutAfterUpdate: LayoutModel?
+
+    private unowned var layoutRepresentation: Layout
+
+    init(layoutRepresentation: Layout) {
         self.layoutRepresentation = layoutRepresentation
-        storage = [.beforeUpdate: LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)]
+        layoutBeforeUpdate = LayoutModel(sections: [], collectionLayout: self.layoutRepresentation)
         resetCachedAttributeObjects()
     }
 
     func set(_ sections: ContiguousArray<SectionModel>, at state: ModelState) {
         var layoutModel = LayoutModel(sections: sections, collectionLayout: layoutRepresentation)
         layoutModel.assembleLayout()
-        storage[state] = layoutModel
+        switch state {
+        case .beforeUpdate:
+            layoutBeforeUpdate = layoutModel
+        case .afterUpdate:
+            layoutAfterUpdate = layoutModel
+        }
     }
 
     func contentHeight(at state: ModelState) -> CGFloat {
-        guard let locationHeight = storage[state]?.sections.last?.locationHeight else {
+        let locationHeight: CGFloat?
+        switch state {
+        case .beforeUpdate:
+            locationHeight = layoutBeforeUpdate.sections.last?.locationHeight
+        case .afterUpdate:
+            locationHeight = layoutAfterUpdate?.sections.last?.locationHeight
+        }
+
+        guard let locationHeight = locationHeight else {
             return 0
         }
         return locationHeight + layoutRepresentation.settings.additionalInsets.bottom
@@ -271,9 +292,9 @@ final class StateController {
             itemFrame.size.width = additionalAttributes.layoutFrame.size.width
         }
 
-        itemFrame = itemFrame.offsetBy(dx: dx, dy: section.offsetY)
+        itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
         if isFinal {
-            itemFrame = offsetByCompensation(frame: itemFrame, at: itemPath, for: state, backward: true)
+            offsetByCompensation(frame: &itemFrame, at: itemPath, for: state, backward: true)
         }
         return itemFrame
     }
@@ -378,22 +399,34 @@ final class StateController {
             assertionFailure("Item at index path (\(itemPath.section) - \(itemPath.item)) does not exist.")
             return
         }
-        var layout = layout(at: state)
+
         let previousFrame = item.frame
         cachedAttributesState = nil
         item.alignment = alignment
         item.calculatedSize = preferredSize
         item.calculatedOnce = true
 
-        switch kind {
-        case .header:
-            layout.setAndAssemble(header: item, sectionIndex: itemPath.section)
-        case .footer:
-            layout.setAndAssemble(footer: item, sectionIndex: itemPath.section)
-        case .cell:
-            layout.setAndAssemble(item: item, sectionIndex: itemPath.section, itemIndex: itemPath.item)
+        switch state {
+        case .beforeUpdate:
+            switch kind {
+            case .header:
+                layoutBeforeUpdate.setAndAssemble(header: item, sectionIndex: itemPath.section)
+            case .footer:
+                layoutBeforeUpdate.setAndAssemble(footer: item, sectionIndex: itemPath.section)
+            case .cell:
+                layoutBeforeUpdate.setAndAssemble(item: item, sectionIndex: itemPath.section, itemIndex: itemPath.item)
+            }
+        case .afterUpdate:
+            switch kind {
+            case .header:
+                layoutAfterUpdate?.setAndAssemble(header: item, sectionIndex: itemPath.section)
+            case .footer:
+                layoutAfterUpdate?.setAndAssemble(footer: item, sectionIndex: itemPath.section)
+            case .cell:
+                layoutAfterUpdate?.setAndAssemble(item: item, sectionIndex: itemPath.section, itemIndex: itemPath.item)
+            }
         }
-        storage[state] = layout
+
         let frameUpdateAction = CompensatingAction.frameUpdate(previousFrame: previousFrame, newFrame: item.frame)
         compensateOffsetIfNeeded(for: itemPath, kind: kind, action: frameUpdateAction)
     }
@@ -413,7 +446,7 @@ final class StateController {
         proposedCompensatingOffset = 0
         let changeItems = changeItems.sorted()
 
-        var afterUpdateModel = layout(at: .beforeUpdate)
+        var afterUpdateModel = layoutBeforeUpdate
         resetCachedAttributeObjects()
 
         changeItems.forEach { updateItem in
@@ -421,19 +454,19 @@ final class StateController {
             case let .sectionInsert(sectionIndex: sectionIndex):
                 let items = (0..<layoutRepresentation.numberOfItems(in: sectionIndex)).map { index -> ItemModel in
                     let itemIndexPath = IndexPath(item: index, section: sectionIndex)
-                    return ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath))
+                    return ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath))
                 }
                 let header: ItemModel?
                 if layoutRepresentation.shouldPresentHeader(at: sectionIndex) == true {
                     let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    header = ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath))
+                    header = ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath))
                 } else {
                     header = nil
                 }
                 let footer: ItemModel?
                 if layoutRepresentation.shouldPresentFooter(at: sectionIndex) == true {
                     let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    footer = ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath))
+                    footer = ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath))
                 } else {
                     footer = nil
                 }
@@ -441,11 +474,11 @@ final class StateController {
                 afterUpdateModel.insertSection(section, at: sectionIndex)
                 insertedSectionsIndexes.insert(sectionIndex)
             case let .itemInsert(itemIndexPath: indexPath):
-                let item = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: indexPath.itemPath))
+                let item = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: indexPath))
                 insertedIndexes.insert(indexPath)
                 afterUpdateModel.insertItem(item, at: indexPath)
             case let .sectionDelete(sectionIndex: sectionIndex):
-                let section = layout(at: .beforeUpdate).sections[sectionIndex]
+                let section = layoutBeforeUpdate.sections[sectionIndex]
                 deletedSectionsIndexes.insert(sectionIndex)
                 afterUpdateModel.removeSection(by: section.id)
             case let .itemDelete(itemIndexPath: indexPath):
@@ -454,13 +487,13 @@ final class StateController {
                 deletedIndexes.insert(indexPath)
             case let .sectionReload(sectionIndex: sectionIndex):
                 reloadedSectionsIndexes.insert(sectionIndex)
-                var section = layout(at: .beforeUpdate).sections[sectionIndex]
+                var section = layoutBeforeUpdate.sections[sectionIndex]
 
                 var header: ItemModel?
                 if layoutRepresentation.shouldPresentHeader(at: sectionIndex) == true {
                     let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    var newHeader = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath))
-                    let configuration = layoutRepresentation.configuration(for: .header, at: headerIndexPath.itemPath)
+                    var newHeader = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath))
+                    let configuration = layoutRepresentation.configuration(for: .header, at: headerIndexPath)
                     applyConfiguration(configuration, to: &newHeader)
                     header = newHeader
                 } else {
@@ -471,8 +504,8 @@ final class StateController {
                 var footer: ItemModel?
                 if layoutRepresentation.shouldPresentFooter(at: sectionIndex) == true {
                     let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    var newFooter = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath))
-                    let configuration = layoutRepresentation.configuration(for: .footer, at: footerIndexPath.itemPath)
+                    var newFooter = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath))
+                    let configuration = layoutRepresentation.configuration(for: .footer, at: footerIndexPath)
                     applyConfiguration(configuration, to: &newFooter)
                     footer = newFooter
                 } else {
@@ -486,10 +519,10 @@ final class StateController {
                     let itemIndexPath = IndexPath(item: index, section: sectionIndex)
                     if index < oldItems.count {
                         newItem = oldItems[index]
-                        let configuration = layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath)
+                        let configuration = layoutRepresentation.configuration(for: .cell, at: itemIndexPath)
                         applyConfiguration(configuration, to: &newItem)
                     } else {
-                        newItem = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath.itemPath))
+                        newItem = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath))
                     }
                     return newItem
                 }
@@ -501,18 +534,18 @@ final class StateController {
                     assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
                     return
                 }
-                let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath.itemPath)
+                let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath)
                 applyConfiguration(configuration, to: &item)
                 afterUpdateModel.replaceItem(item, at: indexPath)
                 reloadedIndexes.insert(indexPath)
             case let .sectionMove(initialSectionIndex: initialSectionIndex, finalSectionIndex: finalSectionIndex):
-                let section = layout(at: .beforeUpdate).sections[initialSectionIndex]
+                let section = layoutBeforeUpdate.sections[initialSectionIndex]
                 movedSectionsIndexes.insert(finalSectionIndex)
                 afterUpdateModel.removeSection(by: section.id)
                 afterUpdateModel.insertSection(section, at: finalSectionIndex)
             case let .itemMove(initialItemIndexPath: initialItemIndexPath, finalItemIndexPath: finalItemIndexPath):
                 let itemId = itemIdentifier(for: initialItemIndexPath.itemPath, kind: .cell, at: .beforeUpdate)!
-                let item = layout(at: .beforeUpdate).sections[initialItemIndexPath.section].items[initialItemIndexPath.item]
+                let item = layoutBeforeUpdate.sections[initialItemIndexPath.section].items[initialItemIndexPath.item]
                 movedIndexes.insert(initialItemIndexPath)
                 afterUpdateModel.removeItem(by: itemId)
                 afterUpdateModel.insertItem(item, at: finalItemIndexPath)
@@ -528,7 +561,7 @@ final class StateController {
         afterUpdateModel = LayoutModel(sections: afterUpdateModelSections, collectionLayout: layoutRepresentation)
         afterUpdateModel.assembleLayout()
 
-        storage[.afterUpdate] = afterUpdateModel
+        layoutAfterUpdate = afterUpdateModel
 
         let visibleBounds = layoutRepresentation.visibleBounds
 
@@ -581,8 +614,8 @@ final class StateController {
         deletedIndexes = []
         deletedSectionsIndexes = []
 
-        storage[.beforeUpdate] = layout(at: .afterUpdate)
-        storage[.afterUpdate] = nil
+        layoutBeforeUpdate = layout(at: .afterUpdate)
+        layoutAfterUpdate = nil
 
         totalProposedCompensatingOffset = 0
 
@@ -614,18 +647,23 @@ final class StateController {
             return
         }
         if backward, isLayoutBiggerThanVisibleBounds(at: .afterUpdate) {
-            attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset * -1)
+            attributes.frame.offsettingBy(dx: 0, dy: totalProposedCompensatingOffset * -1)
         } else if !backward, isLayoutBiggerThanVisibleBounds(at: .afterUpdate) {
-            attributes.frame = attributes.frame.offsetBy(dx: 0, dy: totalProposedCompensatingOffset)
+            attributes.frame.offsettingBy(dx: 0, dy: totalProposedCompensatingOffset)
         }
     }
 
     func layout(at state: ModelState) -> LayoutModel {
-        guard let layout = storage[state] else {
-            assertionFailure("Internal inconsistency. Layout at \(state) is missing.")
-            return LayoutModel(sections: [], collectionLayout: layoutRepresentation)
+        switch state {
+        case .beforeUpdate:
+            return layoutBeforeUpdate
+        case .afterUpdate:
+            guard let layoutAfterUpdate = layoutAfterUpdate else {
+                assertionFailure("Internal inconsistency. Layout at \(state) is missing.")
+                return LayoutModel(sections: [], collectionLayout: layoutRepresentation)
+            }
+            return layoutAfterUpdate
         }
-        return layout
     }
 
     func isLayoutBiggerThanVisibleBounds(at state: ModelState, withFullCompensation: Bool = false, visibleBounds: CGRect? = nil) -> Bool {
@@ -639,12 +677,6 @@ final class StateController {
         let additionalAttributes = AdditionalLayoutAttributes(layoutRepresentation)
 
         if let visibleRect = visibleRect {
-            enum TraverseState {
-                case notFound
-                case found
-                case done
-            }
-
             var traverseState: TraverseState = .notFound
 
             func check(rect: CGRect) -> Bool {
@@ -741,13 +773,13 @@ final class StateController {
                                           let item = item(for: initialIndexPath, kind: .cell, at: .beforeUpdate),
                                           item.calculatedOnce == true,
                                           let itemFrame = self.itemFrame(for: initialIndexPath, kind: .cell, at: .beforeUpdate, isFinal: false, additionalAttributes: additionalAttributes),
-                                          itemFrame.intersects(layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
+                                          itemFrame.intersects(additionalAttributes.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
                                         return false
                                     }
                                     return true
                                 }
                                 var itemWillBeVisible: Bool {
-                                    let offsetVisibleBounds = layoutRepresentation.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)
+                                    let offsetVisibleBounds = additionalAttributes.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)
                                     if insertedIndexes.contains(itemPath.indexPath),
                                        let itemFrame = self.itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                                        itemFrame.intersects(offsetVisibleBounds) {
@@ -856,11 +888,12 @@ final class StateController {
 
         switch action {
         case .insert:
+            let sectionsAfterUpdate = layout(at: .afterUpdate).sections
             guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: visibleBounds),
-                  sectionIndex < layout(at: .afterUpdate).sections.count else {
+                  sectionIndex < sectionsAfterUpdate.count else {
                 return
             }
-            let section = layout(at: .afterUpdate).sections[sectionIndex]
+            let section = sectionsAfterUpdate[sectionIndex]
 
             if section.offsetY.rounded() - interSectionSpacing <= minY {
                 proposedCompensatingOffset += section.height + interSectionSpacing
@@ -888,16 +921,16 @@ final class StateController {
 
     }
 
-    private func offsetByCompensation(frame: CGRect,
+    private func offsetByCompensation(frame: inout CGRect,
                                       at itemPath: ItemPath,
                                       for state: ModelState,
-                                      backward: Bool = false) -> CGRect {
+                                      backward: Bool = false) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
               state == .afterUpdate,
               isLayoutBiggerThanVisibleBounds(at: .afterUpdate) else {
-            return frame
+            return
         }
-        return frame.offsetBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))
+        frame.offsettingBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))
     }
 
 }

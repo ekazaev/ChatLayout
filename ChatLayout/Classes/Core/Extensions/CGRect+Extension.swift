@@ -15,19 +15,17 @@ import UIKit
 
 extension CGRect {
 
-    func equalRounded(to rect: CGRect) -> Bool {
-        abs(origin.x - rect.origin.x) <= 1 &&
-            abs(origin.y - rect.origin.y) <= 1 &&
-            abs(size.width - rect.size.width) <= 1 &&
-            abs(size.height - rect.size.height) <= 1
-    }
-
     var higherPoint: CGPoint {
         origin
     }
 
     var lowerPoint: CGPoint {
         CGPoint(x: origin.x + size.width, y: origin.y + size.height)
+    }
+
+    @inline(__always) mutating func offsettingBy(dx: CGFloat, dy: CGFloat) {
+        origin.x += dx
+        origin.y += dy
     }
 
 }
