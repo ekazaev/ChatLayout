@@ -13,7 +13,7 @@
 import Foundation
 import UIKit
 
-struct LayoutModel {
+final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
     private struct ItemUUIDKey: Hashable {
 
@@ -23,20 +23,20 @@ struct LayoutModel {
 
     }
 
-    private(set) var sections: ContiguousArray<SectionModel>
+    private(set) var sections: ContiguousArray<SectionModel<Layout>>
 
-    private unowned var collectionLayout: ChatLayoutRepresentation
+    private unowned var collectionLayout: Layout
 
     private var sectionIndexByIdentifierCache: [UUID: Int]?
 
     private var itemPathByIdentifierCache: [ItemUUIDKey: ItemPath]?
 
-    init(sections: ContiguousArray<SectionModel>, collectionLayout: ChatLayoutRepresentation) {
+    init(sections: ContiguousArray<SectionModel<Layout>>, collectionLayout: Layout) {
         self.sections = sections
         self.collectionLayout = collectionLayout
     }
 
-    mutating func assembleLayout() {
+    func assembleLayout() {
         var offset: CGFloat = collectionLayout.settings.additionalInsets.top
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
@@ -65,7 +65,7 @@ struct LayoutModel {
 
     // MARK: To use when its is important to make the correct insertion
 
-    mutating func setAndAssemble(header: ItemModel, sectionIndex: Int) {
+    func setAndAssemble(header: ItemModel, sectionIndex: Int) {
         guard sectionIndex < sections.count else {
             assertionFailure("Incorrect section index.")
             return
@@ -77,7 +77,7 @@ struct LayoutModel {
         offsetEverything(below: sectionIndex, by: heightDiff)
     }
 
-    mutating func setAndAssemble(item: ItemModel, sectionIndex: Int, itemIndex: Int) {
+    func setAndAssemble(item: ItemModel, sectionIndex: Int, itemIndex: Int) {
         guard sectionIndex < sections.count else {
             assertionFailure("Incorrect section index.")
             return
@@ -88,7 +88,7 @@ struct LayoutModel {
         offsetEverything(below: sectionIndex, by: heightDiff)
     }
 
-    mutating func setAndAssemble(footer: ItemModel, sectionIndex: Int) {
+    func setAndAssemble(footer: ItemModel, sectionIndex: Int) {
         guard sectionIndex < sections.count else {
             assertionFailure("Incorrect section index.")
             return
@@ -131,7 +131,7 @@ struct LayoutModel {
         return itemPathByIdentifierCache[ItemUUIDKey(kind: kind, id: itemId)]
     }
 
-    private mutating func offsetEverything(below index: Int, by heightDiff: CGFloat) {
+    private func offsetEverything(below index: Int, by heightDiff: CGFloat) {
         guard heightDiff != 0 else {
             return
         }
@@ -147,7 +147,7 @@ struct LayoutModel {
 
     // MARK: To use only withing process(updateItems:)
 
-    mutating func insertSection(_ section: SectionModel, at sectionIndex: Int) {
+    func insertSection(_ section: SectionModel<Layout>, at sectionIndex: Int) {
         var sections = sections
         guard sectionIndex <= sections.count else {
             assertionFailure("Incorrect section index.")
@@ -159,7 +159,7 @@ struct LayoutModel {
         resetCache()
     }
 
-    mutating func removeSection(by sectionIdentifier: UUID) {
+    func removeSection(by sectionIdentifier: UUID) {
         guard let sectionIndex = sections.firstIndex(where: { $0.id == sectionIdentifier }) else {
             assertionFailure("Incorrect section identifier.")
             return
@@ -168,22 +168,22 @@ struct LayoutModel {
         resetCache()
     }
 
-    mutating func removeSection(for sectionIndex: Int) {
+    func removeSection(for sectionIndex: Int) {
         sections.remove(at: sectionIndex)
         resetCache()
     }
 
-    mutating func insertItem(_ item: ItemModel, at indexPath: IndexPath) {
+    func insertItem(_ item: ItemModel, at indexPath: IndexPath) {
         sections[indexPath.section].insert(item, at: indexPath.item)
         resetCache()
     }
 
-    mutating func replaceItem(_ item: ItemModel, at indexPath: IndexPath) {
+    func replaceItem(_ item: ItemModel, at indexPath: IndexPath) {
         sections[indexPath.section].replace(item, at: indexPath.item)
         resetCache()
     }
 
-    mutating func removeItem(by itemId: UUID) {
+    func removeItem(by itemId: UUID) {
         var itemPath: ItemPath?
         for (sectionIndex, section) in sections.enumerated() {
             if let itemIndex = section.items.firstIndex(where: { $0.id == itemId }) {
@@ -199,7 +199,7 @@ struct LayoutModel {
         resetCache()
     }
 
-    private mutating func resetCache() {
+    private func resetCache() {
         itemPathByIdentifierCache = nil
         sectionIndexByIdentifierCache = nil
     }

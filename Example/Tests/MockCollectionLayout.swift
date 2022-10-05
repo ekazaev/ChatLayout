@@ -73,8 +73,8 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
         .estimated(settings.estimatedItemSize!)
     }
 
-    func getPreparedSections() -> ContiguousArray<SectionModel> {
-        var sections: ContiguousArray<SectionModel> = []
+    func getPreparedSections() -> ContiguousArray<SectionModel<MockCollectionLayout>> {
+        var sections: ContiguousArray<SectionModel<MockCollectionLayout>> = []
         for sectionIndex in 0..<numberOfItemsInSection.count {
             let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
             let header = ItemModel(with: configuration(for: .header, at: headerIndexPath))

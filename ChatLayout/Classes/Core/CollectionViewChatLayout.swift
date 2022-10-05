@@ -300,7 +300,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         if prepareActions.contains(.recreateSectionModels) {
-            var sections: ContiguousArray<SectionModel> = []
+            var sections: ContiguousArray<SectionModel<CollectionViewChatLayout>> = []
             for sectionIndex in 0..<collectionView.numberOfSections {
                 // Header
                 let header: ItemModel?
