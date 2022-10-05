@@ -109,9 +109,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         let locationHeight: CGFloat?
         switch state {
         case .beforeUpdate:
-            locationHeight = layoutBeforeUpdate.sections.withUnsafeBufferPointer({ $0.last?.locationHeight })
+            locationHeight = layoutBeforeUpdate.sections.withUnsafeBufferPointer { $0.last?.locationHeight }
         case .afterUpdate:
-            locationHeight = layoutAfterUpdate?.sections.withUnsafeBufferPointer({ $0.last?.locationHeight })
+            locationHeight = layoutAfterUpdate?.sections.withUnsafeBufferPointer { $0.last?.locationHeight }
         }
 
         guard let locationHeight = locationHeight else {
