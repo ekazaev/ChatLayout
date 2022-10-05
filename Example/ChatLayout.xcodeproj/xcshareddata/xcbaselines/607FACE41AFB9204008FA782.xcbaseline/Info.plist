@@ -16,6 +16,18 @@
 				<string>com.apple.platform.iphoneos</string>
 			</dict>
 		</dict>
+		<key>3F1217C8-B24C-4A94-A9AB-1DC2A6F2D2FF</key>
+		<dict>
+			<key>targetArchitecture</key>
+			<string>arm64</string>
+			<key>targetDevice</key>
+			<dict>
+				<key>modelCode</key>
+				<string>iPad8,11</string>
+				<key>platformIdentifier</key>
+				<string>com.apple.platform.iphoneos</string>
+			</dict>
+		</dict>
 		<key>71E5FE30-BEA6-4194-B013-E550EA60539B</key>
 		<dict>
 			<key>targetArchitecture</key>

@@ -9,7 +9,7 @@
 <h2 class="cov_title">
 <span>Coverage for "CollectionViewChatLayout.swift" : </span><span class="cov_low">0.00%</span>
 </h2>
-<h4 class="cov_subtitle">(0 of 657 relevant lines covered)</h4>
+<h4 class="cov_subtitle">(0 of 754 relevant lines covered)</h4>
 <h4 class="cov_filepath">ChatLayout/Classes/Core/CollectionViewChatLayout.swift</h4>
 <table class="source_code">
 <tr class="never">
@@ -1302,10 +1302,10 @@
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">259</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">260</td>
@@ -1317,10 +1317,10 @@
 <td class="src"><pre><code class="objc">    /// Invalidates layout of the `UICollectionView` and trying to keep the offset of the item provided in `ChatLayoutPositionSnapshot`</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">262</td>
 <td class="src"><pre><code class="objc">    /// - Parameter snapshot: `ChatLayoutPositionSnapshot`</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">263</td>
@@ -1387,10 +1387,10 @@
 <td class="src"><pre><code class="objc">        currentPositionSnapshot = nil</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">276</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">277</td>
@@ -1412,505 +1412,505 @@
 <td class="src"><pre><code class="objc">    /// Tells the layout object to update the current layout.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">281</td>
 <td class="src"><pre><code class="objc">    public override func prepare() {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">282</td>
 <td class="src"><pre><code class="objc">        super.prepare()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">283</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">284</td>
 <td class="src"><pre><code class="objc">        guard let collectionView = collectionView,</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">285</td>
 <td class="src"><pre><code class="objc">              !prepareActions.isEmpty else {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">286</td>
 <td class="src"><pre><code class="objc">            return</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">287</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">288</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">289</td>
 <td class="src"><pre><code class="objc">        #if DEBUG</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">290</td>
 <td class="src"><pre><code class="objc">        if collectionView.isPrefetchingEnabled {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">291</td>
 <td class="src"><pre><code class="objc">            preconditionFailure("UICollectionView with prefetching enabled is not supported due to https://openradar.appspot.com/40926834 bug.")</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">292</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">293</td>
 <td class="src"><pre><code class="objc">        #endif</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">294</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">295</td>
 <td class="src"><pre><code class="objc">        if prepareActions.contains(.switchStates) {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">296</td>
 <td class="src"><pre><code class="objc">            controller.commitUpdates()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">297</td>
 <td class="src"><pre><code class="objc">            state = .beforeUpdate</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">298</td>
 <td class="src"><pre><code class="objc">            resetAttributesForPendingAnimations()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">299</td>
 <td class="src"><pre><code class="objc">            resetInvalidatedAttributes()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">300</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">301</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">302</td>
 <td class="src"><pre><code class="objc">        if prepareActions.contains(.recreateSectionModels) {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">303</td>
-<td class="src"><pre><code class="objc">            var sections: ContiguousArray&lt;SectionModel&gt; = []</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">            var sections: ContiguousArray&lt;SectionModel&lt;CollectionViewChatLayout&gt;&gt; = []</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">304</td>
 <td class="src"><pre><code class="objc">            for sectionIndex in 0..&lt;collectionView.numberOfSections {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">305</td>
 <td class="src"><pre><code class="objc">                // Header</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">306</td>
 <td class="src"><pre><code class="objc">                let header: ItemModel?</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">307</td>
 <td class="src"><pre><code class="objc">                if delegate?.shouldPresentHeader(self, at: sectionIndex) == true {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">308</td>
-<td class="src"><pre><code class="objc">                    let headerPath = ItemPath(item: 0, section: sectionIndex)</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">                    let headerPath = IndexPath(item: 0, section: sectionIndex)</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">309</td>
 <td class="src"><pre><code class="objc">                    header = ItemModel(with: configuration(for: .header, at: headerPath))</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">310</td>
 <td class="src"><pre><code class="objc">                } else {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">311</td>
 <td class="src"><pre><code class="objc">                    header = nil</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">312</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">313</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">314</td>
 <td class="src"><pre><code class="objc">                // Items</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">315</td>
 <td class="src"><pre><code class="objc">                var items: ContiguousArray&lt;ItemModel&gt; = []</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">316</td>
 <td class="src"><pre><code class="objc">                for itemIndex in 0..&lt;collectionView.numberOfItems(inSection: sectionIndex) {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">317</td>
-<td class="src"><pre><code class="objc">                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">                    let itemPath = IndexPath(item: itemIndex, section: sectionIndex)</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">318</td>
 <td class="src"><pre><code class="objc">                    items.append(ItemModel(with: configuration(for: .cell, at: itemPath)))</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">319</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">320</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">321</td>
 <td class="src"><pre><code class="objc">                // Footer</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">322</td>
 <td class="src"><pre><code class="objc">                let footer: ItemModel?</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">323</td>
 <td class="src"><pre><code class="objc">                if delegate?.shouldPresentFooter(self, at: sectionIndex) == true {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">324</td>
-<td class="src"><pre><code class="objc">                    let footerPath = ItemPath(item: 0, section: sectionIndex)</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">                    let footerPath = IndexPath(item: 0, section: sectionIndex)</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">325</td>
 <td class="src"><pre><code class="objc">                    footer = ItemModel(with: configuration(for: .footer, at: footerPath))</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">326</td>
 <td class="src"><pre><code class="objc">                } else {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">327</td>
 <td class="src"><pre><code class="objc">                    footer = nil</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">328</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">329</td>
 <td class="src"><pre><code class="objc">                var section = SectionModel(header: header, footer: footer, items: items, collectionLayout: self)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">330</td>
 <td class="src"><pre><code class="objc">                section.assembleLayout()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">331</td>
 <td class="src"><pre><code class="objc">                sections.append(section)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">332</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">333</td>
 <td class="src"><pre><code class="objc">            controller.set(sections, at: .beforeUpdate)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">334</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">335</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">336</td>
 <td class="src"><pre><code class="objc">        if prepareActions.contains(.updateLayoutMetrics),</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">337</td>
 <td class="src"><pre><code class="objc">           !prepareActions.contains(.recreateSectionModels) {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">338</td>
 <td class="src"><pre><code class="objc">            var sections: ContiguousArray&lt;SectionModel&gt; = controller.layout(at: state).sections</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">339</td>
 <td class="src"><pre><code class="objc">            sections.withUnsafeMutableBufferPointer { directlyMutableSections in</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">340</td>
 <td class="src"><pre><code class="objc">                for sectionIndex in 0..&lt;directlyMutableSections.count {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">341</td>
 <td class="src"><pre><code class="objc">                    var section = directlyMutableSections[sectionIndex]</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">342</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">343</td>
 <td class="src"><pre><code class="objc">                    // Header</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">344</td>
 <td class="src"><pre><code class="objc">                    if var header = section.header {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">345</td>
 <td class="src"><pre><code class="objc">                        header.resetSize()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">346</td>
 <td class="src"><pre><code class="objc">                        section.set(header: header)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">347</td>
 <td class="src"><pre><code class="objc">                    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">348</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">349</td>
 <td class="src"><pre><code class="objc">                    // Items</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">350</td>
 <td class="src"><pre><code class="objc">                    var items: ContiguousArray&lt;ItemModel&gt; = section.items</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">351</td>
 <td class="src"><pre><code class="objc">                    items.withUnsafeMutableBufferPointer { directlyMutableItems in</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">352</td>
 <td class="src"><pre><code class="objc">                        DispatchQueue.concurrentPerform(iterations: directlyMutableItems.count, execute: { rowIndex in</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">353</td>
 <td class="src"><pre><code class="objc">                            directlyMutableItems[rowIndex].resetSize()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">354</td>
 <td class="src"><pre><code class="objc">                        })</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">355</td>
 <td class="src"><pre><code class="objc">                    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">356</td>
 <td class="src"><pre><code class="objc">                    section.set(items: items)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">357</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">358</td>
 <td class="src"><pre><code class="objc">                    // Footer</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">359</td>
 <td class="src"><pre><code class="objc">                    if var footer = section.footer {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">360</td>
 <td class="src"><pre><code class="objc">                        footer.resetSize()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">361</td>
 <td class="src"><pre><code class="objc">                        section.set(footer: footer)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">362</td>
 <td class="src"><pre><code class="objc">                    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">363</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">364</td>
 <td class="src"><pre><code class="objc">                    section.assembleLayout()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">365</td>
 <td class="src"><pre><code class="objc">                    directlyMutableSections[sectionIndex] = section</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">366</td>
 <td class="src"><pre><code class="objc">                }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">367</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">368</td>
 <td class="src"><pre><code class="objc">            controller.set(sections, at: state)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">369</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">370</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">371</td>
 <td class="src"><pre><code class="objc">        if prepareActions.contains(.cachePreviousContentInsets) {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">372</td>
 <td class="src"><pre><code class="objc">            cachedCollectionViewInset = adjustedContentInset</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">373</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">374</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">375</td>
 <td class="src"><pre><code class="objc">        if prepareActions.contains(.cachePreviousWidth) {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">376</td>
 <td class="src"><pre><code class="objc">            cachedCollectionViewSize = collectionView.bounds.size</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">377</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">378</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">379</td>
 <td class="src"><pre><code class="objc">        prepareActions = []</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">380</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">381</td>
@@ -1922,25 +1922,25 @@
 <td class="src"><pre><code class="objc">    /// Retrieves the layout attributes for all of the cells and views in the specified rectangle.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">383</td>
 <td class="src"><pre><code class="objc">    public override func layoutAttributesForElements(in rect: CGRect) -&gt; [UICollectionViewLayoutAttributes]? {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">384</td>
 <td class="src"><pre><code class="objc">        // This early return prevents an issue that causes overlapping / misplaced elements after an</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">385</td>
 <td class="src"><pre><code class="objc">        // off-screen batch update occurs. The root cause of this issue is that `UICollectionView`</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">386</td>
 <td class="src"><pre><code class="objc">        // expects `layoutAttributesForElementsInRect:` to return post-batch-update layout attributes</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">387</td>
@@ -2072,15 +2072,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">413</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">414</td>
 <td class="src"><pre><code class="objc">    /// Retrieves layout information for an item at the specified index path with a corresponding cell.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">415</td>
@@ -2092,15 +2092,15 @@
 <td class="src"><pre><code class="objc">        guard !dontReturnAttributes else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">417</td>
 <td class="src"><pre><code class="objc">            return nil</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">418</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">419</td>
@@ -2122,15 +2122,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">423</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">424</td>
 <td class="src"><pre><code class="objc">    /// Retrieves the layout attributes for the specified supplementary view.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">425</td>
@@ -2142,15 +2142,15 @@
 <td class="src"><pre><code class="objc">        guard !dontReturnAttributes else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">427</td>
 <td class="src"><pre><code class="objc">            return nil</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">428</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">429</td>
@@ -2182,45 +2182,45 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">435</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">436</td>
 <td class="src"><pre><code class="objc">    // MARK: Coordinating Animated Changes</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">437</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">438</td>
+<td class="src"><pre><code class="objc">    /// Prepares the layout object for animated changes to the view&rsquo;s bounds or the insertion or deletion of items.</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="missed">
+<td class="num">439</td>
+<td class="src"><pre><code class="objc">    public override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">438</td>
-<td class="src"><pre><code class="objc">    /// Prepares the layout object for animated changes to the view&rsquo;s bounds or the insertion or deletion of items.</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="never">
-<td class="num">439</td>
-<td class="src"><pre><code class="objc">    public override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
 <td class="num">440</td>
 <td class="src"><pre><code class="objc">        controller.isAnimatedBoundsChange = true</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">441</td>
 <td class="src"><pre><code class="objc">        controller.process(changeItems: [])</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">442</td>
 <td class="src"><pre><code class="objc">        state = .afterUpdate</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">443</td>
@@ -2277,15 +2277,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">454</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">455</td>
 <td class="src"><pre><code class="objc">    /// Cleans up after any animated changes to the view&rsquo;s bounds or after the insertion or deletion of items.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">456</td>
@@ -2297,15 +2297,15 @@
 <td class="src"><pre><code class="objc">        if controller.isAnimatedBoundsChange {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">458</td>
 <td class="src"><pre><code class="objc">            state = .beforeUpdate</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">459</td>
 <td class="src"><pre><code class="objc">            resetInvalidatedAttributes()</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">460</td>
@@ -2342,45 +2342,45 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">467</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">468</td>
 <td class="src"><pre><code class="objc">    // MARK: Context Invalidation</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">469</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">470</td>
+<td class="src"><pre><code class="objc">    /// Asks the layout object if changes to a self-sizing cell require a layout update.</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="missed">
+<td class="num">471</td>
+<td class="src"><pre><code class="objc">    public override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -&gt; Bool {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">470</td>
-<td class="src"><pre><code class="objc">    /// Asks the layout object if changes to a self-sizing cell require a layout update.</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="never">
-<td class="num">471</td>
-<td class="src"><pre><code class="objc">    public override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -&gt; Bool {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
 <td class="num">472</td>
 <td class="src"><pre><code class="objc">        let preferredAttributesItemPath = preferredAttributes.indexPath.itemPath</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">473</td>
 <td class="src"><pre><code class="objc">        guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">474</td>
 <td class="src"><pre><code class="objc">              let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">475</td>
@@ -2417,15 +2417,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">482</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">483</td>
 <td class="src"><pre><code class="objc">    /// Retrieves a context object that identifies the portions of the layout that should change in response to dynamic cell changes.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">484</td>
@@ -2437,15 +2437,15 @@
 <td class="src"><pre><code class="objc">        guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">486</td>
 <td class="src"><pre><code class="objc">            return super.invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">487</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">488</td>
@@ -2782,15 +2782,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">555</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">556</td>
 <td class="src"><pre><code class="objc">    /// Asks the layout object if the new bounds require a layout update.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">557</td>
@@ -2802,15 +2802,15 @@
 <td class="src"><pre><code class="objc">        let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) ||</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">559</td>
 <td class="src"><pre><code class="objc">            cachedCollectionViewInset != .some(adjustedContentInset) ||</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">560</td>
 <td class="src"><pre><code class="objc">            invalidationActions.contains(.shouldInvalidateOnBoundsChange)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">561</td>
@@ -2832,15 +2832,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">565</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">566</td>
 <td class="src"><pre><code class="objc">    /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">567</td>
@@ -2852,30 +2852,30 @@
 <td class="src"><pre><code class="objc">        let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">569</td>
 <td class="src"><pre><code class="objc">        invalidationContext.invalidateLayoutMetrics = false</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">570</td>
 <td class="src"><pre><code class="objc">        return invalidationContext</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">571</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">572</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">573</td>
 <td class="src"><pre><code class="objc">    /// Invalidates the current layout using the information in the provided context object.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">574</td>
@@ -2887,15 +2887,15 @@
 <td class="src"><pre><code class="objc">        guard let collectionView = collectionView else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">576</td>
 <td class="src"><pre><code class="objc">            super.invalidateLayout(with: context)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">577</td>
 <td class="src"><pre><code class="objc">            return</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">578</td>
@@ -3132,15 +3132,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">625</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">626</td>
 <td class="src"><pre><code class="objc">    /// Invalidates the current layout and triggers a layout update.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">627</td>
@@ -3152,20 +3152,20 @@
 <td class="src"><pre><code class="objc">        super.invalidateLayout()</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">629</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">630</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">631</td>
 <td class="src"><pre><code class="objc">    /// Retrieves the content offset to use after an animated layout update or change.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">632</td>
@@ -3177,15 +3177,15 @@
 <td class="src"><pre><code class="objc">        if controller.proposedCompensatingOffset != 0,</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">634</td>
 <td class="src"><pre><code class="objc">           let collectionView = collectionView {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">635</td>
 <td class="src"><pre><code class="objc">            let minPossibleContentOffset = -collectionView.adjustedContentInset.top</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">636</td>
@@ -3252,45 +3252,45 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">649</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">650</td>
 <td class="src"><pre><code class="objc">    // MARK: Responding to Collection View Updates</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">651</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">652</td>
+<td class="src"><pre><code class="objc">    /// Notifies the layout object that the contents of the collection view are about to change.</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="missed">
+<td class="num">653</td>
+<td class="src"><pre><code class="objc">    public override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">652</td>
-<td class="src"><pre><code class="objc">    /// Notifies the layout object that the contents of the collection view are about to change.</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="never">
-<td class="num">653</td>
-<td class="src"><pre><code class="objc">    public override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
 <td class="num">654</td>
 <td class="src"><pre><code class="objc">        let changeItems = updateItems.compactMap { ChangeItem(with: $0) }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">655</td>
 <td class="src"><pre><code class="objc">        controller.process(changeItems: changeItems)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">656</td>
 <td class="src"><pre><code class="objc">        state = .afterUpdate</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">657</td>
@@ -3307,15 +3307,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">660</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">661</td>
 <td class="src"><pre><code class="objc">    /// Performs any additional animations or clean up needed during a collection view update.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">662</td>
@@ -3327,15 +3327,15 @@
 <td class="src"><pre><code class="objc">        controller.proposedCompensatingOffset = 0</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">664</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">665</td>
 <td class="src"><pre><code class="objc">        if keepContentOffsetAtBottomOnBatchUpdates,</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">666</td>
@@ -3452,45 +3452,45 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">689</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">690</td>
 <td class="src"><pre><code class="objc">    // MARK: - Cell Appearance Animation</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">691</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">692</td>
+<td class="src"><pre><code class="objc">    /// Retrieves the starting layout information for an item being inserted into the collection view.</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="missed">
+<td class="num">693</td>
+<td class="src"><pre><code class="objc">    public override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -&gt; UICollectionViewLayoutAttributes? {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">692</td>
-<td class="src"><pre><code class="objc">    /// Retrieves the starting layout information for an item being inserted into the collection view.</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="never">
-<td class="num">693</td>
-<td class="src"><pre><code class="objc">    public override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -&gt; UICollectionViewLayoutAttributes? {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
 <td class="num">694</td>
 <td class="src"><pre><code class="objc">        var attributes: ChatLayoutAttributes?</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">695</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">696</td>
 <td class="src"><pre><code class="objc">        let itemPath = itemIndexPath.itemPath</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">697</td>
@@ -3647,15 +3647,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">728</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">729</td>
 <td class="src"><pre><code class="objc">    /// Retrieves the final layout information for an item that is about to be removed from the collection view.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">730</td>
@@ -3667,15 +3667,15 @@
 <td class="src"><pre><code class="objc">        var attributes: ChatLayoutAttributes?</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">732</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">733</td>
 <td class="src"><pre><code class="objc">        let itemPath = itemIndexPath.itemPath</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">734</td>
@@ -3892,45 +3892,45 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">777</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">778</td>
 <td class="src"><pre><code class="objc">    // MARK: - Supplementary View Appearance Animation</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">779</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">780</td>
+<td class="src"><pre><code class="objc">    /// Retrieves the starting layout information for a supplementary view being inserted into the collection view.</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="missed">
+<td class="num">781</td>
+<td class="src"><pre><code class="objc">    public override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -&gt; UICollectionViewLayoutAttributes? {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">780</td>
-<td class="src"><pre><code class="objc">    /// Retrieves the starting layout information for a supplementary view being inserted into the collection view.</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="never">
-<td class="num">781</td>
-<td class="src"><pre><code class="objc">    public override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -&gt; UICollectionViewLayoutAttributes? {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
 <td class="num">782</td>
 <td class="src"><pre><code class="objc">        var attributes: ChatLayoutAttributes?</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">783</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">784</td>
 <td class="src"><pre><code class="objc">        let kind = ItemKind(elementKind)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">785</td>
@@ -4097,15 +4097,15 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">818</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">819</td>
 <td class="src"><pre><code class="objc">    /// Retrieves the final layout information for a supplementary view that is about to be removed from the collection view.</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">820</td>
@@ -4117,15 +4117,15 @@
 <td class="src"><pre><code class="objc">        var attributes: ChatLayoutAttributes?</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">822</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">823</td>
 <td class="src"><pre><code class="objc">        let kind = ItemKind(elementKind)</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">824</td>
@@ -4337,304 +4337,304 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">866</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">867</td>
 <td class="src"><pre><code class="objc">}</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">868</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">869</td>
 <td class="src"><pre><code class="objc">extension CollectionViewChatLayout {</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">870</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">871</td>
-<td class="src"><pre><code class="objc">    func configuration(for element: ItemKind, at itemPath: ItemPath) -&gt; ItemModel.Configuration {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">872</td>
-<td class="src"><pre><code class="objc">        let indexPath = itemPath.indexPath</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">873</td>
-<td class="src"><pre><code class="objc">        let itemSize = estimatedSize(for: element, at: indexPath)</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">874</td>
-<td class="src"><pre><code class="objc">        return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact)</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">    func configuration(for element: ItemKind, at indexPath: IndexPath) -&gt; ItemModel.Configuration {</code></pre></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">875</td>
+<td class="num">872</td>
+<td class="src"><pre><code class="objc">        let itemSize = estimatedSize(for: element, at: indexPath)</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">873</td>
+<td class="src"><pre><code class="objc">        return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact)</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">874</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
+</tr>
+<tr class="never">
+<td class="num">875</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">876</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">877</td>
-<td class="src"><pre><code class="objc">    private func alignment(for element: ItemKind, at itemPath: ItemPath) -&gt; ChatItemAlignment {</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">878</td>
-<td class="src"><pre><code class="objc">        let indexPath = itemPath.indexPath</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">879</td>
-<td class="src"><pre><code class="objc">        return alignment(for: element, at: indexPath)</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="never">
-<td class="num">880</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="missed">
-<td class="num">881</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">882</td>
 <td class="src"><pre><code class="objc">    private func estimatedSize(for element: ItemKind, at indexPath: IndexPath) -&gt; (estimated: CGSize, exact: CGSize?) {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">883</td>
+<td class="num">877</td>
 <td class="src"><pre><code class="objc">        guard let delegate = delegate else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">884</td>
+<td class="num">878</td>
 <td class="src"><pre><code class="objc">            return (estimated: estimatedItemSize, exact: nil)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
-<td class="num">885</td>
+<tr class="missed">
+<td class="num">879</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">886</td>
+<td class="num">880</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">887</td>
+<td class="num">881</td>
 <td class="src"><pre><code class="objc">        let itemSize = delegate.sizeForItem(self, of: element, at: indexPath)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">888</td>
+<td class="num">882</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">889</td>
+<td class="num">883</td>
 <td class="src"><pre><code class="objc">        switch itemSize {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">890</td>
+<td class="num">884</td>
 <td class="src"><pre><code class="objc">        case .auto:</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">891</td>
+<td class="num">885</td>
 <td class="src"><pre><code class="objc">            return (estimated: estimatedItemSize, exact: nil)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">892</td>
+<td class="num">886</td>
 <td class="src"><pre><code class="objc">        case let .estimated(size):</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">893</td>
+<td class="num">887</td>
 <td class="src"><pre><code class="objc">            return (estimated: size, exact: nil)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">894</td>
+<td class="num">888</td>
 <td class="src"><pre><code class="objc">        case let .exact(size):</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">895</td>
+<td class="num">889</td>
 <td class="src"><pre><code class="objc">            return (estimated: size, exact: size)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">896</td>
+<td class="num">890</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">897</td>
+<td class="num">891</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
-<td class="num">898</td>
+<tr class="never">
+<td class="num">892</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
-<td class="num">899</td>
+<td class="num">893</td>
 <td class="src"><pre><code class="objc">    private func itemSize(with preferredAttributes: ChatLayoutAttributes) -&gt; CGSize {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">900</td>
+<td class="num">894</td>
 <td class="src"><pre><code class="objc">        let itemSize: CGSize</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">901</td>
+<td class="num">895</td>
 <td class="src"><pre><code class="objc">        if let delegate = delegate,</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
-<td class="num">902</td>
+<tr class="missed">
+<td class="num">896</td>
 <td class="src"><pre><code class="objc">           case let .exact(size) = delegate.sizeForItem(self, of: preferredAttributes.kind, at: preferredAttributes.indexPath) {</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">903</td>
+<td class="num">897</td>
 <td class="src"><pre><code class="objc">            itemSize = size</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">904</td>
+<td class="num">898</td>
 <td class="src"><pre><code class="objc">        } else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">905</td>
+<td class="num">899</td>
 <td class="src"><pre><code class="objc">            itemSize = preferredAttributes.size</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">906</td>
+<td class="num">900</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">907</td>
+<td class="num">901</td>
 <td class="src"><pre><code class="objc">        return itemSize</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">908</td>
+<td class="num">902</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
-<td class="num">909</td>
+<tr class="never">
+<td class="num">903</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
-<td class="num">910</td>
+<td class="num">904</td>
 <td class="src"><pre><code class="objc">    private func alignment(for element: ItemKind, at indexPath: IndexPath) -&gt; ChatItemAlignment {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">911</td>
+<td class="num">905</td>
 <td class="src"><pre><code class="objc">        guard let delegate = delegate else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">912</td>
+<td class="num">906</td>
 <td class="src"><pre><code class="objc">            return .fullWidth</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
-<td class="num">913</td>
+<tr class="missed">
+<td class="num">907</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">914</td>
+<td class="num">908</td>
 <td class="src"><pre><code class="objc">        return delegate.alignmentForItem(self, of: element, at: indexPath)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">915</td>
+<td class="num">909</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
-<td class="num">916</td>
+<tr class="never">
+<td class="num">910</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
-<td class="num">917</td>
+<td class="num">911</td>
 <td class="src"><pre><code class="objc">    private var estimatedItemSize: CGSize {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">918</td>
+<td class="num">912</td>
 <td class="src"><pre><code class="objc">        guard let estimatedItemSize = settings.estimatedItemSize else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">919</td>
+<td class="num">913</td>
 <td class="src"><pre><code class="objc">            guard collectionView != nil else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
-<td class="num">920</td>
+<tr class="missed">
+<td class="num">914</td>
 <td class="src"><pre><code class="objc">                return .zero</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">921</td>
+<td class="num">915</td>
 <td class="src"><pre><code class="objc">            }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">922</td>
+<td class="num">916</td>
 <td class="src"><pre><code class="objc">            return CGSize(width: layoutFrame.width, height: 40)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">923</td>
+<td class="num">917</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">924</td>
+<td class="num">918</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">925</td>
+<td class="num">919</td>
 <td class="src"><pre><code class="objc">        return estimatedItemSize</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">920</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="never">
+<td class="num">921</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="missed">
+<td class="num">922</td>
+<td class="src"><pre><code class="objc">    private func resetAttributesForPendingAnimations() {</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">923</td>
+<td class="src"><pre><code class="objc">        ItemKind.allCases.forEach {</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">924</td>
+<td class="src"><pre><code class="objc">            attributesForPendingAnimations[$0] = [:]</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">925</td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
@@ -4642,14 +4642,14 @@
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">927</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">928</td>
-<td class="src"><pre><code class="objc">    private func resetAttributesForPendingAnimations() {</code></pre></td>
+<td class="src"><pre><code class="objc">    private func resetInvalidatedAttributes() {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
@@ -4659,248 +4659,218 @@
 </tr>
 <tr class="missed">
 <td class="num">930</td>
-<td class="src"><pre><code class="objc">            attributesForPendingAnimations[$0] = [:]</code></pre></td>
+<td class="src"><pre><code class="objc">            invalidatedAttributes[$0] = []</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">931</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">932</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">933</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">934</td>
-<td class="src"><pre><code class="objc">    private func resetInvalidatedAttributes() {</code></pre></td>
-<td class="coverage">!</td>
+<td class="src"><pre><code class="objc">}</code></pre></td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">935</td>
-<td class="src"><pre><code class="objc">        ItemKind.allCases.forEach {</code></pre></td>
-<td class="coverage">!</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">936</td>
-<td class="src"><pre><code class="objc">            invalidatedAttributes[$0] = []</code></pre></td>
-<td class="coverage">!</td>
+<td class="src"><pre><code class="objc">extension CollectionViewChatLayout: ChatLayoutRepresentation {</code></pre></td>
+<td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">937</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="missed">
 <td class="num">938</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="src"><pre><code class="objc">    func numberOfItems(in section: Int) -&gt; Int {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">939</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">        guard let collectionView = collectionView else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">940</td>
-<td class="src"><pre><code class="objc">}</code></pre></td>
+<td class="src"><pre><code class="objc">            return .zero</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">941</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">942</td>
-<td class="src"><pre><code class="objc">extension CollectionViewChatLayout: ChatLayoutRepresentation {</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="never">
-<td class="num">943</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">944</td>
-<td class="src"><pre><code class="objc">    func numberOfItems(in section: Int) -&gt; Int {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">945</td>
-<td class="src"><pre><code class="objc">        guard let collectionView = collectionView else {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">946</td>
-<td class="src"><pre><code class="objc">            return .zero</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">947</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="missed">
-<td class="num">948</td>
 <td class="src"><pre><code class="objc">        return collectionView.numberOfItems(inSection: section)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">949</td>
+<td class="num">943</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
-<td class="num">950</td>
+<tr class="never">
+<td class="num">944</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
-<td class="num">951</td>
+<td class="num">945</td>
 <td class="src"><pre><code class="objc">    func shouldPresentHeader(at sectionIndex: Int) -&gt; Bool {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">952</td>
+<td class="num">946</td>
 <td class="src"><pre><code class="objc">        delegate?.shouldPresentHeader(self, at: sectionIndex) ?? false</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">953</td>
+<td class="num">947</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
+</tr>
+<tr class="never">
+<td class="num">948</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="missed">
+<td class="num">949</td>
+<td class="src"><pre><code class="objc">    func shouldPresentFooter(at sectionIndex: Int) -&gt; Bool {</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">950</td>
+<td class="src"><pre><code class="objc">        delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">951</td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="never">
+<td class="num">952</td>
+<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
+<td class="num">953</td>
+<td class="src"><pre><code class="objc">}</code></pre></td>
+<td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">954</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="missed">
+<tr class="never">
 <td class="num">955</td>
-<td class="src"><pre><code class="objc">    func shouldPresentFooter(at sectionIndex: Int) -&gt; Bool {</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">956</td>
-<td class="src"><pre><code class="objc">        delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">957</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">!</td>
+<td class="src"><pre><code class="objc">extension CollectionViewChatLayout {</code></pre></td>
+<td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">958</td>
+<td class="num">956</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="missed">
+<td class="num">957</td>
+<td class="src"><pre><code class="objc">    private var maxPossibleContentOffset: CGPoint {</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
+<td class="num">958</td>
+<td class="src"><pre><code class="objc">        guard let collectionView = collectionView else {</code></pre></td>
+<td class="coverage">!</td>
+</tr>
+<tr class="missed">
 <td class="num">959</td>
-<td class="src"><pre><code class="objc">}</code></pre></td>
+<td class="src"><pre><code class="objc">            return .zero</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">960</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">961</td>
-<td class="src"><pre><code class="objc">extension CollectionViewChatLayout {</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="never">
-<td class="num">962</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">963</td>
-<td class="src"><pre><code class="objc">    private var maxPossibleContentOffset: CGPoint {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">964</td>
-<td class="src"><pre><code class="objc">        guard let collectionView = collectionView else {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">965</td>
-<td class="src"><pre><code class="objc">            return .zero</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">966</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="missed">
-<td class="num">967</td>
 <td class="src"><pre><code class="objc">        let maxContentOffset = max(0 - collectionView.adjustedContentInset.top, controller.contentHeight(at: state) - collectionView.frame.height + collectionView.adjustedContentInset.bottom)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">968</td>
+<td class="num">962</td>
 <td class="src"><pre><code class="objc">        return CGPoint(x: 0, y: maxContentOffset)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">969</td>
+<td class="num">963</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
-<td class="num">970</td>
+<tr class="never">
+<td class="num">964</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 <tr class="missed">
-<td class="num">971</td>
+<td class="num">965</td>
 <td class="src"><pre><code class="objc">    private var isUserInitiatedScrolling: Bool {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">972</td>
+<td class="num">966</td>
 <td class="src"><pre><code class="objc">        guard let collectionView = collectionView else {</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">973</td>
+<td class="num">967</td>
 <td class="src"><pre><code class="objc">            return false</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="never">
-<td class="num">974</td>
+<tr class="missed">
+<td class="num">968</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage"></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">975</td>
+<td class="num">969</td>
 <td class="src"><pre><code class="objc">        return collectionView.isDragging || collectionView.isDecelerating</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">976</td>
+<td class="num">970</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="missed">
-<td class="num">977</td>
+<tr class="never">
+<td class="num">971</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
-<tr class="missed">
-<td class="num">978</td>
+<tr class="never">
+<td class="num">972</td>
 <td class="src"><pre><code class="objc">}</code></pre></td>
-<td class="coverage">!</td>
+<td class="coverage"></td>
 </tr>
 </table>
 </div></div>
