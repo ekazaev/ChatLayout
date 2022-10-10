@@ -13,7 +13,7 @@
 import Foundation
 import UIKit
 
-struct SectionModel<Layout: ChatLayoutRepresentation> {
+struct SectionModel {
 
     let id: UUID
 
@@ -25,7 +25,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     var offsetY: CGFloat = 0
 
-    private unowned var collectionLayout: Layout
+    private unowned var collectionLayout: ChatLayoutRepresentation
 
     var frame: CGRect {
         let additionalInsets = collectionLayout.settings.additionalInsets
@@ -54,7 +54,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
          header: ItemModel?,
          footer: ItemModel?,
          items: ContiguousArray<ItemModel> = [],
-         collectionLayout: Layout) {
+         collectionLayout: ChatLayoutRepresentation) {
         self.id = id
         self.items = items
         self.collectionLayout = collectionLayout

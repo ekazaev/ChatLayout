@@ -13,7 +13,7 @@
 import Foundation
 import UIKit
 
-final class LayoutModel<Layout: ChatLayoutRepresentation> {
+final class LayoutModel {
 
     private struct ItemUUIDKey: Hashable {
 
@@ -23,15 +23,15 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
     }
 
-    private(set) var sections: ContiguousArray<SectionModel<Layout>>
+    private(set) var sections: ContiguousArray<SectionModel>
 
-    private unowned var collectionLayout: Layout
+    private unowned var collectionLayout: ChatLayoutRepresentation
 
     private var sectionIndexByIdentifierCache: [UUID: Int]?
 
     private var itemPathByIdentifierCache: [ItemUUIDKey: ItemPath]?
 
-    init(sections: ContiguousArray<SectionModel<Layout>>, collectionLayout: Layout) {
+    init(sections: ContiguousArray<SectionModel>, collectionLayout: ChatLayoutRepresentation) {
         self.sections = sections
         self.collectionLayout = collectionLayout
     }
@@ -40,7 +40,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         var offset: CGFloat = collectionLayout.settings.additionalInsets.top
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
-        var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath](minimumCapacity: sections.reduce(into: 0) { $0 += $1.items.count })
+        var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath]()
 
         sections.withUnsafeMutableBufferPointer { directlyMutableSections in
             for sectionIndex in 0..<directlyMutableSections.count {
@@ -147,7 +147,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
     // MARK: To use only withing process(updateItems:)
 
-    func insertSection(_ section: SectionModel<Layout>, at sectionIndex: Int) {
+    func insertSection(_ section: SectionModel, at sectionIndex: Int) {
         var sections = sections
         guard sectionIndex <= sections.count else {
             assertionFailure("Incorrect section index.")

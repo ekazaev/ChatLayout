@@ -82,9 +82,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
     private var cachedAttributeObjects = [ModelState: [ItemKind: [ItemPath: ChatLayoutAttributes]]]()
 
-    private var layoutBeforeUpdate: LayoutModel<Layout>
+    private var layoutBeforeUpdate: LayoutModel
 
-    private var layoutAfterUpdate: LayoutModel<Layout>?
+    private var layoutAfterUpdate: LayoutModel?
 
     private unowned var layoutRepresentation: Layout
 
@@ -94,7 +94,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         resetCachedAttributeObjects()
     }
 
-    func set(_ sections: ContiguousArray<SectionModel<Layout>>, at state: ModelState) {
+    func set(_ sections: ContiguousArray<SectionModel>, at state: ModelState) {
         let layoutModel = LayoutModel(sections: sections, collectionLayout: layoutRepresentation)
         layoutModel.assembleLayout()
         switch state {
@@ -320,7 +320,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         return sectionIndex
     }
 
-    func section(at index: Int, at state: ModelState) -> SectionModel<Layout> {
+    func section(at index: Int, at state: ModelState) -> SectionModel {
         #if DEBUG
         guard index < layout(at: state).sections.count else {
             preconditionFailure("Section index \(index) is bigger than the amount of sections \(layout(at: state).sections.count).")
@@ -653,7 +653,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    func layout(at state: ModelState) -> LayoutModel<Layout> {
+    func layout(at state: ModelState) -> LayoutModel {
         switch state {
         case .beforeUpdate:
             return layoutBeforeUpdate

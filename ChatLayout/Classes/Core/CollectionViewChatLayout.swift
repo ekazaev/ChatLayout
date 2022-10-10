@@ -196,7 +196,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     private var needsIOS15_1IssueFix: Bool {
         guard enableIOS15_1Fix else { return false }
-        guard #unavailable(iOS 15.2) else { return false }
+        guard !isIOS15_2orHigher else { return false }
         guard #available(iOS 15.1, *) else { return false }
         return isUserInitiatedScrolling && !controller.isAnimatedBoundsChange
     }
@@ -300,7 +300,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         if prepareActions.contains(.recreateSectionModels) {
-            var sections: ContiguousArray<SectionModel<CollectionViewChatLayout>> = []
+            var sections: ContiguousArray<SectionModel> = []
             for sectionIndex in 0..<collectionView.numberOfSections {
                 // Header
                 let header: ItemModel?
@@ -710,7 +710,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                       let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate) {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 attributes?.indexPath = itemIndexPath
-                if #unavailable(iOS 13.0) {
+                if !isIOS13orHigher {
                     if controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
                         // It is needed to position the new cell in the middle of the old cell on ios 12
                         attributesForPendingAnimations[.cell]?[itemPath] = attributes
@@ -800,7 +800,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 attributes?.indexPath = elementIndexPath
 
-                if #unavailable(iOS 13.0) {
+                if !isIOS13orHigher {
                     if controller.reloadedSectionsIndexes.contains(elementPath.section) {
                         // It is needed to position the new cell in the middle of the old cell on ios 12
                         attributesForPendingAnimations[kind]?[elementPath] = attributes
@@ -970,3 +970,19 @@ extension CollectionViewChatLayout {
     }
 
 }
+
+var isIOS13orHigher: Bool = {
+    if #available(iOS 13.0, *) {
+        return true
+    } else {
+        return false
+    }
+}()
+
+var isIOS15_2orHigher: Bool = {
+    if #available(iOS 15.2, *) {
+        return true
+    } else {
+        return false
+    }
+}()
