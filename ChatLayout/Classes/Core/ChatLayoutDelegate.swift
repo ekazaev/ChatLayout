@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 /// Represents the point in time when `CollectionViewChatLayout` asks about layout attributes modification.
-public enum InitialAttributesRequestType {
+public enum InitialAttributesRequestType: Hashable {
 
     /// `UICollectionView` initially asks about the layout of an item.
     case initial

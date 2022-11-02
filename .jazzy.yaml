@@ -17,6 +17,7 @@ custom_categories:
       - ChatLayoutInvalidationContext
       - ItemKind
       - ItemSize
+      - ItemSize.CaseType
       - ChatItemAlignment
       - InitialAttributesRequestType
 

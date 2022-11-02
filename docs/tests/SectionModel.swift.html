@@ -234,7 +234,7 @@
 </tr>
 <tr class="covered">
 <td class="num">45</td>
-<td class="src"><pre><code class="objc">            return lastItem.locationHeight</code></pre></td>
+<td class="src"><pre><code class="objc">            return lastItem.frame.maxY</code></pre></td>
 <td class="coverage">2x</td>
 </tr>
 <tr class="covered">
@@ -389,7 +389,7 @@
 </tr>
 <tr class="never">
 <td class="num">76</td>
-<td class="src"><pre><code class="objc">                offsetY += directlyMutableItems[rowIndex].height + collectionLayout.settings.interItemSpacing</code></pre></td>
+<td class="src"><pre><code class="objc">                offsetY += directlyMutableItems[rowIndex].size.height + collectionLayout.settings.interItemSpacing</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -459,7 +459,7 @@
 </tr>
 <tr class="missed">
 <td class="num">90</td>
-<td class="src"><pre><code class="objc">            offsetEverything(below: -1, by: header.height)</code></pre></td>
+<td class="src"><pre><code class="objc">            offsetEverything(below: -1, by: header.size.height)</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
@@ -504,7 +504,7 @@
 </tr>
 <tr class="covered">
 <td class="num">99</td>
-<td class="src"><pre><code class="objc">        let heightDiff = header.height - oldHeader.height</code></pre></td>
+<td class="src"><pre><code class="objc">        let heightDiff = header.size.height - oldHeader.size.height</code></pre></td>
 <td class="coverage">3x</td>
 </tr>
 <tr class="covered">
@@ -589,7 +589,7 @@
 </tr>
 <tr class="covered">
 <td class="num">116</td>
-<td class="src"><pre><code class="objc">        let heightDiff = item.height - oldItem.height</code></pre></td>
+<td class="src"><pre><code class="objc">        let heightDiff = item.size.height - oldItem.size.height</code></pre></td>
 <td class="coverage">10000x</td>
 </tr>
 <tr class="covered">

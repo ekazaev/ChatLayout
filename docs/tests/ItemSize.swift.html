@@ -1,16 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 <head>
-<title>ItemModel.swift - Slather</title>
+<title>ItemSize.swift - Slather</title>
 <link href="slather.css" media="all" rel="stylesheet">
 </head>
 <body>
 <header><div class="row"><a href="index.html"><img src="logo.jpg" alt="Slather logo"></a></div></header><div class="row"><div id="reports">
 <h2 class="cov_title">
-<span>Coverage for "ItemModel.swift" : </span><span class="cov_low">42.86%</span>
+<span>Coverage for "ItemSize.swift" : </span><span class="cov_low">0.00%</span>
 </h2>
-<h4 class="cov_subtitle">(6 of 14 relevant lines covered)</h4>
-<h4 class="cov_filepath">ChatLayout/Classes/Core/Model/ItemModel.swift</h4>
+<h4 class="cov_subtitle">(0 of 23 relevant lines covered)</h4>
+<h4 class="cov_filepath">ChatLayout/Classes/Core/Model/ItemSize.swift</h4>
 <table class="source_code">
 <tr class="never">
 <td class="num">1</td>
@@ -24,7 +24,7 @@
 </tr>
 <tr class="never">
 <td class="num">3</td>
-<td class="src"><pre><code class="objc">// ItemModel.swift</code></pre></td>
+<td class="src"><pre><code class="objc">// ItemSize.swift</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -89,27 +89,27 @@
 </tr>
 <tr class="never">
 <td class="num">16</td>
-<td class="src"><pre><code class="objc">struct ItemModel {</code></pre></td>
+<td class="src"><pre><code class="objc">/// Represents desired item size.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">17</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">public enum ItemSize: Hashable {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">18</td>
-<td class="src"><pre><code class="objc">    struct Configuration {</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">19</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
+<td class="num">19</td>
+<td class="src"><pre><code class="objc">    /// Item size should be fully calculated by the `CollectionViewChatLayout`. Initial estimated size will be taken from `ChatLayoutSettings`.</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
 <td class="num">20</td>
-<td class="src"><pre><code class="objc">        let alignment: ChatItemAlignment</code></pre></td>
+<td class="src"><pre><code class="objc">    case auto</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -119,27 +119,27 @@
 </tr>
 <tr class="never">
 <td class="num">22</td>
-<td class="src"><pre><code class="objc">        let preferredSize: CGSize</code></pre></td>
+<td class="src"><pre><code class="objc">    /// Item size should be fully calculated by the `CollectionViewChatLayout`. Initial estimated size should be taken from the value provided.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">23</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">    case estimated(CGSize)</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">24</td>
-<td class="src"><pre><code class="objc">        let calculatedSize: CGSize?</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="never">
-<td class="num">25</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
+<td class="num">25</td>
+<td class="src"><pre><code class="objc">    /// Item size should be exactly equal to the value provided.</code></pre></td>
+<td class="coverage"></td>
+</tr>
+<tr class="never">
 <td class="num">26</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="src"><pre><code class="objc">    case exact(CGSize)</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -149,47 +149,47 @@
 </tr>
 <tr class="never">
 <td class="num">28</td>
-<td class="src"><pre><code class="objc">    let id: UUID</code></pre></td>
+<td class="src"><pre><code class="objc">    /// Represents current item size case type.</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">29</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">    public enum CaseType: Hashable, CaseIterable {</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">30</td>
-<td class="src"><pre><code class="objc">    var preferredSize: CGSize</code></pre></td>
+<td class="src"><pre><code class="objc">        /// Represents `ItemSize.auto`</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">31</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">        case auto</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">32</td>
-<td class="src"><pre><code class="objc">    var offsetY: CGFloat = .zero</code></pre></td>
+<td class="src"><pre><code class="objc">        /// Represents `ItemSize.estimated`</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">33</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">        case estimated</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">34</td>
-<td class="src"><pre><code class="objc">    var calculatedSize: CGSize?</code></pre></td>
+<td class="src"><pre><code class="objc">        /// Represents `ItemSize.exact`</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">35</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
+<td class="src"><pre><code class="objc">        case exact</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
 <td class="num">36</td>
-<td class="src"><pre><code class="objc">    var calculatedOnce: Bool = false</code></pre></td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
@@ -199,166 +199,136 @@
 </tr>
 <tr class="never">
 <td class="num">38</td>
-<td class="src"><pre><code class="objc">    var alignment: ChatItemAlignment</code></pre></td>
+<td class="src"><pre><code class="objc">    /// Returns current item size case type.</code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">39</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">    public var caseType: CaseType {</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">40</td>
-<td class="src"><pre><code class="objc">    var size: CGSize {</code></pre></td>
-<td class="coverage">1020000x</td>
+<td class="src"><pre><code class="objc">        switch self {</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">41</td>
-<td class="src"><pre><code class="objc">        guard let calculatedSize = calculatedSize else {</code></pre></td>
-<td class="coverage">1020000x</td>
+<td class="src"><pre><code class="objc">        case .auto:</code></pre></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="missed">
 <td class="num">42</td>
-<td class="src"><pre><code class="objc">            return preferredSize</code></pre></td>
+<td class="src"><pre><code class="objc">            return .auto</code></pre></td>
 <td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">43</td>
-<td class="src"><pre><code class="objc">        }</code></pre></td>
-<td class="coverage">1020000x</td>
+<td class="src"><pre><code class="objc">        case .estimated:</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">44</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage">1020000x</td>
+<td class="src"><pre><code class="objc">            return .estimated</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">45</td>
-<td class="src"><pre><code class="objc">        return calculatedSize</code></pre></td>
-<td class="coverage">1020000x</td>
+<td class="src"><pre><code class="objc">        case .exact:</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="covered">
+<tr class="missed">
 <td class="num">46</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage">1020000x</td>
+<td class="src"><pre><code class="objc">            return .exact</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">47</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">        }</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">48</td>
-<td class="src"><pre><code class="objc">    var frame: CGRect {</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">    }</code></pre></td>
+<td class="coverage">!</td>
 </tr>
 <tr class="never">
 <td class="num">49</td>
-<td class="src"><pre><code class="objc">        CGRect(origin: CGPoint(x: 0, y: offsetY), size: size)</code></pre></td>
+<td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">50</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">    public func hash(into hasher: inout Hasher) {</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">51</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">        hasher.combine(caseType)</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">52</td>
-<td class="src"><pre><code class="objc">    init(id: UUID = UUID(), with configuration: Configuration) {</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">        switch self {</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">53</td>
-<td class="src"><pre><code class="objc">        self.id = id</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">        case .auto:</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">54</td>
-<td class="src"><pre><code class="objc">        alignment = configuration.alignment</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">            break</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">55</td>
-<td class="src"><pre><code class="objc">        preferredSize = configuration.preferredSize</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">        case let .estimated(size):</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">56</td>
-<td class="src"><pre><code class="objc">        calculatedSize = configuration.calculatedSize</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">            hasher.combine(size.width)</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">57</td>
-<td class="src"><pre><code class="objc">        calculatedOnce = configuration.calculatedSize != nil</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">            hasher.combine(size.height)</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">58</td>
-<td class="src"><pre><code class="objc">    }</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">        case let .exact(size):</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">59</td>
-<td class="src"><pre><code class="objc"></code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">            hasher.combine(size.width)</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">60</td>
-<td class="src"><pre><code class="objc">    // We are just resetting `calculatedSize` if needed as the actual size will be found in invalidationContext(forPreferredLayoutAttributes:, withOriginalAttributes:)</code></pre></td>
-<td class="coverage"></td>
+<td class="src"><pre><code class="objc">            hasher.combine(size.height)</code></pre></td>
+<td class="coverage">!</td>
 </tr>
-<tr class="never">
+<tr class="missed">
 <td class="num">61</td>
-<td class="src"><pre><code class="objc">    // It is important for the rotation to keep previous frame size.</code></pre></td>
-<td class="coverage"></td>
-</tr>
-<tr class="missed">
-<td class="num">62</td>
-<td class="src"><pre><code class="objc">    mutating func resetSize() {</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">63</td>
-<td class="src"><pre><code class="objc">        guard let calculatedSize = calculatedSize else {</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">64</td>
-<td class="src"><pre><code class="objc">            return</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">65</td>
 <td class="src"><pre><code class="objc">        }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="missed">
-<td class="num">66</td>
-<td class="src"><pre><code class="objc">        self.calculatedSize = nil</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">67</td>
-<td class="src"><pre><code class="objc">        preferredSize = calculatedSize</code></pre></td>
-<td class="coverage">!</td>
-</tr>
-<tr class="missed">
-<td class="num">68</td>
+<td class="num">62</td>
 <td class="src"><pre><code class="objc">    }</code></pre></td>
 <td class="coverage">!</td>
 </tr>
 <tr class="never">
-<td class="num">69</td>
+<td class="num">63</td>
 <td class="src"><pre><code class="objc"></code></pre></td>
 <td class="coverage"></td>
 </tr>
 <tr class="never">
-<td class="num">70</td>
+<td class="num">64</td>
 <td class="src"><pre><code class="objc">}</code></pre></td>
 <td class="coverage"></td>
 </tr>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Edge Enumeration Reference</title>
+    <title>CaseType Enumeration Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/Edge" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Enum/CaseType" class="dashAnchor"></a>
 
-    <a title="Edge Enumeration Reference"></a>
+    <a title="CaseType Enumeration Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../../index.html">ChatLayout Reference</a>
       <img class="carat" src="../../img/carat.png" alt=""/>
-      Edge Enumeration Reference
+      CaseType Enumeration Reference
     </p>
 
     <div class="content-wrapper">
@@ -146,15 +146,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>Edge</h1>
+            <h1>CaseType</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Edge</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">CaseType</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">CaseIterable</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents the edge.</p>
+            <p>Represents current item size case type.</p>
 
           </div>
         </section>
@@ -166,9 +166,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0aB16PositionSnapshotV4EdgeO3topyA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/top" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB16PositionSnapshotV4EdgeO3topyA2EmF">top</a>
+                    <a name="/s:10ChatLayout8ItemSizeO8CaseTypeO4autoyA2EmF"></a>
+                    <a name="//apple_ref/swift/Element/auto" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout8ItemSizeO8CaseTypeO4autoyA2EmF">auto</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -176,14 +176,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Top edge of the <code>UICollectionView</code></p>
+                        <p>Represents <code><a href="../../Enums/ItemSize.html#/s:10ChatLayout8ItemSizeO4autoyA2CmF">ItemSize.auto</a></code></p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">top</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">auto</span></code></pre>
 
                         </div>
                       </div>
@@ -193,9 +193,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0aB16PositionSnapshotV4EdgeO6bottomyA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/bottom" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB16PositionSnapshotV4EdgeO6bottomyA2EmF">bottom</a>
+                    <a name="/s:10ChatLayout8ItemSizeO8CaseTypeO9estimatedyA2EmF"></a>
+                    <a name="//apple_ref/swift/Element/estimated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout8ItemSizeO8CaseTypeO9estimatedyA2EmF">estimated</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -203,14 +203,41 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Bottom edge of the <code>UICollectionView</code></p>
+                        <p>Represents <code>ItemSize.estimated</code></p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">bottom</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">estimated</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout8ItemSizeO8CaseTypeO5exactyA2EmF"></a>
+                    <a name="//apple_ref/swift/Element/exact" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout8ItemSizeO8CaseTypeO5exactyA2EmF">exact</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents <code>ItemSize.exact</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">exact</span></code></pre>
 
                         </div>
                       </div>

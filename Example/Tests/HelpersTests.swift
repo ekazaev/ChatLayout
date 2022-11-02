@@ -88,4 +88,21 @@ final class HelpersTests: XCTestCase {
         XCTAssertEqual((150...250).map { $0 }.binarySearchRange(predicate: predicate), (150...200).map { $0 })
         XCTAssertEqual((150...170).map { $0 }.binarySearchRange(predicate: predicate), (150...170).map { $0 })
     }
+
+    func testItemSizeHasher() {
+        let size = CGSize(width: 100, height: 100)
+        var dictionary = [ItemSize: Int]()
+        dictionary[.auto] = 0
+        dictionary[.estimated(.zero)] = 1
+        dictionary[.estimated(size)] = 2
+        dictionary[.exact(.zero)] = 3
+        dictionary[.exact(size)] = 4
+
+        XCTAssertEqual(dictionary[.auto], 0)
+        XCTAssertEqual(dictionary[.estimated(.zero)], 1)
+        XCTAssertEqual(dictionary[.estimated(size)], 2)
+        XCTAssertEqual(dictionary[.exact(.zero)], 3)
+        XCTAssertEqual(dictionary[.exact(size)], 4)
+    }
+
 }
