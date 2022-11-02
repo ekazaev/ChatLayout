@@ -37,7 +37,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
     }
 
     func assembleLayout() {
-        var offset: CGFloat = collectionLayout.settings.additionalInsets.top
+        var offsetY: CGFloat = collectionLayout.settings.additionalInsets.top
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
         var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath](minimumCapacity: sections.reduce(into: 0) { $0 += $1.items.count })
@@ -45,8 +45,8 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         sections.withUnsafeMutableBufferPointer { directlyMutableSections in
             for sectionIndex in 0..<directlyMutableSections.count {
                 sectionIndexByIdentifierCache[directlyMutableSections[sectionIndex].id] = sectionIndex
-                directlyMutableSections[sectionIndex].offsetY = offset
-                offset += directlyMutableSections[sectionIndex].height + collectionLayout.settings.interSectionSpacing
+                directlyMutableSections[sectionIndex].offsetY = offsetY
+                offsetY += directlyMutableSections[sectionIndex].height + collectionLayout.settings.interSectionSpacing
                 if let header = directlyMutableSections[sectionIndex].header {
                     itemPathByIdentifierCache[ItemUUIDKey(kind: .header, id: header.id)] = ItemPath(item: 0, section: sectionIndex)
                 }

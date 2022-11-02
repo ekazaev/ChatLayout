@@ -42,7 +42,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
             guard let lastItem = items.last else {
                 return header?.frame.maxY ?? .zero
             }
-            return lastItem.locationHeight
+            return lastItem.frame.maxY
         }
     }
 
@@ -73,7 +73,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         items.withUnsafeMutableBufferPointer { directlyMutableItems in
             for rowIndex in 0..<directlyMutableItems.count {
                 directlyMutableItems[rowIndex].offsetY = offsetY
-                offsetY += directlyMutableItems[rowIndex].height + collectionLayout.settings.interItemSpacing
+                offsetY += directlyMutableItems[rowIndex].size.height + collectionLayout.settings.interItemSpacing
             }
         }
 
@@ -87,7 +87,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     mutating func setAndAssemble(header: ItemModel) {
         guard let oldHeader = self.header else {
             self.header = header
-            offsetEverything(below: -1, by: header.height)
+            offsetEverything(below: -1, by: header.size.height)
             return
         }
         #if DEBUG
@@ -96,7 +96,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         }
         #endif
         self.header = header
-        let heightDiff = header.height - oldHeader.height
+        let heightDiff = header.size.height - oldHeader.size.height
         offsetEverything(below: -1, by: heightDiff)
     }
 
@@ -113,7 +113,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         #endif
         items[index] = item
 
-        let heightDiff = item.height - oldItem.height
+        let heightDiff = item.size.height - oldItem.size.height
         offsetEverything(below: index, by: heightDiff)
     }
 

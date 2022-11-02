@@ -37,18 +37,6 @@ struct ItemModel {
 
     var alignment: ChatItemAlignment
 
-    var origin: CGPoint {
-        CGPoint(x: 0, y: offsetY)
-    }
-
-    var height: CGFloat {
-        size.height
-    }
-
-    var locationHeight: CGFloat {
-        offsetY + height
-    }
-
     var size: CGSize {
         guard let calculatedSize = calculatedSize else {
             return preferredSize
@@ -58,7 +46,7 @@ struct ItemModel {
     }
 
     var frame: CGRect {
-        CGRect(origin: origin, size: size)
+        CGRect(origin: CGPoint(x: 0, y: offsetY), size: size)
     }
 
     init(id: UUID = UUID(), with configuration: Configuration) {
