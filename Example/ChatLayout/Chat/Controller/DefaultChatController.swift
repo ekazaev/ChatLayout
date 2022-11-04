@@ -193,9 +193,9 @@ final class DefaultChatController: ChatController {
         }
     }
 
-    private func repopulateMessages() {
+    private func repopulateMessages(requiresIsolatedProcess: Bool = false) {
         propagateLatestMessages { sections in
-            self.delegate?.update(with: sections)
+            self.delegate?.update(with: sections, requiresIsolatedProcess: requiresIsolatedProcess)
         }
     }
 
@@ -305,7 +305,7 @@ extension DefaultChatController: EditingAccessoryControllerDelegate {
 
     func deleteMessage(with id: UUID) {
         messages = Array(messages.filter { $0.id != id })
-        repopulateMessages()
+        repopulateMessages(requiresIsolatedProcess: true)
     }
 
 }

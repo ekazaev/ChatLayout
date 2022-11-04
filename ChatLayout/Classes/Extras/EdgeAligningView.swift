@@ -147,7 +147,8 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
             let layoutConstraint = view.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor)
             addedConstraints.append(layoutConstraint)
             layoutConstraint.isActive = true
-        } else if flexibleEdges.contains(.top), flexibleEdges.contains(.bottom) {
+        }
+        if flexibleEdges.contains(.top), flexibleEdges.contains(.bottom) {
             let layoutConstraint = view.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor)
             addedConstraints.append(layoutConstraint)
             layoutConstraint.isActive = true

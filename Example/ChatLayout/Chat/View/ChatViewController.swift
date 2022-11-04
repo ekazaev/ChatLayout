@@ -32,6 +32,7 @@ final class ChatViewController: UIViewController {
         case scrollingToBottom
         case showingPreview
         case showingAccessory
+        case updatingCollectionInIsolation
     }
 
     private enum ControllerActions {
@@ -124,6 +125,7 @@ final class ChatViewController: UIViewController {
         chatLayout.settings.interSectionSpacing = 8
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
+        chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
 
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: chatLayout)
         view.addSubview(collectionView)
@@ -156,7 +158,7 @@ final class ChatViewController: UIViewController {
         currentControllerActions.options.insert(.loadingInitialMessages)
         chatController.loadInitialMessages { sections in
             self.currentControllerActions.options.remove(.loadingInitialMessages)
-            self.processUpdates(with: sections, animated: true)
+            self.processUpdates(with: sections, animated: true, requiresIsolatedProcess: false)
         }
 
         KeyboardListener.shared.add(delegate: self)
@@ -298,7 +300,7 @@ extension ChatViewController: UIScrollViewDelegate {
             }
             // Reloading the content without animation just because it looks better is the scrolling is in process.
             let animated = !self.isUserInitiatedScrolling
-            self.processUpdates(with: sections, animated: animated) {
+            self.processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
                 self.currentControllerActions.options.remove(.loadingPreviousMessages)
             }
         }
@@ -441,11 +443,11 @@ extension ChatViewController: UICollectionViewDelegate {
 
 extension ChatViewController: ChatControllerDelegate {
 
-    func update(with sections: [Section]) {
-        processUpdates(with: sections, animated: true)
+    func update(with sections: [Section], requiresIsolatedProcess: Bool) {
+        processUpdates(with: sections, animated: true, requiresIsolatedProcess: requiresIsolatedProcess)
     }
 
-    private func processUpdates(with sections: [Section], animated: Bool = true, completion: (() -> Void)? = nil) {
+    private func processUpdates(with sections: [Section], animated: Bool = true, requiresIsolatedProcess: Bool, completion: (() -> Void)? = nil) {
         guard isViewLoaded else {
             dataSource.sections = sections
             return
@@ -459,7 +461,7 @@ extension ChatViewController: ChatControllerDelegate {
                                                                                        guard let self = self else {
                                                                                            return
                                                                                        }
-                                                                                       self.processUpdates(with: sections, animated: animated, completion: completion)
+                                                                                       self.processUpdates(with: sections, animated: animated, requiresIsolatedProcess: requiresIsolatedProcess, completion: completion)
                                                                                    })
             currentInterfaceActions.add(reaction: reaction)
             return
@@ -475,6 +477,10 @@ extension ChatViewController: ChatControllerDelegate {
                 return
             }
 
+            if requiresIsolatedProcess {
+                chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = true
+                currentInterfaceActions.options.insert(.updatingCollectionInIsolation)
+            }
             currentControllerActions.options.insert(.updatingCollection)
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
@@ -491,6 +497,10 @@ extension ChatViewController: ChatControllerDelegate {
                                   },
                                   completion: { _ in
                                       DispatchQueue.main.async {
+                                          self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
+                                          if requiresIsolatedProcess {
+                                              self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
+                                          }
                                           completion?()
                                           self.currentControllerActions.options.remove(.updatingCollection)
                                       }
@@ -595,7 +605,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
             self.scrollToBottom(completion: {
                 self.chatController.sendMessage(.text(messageText)) { sections in
                     self.currentInterfaceActions.options.remove(.sendingMessage)
-                    self.processUpdates(with: sections, animated: true)
+                    self.processUpdates(with: sections, animated: true, requiresIsolatedProcess: false)
                 }
             })
         }

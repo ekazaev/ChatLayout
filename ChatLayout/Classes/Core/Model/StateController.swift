@@ -28,6 +28,8 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     var keepContentOffsetAtBottomOnBatchUpdates: Bool { get }
 
+    var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool { get }
+
     func numberOfItems(in section: Int) -> Int
 
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration
@@ -764,7 +766,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
                         if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, additionalAttributes: additionalAttributes),
                            check(rect: itemFrame) {
-                            if state == .beforeUpdate || isAnimatedBoundsChange {
+                            if state == .beforeUpdate || isAnimatedBoundsChange || !layoutRepresentation.processOnlyVisibleItemsOnAnimatedBatchUpdates {
                                 allRects.append((frame: itemFrame, indexPath: itemPath, kind: .cell))
                             } else {
                                 var itemWasVisibleBefore: Bool {

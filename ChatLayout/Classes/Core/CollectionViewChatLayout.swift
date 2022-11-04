@@ -23,6 +23,8 @@ import UIKit
 ///
 /// `CollectionViewChatLayout.keepContentOffsetAtBottomOnBatchUpdates`
 ///
+/// `CollectionViewChatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates`
+///
 /// `CollectionViewChatLayout.visibleBounds`
 ///
 /// `CollectionViewChatLayout.layoutFrame`
@@ -57,6 +59,15 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     /// Keep in mind that if during the batch content inset changes also (e.g. keyboard frame changes), `CollectionViewChatLayout` will usually get that information after
     /// the animation starts and wont be able to compensate that change too. It should be done manually.
     public var keepContentOffsetAtBottomOnBatchUpdates: Bool = false
+
+    /// Sometimes `UIScrollView` can behave weirdly if there are too many corrections in it's `contentOffset` during the animation. Especially when content size of the `UIScrollView`
+    // is getting smaller first and then expands again as the newly appearing cells sizes are being calculated. That is why `CollectionViewChatLayout`
+    /// tries to process only the elements that are currently visible on the screen. But often it is not needed. This flag allows you to have fine control over this behaviour.
+    /// It set to `true` by default to keep the compatibility with the older versions of the library.
+    ///
+    /// **NB:**
+    /// This flag is only to provide fine control over the batch updates. If in doubts - keep it `true`.
+    public var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
 
     /// Represent the currently visible rectangle.
     public var visibleBounds: CGRect {
