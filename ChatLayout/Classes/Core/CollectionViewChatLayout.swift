@@ -71,7 +71,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Represent the currently visible rectangle.
     public var visibleBounds: CGRect {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return .zero
         }
         return CGRect(x: adjustedContentInset.left,
@@ -82,7 +82,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Represent the rectangle where all the items are aligned.
     public var layoutFrame: CGRect {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return .zero
         }
         let additionalInsets = settings.additionalInsets
@@ -143,14 +143,14 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: Internal Properties
 
     var adjustedContentInset: UIEdgeInsets {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return .zero
         }
         return collectionView.adjustedContentInset
     }
 
     var viewSize: CGSize {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return .zero
         }
         return collectionView.frame.size
@@ -240,7 +240,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     /// - Parameter edge: The edge of the `UICollectionView`
     /// - Returns: `ChatLayoutPositionSnapshot`
     public func getContentOffsetSnapshot(from edge: ChatLayoutPositionSnapshot.Edge) -> ChatLayoutPositionSnapshot? {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return nil
         }
         let insets = UIEdgeInsets(top: -collectionView.frame.height,
@@ -272,7 +272,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     /// Invalidates layout of the `UICollectionView` and trying to keep the offset of the item provided in `ChatLayoutPositionSnapshot`
     /// - Parameter snapshot: `ChatLayoutPositionSnapshot`
     public func restoreContentOffset(with snapshot: ChatLayoutPositionSnapshot) {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return
         }
         collectionView.setNeedsLayout()
@@ -292,7 +292,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     public override func prepare() {
         super.prepare()
 
-        guard let collectionView = collectionView,
+        guard let collectionView,
               !prepareActions.isEmpty else {
             return
         }
@@ -452,7 +452,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         controller.process(changeItems: [])
         state = .afterUpdate
         prepareActions.remove(.switchStates)
-        guard let collectionView = collectionView,
+        guard let collectionView,
               oldBounds.width != collectionView.bounds.width,
               keepContentOffsetAtBottomOnBatchUpdates,
               controller.isLayoutBiggerThanVisibleBounds(at: state) else {
@@ -538,7 +538,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 if controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) ||
                     controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
                     layoutAttributesForPendingAnimation.map { attributes in
-                        guard let delegate = delegate else {
+                        guard let delegate else {
                             attributes.alpha = 0
                             return
                         }
@@ -583,7 +583,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Invalidates the current layout using the information in the provided context object.
     public override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             super.invalidateLayout(with: context)
             return
         }
@@ -615,7 +615,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
             prepareActions.formUnion([.updateLayoutMetrics])
         }
 
-        if let currentPositionSnapshot = currentPositionSnapshot {
+        if let currentPositionSnapshot {
             let contentHeight = controller.contentHeight(at: state)
             if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, kind: currentPositionSnapshot.kind, at: state, isFinal: true),
                contentHeight != 0,
@@ -642,7 +642,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     /// Retrieves the content offset to use after an animated layout update or change.
     public override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
         if controller.proposedCompensatingOffset != 0,
-           let collectionView = collectionView {
+           let collectionView {
             let minPossibleContentOffset = -collectionView.adjustedContentInset.top
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
@@ -676,7 +676,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         if keepContentOffsetAtBottomOnBatchUpdates,
            controller.isLayoutBiggerThanVisibleBounds(at: state),
            controller.batchUpdateCompensatingOffset != 0,
-           let collectionView = collectionView {
+           let collectionView {
             let compensatingOffset: CGFloat
             if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
                 compensatingOffset = controller.batchUpdateCompensatingOffset
@@ -710,7 +710,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .afterUpdate)?.typedCopy()
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
                 attributes.map { attributes in
-                    guard let delegate = delegate else {
+                    guard let delegate else {
                         attributes.alpha = 0
                         return
                     }
@@ -748,11 +748,11 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
                    controller.isLayoutBiggerThanVisibleBounds(at: state),
-                   let attributes = attributes {
+                   let attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height * 0.2)
                 }
                 attributes.map { attributes in
-                    guard let delegate = delegate else {
+                    guard let delegate else {
                         attributes.alpha = 0
                         return
                     }
@@ -799,7 +799,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .afterUpdate)?.typedCopy()
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
                 attributes.map { attributes in
-                    guard let delegate = delegate else {
+                    guard let delegate else {
                         attributes.alpha = 0
                         return
                     }
@@ -839,11 +839,11 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
                    controller.isLayoutBiggerThanVisibleBounds(at: state),
-                   let attributes = attributes {
+                   let attributes {
                     attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height * 0.2)
                 }
                 attributes.map { attributes in
-                    guard let delegate = delegate else {
+                    guard let delegate else {
                         attributes.alpha = 0
                         return
                     }
@@ -885,7 +885,7 @@ extension CollectionViewChatLayout {
     }
 
     private func estimatedSize(for element: ItemKind, at indexPath: IndexPath) -> (estimated: CGSize, exact: CGSize?) {
-        guard let delegate = delegate else {
+        guard let delegate else {
             return (estimated: estimatedItemSize, exact: nil)
         }
 
@@ -903,7 +903,7 @@ extension CollectionViewChatLayout {
 
     private func itemSize(with preferredAttributes: ChatLayoutAttributes) -> CGSize {
         let itemSize: CGSize
-        if let delegate = delegate,
+        if let delegate,
            case let .exact(size) = delegate.sizeForItem(self, of: preferredAttributes.kind, at: preferredAttributes.indexPath) {
             itemSize = size
         } else {
@@ -913,7 +913,7 @@ extension CollectionViewChatLayout {
     }
 
     private func alignment(for element: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
-        guard let delegate = delegate else {
+        guard let delegate else {
             return .fullWidth
         }
         return delegate.alignmentForItem(self, of: element, at: indexPath)
@@ -947,7 +947,7 @@ extension CollectionViewChatLayout {
 extension CollectionViewChatLayout: ChatLayoutRepresentation {
 
     func numberOfItems(in section: Int) -> Int {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return .zero
         }
         return collectionView.numberOfItems(inSection: section)
@@ -966,7 +966,7 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
 extension CollectionViewChatLayout {
 
     private var maxPossibleContentOffset: CGPoint {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return .zero
         }
         let maxContentOffset = max(0 - collectionView.adjustedContentInset.top, controller.contentHeight(at: state) - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
@@ -974,7 +974,7 @@ extension CollectionViewChatLayout {
     }
 
     private var isUserInitiatedScrolling: Bool {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return false
         }
         return collectionView.isDragging || collectionView.isDecelerating

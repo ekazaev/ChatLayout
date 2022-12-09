@@ -71,7 +71,7 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
 //        }
         UIView.performWithoutAnimation {
             linkView?.removeFromSuperview()
-            guard let controller = controller else {
+            guard let controller else {
                 return
             }
 
@@ -105,7 +105,7 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
     }
 
     private func setupSize() {
-        guard let linkView = linkView else {
+        guard let linkView else {
             return
         }
         let contentSize = linkView.intrinsicContentSize

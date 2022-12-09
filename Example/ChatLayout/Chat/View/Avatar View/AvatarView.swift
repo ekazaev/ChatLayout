@@ -31,7 +31,7 @@ final class AvatarView: UIView, StaticViewFactory {
     }
 
     func reloadData() {
-        guard let controller = controller else {
+        guard let controller else {
             return
         }
         UIView.performWithoutAnimation {

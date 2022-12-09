@@ -188,7 +188,7 @@ final class ChatViewController: UIViewController {
             // self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.performBatchUpdates(nil)
         }, completion: { _ in
-            if let positionSnapshot = positionSnapshot,
+            if let positionSnapshot,
                !self.isUserInitiatedScrolling {
                 // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
                 // to compact and back. `CollectionViewChatLayout` may not properly predict the final position of the element. So we try
@@ -295,7 +295,7 @@ extension ChatViewController: UIScrollViewDelegate {
         // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
         currentControllerActions.options.insert(.loadingPreviousMessages)
         chatController.loadPreviousMessages { [weak self] sections in
-            guard let self = self else {
+            guard let self else {
                 return
             }
             // Reloading the content without animation just because it looks better is the scrolling is in process.
@@ -326,7 +326,7 @@ extension ChatViewController: UIScrollViewDelegate {
             // See: https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
             animator = ManualAnimator()
             animator?.animate(duration: TimeInterval(0.25), curve: .easeInOut) { [weak self] percentage in
-                guard let self = self else {
+                guard let self else {
                     return
                 }
                 self.collectionView.contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
@@ -458,7 +458,7 @@ extension ChatViewController: ChatControllerDelegate {
                                                                                    action: .onEmpty,
                                                                                    executionType: .once,
                                                                                    actionBlock: { [weak self] in
-                                                                                       guard let self = self else {
+                                                                                       guard let self else {
                                                                                            return
                                                                                        }
                                                                                        self.processUpdates(with: sections, animated: animated, requiresIsolatedProcess: requiresIsolatedProcess, completion: completion)
@@ -595,10 +595,10 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         let messageText = inputBar.inputTextView.text
         currentInterfaceActions.options.insert(.sendingMessage)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
-            guard let self = self else {
+            guard let self else {
                 return
             }
-            guard let messageText = messageText else {
+            guard let messageText else {
                 self.currentInterfaceActions.options.remove(.sendingMessage)
                 return
             }
@@ -646,7 +646,7 @@ extension ChatViewController: KeyboardListenerDelegate {
                     self.collectionView.scrollIndicatorInsets.bottom = newBottomInset
                 }, completion: nil)
 
-                if let positionSnapshot = positionSnapshot, !self.isUserInitiatedScrolling {
+                if let positionSnapshot, !self.isUserInitiatedScrolling {
                     self.chatLayout.restoreContentOffset(with: positionSnapshot)
                 }
                 if #available(iOS 13.0, *) {

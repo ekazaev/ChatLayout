@@ -76,7 +76,7 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
             stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
         ])
 
-        if let accessoryView = accessoryView {
+        if let accessoryView {
             stackView.addArrangedSubview(accessoryView)
             accessoryView.translatesAutoresizingMaskIntoConstraints = false
         }

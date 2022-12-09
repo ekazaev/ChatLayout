@@ -34,7 +34,7 @@ final class TextBubbleController<CustomView: UIView>: BubbleController {
     }
 
     private func setupBubbleView() {
-        guard let bubbleView = bubbleView else {
+        guard let bubbleView else {
             return
         }
         UIView.performWithoutAnimation {

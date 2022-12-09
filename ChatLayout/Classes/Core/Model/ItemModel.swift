@@ -38,7 +38,7 @@ struct ItemModel {
     var alignment: ChatItemAlignment
 
     var size: CGSize {
-        guard let calculatedSize = calculatedSize else {
+        guard let calculatedSize else {
             return preferredSize
         }
 
@@ -60,7 +60,7 @@ struct ItemModel {
     // We are just resetting `calculatedSize` if needed as the actual size will be found in invalidationContext(forPreferredLayoutAttributes:, withOriginalAttributes:)
     // It is important for the rotation to keep previous frame size.
     mutating func resetSize() {
-        guard let calculatedSize = calculatedSize else {
+        guard let calculatedSize else {
             return
         }
         self.calculatedSize = nil

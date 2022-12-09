@@ -36,7 +36,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     }
 
     var height: CGFloat {
-        if let footer = footer {
+        if let footer {
             return footer.frame.maxY
         } else {
             guard let lastItem = items.last else {

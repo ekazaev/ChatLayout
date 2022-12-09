@@ -43,8 +43,8 @@ final class URLController {
             view?.reloadData()
         } else {
             provider.startFetchingMetadata(for: url) { [weak self] metadata, error in
-                guard let self = self,
-                      let metadata = metadata,
+                guard let self,
+                      let metadata,
                       error == nil else {
                     return
                 }
@@ -52,7 +52,7 @@ final class URLController {
                 try? metadataCache.store(entity: metadata, for: self.url)
 
                 DispatchQueue.main.async { [weak self] in
-                    guard let self = self else {
+                    guard let self else {
                         return
                     }
                     self.delegate?.reloadMessage(with: self.messageId)

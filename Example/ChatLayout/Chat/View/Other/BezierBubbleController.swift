@@ -36,7 +36,7 @@ final class BezierBubbleController<CustomView: UIView>: BubbleController {
     }
 
     private func setupBubbleView() {
-        guard let bubbleView = bubbleView else {
+        guard let bubbleView else {
             return
         }
 

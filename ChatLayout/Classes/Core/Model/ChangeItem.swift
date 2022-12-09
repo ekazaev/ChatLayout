@@ -48,8 +48,8 @@ enum ChangeItem: Equatable {
         case .none:
             return nil
         case .move:
-            guard let indexPathBeforeUpdate = indexPathBeforeUpdate,
-                  let indexPathAfterUpdate = indexPathAfterUpdate else {
+            guard let indexPathBeforeUpdate,
+                  let indexPathAfterUpdate else {
                 assertionFailure("`indexPathBeforeUpdate` and `indexPathAfterUpdate` cannot be `nil` for a `.move` update action.")
                 return nil
             }

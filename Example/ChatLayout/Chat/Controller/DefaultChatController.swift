@@ -78,7 +78,7 @@ final class DefaultChatController: ChatController {
     private func propagateLatestMessages(completion: @escaping ([Section]) -> Void) {
         var lastMessageStorage: Message?
         dispatchQueue.async { [weak self] in
-            guard let self = self else {
+            guard let self else {
                 return
             }
             let messagesSplitByDay = self.messages
@@ -232,12 +232,12 @@ extension DefaultChatController: RandomDataProviderDelegate {
     }
 
     func markAllMessagesAsReceived(completion: @escaping () -> Void) {
-        guard let lastReceivedUUID = lastReceivedUUID else {
+        guard let lastReceivedUUID else {
             completion()
             return
         }
         dispatchQueue.async { [weak self] in
-            guard let self = self else {
+            guard let self else {
                 return
             }
             var finished = false
@@ -262,12 +262,12 @@ extension DefaultChatController: RandomDataProviderDelegate {
     }
 
     func markAllMessagesAsRead(completion: @escaping () -> Void) {
-        guard let lastReadUUID = lastReadUUID else {
+        guard let lastReadUUID else {
             completion()
             return
         }
         dispatchQueue.async { [weak self] in
-            guard let self = self else {
+            guard let self else {
                 return
             }
             var finished = false

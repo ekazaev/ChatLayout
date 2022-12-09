@@ -116,7 +116,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             locationHeight = layoutAfterUpdate?.sections.withUnsafeBufferPointer { $0.last?.locationHeight }
         }
 
-        guard let locationHeight = locationHeight else {
+        guard let locationHeight else {
             return 0
         }
         return locationHeight + layoutRepresentation.settings.additionalInsets.bottom
@@ -137,7 +137,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
 
         if !ignoreCache,
-           let cachedAttributesState = cachedAttributesState,
+           let cachedAttributesState,
            cachedAttributesState.rect.contains(rect) {
             return cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
         } else {
@@ -645,7 +645,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     func offsetByTotalCompensation(attributes: UICollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
               state == .afterUpdate,
-              let attributes = attributes else {
+              let attributes else {
             return
         }
         if backward, isLayoutBiggerThanVisibleBounds(at: .afterUpdate) {
@@ -660,7 +660,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         case .beforeUpdate:
             return layoutBeforeUpdate
         case .afterUpdate:
-            guard let layoutAfterUpdate = layoutAfterUpdate else {
+            guard let layoutAfterUpdate else {
                 assertionFailure("Internal inconsistency. Layout at \(state) is missing.")
                 return LayoutModel(sections: [], collectionLayout: layoutRepresentation)
             }
@@ -678,7 +678,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         let layout = layout(at: state)
         let additionalAttributes = AdditionalLayoutAttributes(layoutRepresentation)
 
-        if let visibleRect = visibleRect {
+        if let visibleRect {
             var traverseState: TraverseState = .notFound
 
             func check(rect: CGRect) -> Bool {

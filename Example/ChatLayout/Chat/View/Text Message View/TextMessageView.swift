@@ -71,7 +71,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
     }
 
     func reloadData() {
-        guard let controller = controller else {
+        guard let controller else {
             return
         }
         textView.text = controller.text

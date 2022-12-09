@@ -101,7 +101,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         restartMessageTimer()
         restartTypingTimer()
         dispatchQueue.async { [weak self] in
-            guard let self = self else {
+            guard let self else {
                 return
             }
             let messages = self.createBunchOfMessages(number: 50)
@@ -119,7 +119,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     func loadPreviousMessages(completion: @escaping ([RawMessage]) -> Void) {
         dispatchQueue.async { [weak self] in
-            guard let self = self else {
+            guard let self else {
                 return
             }
             let messages = self.createBunchOfMessages(number: 50)

@@ -101,7 +101,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
     }
 
     private func updateOffsets() {
-        if let avatarView = avatarView,
+        if let avatarView,
            !avatarView.isHidden {
             avatarView.transform = CGAffineTransform(translationX: -((avatarView.bounds.width + accessorySafeAreaInsets.left) * swipeCompletionRate), y: 0)
         }
@@ -113,7 +113,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
             let maxOffset = min(frame.origin.x, accessoryView.frame.width)
             customView.transform = .identity
             customView.transform = CGAffineTransform(translationX: -(maxOffset * swipeCompletionRate), y: 0)
-            if let statusView = statusView,
+            if let statusView,
                !statusView.isHidden {
                 statusView.transform = CGAffineTransform(translationX: -(maxOffset * swipeCompletionRate), y: 0)
             }

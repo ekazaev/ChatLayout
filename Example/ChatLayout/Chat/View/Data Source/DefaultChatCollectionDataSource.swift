@@ -161,7 +161,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func setupMessageContainerView<CustomView>(_ messageContainerView: MessageContainerView<EditingAccessoryView, CustomView>, messageId: UUID, alignment: ChatItemAlignment) {
+    private func setupMessageContainerView(_ messageContainerView: MessageContainerView<EditingAccessoryView, some Any>, messageId: UUID, alignment: ChatItemAlignment) {
         messageContainerView.alignment = alignment
         if let accessoryView = messageContainerView.accessoryView {
             editNotifier.add(delegate: accessoryView)
@@ -174,11 +174,11 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         }
     }
 
-    private func setupCellLayoutView<CustomView>(_ cellView: CellLayoutContainerView<AvatarView, CustomView, StatusView>,
-                                                 user: User,
-                                                 alignment: ChatItemAlignment,
-                                                 bubble: Cell.BubbleType,
-                                                 status: MessageStatus) {
+    private func setupCellLayoutView(_ cellView: CellLayoutContainerView<AvatarView, some Any, StatusView>,
+                                     user: User,
+                                     alignment: ChatItemAlignment,
+                                     bubble: Cell.BubbleType,
+                                     status: MessageStatus) {
         cellView.alignment = .bottom
         cellView.leadingView?.isHiddenSafe = !alignment.isIncoming
         cellView.leadingView?.alpha = alignment.isIncoming ? 1 : 0
@@ -193,11 +193,11 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         }
     }
 
-    private func setupMainMessageView<CustomView>(_ cellView: MainContainerView<AvatarView, CustomView, StatusView>,
-                                                  user: User,
-                                                  alignment: ChatItemAlignment,
-                                                  bubble: Cell.BubbleType,
-                                                  status: MessageStatus) {
+    private func setupMainMessageView(_ cellView: MainContainerView<AvatarView, some Any, StatusView>,
+                                      user: User,
+                                      alignment: ChatItemAlignment,
+                                      bubble: Cell.BubbleType,
+                                      status: MessageStatus) {
         cellView.containerView.alignment = .bottom
         cellView.containerView.leadingView?.isHiddenSafe = !alignment.isIncoming
         cellView.containerView.leadingView?.alpha = alignment.isIncoming ? 1 : 0
@@ -211,9 +211,9 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         }
     }
 
-    private func setupSwipeHandlingAccessory<CustomView>(_ cellView: MainContainerView<AvatarView, CustomView, StatusView>,
-                                                         date: Date,
-                                                         accessoryConnectingView: UIView) {
+    private func setupSwipeHandlingAccessory(_ cellView: MainContainerView<AvatarView, some Any, StatusView>,
+                                             date: Date,
+                                             accessoryConnectingView: UIView) {
         cellView.accessoryConnectingView = accessoryConnectingView
         cellView.accessoryView.setup(with: DateAccessoryController(date: date))
         cellView.accessorySafeAreaInsets = swipeNotifier.accessorySafeAreaInsets
@@ -221,13 +221,13 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         swipeNotifier.add(delegate: cellView)
     }
 
-    private func buildTextBubbleController<CustomView>(bubbleView: BezierMaskedView<CustomView>, messageType: MessageType, bubbleType: Cell.BubbleType) -> BubbleController {
+    private func buildTextBubbleController(bubbleView: BezierMaskedView<some Any>, messageType: MessageType, bubbleType: Cell.BubbleType) -> BubbleController {
         let textBubbleController = TextBubbleController(bubbleView: bubbleView, type: messageType, bubbleType: bubbleType)
         let bubbleController = BezierBubbleController(bubbleView: bubbleView, controllerProxy: textBubbleController, type: messageType, bubbleType: bubbleType)
         return bubbleController
     }
 
-    private func buildBezierBubbleController<CustomView>(for bubbleView: BezierMaskedView<CustomView>, messageType: MessageType, bubbleType: Cell.BubbleType) -> BubbleController {
+    private func buildBezierBubbleController(for bubbleView: BezierMaskedView<some Any>, messageType: MessageType, bubbleType: Cell.BubbleType) -> BubbleController {
         let contentBubbleController = FullCellContentBubbleController(bubbleView: bubbleView)
         let bubbleController = BezierBubbleController(bubbleView: bubbleView, controllerProxy: contentBubbleController, type: messageType, bubbleType: bubbleType)
         return bubbleController

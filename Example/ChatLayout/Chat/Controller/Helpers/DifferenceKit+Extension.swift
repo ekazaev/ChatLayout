@@ -25,7 +25,7 @@ public extension UICollectionView {
     ) {
         if case .none = window, let data = stagedChangeset.last?.data {
             setData(data)
-            if let onInterruptedReload = onInterruptedReload {
+            if let onInterruptedReload {
                 onInterruptedReload()
             } else {
                 reloadData()
@@ -44,9 +44,9 @@ public extension UICollectionView {
             : nil
 
         for changeset in stagedChangeset {
-            if let interrupt = interrupt, interrupt(changeset), let data = stagedChangeset.last?.data {
+            if let interrupt, interrupt(changeset), let data = stagedChangeset.last?.data {
                 setData(data)
-                if let onInterruptedReload = onInterruptedReload {
+                if let onInterruptedReload {
                     onInterruptedReload()
                 } else {
                     reloadData()

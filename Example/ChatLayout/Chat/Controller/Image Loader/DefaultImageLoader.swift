@@ -29,7 +29,7 @@ public struct DefaultImageLoader: ImageLoader {
             DispatchQueue.global(qos: .utility).async {
                 guard let imageData = data else {
                     DispatchQueue.main.async {
-                        guard let error = error else {
+                        guard let error else {
                             completion(.failure(ImageError.unknown))
                             return
                         }

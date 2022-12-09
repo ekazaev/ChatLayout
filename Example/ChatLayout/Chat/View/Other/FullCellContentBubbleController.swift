@@ -28,7 +28,7 @@ final class FullCellContentBubbleController<CustomView: UIView>: BubbleControlle
     }
 
     private func setupBubbleView() {
-        guard let bubbleView = bubbleView else {
+        guard let bubbleView else {
             return
         }
 

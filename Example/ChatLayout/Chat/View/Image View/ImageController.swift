@@ -24,7 +24,7 @@ final class ImageController {
     weak var delegate: ReloadDelegate?
 
     var state: ImageViewState {
-        guard let image = image else {
+        guard let image else {
             return .loading
         }
         return .image(image)
@@ -53,7 +53,7 @@ final class ImageController {
                 view?.reloadData()
             } else {
                 loader.loadImage(from: url) { [weak self] _ in
-                    guard let self = self else {
+                    guard let self else {
                         return
                     }
                     self.delegate?.reloadMessage(with: self.messageId)

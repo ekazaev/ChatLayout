@@ -73,13 +73,13 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
     /// Custom spacing between the leading and main views.
     public var customLeadingSpacing: CGFloat {
         get {
-            guard let leadingView = leadingView else {
+            guard let leadingView else {
                 return 0
             }
             return stackView.customSpacing(after: leadingView)
         }
         set {
-            guard let leadingView = leadingView else {
+            guard let leadingView else {
                 return
             }
             return stackView.setCustomSpacing(newValue, after: leadingView)
