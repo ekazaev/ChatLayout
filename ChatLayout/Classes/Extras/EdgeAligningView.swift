@@ -32,10 +32,6 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         /// Bottom edge
         case bottom
 
-        var otherEdges: [Edge] {
-            Edge.allCases.filter { $0 != self }
-        }
-
     }
 
     /// Set of edge constraints  to be set as loose.
@@ -44,14 +40,15 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
             guard flexibleEdges != oldValue else {
                 return
             }
-            setupContainer()
+            lastConstraintsUpdateEdges = nil
+            setNeedsUpdateConstraints()
         }
     }
 
     /// Contained view.
     public var customView: CustomView {
         didSet {
-            guard customView != oldValue else {
+            guard customView !== oldValue else {
                 return
             }
             oldValue.removeFromSuperview()
@@ -59,7 +56,15 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         }
     }
 
+    private var rigidConstraints: [Edge: NSLayoutConstraint] = [:]
+
+    private var flexibleConstraints: [Edge: NSLayoutConstraint] = [:]
+
+    private var centerConstraints: (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint)?
+
     private var addedConstraints: [NSLayoutConstraint] = []
+
+    private var lastConstraintsUpdateEdges: Set<Edge>?
 
     /// Initializes and returns a newly allocated `EdgeAligningView`
     /// - Parameters:
@@ -87,6 +92,28 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         fatalError("Use init(with:flexibleEdges:) instead.")
     }
 
+    public override func updateConstraints() {
+        guard lastConstraintsUpdateEdges != flexibleEdges else {
+            super.updateConstraints()
+            return
+        }
+
+        flexibleEdges.forEach { edge in
+            rigidConstraints[edge]?.isActive = false
+            flexibleConstraints[edge]?.isActive = true
+        }
+        Set(Edge.allCases).subtracting(flexibleEdges).forEach { edge in
+            flexibleConstraints[edge]?.isActive = false
+            rigidConstraints[edge]?.isActive = true
+        }
+        centerConstraints?.centerX.isActive = flexibleEdges.contains(.leading) && flexibleEdges.contains(.trailing)
+        centerConstraints?.centerY.isActive = flexibleEdges.contains(.top) && flexibleEdges.contains(.bottom)
+
+        lastConstraintsUpdateEdges = flexibleEdges
+
+        super.updateConstraints()
+    }
+
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
         insetsLayoutMarginsFromSafeArea = false
@@ -104,55 +131,40 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
             removeConstraints(addedConstraints)
             addedConstraints.removeAll()
         }
-        Set(Edge.allCases).subtracting(flexibleEdges).forEach { setConstraint(for: $0, on: customView, flexible: false) }
-        flexibleEdges.forEach { setConstraint(for: $0, on: customView, flexible: true) }
-        setDistributionConstraint(on: customView)
-        setNeedsLayout()
+
+        lastConstraintsUpdateEdges = nil
+
+        let rigidConstraints = buildRigidConstraints(customView)
+        let flexibleConstraints = buildFlexibleConstraints(customView)
+        let centerConstraints = buildCenterConstraints(customView)
+
+        addedConstraints.append(contentsOf: rigidConstraints.values)
+        addedConstraints.append(contentsOf: flexibleConstraints.values)
+        addedConstraints.append(centerConstraints.centerX)
+        addedConstraints.append(centerConstraints.centerY)
+
+        self.rigidConstraints = rigidConstraints
+        self.flexibleConstraints = flexibleConstraints
+        self.centerConstraints = centerConstraints
+        setNeedsUpdateConstraints()
     }
 
-    private func setConstraint(for edge: Edge, on view: UIView, flexible: Bool = false) {
-        var addedConstraints: [NSLayoutConstraint] = []
-        switch edge {
-        case .top:
-            if flexible {
-                addedConstraints.append(view.topAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.topAnchor))
-            } else {
-                addedConstraints.append(view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor))
-            }
-        case .leading:
-            if flexible {
-                addedConstraints.append(view.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor))
-            } else {
-                addedConstraints.append(view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor))
-            }
-        case .trailing:
-            if flexible {
-                addedConstraints.append(view.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor))
-            } else {
-                addedConstraints.append(view.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor))
-            }
-        case .bottom:
-            if flexible {
-                addedConstraints.append(view.bottomAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.bottomAnchor))
-            } else {
-                addedConstraints.append(view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor))
-            }
-        }
-        NSLayoutConstraint.activate(addedConstraints)
-        self.addedConstraints.append(contentsOf: addedConstraints)
+    private func buildCenterConstraints(_ view: UIView) -> (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint) {
+        (centerX: view.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor), centerY: view.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor))
     }
 
-    private func setDistributionConstraint(on view: UIView) {
-        if flexibleEdges.contains(.leading), flexibleEdges.contains(.trailing) {
-            let layoutConstraint = view.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor)
-            addedConstraints.append(layoutConstraint)
-            layoutConstraint.isActive = true
-        }
-        if flexibleEdges.contains(.top), flexibleEdges.contains(.bottom) {
-            let layoutConstraint = view.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor)
-            addedConstraints.append(layoutConstraint)
-            layoutConstraint.isActive = true
-        }
+    private func buildRigidConstraints(_ view: UIView) -> [Edge: NSLayoutConstraint] {
+        [.top: view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+         .bottom: view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+         .leading: view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+         .trailing: view.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)]
+    }
+
+    private func buildFlexibleConstraints(_ view: UIView) -> [Edge: NSLayoutConstraint] {
+        [.top: view.topAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.topAnchor),
+         .bottom: view.bottomAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.bottomAnchor),
+         .leading: view.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor),
+         .trailing: view.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor)]
     }
 
 }
