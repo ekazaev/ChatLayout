@@ -360,9 +360,9 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                     // Items
                     var items: ContiguousArray<ItemModel> = section.items
                     items.withUnsafeMutableBufferPointer { directlyMutableItems in
-                        DispatchQueue.concurrentPerform(iterations: directlyMutableItems.count, execute: { rowIndex in
+                        DispatchQueue.concurrentPerform(iterations: directlyMutableItems.count) { rowIndex in
                             directlyMutableItems[rowIndex].resetSize()
-                        })
+                        }
                     }
                     section.set(items: items)
 
