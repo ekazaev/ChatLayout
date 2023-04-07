@@ -122,6 +122,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         fatalError("Use init(with:flexibleEdges:) instead.")
     }
 
+    /// Updates constraints for the view.
     public override func updateConstraints() {
         guard lastConstraintsUpdateEdges != flexibleEdges else {
             super.updateConstraints()
