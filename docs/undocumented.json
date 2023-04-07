@@ -1,6 +1,26 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/ekazaev/Workplace/ChatLayout/ChatLayout/Classes/Extras/EdgeAligningView.swift",
+      "line": 125,
+      "symbol": "EdgeAligningView.updateConstraints()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ekazaev/Workplace/ChatLayout/ChatLayout/Classes/Extras/EdgeAligningView.swift",
+      "line": 125,
+      "symbol": "EdgeAligningView.updateConstraints()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/ekazaev/Workplace/ChatLayout/ChatLayout/Classes/Extras/EdgeAligningView.swift",
+      "line": 125,
+      "symbol": "EdgeAligningView.updateConstraints()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
   ],
   "source_directory": "/Users/ekazaev/Workplace/ChatLayout"
 }
