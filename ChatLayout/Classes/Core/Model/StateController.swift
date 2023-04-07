@@ -396,7 +396,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    func update(preferredSize: CGSize, alignment: ChatItemAlignment, for itemPath: ItemPath, kind: ItemKind, at state: ModelState) {
+    func update(preferredSize: CGSize,
+                alignment: ChatItemAlignment,
+                for itemPath: ItemPath,
+                kind: ItemKind,
+                at state: ModelState) {
         guard var item = item(for: itemPath, kind: kind, at: state) else {
             assertionFailure("Item at index path (\(itemPath.section) - \(itemPath.item)) does not exist.")
             return
@@ -840,7 +844,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    private func compensateOffsetIfNeeded(for itemPath: ItemPath, kind: ItemKind, action: CompensatingAction, visibleBounds: CGRect? = nil) {
+    private func compensateOffsetIfNeeded(for itemPath: ItemPath,
+                                          kind: ItemKind,
+                                          action: CompensatingAction,
+                                          visibleBounds: CGRect? = nil) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
@@ -879,7 +886,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
     }
 
-    private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int, action: CompensatingAction, visibleBounds: CGRect? = nil) {
+    private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int,
+                                                   action: CompensatingAction,
+                                                   visibleBounds: CGRect? = nil) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }

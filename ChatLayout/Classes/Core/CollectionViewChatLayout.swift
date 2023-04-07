@@ -13,9 +13,11 @@
 import Foundation
 import UIKit
 
-/// A collection view layout that can display items in a grid similar to `UITableView` but aligning them
-/// to the leading or trailing edge of the `UICollectionView`. Helps to maintain chat like behavior by keeping
-/// content offset from the bottom constant. Can deal with autosizing cells and supplementary views.
+/// A collection view layout designed to display items in a grid similar to `UITableView`, while aligning them to the
+/// leading or trailing edge of the `UICollectionView`. This layout facilitates chat-like behavior by maintaining
+/// a constant content offset from the bottom. Additionally, it is capable of handling autosizing cells and
+/// supplementary views.
+///
 /// ### Custom Properties:
 /// `CollectionViewChatLayout.delegate`
 ///
@@ -433,7 +435,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves the layout attributes for the specified supplementary view.
-    public override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    public override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
+                                                              at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         guard !dontReturnAttributes else {
             return nil
         }
@@ -479,7 +482,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: Context Invalidation
 
     /// Asks the layout object if changes to a self-sizing cell require a layout update.
-    public override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
+    public override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
+                                                withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
         let preferredAttributesItemPath = preferredAttributes.indexPath.itemPath
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
               let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
@@ -492,7 +496,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves a context object that identifies the portions of the layout that should change in response to dynamic cell changes.
-    public override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
+    public override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
+                                             withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes else {
             return super.invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
         }
@@ -789,7 +794,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: - Supplementary View Appearance Animation
 
     /// Retrieves the starting layout information for a supplementary view being inserted into the collection view.
-    public override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    public override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String,
+                                                                                 at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let kind = ItemKind(elementKind)
@@ -828,7 +834,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves the final layout information for a supplementary view that is about to be removed from the collection view.
-    public override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    public override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String,
+                                                                                  at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let kind = ItemKind(elementKind)
