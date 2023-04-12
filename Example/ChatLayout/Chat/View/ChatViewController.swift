@@ -33,6 +33,7 @@ final class ChatViewController: UIViewController {
         case showingPreview
         case showingAccessory
         case updatingCollectionInIsolation
+        case processingChanges
     }
 
     private enum ControllerActions {
@@ -61,6 +62,7 @@ final class ChatViewController: UIViewController {
     private let fpsCounter = FPSCounter()
     private let fpsView = EdgeAligningView<UILabel>(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))
     private var animator: ManualAnimator?
+    private let processingQueue = DispatchQueue(label: "chat.view", qos: .userInteractive)
 
     private var translationX: CGFloat = 0
     private var currentOffset: CGFloat = 0
@@ -467,11 +469,54 @@ extension ChatViewController: ChatControllerDelegate {
             return
         }
 
-        func process() {
-            // If there is a big amount of changes, it is better to move that calculation out of the main thread.
-            // Here is on the main thread for the simplicity.
-            let changeSet = StagedChangeset(source: dataSource.sections, target: sections).flattenIfPossible()
+        currentInterfaceActions.options.insert(.processingChanges)
+        processingQueue.async(execute: { [weak self] in
+            guard self != nil else { return }
+            calculateChangeSet()
+        })
 
+        func performOnMainThread(_ block: @escaping () -> Void) {
+            if Thread.isMainThread {
+                block()
+            } else {
+                DispatchQueue.main.async {
+                    block()
+                }
+            }
+        }
+
+        func calculateChangeSet() {
+            guard (dataSource.sections != sections) else {
+                performOnMainThread { [weak self] in
+                    self?.currentInterfaceActions.options.remove(.processingChanges)
+                    completion?()
+                }
+                return
+            }
+            let changeSet = StagedChangeset(source: dataSource.sections, target: sections).flattenIfPossible()
+            if animated {
+                performOnMainThread { [weak self] in
+                    guard let self = self else { return }
+                    if self.collectionView.isDragging {
+                        UIView.animate(withDuration: 0.15) { [weak self] in
+                            guard self != nil else { return }
+                            process(changeSet)
+                        }
+                    } else {
+                        process(changeSet)
+                    }
+                }
+            } else {
+                performOnMainThread { [weak self] in
+                    guard self != nil else { return }
+                    UIView.performWithoutAnimation {
+                        process(changeSet)
+                    }
+                }
+            }
+        }
+
+        func process(_ changeSet: StagedChangeset<[Section]>) {
             guard !changeSet.isEmpty else {
                 completion?()
                 return
@@ -502,20 +547,13 @@ extension ChatViewController: ChatControllerDelegate {
                                               self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
                                           }
                                           completion?()
+                                          self.currentInterfaceActions.options.remove(.processingChanges)
                                           self.currentControllerActions.options.remove(.updatingCollection)
                                       }
                                   },
                                   setData: { data in
                                       self.dataSource.sections = data
                                   })
-        }
-
-        if animated {
-            process()
-        } else {
-            UIView.performWithoutAnimation {
-                process()
-            }
         }
     }
 

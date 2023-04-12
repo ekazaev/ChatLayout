@@ -667,6 +667,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Notifies the layout object that the contents of the collection view are about to change.
     public override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+        print("\(#function) \(updateItems)")
         let changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         controller.process(changeItems: changeItems)
         state = .afterUpdate
