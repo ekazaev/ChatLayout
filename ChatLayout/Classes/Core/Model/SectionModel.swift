@@ -73,7 +73,8 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         items.withUnsafeMutableBufferPointer { directlyMutableItems in
             for rowIndex in 0..<directlyMutableItems.count {
                 directlyMutableItems[rowIndex].offsetY = offsetY
-                offsetY += directlyMutableItems[rowIndex].size.height + collectionLayout.settings.interItemSpacing
+                let spacing = (collectionLayout as? CollectionViewChatLayout)?.delegate?.collectionView(interItemSpacing: rowIndex) ?? collectionLayout.settings.interItemSpacing
+                offsetY += directlyMutableItems[rowIndex].size.height + spacing
             }
         }
 

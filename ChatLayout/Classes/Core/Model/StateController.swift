@@ -854,7 +854,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         let visibleBounds = visibleBounds ?? layoutRepresentation.visibleBounds
         let minY = (visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
-        let interItemSpacing = layoutRepresentation.settings.interItemSpacing
+        let interItemSpacing = (layoutRepresentation as? CollectionViewChatLayout)?.delegate?.collectionView(interItemSpacing: itemPath.item) ?? layoutRepresentation.settings.interItemSpacing
 
         switch action {
         case .insert:
@@ -895,7 +895,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         let visibleBounds = visibleBounds ?? layoutRepresentation.visibleBounds
         let minY = (visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
-        let interSectionSpacing = layoutRepresentation.settings.interSectionSpacing
+        let interSectionSpacing = (layoutRepresentation as? CollectionViewChatLayout)?.delegate?.collectionView(interSectionSpacing: sectionIndex) ?? layoutRepresentation.settings.interSectionSpacing
 
         switch action {
         case .insert:

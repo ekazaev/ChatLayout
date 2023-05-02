@@ -102,7 +102,19 @@ public protocol ChatLayoutDelegate: AnyObject {
                                              of kind: ItemKind,
                                              at indexPath: IndexPath,
                                              modifying originalAttributes: ChatLayoutAttributes)
-
+  
+    ///   Returns the interval between items.
+    ///
+    /// - Parameters:
+    ///   - section: Indicates the index of sections between items to return.
+    func collectionView(interItemSpacing section: Int) -> CGFloat?
+  
+    ///   Returns the interval between sections.
+    ///
+    /// - Parameters:
+    ///   - section: Indicates the index of sections to return.
+    func collectionView(interSectionSpacing section: Int) -> CGFloat?
+  
 }
 
 /// Default extension.
@@ -149,6 +161,16 @@ public extension ChatLayoutDelegate {
                                              at indexPath: IndexPath,
                                              modifying originalAttributes: ChatLayoutAttributes) {
         originalAttributes.alpha = 0
+    }
+  
+    /// Default implementation uses 'settings.interItemSpacing'.
+    func collectionView(interItemSpacing section: Int) -> CGFloat? {
+        return nil
+    }
+
+    /// Default implementation uses 'settings.interSectionSpacing'.
+    func collectionView(interSectionSpacing section: Int) -> CGFloat? {
+        return nil
     }
 
 }
