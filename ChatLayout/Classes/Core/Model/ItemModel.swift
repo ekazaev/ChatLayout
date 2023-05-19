@@ -23,6 +23,8 @@ struct ItemModel {
 
         let calculatedSize: CGSize?
 
+        let interItemSpacing: CGFloat
+
     }
 
     let id: UUID
@@ -36,6 +38,8 @@ struct ItemModel {
     var calculatedOnce: Bool = false
 
     var alignment: ChatItemAlignment
+
+    var interItemSpacing: CGFloat
 
     var size: CGSize {
         guard let calculatedSize else {
@@ -53,6 +57,7 @@ struct ItemModel {
         self.id = id
         alignment = configuration.alignment
         preferredSize = configuration.preferredSize
+        interItemSpacing = configuration.interItemSpacing
         calculatedSize = configuration.calculatedSize
         calculatedOnce = configuration.calculatedSize != nil
     }

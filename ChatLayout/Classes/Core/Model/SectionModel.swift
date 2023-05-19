@@ -17,6 +17,8 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     let id: UUID
 
+    var interSectionSpacing: CGFloat
+
     private(set) var header: ItemModel?
 
     private(set) var footer: ItemModel?
@@ -51,11 +53,13 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     }
 
     init(id: UUID = UUID(),
+         interSectionSpacing: CGFloat,
          header: ItemModel?,
          footer: ItemModel?,
          items: ContiguousArray<ItemModel> = [],
          collectionLayout: Layout) {
         self.id = id
+        self.interSectionSpacing = interSectionSpacing
         self.items = items
         self.collectionLayout = collectionLayout
         self.header = header
@@ -73,7 +77,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         items.withUnsafeMutableBufferPointer { directlyMutableItems in
             for rowIndex in 0..<directlyMutableItems.count {
                 directlyMutableItems[rowIndex].offsetY = offsetY
-                offsetY += directlyMutableItems[rowIndex].size.height + collectionLayout.settings.interItemSpacing
+                offsetY += directlyMutableItems[rowIndex].size.height + directlyMutableItems[rowIndex].interItemSpacing
             }
         }
 

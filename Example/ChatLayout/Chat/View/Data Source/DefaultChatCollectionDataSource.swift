@@ -295,8 +295,6 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
             return cell
         case .typingIndicator:
             return createTypingIndicatorCell(collectionView: collectionView, indexPath: indexPath)
-        default:
-            fatalError()
         }
     }
 
@@ -359,8 +357,6 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
                 return .estimated(CGSize(width: 60, height: 36))
             case .messageGroup:
                 return .estimated(CGSize(width: min(85, chatLayout.layoutFrame.width / 3), height: 18))
-            case .deliveryStatus:
-                return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 18))
             }
         case .footer, .header:
             return .auto
@@ -376,7 +372,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             switch item {
             case .date:
                 return .center
-            case .message, .deliveryStatus:
+            case .message:
                 return .fullWidth
             case .messageGroup, .typingIndicator:
                 return .leading
@@ -429,4 +425,17 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
+    public func interItemSpacing(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, after indexPath: IndexPath) -> CGFloat? {
+        let item = sections[indexPath.section].cells[indexPath.item]
+        switch item {
+        case .messageGroup:
+            return 3
+        default:
+            return nil
+        }
+    }
+
+    public func interSectionSpacing(_ chatLayout: CollectionViewChatLayout, after sectionIndex: Int) -> CGFloat? {
+        50
+    }
 }

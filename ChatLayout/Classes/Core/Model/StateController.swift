@@ -38,14 +38,15 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool
 
+    func interSectionSpacing(at sectionIndex: Int) -> CGFloat
 }
 
 final class StateController<Layout: ChatLayoutRepresentation> {
 
     private enum CompensatingAction {
-        case insert
-        case delete
-        case frameUpdate(previousFrame: CGRect, newFrame: CGRect)
+        case insert(spacing: CGFloat)
+        case delete(spacing: CGFloat)
+        case frameUpdate(previousFrame: CGRect, newFrame: CGRect, previousSpacing: CGFloat, newSpacing: CGFloat)
     }
 
     private enum TraverseState {
@@ -264,7 +265,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         return attributes
     }
 
-    func itemFrame(for itemPath: ItemPath, kind: ItemKind, at state: ModelState, isFinal: Bool = false, additionalAttributes: AdditionalLayoutAttributes? = nil) -> CGRect? {
+    func itemFrame(for itemPath: ItemPath,
+                   kind: ItemKind,
+                   at state: ModelState,
+                   isFinal: Bool = false,
+                   additionalAttributes: AdditionalLayoutAttributes? = nil) -> CGRect? {
         let additionalAttributes = additionalAttributes ?? AdditionalLayoutAttributes(layoutRepresentation)
         let layout = layout(at: state)
         guard itemPath.section < layout.sections.count else {
@@ -398,6 +403,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
     func update(preferredSize: CGSize,
                 alignment: ChatItemAlignment,
+                interItemSpacing: CGFloat,
                 for itemPath: ItemPath,
                 kind: ItemKind,
                 at state: ModelState) {
@@ -407,6 +413,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
 
         let previousFrame = item.frame
+        let previousInterItemSpacing = item.interItemSpacing
         cachedAttributesState = nil
         item.alignment = alignment
         item.calculatedSize = preferredSize
@@ -433,7 +440,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         }
 
-        let frameUpdateAction = CompensatingAction.frameUpdate(previousFrame: previousFrame, newFrame: item.frame)
+        let frameUpdateAction = CompensatingAction.frameUpdate(previousFrame: previousFrame,
+                                                               newFrame: item.frame,
+                                                               previousSpacing: previousInterItemSpacing,
+                                                               newSpacing: interItemSpacing)
         compensateOffsetIfNeeded(for: itemPath, kind: kind, action: frameUpdateAction)
     }
 
@@ -476,7 +486,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 } else {
                     footer = nil
                 }
-                let section = SectionModel(header: header, footer: footer, items: ContiguousArray(items), collectionLayout: layoutRepresentation)
+                let section = SectionModel(interSectionSpacing: layoutRepresentation.interSectionSpacing(at: sectionIndex),
+                                           header: header,
+                                           footer: footer,
+                                           items: ContiguousArray(items),
+                                           collectionLayout: layoutRepresentation)
                 afterUpdateModel.insertSection(section, at: sectionIndex)
                 insertedSectionsIndexes.insert(sectionIndex)
             case let .itemInsert(itemIndexPath: indexPath):
@@ -498,7 +512,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 var header: ItemModel?
                 if layoutRepresentation.shouldPresentHeader(at: sectionIndex) == true {
                     let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    var newHeader = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header, at: headerIndexPath))
+                    var newHeader = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header,
+                                                                                                         at: headerIndexPath))
                     let configuration = layoutRepresentation.configuration(for: .header, at: headerIndexPath)
                     applyConfiguration(configuration, to: &newHeader)
                     header = newHeader
@@ -510,7 +525,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 var footer: ItemModel?
                 if layoutRepresentation.shouldPresentFooter(at: sectionIndex) == true {
                     let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    var newFooter = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer, at: footerIndexPath))
+                    var newFooter = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer,
+                                                                                                         at: footerIndexPath))
                     let configuration = layoutRepresentation.configuration(for: .footer, at: footerIndexPath)
                     applyConfiguration(configuration, to: &newFooter)
                     footer = newFooter
@@ -573,7 +589,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         // Calculating potential content offset changes after the updates
         insertedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            compensateOffsetOfSectionIfNeeded(for: $0, action: .insert, visibleBounds: visibleBounds)
+            let section = section(at: $0, at: .afterUpdate)
+            compensateOffsetOfSectionIfNeeded(for: $0,
+                                              action: .insert(spacing: section.interSectionSpacing),
+                                              visibleBounds: visibleBounds)
         }
         reloadedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
             let oldSection = section(at: $0, at: .beforeUpdate)
@@ -582,26 +601,57 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 return
             }
             let newSection = section(at: newSectionIndex, at: .afterUpdate)
-            compensateOffsetOfSectionIfNeeded(for: $0, action: .frameUpdate(previousFrame: oldSection.frame, newFrame: newSection.frame), visibleBounds: visibleBounds)
+            compensateOffsetOfSectionIfNeeded(for: $0,
+                                              action: .frameUpdate(previousFrame: oldSection.frame,
+                                                                   newFrame: newSection.frame,
+                                                                   previousSpacing: oldSection.interSectionSpacing,
+                                                                   newSpacing: newSection.interSectionSpacing),
+                                              visibleBounds: visibleBounds)
         }
         deletedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            compensateOffsetOfSectionIfNeeded(for: $0, action: .delete, visibleBounds: visibleBounds)
+            let section = section(at: $0, at: .beforeUpdate)
+            compensateOffsetOfSectionIfNeeded(for: $0,
+                                              action: .delete(spacing: section.interSectionSpacing),
+                                              visibleBounds: visibleBounds)
         }
 
         reloadedIndexes.sorted(by: { $0 < $1 }).forEach {
-            guard let oldItem = item(for: $0.itemPath, kind: .cell, at: .beforeUpdate),
+            let newItemPath = $0.itemPath
+            guard let oldItem = item(for: newItemPath, kind: .cell, at: .beforeUpdate),
                   let newItemIndexPath = itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
                   let newItem = item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
                 assertionFailure("Internal inconsistency.")
                 return
             }
-            compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .frameUpdate(previousFrame: oldItem.frame, newFrame: newItem.frame), visibleBounds: visibleBounds)
+            compensateOffsetIfNeeded(for: newItemPath,
+                                     kind: .cell,
+                                     action: .frameUpdate(previousFrame: oldItem.frame,
+                                                          newFrame: newItem.frame,
+                                                          previousSpacing: oldItem.interItemSpacing,
+                                                          newSpacing: newItem.interItemSpacing),
+                                     visibleBounds: visibleBounds)
         }
         insertedIndexes.sorted(by: { $0 < $1 }).forEach {
-            compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .insert, visibleBounds: visibleBounds)
+            let itemPath = $0.itemPath
+            guard let item = item(for: itemPath, kind: .cell, at: .afterUpdate) else {
+                assertionFailure("Internal inconsistency.")
+                return
+            }
+            compensateOffsetIfNeeded(for: itemPath,
+                                     kind: .cell,
+                                     action: .insert(spacing: item.interItemSpacing),
+                                     visibleBounds: visibleBounds)
         }
         deletedIndexes.sorted(by: { $0 < $1 }).forEach {
-            compensateOffsetIfNeeded(for: $0.itemPath, kind: .cell, action: .delete, visibleBounds: visibleBounds)
+            let itemPath = $0.itemPath
+            guard let item = item(for: itemPath, kind: .cell, at: .beforeUpdate) else {
+                assertionFailure("Internal inconsistency.")
+                return
+            }
+            compensateOffsetIfNeeded(for: itemPath,
+                                     kind: .cell,
+                                     action: .delete(spacing: item.interItemSpacing),
+                                     visibleBounds: visibleBounds)
         }
 
         totalProposedCompensatingOffset = proposedCompensatingOffset
@@ -854,10 +904,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         let visibleBounds = visibleBounds ?? layoutRepresentation.visibleBounds
         let minY = (visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
-        let interItemSpacing = layoutRepresentation.settings.interItemSpacing
 
         switch action {
-        case .insert:
+        case let .insert(interItemSpacing):
             guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: visibleBounds),
                   let itemFrame = itemFrame(for: itemPath, kind: kind, at: .afterUpdate) else {
                 return
@@ -865,14 +914,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if itemFrame.minY.rounded() - interItemSpacing <= minY {
                 proposedCompensatingOffset += itemFrame.height + interItemSpacing
             }
-        case let .frameUpdate(previousFrame, newFrame):
+        case let .frameUpdate(previousFrame, newFrame, oldInterItemSpacing, newInterItemSpacing):
             guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, withFullCompensation: true, visibleBounds: visibleBounds) else {
                 return
             }
             if newFrame.minY.rounded() <= minY {
-                batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
+                batchUpdateCompensatingOffset += newFrame.height - previousFrame.height + newInterItemSpacing - oldInterItemSpacing
             }
-        case .delete:
+        case let .delete(interItemSpacing):
             guard isLayoutBiggerThanVisibleBounds(at: .beforeUpdate, visibleBounds: visibleBounds),
                   let deletedFrame = itemFrame(for: itemPath, kind: kind, at: .beforeUpdate) else {
                 return
@@ -895,10 +944,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         let visibleBounds = visibleBounds ?? layoutRepresentation.visibleBounds
         let minY = (visibleBounds.lowerPoint.y + batchUpdateCompensatingOffset + proposedCompensatingOffset).rounded()
-        let interSectionSpacing = layoutRepresentation.settings.interSectionSpacing
 
         switch action {
-        case .insert:
+        case let .insert(interSectionSpacing):
             let sectionsAfterUpdate = layout(at: .afterUpdate).sections
             guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: visibleBounds),
                   sectionIndex < sectionsAfterUpdate.count else {
@@ -909,15 +957,15 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if section.offsetY.rounded() - interSectionSpacing <= minY {
                 proposedCompensatingOffset += section.height + interSectionSpacing
             }
-        case let .frameUpdate(previousFrame, newFrame):
+        case let .frameUpdate(previousFrame, newFrame, oldInterSectionSpacing, newInterSectionSpacing):
             guard sectionIndex < layout(at: .afterUpdate).sections.count,
                   isLayoutBiggerThanVisibleBounds(at: .afterUpdate, withFullCompensation: true, visibleBounds: visibleBounds) else {
                 return
             }
             if newFrame.minY.rounded() <= minY {
-                batchUpdateCompensatingOffset += newFrame.height - previousFrame.height
+                batchUpdateCompensatingOffset += newFrame.height - previousFrame.height + newInterSectionSpacing - oldInterSectionSpacing
             }
-        case .delete:
+        case let .delete(interSectionSpacing):
             guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: visibleBounds),
                   sectionIndex < layout(at: .afterUpdate).sections.count else {
                 return

@@ -52,7 +52,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     }
 
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
-        .init(alignment: .fullWidth, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!)
+        .init(alignment: .fullWidth, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!, interItemSpacing: settings.interItemSpacing)
     }
 
     func shouldPresentHeader(at sectionIndex: Int) -> Bool {
@@ -75,6 +75,10 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
         .estimated(settings.estimatedItemSize!)
     }
 
+    func interSectionSpacing(at sectionIndex: Int) -> CGFloat {
+        settings.interSectionSpacing
+    }
+
     func getPreparedSections() -> ContiguousArray<SectionModel<MockCollectionLayout>> {
         var sections: ContiguousArray<SectionModel<MockCollectionLayout>> = []
         for sectionIndex in 0..<numberOfItemsInSection.count {
@@ -88,7 +92,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
                 items.append(ItemModel(with: configuration(for: .cell, at: indexPath)))
             }
 
-            var section = SectionModel(header: header, footer: footer, items: items, collectionLayout: self)
+            var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex), header: header, footer: footer, items: items, collectionLayout: self)
             section.assembleLayout()
             sections.append(section)
         }

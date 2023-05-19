@@ -339,7 +339,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 } else {
                     footer = nil
                 }
-                var section = SectionModel(header: header, footer: footer, items: items, collectionLayout: self)
+                var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex), header: header, footer: footer, items: items, collectionLayout: self)
                 section.assembleLayout()
                 sections.append(section)
             }
@@ -511,6 +511,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         let layoutAttributesForPendingAnimation = attributesForPendingAnimations[preferredMessageAttributes.kind]?[preferredAttributesItemPath]
 
         let newItemSize = itemSize(with: preferredMessageAttributes)
+        let newInterItemSpacing = interItemSpacing(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
         let newItemAlignment: ChatItemAlignment
         if controller.reloadedIndexes.contains(preferredMessageAttributes.indexPath) {
             newItemAlignment = alignment(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
@@ -519,6 +520,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         }
         controller.update(preferredSize: newItemSize,
                           alignment: newItemAlignment,
+                          interItemSpacing: newInterItemSpacing,
                           for: preferredAttributesItemPath,
                           kind: preferredMessageAttributes.kind,
                           at: state)
@@ -888,7 +890,8 @@ extension CollectionViewChatLayout {
 
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
         let itemSize = estimatedSize(for: element, at: indexPath)
-        return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact)
+        let interItemSpacing = interItemSpacing(for: element, at: indexPath)
+        return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact, interItemSpacing: interItemSpacing)
     }
 
     private func estimatedSize(for element: ItemKind, at indexPath: IndexPath) -> (estimated: CGSize, exact: CGSize?) {
@@ -917,6 +920,17 @@ extension CollectionViewChatLayout {
             itemSize = preferredAttributes.size
         }
         return itemSize
+    }
+
+    private func interItemSpacing(for kind: ItemKind, at indexPath: IndexPath) -> CGFloat {
+        let interItemSpacing: CGFloat
+        if let delegate,
+           let customInterItemSpacing = delegate.interItemSpacing(self, of: kind, after: indexPath) {
+            interItemSpacing = customInterItemSpacing
+        } else {
+            interItemSpacing = settings.interItemSpacing
+        }
+        return interItemSpacing
     }
 
     private func alignment(for element: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
@@ -968,6 +982,16 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
         delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false
     }
 
+    func interSectionSpacing(at sectionIndex: Int) -> CGFloat {
+        let interItemSpacing: CGFloat
+        if let delegate,
+           let customInterItemSpacing = delegate.interSectionSpacing(self, after: sectionIndex) {
+            interItemSpacing = customInterItemSpacing
+        } else {
+            interItemSpacing = settings.interSectionSpacing
+        }
+        return interItemSpacing
+    }
 }
 
 extension CollectionViewChatLayout {
