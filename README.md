@@ -170,9 +170,12 @@ Russian:
 
 ## Sponsor this project
 
-If you like this library and especially if you are using it in production please consider sponsoring this 
-project [here](https://github.com/sponsors/ekazaev). I work on `ChatLayout` in my spare time. Sponsorship 
-will help me to work on this project and continue to contribute to the Open Source community.
+If you find this library useful, and especially if you are using it in production, please consider sponsoring this 
+project [here](https://github.com/sponsors/ekazaev). I work on `ChatLayout` in my spare time, and your sponsorship would 
+help me to continue developing and contributing to the Open Source community. Your support will enable me to dedicate 
+more time and resources to this project, ensuring that it remains up-to-date and relevant for years to come. 
+
+Thank you for your consideration!
 
 ## Author
   
