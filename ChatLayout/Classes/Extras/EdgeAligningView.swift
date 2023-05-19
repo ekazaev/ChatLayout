@@ -42,6 +42,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
             }
             lastConstraintsUpdateEdges = nil
             setNeedsUpdateConstraints()
+            setNeedsLayout()
         }
     }
 
@@ -178,6 +179,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         self.flexibleConstraints = flexibleConstraints
         self.centerConstraints = centerConstraints
         setNeedsUpdateConstraints()
+        setNeedsLayout()
     }
 
     private func buildCenterConstraints(_ view: UIView) -> (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint) {

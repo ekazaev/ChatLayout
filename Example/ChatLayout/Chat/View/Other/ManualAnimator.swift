@@ -86,7 +86,7 @@ private extension CGFloat {
         guard self < 1.0 else {
             return 1.0
         }
-        return ((self * self) / (2.0 * ((self * self) - self) + 1.0))
+        return (self * self) / (2.0 * ((self * self) - self) + 1.0)
     }
 
     var quadraticEaseInOut: CGFloat {

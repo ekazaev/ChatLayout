@@ -56,7 +56,7 @@ final class ImageController {
                     guard let self else {
                         return
                     }
-                    self.delegate?.reloadMessage(with: self.messageId)
+                    delegate?.reloadMessage(with: messageId)
                 }
             }
         case let .image(image):

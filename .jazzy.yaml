@@ -29,6 +29,7 @@ custom_categories:
       - CellLayoutContainerView
       - CellLayoutContainerViewAlignment
       - EdgeAligningView
+      - SwappingContainerView
       - ImageMaskedView
       - ImageMaskedViewTransformation
       - RoundedCornersContainerView

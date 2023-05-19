@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name             = 'ChatLayout'
-  s.version          = '1.2.19'
+  s.version          = '1.2.20'
   s.summary          = 'Chat UI Library. It uses custom UICollectionViewLayout to provide you full control over the presentation.'
-  s.swift_version    = '5.7'
+  s.swift_version    = '5.8'
 
   s.description      = <<-DESC
 ChatLayout is a Chat UI Library. It uses custom UICollectionViewLayout to provide you full control over the

@@ -49,13 +49,13 @@ final class URLController {
                     return
                 }
 
-                try? metadataCache.store(entity: metadata, for: self.url)
+                try? metadataCache.store(entity: metadata, for: url)
 
                 DispatchQueue.main.async { [weak self] in
                     guard let self else {
                         return
                     }
-                    self.delegate?.reloadMessage(with: self.messageId)
+                    delegate?.reloadMessage(with: messageId)
                 }
             }
         }

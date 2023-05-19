@@ -104,12 +104,12 @@ final class DefaultRandomDataProvider: RandomDataProvider {
             guard let self else {
                 return
             }
-            let messages = self.createBunchOfMessages(number: 50)
+            let messages = createBunchOfMessages(number: 50)
             if messages.count > 10 {
-                self.lastReceivedUUID = messages[messages.count - 10].id
+                lastReceivedUUID = messages[messages.count - 10].id
             }
             if messages.count > 3 {
-                self.lastReadUUID = messages[messages.count - 3].id
+                lastReadUUID = messages[messages.count - 3].id
             }
             DispatchQueue.main.async {
                 completion(messages)
@@ -122,7 +122,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
             guard let self else {
                 return
             }
-            let messages = self.createBunchOfMessages(number: 50)
+            let messages = createBunchOfMessages(number: 50)
 
             DispatchQueue.main.async {
                 completion(messages)

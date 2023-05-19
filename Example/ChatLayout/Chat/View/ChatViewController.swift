@@ -299,8 +299,8 @@ extension ChatViewController: UIScrollViewDelegate {
                 return
             }
             // Reloading the content without animation just because it looks better is the scrolling is in process.
-            let animated = !self.isUserInitiatedScrolling
-            self.processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
+            let animated = !isUserInitiatedScrolling
+            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
                 self.currentControllerActions.options.remove(.loadingPreviousMessages)
             }
         }
@@ -329,12 +329,12 @@ extension ChatViewController: UIScrollViewDelegate {
                 guard let self else {
                     return
                 }
-                self.collectionView.contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
+                collectionView.contentOffset = CGPoint(x: collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
                 if percentage == 1.0 {
-                    self.animator = nil
+                    animator = nil
                     let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
-                    self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                    self.currentInterfaceActions.options.remove(.scrollingToBottom)
+                    chatLayout.restoreContentOffset(with: positionSnapshot)
+                    currentInterfaceActions.options.remove(.scrollingToBottom)
                     completion?()
                 }
             }
@@ -461,7 +461,7 @@ extension ChatViewController: ChatControllerDelegate {
                                                                                        guard let self else {
                                                                                            return
                                                                                        }
-                                                                                       self.processUpdates(with: sections, animated: animated, requiresIsolatedProcess: requiresIsolatedProcess, completion: completion)
+                                                                                       processUpdates(with: sections, animated: animated, requiresIsolatedProcess: requiresIsolatedProcess, completion: completion)
                                                                                    })
             currentInterfaceActions.add(reaction: reaction)
             return
@@ -599,10 +599,10 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                 return
             }
             guard let messageText else {
-                self.currentInterfaceActions.options.remove(.sendingMessage)
+                currentInterfaceActions.options.remove(.sendingMessage)
                 return
             }
-            self.scrollToBottom(completion: {
+            scrollToBottom(completion: {
                 self.chatController.sendMessage(.text(messageText)) { sections in
                     self.currentInterfaceActions.options.remove(.sendingMessage)
                     self.processUpdates(with: sections, animated: true, requiresIsolatedProcess: false)

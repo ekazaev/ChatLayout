@@ -81,7 +81,7 @@ final class DefaultChatController: ChatController {
             guard let self else {
                 return
             }
-            let messagesSplitByDay = self.messages
+            let messagesSplitByDay = messages
                 .map { Message(id: $0.id,
                                date: $0.date,
                                data: self.convert($0.data),
@@ -241,7 +241,7 @@ extension DefaultChatController: RandomDataProviderDelegate {
                 return
             }
             var finished = false
-            self.messages = self.messages.map { message in
+            messages = messages.map { message in
                 guard !finished, message.status != .received, message.status != .read else {
                     if message.id == lastReceivedUUID {
                         finished = true
@@ -271,7 +271,7 @@ extension DefaultChatController: RandomDataProviderDelegate {
                 return
             }
             var finished = false
-            self.messages = self.messages.map { message in
+            messages = messages.map { message in
                 guard !finished, message.status != .read else {
                     if message.id == lastReadUUID {
                         finished = true
