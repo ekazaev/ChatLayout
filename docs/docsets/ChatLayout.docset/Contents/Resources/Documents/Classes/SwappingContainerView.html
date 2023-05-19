@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          ChatLayout 1.2.20 Docs
+          ChatLayout 1.2.21 Docs
         </a>
          (100% documented)
       </p>
@@ -313,6 +313,33 @@ It also allows to easily change the order of the views if needed.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ChatLayout21SwappingContainerViewC17preferredPrioritySo08UILayoutG0avp"></a>
+                    <a name="//apple_ref/swift/Property/preferredPriority" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout21SwappingContainerViewC17preferredPrioritySo08UILayoutG0avp">preferredPriority</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Preferred priority of the internal constraints.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">preferredPriority</span><span class="p">:</span> <span class="kt">UILayoutPriority</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ChatLayout21SwappingContainerViewC09accessoryE0q_vp"></a>
                     <a name="//apple_ref/swift/Property/accessoryView" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ChatLayout21SwappingContainerViewC09accessoryE0q_vp">accessoryView</a>
@@ -330,7 +357,7 @@ It also allows to easily change the order of the views if needed.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">accessoryView</span><span class="p">:</span> <span class="kt">AccessoryView</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">accessoryView</span><span class="p">:</span> <span class="kt">AccessoryView</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -357,7 +384,7 @@ It also allows to easily change the order of the views if needed.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">customView</span><span class="p">:</span> <span class="kt">CustomView</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">customView</span><span class="p">:</span> <span class="kt">CustomView</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -367,9 +394,9 @@ It also allows to easily change the order of the views if needed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout21SwappingContainerViewC5frame4axis12distribution7spacingACyxq_GSo6CGRectV_AC4AxisOyxq__GAC12DistributionOyxq__G14CoreFoundation7CGFloatVtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(frame:axis:distribution:spacing:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout21SwappingContainerViewC5frame4axis12distribution7spacingACyxq_GSo6CGRectV_AC4AxisOyxq__GAC12DistributionOyxq__G14CoreFoundation7CGFloatVtcfc">init(frame:<wbr>axis:<wbr>distribution:<wbr>spacing:<wbr>)</a>
+                    <a name="/s:10ChatLayout21SwappingContainerViewC5frame4axis12distribution7spacing17preferredPriorityACyxq_GSo6CGRectV_AC4AxisOyxq__GAC12DistributionOyxq__G14CoreFoundation7CGFloatVSo08UILayoutK0atcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(frame:axis:distribution:spacing:preferredPriority:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout21SwappingContainerViewC5frame4axis12distribution7spacing17preferredPriorityACyxq_GSo6CGRectV_AC4AxisOyxq__GAC12DistributionOyxq__G14CoreFoundation7CGFloatVSo08UILayoutK0atcfc">init(frame:<wbr>axis:<wbr>distribution:<wbr>spacing:<wbr>preferredPriority:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -387,7 +414,8 @@ It also allows to easily change the order of the views if needed.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">,</span>
             <span class="nv">axis</span><span class="p">:</span> <span class="kt"><a href="../Classes/SwappingContainerView/Axis.html">Axis</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">horizontal</span><span class="p">,</span>
             <span class="nv">distribution</span><span class="p">:</span> <span class="kt"><a href="../Classes/SwappingContainerView/Distribution.html">Distribution</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">accessoryFirst</span><span class="p">,</span>
-            <span class="nv">spacing</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span></code></pre>
+            <span class="nv">spacing</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span>
+            <span class="nv">preferredPriority</span><span class="p">:</span> <span class="kt">UILayoutPriority</span> <span class="o">=</span> <span class="o">.</span><span class="kd">required</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -439,7 +467,19 @@ It also allows to easily change the order of the views if needed.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The distance in points between the edges of the contained views.
+                                  <p>The distance in points between the edges of the contained views.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>preferredPriority</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Preferred priority of the internal constraints.
 to the superview in which you plan to add it.</p>
                                 </div>
                               </td>
@@ -493,6 +533,33 @@ to the superview in which you plan to add it.</p>
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout21SwappingContainerViewC023requiresConstraintBasedB0SbvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/requiresConstraintBasedLayout" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout21SwappingContainerViewC023requiresConstraintBasedB0SbvpZ">requiresConstraintBasedLayout</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A Boolean value that indicates whether the receiver depends on the constraint-based layout system.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">requiresConstraintBasedLayout</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

@@ -19,6 +19,7 @@ typealias TextMessageCollectionCell = ContainerCollectionViewCell<MessageContain
 typealias URLCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, URLView, StatusView>>>
 typealias ImageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, ImageView, StatusView>>>
 typealias TitleCollectionCell = ContainerCollectionViewCell<UILabel>
+typealias UserTitleCollectionCell = ContainerCollectionViewCell<SwappingContainerView<EdgeAligningView<UILabel>, UIImageView>>
 typealias TypingIndicatorCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarPlaceholderView, TextMessageView, VoidViewFactory>>>
 
 typealias TextTitleView = ContainerCollectionReusableView<UILabel>
@@ -55,6 +56,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         collectionView.register(TextMessageCollectionCell.self, forCellWithReuseIdentifier: TextMessageCollectionCell.reuseIdentifier)
         collectionView.register(ImageCollectionCell.self, forCellWithReuseIdentifier: ImageCollectionCell.reuseIdentifier)
         collectionView.register(TitleCollectionCell.self, forCellWithReuseIdentifier: TitleCollectionCell.reuseIdentifier)
+        collectionView.register(UserTitleCollectionCell.self, forCellWithReuseIdentifier: UserTitleCollectionCell.reuseIdentifier)
         collectionView.register(TypingIndicatorCollectionCell.self, forCellWithReuseIdentifier: TypingIndicatorCollectionCell.reuseIdentifier)
         collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TextTitleView.reuseIdentifier)
         collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: TextTitleView.reuseIdentifier)
@@ -139,13 +141,35 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createGroupTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionCell.reuseIdentifier, for: indexPath) as! TitleCollectionCell
-        cell.customView.text = title
-        cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
-        cell.customView.textColor = .gray
-        cell.customView.numberOfLines = 0
-        cell.customView.font = .preferredFont(forTextStyle: .caption2)
+    private func createGroupTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> UserTitleCollectionCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserTitleCollectionCell.reuseIdentifier, for: indexPath) as! UserTitleCollectionCell
+        cell.customView.spacing = 2
+
+        cell.customView.customView.customView.text = title
+        cell.customView.customView.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
+        cell.customView.customView.customView.textColor = .gray
+        cell.customView.customView.customView.numberOfLines = 0
+        cell.customView.customView.customView.font = .preferredFont(forTextStyle: .caption2)
+        cell.customView.customView.flexibleEdges = [.top]
+
+        cell.customView.accessoryView.contentMode = .scaleAspectFit
+        cell.customView.accessoryView.tintColor = .gray
+        cell.customView.accessoryView.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if cell.customView.accessoryView.image == nil {
+                cell.customView.accessoryView.image = UIImage(systemName: "person")
+                let constraints = [
+                    cell.customView.accessoryView.widthAnchor.constraint(equalTo: cell.customView.accessoryView.heightAnchor),
+                    cell.customView.accessoryView.heightAnchor.constraint(equalTo: cell.customView.customView.customView.heightAnchor, constant: 2)
+                ]
+                constraints.forEach { $0.priority = UILayoutPriority(rawValue: 999) }
+                cell.customView.customView.customView.setContentHuggingPriority(.required, for: .vertical)
+                cell.customView.accessoryView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+                NSLayoutConstraint.activate(constraints)
+            }
+        } else {
+            cell.customView.accessoryView.isHidden = true
+        }
         cell.contentView.layoutMargins = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
         return cell
     }

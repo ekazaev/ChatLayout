@@ -55,8 +55,7 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
             guard axis != oldValue else {
                 return
             }
-            setNeedsUpdateConstraints()
-            setNeedsLayout()
+            setupContainer()
         }
     }
 
@@ -71,93 +70,65 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         }
     }
 
+    /// Preferred priority of the internal constraints.
+    public var preferredPriority: UILayoutPriority = .required {
+        didSet {
+            guard preferredPriority != oldValue else {
+                return
+            }
+            setupContainer()
+        }
+    }
+
     /// Contained accessory view.
-    public let accessoryView: AccessoryView
+    public var accessoryView: AccessoryView {
+        didSet {
+            guard accessoryView !== oldValue else {
+                return
+            }
+            if oldValue.superview === self {
+                oldValue.removeFromSuperview()
+            }
+            accessoryFirstObserver?.invalidate()
+            accessoryFirstObserver = nil
+            setupContainer()
+        }
+    }
 
     /// Contained main view.
-    public let customView: CustomView
+    public var customView: CustomView {
+        didSet {
+            guard customView !== oldValue else {
+                return
+            }
+            if oldValue.superview === self {
+                oldValue.removeFromSuperview()
+            }
+            customViewObserver?.invalidate()
+            customViewObserver = nil
+            setupContainer()
+        }
+    }
 
     private struct SwappingContainerState: Equatable {
         let axis: Axis
-        let position: Distribution
+        let distribution: Distribution
         let spacing: CGFloat
         let isAccessoryHidden: Bool
         let isCustomViewHidden: Bool
     }
 
-    private lazy var accessoryFirstConstraints: [NSLayoutConstraint] = {
-        [
-            accessoryView.trailingAnchor.constraint(equalTo: customView.leadingAnchor, constant: spacing),
-            accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
-        ]
-    }()
+    private var addedConstraints: [NSLayoutConstraint] = []
 
-    private lazy var accessoryTopConstraints: [NSLayoutConstraint] = {
-        [
-            accessoryView.bottomAnchor.constraint(equalTo: customView.topAnchor, constant: -spacing),
-            accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-        ]
-    }()
+    private var accessoryFirstConstraints: [NSLayoutConstraint] = []
 
-    private lazy var accessoryFullConstraints: [NSLayoutConstraint] = {
-        [
-            accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
-        ]
-    }()
+    private var accessoryFullConstraints: [NSLayoutConstraint] = []
 
-    private lazy var accessoryFullVConstraints: [NSLayoutConstraint] = {
-        [
-            accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-        ]
-    }()
+    private var customViewFirstConstraints: [NSLayoutConstraint] = []
 
-    private lazy var customViewFirstConstraints: [NSLayoutConstraint] = {
-        [
-            customView.trailingAnchor.constraint(equalTo: accessoryView.leadingAnchor, constant: -spacing),
-            customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
-        ]
-    }()
+    private var customViewFullConstraints: [NSLayoutConstraint] = []
 
-    private lazy var customViewTopConstraints: [NSLayoutConstraint] = {
-        [
-            customView.bottomAnchor.constraint(equalTo: accessoryView.topAnchor, constant: -spacing),
-            customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-        ]
-    }()
-
-    private lazy var customViewFullConstraints: [NSLayoutConstraint] = {
-        [
-            customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
-        ]
-    }()
-
-    private lazy var customViewFullVConstraints: [NSLayoutConstraint] = {
-        [
-            customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-        ]
-    }()
-
-    private lazy var topBottomConstraints: (accessory: [NSLayoutConstraint], customView: [NSLayoutConstraint]) = {
-        (accessory: [accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-                     accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)],
-         customView: [customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-                      customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)])
-    }()
-
-    private lazy var leadingTrailingConstraints: (accessory: [NSLayoutConstraint], customView: [NSLayoutConstraint]) = {
-        (accessory: [accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-                     accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)],
-         customView: [customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-                      customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)])
-    }()
+    private var edgeConstraints: (accessory: [NSLayoutConstraint], customView: [NSLayoutConstraint]) = (accessory: [], customView: [])
 
     private var cachedState: SwappingContainerState?
 
@@ -171,11 +142,13 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
     ///   - axis: The view distribution axis.
     ///   - distribution: The layout of the arranged subviews along the axis.
     ///   - spacing: The distance in points between the edges of the contained views.
+    ///   - preferredPriority: Preferred priority of the internal constraints.
     ///   to the superview in which you plan to add it.
     public init(frame: CGRect,
                 axis: Axis = .horizontal,
                 distribution: Distribution = .accessoryFirst,
-                spacing: CGFloat) {
+                spacing: CGFloat,
+                preferredPriority: UILayoutPriority = .required) {
         customView = CustomView(frame: frame)
         accessoryView = AccessoryView(frame: frame)
         self.axis = axis
@@ -201,10 +174,15 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         fatalError("Use init(with:flexibleEdges:) instead.")
     }
 
+    /// A Boolean value that indicates whether the receiver depends on the constraint-based layout system.
+    public override class var requiresConstraintBasedLayout: Bool {
+        true
+    }
+
     /// Updates constraints for the view.
     public override func updateConstraints() {
         let currentState = SwappingContainerState(axis: axis,
-                                                  position: distribution,
+                                                  distribution: distribution,
                                                   spacing: spacing,
                                                   isAccessoryHidden: accessoryView.isHidden,
                                                   isCustomViewHidden: customView.isHidden)
@@ -213,124 +191,57 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
             return
         }
 
-        if let cachedState,
-           cachedState.axis != axis {
-            switch cachedState.axis {
-            case .horizontal:
-                NSLayoutConstraint.deactivate(topBottomConstraints.accessory)
-                NSLayoutConstraint.deactivate(topBottomConstraints.customView)
-                NSLayoutConstraint.deactivate(accessoryFirstConstraints)
-                NSLayoutConstraint.deactivate(customViewFirstConstraints)
-                NSLayoutConstraint.deactivate(accessoryFullConstraints)
-                NSLayoutConstraint.deactivate(customViewFullConstraints)
-            case .vertical:
-                NSLayoutConstraint.deactivate(leadingTrailingConstraints.accessory)
-                NSLayoutConstraint.deactivate(leadingTrailingConstraints.customView)
-                NSLayoutConstraint.deactivate(accessoryTopConstraints)
-                NSLayoutConstraint.deactivate(customViewTopConstraints)
-                NSLayoutConstraint.deactivate(accessoryFullVConstraints)
-                NSLayoutConstraint.deactivate(customViewFullVConstraints)
-            }
-        }
-
         cachedState = currentState
 
-        switch axis {
-        case .horizontal:
-            if currentState.isAccessoryHidden, currentState.isCustomViewHidden {
-                NSLayoutConstraint.deactivate(topBottomConstraints.accessory)
-                NSLayoutConstraint.deactivate(topBottomConstraints.customView)
-                NSLayoutConstraint.deactivate(accessoryFirstConstraints)
-                NSLayoutConstraint.deactivate(customViewFirstConstraints)
-                NSLayoutConstraint.deactivate(accessoryFullConstraints)
-                NSLayoutConstraint.deactivate(customViewFullConstraints)
-            } else if currentState.isAccessoryHidden {
-                NSLayoutConstraint.deactivate(topBottomConstraints.accessory)
-                NSLayoutConstraint.deactivate(accessoryFirstConstraints)
-                NSLayoutConstraint.deactivate(customViewFirstConstraints)
-                NSLayoutConstraint.deactivate(accessoryFullConstraints)
-                NSLayoutConstraint.activate(customViewFullConstraints)
-                NSLayoutConstraint.activate(topBottomConstraints.customView)
-            } else if currentState.isCustomViewHidden {
-                NSLayoutConstraint.deactivate(topBottomConstraints.customView)
-                NSLayoutConstraint.deactivate(accessoryFirstConstraints)
-                NSLayoutConstraint.deactivate(customViewFirstConstraints)
-                NSLayoutConstraint.deactivate(customViewFullConstraints)
-                NSLayoutConstraint.activate(accessoryFullConstraints)
-                NSLayoutConstraint.activate(topBottomConstraints.accessory)
-            } else {
-                NSLayoutConstraint.deactivate(accessoryFullConstraints)
-                NSLayoutConstraint.deactivate(customViewFullConstraints)
+        if currentState.isAccessoryHidden, currentState.isCustomViewHidden {
+            NSLayoutConstraint.deactivate(edgeConstraints.accessory)
+            NSLayoutConstraint.deactivate(edgeConstraints.customView)
+            NSLayoutConstraint.deactivate(accessoryFirstConstraints)
+            NSLayoutConstraint.deactivate(customViewFirstConstraints)
+            NSLayoutConstraint.deactivate(accessoryFullConstraints)
+            NSLayoutConstraint.deactivate(customViewFullConstraints)
+        } else if currentState.isAccessoryHidden {
+            NSLayoutConstraint.deactivate(edgeConstraints.accessory)
+            NSLayoutConstraint.deactivate(accessoryFirstConstraints)
+            NSLayoutConstraint.deactivate(customViewFirstConstraints)
+            NSLayoutConstraint.deactivate(accessoryFullConstraints)
+            NSLayoutConstraint.activate(customViewFullConstraints)
+            NSLayoutConstraint.activate(edgeConstraints.customView)
+        } else if currentState.isCustomViewHidden {
+            NSLayoutConstraint.deactivate(edgeConstraints.customView)
+            NSLayoutConstraint.deactivate(accessoryFirstConstraints)
+            NSLayoutConstraint.deactivate(customViewFirstConstraints)
+            NSLayoutConstraint.deactivate(customViewFullConstraints)
+            NSLayoutConstraint.activate(accessoryFullConstraints)
+            NSLayoutConstraint.activate(edgeConstraints.accessory)
+        } else {
+            NSLayoutConstraint.deactivate(accessoryFullConstraints)
+            NSLayoutConstraint.deactivate(customViewFullConstraints)
 
-                switch distribution {
-                case .accessoryFirst:
-                    guard !(accessoryFirstConstraints.first?.isActive ?? false) else {
-                        break
-                    }
+            switch distribution {
+            case .accessoryFirst:
+                guard !(accessoryFirstConstraints.first?.isActive ?? false) else {
                     accessoryFirstConstraints.first?.constant = -spacing
-                    customViewFirstConstraints.first?.constant = spacing
-                    NSLayoutConstraint.deactivate(customViewFirstConstraints)
-                    NSLayoutConstraint.activate(accessoryFirstConstraints)
-                case .accessoryLast:
-                    guard !(customViewFirstConstraints.first?.isActive ?? false) else {
-                        break
-                    }
-                    accessoryFirstConstraints.first?.constant = spacing
+                    break
+                }
+                accessoryFirstConstraints.first?.constant = -spacing
+                customViewFirstConstraints.first?.constant = spacing
+                NSLayoutConstraint.deactivate(customViewFirstConstraints)
+                NSLayoutConstraint.activate(accessoryFirstConstraints)
+            case .accessoryLast:
+                guard !(customViewFirstConstraints.first?.isActive ?? false) else {
                     customViewFirstConstraints.first?.constant = -spacing
-                    NSLayoutConstraint.deactivate(accessoryFirstConstraints)
-                    NSLayoutConstraint.activate(customViewFirstConstraints)
+                    break
                 }
-                NSLayoutConstraint.activate(topBottomConstraints.customView)
-                NSLayoutConstraint.activate(topBottomConstraints.accessory)
+                accessoryFirstConstraints.first?.constant = spacing
+                customViewFirstConstraints.first?.constant = -spacing
+                NSLayoutConstraint.deactivate(accessoryFirstConstraints)
+                NSLayoutConstraint.activate(customViewFirstConstraints)
             }
-        case .vertical:
-            if currentState.isAccessoryHidden, currentState.isCustomViewHidden {
-                NSLayoutConstraint.deactivate(leadingTrailingConstraints.accessory)
-                NSLayoutConstraint.deactivate(leadingTrailingConstraints.customView)
-                NSLayoutConstraint.deactivate(accessoryTopConstraints)
-                NSLayoutConstraint.deactivate(customViewTopConstraints)
-                NSLayoutConstraint.deactivate(accessoryFullVConstraints)
-                NSLayoutConstraint.deactivate(customViewFullVConstraints)
-            } else if currentState.isAccessoryHidden {
-                NSLayoutConstraint.deactivate(leadingTrailingConstraints.accessory)
-                NSLayoutConstraint.deactivate(accessoryTopConstraints)
-                NSLayoutConstraint.deactivate(customViewTopConstraints)
-                NSLayoutConstraint.deactivate(accessoryFullVConstraints)
-                NSLayoutConstraint.activate(customViewFullVConstraints)
-                NSLayoutConstraint.activate(leadingTrailingConstraints.customView)
-            } else if currentState.isCustomViewHidden {
-                NSLayoutConstraint.deactivate(leadingTrailingConstraints.customView)
-                NSLayoutConstraint.deactivate(accessoryTopConstraints)
-                NSLayoutConstraint.deactivate(customViewTopConstraints)
-                NSLayoutConstraint.deactivate(customViewFullVConstraints)
-                NSLayoutConstraint.activate(accessoryFullVConstraints)
-                NSLayoutConstraint.activate(leadingTrailingConstraints.accessory)
-            } else {
-                NSLayoutConstraint.deactivate(accessoryFullVConstraints)
-                NSLayoutConstraint.deactivate(customViewFullVConstraints)
-
-                switch distribution {
-                case .accessoryFirst:
-                    guard !(accessoryTopConstraints.first?.isActive ?? false) else {
-                        break
-                    }
-                    accessoryTopConstraints.first?.constant = -spacing
-                    customViewTopConstraints.first?.constant = spacing
-                    NSLayoutConstraint.deactivate(customViewTopConstraints)
-                    NSLayoutConstraint.activate(accessoryTopConstraints)
-                case .accessoryLast:
-                    guard !(customViewTopConstraints.first?.isActive ?? false) else {
-                        break
-                    }
-                    accessoryTopConstraints.first?.constant = spacing
-                    customViewTopConstraints.first?.constant = -spacing
-                    NSLayoutConstraint.deactivate(accessoryTopConstraints)
-                    NSLayoutConstraint.activate(customViewTopConstraints)
-                }
-                NSLayoutConstraint.activate(leadingTrailingConstraints.customView)
-                NSLayoutConstraint.activate(leadingTrailingConstraints.accessory)
-            }
+            NSLayoutConstraint.activate(edgeConstraints.customView)
+            NSLayoutConstraint.activate(edgeConstraints.accessory)
         }
+
         super.updateConstraints()
     }
 
@@ -340,23 +251,152 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         layoutMargins = .zero
         clipsToBounds = false
 
-        addSubview(accessoryView)
-        addSubview(customView)
+        setupContainer()
+    }
 
-        accessoryFirstObserver = accessoryView.observe(\.isHidden, options: [.new]) { [weak self] _, _ in
-            guard let self else {
-                return
-            }
-            setNeedsUpdateConstraints()
+    private func setupContainer() {
+        if !addedConstraints.isEmpty {
+            NSLayoutConstraint.deactivate(addedConstraints)
+            addedConstraints.removeAll()
         }
-        customViewObserver = customView.observe(\.isHidden, options: [.new]) { [weak self] _, _ in
-            guard let self else {
-                return
-            }
-            setNeedsUpdateConstraints()
+
+        if customView.superview != self {
+            customView.translatesAutoresizingMaskIntoConstraints = false
+            customView.removeFromSuperview()
+            addSubview(customView)
         }
+
+        if accessoryView.superview != self {
+            accessoryView.translatesAutoresizingMaskIntoConstraints = false
+            accessoryView.removeFromSuperview()
+            addSubview(accessoryView)
+        }
+
+        if accessoryFirstObserver == nil {
+            accessoryFirstObserver = accessoryView.observe(\.isHidden, options: [.new]) { [weak self] _, _ in
+                guard let self else {
+                    return
+                }
+                setNeedsUpdateConstraints()
+            }
+        }
+
+        if customViewObserver == nil {
+            customViewObserver = customView.observe(\.isHidden, options: [.new]) { [weak self] _, _ in
+                guard let self else {
+                    return
+                }
+                setNeedsUpdateConstraints()
+            }
+
+        }
+
+        cachedState = nil
+
+        let accessoryFirstConstraints = buildAccessoryFirstConstraints()
+        let accessoryFullConstraints = buildAccessoryFullConstraints()
+        let customViewFirstConstraints = buildCustomViewFirstConstraints()
+        let customViewFullConstraints = buildCustomViewFullConstraints()
+        let edgeConstraints = buildEdgeConstraints()
+
+        addedConstraints.append(contentsOf: accessoryFirstConstraints)
+        addedConstraints.append(contentsOf: accessoryFullConstraints)
+        addedConstraints.append(contentsOf: customViewFirstConstraints)
+        addedConstraints.append(contentsOf: customViewFullConstraints)
+        addedConstraints.append(contentsOf: edgeConstraints.customView)
+        addedConstraints.append(contentsOf: edgeConstraints.accessory)
+
+        self.accessoryFirstConstraints = accessoryFirstConstraints
+        self.accessoryFullConstraints = accessoryFullConstraints
+        self.customViewFirstConstraints = customViewFirstConstraints
+        self.customViewFullConstraints = customViewFullConstraints
+        self.edgeConstraints = edgeConstraints
+
         setNeedsUpdateConstraints()
         setNeedsLayout()
+    }
+
+    private func spacingPriority() -> UILayoutPriority {
+        preferredPriority == .required ? .almostRequired : preferredPriority
+    }
+
+    private func buildAccessoryFirstConstraints() -> [NSLayoutConstraint] {
+        switch axis {
+        case .horizontal:
+            return [
+                accessoryView.trailingAnchor.constraint(equalTo: customView.leadingAnchor, constant: spacing, priority: spacingPriority()),
+                accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+            ]
+        case .vertical:
+            return [
+                accessoryView.bottomAnchor.constraint(equalTo: customView.topAnchor, constant: spacing, priority: spacingPriority()),
+                accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+            ]
+        }
+    }
+
+    private func buildCustomViewFirstConstraints() -> [NSLayoutConstraint] {
+        switch axis {
+        case .horizontal:
+            return [
+                customView.trailingAnchor.constraint(equalTo: accessoryView.leadingAnchor, constant: -spacing, priority: spacingPriority()),
+                customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+            ]
+        case .vertical:
+            return [
+                customView.bottomAnchor.constraint(equalTo: accessoryView.topAnchor, constant: -spacing, priority: spacingPriority()),
+                customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+            ]
+        }
+    }
+
+    private func buildAccessoryFullConstraints() -> [NSLayoutConstraint] {
+        switch axis {
+        case .horizontal:
+            return [
+                accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+            ]
+        case .vertical:
+            return [
+                accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+            ]
+        }
+    }
+
+    private func buildCustomViewFullConstraints() -> [NSLayoutConstraint] {
+        switch axis {
+        case .horizontal:
+            return [
+                customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+            ]
+        case .vertical:
+            return [
+                customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+            ]
+        }
+    }
+
+    private func buildEdgeConstraints() -> (accessory: [NSLayoutConstraint], customView: [NSLayoutConstraint]) {
+        switch axis {
+        case .horizontal:
+            return (accessory: [accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                                accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)],
+                    customView: [customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                                 customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)])
+        case .vertical:
+            return (accessory: [accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                                accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)],
+                    customView: [customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                                 customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)])
+        }
     }
 
 }

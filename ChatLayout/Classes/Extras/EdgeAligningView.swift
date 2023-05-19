@@ -123,6 +123,11 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         fatalError("Use init(with:flexibleEdges:) instead.")
     }
 
+    /// A Boolean value that indicates whether the receiver depends on the constraint-based layout system.
+    public override class var requiresConstraintBasedLayout: Bool {
+        true
+    }
+
     /// Updates constraints for the view.
     public override func updateConstraints() {
         guard lastConstraintsUpdateEdges != flexibleEdges else {
@@ -160,7 +165,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         }
         customView.translatesAutoresizingMaskIntoConstraints = false
         if !addedConstraints.isEmpty {
-            removeConstraints(addedConstraints)
+            NSLayoutConstraint.deactivate(addedConstraints)
             addedConstraints.removeAll()
         }
 
