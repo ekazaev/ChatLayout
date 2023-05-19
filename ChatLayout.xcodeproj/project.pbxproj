@@ -33,6 +33,9 @@
 		45A45FEE256856ED00F0A68A /* ItemPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A45FED256856ED00F0A68A /* ItemPath.swift */; };
 		45A45FF12568570300F0A68A /* IndexPath+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A45FF02568570300F0A68A /* IndexPath+Extension.swift */; };
 		45E987C8261340C9008ECE6E /* ChangeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E987C7261340C9008ECE6E /* ChangeItem.swift */; };
+		84424F702A17E7320079E09E /* SwappingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84424F6F2A17E7320079E09E /* SwappingContainerView.swift */; };
+		84424F742A17E7420079E09E /* NSLayoutAnchor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84424F722A17E7420079E09E /* NSLayoutAnchor+Extension.swift */; };
+		84424F752A17E7420079E09E /* NSLayoutDimension+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84424F732A17E7420079E09E /* NSLayoutDimension+Extension.swift */; };
 		84D248F0296354B90060BBF1 /* CollectionViewChatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D248EF296354B90060BBF1 /* CollectionViewChatLayout.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +68,9 @@
 		45AF499F24D9F30D00B5BBC2 /* ChatLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChatLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		45AF49BA24D9F3C000B5BBC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		45E987C7261340C9008ECE6E /* ChangeItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeItem.swift; sourceTree = "<group>"; };
+		84424F6F2A17E7320079E09E /* SwappingContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwappingContainerView.swift; sourceTree = "<group>"; };
+		84424F722A17E7420079E09E /* NSLayoutAnchor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutAnchor+Extension.swift"; sourceTree = "<group>"; };
+		84424F732A17E7420079E09E /* NSLayoutDimension+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutDimension+Extension.swift"; sourceTree = "<group>"; };
 		84D248EF296354B90060BBF1 /* CollectionViewChatLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewChatLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,6 +130,7 @@
 		455ED4372534BF1B00F4A83F /* Extras */ = {
 			isa = PBXGroup;
 			children = (
+				84424F712A17E7420079E09E /* Extensions */,
 				4570EE5C264C276C00103D39 /* ContainerCollectionViewCellDelegate.swift */,
 				455ED43F2534BF1B00F4A83F /* ContainerCollectionViewCell.swift */,
 				455ED43A2534BF1B00F4A83F /* ContainerCollectionReusableView.swift */,
@@ -133,6 +140,7 @@
 				455ED43C2534BF1B00F4A83F /* MessageContainerView.swift */,
 				455ED43D2534BF1B00F4A83F /* RoundedCornersContainerView.swift */,
 				455ED43E2534BF1B00F4A83F /* EdgeAligningView.swift */,
+				84424F6F2A17E7320079E09E /* SwappingContainerView.swift */,
 			);
 			name = Extras;
 			path = Classes/Extras;
@@ -162,6 +170,15 @@
 				45AF49BA24D9F3C000B5BBC2 /* Info.plist */,
 			);
 			path = ChatLayout;
+			sourceTree = "<group>";
+		};
+		84424F712A17E7420079E09E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				84424F722A17E7420079E09E /* NSLayoutAnchor+Extension.swift */,
+				84424F732A17E7420079E09E /* NSLayoutDimension+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -248,12 +265,15 @@
 				455ED4432534BF1B00F4A83F /* ChatLayoutPositionSnapshot.swift in Sources */,
 				455ED4442534BF1B00F4A83F /* ChatItemAlignment.swift in Sources */,
 				84D248F0296354B90060BBF1 /* CollectionViewChatLayout.swift in Sources */,
+				84424F752A17E7420079E09E /* NSLayoutDimension+Extension.swift in Sources */,
+				84424F702A17E7320079E09E /* SwappingContainerView.swift in Sources */,
 				455ED4542534BF1B00F4A83F /* RoundedCornersContainerView.swift in Sources */,
 				455ED4532534BF1B00F4A83F /* MessageContainerView.swift in Sources */,
 				455ED44F2534BF1B00F4A83F /* CellLayoutContainerView.swift in Sources */,
 				455ED4522534BF1B00F4A83F /* ImageMaskedView.swift in Sources */,
 				45E987C8261340C9008ECE6E /* ChangeItem.swift in Sources */,
 				455ED4512534BF1B00F4A83F /* ContainerCollectionReusableView.swift in Sources */,
+				84424F742A17E7420079E09E /* NSLayoutAnchor+Extension.swift in Sources */,
 				45A45FF12568570300F0A68A /* IndexPath+Extension.swift in Sources */,
 				455ED44C2534BF1B00F4A83F /* LayoutModel.swift in Sources */,
 				455ED4482534BF1B00F4A83F /* ItemModel.swift in Sources */,
