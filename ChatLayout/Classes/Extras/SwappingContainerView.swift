@@ -19,6 +19,7 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
 
     /// Keys that specify a horizontal or vertical layout constraint between views.
     public enum Axis: Hashable {
+
         /// The constraint applied when laying out the horizontal relationship between views.
         case horizontal
 
@@ -111,11 +112,17 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
     }
 
     private struct SwappingContainerState: Equatable {
+
         let axis: Axis
+
         let distribution: Distribution
+
         let spacing: CGFloat
+
         let isAccessoryHidden: Bool
+
         let isCustomViewHidden: Bool
+
     }
 
     private var addedConstraints: [NSLayoutConstraint] = []
