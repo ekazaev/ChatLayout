@@ -33,6 +33,8 @@
 		45A45FEE256856ED00F0A68A /* ItemPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A45FED256856ED00F0A68A /* ItemPath.swift */; };
 		45A45FF12568570300F0A68A /* IndexPath+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A45FF02568570300F0A68A /* IndexPath+Extension.swift */; };
 		45E987C8261340C9008ECE6E /* ChangeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E987C7261340C9008ECE6E /* ChangeItem.swift */; };
+		841578F82A1E2572002EB2EC /* RandomAccessCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841578F72A1E2572002EB2EC /* RandomAccessCollection+Extension.swift */; };
+		841578FA2A1E2580002EB2EC /* UILayoutPriority+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841578F92A1E2580002EB2EC /* UILayoutPriority+Extension.swift */; };
 		84424F702A17E7320079E09E /* SwappingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84424F6F2A17E7320079E09E /* SwappingContainerView.swift */; };
 		84424F742A17E7420079E09E /* NSLayoutAnchor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84424F722A17E7420079E09E /* NSLayoutAnchor+Extension.swift */; };
 		84424F752A17E7420079E09E /* NSLayoutDimension+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84424F732A17E7420079E09E /* NSLayoutDimension+Extension.swift */; };
@@ -68,6 +70,8 @@
 		45AF499F24D9F30D00B5BBC2 /* ChatLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChatLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		45AF49BA24D9F3C000B5BBC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		45E987C7261340C9008ECE6E /* ChangeItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeItem.swift; sourceTree = "<group>"; };
+		841578F72A1E2572002EB2EC /* RandomAccessCollection+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+Extension.swift"; sourceTree = "<group>"; };
+		841578F92A1E2580002EB2EC /* UILayoutPriority+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILayoutPriority+Extension.swift"; sourceTree = "<group>"; };
 		84424F6F2A17E7320079E09E /* SwappingContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwappingContainerView.swift; sourceTree = "<group>"; };
 		84424F722A17E7420079E09E /* NSLayoutAnchor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutAnchor+Extension.swift"; sourceTree = "<group>"; };
 		84424F732A17E7420079E09E /* NSLayoutDimension+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutDimension+Extension.swift"; sourceTree = "<group>"; };
@@ -105,6 +109,7 @@
 		455ED42B2534BF1B00F4A83F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				841578F72A1E2572002EB2EC /* RandomAccessCollection+Extension.swift */,
 				455ED42C2534BF1B00F4A83F /* CGRect+Extension.swift */,
 				45A45FF02568570300F0A68A /* IndexPath+Extension.swift */,
 			);
@@ -177,6 +182,7 @@
 			children = (
 				84424F722A17E7420079E09E /* NSLayoutAnchor+Extension.swift */,
 				84424F732A17E7420079E09E /* NSLayoutDimension+Extension.swift */,
+				841578F92A1E2580002EB2EC /* UILayoutPriority+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -262,6 +268,7 @@
 			files = (
 				455ED4462534BF1B00F4A83F /* ChatLayoutAttributes.swift in Sources */,
 				455ED44B2534BF1B00F4A83F /* StateController.swift in Sources */,
+				841578FA2A1E2580002EB2EC /* UILayoutPriority+Extension.swift in Sources */,
 				455ED4432534BF1B00F4A83F /* ChatLayoutPositionSnapshot.swift in Sources */,
 				455ED4442534BF1B00F4A83F /* ChatItemAlignment.swift in Sources */,
 				84D248F0296354B90060BBF1 /* CollectionViewChatLayout.swift in Sources */,
@@ -281,6 +288,7 @@
 				455ED4552534BF1B00F4A83F /* EdgeAligningView.swift in Sources */,
 				455ED44E2534BF1B00F4A83F /* ChatLayoutSettings.swift in Sources */,
 				455ED44D2534BF1B00F4A83F /* ModelState.swift in Sources */,
+				841578F82A1E2572002EB2EC /* RandomAccessCollection+Extension.swift in Sources */,
 				455ED4472534BF1B00F4A83F /* SectionModel.swift in Sources */,
 				455ED4422534BF1B00F4A83F /* ChatLayoutInvalidationContext.swift in Sources */,
 				455ED4452534BF1B00F4A83F /* CGRect+Extension.swift in Sources */,
