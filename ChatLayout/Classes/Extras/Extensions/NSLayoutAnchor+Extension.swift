@@ -38,7 +38,3 @@ extension NSLayoutAnchor {
         return constraint
     }
 }
-
-extension UILayoutPriority {
-    static let almostRequired = UILayoutPriority(rawValue: UILayoutPriority.required.rawValue - 1)
-}

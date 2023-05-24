@@ -17,7 +17,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     let id: UUID
 
-    var interSectionSpacing: CGFloat
+    let interSectionSpacing: CGFloat
 
     private(set) var header: ItemModel?
 

@@ -40,7 +40,8 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         var offsetY: CGFloat = collectionLayout.settings.additionalInsets.top
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
-        var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath](minimumCapacity: sections.reduce(into: 0) { $0 += $1.items.count })
+        let capacity = sections.reduce(into: 0) { $0 += $1.items.count }
+        var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath](minimumCapacity: capacity)
 
         sections.withUnsafeMutableBufferPointer { directlyMutableSections in
             for sectionIndex in 0..<directlyMutableSections.count {
@@ -48,13 +49,16 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
                 directlyMutableSections[sectionIndex].offsetY = offsetY
                 offsetY += directlyMutableSections[sectionIndex].height + directlyMutableSections[sectionIndex].interSectionSpacing
                 if let header = directlyMutableSections[sectionIndex].header {
-                    itemPathByIdentifierCache[ItemUUIDKey(kind: .header, id: header.id)] = ItemPath(item: 0, section: sectionIndex)
+                    let key = ItemUUIDKey(kind: .header, id: header.id)
+                    itemPathByIdentifierCache[key] = ItemPath(item: 0, section: sectionIndex)
                 }
                 for itemIndex in 0..<directlyMutableSections[sectionIndex].items.count {
-                    itemPathByIdentifierCache[ItemUUIDKey(kind: .cell, id: directlyMutableSections[sectionIndex].items[itemIndex].id)] = ItemPath(item: itemIndex, section: sectionIndex)
+                    let key = ItemUUIDKey(kind: .cell, id: directlyMutableSections[sectionIndex].items[itemIndex].id)
+                    itemPathByIdentifierCache[key] = ItemPath(item: itemIndex, section: sectionIndex)
                 }
                 if let footer = directlyMutableSections[sectionIndex].footer {
-                    itemPathByIdentifierCache[ItemUUIDKey(kind: .footer, id: footer.id)] = ItemPath(item: 0, section: sectionIndex)
+                    let key = ItemUUIDKey(kind: .footer, id: footer.id)
+                    itemPathByIdentifierCache[key] = ItemPath(item: 0, section: sectionIndex)
                 }
             }
         }

@@ -66,8 +66,7 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
 
     /// Returns a Boolean value indicating whether two `ChatLayoutAttributes` are considered equal.
     public override func isEqual(_ object: Any?) -> Bool {
-        super.isEqual(object)
-            && alignment == (object as? ChatLayoutAttributes)?.alignment
+        super.isEqual(object) && alignment == (object as? ChatLayoutAttributes)?.alignment
     }
 
     /// `ItemKind` represented by this attributes object.

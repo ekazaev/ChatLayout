@@ -261,13 +261,19 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 return nil
             }
             let visibleBoundsTopOffset = firstVisibleItemAttributes.frame.minY - visibleBounds.higherPoint.y - settings.additionalInsets.top
-            return ChatLayoutPositionSnapshot(indexPath: firstVisibleItemAttributes.indexPath, kind: firstVisibleItemAttributes.kind, edge: .top, offset: visibleBoundsTopOffset)
+            return ChatLayoutPositionSnapshot(indexPath: firstVisibleItemAttributes.indexPath,
+                                              kind: firstVisibleItemAttributes.kind,
+                                              edge: .top,
+                                              offset: visibleBoundsTopOffset)
         case .bottom:
             guard let lastVisibleItemAttributes = layoutAttributes.last(where: { $0.frame.minY <= visibleBounds.lowerPoint.y }) else {
                 return nil
             }
             let visibleBoundsBottomOffset = visibleBounds.lowerPoint.y - lastVisibleItemAttributes.frame.maxY - settings.additionalInsets.bottom
-            return ChatLayoutPositionSnapshot(indexPath: lastVisibleItemAttributes.indexPath, kind: lastVisibleItemAttributes.kind, edge: .bottom, offset: visibleBoundsBottomOffset)
+            return ChatLayoutPositionSnapshot(indexPath: lastVisibleItemAttributes.indexPath,
+                                              kind: lastVisibleItemAttributes.kind,
+                                              edge: .bottom,
+                                              offset: visibleBoundsBottomOffset)
         }
     }
 
@@ -339,7 +345,11 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 } else {
                     footer = nil
                 }
-                var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex), header: header, footer: footer, items: items, collectionLayout: self)
+                var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex),
+                                           header: header,
+                                           footer: footer,
+                                           items: items,
+                                           collectionLayout: self)
                 section.assembleLayout()
                 sections.append(section)
             }
@@ -627,13 +637,14 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
             if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, kind: currentPositionSnapshot.kind, at: state, isFinal: true),
                contentHeight != 0,
                contentHeight > visibleBounds.size.height {
-                let maxAllowed = max(-collectionView.adjustedContentInset.top, contentHeight - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
+                let adjustedContentInset: UIEdgeInsets = collectionView.adjustedContentInset
+                let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.frame.height + adjustedContentInset.bottom)
                 switch currentPositionSnapshot.edge {
                 case .top:
-                    let desiredOffset = max(min(maxAllowed, frame.minY - currentPositionSnapshot.offset - collectionView.adjustedContentInset.top - settings.additionalInsets.top), -collectionView.adjustedContentInset.top)
+                    let desiredOffset = max(min(maxAllowed, frame.minY - currentPositionSnapshot.offset - adjustedContentInset.top - settings.additionalInsets.top), -adjustedContentInset.top)
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 case .bottom:
-                    let desiredOffset = max(min(maxAllowed, frame.maxY + currentPositionSnapshot.offset - collectionView.bounds.height + collectionView.adjustedContentInset.bottom + settings.additionalInsets.bottom), -collectionView.adjustedContentInset.top)
+                    let desiredOffset = max(min(maxAllowed, frame.maxY + currentPositionSnapshot.offset - collectionView.bounds.height + adjustedContentInset.bottom + settings.additionalInsets.bottom), -adjustedContentInset.top)
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 }
             }
