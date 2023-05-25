@@ -284,7 +284,7 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
                 guard let self else {
                     return
                 }
-                setNeedsUpdateConstraints()
+                self.setNeedsUpdateConstraints()
             }
         }
 
@@ -293,7 +293,7 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
                 guard let self else {
                     return
                 }
-                setNeedsUpdateConstraints()
+                self.setNeedsUpdateConstraints()
             }
 
         }
