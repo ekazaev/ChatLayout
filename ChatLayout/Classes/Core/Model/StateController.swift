@@ -790,7 +790,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                     if visibleRect.intersects(rect) {
                         return true
                     } else {
-                        if rect.minY > visibleRect.maxY + batchUpdateCompensatingOffset + proposedCompensatingOffset {
+                        if rect.minY >= visibleRect.maxY + batchUpdateCompensatingOffset + proposedCompensatingOffset {
                             traverseState = .done
                         }
                         return false
