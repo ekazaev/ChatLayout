@@ -152,9 +152,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         let predicate: (ChatLayoutAttributes) -> ComparisonResult = { attributes in
             if attributes.frame.intersects(rect) {
                 return .orderedSame
-            } else if attributes.frame.minY > rect.maxY {
+            } else if attributes.frame.minY >= rect.maxY {
                 return .orderedDescending
-            } else if attributes.frame.maxY < rect.minY {
+            } else if attributes.frame.maxY <= rect.minY {
                 return .orderedAscending
             }
             return .orderedSame
@@ -835,9 +835,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                         }
                         if itemFrame.intersects(visibleRect) {
                             return .orderedSame
-                        } else if itemFrame.minY > visibleRect.maxY {
+                        } else if itemFrame.minY >= visibleRect.maxY {
                             return .orderedDescending
-                        } else if itemFrame.maxX < visibleRect.minY {
+                        } else if itemFrame.maxX <= visibleRect.minY {
                             return .orderedAscending
                         }
                         return .orderedSame

@@ -70,7 +70,7 @@ final class PerformanceTests: XCTestCase {
 
         let rect = CGRect(origin: CGPoint(x: 0, y: 99999), size: CGSize(width: 300, height: 2))
         let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate, ignoreCache: true)
-        XCTAssertEqual(attributes.count, 4)
+        XCTAssertEqual(attributes.count, 2)
         measure {
             for _ in 0..<10 {
                 _ = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate, ignoreCache: true)

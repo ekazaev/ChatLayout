@@ -20,9 +20,10 @@ extension RandomAccessCollection where Index == Int {
 
         while lowerBound < upperBound {
             let midIndex = lowerBound &+ (upperBound &- lowerBound) / 2
-            if predicate(self[midIndex]) == .orderedSame {
+            let result = predicate(self[midIndex])
+            if result == .orderedSame {
                 return midIndex
-            } else if predicate(self[midIndex]) == .orderedAscending {
+            } else if result == .orderedAscending {
                 lowerBound = midIndex &+ 1
             } else {
                 upperBound = midIndex
