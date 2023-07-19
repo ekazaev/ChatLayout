@@ -283,12 +283,18 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         guard let collectionView else {
             return
         }
+
+        // We do not want to return attributes while we just looking for a position so that `UICollectionView` wont
+        // create unnecessary cells that may not be used when we find the actual position.
+        dontReturnAttributes = false
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
         currentPositionSnapshot = snapshot
         let context = ChatLayoutInvalidationContext()
         context.invalidateLayoutMetrics = false
         invalidateLayout(with: context)
+
+        dontReturnAttributes = false
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
         currentPositionSnapshot = nil
