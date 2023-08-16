@@ -302,6 +302,12 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         currentPositionSnapshot = nil
     }
 
+    /// If you want to use new `UICollectionView.reconfigureItems(..)` api and expect the reconfiguration to happen animated as well
+    /// - you must call this method next to the `UICollectionView` one. `UIKit` in its classic way uses private API to process it.
+    public func reconfigureItems(at indexPaths: [IndexPath]) {
+        reconfigureItemsIndexPaths = indexPaths
+    }
+
     // MARK: Providing Layout Attributes
 
     /// Tells the layout object to update the current layout.
@@ -606,12 +612,6 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         return invalidationContext
     }
 
-    /// If you want to use new `UICollectionView.reconfigureItems(..)` api and expect the reconfiguration to happen animated as well
-    /// - you must call this method next to the `UICollectionView` one. `UIKit` in its classic way uses private API to process it.
-    public func reconfigureItems(at indexPaths: [IndexPath]) {
-        reconfigureItemsIndexPaths = indexPaths
-    }
-
     /// Invalidates the current layout using the information in the provided context object.
     public override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
         guard let collectionView else {
@@ -699,18 +699,19 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         state = .afterUpdate
         dontReturnAttributes = false
 
-        if let collectionView,
-           !reconfigureItemsIndexPaths.isEmpty {
-            reconfigureItemsIndexPaths.filter { collectionView.indexPathsForVisibleItems.contains($0) }.forEach { indexPath in
+        if !reconfigureItemsIndexPaths.isEmpty,
+           let collectionView {
+            reconfigureItemsIndexPaths
+                .filter { collectionView.indexPathsForVisibleItems.contains($0) && !controller.reloadedIndexes.contains($0) }
+                .forEach { indexPath in
+                    let cell = collectionView.cellForItem(at: indexPath)
 
-                let cell = collectionView.cellForItem(at: indexPath)
-
-                if let originalAttributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate),
-                   let preferredAttributes = cell?.preferredLayoutAttributesFitting(originalAttributes),
-                   shouldInvalidateLayout(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes) {
-                    _ = invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
+                    if let originalAttributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate),
+                       let preferredAttributes = cell?.preferredLayoutAttributesFitting(originalAttributes),
+                       shouldInvalidateLayout(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes) {
+                        _ = invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
+                    }
                 }
-            }
             reconfigureItemsIndexPaths = []
         }
 

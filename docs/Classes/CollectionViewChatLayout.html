@@ -750,6 +750,37 @@ right-to-left layout.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout014CollectionViewaB0C16reconfigureItems2atySay10Foundation9IndexPathVG_tF"></a>
+                    <a name="//apple_ref/swift/Method/reconfigureItems(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout014CollectionViewaB0C16reconfigureItems2atySay10Foundation9IndexPathVG_tF">reconfigureItems(at:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If you want to use new <code>UICollectionView.reconfigureItems(..)</code> api and expect the reconfiguration to happen animated as well</p>
+
+<ul>
+<li>you must call this method next to the <code>UICollectionView</code> one. <code>UIKit</code> in its classic way uses private API to process it.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reconfigureItems</span><span class="p">(</span><span class="n">at</span> <span class="nv">indexPaths</span><span class="p">:</span> <span class="p">[</span><span class="kt">IndexPath</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -1056,37 +1087,6 @@ right-to-left layout.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">invalidationContext</span><span class="p">(</span><span class="n">forBoundsChange</span> <span class="nv">newBounds</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutInvalidationContext</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ChatLayout014CollectionViewaB0C16reconfigureItems2atySay10Foundation9IndexPathVG_tF"></a>
-                    <a name="//apple_ref/swift/Method/reconfigureItems(at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout014CollectionViewaB0C16reconfigureItems2atySay10Foundation9IndexPathVG_tF">reconfigureItems(at:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>If you want to use new <code>UICollectionView.reconfigureItems(..)</code> api and expect the reconfiguration to happen animated as well</p>
-
-<ul>
-<li>you must call this method next to the <code>UICollectionView</code> one. <code>UIKit</code> in its classic way uses private API to process it.</li>
-</ul>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reconfigureItems</span><span class="p">(</span><span class="n">at</span> <span class="nv">indexPaths</span><span class="p">:</span> <span class="p">[</span><span class="kt">IndexPath</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
