@@ -607,7 +607,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// If you want to use new `UICollectionView.reconfigureItems(..)` api and expect the reconfiguration to happen animated as well
-    // - you must call this method next to the `UICollectionView` one. `UIKit` in its classic way uses private API to process it.
+    /// - you must call this method next to the `UICollectionView` one. `UIKit` in its classic way uses private API to process it.
     public func reconfigureItems(at indexPaths: [IndexPath]) {
         reconfigureItemsIndexPaths = indexPaths
     }
