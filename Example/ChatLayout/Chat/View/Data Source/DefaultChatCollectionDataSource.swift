@@ -13,6 +13,11 @@
 import ChatLayout
 import Foundation
 import UIKit
+import RecyclerView
+
+typealias TextMessageViewItem = MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, TextMessageView, StatusView>>
+typealias TitleViewItem = UILabel
+typealias UserTitleViewItem = SwappingContainerView<EdgeAligningView<UILabel>, UIImageView>
 
 typealias TextMessageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, TextMessageView, StatusView>>>
 @available(iOS 13, *)
@@ -25,6 +30,9 @@ typealias TypingIndicatorCollectionCell = ContainerCollectionViewCell<MessageCon
 typealias TextTitleView = ContainerCollectionReusableView<UILabel>
 
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
+
+    weak var scrollView: RecyclerScrollView<SimpleLayoutEngine<Cell, VoidPayload>>!
+
     private unowned var reloadDelegate: ReloadDelegate
 
     private unowned var editingDelegate: EditingAccessoryControllerDelegate
@@ -426,4 +434,101 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     public func interSectionSpacing(_ chatLayout: CollectionViewChatLayout, after sectionIndex: Int) -> CGFloat? {
         50
     }
+}
+
+extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
+    func allIdentifiers() -> [Cell] {
+        return sections.first?.cells ?? []
+    }
+
+    func layoutView(viewForItemAt identifier: Cell) -> UIView {
+        print("\(#function)")
+        switch identifier {
+        case let .message(message, bubbleType: bubbleType):
+            switch message.data {
+            case let .text(text):
+                let view = scrollView.dequeueReusableCellWithReuseIdentifier(identifier) ?? TextMessageViewItem()
+                setupMessageContainerView(view, messageId: message.id, alignment: identifier.alignment)
+                setupMainMessageView(view.customView, user: message.owner, alignment: identifier.alignment, bubble: bubbleType, status: message.status)
+
+                setupSwipeHandlingAccessory(view.customView, date: message.date, accessoryConnectingView: view)
+
+                let bubbleView = view.customView.customView
+                let controller = TextMessageController(text: text,
+                        type: message.type,
+                        bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: message.type, bubbleType: bubbleType))
+                bubbleView.customView.setup(with: controller)
+                controller.view = bubbleView.customView
+                return view
+            case let .url(url, isLocallyStored: _):
+                fatalError()
+            case let .image(source, isLocallyStored: _):
+                fatalError()
+            }
+        case let .messageGroup(group):
+            let view = scrollView.dequeueReusableCellWithReuseIdentifier(identifier) ?? UserTitleViewItem()
+            view.spacing = 2
+
+            view.customView.customView.text = group.title
+            view.customView.customView.preferredMaxLayoutWidth = scrollView.visibleRect.width
+            view.customView.customView.textColor = .gray
+            view.customView.customView.numberOfLines = 0
+            view.customView.customView.font = .preferredFont(forTextStyle: .caption2)
+            view.customView.flexibleEdges = [.top]
+
+            view.accessoryView.contentMode = .scaleAspectFit
+            view.accessoryView.tintColor = .gray
+            view.accessoryView.translatesAutoresizingMaskIntoConstraints = false
+            if #available(iOS 13.0, *) {
+                if view.accessoryView.image == nil {
+                    view.accessoryView.image = UIImage(systemName: "person")
+                    let constraints = [
+                        view.accessoryView.widthAnchor.constraint(equalTo: view.accessoryView.heightAnchor),
+                        view.accessoryView.heightAnchor.constraint(equalTo: view.customView.customView.heightAnchor, constant: 2)
+                    ]
+                    constraints.forEach { $0.priority = UILayoutPriority(rawValue: 999) }
+                    view.customView.customView.setContentHuggingPriority(.required, for: .vertical)
+                    view.accessoryView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+                    NSLayoutConstraint.activate(constraints)
+                }
+            } else {
+                view.accessoryView.isHidden = true
+            }
+            view.layoutMargins = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
+            return view
+        case let .date(group):
+            let view = scrollView.dequeueReusableCellWithReuseIdentifier(identifier) ?? TitleViewItem()
+            view.preferredMaxLayoutWidth = scrollView.visibleRect.width
+            view.text = group.value
+            view.textAlignment = .center
+            view.textColor = .gray
+            view.numberOfLines = 0
+            view.font = .preferredFont(forTextStyle: .caption2)
+            view.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
+            return view
+        case .typingIndicator:
+            fatalError()
+        }
+
+    }
+
+    func payloadForItemWithIdentifier(identifier: Cell) -> VoidPayload {
+        var payload =  VoidPayload()
+        if case .date = identifier {
+            payload.isSticky = true
+        } else {
+            payload.isSticky = false
+        }
+        return payload
+    }
+
+    func reconfigure(view: UIView, with identifier: Cell) {
+    }
+
+    typealias Identifier = Cell
+
+    typealias Payload = VoidPayload
+
+
+
 }

@@ -13,8 +13,10 @@
 import ChatLayout
 import Foundation
 import UIKit
+import RecyclerView
 
-protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegate {
+protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegate, RecyclerViewDataSource<Cell, VoidPayload> {
+
     var sections: [Section] { get set }
 
     func prepare(with collectionView: UICollectionView)

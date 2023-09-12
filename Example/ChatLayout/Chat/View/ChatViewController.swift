@@ -16,6 +16,17 @@ import Foundation
 import FPSCounter
 import InputBarAccessoryView
 import UIKit
+import RecyclerView
+
+struct VoidPayload: Equatable, TapSelectionStateSupporting, InteractivelyMovingItemSupporting, SimpleLayoutSupporting {
+    var isSticky: Bool = false
+    var spacing: CGFloat = 8
+    var isInteractiveMovingPossible: Bool = false
+    var isInteractiveMovingEnabled: Bool = false
+    var selectionState: TapSelectionState = .init(isHighlighted: false, isSelected: false)
+
+    init() {}
+}
 
 // It's advisable to continue using the reload/reconfigure method, especially when multiple changes occur concurrently in an animated fashion.
 // This approach ensures that the ChatLayout can handle these changes while maintaining the content offset accurately.
@@ -26,6 +37,9 @@ let enableSelfSizingSupport = false
 let enableReconfigure = false
 
 final class ChatViewController: UIViewController {
+
+    lazy var scrollView = RecyclerScrollView(frame: UIScreen.main.bounds, engine: SimpleLayoutEngine<Cell, VoidPayload>(identifiers: []))
+
     private enum ReactionTypes {
         case delayedUpdate
     }
@@ -64,7 +78,7 @@ final class ChatViewController: UIViewController {
     private var chatLayout = CollectionViewChatLayout()
     private let inputBarView = InputBarAccessoryView()
     private let chatController: ChatController
-    private let dataSource: ChatCollectionDataSource
+    private let dataSource: any ChatCollectionDataSource
     private let fpsCounter = FPSCounter()
     private let fpsView = EdgeAligningView<UILabel>(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))
     private var animator: ManualAnimator?
@@ -79,7 +93,7 @@ final class ChatViewController: UIViewController {
     }()
 
     init(chatController: ChatController,
-         dataSource: ChatCollectionDataSource,
+         dataSource: any ChatCollectionDataSource,
          editNotifier: EditNotifier,
          swipeNotifier: SwipeNotifier) {
         self.chatController = chatController
@@ -101,6 +115,11 @@ final class ChatViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        (dataSource as? DefaultChatCollectionDataSource)?.scrollView = scrollView
+        scrollView.dataSource = dataSource as? DefaultChatCollectionDataSource
+        scrollView.engine.enableOppositeAnchor = true
+        scrollView.engine.settings.additionalInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+
         fpsCounter.delegate = self
         fpsCounter.startTracking()
         if #available(iOS 13.0, *) {
@@ -135,12 +154,28 @@ final class ChatViewController: UIViewController {
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
 
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: chatLayout)
-        view.addSubview(collectionView)
+        //view.addSubview(collectionView)
         collectionView.alwaysBounceVertical = true
         collectionView.dataSource = dataSource
         chatLayout.delegate = dataSource
         collectionView.delegate = self
         collectionView.keyboardDismissMode = .interactive
+
+        view.addSubview(scrollView)
+        scrollView.alwaysBounceVertical = true
+        scrollView.keyboardDismissMode = .interactive
+        scrollView.contentInsetAdjustmentBehavior = .always
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.frame = view.bounds
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0)
+        ])
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.addGestureRecognizer(panGesture)
+        scrollView.backgroundColor = .clear
 
         /// https://openradar.appspot.com/40926834
         collectionView.isPrefetchingEnabled = false
@@ -158,12 +193,12 @@ final class ChatViewController: UIViewController {
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.frame = view.bounds
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0)
-        ])
+//        NSLayoutConstraint.activate([
+//            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+//            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+//            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0)
+//        ])
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
         dataSource.prepare(with: collectionView)
@@ -175,7 +210,8 @@ final class ChatViewController: UIViewController {
         }
 
         KeyboardListener.shared.add(delegate: self)
-        collectionView.addGestureRecognizer(panGesture)
+        //collectionView.addGestureRecognizer(panGesture)
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -501,11 +537,13 @@ extension ChatViewController: ChatControllerDelegate {
                                   onInterruptedReload: {
                                       let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
                                       self.collectionView.reloadData()
+                                      self.scrollView.reloadData()
                                       // We want so that user on reload appeared at the very bottom of the layout
                                       self.chatLayout.restoreContentOffset(with: positionSnapshot)
                                   },
                                   completion: { _ in
                                       DispatchQueue.main.async {
+                                          self.scrollView.reloadData()
                                           self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
                                           if requiresIsolatedProcess {
                                               self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
@@ -625,16 +663,16 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 extension ChatViewController: KeyboardListenerDelegate {
     func keyboardWillChangeFrame(info: KeyboardInfo) {
         guard !currentInterfaceActions.options.contains(.changingFrameSize),
-              collectionView.contentInsetAdjustmentBehavior != .never,
-              let keyboardFrame = collectionView.window?.convert(info.frameEnd, to: view),
+              scrollView.contentInsetAdjustmentBehavior != .never,
+              let keyboardFrame = scrollView.window?.convert(info.frameEnd, to: view),
               keyboardFrame.minY > 0,
-              collectionView.convert(collectionView.bounds, to: collectionView.window).maxY > info.frameEnd.minY else {
+              scrollView.convert(scrollView.bounds, to: collectionView.window).maxY > info.frameEnd.minY else {
             return
         }
         currentInterfaceActions.options.insert(.changingKeyboardFrame)
-        let newBottomInset = collectionView.frame.minY + collectionView.frame.size.height - keyboardFrame.minY - collectionView.safeAreaInsets.bottom
+        let newBottomInset = scrollView.frame.minY + scrollView.frame.size.height - keyboardFrame.minY - scrollView.safeAreaInsets.bottom
         if newBottomInset > 0,
-           collectionView.contentInset.bottom != newBottomInset {
+           scrollView.contentInset.bottom != newBottomInset {
             let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
 
             // Interrupting current update animation if user starts to scroll while batchUpdate is performed.
@@ -651,6 +689,9 @@ extension ChatViewController: KeyboardListenerDelegate {
                     self.collectionView.contentInset.bottom = newBottomInset
                     self.collectionView.scrollIndicatorInsets.bottom = newBottomInset
                 }, completion: nil)
+
+                self.scrollView.contentInset.bottom = newBottomInset
+                self.scrollView.scrollIndicatorInsets.bottom = newBottomInset
 
                 if let positionSnapshot, !self.isUserInitiatedScrolling {
                     self.chatLayout.restoreContentOffset(with: positionSnapshot)
