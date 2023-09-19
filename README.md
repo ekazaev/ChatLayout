@@ -4,7 +4,6 @@
 
 # ChatLayout
 
-[![CI Status](https://travis-ci.org/ekazaev/ChatLayout.svg?branch=master&style=flat)](https://travis-ci.org/github/ekazaev/ChatLayout)
 [![Release](https://img.shields.io/github/release/ekazaev/ChatLayout.svg?style=flat&color=darkcyan)](https://github.com/ekazaev/ChatLayout/releases)
 [![Version](https://img.shields.io/cocoapods/v/ChatLayout.svg?style=flat)](https://cocoapods.org/pods/ChatLayout)
 [![Documentation](https://ekazaev.github.io/ChatLayout/badge.svg)](https://ekazaev.github.io/ChatLayout/)
@@ -16,7 +15,7 @@
 [![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2016-yellow.svg)](https://www.apple.com/ios)
 
 <p align="center">
-<img src="https://habrastorage.org/webt/ji/ba/dj/jibadjc0hul-fzfwxm2w0ywdutg.png" />
+<img src="https://habrastorage.org/webt/ji/ba/dj/jibadjc0hul-fzfwxm2w0ywdutg.png"  alt="ChatLayout logo"/>
 </p>
 
 ## Table of contents
