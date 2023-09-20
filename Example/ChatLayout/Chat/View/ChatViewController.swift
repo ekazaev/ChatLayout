@@ -74,7 +74,7 @@ final class ChatViewController: UIViewController {
     private var currentControllerActions: SetActor<Set<ControllerActions>, ReactionTypes> = SetActor()
     private let editNotifier: EditNotifier
     private let swipeNotifier: SwipeNotifier
-    private var collectionView: UICollectionView!
+    //private var collectionView: UICollectionView!
     private var chatLayout = CollectionViewChatLayout()
     private let inputBarView = InputBarAccessoryView()
     private let chatController: ChatController
@@ -119,6 +119,7 @@ final class ChatViewController: UIViewController {
         scrollView.dataSource = dataSource as? DefaultChatCollectionDataSource
         scrollView.engine.enableOppositeAnchor = true
         scrollView.engine.settings.additionalInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        scrollView.engine.delegate = dataSource as? DefaultChatCollectionDataSource
 
         fpsCounter.delegate = self
         fpsCounter.startTracking()
@@ -153,13 +154,13 @@ final class ChatViewController: UIViewController {
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
 
-        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: chatLayout)
-        //view.addSubview(collectionView)
-        collectionView.alwaysBounceVertical = true
-        collectionView.dataSource = dataSource
-        chatLayout.delegate = dataSource
-        collectionView.delegate = self
-        collectionView.keyboardDismissMode = .interactive
+//        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: chatLayout)
+//        //view.addSubview(collectionView)
+//        collectionView.alwaysBounceVertical = true
+//        collectionView.dataSource = dataSource
+//        chatLayout.delegate = dataSource
+//        collectionView.delegate = self
+//        collectionView.keyboardDismissMode = .interactive
 
         view.addSubview(scrollView)
         scrollView.alwaysBounceVertical = true
@@ -178,30 +179,30 @@ final class ChatViewController: UIViewController {
         scrollView.backgroundColor = .clear
 
         /// https://openradar.appspot.com/40926834
-        collectionView.isPrefetchingEnabled = false
-
-        collectionView.contentInsetAdjustmentBehavior = .always
-        if #available(iOS 13.0, *) {
-            collectionView.automaticallyAdjustsScrollIndicatorInsets = true
-        }
-
-        if #available(iOS 16.0, *),
-           enableSelfSizingSupport {
-            collectionView.selfSizingInvalidation = .enabled
-            chatLayout.supportSelfSizingInvalidation = true
-        }
-
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.frame = view.bounds
+//        collectionView.isPrefetchingEnabled = false
+//
+//        collectionView.contentInsetAdjustmentBehavior = .always
+//        if #available(iOS 13.0, *) {
+//            collectionView.automaticallyAdjustsScrollIndicatorInsets = true
+//        }
+//
+//        if #available(iOS 16.0, *),
+//           enableSelfSizingSupport {
+//            collectionView.selfSizingInvalidation = .enabled
+//            chatLayout.supportSelfSizingInvalidation = true
+//        }
+//
+//        collectionView.translatesAutoresizingMaskIntoConstraints = false
+//        collectionView.frame = view.bounds
 //        NSLayoutConstraint.activate([
 //            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
 //            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
 //            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
 //            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0)
 //        ])
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        dataSource.prepare(with: collectionView)
+//        collectionView.backgroundColor = .clear
+//        collectionView.showsHorizontalScrollIndicator = false
+//        dataSource.prepare(with: collectionView)
 
         currentControllerActions.options.insert(.loadingInitialMessages)
         chatController.loadInitialMessages { sections in
@@ -220,7 +221,7 @@ final class ChatViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        collectionView.collectionViewLayout.invalidateLayout()
+//        collectionView.collectionViewLayout.invalidateLayout()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -229,12 +230,12 @@ final class ChatViewController: UIViewController {
         }
         currentInterfaceActions.options.insert(.changingFrameSize)
         let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
-        collectionView.collectionViewLayout.invalidateLayout()
-        collectionView.setNeedsLayout()
+//        collectionView.collectionViewLayout.invalidateLayout()
+//        collectionView.setNeedsLayout()
         coordinator.animate(alongsideTransition: { _ in
             // Gives nicer transition behaviour
             // self.collectionView.collectionViewLayout.invalidateLayout()
-            self.collectionView.performBatchUpdates(nil)
+//            self.collectionView.performBatchUpdates(nil)
         }, completion: { _ in
             if let positionSnapshot,
                !self.isUserInitiatedScrolling {
@@ -243,7 +244,7 @@ final class ChatViewController: UIViewController {
                 // to restore it after the rotation manually.
                 self.chatLayout.restoreContentOffset(with: positionSnapshot)
             }
-            self.collectionView.collectionViewLayout.invalidateLayout()
+//            self.collectionView.collectionViewLayout.invalidateLayout()
             self.currentInterfaceActions.options.remove(.changingFrameSize)
         })
         super.viewWillTransition(to: size, with: coordinator)
@@ -316,15 +317,15 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if currentControllerActions.options.contains(.updatingCollection), collectionView.isDragging {
+        if currentControllerActions.options.contains(.updatingCollection), scrollView.isDragging {
             // Interrupting current update animation if user starts to scroll while batchUpdate is performed. It helps to
             // avoid presenting blank area if user scrolls out of the animation rendering area.
             UIView.performWithoutAnimation {
-                self.collectionView.performBatchUpdates({}, completion: { _ in
-                    let context = ChatLayoutInvalidationContext()
-                    context.invalidateLayoutMetrics = false
-                    self.collectionView.collectionViewLayout.invalidateLayout(with: context)
-                })
+//                self.collectionView.performBatchUpdates({}, completion: { _ in
+//                    let context = ChatLayoutInvalidationContext()
+//                    context.invalidateLayoutMetrics = false
+//                    self.collectionView.collectionViewLayout.invalidateLayout(with: context)
+//                })
             }
         }
         guard !currentControllerActions.options.contains(.loadingInitialMessages),
@@ -356,135 +357,137 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     fileprivate var isUserInitiatedScrolling: Bool {
-        collectionView.isDragging || collectionView.isDecelerating
+        scrollView.isDragging || scrollView.isDecelerating
     }
 
     func scrollToBottom(completion: (() -> Void)? = nil) {
-        // I ask content size from the layout because on IOs 12 collection view contains not updated one
-        let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x,
-                                            y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
-
-        guard contentOffsetAtBottom.y > collectionView.contentOffset.y else {
-            completion?()
-            return
-        }
-
-        let initialOffset = collectionView.contentOffset.y
-        let delta = contentOffsetAtBottom.y - initialOffset
-        if abs(delta) > chatLayout.visibleBounds.height {
-            // See: https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
-            animator = ManualAnimator()
-            animator?.animate(duration: TimeInterval(0.25), curve: .easeInOut) { [weak self] percentage in
-                guard let self else {
-                    return
-                }
-                collectionView.contentOffset = CGPoint(x: collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
-                if percentage == 1.0 {
-                    animator = nil
-                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
-                    chatLayout.restoreContentOffset(with: positionSnapshot)
-                    currentInterfaceActions.options.remove(.scrollingToBottom)
-                    completion?()
-                }
-            }
-        } else {
-            currentInterfaceActions.options.insert(.scrollingToBottom)
-            UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                self?.collectionView.setContentOffset(contentOffsetAtBottom, animated: true)
-            }, completion: { [weak self] _ in
-                self?.currentInterfaceActions.options.remove(.scrollingToBottom)
-                completion?()
-            })
-        }
+//        // I ask content size from the layout because on IOs 12 collection view contains not updated one
+//        let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x,
+//                                            y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
+//
+//        guard contentOffsetAtBottom.y > collectionView.contentOffset.y else {
+//            completion?()
+//            return
+//        }
+//
+//        let initialOffset = collectionView.contentOffset.y
+//        let delta = contentOffsetAtBottom.y - initialOffset
+//        if abs(delta) > chatLayout.visibleBounds.height {
+//            // See: https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
+//            animator = ManualAnimator()
+//            animator?.animate(duration: TimeInterval(0.25), curve: .easeInOut) { [weak self] percentage in
+//                guard let self else {
+//                    return
+//                }
+//                collectionView.contentOffset = CGPoint(x: collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
+//                if percentage == 1.0 {
+//                    animator = nil
+//                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
+//                    chatLayout.restoreContentOffset(with: positionSnapshot)
+//                    currentInterfaceActions.options.remove(.scrollingToBottom)
+//                    completion?()
+//                }
+//            }
+//        } else {
+//            currentInterfaceActions.options.insert(.scrollingToBottom)
+//            UIView.animate(withDuration: 0.25, animations: { [weak self] in
+//                self?.collectionView.setContentOffset(contentOffsetAtBottom, animated: true)
+//            }, completion: { [weak self] _ in
+//                self?.currentInterfaceActions.options.remove(.scrollingToBottom)
+//                completion?()
+//            })
+//        }
     }
 }
 
 extension ChatViewController: UICollectionViewDelegate {
-    @available(iOS 13.0, *)
-    private func preview(for configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        guard let identifier = configuration.identifier as? String else {
-            return nil
-        }
-        let components = identifier.split(separator: "|")
-        guard components.count == 2,
-              let sectionIndex = Int(components[0]),
-              let itemIndex = Int(components[1]),
-              let cell = collectionView.cellForItem(at: IndexPath(item: itemIndex, section: sectionIndex)) as? TextMessageCollectionCell else {
-            return nil
-        }
 
-        let item = dataSource.sections[0].cells[itemIndex]
-        switch item {
-        case let .message(message, bubbleType: _):
-            switch message.data {
-            case .text:
-                let parameters = UIPreviewParameters()
-                // `UITargetedPreview` doesnt support image mask (Why?) like the one I use to mask the message bubble in the example app.
-                // So I replaced default `ImageMaskedView` with `BezierMaskedView` that can uses `UIBezierPath` to mask the message view
-                // instead. So we are reusing that path here.
-                //
-                // NB: This way of creating the preview is not valid for long texts as `UITextView` within message view uses `CATiledLayer`
-                // to render its content, so it may not render itself fully when it is partly outside the collection view. You will have to
-                // recreate a brand new view that will behave as a preview. It is outside of the scope of the example app.
-                parameters.visiblePath = cell.customView.customView.customView.maskingPath
-                var center = cell.customView.customView.customView.center
-                center.x += (message.type.isIncoming ? cell.customView.customView.customView.offset : -cell.customView.customView.customView.offset) / 2
+//    @available(iOS 13.0, *)
+//    private func preview(for configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+//        guard let identifier = configuration.identifier as? String else {
+//            return nil
+//        }
+//        let components = identifier.split(separator: "|")
+//        guard components.count == 2,
+//              let sectionIndex = Int(components[0]),
+//              let itemIndex = Int(components[1]),
+//              let cell = collectionView.cellForItem(at: IndexPath(item: itemIndex, section: sectionIndex)) as? TextMessageCollectionCell else {
+//            return nil
+//        }
+//
+//        let item = dataSource.sections[0].cells[itemIndex]
+//        switch item {
+//        case let .message(message, bubbleType: _):
+//            switch message.data {
+//            case .text:
+//                let parameters = UIPreviewParameters()
+//                // `UITargetedPreview` doesnt support image mask (Why?) like the one I use to mask the message bubble in the example app.
+//                // So I replaced default `ImageMaskedView` with `BezierMaskedView` that can uses `UIBezierPath` to mask the message view
+//                // instead. So we are reusing that path here.
+//                //
+//                // NB: This way of creating the preview is not valid for long texts as `UITextView` within message view uses `CATiledLayer`
+//                // to render its content, so it may not render itself fully when it is partly outside the collection view. You will have to
+//                // recreate a brand new view that will behave as a preview. It is outside of the scope of the example app.
+//                parameters.visiblePath = cell.customView.customView.customView.maskingPath
+//                var center = cell.customView.customView.customView.center
+//                center.x += (message.type.isIncoming ? cell.customView.customView.customView.offset : -cell.customView.customView.customView.offset) / 2
+//
+//                return UITargetedPreview(view: cell.customView.customView.customView,
+//                                         parameters: parameters,
+//                                         target: UIPreviewTarget(container: cell.customView.customView, center: center))
+//            default:
+//                return nil
+//            }
+//        default:
+//            return nil
+//        }
+//    }
+//
+//    @available(iOS 13.0, *)
+//    public func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+//        preview(for: configuration)
+//    }
+//
+//    @available(iOS 13.0, *)
+//    public func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+//        preview(for: configuration)
+//    }
+//
+//    @available(iOS 13.0, *)
+//    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+//        guard !currentInterfaceActions.options.contains(.showingPreview),
+//              !currentControllerActions.options.contains(.updatingCollection) else {
+//            return nil
+//        }
+//        let item = dataSource.sections[indexPath.section].cells[indexPath.item]
+//        switch item {
+//        case let .message(message, bubbleType: _):
+//            switch message.data {
+//            case let .text(body):
+//                let actions = [UIAction(title: "Copy", image: nil, identifier: nil) { [body] _ in
+//                    let pasteboard = UIPasteboard.general
+//                    pasteboard.string = body
+//                }]
+//                let menu = UIMenu(title: "", children: actions)
+//                // Custom NSCopying identifier leads to the crash. No other requirements for the identifier to avoid the crash are provided.
+//                let identifier: NSString = "\(indexPath.section)|\(indexPath.item)" as NSString
+//                currentInterfaceActions.options.insert(.showingPreview)
+//                return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil, actionProvider: { _ in menu })
+//            default:
+//                return nil
+//            }
+//        default:
+//            return nil
+//        }
+//    }
+//
+//    @available(iOS 13.2, *)
+//    func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+//        animator?.addCompletion {
+//            self.currentInterfaceActions.options.remove(.showingPreview)
+//        }
+//    }
 
-                return UITargetedPreview(view: cell.customView.customView.customView,
-                                         parameters: parameters,
-                                         target: UIPreviewTarget(container: cell.customView.customView, center: center))
-            default:
-                return nil
-            }
-        default:
-            return nil
-        }
-    }
-
-    @available(iOS 13.0, *)
-    public func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        preview(for: configuration)
-    }
-
-    @available(iOS 13.0, *)
-    public func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        preview(for: configuration)
-    }
-
-    @available(iOS 13.0, *)
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        guard !currentInterfaceActions.options.contains(.showingPreview),
-              !currentControllerActions.options.contains(.updatingCollection) else {
-            return nil
-        }
-        let item = dataSource.sections[indexPath.section].cells[indexPath.item]
-        switch item {
-        case let .message(message, bubbleType: _):
-            switch message.data {
-            case let .text(body):
-                let actions = [UIAction(title: "Copy", image: nil, identifier: nil) { [body] _ in
-                    let pasteboard = UIPasteboard.general
-                    pasteboard.string = body
-                }]
-                let menu = UIMenu(title: "", children: actions)
-                // Custom NSCopying identifier leads to the crash. No other requirements for the identifier to avoid the crash are provided.
-                let identifier: NSString = "\(indexPath.section)|\(indexPath.item)" as NSString
-                currentInterfaceActions.options.insert(.showingPreview)
-                return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil, actionProvider: { _ in menu })
-            default:
-                return nil
-            }
-        default:
-            return nil
-        }
-    }
-
-    @available(iOS 13.2, *)
-    func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
-        animator?.addCompletion {
-            self.currentInterfaceActions.options.remove(.showingPreview)
-        }
-    }
 }
 
 extension ChatViewController: ChatControllerDelegate {
@@ -527,34 +530,39 @@ extension ChatViewController: ChatControllerDelegate {
                 currentInterfaceActions.options.insert(.updatingCollectionInIsolation)
             }
             currentControllerActions.options.insert(.updatingCollection)
-            collectionView.reload(using: changeSet,
-                                  interrupt: { changeSet in
-                                      guard changeSet.sectionInserted.isEmpty else {
-                                          return true
-                                      }
-                                      return false
-                                  },
-                                  onInterruptedReload: {
-                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
-                                      self.collectionView.reloadData()
-                                      self.scrollView.reloadData()
-                                      // We want so that user on reload appeared at the very bottom of the layout
-                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                                  },
-                                  completion: { _ in
-                                      DispatchQueue.main.async {
-                                          self.scrollView.reloadData()
-                                          self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
-                                          if requiresIsolatedProcess {
-                                              self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
-                                          }
-                                          completion?()
-                                          self.currentControllerActions.options.remove(.updatingCollection)
-                                      }
-                                  },
-                                  setData: { data in
-                                      self.dataSource.sections = data
-                                  })
+            if let data = changeSet.last?.data {
+                self.dataSource.sections = data
+            }
+            self.scrollView.reloadData()
+            self.currentControllerActions.options.remove(.updatingCollection)
+//            collectionView.reload(using: changeSet,
+//                                  interrupt: { changeSet in
+//                                      guard changeSet.sectionInserted.isEmpty else {
+//                                          return true
+//                                      }
+//                                      return false
+//                                  },
+//                                  onInterruptedReload: {
+//                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
+//                                      self.collectionView.reloadData()
+//                                      self.scrollView.reloadData()
+//                                      // We want so that user on reload appeared at the very bottom of the layout
+//                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
+//                                  },
+//                                  completion: { _ in
+//                                      DispatchQueue.main.async {
+//                                          self.scrollView.reloadData()
+//                                          self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
+//                                          if requiresIsolatedProcess {
+//                                              self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
+//                                          }
+//                                          completion?()
+//                                          self.currentControllerActions.options.remove(.updatingCollection)
+//                                      }
+//                                  },
+//                                  setData: { data in
+//                                      self.dataSource.sections = data
+//                                  })
         }
 
         if animated {
@@ -666,7 +674,7 @@ extension ChatViewController: KeyboardListenerDelegate {
               scrollView.contentInsetAdjustmentBehavior != .never,
               let keyboardFrame = scrollView.window?.convert(info.frameEnd, to: view),
               keyboardFrame.minY > 0,
-              scrollView.convert(scrollView.bounds, to: collectionView.window).maxY > info.frameEnd.minY else {
+              scrollView.convert(scrollView.bounds, to: scrollView.window).maxY > info.frameEnd.minY else {
             return
         }
         currentInterfaceActions.options.insert(.changingKeyboardFrame)
@@ -678,17 +686,17 @@ extension ChatViewController: KeyboardListenerDelegate {
             // Interrupting current update animation if user starts to scroll while batchUpdate is performed.
             if currentControllerActions.options.contains(.updatingCollection) {
                 UIView.performWithoutAnimation {
-                    self.collectionView.performBatchUpdates({})
+//                    self.collectionView.performBatchUpdates({})
                 }
             }
 
             // Blocks possible updates when keyboard is being hidden interactively
             currentInterfaceActions.options.insert(.changingContentInsets)
             UIView.animate(withDuration: info.animationDuration, animations: {
-                self.collectionView.performBatchUpdates({
-                    self.collectionView.contentInset.bottom = newBottomInset
-                    self.collectionView.scrollIndicatorInsets.bottom = newBottomInset
-                }, completion: nil)
+//                self.collectionView.performBatchUpdates({
+//                    self.collectionView.contentInset.bottom = newBottomInset
+//                    self.collectionView.scrollIndicatorInsets.bottom = newBottomInset
+//                }, completion: nil)
 
                 self.scrollView.contentInset.bottom = newBottomInset
                 self.scrollView.scrollIndicatorInsets.bottom = newBottomInset
@@ -700,7 +708,7 @@ extension ChatViewController: KeyboardListenerDelegate {
                 } else {
                     // When contentInset is changed programmatically IOs 13 calls invalidate context automatically.
                     // this does not happen in ios 12 so we do it manually
-                    self.collectionView.collectionViewLayout.invalidateLayout()
+//                    self.collectionView.collectionViewLayout.invalidateLayout()
                 }
             }, completion: { _ in
                 self.currentInterfaceActions.options.remove(.changingContentInsets)

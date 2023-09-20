@@ -436,13 +436,25 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     }
 }
 
+extension DefaultChatCollectionDataSource: SimpleLayoutEngineDelegate {
+    func estimatedHeightForIdentifier(_ identifier: Identifier) -> CGFloat? {
+        return 44
+    }
+
+    public func heightForView(_ view: UIView, with identifier: Identifier, width: CGFloat) -> CGFloat? {
+        let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel)
+        return systemLayoutSize.height
+    }
+}
+
 extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
     func allIdentifiers() -> [Cell] {
         return sections.first?.cells ?? []
     }
 
     func layoutView(viewForItemAt identifier: Cell) -> UIView {
-        print("\(#function)")
         switch identifier {
         case let .message(message, bubbleType: bubbleType):
             switch message.data {
@@ -514,11 +526,11 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
 
     func payloadForItemWithIdentifier(identifier: Cell) -> VoidPayload {
         var payload =  VoidPayload()
-        if case .date = identifier {
-            payload.isSticky = true
-        } else {
-            payload.isSticky = false
-        }
+//        if case .date = identifier {
+//            payload.isSticky = true
+//        } else {
+//            payload.isSticky = false
+//        }
         return payload
     }
 
