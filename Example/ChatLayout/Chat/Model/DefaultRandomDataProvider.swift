@@ -99,7 +99,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
             guard let self else {
                 return
             }
-            let messages = createBunchOfMessages(number: 50)
+            let messages = createBunchOfMessages(number: 500)
             if messages.count > 10 {
                 lastReceivedUUID = messages[messages.count - 10].id
             }

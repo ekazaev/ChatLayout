@@ -60,10 +60,6 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         setupSize()
     }
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-
     func setup(with controller: TextMessageController) {
         self.controller = controller
         reloadData()

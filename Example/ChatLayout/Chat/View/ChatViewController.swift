@@ -681,7 +681,7 @@ extension ChatViewController: KeyboardListenerDelegate {
         let newBottomInset = scrollView.frame.minY + scrollView.frame.size.height - keyboardFrame.minY - scrollView.safeAreaInsets.bottom
         if newBottomInset > 0,
            scrollView.contentInset.bottom != newBottomInset {
-            let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
+            let positionSnapshot = scrollView.getPositionSnapshot(from: .bottom)
 
             // Interrupting current update animation if user starts to scroll while batchUpdate is performed.
             if currentControllerActions.options.contains(.updatingCollection) {
@@ -700,9 +700,10 @@ extension ChatViewController: KeyboardListenerDelegate {
 
                 self.scrollView.contentInset.bottom = newBottomInset
                 self.scrollView.scrollIndicatorInsets.bottom = newBottomInset
-
+                self.scrollView.setNeedsLayout()
+                self.scrollView.layoutIfNeeded()
                 if let positionSnapshot, !self.isUserInitiatedScrolling {
-                    self.chatLayout.restoreContentOffset(with: positionSnapshot)
+                    self.scrollView.scrollToPositionSnapshot(positionSnapshot, animated: false)
                 }
                 if #available(iOS 13.0, *) {
                 } else {
