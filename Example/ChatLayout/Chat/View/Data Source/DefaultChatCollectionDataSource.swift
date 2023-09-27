@@ -446,6 +446,9 @@ extension DefaultChatCollectionDataSource: SimpleLayoutEngineDelegate {
             view.customView.customView.customView.applyWidth(width)
         }
         let systemLayoutSize = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+//        let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
+//                withHorizontalFittingPriority: .required,
+//                verticalFittingPriority: .fittingSizeLevel)
         return systemLayoutSize.height
     }
 }
