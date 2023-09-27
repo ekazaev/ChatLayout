@@ -42,6 +42,19 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
         }
     }
 
+    public override var center: CGPoint {
+        get {
+            super.center
+        }
+        set {
+            let oldValue = super.center
+            if newValue != super.center {
+                print("Center changed: \(super.center) -> \(newValue)")
+            }
+            super.center = newValue
+        }
+    }
+
     /// Default reuse identifier is set with the class name.
     public static var reuseIdentifier: String {
         String(describing: self)
