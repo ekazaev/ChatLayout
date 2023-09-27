@@ -60,6 +60,11 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         setupSize()
     }
 
+    func applyWidth(_ width: CGFloat) {
+        viewPortWidth = width
+        setupSize()
+    }
+
     func setup(with controller: TextMessageController) {
         self.controller = controller
         reloadData()
@@ -105,6 +110,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         textView.showsVerticalScrollIndicator = false
         textView.isExclusiveTouch = true
         textView.font = UIFont.preferredFont(forTextStyle: .body)
+        textView.insetsLayoutMarginsFromSafeArea = false
         addSubview(textView)
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
@@ -119,6 +125,8 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
     private func setupSize() {
         UIView.performWithoutAnimation {
             self.textViewWidthConstraint?.constant = viewPortWidth * Constants.maxWidth
+            textView.invalidateIntrinsicContentSize()
+//            textView.setNeedsUpdateConstraints()
             setNeedsLayout()
         }
     }
