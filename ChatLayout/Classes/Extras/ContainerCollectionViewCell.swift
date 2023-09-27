@@ -16,6 +16,32 @@ import UIKit
 /// A container `UICollectionViewCell` that constraints its contained view to its margins.
 public final class ContainerCollectionViewCell<CustomView: UIView>: UICollectionViewCell {
 
+    public override var frame: CGRect {
+        get {
+            super.frame
+        }
+        set {
+            let oldValue = super.frame
+            if newValue != super.frame {
+                print("Frame changed: \(super.frame) -> \(newValue)")
+            }
+            super.frame = newValue
+        }
+    }
+
+    public override var bounds: CGRect {
+        get {
+            super.bounds
+        }
+        set {
+            let oldValue = super.bounds
+            if newValue != super.bounds {
+                print("Bounds changed: \(super.bounds) -> \(newValue)")
+            }
+            super.bounds = newValue
+        }
+    }
+
     /// Default reuse identifier is set with the class name.
     public static var reuseIdentifier: String {
         String(describing: self)
@@ -56,14 +82,8 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
         }
         delegate?.apply(chatLayoutAttributes)
         let resultingLayoutAttributes: ChatLayoutAttributes
-        if let preferredLayoutAttributes = delegate?.preferredLayoutAttributesFitting(chatLayoutAttributes) {
-            resultingLayoutAttributes = preferredLayoutAttributes
-        } else if let chatLayoutAttributes = super.preferredLayoutAttributesFitting(chatLayoutAttributes) as? ChatLayoutAttributes {
-            delegate?.modifyPreferredLayoutAttributesFitting(chatLayoutAttributes)
-            resultingLayoutAttributes = chatLayoutAttributes
-        } else {
-            resultingLayoutAttributes = chatLayoutAttributes
-        }
+        layoutAttributes.size = contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        resultingLayoutAttributes = layoutAttributes as! ChatLayoutAttributes
         return resultingLayoutAttributes
     }
 
