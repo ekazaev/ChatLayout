@@ -105,13 +105,16 @@ final class ChatViewController: UIViewController {
             view.backgroundColor = .white
         }
 
-//        let interposer = try? Interpose(UIView.self) {
+//        let interposer = try? Interpose(UIStackView.self) {
 //            try $0.prepareHook(
-//                    #selector(UIView.updateConstraints),
+//                    #selector(UIStackView.setNeedsUpdateConstraints),
 //                    methodSignature: (@convention(c) (AnyObject, Selector) -> Void).self,
 //                    hookSignature: (@convention(block) (AnyObject) -> Void).self) {
 //                store in { `self` in
-//                    print("Before Interposing \(`self`)")
+//                    print("Before Interposing \(`self`) SUPER: \(self.superview)")
+//                    if self.superview is CellLayoutContainerView<AvatarView, BezierMaskedView<TextMessageView>, StatusView> {
+//                        print("TADA")
+//                    }
 //                    let string = store.original(`self`, store.selector) // free to skip
 //                    print("After Interposing \(`self`)")
 //                    return

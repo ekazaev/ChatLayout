@@ -83,6 +83,7 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
         delegate?.apply(chatLayoutAttributes)
         let resultingLayoutAttributes: ChatLayoutAttributes
         layoutAttributes.size = contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        print("\(Self.self) \(#function) \(layoutAttributes.indexPath) \(frame.size) \(layoutAttributes.size)")
         resultingLayoutAttributes = layoutAttributes as! ChatLayoutAttributes
         return resultingLayoutAttributes
     }
