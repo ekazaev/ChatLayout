@@ -449,9 +449,10 @@ extension DefaultChatCollectionDataSource: SimpleLayoutEngineDelegate {
 //            view.invalidateIntrinsicContentSize()
 //            view.layoutIfNeeded()
         }
-        let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
-                withHorizontalFittingPriority: .required,
-                verticalFittingPriority: .fittingSizeLevel)
+        let systemLayoutSize = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+//        let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
+//                withHorizontalFittingPriority: .required,
+//                verticalFittingPriority: .fittingSizeLevel)
         print("TADA: \(identifier): \(view.frame.size) -> \(systemLayoutSize)")
         return systemLayoutSize.height
     }

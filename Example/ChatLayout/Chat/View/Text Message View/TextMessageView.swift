@@ -127,7 +127,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
             self.textViewWidthConstraint?.constant = viewPortWidth * Constants.maxWidth
             textView.invalidateIntrinsicContentSize()
 //            textView.setNeedsUpdateConstraints()
-            setNeedsLayout()
+//            setNeedsLayout()
         }
     }
 }
