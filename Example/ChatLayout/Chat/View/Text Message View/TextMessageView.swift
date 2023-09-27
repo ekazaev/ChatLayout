@@ -125,7 +125,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
     private func setupSize() {
         UIView.performWithoutAnimation {
             self.textViewWidthConstraint?.constant = viewPortWidth * Constants.maxWidth
-//            textView.invalidateIntrinsicContentSize()
+            textView.invalidateIntrinsicContentSize()
 //            textView.setNeedsUpdateConstraints()
 //            setNeedsLayout()
         }

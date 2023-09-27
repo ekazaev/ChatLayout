@@ -443,17 +443,9 @@ extension DefaultChatCollectionDataSource: SimpleLayoutEngineDelegate {
 
     public func heightForView(_ view: UIView, with identifier: Identifier, width: CGFloat) -> CGFloat? {
         if let view = view as? TextMessageViewItem {
-//            view.frame.size.width = width
-//            view.frame.size.height = 0
             view.customView.customView.customView.applyWidth(width)
-//            view.invalidateIntrinsicContentSize()
-//            view.layoutIfNeeded()
         }
         let systemLayoutSize = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-//        let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
-//                withHorizontalFittingPriority: .required,
-//                verticalFittingPriority: .fittingSizeLevel)
-        print("TADA: \(identifier): \(view.frame.size) -> \(systemLayoutSize)")
         return systemLayoutSize.height
     }
 }

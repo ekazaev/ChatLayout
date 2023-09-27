@@ -165,7 +165,7 @@ final class ChatViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.alwaysBounceVertical = true
         scrollView.keyboardDismissMode = .interactive
-        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.contentInsetAdjustmentBehavior = .always
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.frame = view.bounds
         NSLayoutConstraint.activate([
