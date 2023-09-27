@@ -16,6 +16,7 @@ import Foundation
 import FPSCounter
 import InputBarAccessoryView
 import UIKit
+import InterposeKit
 
 final class ChatViewController: UIViewController {
 
@@ -92,6 +93,8 @@ final class ChatViewController: UIViewController {
         fatalError()
     }
 
+    var strongReference: [Any] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         fpsCounter.delegate = self
@@ -101,6 +104,21 @@ final class ChatViewController: UIViewController {
         } else {
             view.backgroundColor = .white
         }
+
+//        let interposer = try? Interpose(UIView.self) {
+//            try $0.prepareHook(
+//                    #selector(UIView.updateConstraints),
+//                    methodSignature: (@convention(c) (AnyObject, Selector) -> Void).self,
+//                    hookSignature: (@convention(block) (AnyObject) -> Void).self) {
+//                store in { `self` in
+//                    print("Before Interposing \(`self`)")
+//                    let string = store.original(`self`, store.selector) // free to skip
+//                    print("After Interposing \(`self`)")
+//                    return
+//                }
+//            }
+//        }
+//        strongReference.append(interposer)
 
         inputBarView.delegate = self
 

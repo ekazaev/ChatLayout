@@ -6,6 +6,7 @@ target 'ChatLayout_Example' do
   pod 'InputBarAccessoryView'
   pod 'DifferenceKit'
   pod 'FPSCounter', '~> 4.0'
+  pod 'InterposeKit', :git => 'https://github.com/steipete/InterposeKit'
 
   target 'ChatLayout_Tests' do
     inherit! :search_paths
