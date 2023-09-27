@@ -445,6 +445,11 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         let visibleAttributes = controller.layoutAttributesForElements(in: rect, state: state)
+        print("\(Self.self) \(#function):")
+        visibleAttributes.forEach({
+            print("\($0.indexPath) \($0.frame)")
+        })
+        print("")
         return visibleAttributes
     }
 
@@ -454,6 +459,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
             return nil
         }
         let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state)
+        print("\(Self.self) \(#function): \(attributes?.indexPath) \(attributes?.frame)")
 
         return attributes
     }
@@ -782,7 +788,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         } else {
             attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)
         }
-
+        print("\(Self.self) \(#function): \(attributes?.indexPath) \(attributes?.frame)")
         return attributes
     }
 
@@ -832,6 +838,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
             attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)
         }
 
+        print("\(Self.self) \(#function): \(attributes?.indexPath) \(attributes?.frame)")
         return attributes
     }
 
