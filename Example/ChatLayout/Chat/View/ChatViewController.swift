@@ -229,7 +229,7 @@ final class ChatViewController: UIViewController {
             return
         }
         currentInterfaceActions.options.insert(.changingFrameSize)
-        let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
+        let positionSnapshot = scrollView.getPositionSnapshot(from: .bottom)
 //        collectionView.collectionViewLayout.invalidateLayout()
 //        collectionView.setNeedsLayout()
         coordinator.animate(alongsideTransition: { _ in
@@ -242,7 +242,7 @@ final class ChatViewController: UIViewController {
                 // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
                 // to compact and back. `CollectionViewChatLayout` may not properly predict the final position of the element. So we try
                 // to restore it after the rotation manually.
-                self.chatLayout.restoreContentOffset(with: positionSnapshot)
+                self.scrollView.scrollToPositionSnapshot(positionSnapshot, animated: false)
             }
 //            self.collectionView.collectionViewLayout.invalidateLayout()
             self.currentInterfaceActions.options.remove(.changingFrameSize)
@@ -669,7 +669,13 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 }
 
 extension ChatViewController: KeyboardListenerDelegate {
+
+    func keyboardWillShow(info: KeyboardInfo) {
+        print("\(#function)")
+    }
+
     func keyboardWillChangeFrame(info: KeyboardInfo) {
+        print("\(#function)")
         guard !currentInterfaceActions.options.contains(.changingFrameSize),
               scrollView.contentInsetAdjustmentBehavior != .never,
               let keyboardFrame = scrollView.window?.convert(info.frameEnd, to: view),
@@ -692,7 +698,7 @@ extension ChatViewController: KeyboardListenerDelegate {
 
             // Blocks possible updates when keyboard is being hidden interactively
             currentInterfaceActions.options.insert(.changingContentInsets)
-            UIView.animate(withDuration: info.animationDuration, animations: {
+            let animationBlock = {
 //                self.collectionView.performBatchUpdates({
 //                    self.collectionView.contentInset.bottom = newBottomInset
 //                    self.collectionView.scrollIndicatorInsets.bottom = newBottomInset
@@ -711,14 +717,25 @@ extension ChatViewController: KeyboardListenerDelegate {
                     // this does not happen in ios 12 so we do it manually
 //                    self.collectionView.collectionViewLayout.invalidateLayout()
                 }
-            }, completion: { _ in
+            }
+            let completionBlock: (Bool) -> () = { _ in
                 self.currentInterfaceActions.options.remove(.changingContentInsets)
-            })
+            }
+            if info.animationDuration > 0 {
+                UIView.animate(withDuration: info.animationDuration,
+                        animations: animationBlock,
+                        completion: completionBlock)
+
+            } else {
+                animationBlock()
+                completionBlock(true)
+            }
         }
     }
 
     func keyboardDidChangeFrame(info: KeyboardInfo) {
-        guard currentInterfaceActions.options.contains(.changingKeyboardFrame) else {
+        print("\(#function)")
+            guard currentInterfaceActions.options.contains(.changingKeyboardFrame) else {
             return
         }
         currentInterfaceActions.options.remove(.changingKeyboardFrame)

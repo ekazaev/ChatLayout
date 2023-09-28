@@ -445,25 +445,24 @@ extension DefaultChatCollectionDataSource: SimpleLayoutEngineDelegate {
         if let view = view as? TextMessageViewItem {
             view.customView.customView.customView.applyWidth(width)
         }
-        let systemLayoutSize = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-//        let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
-//                withHorizontalFittingPriority: .required,
-//                verticalFittingPriority: .fittingSizeLevel)
+        let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel)
         return systemLayoutSize.height
     }
 }
 
 extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
-    func allIdentifiers() -> [Cell] {
+    func allIdentifiers() -> [Identifier] {
         return sections.first?.cells ?? []
     }
 
-    func layoutView(viewForItemAt identifier: Cell) -> UIView {
+    func viewForIdentifier(_ identifier: Identifier) -> UIView {
         switch identifier {
         case let .message(message, bubbleType: bubbleType):
             switch message.data {
             case let .text(text):
-                let view = scrollView.dequeueReusableCellWithReuseIdentifier(identifier) ?? TextMessageViewItem()
+                let view = scrollView.dequeueReusableViewWithIdentifier(identifier) ?? TextMessageViewItem()
                 setupMessageContainerView(view, messageId: message.id, alignment: identifier.alignment)
                 setupMainMessageView(view.customView, user: message.owner, alignment: identifier.alignment, bubble: bubbleType, status: message.status)
 
@@ -482,7 +481,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
                 fatalError()
             }
         case let .messageGroup(group):
-            let view = scrollView.dequeueReusableCellWithReuseIdentifier(identifier) ?? UserTitleViewItem()
+            let view = scrollView.dequeueReusableViewWithIdentifier(identifier) ?? UserTitleViewItem()
             view.spacing = 2
 
             view.customView.customView.text = group.title
@@ -513,7 +512,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
             view.layoutMargins = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
             return view
         case let .date(group):
-            let view = scrollView.dequeueReusableCellWithReuseIdentifier(identifier) ?? TitleViewItem()
+            let view = scrollView.dequeueReusableViewWithIdentifier(identifier) ?? TitleViewItem()
             view.preferredMaxLayoutWidth = scrollView.visibleRect.width
             view.text = group.value
             view.textAlignment = .center
@@ -528,7 +527,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
 
     }
 
-    func payloadForItemWithIdentifier(identifier: Cell) -> VoidPayload {
+    func payloadForIdentifier(_ identifier: Identifier) -> Payload {
         var payload =  VoidPayload()
 //        if case .date = identifier {
 //            payload.isSticky = true
@@ -538,7 +537,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
         return payload
     }
 
-    func reconfigure(view: UIView, with identifier: Cell) {
+    func reconfigureView(_ view: UIView, with identifier: Identifier) {
     }
 
     typealias Identifier = Cell
