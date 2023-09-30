@@ -46,15 +46,13 @@ extension RecyclerScrollView where Engine.Identifier == Cell {
             dispatchGroup!.leave()
         } : nil
 
-        UIView.animate(withDuration: 0.25, animations: { [weak self] in
-            dispatchGroup?.enter()
         for changeset in stagedChangeset {
             if let interrupt, interrupt(changeset), let data = stagedChangeset.last?.data {
                 setData(data)
                 if let onInterruptedReload {
                     onInterruptedReload()
                 } else {
-                    self?.reloadData()
+                    self.reloadData()
                 }
                 completion?(false)
                 print("END")
@@ -75,11 +73,13 @@ extension RecyclerScrollView where Engine.Identifier == Cell {
             changeset.elementMoved.forEach({ sourceIndexPath, targetIndexPath in
                 modifications.append(.reload(originalData[sourceIndexPath.section].cells[sourceIndexPath.element], with: changeset.data[targetIndexPath.section].cells[targetIndexPath.element]))
             })
+            UIView.animate(withDuration: 0.25, animations: { [weak self] in
+                dispatchGroup?.enter()
                 self?.applyModifications(modifications)
+            }, completion: completionHandler)
             setData(changeset.data)
             originalData = changeset.data
         }
-        }, completion: completionHandler)
 
         dispatchGroup?.notify(queue: .main) {
             print("END")

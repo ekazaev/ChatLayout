@@ -462,7 +462,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
         case let .message(message, bubbleType: bubbleType):
             switch message.data {
             case let .text(text):
-                let view = /*scrollView.dequeueReusableViewWithIdentifier(identifier) ?? */TextMessageViewItem()
+                let view = scrollView.dequeueReusableViewWithIdentifier(identifier) ?? TextMessageViewItem()
                 setupMessageContainerView(view, messageId: message.id, alignment: identifier.alignment)
                 setupMainMessageView(view.customView, user: message.owner, alignment: identifier.alignment, bubble: bubbleType, status: message.status)
 
