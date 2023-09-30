@@ -14,6 +14,79 @@ import ChatLayout
 import DifferenceKit
 import Foundation
 import UIKit
+import RecyclerView
+
+extension RecyclerScrollView where Engine.Identifier == Cell {
+
+    func reload(
+            originalData: [Section],
+            using stagedChangeset: StagedChangeset<[Section]>,
+            interrupt: ((Changeset<[Section]>) -> Bool)? = nil,
+            onInterruptedReload: (() -> Void)? = nil,
+            completion: ((Bool) -> Void)? = nil,
+            setData: @escaping ([Section]) -> Void
+    ) {
+        print("BEGIN")
+        var originalData = originalData
+        if case .none = window,
+           let data = stagedChangeset.last?.data {
+            setData(data)
+            if let onInterruptedReload {
+                onInterruptedReload()
+            } else {
+                reloadData()
+            }
+            completion?(false)
+            print("END")
+            return
+        }
+
+        let dispatchGroup: DispatchGroup? = completion != nil ? DispatchGroup() : nil
+        let completionHandler: ((Bool) -> Void)? = completion != nil ? { _ in
+            dispatchGroup!.leave()
+        } : nil
+
+        UIView.animate(withDuration: 0.25, animations: { [weak self] in
+            dispatchGroup?.enter()
+        for changeset in stagedChangeset {
+            if let interrupt, interrupt(changeset), let data = stagedChangeset.last?.data {
+                setData(data)
+                if let onInterruptedReload {
+                    onInterruptedReload()
+                } else {
+                    self?.reloadData()
+                }
+                completion?(false)
+                print("END")
+                return
+            }
+
+            print("I:\(changeset.elementInserted) D:\(changeset.elementDeleted) U:\(changeset.elementUpdated) M:\(changeset.elementMoved)")
+            var modifications: [ModificationActions<Engine.Identifier>] = []
+            changeset.elementDeleted.forEach({ indexPath in
+                modifications.append(.delete(originalData[indexPath.section].cells[indexPath.element]))
+            })
+            changeset.elementInserted.forEach({ indexPath in
+                modifications.append(.insert(changeset.data[indexPath.section].cells[indexPath.element], at: indexPath.element))
+            })
+            changeset.elementUpdated.forEach({ indexPath in
+                modifications.append(.reload(originalData[indexPath.section].cells[indexPath.element], with: changeset.data[indexPath.section].cells[indexPath.element]))
+            })
+            changeset.elementMoved.forEach({ sourceIndexPath, targetIndexPath in
+                modifications.append(.reload(originalData[sourceIndexPath.section].cells[sourceIndexPath.element], with: changeset.data[targetIndexPath.section].cells[targetIndexPath.element]))
+            })
+                self?.applyModifications(modifications)
+            setData(changeset.data)
+            originalData = changeset.data
+        }
+        }, completion: completionHandler)
+
+        dispatchGroup?.notify(queue: .main) {
+            print("END")
+            completion!(true)
+        }
+    }
+}
 
 public extension UICollectionView {
     func reload<C>(

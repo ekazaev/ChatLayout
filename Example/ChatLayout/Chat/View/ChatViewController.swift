@@ -531,39 +531,34 @@ extension ChatViewController: ChatControllerDelegate {
                 currentInterfaceActions.options.insert(.updatingCollectionInIsolation)
             }
             currentControllerActions.options.insert(.updatingCollection)
-            if let data = changeSet.last?.data {
-                self.dataSource.sections = data
-            }
-            self.scrollView.reloadData()
             self.currentControllerActions.options.remove(.updatingCollection)
-//            collectionView.reload(using: changeSet,
-//                                  interrupt: { changeSet in
-//                                      guard changeSet.sectionInserted.isEmpty else {
-//                                          return true
-//                                      }
-//                                      return false
-//                                  },
-//                                  onInterruptedReload: {
-//                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
-//                                      self.collectionView.reloadData()
-//                                      self.scrollView.reloadData()
-//                                      // We want so that user on reload appeared at the very bottom of the layout
-//                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
-//                                  },
-//                                  completion: { _ in
-//                                      DispatchQueue.main.async {
-//                                          self.scrollView.reloadData()
-//                                          self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
-//                                          if requiresIsolatedProcess {
-//                                              self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
-//                                          }
-//                                          completion?()
-//                                          self.currentControllerActions.options.remove(.updatingCollection)
-//                                      }
-//                                  },
-//                                  setData: { data in
-//                                      self.dataSource.sections = data
-//                                  })
+            scrollView.reload(originalData: dataSource.sections,
+                    using: changeSet,
+                                  interrupt: { changeSet in
+                                      guard changeSet.sectionInserted.isEmpty else {
+                                          return true
+                                      }
+                                      return false
+                                  },
+                                  onInterruptedReload: {
+                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
+                                      self.scrollView.reloadData()
+                                      // We want so that user on reload appeared at the very bottom of the layout
+                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
+                                  },
+                                  completion: { _ in
+                                      DispatchQueue.main.async {
+                                          self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
+                                          if requiresIsolatedProcess {
+                                              self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
+                                          }
+                                          completion?()
+                                          self.currentControllerActions.options.remove(.updatingCollection)
+                                      }
+                                  },
+                                  setData: { data in
+                                      self.dataSource.sections = data
+                                  })
         }
 
         if animated {
@@ -695,23 +690,12 @@ extension ChatViewController: KeyboardListenerDelegate {
             // Blocks possible updates when keyboard is being hidden interactively
             currentInterfaceActions.options.insert(.changingContentInsets)
             let animationBlock = {
-//                self.collectionView.performBatchUpdates({
-//                    self.collectionView.contentInset.bottom = newBottomInset
-//                    self.collectionView.scrollIndicatorInsets.bottom = newBottomInset
-//                }, completion: nil)
-
                 self.scrollView.contentInset.bottom = newBottomInset
-                self.scrollView.scrollIndicatorInsets.bottom = newBottomInset
+                self.scrollView.verticalScrollIndicatorInsets.bottom = newBottomInset
                 self.scrollView.setNeedsLayout()
                 self.scrollView.layoutIfNeeded()
                 if let positionSnapshot, !self.isUserInitiatedScrolling {
                     self.scrollView.scrollToPositionSnapshot(positionSnapshot, animated: false)
-                }
-                if #available(iOS 13.0, *) {
-                } else {
-                    // When contentInset is changed programmatically IOs 13 calls invalidate context automatically.
-                    // this does not happen in ios 12 so we do it manually
-//                    self.collectionView.collectionViewLayout.invalidateLayout()
                 }
             }
             let completionBlock: (Bool) -> () = { _ in
