@@ -213,6 +213,9 @@ final class ChatViewController: UIViewController {
         KeyboardListener.shared.add(delegate: self)
         //collectionView.addGestureRecognizer(panGesture)
 
+        if #available(iOS 17.0, *) {
+            view.keyboardLayoutGuide.usesBottomSafeArea = false
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -230,21 +233,23 @@ final class ChatViewController: UIViewController {
         }
         currentInterfaceActions.options.insert(.changingFrameSize)
         let positionSnapshot = scrollView.getPositionSnapshot(from: .bottom)
-//        collectionView.collectionViewLayout.invalidateLayout()
-//        collectionView.setNeedsLayout()
+        let cellFrame = positionSnapshot.flatMap({ scrollView.engine.configurationForIdentifier($0.identifier).frame })
+
         coordinator.animate(alongsideTransition: { _ in
-            // Gives nicer transition behaviour
-            // self.collectionView.collectionViewLayout.invalidateLayout()
-//            self.collectionView.performBatchUpdates(nil)
-        }, completion: { _ in
+        }, completion: { [weak self] _ in
+            guard let self else {
+                return
+            }
             if let positionSnapshot,
+               let cellFrame,
+               let newSnapshot = self.scrollView.getPositionSnapshot(from: .bottom),
                !self.isUserInitiatedScrolling {
+                let adjustedOffset = scrollView.engine.configurationForIdentifier(newSnapshot.identifier).frame.height * positionSnapshot.offset / cellFrame.height
                 // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
                 // to compact and back. `CollectionViewChatLayout` may not properly predict the final position of the element. So we try
                 // to restore it after the rotation manually.
-                self.scrollView.scrollToPositionSnapshot(positionSnapshot, animated: false)
+                self.scrollView.scrollToPositionSnapshot(.init(identifier: positionSnapshot.identifier, edge: positionSnapshot.edge, offset: adjustedOffset), animated: false)
             }
-//            self.collectionView.collectionViewLayout.invalidateLayout()
             self.currentInterfaceActions.options.remove(.changingFrameSize)
         })
         super.viewWillTransition(to: size, with: coordinator)
