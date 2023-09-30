@@ -212,10 +212,6 @@ final class ChatViewController: UIViewController {
 
         KeyboardListener.shared.add(delegate: self)
         //collectionView.addGestureRecognizer(panGesture)
-
-        if #available(iOS 17.0, *) {
-            view.keyboardLayoutGuide.usesBottomSafeArea = false
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -675,12 +671,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 
 extension ChatViewController: KeyboardListenerDelegate {
 
-    func keyboardWillShow(info: KeyboardInfo) {
-        print("\(#function)")
-    }
-
     func keyboardWillChangeFrame(info: KeyboardInfo) {
-        print("\(#function)")
         guard !currentInterfaceActions.options.contains(.changingFrameSize),
               scrollView.contentInsetAdjustmentBehavior != .never,
               let keyboardFrame = scrollView.window?.convert(info.frameEnd, to: view),
@@ -739,8 +730,7 @@ extension ChatViewController: KeyboardListenerDelegate {
     }
 
     func keyboardDidChangeFrame(info: KeyboardInfo) {
-        print("\(#function)")
-            guard currentInterfaceActions.options.contains(.changingKeyboardFrame) else {
+        guard currentInterfaceActions.options.contains(.changingKeyboardFrame) else {
             return
         }
         currentInterfaceActions.options.remove(.changingKeyboardFrame)
