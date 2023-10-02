@@ -44,16 +44,28 @@ enum Cell: Hashable {
 }
 
 extension Cell: Differentiable {
-    public var differenceIdentifier: Int {
+
+    enum Identifier: Hashable {
+        case message(UUID)
+
+        case typingIndicator
+
+        case messageGroup(UUID)
+
+        case date(UUID)
+    }
+
+
+    public var differenceIdentifier: Identifier {
         switch self {
         case let .message(message, _):
-            message.differenceIdentifier
+            return .message(message.id)
         case .typingIndicator:
-            hashValue
+            return .typingIndicator
         case let .messageGroup(group):
-            group.differenceIdentifier
+            return .messageGroup(group.id)
         case let .date(group):
-            group.differenceIdentifier
+            return .date(group.id)
         }
     }
 

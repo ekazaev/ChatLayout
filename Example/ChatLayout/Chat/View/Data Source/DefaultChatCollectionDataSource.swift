@@ -16,6 +16,7 @@ import UIKit
 import RecyclerView
 
 typealias TextMessageViewItem = MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, TextMessageView, StatusView>>
+typealias TypingIndicatorItem = MessageContainerView<EditingAccessoryView, MainContainerView<AvatarPlaceholderView, TextMessageView, VoidViewFactory>>
 typealias TitleViewItem = UILabel
 typealias UserTitleViewItem = SwappingContainerView<EdgeAligningView<UILabel>, UIImageView>
 
@@ -31,7 +32,7 @@ typealias TextTitleView = ContainerCollectionReusableView<UILabel>
 
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
 
-    weak var scrollView: RecyclerScrollView<SimpleLayoutEngine<Cell, VoidPayload>>!
+    weak var scrollView: RecyclerScrollView<SimpleLayoutEngine<Cell.Identifier, VoidPayload>>!
 
     private unowned var reloadDelegate: ReloadDelegate
 
@@ -44,8 +45,14 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
     var sections: [Section] = [] {
         didSet {
             oldSections = oldValue
+            cellsDictionary.removeAll(keepingCapacity: true)
+            sections.first?.cells.forEach({ cell in
+                cellsDictionary[cell.differenceIdentifier] = cell
+            })
         }
     }
+
+    var cellsDictionary: Dictionary<Cell.Identifier, Cell> = [:]
 
     private var oldSections: [Section] = []
 
@@ -454,17 +461,43 @@ extension DefaultChatCollectionDataSource: SimpleLayoutEngineDelegate {
 
 extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
     func allIdentifiers() -> [Identifier] {
-        return sections.first?.cells ?? []
+        return sections.first?.cells.map({ $0.differenceIdentifier }) ?? []
     }
 
     func viewForIdentifier(_ identifier: Identifier) -> UIView {
-        switch identifier {
+        return createView(nil, with: identifier)
+    }
+
+    func payloadForIdentifier(_ identifier: Identifier) -> Payload {
+        var payload =  VoidPayload()
+//        if case .date = identifier {
+//            payload.isSticky = true
+//        } else {
+//            payload.isSticky = false
+//        }
+        return payload
+    }
+
+    func reconfigureView(_ view: UIView, with identifier: Identifier) {
+        createView(view, with: identifier)
+    }
+
+
+    @discardableResult
+    func createView(_ view: UIView?, with identifier: Identifier) -> UIView {
+        guard let cell = cellsDictionary[identifier] else {
+            fatalError("Internal inconsistency.")
+        }
+        switch cell {
         case let .message(message, bubbleType: bubbleType):
             switch message.data {
             case let .text(text):
-                let view = scrollView.dequeueReusableViewWithIdentifier(identifier) ?? TextMessageViewItem()
-                setupMessageContainerView(view, messageId: message.id, alignment: identifier.alignment)
-                setupMainMessageView(view.customView, user: message.owner, alignment: identifier.alignment, bubble: bubbleType, status: message.status)
+                let view = (view as? TextMessageViewItem) ?? scrollView.dequeueReusableViewWithIdentifier(identifier) ?? {
+                    print("NEW")
+                    return TextMessageViewItem()
+                }()
+                setupMessageContainerView(view, messageId: message.id, alignment: cell.alignment)
+                setupMainMessageView(view.customView, user: message.owner, alignment: cell.alignment, bubble: bubbleType, status: message.status)
 
                 setupSwipeHandlingAccessory(view.customView, date: message.date, accessoryConnectingView: view)
 
@@ -481,7 +514,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
                 fatalError()
             }
         case let .messageGroup(group):
-            let view = scrollView.dequeueReusableViewWithIdentifier(identifier) ?? UserTitleViewItem()
+            let view = (view as? UserTitleViewItem) ?? scrollView.dequeueReusableViewWithIdentifier(identifier) ?? UserTitleViewItem()
             view.spacing = 2
 
             view.customView.customView.text = group.title
@@ -512,7 +545,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
             view.layoutMargins = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
             return view
         case let .date(group):
-            let view = scrollView.dequeueReusableViewWithIdentifier(identifier) ?? TitleViewItem()
+            let view = (view as? TitleViewItem) ?? scrollView.dequeueReusableViewWithIdentifier(identifier) ?? TitleViewItem()
             view.preferredMaxLayoutWidth = scrollView.visibleRect.width
             view.text = group.value
             view.textAlignment = .center
@@ -522,25 +555,22 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
             view.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
             return view
         case .typingIndicator:
-            fatalError()
+            let view = (view as? TypingIndicatorItem) ?? scrollView.dequeueReusableViewWithIdentifier(identifier) ?? TypingIndicatorItem()
+            let alignment = ChatItemAlignment.leading
+            view.alignment = alignment
+            let bubbleView = view.customView.customView
+            let controller = TextMessageController(text: "Typing...",
+                    type: .incoming,
+                    bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: .incoming, bubbleType: .tailed))
+            bubbleView.customView.setup(with: controller)
+            controller.view = bubbleView.customView
+            view.accessoryView?.isHiddenSafe = true
+
+            return view
         }
-
     }
 
-    func payloadForIdentifier(_ identifier: Identifier) -> Payload {
-        var payload =  VoidPayload()
-//        if case .date = identifier {
-//            payload.isSticky = true
-//        } else {
-//            payload.isSticky = false
-//        }
-        return payload
-    }
-
-    func reconfigureView(_ view: UIView, with identifier: Identifier) {
-    }
-
-    typealias Identifier = Cell
+    typealias Identifier = Cell.Identifier
 
     typealias Payload = VoidPayload
 

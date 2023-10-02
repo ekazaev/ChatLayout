@@ -16,7 +16,7 @@ import Foundation
 import UIKit
 import RecyclerView
 
-extension RecyclerScrollView where Engine.Identifier == Cell {
+extension RecyclerScrollView where Engine.Identifier == Cell.Identifier {
 
     func reload(
             originalData: [Section],
@@ -59,25 +59,36 @@ extension RecyclerScrollView where Engine.Identifier == Cell {
                 return
             }
 
+            setData(changeset.data)
             print("I:\(changeset.elementInserted) D:\(changeset.elementDeleted) U:\(changeset.elementUpdated) M:\(changeset.elementMoved)")
             var modifications: [ModificationActions<Engine.Identifier>] = []
             changeset.elementDeleted.forEach({ indexPath in
-                modifications.append(.delete(originalData[indexPath.section].cells[indexPath.element]))
+                modifications.append(.delete(originalData[indexPath.section].cells[indexPath.element].differenceIdentifier))
             })
             changeset.elementInserted.forEach({ indexPath in
-                modifications.append(.insert(changeset.data[indexPath.section].cells[indexPath.element], at: indexPath.element))
+                modifications.append(.insert(changeset.data[indexPath.section].cells[indexPath.element].differenceIdentifier, at: indexPath.element))
             })
             changeset.elementUpdated.forEach({ indexPath in
-                modifications.append(.reload(originalData[indexPath.section].cells[indexPath.element], with: changeset.data[indexPath.section].cells[indexPath.element]))
+                let originalIdentifier = originalData[indexPath.section].cells[indexPath.element].differenceIdentifier
+                let newIdentifier = changeset.data[indexPath.section].cells[indexPath.element].differenceIdentifier
+                if originalIdentifier != newIdentifier {
+                    modifications.append(.reload(originalIdentifier, with: newIdentifier))
+                } else {
+                    modifications.append(.reconfigure(originalIdentifier))
+                }
             })
             changeset.elementMoved.forEach({ sourceIndexPath, targetIndexPath in
-                modifications.append(.reload(originalData[sourceIndexPath.section].cells[sourceIndexPath.element], with: changeset.data[targetIndexPath.section].cells[targetIndexPath.element]))
+                modifications.append(.move(originalData[sourceIndexPath.section].cells[sourceIndexPath.element].differenceIdentifier, to: targetIndexPath.element))
             })
             UIView.animate(withDuration: 0.25, animations: { [weak self] in
                 dispatchGroup?.enter()
-                self?.applyModifications(modifications)
+                guard let self else {
+                    return
+                }
+
+                self.applyModifications(modifications)
             }, completion: completionHandler)
-            setData(changeset.data)
+
             originalData = changeset.data
         }
 
@@ -90,11 +101,11 @@ extension RecyclerScrollView where Engine.Identifier == Cell {
 
 public extension UICollectionView {
     func reload<C>(
-        using stagedChangeset: StagedChangeset<C>,
-        interrupt: ((Changeset<C>) -> Bool)? = nil,
-        onInterruptedReload: (() -> Void)? = nil,
-        completion: ((Bool) -> Void)? = nil,
-        setData: (C) -> Void
+            using stagedChangeset: StagedChangeset<C>,
+            interrupt: ((Changeset<C>) -> Bool)? = nil,
+            onInterruptedReload: (() -> Void)? = nil,
+            completion: ((Bool) -> Void)? = nil,
+            setData: (C) -> Void
     ) {
         if case .none = window, let data = stagedChangeset.last?.data {
             setData(data)
@@ -108,13 +119,13 @@ public extension UICollectionView {
         }
 
         let dispatchGroup: DispatchGroup? = completion != nil
-            ? DispatchGroup()
-            : nil
+                ? DispatchGroup()
+                : nil
         let completionHandler: ((Bool) -> Void)? = completion != nil
-            ? { _ in
-                dispatchGroup!.leave()
-            }
-            : nil
+                ? { _ in
+            dispatchGroup!.leave()
+        }
+                : nil
 
         for changeset in stagedChangeset {
             if let interrupt, interrupt(changeset), let data = stagedChangeset.last?.data {
