@@ -87,8 +87,10 @@ extension RecyclerScrollView where Engine.Identifier == Cell.Identifier {
                 }
 
                 self.applyModifications(modifications)
-            }, completion: completionHandler)
-
+            }, completion: { b in
+                self.commitModifications()
+                completionHandler?(b)
+            })
             originalData = changeset.data
         }
 
