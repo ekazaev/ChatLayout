@@ -105,23 +105,23 @@ final class ChatViewController: UIViewController {
             view.backgroundColor = .white
         }
 
-//        let interposer = try? Interpose(UIStackView.self) {
-//            try $0.prepareHook(
-//                    #selector(UIStackView.setNeedsUpdateConstraints),
-//                    methodSignature: (@convention(c) (AnyObject, Selector) -> Void).self,
-//                    hookSignature: (@convention(block) (AnyObject) -> Void).self) {
-//                store in { `self` in
-//                    print("Before Interposing \(`self`) SUPER: \(self.superview)")
-//                    if self.superview is CellLayoutContainerView<AvatarView, BezierMaskedView<TextMessageView>, StatusView> {
-//                        print("TADA")
-//                    }
-//                    let string = store.original(`self`, store.selector) // free to skip
-//                    print("After Interposing \(`self`)")
-//                    return
-//                }
-//            }
-//        }
-//        strongReference.append(interposer)
+        let interposer = try? Interpose(CALayer.self) {
+            try $0.prepareHook(
+                    #selector(setter: CALayer.isHidden),
+                    methodSignature: (@convention(c) (AnyObject, Selector, Bool) -> Void).self,
+                    hookSignature: (@convention(block) (AnyObject, Bool) -> Void).self) {
+                store in { `self`, value in
+                    print("Before Interposing \(`self`) SUPER: \((self as? CALayer)?.delegate)")
+                    if "\((self as? CALayer)?.delegate)".contains("ContainerCollectionViewCell"), value == true {
+                        print("TADA")
+                    }
+                    let string = store.original(`self`, store.selector, value) // free to skip
+                    print("After Interposing \(`self`)")
+                    return
+                }
+            }
+        }
+        strongReference.append(interposer)
 
         inputBarView.delegate = self
 
