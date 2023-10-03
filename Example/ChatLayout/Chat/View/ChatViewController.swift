@@ -120,6 +120,7 @@ final class ChatViewController: UIViewController {
         scrollView.engine.enableOppositeAnchor = true
         scrollView.engine.settings.additionalInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         scrollView.engine.delegate = dataSource as? DefaultChatCollectionDataSource
+        scrollView.delegate = self
 
         fpsCounter.delegate = self
         fpsCounter.startTracking()
