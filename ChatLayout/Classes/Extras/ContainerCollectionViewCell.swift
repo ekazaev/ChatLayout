@@ -55,6 +55,19 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
         }
     }
 
+    public override var isHidden: Bool {
+        get {
+            super.isHidden
+        }
+        set {
+            let oldValue = super.isHidden
+            if newValue != super.isHidden {
+                print("isHidden changed: \(super.isHidden) -> \(newValue)")
+            }
+            super.isHidden = newValue
+        }
+    }
+
     /// Default reuse identifier is set with the class name.
     public static var reuseIdentifier: String {
         String(describing: self)
