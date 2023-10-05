@@ -363,42 +363,14 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     func scrollToBottom(completion: (() -> Void)? = nil) {
-//        // I ask content size from the layout because on IOs 12 collection view contains not updated one
-//        let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x,
-//                                            y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
-//
-//        guard contentOffsetAtBottom.y > collectionView.contentOffset.y else {
-//            completion?()
-//            return
-//        }
-//
-//        let initialOffset = collectionView.contentOffset.y
-//        let delta = contentOffsetAtBottom.y - initialOffset
-//        if abs(delta) > chatLayout.visibleBounds.height {
-//            // See: https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
-//            animator = ManualAnimator()
-//            animator?.animate(duration: TimeInterval(0.25), curve: .easeInOut) { [weak self] percentage in
-//                guard let self else {
-//                    return
-//                }
-//                collectionView.contentOffset = CGPoint(x: collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
-//                if percentage == 1.0 {
-//                    animator = nil
-//                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
-//                    chatLayout.restoreContentOffset(with: positionSnapshot)
-//                    currentInterfaceActions.options.remove(.scrollingToBottom)
-//                    completion?()
-//                }
-//            }
-//        } else {
-//            currentInterfaceActions.options.insert(.scrollingToBottom)
-//            UIView.animate(withDuration: 0.25, animations: { [weak self] in
-//                self?.collectionView.setContentOffset(contentOffsetAtBottom, animated: true)
-//            }, completion: { [weak self] _ in
-//                self?.currentInterfaceActions.options.remove(.scrollingToBottom)
-//                completion?()
-//            })
-//        }
+        guard let identifier = dataSource.sections.first?.cells.last?.differenceIdentifier else {
+            return
+        }
+        currentInterfaceActions.options.insert(.scrollingToBottom)
+        scrollView.scrollToPositionSnapshot(.init(identifier: identifier, edge: .bottom), animated: true, completion: { _ in
+            self.currentInterfaceActions.options.remove(.scrollingToBottom)
+            completion?()
+        })
     }
 }
 
