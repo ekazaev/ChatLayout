@@ -35,12 +35,12 @@ import UIKit
 /// `CollectionViewChatLayout.getContentOffsetSnapshot(...)`
 ///
 /// `CollectionViewChatLayout.restoreContentOffset(...)`
-public final class CollectionViewChatLayout: UICollectionViewLayout {
+open class CollectionViewChatLayout: UICollectionViewLayout {
 
     // MARK: Custom Properties
 
     /// `CollectionViewChatLayout` delegate.
-    public weak var delegate: ChatLayoutDelegate?
+    open weak var delegate: ChatLayoutDelegate?
 
     /// Additional settings for `CollectionViewChatLayout`.
     public var settings = ChatLayoutSettings() {
@@ -72,7 +72,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     public var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
 
     /// Represent the currently visible rectangle.
-    public var visibleBounds: CGRect {
+    open var visibleBounds: CGRect {
         guard let collectionView else {
             return .zero
         }
@@ -83,7 +83,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Represent the rectangle where all the items are aligned.
-    public var layoutFrame: CGRect {
+    open var layoutFrame: CGRect {
         guard let collectionView else {
             return .zero
         }
@@ -97,12 +97,12 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: Inherited Properties
 
     /// The direction of the language you used when designing `CollectionViewChatLayout` layout.
-    public override var developmentLayoutDirection: UIUserInterfaceLayoutDirection {
+    open override var developmentLayoutDirection: UIUserInterfaceLayoutDirection {
         .leftToRight
     }
 
     /// A Boolean value that indicates whether the horizontal coordinate system is automatically flipped at appropriate times.
-    public override var flipsHorizontallyInOppositeLayoutDirection: Bool {
+    open override var flipsHorizontallyInOppositeLayoutDirection: Bool {
         _flipsHorizontallyInOppositeLayoutDirection
     }
 
@@ -117,7 +117,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// The width and height of the collection view’s contents.
-    public override var collectionViewContentSize: CGSize {
+    open override var collectionViewContentSize: CGSize {
         let contentSize: CGSize
         if state == .beforeUpdate {
             contentSize = controller.contentSize(for: .beforeUpdate)
@@ -243,7 +243,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     /// Get current offset of the item closest to the provided edge.
     /// - Parameter edge: The edge of the `UICollectionView`
     /// - Returns: `ChatLayoutPositionSnapshot`
-    public func getContentOffsetSnapshot(from edge: ChatLayoutPositionSnapshot.Edge) -> ChatLayoutPositionSnapshot? {
+    open func getContentOffsetSnapshot(from edge: ChatLayoutPositionSnapshot.Edge) -> ChatLayoutPositionSnapshot? {
         guard let collectionView else {
             return nil
         }
@@ -281,7 +281,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Invalidates layout of the `UICollectionView` and trying to keep the offset of the item provided in `ChatLayoutPositionSnapshot`
     /// - Parameter snapshot: `ChatLayoutPositionSnapshot`
-    public func restoreContentOffset(with snapshot: ChatLayoutPositionSnapshot) {
+    open func restoreContentOffset(with snapshot: ChatLayoutPositionSnapshot) {
         guard let collectionView else {
             return
         }
@@ -307,14 +307,14 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     ///
     /// NB: Reconfigure items is not exposed to the layout, it may behave strange and if you experience something like
     /// this - move to the `UICollectionView.reloadItems(..)` as a safer option.
-    public func reconfigureItems(at indexPaths: [IndexPath]) {
+    open func reconfigureItems(at indexPaths: [IndexPath]) {
         reconfigureItemsIndexPaths = indexPaths
     }
 
     // MARK: Providing Layout Attributes
 
     /// Tells the layout object to update the current layout.
-    public override func prepare() {
+    open override func prepare() {
         super.prepare()
 
         guard let collectionView,
@@ -420,7 +420,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves the layout attributes for all of the cells and views in the specified rectangle.
-    public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    open override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // This early return prevents an issue that causes overlapping / misplaced elements after an
         // off-screen batch update occurs. The root cause of this issue is that `UICollectionView`
         // expects `layoutAttributesForElementsInRect:` to return post-batch-update layout attributes
@@ -452,7 +452,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves layout information for an item at the specified index path with a corresponding cell.
-    public override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         guard !dontReturnAttributes else {
             return nil
         }
@@ -462,8 +462,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves the layout attributes for the specified supplementary view.
-    public override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
-                                                              at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
+                                                            at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         guard !dontReturnAttributes else {
             return nil
         }
@@ -477,7 +477,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: Coordinating Animated Changes
 
     /// Prepares the layout object for animated changes to the view’s bounds or the insertion or deletion of items.
-    public override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
+    open override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
         controller.isAnimatedBoundsChange = true
         controller.process(changeItems: [])
         state = .afterUpdate
@@ -494,7 +494,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Cleans up after any animated changes to the view’s bounds or after the insertion or deletion of items.
-    public override func finalizeAnimatedBoundsChange() {
+    open override func finalizeAnimatedBoundsChange() {
         if controller.isAnimatedBoundsChange {
             state = .beforeUpdate
             resetInvalidatedAttributes()
@@ -509,8 +509,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: Context Invalidation
 
     /// Asks the layout object if changes to a self-sizing cell require a layout update.
-    public override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
-                                                withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
+    open override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
+                                              withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
         let preferredAttributesItemPath = preferredAttributes.indexPath.itemPath
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
               let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
@@ -523,8 +523,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves a context object that identifies the portions of the layout that should change in response to dynamic cell changes.
-    public override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
-                                             withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
+    open override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
+                                           withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes else {
             return super.invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
         }
@@ -601,7 +601,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Asks the layout object if the new bounds require a layout update.
-    public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) ||
             cachedCollectionViewInset != .some(adjustedContentInset) ||
             invalidationActions.contains(.shouldInvalidateOnBoundsChange)
@@ -611,14 +611,14 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.
-    public override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
+    open override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext
         invalidationContext.invalidateLayoutMetrics = false
         return invalidationContext
     }
 
     /// Invalidates the current layout using the information in the provided context object.
-    public override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+    open override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
         guard let collectionView else {
             super.invalidateLayout(with: context)
             return
@@ -672,12 +672,12 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Invalidates the current layout and triggers a layout update.
-    public override func invalidateLayout() {
+    open override func invalidateLayout() {
         super.invalidateLayout()
     }
 
     /// Retrieves the content offset to use after an animated layout update or change.
-    public override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+    open override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
         if controller.proposedCompensatingOffset != 0,
            let collectionView {
             let minPossibleContentOffset = -collectionView.adjustedContentInset.top
@@ -698,7 +698,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: Responding to Collection View Updates
 
     /// Notifies the layout object that the contents of the collection view are about to change.
-    public override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+    open override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
         controller.process(changeItems: changeItems)
@@ -725,7 +725,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Performs any additional animations or clean up needed during a collection view update.
-    public override func finalizeCollectionViewUpdates() {
+    open override func finalizeCollectionViewUpdates() {
         controller.proposedCompensatingOffset = 0
 
         if keepContentOffsetAtBottomOnBatchUpdates,
@@ -755,7 +755,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: - Cell Appearance Animation
 
     /// Retrieves the starting layout information for an item being inserted into the collection view.
-    public override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let itemPath = itemIndexPath.itemPath
@@ -792,7 +792,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves the final layout information for an item that is about to be removed from the collection view.
-    public override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let itemPath = itemIndexPath.itemPath
@@ -843,8 +843,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: - Supplementary View Appearance Animation
 
     /// Retrieves the starting layout information for a supplementary view being inserted into the collection view.
-    public override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String,
-                                                                                 at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String,
+                                                                               at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let kind = ItemKind(elementKind)
@@ -883,8 +883,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves the final layout information for a supplementary view that is about to be removed from the collection view.
-    public override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String,
-                                                                                  at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String,
+                                                                                at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let kind = ItemKind(elementKind)
