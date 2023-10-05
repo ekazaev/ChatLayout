@@ -34,6 +34,9 @@ enum ChangeItem: Equatable {
     /// Reload item at `itemIndexPath`
     case itemReload(itemIndexPath: IndexPath)
 
+    /// Reconfigure item at `itemIndexPath`
+    case itemReconfigure(itemIndexPath: IndexPath)
+
     /// Move section from `initialSectionIndex` to `finalSectionIndex`
     case sectionMove(initialSectionIndex: Int, finalSectionIndex: Int)
 
@@ -102,18 +105,20 @@ enum ChangeItem: Equatable {
             return 0
         case .itemReload:
             return 1
-        case .sectionDelete:
+        case .itemReconfigure:
             return 2
-        case .itemDelete:
+        case .sectionDelete:
             return 3
-        case .sectionInsert:
+        case .itemDelete:
             return 4
-        case .itemInsert:
+        case .sectionInsert:
             return 5
-        case .sectionMove:
+        case .itemInsert:
             return 6
-        case .itemMove:
+        case .sectionMove:
             return 7
+        case .itemMove:
+            return 8
         }
     }
 
@@ -134,6 +139,8 @@ extension ChangeItem: Comparable {
         case let (.sectionReload(sectionIndex: lIndex), .sectionReload(sectionIndex: rIndex)):
             return lIndex < rIndex
         case let (.itemReload(itemIndexPath: lIndexPath), .itemReload(itemIndexPath: rIndexPath)):
+            return lIndexPath < rIndexPath
+        case let (.itemReconfigure(itemIndexPath: lIndexPath), .itemReconfigure(itemIndexPath: rIndexPath)):
             return lIndexPath < rIndexPath
         case let (.sectionMove(initialSectionIndex: lInitialSectionIndex, finalSectionIndex: lFinalSectionIndex),
                   .sectionMove(initialSectionIndex: rInitialSectionIndex, finalSectionIndex: rFinalSectionIndex)):

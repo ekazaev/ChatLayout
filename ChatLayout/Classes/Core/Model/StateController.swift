@@ -89,6 +89,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
     private(set) var reloadedIndexes: Set<IndexPath> = []
 
+    private(set) var reconfiguredIndexes: Set<IndexPath> = []
+
     private(set) var insertedIndexes: Set<IndexPath> = []
 
     private(set) var movedIndexes: Set<IndexPath> = []
@@ -238,6 +240,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             attributes.indexPath = itemIndexPath
             attributes.zIndex = 10
             attributes.alignment = item.alignment
+            attributes.interItemSpacing = item.interItemSpacing
         case .footer:
             guard itemPath.section < layout.sections.count,
                   itemPath.item == 0 else {
@@ -265,6 +268,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             attributes.indexPath = itemIndexPath
             attributes.zIndex = 10
             attributes.alignment = item.alignment
+            attributes.interItemSpacing = item.interItemSpacing
         case .cell:
             guard itemPath.section < layout.sections.count,
                   itemPath.item < layout.sections[itemPath.section].items.count else {
@@ -292,6 +296,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             attributes.indexPath = itemIndexPath
             attributes.zIndex = 0
             attributes.alignment = item.alignment
+            attributes.interItemSpacing = item.interItemSpacing
         }
         attributes.viewSize = additionalAttributes.viewSize
         attributes.adjustedContentInsets = additionalAttributes.adjustedContentInsets
@@ -489,6 +494,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     func process(changeItems: [ChangeItem]) {
         func applyConfiguration(_ configuration: ItemModel.Configuration, to item: inout ItemModel) {
             item.alignment = configuration.alignment
+            item.interItemSpacing = configuration.interItemSpacing
             if let calculatedSize = configuration.calculatedSize {
                 item.calculatedSize = calculatedSize
                 item.calculatedOnce = true
@@ -600,6 +606,15 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 applyConfiguration(configuration, to: &item)
                 afterUpdateModel.replaceItem(item, at: indexPath)
                 reloadedIndexes.insert(indexPath)
+            case let .itemReconfigure(itemIndexPath: indexPath):
+                guard var item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
+                    assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
+                    return
+                }
+                let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath)
+                applyConfiguration(configuration, to: &item)
+                afterUpdateModel.replaceItem(item, at: indexPath)
+                reconfiguredIndexes.insert(indexPath)
             case let .sectionMove(initialSectionIndex: initialSectionIndex, finalSectionIndex: finalSectionIndex):
                 let section = layoutBeforeUpdate.sections[initialSectionIndex]
                 movedSectionsIndexes.insert(finalSectionIndex)
@@ -671,6 +686,22 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                                                           newSpacing: newItem.interItemSpacing),
                                      visibleBounds: visibleBounds)
         }
+        reconfiguredIndexes.sorted(by: { $0 < $1 }).forEach {
+            let newItemPath = $0.itemPath
+            guard let oldItem = item(for: newItemPath, kind: .cell, at: .beforeUpdate),
+                  let newItemIndexPath = itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
+                  let newItem = item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
+                assertionFailure("Internal inconsistency.")
+                return
+            }
+            compensateOffsetIfNeeded(for: newItemPath,
+                                     kind: .cell,
+                                     action: .frameUpdate(previousFrame: oldItem.frame,
+                                                          newFrame: newItem.frame,
+                                                          previousSpacing: oldItem.interItemSpacing,
+                                                          newSpacing: newItem.interItemSpacing),
+                                     visibleBounds: visibleBounds)
+        }
         insertedIndexes.sorted(by: { $0 < $1 }).forEach {
             let itemPath = $0.itemPath
             guard let item = item(for: itemPath, kind: .cell, at: .afterUpdate) else {
@@ -702,6 +733,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         insertedSectionsIndexes = []
 
         reloadedIndexes = []
+        reconfiguredIndexes = []
         reloadedSectionsIndexes = []
 
         movedIndexes = []

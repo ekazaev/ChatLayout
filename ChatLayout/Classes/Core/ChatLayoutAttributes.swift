@@ -19,6 +19,9 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var alignment: ChatItemAlignment = .fullWidth
 
+    /// Inter item spacing. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
+    public var interItemSpacing: CGFloat = 0
+
     /// `CollectionViewChatLayout`s additional insets setup using `ChatLayoutSettings`. Added for convenience.
     public internal(set) var additionalInsets: UIEdgeInsets = .zero
 
@@ -54,6 +57,7 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         let copy = super.copy(with: zone) as! ChatLayoutAttributes
         copy.viewSize = viewSize
         copy.alignment = alignment
+        copy.interItemSpacing = interItemSpacing
         copy.layoutFrame = layoutFrame
         copy.additionalInsets = additionalInsets
         copy.visibleBoundsSize = visibleBoundsSize
@@ -66,7 +70,9 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
 
     /// Returns a Boolean value indicating whether two `ChatLayoutAttributes` are considered equal.
     public override func isEqual(_ object: Any?) -> Bool {
-        super.isEqual(object) && alignment == (object as? ChatLayoutAttributes)?.alignment
+        super.isEqual(object)
+            && alignment == (object as? ChatLayoutAttributes)?.alignment
+            && interItemSpacing == (object as? ChatLayoutAttributes)?.interItemSpacing
     }
 
     /// `ItemKind` represented by this attributes object.

@@ -304,6 +304,9 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// If you want to use new `UICollectionView.reconfigureItems(..)` api and expect the reconfiguration to happen animated as well
     /// - you must call this method next to the `UICollectionView` one. `UIKit` in its classic way uses private API to process it.
+    ///
+    /// NB: Reconfigure items is not exposed to the layout, it may behave strange and if you experience something like
+    /// this - move to the `UICollectionView.reloadItems(..)` as a safer option.
     public func reconfigureItems(at indexPaths: [IndexPath]) {
         reconfigureItemsIndexPaths = indexPaths
     }
@@ -514,7 +517,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
             return true
         }
 
-        let shouldInvalidateLayout = item.calculatedSize == nil || item.alignment != preferredMessageAttributes.alignment
+        let shouldInvalidateLayout = item.calculatedSize == nil || item.alignment != preferredMessageAttributes.alignment || item.interItemSpacing != preferredMessageAttributes.interItemSpacing
 
         return shouldInvalidateLayout
     }
@@ -535,12 +538,14 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         let layoutAttributesForPendingAnimation = attributesForPendingAnimations[preferredMessageAttributes.kind]?[preferredAttributesItemPath]
 
         let newItemSize = itemSize(with: preferredMessageAttributes)
-        let newInterItemSpacing = interItemSpacing(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
+        let newInterItemSpacing: CGFloat
         let newItemAlignment: ChatItemAlignment
-        if controller.reloadedIndexes.contains(preferredMessageAttributes.indexPath) || reconfigureItemsIndexPaths.contains(preferredMessageAttributes.indexPath) {
+        if controller.reloadedIndexes.contains(preferredMessageAttributes.indexPath) || controller.reconfiguredIndexes.contains(preferredMessageAttributes.indexPath) {
             newItemAlignment = alignment(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
+            newInterItemSpacing = interItemSpacing(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
         } else {
             newItemAlignment = preferredMessageAttributes.alignment
+            newInterItemSpacing = preferredMessageAttributes.interItemSpacing
         }
         controller.update(preferredSize: newItemSize,
                           alignment: newItemAlignment,
@@ -694,7 +699,8 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Notifies the layout object that the contents of the collection view are about to change.
     public override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
-        let changeItems = updateItems.compactMap { ChangeItem(with: $0) }
+        var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
+        changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
         controller.process(changeItems: changeItems)
         state = .afterUpdate
         dontReturnAttributes = false
@@ -743,7 +749,6 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         prepareActions.formUnion(.switchStates)
-
         super.finalizeCollectionViewUpdates()
     }
 
@@ -771,7 +776,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 attributes?.indexPath = itemIndexPath
                 if #unavailable(iOS 13.0) {
-                    if controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
+                    if controller.reloadedIndexes.contains(itemIndexPath) || controller.reconfiguredIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
                         // It is needed to position the new cell in the middle of the old cell on ios 12
                         attributesForPendingAnimations[.cell]?[itemPath] = attributes
                     }
@@ -810,7 +815,7 @@ public final class CollectionViewChatLayout: UICollectionViewLayout {
             } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, kind: .cell, at: .beforeUpdate),
                       let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .afterUpdate) {
                 if controller.movedIndexes.contains(itemIndexPath) || controller.movedSectionsIndexes.contains(itemPath.section) ||
-                    controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
+                    controller.reloadedIndexes.contains(itemIndexPath) || controller.reconfiguredIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
                     attributes = controller.itemAttributes(for: finalIndexPath, kind: .cell, at: .afterUpdate)?.typedCopy()
                 } else {
                     attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)?.typedCopy()
