@@ -426,12 +426,19 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     }
 
     public func interItemSpacing(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, after indexPath: IndexPath) -> CGFloat? {
+        return nil
         let item = sections[indexPath.section].cells[indexPath.item]
+//        if case let .message(_, b) = item,
+//           b == .tailed {
+//            print("Return 0 for \(indexPath.item)")
+//            return 0
+//        }
         switch item {
         case .messageGroup:
             return 3
         default:
-            return nil
+            print("Return 50 for \(indexPath.item)")
+            return 150
         }
     }
 

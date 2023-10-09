@@ -95,7 +95,7 @@ final class DefaultChatController: ChatController {
                         result.append(section)
                         return
                     }
-                    if Calendar.current.isDate(prevMessage.date, equalTo: message.date, toGranularity: .hour) {
+                    if Calendar.current.isDate(prevMessage.date, equalTo: message.date, toGranularity: .minute) {
                         section.append(message)
                         result[result.count - 1] = section
                     } else {
@@ -113,6 +113,7 @@ final class DefaultChatController: ChatController {
                     } else {
                         bubble = .tailed
                     }
+//                    let bubble: Cell.BubbleType = .tailed
                     guard message.type != .outgoing else {
                         lastMessageStorage = message
                         return [.message(message, bubbleType: bubble)]
@@ -304,7 +305,10 @@ extension DefaultChatController: ReloadDelegate {
 extension DefaultChatController: EditingAccessoryControllerDelegate {
 
     func deleteMessage(with id: UUID) {
-        messages = Array(messages.filter { $0.id != id })
+        let message = messages.first(where: { $0.id == id })!
+        messages = Array(messages.shuffled().filter { $0.id != id })
+        messages.append(message)
+
         repopulateMessages(requiresIsolatedProcess: true)
     }
 

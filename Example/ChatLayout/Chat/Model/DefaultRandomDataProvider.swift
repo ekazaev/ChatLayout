@@ -59,11 +59,11 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let dispatchQueue = DispatchQueue.global(qos: .userInteractive)
 
-    private let enableTyping = true
+    private let enableTyping = false
 
-    private let enableNewMessages = true
+    private let enableNewMessages = false
 
-    private let enableRichContent = true
+    private let enableRichContent = false
 
     private let websiteUrls: [URL] = [
         URL(string: "https://messagekit.github.io")!,
@@ -89,7 +89,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     private let images: [UIImage] = (1...8).compactMap { UIImage(named: "demo\($0)") }
 
     private var allUsersIds: [Int] {
-        Array([users, [receiverId]].joined())
+        Array([users].joined())
     }
 
     init(receiverId: Int, usersIds: [Int]) {
@@ -104,7 +104,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
             guard let self else {
                 return
             }
-            let messages = createBunchOfMessages(number: 50)
+            let messages = createBunchOfMessages(number: 20)
             if messages.count > 10 {
                 lastReceivedUUID = messages[messages.count - 10].id
             }

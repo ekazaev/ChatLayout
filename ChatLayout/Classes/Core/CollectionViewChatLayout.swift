@@ -540,13 +540,16 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let newItemSize = itemSize(with: preferredMessageAttributes)
         let newInterItemSpacing: CGFloat
         let newItemAlignment: ChatItemAlignment
-        if controller.reloadedIndexes.contains(preferredMessageAttributes.indexPath) || controller.reconfiguredIndexes.contains(preferredMessageAttributes.indexPath) {
+//        if controller.reloadedIndexes.contains(preferredMessageAttributes.indexPath) || controller.reconfiguredIndexes.contains(preferredMessageAttributes.indexPath),
+//           controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) || controller.insertedSectionsIndexes.contains(preferredMessageAttributes.indexPath.section) {
             newItemAlignment = alignment(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
             newInterItemSpacing = interItemSpacing(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
-        } else {
-            newItemAlignment = preferredMessageAttributes.alignment
-            newInterItemSpacing = preferredMessageAttributes.interItemSpacing
-        }
+            print("A: \(preferredMessageAttributes.indexPath.item) \(newItemAlignment) - \(newInterItemSpacing)")
+//        } else {
+//            newItemAlignment = preferredMessageAttributes.alignment
+//            newInterItemSpacing = preferredMessageAttributes.interItemSpacing
+//            print("b: \(preferredMessageAttributes.indexPath.item) \(newItemAlignment) - \(newInterItemSpacing)")
+//        }
         controller.update(preferredSize: newItemSize,
                           alignment: newItemAlignment,
                           interItemSpacing: newInterItemSpacing,
@@ -697,8 +700,55 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     // MARK: Responding to Collection View Updates
 
+    private class MockUICollectionViewUpdateItem: UICollectionViewUpdateItem {
+
+        // swiftlint:disable identifier_name
+        var _indexPathBeforeUpdate: IndexPath?
+        var _indexPathAfterUpdate: IndexPath?
+        var _updateAction: Action
+        // swiftlint:enable identifier_name
+
+        init(indexPathBeforeUpdate: IndexPath?, indexPathAfterUpdate: IndexPath?, action: Action) {
+            _indexPathBeforeUpdate = indexPathBeforeUpdate
+            _indexPathAfterUpdate = indexPathAfterUpdate
+            _updateAction = action
+            super.init()
+        }
+
+        override var indexPathBeforeUpdate: IndexPath? {
+            _indexPathBeforeUpdate
+        }
+
+        override var indexPathAfterUpdate: IndexPath? {
+            _indexPathAfterUpdate
+        }
+
+        override var updateAction: Action {
+            _updateAction
+        }
+
+    }
+
     /// Notifies the layout object that the contents of the collection view are about to change.
     open override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+        print("\(updateItems)")
+        let updateItems = updateItems.reduce(into: [UICollectionViewUpdateItem](), { result, item in
+            switch item.updateAction {
+            case .delete:
+                result.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: item.indexPathBeforeUpdate, indexPathAfterUpdate: item.indexPathAfterUpdate, action: .delete))
+            case .insert:
+                result.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: item.indexPathBeforeUpdate, indexPathAfterUpdate: item.indexPathAfterUpdate, action: .insert))
+            case .reload:
+                result.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: item.indexPathBeforeUpdate, indexPathAfterUpdate: item.indexPathAfterUpdate, action: .reload))
+            case .move:
+                result.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: item.indexPathBeforeUpdate, indexPathAfterUpdate: nil, action: .delete))
+                result.append(MockUICollectionViewUpdateItem(indexPathBeforeUpdate: nil, indexPathAfterUpdate: item.indexPathAfterUpdate, action: .insert))
+            case .none:
+                break
+            @unknown default:
+                break
+            }
+        })
         var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
         controller.process(changeItems: changeItems)
@@ -1057,5 +1107,33 @@ extension CollectionViewChatLayout {
         }
         return collectionView.isDragging || collectionView.isDecelerating
     }
+
+}
+
+extension UICollectionViewUpdateItem: Comparable {
+    public static func <(lhs: UICollectionViewUpdateItem, rhs: UICollectionViewUpdateItem) -> Bool {
+        switch (lhs.updateAction, rhs.updateAction) {
+        case (.delete, .delete):
+            if let lIndexPathBeforeUpdate = lhs.indexPathBeforeUpdate,
+               let rIndexPathBeforeUpdate = rhs.indexPathBeforeUpdate {
+                if lIndexPathBeforeUpdate.item == NSNotFound, rIndexPathBeforeUpdate.item == NSNotFound {
+                    return lIndexPathBeforeUpdate.section > rIndexPathBeforeUpdate.section
+                } else {
+                    return lIndexPathBeforeUpdate > rIndexPathBeforeUpdate
+                }
+            }
+        default:
+            if let lIndexPathBeforeUpdate = lhs.indexPathBeforeUpdate,
+               let rIndexPathBeforeUpdate = rhs.indexPathBeforeUpdate {
+                if lIndexPathBeforeUpdate.item == NSNotFound, rIndexPathBeforeUpdate.item == NSNotFound {
+                    return lIndexPathBeforeUpdate.section < rIndexPathBeforeUpdate.section
+                } else {
+                    return lIndexPathBeforeUpdate < rIndexPathBeforeUpdate
+                }
+            }
+        }
+        return (lhs.indexPathBeforeUpdate ?? IndexPath(item: 0, section: 0)) < (rhs.indexPathBeforeUpdate ?? IndexPath(item: 0, section: 0))
+    }
+
 
 }

@@ -455,6 +455,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         let previousFrame = item.frame
         let previousInterItemSpacing = item.interItemSpacing
         cachedAttributesState = nil
+        if item.alignment != alignment {
+            print("ALIGNMENT CHANGE: \(item.id) \(item.alignment) -> \(alignment) ")
+        }
         item.alignment = alignment
         item.calculatedSize = preferredSize
         item.calculatedOnce = true
@@ -502,10 +505,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 item.resetSize()
             }
         }
+        let changeItems = changeItems.sorted()
+        print("BEFORE MODIFICATION \(changeItems.map({ "\(String(describing: $0))" })):")
+        if layout(at: .beforeUpdate).sections.count > 0 {
+            print("\(section(at: 0, at: .beforeUpdate).items.enumerated().map({ "\($0.offset): \($0.element.id) \($0.element.alignment) \($0.element.interItemSpacing)\n" }).joined())")
+        }
 
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
-        let changeItems = changeItems.sorted()
 
         var afterUpdateModel = LayoutModel(sections: layoutBeforeUpdate.sections,
                                            collectionLayout: layoutRepresentation)
@@ -542,6 +549,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             case let .itemInsert(itemIndexPath: indexPath):
                 let item = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: indexPath))
                 insertedIndexes.insert(indexPath)
+                print("INSERTED \(indexPath.item): \(item.id) \(item.alignment) \(item.interItemSpacing)\n")
                 afterUpdateModel.insertItem(item, at: indexPath)
             case let .sectionDelete(sectionIndex: sectionIndex):
                 let section = layoutBeforeUpdate.sections[sectionIndex]
@@ -549,7 +557,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 afterUpdateModel.removeSection(by: section.id)
             case let .itemDelete(itemIndexPath: indexPath):
                 let itemId = itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate)!
+                let item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate)!
                 afterUpdateModel.removeItem(by: itemId)
+                print("DELETED \(indexPath.item): \(item.id) \(item.alignment) \(item.interItemSpacing)\n")
                 deletedIndexes.insert(indexPath)
             case let .sectionReload(sectionIndex: sectionIndex):
                 reloadedSectionsIndexes.insert(sectionIndex)
@@ -603,6 +613,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                     return
                 }
                 let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath)
+                print("RELOADED \(indexPath.item): \(item.id) \(item.alignment) \(item.interItemSpacing)\n")
                 applyConfiguration(configuration, to: &item)
                 afterUpdateModel.replaceItem(item, at: indexPath)
                 reloadedIndexes.insert(indexPath)
@@ -623,11 +634,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             case let .itemMove(initialItemIndexPath: initialItemIndexPath, finalItemIndexPath: finalItemIndexPath):
                 let itemId = itemIdentifier(for: initialItemIndexPath.itemPath, kind: .cell, at: .beforeUpdate)!
                 let item = layoutBeforeUpdate.sections[initialItemIndexPath.section].items[initialItemIndexPath.item]
+                print("MOVED \(initialItemIndexPath.item) -> \(finalItemIndexPath.item): \(item.id) \(item.alignment) \(item.interItemSpacing)\n")
                 movedIndexes.insert(initialItemIndexPath)
-                afterUpdateModel.removeItem(by: itemId)
+                let itemId1 = afterUpdateModel.sections[initialItemIndexPath.section].items[initialItemIndexPath.item].id // itemIdentifier(for: initialItemIndexPath.itemPath, kind: .cell, at: .beforeUpdate)!
+                afterUpdateModel.removeItem(by: item.id)
                 afterUpdateModel.insertItem(item, at: finalItemIndexPath)
             }
         }
+
 
         var afterUpdateModelSections = afterUpdateModel.sections
         afterUpdateModelSections.withUnsafeMutableBufferPointer { directlyMutableSections in
@@ -640,13 +654,36 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         layoutAfterUpdate = afterUpdateModel
 
+        print("AFTER MODIFICATION \(changeItems.map({ "\(String(describing: $0))" })):")
+        if layout(at: .afterUpdate).sections.count > 0 {
+            print("\(section(at: 0, at: .afterUpdate).items.enumerated().map({ "\($0.offset): \($0.element.id) \($0.element.alignment) \($0.element.interItemSpacing)\n" }).joined())")
+        }
+
         let visibleBounds = layoutRepresentation.visibleBounds
+
+        func isLastSectionInLayout(_ index: Int, at state: ModelState) -> Bool {
+            let layout = layout(at: state)
+            guard index < layout.sections.count - 1 else {
+                return false
+            }
+            return true
+        }
+
+        func isLastItemInSection(_ itemPath: ItemPath, at state: ModelState) -> Bool {
+            let layout = layout(at: state)
+            guard itemPath.section < layout.sections.count,
+                  itemPath.item < layout.sections[itemPath.section].items.count - 1 else {
+                // This occurs when getting layout attributes for initial / final animations
+                return false
+            }
+            return true
+        }
 
         // Calculating potential content offset changes after the updates
         insertedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
             let section = section(at: $0, at: .afterUpdate)
             compensateOffsetOfSectionIfNeeded(for: $0,
-                                              action: .insert(spacing: section.interSectionSpacing),
+                                              action: .insert(spacing: isLastSectionInLayout($0, at: .afterUpdate) ? 0 : section.interSectionSpacing),
                                               visibleBounds: visibleBounds)
         }
         reloadedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
@@ -659,14 +696,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             compensateOffsetOfSectionIfNeeded(for: $0,
                                               action: .frameUpdate(previousFrame: oldSection.frame,
                                                                    newFrame: newSection.frame,
-                                                                   previousSpacing: oldSection.interSectionSpacing,
-                                                                   newSpacing: newSection.interSectionSpacing),
+                                                                   previousSpacing: isLastSectionInLayout($0, at: .beforeUpdate) ? 0 : oldSection.interSectionSpacing,
+                                                                   newSpacing: isLastSectionInLayout(newSectionIndex, at: .afterUpdate) ? 0 : newSection.interSectionSpacing),
                                               visibleBounds: visibleBounds)
         }
         deletedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
             let section = section(at: $0, at: .beforeUpdate)
             compensateOffsetOfSectionIfNeeded(for: $0,
-                                              action: .delete(spacing: section.interSectionSpacing),
+                                              action: .delete(spacing: isLastSectionInLayout($0, at: .beforeUpdate) ? 0 : section.interSectionSpacing),
                                               visibleBounds: visibleBounds)
         }
 
@@ -682,8 +719,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                                      kind: .cell,
                                      action: .frameUpdate(previousFrame: oldItem.frame,
                                                           newFrame: newItem.frame,
-                                                          previousSpacing: oldItem.interItemSpacing,
-                                                          newSpacing: newItem.interItemSpacing),
+                                                          previousSpacing: isLastItemInSection(newItemPath, at: .beforeUpdate) ? 0 : oldItem.interItemSpacing,
+                                                          newSpacing: isLastItemInSection(newItemIndexPath, at: .afterUpdate) ? 0 : newItem.interItemSpacing),
                                      visibleBounds: visibleBounds)
         }
         reconfiguredIndexes.sorted(by: { $0 < $1 }).forEach {
@@ -698,8 +735,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                                      kind: .cell,
                                      action: .frameUpdate(previousFrame: oldItem.frame,
                                                           newFrame: newItem.frame,
-                                                          previousSpacing: oldItem.interItemSpacing,
-                                                          newSpacing: newItem.interItemSpacing),
+                                                          previousSpacing: isLastItemInSection(newItemPath, at: .beforeUpdate) ? 0 : oldItem.interItemSpacing,
+                                                          newSpacing: isLastItemInSection(newItemIndexPath, at: .afterUpdate) ? 0 : newItem.interItemSpacing),
                                      visibleBounds: visibleBounds)
         }
         insertedIndexes.sorted(by: { $0 < $1 }).forEach {
@@ -710,7 +747,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
             compensateOffsetIfNeeded(for: itemPath,
                                      kind: .cell,
-                                     action: .insert(spacing: item.interItemSpacing),
+                                     action: .insert(spacing: isLastItemInSection(itemPath, at: .afterUpdate) ? 0 : item.interItemSpacing),
                                      visibleBounds: visibleBounds)
         }
         deletedIndexes.sorted(by: { $0 < $1 }).forEach {
@@ -721,7 +758,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
             compensateOffsetIfNeeded(for: itemPath,
                                      kind: .cell,
-                                     action: .delete(spacing: item.interItemSpacing),
+                                     action: .delete(spacing: isLastItemInSection(itemPath, at: .beforeUpdate) ? 0 : item.interItemSpacing),
                                      visibleBounds: visibleBounds)
         }
 
@@ -729,6 +766,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     }
 
     func commitUpdates() {
+//        print("BEFORE:")
+//        if layout(at: .beforeUpdate).sections.count > 0 {
+//            print("\(section(at: 0, at: .beforeUpdate).items.enumerated().map({ "\($0.offset): \($0.element.alignment) \($0.element.interItemSpacing) \($0.element.frame)\n" }).joined())")
+//        }
+//        print("AFTER:")
+//        if layout(at: .afterUpdate).sections.count > 0 {
+//            print("\(section(at: 0, at: .afterUpdate).items.enumerated().map({ "\($0.offset): \($0.element.alignment) \($0.element.interItemSpacing) \($0.element.frame)\n" }).joined())")
+//        }
         insertedIndexes = []
         insertedSectionsIndexes = []
 

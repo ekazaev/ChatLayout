@@ -122,6 +122,28 @@ enum ChangeItem: Equatable {
         }
     }
 
+    var indexPathBeforeUpdate: IndexPath {
+        switch self {
+        case let .sectionReload(sectionIndex):
+            return IndexPath(item: NSNotFound, section: sectionIndex)
+        case let .itemReload(itemIndexPath: indexPath):
+            return indexPath
+        case let .itemReconfigure(itemIndexPath: indexPath):
+            return indexPath
+        case let .sectionDelete(sectionIndex):
+            return IndexPath(item: NSNotFound, section: sectionIndex)
+        case let .itemDelete(itemIndexPath: indexPath):
+            return indexPath
+        case let .sectionInsert(sectionIndex):
+            return IndexPath(item: NSNotFound, section: sectionIndex)
+        case let .itemInsert(itemIndexPath: indexPath):
+            return indexPath
+        case let .sectionMove(sectionIndex, _):
+            return IndexPath(item: NSNotFound, section: sectionIndex)
+        case let .itemMove(_, indexPath):
+            return indexPath
+        }
+    }
 }
 
 extension ChangeItem: Comparable {
@@ -129,9 +151,9 @@ extension ChangeItem: Comparable {
     static func < (lhs: ChangeItem, rhs: ChangeItem) -> Bool {
         switch (lhs, rhs) {
         case let (.sectionDelete(sectionIndex: lIndex), .sectionDelete(sectionIndex: rIndex)):
-            return lIndex < rIndex
+            return lIndex > rIndex
         case let (.itemDelete(itemIndexPath: lIndexPath), .itemDelete(itemIndexPath: rIndexPath)):
-            return lIndexPath < rIndexPath
+            return lIndexPath > rIndexPath
         case let (.sectionInsert(sectionIndex: lIndex), .sectionInsert(sectionIndex: rIndex)):
             return lIndex < rIndex
         case let (.itemInsert(itemIndexPath: lIndexPath), .itemInsert(itemIndexPath: rIndexPath)):
