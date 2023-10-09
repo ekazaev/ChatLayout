@@ -291,8 +291,7 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     private func loadPreviousMessages() {
-        return
-//        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
+        //        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
 //        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
 //        currentControllerActions.options.insert(.loadingPreviousMessages)
 //        chatController.loadPreviousMessages { [weak self] sections in
@@ -509,11 +508,11 @@ extension ChatViewController: ChatControllerDelegate {
                                   setData: { data in
                                       if let section = dataSource.sections.first {
                                           print("Before")
-                                          print("\(section.cells.enumerated().map({ "\($0.offset): \(String(describing: $0.element))\n" }).joined()))")
+                                          print("\(section.cells.enumerated().map { "\($0.offset): \(String(describing: $0.element))\n" }.joined()))")
                                       }
                                       if let section = data.first {
                                           print("After")
-                                          print("\(section.cells.enumerated().map({ "\($0.offset): \(String(describing: $0.element))\n" }).joined()))")
+                                          print("\(section.cells.enumerated().map { "\($0.offset): \(String(describing: $0.element))\n" }.joined()))")
                                       }
                                       self.dataSource.sections = data
                                   })
