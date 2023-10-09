@@ -458,6 +458,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         if item.alignment != alignment {
             print("ALIGNMENT CHANGE: \(item.id) \(item.alignment) -> \(alignment) ")
         }
+        if previousFrame.size != preferredSize {
+            print("SIZE CHANGE: \(item.id) \(previousFrame.size) -> \(preferredSize) ")
+        }
         item.alignment = alignment
         item.calculatedSize = preferredSize
         item.calculatedOnce = true
