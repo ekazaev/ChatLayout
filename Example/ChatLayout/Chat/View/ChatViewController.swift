@@ -121,7 +121,7 @@ final class ChatViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Show Keyboard", style: .plain, target: self, action: #selector(ChatViewController.showHideKeyboard))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
 
-        chatLayout.settings.interItemSpacing = 8
+        chatLayout.settings.interItemSpacing = 20
         chatLayout.settings.interSectionSpacing = 8
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
@@ -291,19 +291,19 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     private func loadPreviousMessages() {
-        //        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
-//        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
-//        currentControllerActions.options.insert(.loadingPreviousMessages)
-//        chatController.loadPreviousMessages { [weak self] sections in
-//            guard let self else {
-//                return
-//            }
-//            // Reloading the content without animation just because it looks better is the scrolling is in process.
-//            let animated = !isUserInitiatedScrolling
-//            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
-//                self.currentControllerActions.options.remove(.loadingPreviousMessages)
-//            }
-//        }
+        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
+        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
+        currentControllerActions.options.insert(.loadingPreviousMessages)
+        chatController.loadPreviousMessages { [weak self] sections in
+            guard let self else {
+                return
+            }
+            // Reloading the content without animation just because it looks better is the scrolling is in process.
+            let animated = !isUserInitiatedScrolling
+            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
+                self.currentControllerActions.options.remove(.loadingPreviousMessages)
+            }
+        }
     }
 
     fileprivate var isUserInitiatedScrolling: Bool {
@@ -490,7 +490,7 @@ extension ChatViewController: ChatControllerDelegate {
                                       return false
                                   },
                                   onInterruptedReload: {
-                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
+                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: (sections.last?.cells.count ?? 0) - 1, section: sections.count - 1), kind: .cell, edge: .bottom)
                                       self.collectionView.reloadData()
                                       // We want so that user on reload appeared at the very bottom of the layout
                                       self.chatLayout.restoreContentOffset(with: positionSnapshot)
@@ -506,14 +506,6 @@ extension ChatViewController: ChatControllerDelegate {
                                       }
                                   },
                                   setData: { data in
-                                      if let section = dataSource.sections.first {
-                                          print("Before")
-                                          print("\(section.cells.enumerated().map { "\($0.offset): \(String(describing: $0.element))\n" }.joined()))")
-                                      }
-                                      if let section = data.first {
-                                          print("After")
-                                          print("\(section.cells.enumerated().map { "\($0.offset): \(String(describing: $0.element))\n" }.joined()))")
-                                      }
                                       self.dataSource.sections = data
                                   })
         }

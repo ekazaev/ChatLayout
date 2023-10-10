@@ -47,7 +47,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
             for sectionIndex in 0..<directlyMutableSections.count {
                 sectionIndexByIdentifierCache[directlyMutableSections[sectionIndex].id] = sectionIndex
                 directlyMutableSections[sectionIndex].offsetY = offsetY
-                offsetY += directlyMutableSections[sectionIndex].height + (sectionIndex != directlyMutableSections.count - 1 ? directlyMutableSections[sectionIndex].interSectionSpacing : 0)
+                offsetY += directlyMutableSections[sectionIndex].height + (sectionIndex < directlyMutableSections.count - 1 ? directlyMutableSections[sectionIndex].interSectionSpacing : 0)
                 if let header = directlyMutableSections[sectionIndex].header {
                     let key = ItemUUIDKey(kind: .header, id: header.id)
                     itemPathByIdentifierCache[key] = ItemPath(item: 0, section: sectionIndex)

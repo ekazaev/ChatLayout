@@ -455,12 +455,6 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         let previousFrame = item.frame
         let previousInterItemSpacing = item.interItemSpacing
         cachedAttributesState = nil
-        if item.alignment != alignment {
-            print("ALIGNMENT CHANGE: \(itemPath.item) \(item.id) \(item.alignment) -> \(alignment) ")
-        }
-        if previousFrame.size != preferredSize {
-            print("SIZE CHANGE: \(itemPath.item) \(item.id) \(previousFrame.size) -> \(preferredSize) ")
-        }
         item.alignment = alignment
         item.calculatedSize = preferredSize
         item.calculatedOnce = true
@@ -490,11 +484,66 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         }
 
+        let isLastItemInSection = isLastItemInSection1(itemPath, at: state)
         let frameUpdateAction = CompensatingAction.frameUpdate(previousFrame: previousFrame,
                                                                newFrame: item.frame,
-                                                               previousSpacing: previousInterItemSpacing,
-                                                               newSpacing: interItemSpacing)
+                                                               previousSpacing: isLastItemInSection ? 0 : previousInterItemSpacing,
+                                                               newSpacing: isLastItemInSection ? 0 : interItemSpacing)
         compensateOffsetIfNeeded(for: itemPath, kind: kind, action: frameUpdateAction)
+    }
+
+    struct ItemToRestore {
+        var globalIndex: Int
+        var kind: ItemKind
+        var offset: CGFloat
+    }
+
+    private func numberOfItemsBeforeSection(_ sectionIndex: Int, state: ModelState, layout: LayoutModel<Layout>? = nil) -> Int {
+        let layout = layout ?? self.layout(at: state)
+        var total = 0
+        for index in 0..<max(sectionIndex - 1, 0) {
+            let section = layout.sections[index]
+//            if section.header != nil {
+//                total += 1
+//            }
+            total += section.items.count
+//            if section.footer != nil {
+//                total += 1
+//            }
+        }
+        return total
+    }
+
+    private func globalIndexFor(_ itemPath: ItemPath, kind: ItemKind, state: ModelState, layout: LayoutModel<Layout>? = nil) -> Int {
+        switch kind {
+        case .header:
+            return numberOfItemsBeforeSection(itemPath.section, state: state, layout: layout)
+        case .footer:
+            return numberOfItemsBeforeSection(itemPath.section, state: state, layout: layout)
+        case .cell:
+            return numberOfItemsBeforeSection(itemPath.section, state: state, layout: layout) + itemPath.item
+        }
+    }
+
+    private func itemPathFor(_ globalIndex: Int, kind: ItemKind, state: ModelState) -> ItemPath {
+        let layout = layout(at: state)
+        var sectionIndex: Int = 0
+        var itemsCount = 0
+        for index in 0..<layout.sections.count {
+            sectionIndex = index
+            let section = layout.sections[index]
+            let countIncludingThisSection = itemsCount + section.items.count /*+ (section.header != nil ? 1 : 0) + (section.footer != nil ? 1 : 0)*/
+            if countIncludingThisSection > globalIndex {
+                break
+            }
+            itemsCount = countIncludingThisSection
+        }
+        switch kind {
+        case .header, .footer:
+            return ItemPath(item: 0, section: sectionIndex)
+        case .cell:
+            return ItemPath(item: globalIndex - itemsCount, section: sectionIndex)
+        }
     }
 
     func process(changeItems: [ChangeItem]) {
@@ -508,11 +557,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 item.resetSize()
             }
         }
-        print("BEFORE MODIFICATION \(changeItems.map { "\(String(describing: $0))" }):")
-        if !layout(at: .beforeUpdate).sections.isEmpty {
-            print("\(section(at: 0, at: .beforeUpdate).items.enumerated().map { "\($0.offset): \($0.element.id) \($0.element.alignment) \($0.element.interItemSpacing)\n" }.joined())")
+        var itemToRestore: ItemToRestore? = nil
+        if let lastVisibleAttribute = allAttributes(at: .beforeUpdate, visibleRect: layoutRepresentation.visibleBounds).last,
+           let item = item(for: lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
+            itemToRestore = ItemToRestore(globalIndex: globalIndexFor(lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
+                    kind: lastVisibleAttribute.kind,
+                    offset: (item.frame.maxY - layoutRepresentation.visibleBounds.maxY).rounded())
         }
-
+        print("ORIGINAL ITEM TO RESTORE: \(itemToRestore)")
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
 
@@ -528,36 +580,46 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         var deletedItemsIndexesArray = [IndexPath]()
         var insertedItemsIndexesArray = [(IndexPath, ItemModel?)]()
 
+        var visibleBoundsBeforeUpdate = layoutRepresentation.visibleBounds
+
         changeItems.forEach { item in
             switch item {
             case let .sectionReload(sectionIndex):
                 reloadedSectionsIndexes.insert(sectionIndex)
+
                 reloadedSectionsIndexesArray.append(sectionIndex)
             case let .itemReload(itemIndexPath: indexPath):
                 reloadedIndexes.insert(indexPath)
+
                 reloadedItemsIndexesArray.append(indexPath)
             case let .itemReconfigure(itemIndexPath: indexPath):
                 reconfiguredIndexes.insert(indexPath)
+
                 reloadedItemsIndexesArray.append(indexPath)
             case let .sectionDelete(sectionIndex):
                 deletedSectionsIndexes.insert(sectionIndex)
                 deletedSectionsIndexesArray.append(sectionIndex)
             case let .itemDelete(itemIndexPath: indexPath):
                 deletedIndexes.insert(indexPath)
+
                 deletedItemsIndexesArray.append(indexPath)
             case let .sectionInsert(sectionIndex):
                 insertedSectionsIndexes.insert(sectionIndex)
+
                 insertedSectionsIndexesArray.append((sectionIndex, nil))
             case let .itemInsert(itemIndexPath: indexPath):
                 insertedIndexes.insert(indexPath)
+
                 insertedItemsIndexesArray.append((indexPath, nil))
             case let .sectionMove(initialSectionIndex, finalSectionIndex):
                 movedSectionsIndexes.insert(initialSectionIndex)
+
                 let original = layoutBeforeUpdate.sections[initialSectionIndex]
                 deletedSectionsIndexesArray.append(initialSectionIndex)
                 insertedSectionsIndexesArray.append((finalSectionIndex, original))
             case let .itemMove(initialItemIndexPath, finalItemIndexPath):
                 movedIndexes.insert(initialItemIndexPath)
+
                 let original = layoutBeforeUpdate.sections[initialItemIndexPath.section].items[initialItemIndexPath.item]
                 deletedItemsIndexesArray.append(initialItemIndexPath)
                 insertedItemsIndexesArray.append((finalItemIndexPath, original))
@@ -657,10 +719,12 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
                 return
             }
+            let oldHeight = item.frame.height
             let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath)
             print("RELOADED \(indexPath.item): \(item.id) \(item.alignment) \(item.interItemSpacing)\n")
             applyConfiguration(configuration, to: &item)
             afterUpdateModel.replaceItem(item, at: indexPath)
+            visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height - oldHeight)
         }
 
         deletedItemsIndexesArray.forEach { indexPath in
@@ -668,16 +732,43 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             let item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate)!
             afterUpdateModel.removeItem(by: itemId)
             print("DELETED \(indexPath.item): \(item.id) \(item.alignment) \(item.interItemSpacing)\n")
+            let globalIndex = globalIndexFor(indexPath.itemPath, kind: .cell, state: .beforeUpdate)
+            if let localItemToRestore = itemToRestore,
+               localItemToRestore.kind == .cell,
+               (localItemToRestore.globalIndex >= globalIndex) {
+                if localItemToRestore.globalIndex != 0 {
+                    itemToRestore?.globalIndex = localItemToRestore.globalIndex - 1
+                } else {
+                    itemToRestore = nil
+                }
+                print("NEW ITEM TO RESTORE AFTER DELETE: \(itemToRestore)")
+            }
         }
 
         insertedItemsIndexesArray.forEach { indexPath, item in
+            let insertedItem: ItemModel
             if let item {
+                insertedItem = item
                 afterUpdateModel.insertItem(item, at: indexPath)
+                visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height)
                 print("MOVED \(indexPath.item): \(item.id) \(item.alignment) \(item.interItemSpacing)\n")
             } else {
                 let item = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: indexPath))
+                insertedItem = item
                 print("INSERTED \(indexPath.item): \(item.id) \(item.alignment) \(item.interItemSpacing)\n")
+                visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height)
                 afterUpdateModel.insertItem(item, at: indexPath)
+            }
+            let globalIndex = globalIndexFor(indexPath.itemPath, kind: .cell, state: .afterUpdate, layout: afterUpdateModel)
+            if let localItemToRestore = itemToRestore {
+                if localItemToRestore.kind == .cell,
+                   localItemToRestore.globalIndex + 1 >= globalIndex {
+                    itemToRestore?.globalIndex = localItemToRestore.globalIndex + 1
+                    print("NEW ITEM TO RESTORE AFTER INSERT: \(itemToRestore)")
+                }
+            } else {
+                itemToRestore = ItemToRestore(globalIndex: globalIndex, kind: .cell, offset: 0)
+                print("NEW ITEM TO RESTORE AFTER INSERT: \(itemToRestore)")
             }
         }
 
@@ -692,126 +783,28 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         layoutAfterUpdate = afterUpdateModel
 
+        print("BEFORE MODIFICATION \(changeItems.map { "\(String(describing: $0))" }):")
+        if !layout(at: .beforeUpdate).sections.isEmpty {
+            print("\(section(at: 0, at: .beforeUpdate).items.enumerated().map { "\($0.offset): \($0.element.id) \($0.element.alignment) \($0.element.interItemSpacing)\n" }.joined())")
+        }
+
         print("AFTER MODIFICATION \(changeItems.map { "\(String(describing: $0))" }):")
         if !layout(at: .afterUpdate).sections.isEmpty {
             print("\(section(at: 0, at: .afterUpdate).items.enumerated().map { "\($0.offset): \($0.element.id) \($0.element.alignment) \($0.element.interItemSpacing)\n" }.joined())")
         }
-
-        let visibleBounds = layoutRepresentation.visibleBounds
-
-        func isLastSectionInLayout(_ index: Int, at state: ModelState) -> Bool {
-            let layout = layout(at: state)
-            guard index < layout.sections.count - 1 else {
-                return false
-            }
-            return true
-        }
-
-        func isLastItemInSection(_ itemPath: ItemPath, at state: ModelState) -> Bool {
-            let layout = layout(at: state)
-            guard itemPath.section < layout.sections.count,
-                  itemPath.item < layout.sections[itemPath.section].items.count - 1 else {
-                // This occurs when getting layout attributes for initial / final animations
-                return false
-            }
-            return true
-        }
-
+        print("")
         // Calculating potential content offset changes after the updates
-        insertedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            let section = section(at: $0, at: .afterUpdate)
-            compensateOffsetOfSectionIfNeeded(for: $0,
-                                              action: .insert(spacing: isLastSectionInLayout($0, at: .afterUpdate) ? 0 : section.interSectionSpacing),
-                                              visibleBounds: visibleBounds)
+        if let itemToRestore,
+           let item = item(for: itemPathFor(itemToRestore.globalIndex, kind: itemToRestore.kind, state: .afterUpdate), kind: itemToRestore.kind, at: .afterUpdate),
+           isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: layoutRepresentation.visibleBounds) {
+            let newProposedCompensationOffset = (item.frame.maxY - itemToRestore.offset) - layoutRepresentation.visibleBounds.maxY
+            print("RESTORE: \(itemToRestore) \(item.id) \(proposedCompensatingOffset) \(newProposedCompensationOffset)")
+            proposedCompensatingOffset = newProposedCompensationOffset
         }
-        reloadedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            let oldSection = section(at: $0, at: .beforeUpdate)
-            guard let newSectionIndex = sectionIndex(for: oldSection.id, at: .afterUpdate) else {
-                assertionFailure("Section with identifier \(oldSection.id) does not exist.")
-                return
-            }
-            let newSection = section(at: newSectionIndex, at: .afterUpdate)
-            compensateOffsetOfSectionIfNeeded(for: $0,
-                                              action: .frameUpdate(previousFrame: oldSection.frame,
-                                                                   newFrame: newSection.frame,
-                                                                   previousSpacing: isLastSectionInLayout($0, at: .beforeUpdate) ? 0 : oldSection.interSectionSpacing,
-                                                                   newSpacing: isLastSectionInLayout(newSectionIndex, at: .afterUpdate) ? 0 : newSection.interSectionSpacing),
-                                              visibleBounds: visibleBounds)
-        }
-        deletedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            let section = section(at: $0, at: .beforeUpdate)
-            compensateOffsetOfSectionIfNeeded(for: $0,
-                                              action: .delete(spacing: isLastSectionInLayout($0, at: .beforeUpdate) ? 0 : section.interSectionSpacing),
-                                              visibleBounds: visibleBounds)
-        }
-
-        reloadedIndexes.sorted(by: { $0 < $1 }).forEach {
-            let newItemPath = $0.itemPath
-            guard let oldItem = item(for: newItemPath, kind: .cell, at: .beforeUpdate),
-                  let newItemIndexPath = itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
-                  let newItem = item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
-                assertionFailure("Internal inconsistency.")
-                return
-            }
-            compensateOffsetIfNeeded(for: newItemPath,
-                                     kind: .cell,
-                                     action: .frameUpdate(previousFrame: oldItem.frame,
-                                                          newFrame: newItem.frame,
-                                                          previousSpacing: isLastItemInSection(newItemPath, at: .beforeUpdate) ? 0 : oldItem.interItemSpacing,
-                                                          newSpacing: isLastItemInSection(newItemIndexPath, at: .afterUpdate) ? 0 : newItem.interItemSpacing),
-                                     visibleBounds: visibleBounds)
-        }
-        reconfiguredIndexes.sorted(by: { $0 < $1 }).forEach {
-            let newItemPath = $0.itemPath
-            guard let oldItem = item(for: newItemPath, kind: .cell, at: .beforeUpdate),
-                  let newItemIndexPath = itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
-                  let newItem = item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
-                assertionFailure("Internal inconsistency.")
-                return
-            }
-            compensateOffsetIfNeeded(for: newItemPath,
-                                     kind: .cell,
-                                     action: .frameUpdate(previousFrame: oldItem.frame,
-                                                          newFrame: newItem.frame,
-                                                          previousSpacing: isLastItemInSection(newItemPath, at: .beforeUpdate) ? 0 : oldItem.interItemSpacing,
-                                                          newSpacing: isLastItemInSection(newItemIndexPath, at: .afterUpdate) ? 0 : newItem.interItemSpacing),
-                                     visibleBounds: visibleBounds)
-        }
-        insertedIndexes.sorted(by: { $0 < $1 }).forEach {
-            let itemPath = $0.itemPath
-            guard let item = item(for: itemPath, kind: .cell, at: .afterUpdate) else {
-                assertionFailure("Internal inconsistency.")
-                return
-            }
-            compensateOffsetIfNeeded(for: itemPath,
-                                     kind: .cell,
-                                     action: .insert(spacing: isLastItemInSection(itemPath, at: .afterUpdate) ? 0 : item.interItemSpacing),
-                                     visibleBounds: visibleBounds)
-        }
-        deletedIndexes.sorted(by: { $0 < $1 }).forEach {
-            let itemPath = $0.itemPath
-            guard let item = item(for: itemPath, kind: .cell, at: .beforeUpdate) else {
-                assertionFailure("Internal inconsistency.")
-                return
-            }
-            compensateOffsetIfNeeded(for: itemPath,
-                                     kind: .cell,
-                                     action: .delete(spacing: isLastItemInSection(itemPath, at: .beforeUpdate) ? 0 : item.interItemSpacing),
-                                     visibleBounds: visibleBounds)
-        }
-
         totalProposedCompensatingOffset = proposedCompensatingOffset
     }
 
     func commitUpdates() {
-//        print("BEFORE:")
-//        if layout(at: .beforeUpdate).sections.count > 0 {
-//            print("\(section(at: 0, at: .beforeUpdate).items.enumerated().map({ "\($0.offset): \($0.element.alignment) \($0.element.interItemSpacing) \($0.element.frame)\n" }).joined())")
-//        }
-//        print("AFTER:")
-//        if layout(at: .afterUpdate).sections.count > 0 {
-//            print("\(section(at: 0, at: .afterUpdate).items.enumerated().map({ "\($0.offset): \($0.element.alignment) \($0.element.interItemSpacing) \($0.element.frame)\n" }).joined())")
-//        }
         insertedIndexes = []
         insertedSectionsIndexes = []
 
@@ -1078,14 +1071,18 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                   let itemFrame = itemFrame(for: itemPath, kind: kind, at: .afterUpdate) else {
                 return
             }
-            if itemFrame.minY.rounded() - interItemSpacing <= minY {
+            if (itemFrame.minY - interItemSpacing).rounded() <= minY {
+                print("INSERT COMPENSATE \(itemPath.item) \(itemFrame.height) \(interItemSpacing): \(itemFrame.height + interItemSpacing)")
                 proposedCompensatingOffset += itemFrame.height + interItemSpacing
+            } else {
+                print("INSERT NOT COMPENSATE \(itemPath.item) \(itemFrame.height) \(itemFrame.minY) \(interItemSpacing) <= \(minY)")
             }
         case let .frameUpdate(previousFrame, newFrame, oldInterItemSpacing, newInterItemSpacing):
             guard isLayoutBiggerThanVisibleBounds(at: .afterUpdate, withFullCompensation: true, visibleBounds: visibleBounds) else {
                 return
             }
             if newFrame.minY.rounded() <= minY {
+                print("RELOAD COMPENSATE \(itemPath.item) \(newFrame.height) <->  \(previousFrame.height) : \(oldInterItemSpacing) <-> \(newInterItemSpacing): \(newFrame.height - previousFrame.height + newInterItemSpacing - oldInterItemSpacing)")
                 batchUpdateCompensatingOffset += newFrame.height - previousFrame.height + newInterItemSpacing - oldInterItemSpacing
             }
         case let .delete(interItemSpacing):
@@ -1096,8 +1093,50 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if deletedFrame.minY.rounded() <= minY {
                 // Changing content offset for deleted items using `invalidateLayout(with:) causes UI glitches.
                 // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.
+                print("DELETE COMPENSATE \(itemPath.item) \(deletedFrame.height) \(interItemSpacing)")
                 proposedCompensatingOffset -= (deletedFrame.height + interItemSpacing)
             }
+        }
+    }
+
+    private func isLastSectionInLayout(_ index: Int, at state: ModelState) -> Bool {
+        return false
+        let layout = layout(at: state)
+        guard index < layout.sections.count - 1 else {
+            return false
+        }
+        return false
+    }
+
+    private func isLastItemInSection(_ itemPath: ItemPath, at state: ModelState) -> Bool {
+        return false
+        let layout = layout(at: state)
+        if itemPath.section < layout.sections.count,
+              itemPath.item < layout.sections[itemPath.section].items.count - 1  {
+            return false
+        } else {
+            return false
+        }
+    }
+
+    func isLastItemInSection1(_ itemPath: ItemPath, at state: ModelState) -> Bool {
+        let layout = layout(at: state)
+        if itemPath.section < layout.sections.count,
+              itemPath.item < layout.sections[itemPath.section].items.count - 1  {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    private func isLastItemInSection(_ id: UUID, at state: ModelState) -> Bool {
+        let layout = layout(at: state)
+        if let itemPath = itemPath(by: id, kind: .cell, at: state),
+              itemPath.section < layout.sections.count,
+              itemPath.item < layout.sections[itemPath.section].items.count - 1 {
+            return false
+        } else {
+            return true
         }
     }
 

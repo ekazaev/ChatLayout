@@ -113,7 +113,6 @@ final class DefaultChatController: ChatController {
                     } else {
                         bubble = .tailed
                     }
-//                    let bubble: Cell.BubbleType = .tailed
                     guard message.type != .outgoing else {
                         lastMessageStorage = message
                         return [.message(message, bubbleType: bubble)]
@@ -305,10 +304,15 @@ extension DefaultChatController: ReloadDelegate {
 extension DefaultChatController: EditingAccessoryControllerDelegate {
 
     func deleteMessage(with id: UUID) {
-        let message = messages.first(where: { $0.id == id })!
-        messages = Array(messages.shuffled().filter { $0.id != id })
-        messages.append(message)
+//        var message = messages.first(where: { $0.id == id })!
+//        if case var .text(text) = message.data {
+//            text = String(text.prefix(max(0, text.count - 5)))
+//            message.data = .text(text)
+//        }
+//        messages = Array(messages.filter { $0.id != id })
+//        messages.append(message)
 
+        messages = Array(messages.filter { $0.id != id })
         repopulateMessages(requiresIsolatedProcess: true)
     }
 
