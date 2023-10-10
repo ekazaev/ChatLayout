@@ -555,7 +555,9 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         if heightDifference != 0,
            (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded()) || isUserInitiatedScrolling,
            isAboveBottomEdge {
+            print("\(#function) \(preferredMessageAttributes.indexPath) \(heightDifference)")
             context.contentOffsetAdjustment.y += heightDifference
+            context.contentSizeAdjustment.height += heightDifference
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
 
@@ -721,7 +723,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// Performs any additional animations or clean up needed during a collection view update.
     open override func finalizeCollectionViewUpdates() {
         controller.proposedCompensatingOffset = 0
-
+        print("\(#function)")
         if keepContentOffsetAtBottomOnBatchUpdates,
            controller.isLayoutBiggerThanVisibleBounds(at: state),
            controller.batchUpdateCompensatingOffset != 0,

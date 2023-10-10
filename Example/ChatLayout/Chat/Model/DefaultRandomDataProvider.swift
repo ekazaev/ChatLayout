@@ -59,9 +59,9 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let dispatchQueue = DispatchQueue.global(qos: .userInteractive)
 
-    private let enableTyping = false
+    private let enableTyping = true
 
-    private let enableNewMessages = false
+    private let enableNewMessages = true
 
     private let enableRichContent = true
 
@@ -89,7 +89,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     private let images: [UIImage] = (1...8).compactMap { UIImage(named: "demo\($0)") }
 
     private var allUsersIds: [Int] {
-        Array([users /*, [receiverId] */].joined())
+        Array([users /* , [receiverId] */ ].joined())
     }
 
     init(receiverId: Int, usersIds: [Int]) {
