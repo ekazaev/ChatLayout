@@ -121,7 +121,7 @@ final class ChatViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Show Keyboard", style: .plain, target: self, action: #selector(ChatViewController.showHideKeyboard))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
 
-        chatLayout.settings.interItemSpacing = 20
+        chatLayout.settings.interItemSpacing = 8
         chatLayout.settings.interSectionSpacing = 8
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
@@ -490,7 +490,7 @@ extension ChatViewController: ChatControllerDelegate {
                                       return false
                                   },
                                   onInterruptedReload: {
-                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: (sections.last?.cells.count ?? 0) - 1, section: sections.count - 1), kind: .cell, edge: .bottom)
+                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
                                       self.collectionView.reloadData()
                                       // We want so that user on reload appeared at the very bottom of the layout
                                       self.chatLayout.restoreContentOffset(with: positionSnapshot)

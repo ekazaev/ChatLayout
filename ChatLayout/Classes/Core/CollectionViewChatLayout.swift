@@ -555,9 +555,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         if heightDifference != 0,
            (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded()) || isUserInitiatedScrolling,
            isAboveBottomEdge {
-            print("\(#function) \(preferredMessageAttributes.indexPath) \(heightDifference)")
             context.contentOffsetAdjustment.y += heightDifference
-            context.contentSizeAdjustment.height += heightDifference
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
 
@@ -694,7 +692,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Notifies the layout object that the contents of the collection view are about to change.
     open override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
-        print("\(#function) \(updateItems)")
         var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
         controller.process(changeItems: changeItems)
@@ -723,7 +720,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// Performs any additional animations or clean up needed during a collection view update.
     open override func finalizeCollectionViewUpdates() {
         controller.proposedCompensatingOffset = 0
-        print("\(#function)")
+
         if keepContentOffsetAtBottomOnBatchUpdates,
            controller.isLayoutBiggerThanVisibleBounds(at: state),
            controller.batchUpdateCompensatingOffset != 0,
@@ -784,7 +781,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)
         }
 
-        print("\(#function) \(attributes)")
         return attributes
     }
 
@@ -834,7 +830,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)
         }
 
-        print("\(#function) \(attributes)")
         return attributes
     }
 

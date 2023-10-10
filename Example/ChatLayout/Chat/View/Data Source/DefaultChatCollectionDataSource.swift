@@ -359,7 +359,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
                 return .estimated(CGSize(width: min(85, chatLayout.layoutFrame.width / 3), height: 18))
             }
         case .footer, .header:
-            return .exact(.init(width: chatLayout.layoutFrame.width, height: 10))
+            return .auto
         }
     }
 
@@ -427,21 +427,15 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
 
     public func interItemSpacing(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, after indexPath: IndexPath) -> CGFloat? {
         let item = sections[indexPath.section].cells[indexPath.item]
-        if case let .message(_, b) = item,
-           b == .tailed {
-            return 100
-        }
         switch item {
         case .messageGroup:
-            return 0
-        case .date:
-            return 50
+            return 3
         default:
-            return 0
+            return nil
         }
     }
 
     public func interSectionSpacing(_ chatLayout: CollectionViewChatLayout, after sectionIndex: Int) -> CGFloat? {
-        0
+        50
     }
 }

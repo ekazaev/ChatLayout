@@ -89,7 +89,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     private let images: [UIImage] = (1...8).compactMap { UIImage(named: "demo\($0)") }
 
     private var allUsersIds: [Int] {
-        Array([users /* , [receiverId] */ ].joined())
+        Array([users, [receiverId]].joined())
     }
 
     init(receiverId: Int, usersIds: [Int]) {
