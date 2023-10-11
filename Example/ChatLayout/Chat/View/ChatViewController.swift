@@ -78,6 +78,7 @@ final class ChatViewController: UIViewController {
         self.chatController = chatController
         self.dataSource = dataSource
         self.editNotifier = editNotifier
+        editNotifier.setIsEditing(true, duration: .notAnimated)
         self.swipeNotifier = swipeNotifier
         super.init(nibName: nil, bundle: nil)
     }
@@ -159,6 +160,21 @@ final class ChatViewController: UIViewController {
         chatController.loadInitialMessages { sections in
             self.currentControllerActions.options.remove(.loadingInitialMessages)
             self.processUpdates(with: sections, animated: true, requiresIsolatedProcess: false)
+
+//            let uuid = UUID()
+//            let originMessage = Cell.message(.init(id: uuid, date: Date(), data: .text("short text message / shor text message / short text message / short text message / short text message / shor text message / short text message / short text message"), owner: User(id: 0), type: .incoming), bubbleType: .tailed)
+//            let fristSectionModel = [Section(id: 0, title: "1", cells: [originMessage])]
+//
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) { [weak self] in
+//                self?.processUpdates(with: fristSectionModel, animated: true, requiresIsolatedProcess: false)
+//            }
+//
+//            let longMessage = Cell.message(.init(id: UUID(), date: Date(), data: .text("long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message/ long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message/ long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message"), owner: User(id: 0), type: .incoming), bubbleType: .tailed)
+//            let secondSectionModel = [Section(id: 0, title: "1", cells: [originMessage, longMessage])]
+//
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2000)) { [weak self] in
+//                self?.processUpdates(with: secondSectionModel, animated: true, requiresIsolatedProcess: false)
+//            }
         }
 
         KeyboardListener.shared.add(delegate: self)
@@ -267,6 +283,7 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print("\(#function) \(scrollView.contentOffset.y)")
         if currentControllerActions.options.contains(.updatingCollection), collectionView.isDragging {
             // Interrupting current update animation if user starts to scroll while batchUpdate is performed. It helps to
             // avoid presenting blank area if user scrolls out of the animation rendering area.
@@ -291,19 +308,20 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     private func loadPreviousMessages() {
-        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
-        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
-        currentControllerActions.options.insert(.loadingPreviousMessages)
-        chatController.loadPreviousMessages { [weak self] sections in
-            guard let self else {
-                return
-            }
-            // Reloading the content without animation just because it looks better is the scrolling is in process.
-            let animated = !isUserInitiatedScrolling
-            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
-                self.currentControllerActions.options.remove(.loadingPreviousMessages)
-            }
-        }
+        return
+//        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
+//        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
+//        currentControllerActions.options.insert(.loadingPreviousMessages)
+//        chatController.loadPreviousMessages { [weak self] sections in
+//            guard let self else {
+//                return
+//            }
+//            // Reloading the content without animation just because it looks better is the scrolling is in process.
+//            let animated = !isUserInitiatedScrolling
+//            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
+//                self.currentControllerActions.options.remove(.loadingPreviousMessages)
+//            }
+//        }
     }
 
     fileprivate var isUserInitiatedScrolling: Bool {

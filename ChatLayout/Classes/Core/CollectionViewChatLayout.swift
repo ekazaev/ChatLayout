@@ -122,15 +122,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         if state == .beforeUpdate {
             contentSize = controller.contentSize(for: .beforeUpdate)
         } else {
-            var size = controller.contentSize(for: .beforeUpdate)
-            if #available(iOS 16.0, *) {
-                if controller.totalProposedCompensatingOffset > 0 {
-                    size.height += controller.totalProposedCompensatingOffset
-                }
-            } else {
-                size.height += controller.totalProposedCompensatingOffset
-            }
-            contentSize = size
+            contentSize = controller.contentSize(for: .afterUpdate)
         }
         return contentSize
     }
@@ -330,6 +322,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
         if prepareActions.contains(.switchStates) {
             controller.commitUpdates()
+            print("\(#function) SWITCHING CONTEXT TO BEFORE UPDATE")
             state = .beforeUpdate
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
@@ -525,7 +518,9 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// Retrieves a context object that identifies the portions of the layout that should change in response to dynamic cell changes.
     open override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
                                            withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
-        guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes else {
+        guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
+              // Can be called ofter the model update in iOS <16. Checking if model for this index path exists.
+              controller.item(for: preferredMessageAttributes.indexPath.itemPath, kind: .cell, at: state) != nil else {
             return super.invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
         }
 
@@ -555,7 +550,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         if heightDifference != 0,
            (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded()) || isUserInitiatedScrolling,
            isAboveBottomEdge {
-            context.contentOffsetAdjustment.y += heightDifference
+            let offsetCompensation: CGFloat = min(controller.contentHeight(at: state) - collectionView!.frame.height + adjustedContentInset.bottom + adjustedContentInset.top, heightDifference)
+            print("\(#function) \(offsetCompensation) \(controller.contentHeight(at: .beforeUpdate)) \(controller.contentHeight(at: state)))")
+            context.contentOffsetAdjustment.y += offsetCompensation
+//            context.contentSizeAdjustment.height += heightDifference
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
 
@@ -674,8 +672,17 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         if controller.proposedCompensatingOffset != 0,
            let collectionView {
             let minPossibleContentOffset = -collectionView.adjustedContentInset.top
-            let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
+            let newProposedContentOffset: CGPoint
+//            let calculatedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(proposedContentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
+//            if (collectionView.contentOffset.y + controller.proposedCompensatingOffset).rounded() != proposedContentOffset.y.rounded() {
+//                newProposedContentOffset = calculatedContentOffset
+//            } else {
+//                newProposedContentOffset = proposedContentOffset
+//            }
+            let calculatedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(collectionView.contentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
+            newProposedContentOffset = calculatedContentOffset
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
+            print("\(#function) TO RETURN: \(newProposedContentOffset.y) Original: \(proposedContentOffset.y) Current: \(collectionView.contentOffset.y) Calculated \(calculatedContentOffset)")
             if needsIOS15_1IssueFix {
                 controller.proposedCompensatingOffset = 0
                 collectionView.contentOffset = newProposedContentOffset
@@ -734,7 +741,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             controller.batchUpdateCompensatingOffset = 0
             let context = ChatLayoutInvalidationContext()
             context.contentOffsetAdjustment.y = compensatingOffset
+//            context.contentSizeAdjustment.height = controller.contentSize(for: .afterUpdate).height - controller.contentSize(for: .beforeUpdate).height
+            print("Adjusting \(compensatingOffset) \(controller.contentSize(for: .afterUpdate).height - controller.contentSize(for: .beforeUpdate).height)")
             invalidateLayout(with: context)
+//            collectionView.contentOffset.y += compensatingOffset
         } else {
             controller.batchUpdateCompensatingOffset = 0
             let context = ChatLayoutInvalidationContext()
@@ -743,6 +753,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
         prepareActions.formUnion(.switchStates)
         super.finalizeCollectionViewUpdates()
+        print("\(#function)")
     }
 
     // MARK: - Cell Appearance Animation
@@ -930,7 +941,12 @@ extension CollectionViewChatLayout {
 
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
         let itemSize = estimatedSize(for: element, at: indexPath)
-        let interItemSpacing = interItemSpacing(for: element, at: indexPath)
+        let interItemSpacing: CGFloat
+        if element == .cell {
+            interItemSpacing = self.interItemSpacing(for: element, at: indexPath)
+        } else {
+            interItemSpacing = 0
+        }
         return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact, interItemSpacing: interItemSpacing)
     }
 
