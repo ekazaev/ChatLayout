@@ -159,6 +159,21 @@ final class ChatViewController: UIViewController {
         chatController.loadInitialMessages { sections in
             self.currentControllerActions.options.remove(.loadingInitialMessages)
             self.processUpdates(with: sections, animated: true, requiresIsolatedProcess: false)
+
+//            let uuid = UUID()
+//            let originMessage = Cell.message(.init(id: uuid, date: Date(), data: .text("short text message / shor text message / short text message / short text message / short text message / shor text message / short text message / short text message"), owner: User(id: 0), type: .incoming), bubbleType: .tailed)
+//            let fristSectionModel = [Section(id: 0, title: "1", cells: [originMessage])]
+//
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) { [weak self] in
+//                self?.processUpdates(with: fristSectionModel, animated: true, requiresIsolatedProcess: false)
+//            }
+//
+//            let longMessage = Cell.message(.init(id: UUID(), date: Date(), data: .text("long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message/ long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message/ long text message / long text message / long text message / long text message / long text message / long text message / long text message / long text message"), owner: User(id: 0), type: .incoming), bubbleType: .tailed)
+//            let secondSectionModel = [Section(id: 0, title: "1", cells: [originMessage, longMessage])]
+//
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2000)) { [weak self] in
+//                self?.processUpdates(with: secondSectionModel, animated: true, requiresIsolatedProcess: false)
+//            }
         }
 
         KeyboardListener.shared.add(delegate: self)

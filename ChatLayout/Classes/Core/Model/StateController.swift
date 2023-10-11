@@ -749,7 +749,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
 
         deletedItemsIndexesArray.forEach { indexPath in
-            let itemId = itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate)!
+            guard let itemId = itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
+                assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
+                return
+            }
             afterUpdateModel.removeItem(by: itemId)
             if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates {
                 let globalIndex = globalIndexFor(indexPath.itemPath, kind: .cell, state: .beforeUpdate)
