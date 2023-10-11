@@ -39,7 +39,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
     }
 
     // Uncomment this method to test the performance without calculating text cell size using autolayout
-    // For the better illustration set DefaultRandomDataProvider.enableRichContent/enableNewMessages/enableRichContent
+    // For the better illustration set DefaultRandomDataProvider.enableRichContent/enableNewMessages
     // to false
 //    func preferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) -> ChatLayoutAttributes? {
 //        viewPortWidth = layoutAttributes.layoutFrame.width
