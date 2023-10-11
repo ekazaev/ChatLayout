@@ -77,7 +77,8 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         items.withUnsafeMutableBufferPointer { directlyMutableItems in
             for rowIndex in 0..<directlyMutableItems.count {
                 directlyMutableItems[rowIndex].offsetY = offsetY
-                offsetY += directlyMutableItems[rowIndex].size.height + directlyMutableItems[rowIndex].interItemSpacing
+                let offset: CGFloat = rowIndex < directlyMutableItems.count - 1 ? directlyMutableItems[rowIndex].interItemSpacing : 0
+                offsetY += directlyMutableItems[rowIndex].size.height + offset
             }
         }
 

@@ -132,6 +132,7 @@ to process the model changes. The Example app does it as well.
 It can be tempting and it may look like it is the right way to go, but **do not** use supplementary views to decorate your
 messages or groups of them. `UICollectionView` processes them in a different order: `UICollectionViewCell`s first and 
 only after switches to `UICollectionReusableView`s. You will most likely face some unexpected behaviour during the animation.
+**I strongly advice you against using sections at all.**
 
 ### About Texture
 

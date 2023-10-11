@@ -65,6 +65,24 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
+    private struct ItemToRestore {
+        var globalIndex: Int
+        var kind: ItemKind
+        var offset: CGFloat
+    }
+
+    private enum GlobalIndexModel {
+        case beforeUpdate
+        case model(LayoutModel<Layout>)
+
+        var layout: LayoutModel<Layout>? {
+            guard case let .model(layout) = self else {
+                return nil
+            }
+            return layout
+        }
+    }
+
     private enum CompensatingAction {
         case insert(spacing: CGFloat)
         case delete(spacing: CGFloat)
@@ -484,10 +502,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         }
 
+        let isLastItemInSection = isLastItemInSection(itemPath, at: state)
         let frameUpdateAction = CompensatingAction.frameUpdate(previousFrame: previousFrame,
                                                                newFrame: item.frame,
-                                                               previousSpacing: previousInterItemSpacing,
-                                                               newSpacing: interItemSpacing)
+                                                               previousSpacing: isLastItemInSection ? 0 : previousInterItemSpacing,
+                                                               newSpacing: isLastItemInSection ? 0 : interItemSpacing)
         compensateOffsetIfNeeded(for: itemPath, kind: kind, action: frameUpdateAction)
     }
 
@@ -502,18 +521,171 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 item.resetSize()
             }
         }
-
+        var itemToRestore: ItemToRestore?
+        if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
+           let lastVisibleAttribute = allAttributes(at: .beforeUpdate, visibleRect: layoutRepresentation.visibleBounds).last,
+           let item = item(for: lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
+            itemToRestore = ItemToRestore(globalIndex: globalIndexFor(lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
+                                          kind: lastVisibleAttribute.kind,
+                                          offset: (item.frame.maxY - layoutRepresentation.visibleBounds.maxY).rounded())
+        }
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
-        let changeItems = changeItems.sorted()
 
         var afterUpdateModel = LayoutModel(sections: layoutBeforeUpdate.sections,
                                            collectionLayout: layoutRepresentation)
         resetCachedAttributeObjects()
 
-        changeItems.forEach { updateItem in
-            switch updateItem {
-            case let .sectionInsert(sectionIndex: sectionIndex):
+        var reloadedSectionsIndexesArray = [Int]()
+        var deletedSectionsIndexesArray = [Int]()
+        var insertedSectionsIndexesArray = [(Int, SectionModel<Layout>?)]()
+
+        var reloadedItemsIndexesArray = [IndexPath]()
+        var deletedItemsIndexesArray = [IndexPath]()
+        var insertedItemsIndexesArray = [(IndexPath, ItemModel?)]()
+
+        var visibleBoundsBeforeUpdate = layoutRepresentation.visibleBounds
+
+        changeItems.forEach { item in
+            switch item {
+            case let .sectionReload(sectionIndex):
+                reloadedSectionsIndexes.insert(sectionIndex)
+
+                reloadedSectionsIndexesArray.append(sectionIndex)
+            case let .itemReload(itemIndexPath: indexPath):
+                reloadedIndexes.insert(indexPath)
+
+                reloadedItemsIndexesArray.append(indexPath)
+            case let .itemReconfigure(itemIndexPath: indexPath):
+                reconfiguredIndexes.insert(indexPath)
+
+                reloadedItemsIndexesArray.append(indexPath)
+            case let .sectionDelete(sectionIndex):
+                deletedSectionsIndexes.insert(sectionIndex)
+
+                deletedSectionsIndexesArray.append(sectionIndex)
+            case let .itemDelete(itemIndexPath: indexPath):
+                deletedIndexes.insert(indexPath)
+
+                deletedItemsIndexesArray.append(indexPath)
+            case let .sectionInsert(sectionIndex):
+                insertedSectionsIndexes.insert(sectionIndex)
+
+                insertedSectionsIndexesArray.append((sectionIndex, nil))
+            case let .itemInsert(itemIndexPath: indexPath):
+                insertedIndexes.insert(indexPath)
+
+                insertedItemsIndexesArray.append((indexPath, nil))
+            case let .sectionMove(initialSectionIndex, finalSectionIndex):
+                movedSectionsIndexes.insert(initialSectionIndex)
+
+                let original = layoutBeforeUpdate.sections[initialSectionIndex]
+                deletedSectionsIndexesArray.append(initialSectionIndex)
+                insertedSectionsIndexesArray.append((finalSectionIndex, original))
+            case let .itemMove(initialItemIndexPath, finalItemIndexPath):
+                movedIndexes.insert(initialItemIndexPath)
+
+                let original = layoutBeforeUpdate.sections[initialItemIndexPath.section].items[initialItemIndexPath.item]
+                deletedItemsIndexesArray.append(initialItemIndexPath)
+                insertedItemsIndexesArray.append((finalItemIndexPath, original))
+            }
+        }
+
+        deletedSectionsIndexesArray = deletedSectionsIndexesArray.sorted(by: { $0 > $1 })
+        insertedSectionsIndexesArray = insertedSectionsIndexesArray.sorted(by: { $0.0 < $1.0 })
+
+        deletedItemsIndexesArray = deletedItemsIndexesArray.sorted(by: { $0 > $1 })
+        insertedItemsIndexesArray = insertedItemsIndexesArray.sorted(by: { $0.0 < $1.0 })
+
+        reloadedSectionsIndexesArray.forEach { sectionIndex in
+            var section = layoutBeforeUpdate.sections[sectionIndex]
+
+            var header: ItemModel?
+            if layoutRepresentation.shouldPresentHeader(at: sectionIndex) == true {
+                let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
+                var newHeader = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header,
+                                                                                                     at: headerIndexPath))
+                let configuration = layoutRepresentation.configuration(for: .header, at: headerIndexPath)
+                applyConfiguration(configuration, to: &newHeader)
+                header = newHeader
+            } else {
+                header = nil
+            }
+            section.set(header: header)
+
+            var footer: ItemModel?
+            if layoutRepresentation.shouldPresentFooter(at: sectionIndex) == true {
+                let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
+                var newFooter = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer,
+                                                                                                     at: footerIndexPath))
+                let configuration = layoutRepresentation.configuration(for: .footer, at: footerIndexPath)
+                applyConfiguration(configuration, to: &newFooter)
+                footer = newFooter
+            } else {
+                footer = nil
+            }
+            section.set(footer: footer)
+
+            let oldItems = section.items
+            let items: [ItemModel] = (0..<layoutRepresentation.numberOfItems(in: sectionIndex)).map { index in
+                var newItem: ItemModel
+                let itemIndexPath = IndexPath(item: index, section: sectionIndex)
+                if index < oldItems.count {
+                    newItem = oldItems[index]
+                    let configuration = layoutRepresentation.configuration(for: .cell, at: itemIndexPath)
+                    applyConfiguration(configuration, to: &newItem)
+                } else {
+                    newItem = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath))
+                }
+                return newItem
+            }
+            section.set(items: ContiguousArray(items))
+            afterUpdateModel.removeSection(for: sectionIndex)
+            afterUpdateModel.insertSection(section, at: sectionIndex)
+        }
+
+        deletedSectionsIndexesArray.forEach { sectionIndex in
+            afterUpdateModel.removeSection(for: sectionIndex)
+            if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates {
+                if let localItemToRestore = itemToRestore {
+                    guard let originalIndexPath = itemPathFor(localItemToRestore.globalIndex, kind: localItemToRestore.kind, state: .beforeUpdate) else {
+                        return
+                    }
+                    if originalIndexPath.section >= sectionIndex {
+                        if originalIndexPath.section != 0 {
+                            if originalIndexPath.section == sectionIndex {
+                                let previousSectionIndex = sectionIndex - 1
+                                let previousSection = section(at: previousSectionIndex, at: .beforeUpdate)
+                                if previousSection.footer != nil {
+                                    itemToRestore?.kind = .footer
+                                    itemToRestore?.globalIndex = globalIndexFor(ItemPath(item: 0, section: previousSectionIndex), kind: .footer, state: .model(afterUpdateModel))
+                                } else if !previousSection.items.isEmpty {
+                                    itemToRestore?.kind = .cell
+                                    itemToRestore?.globalIndex = globalIndexFor(ItemPath(item: previousSection.items.count - 1, section: previousSectionIndex), kind: .cell, state: .model(afterUpdateModel))
+                                } else if previousSection.header != nil {
+                                    itemToRestore?.kind = .header
+                                    itemToRestore?.globalIndex = globalIndexFor(ItemPath(item: 0, section: previousSectionIndex), kind: .header, state: .model(afterUpdateModel))
+                                } else {
+                                    itemToRestore = nil
+                                }
+                            } else {
+                                let section = section(at: sectionIndex, at: .beforeUpdate)
+                                itemToRestore?.globalIndex = localItemToRestore.globalIndex - section.items.count
+                            }
+                        } else {
+                            itemToRestore = nil
+                        }
+                    }
+                }
+            }
+        }
+
+        insertedSectionsIndexesArray.forEach { sectionIndex, section in
+            let insertedSection: SectionModel<Layout>
+            if let section {
+                insertedSection = section
+                afterUpdateModel.insertSection(section, at: sectionIndex)
+            } else {
                 let items = (0..<layoutRepresentation.numberOfItems(in: sectionIndex)).map { index -> ItemModel in
                     let itemIndexPath = IndexPath(item: index, section: sectionIndex)
                     return ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath))
@@ -537,95 +709,85 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                                            footer: footer,
                                            items: ContiguousArray(items),
                                            collectionLayout: layoutRepresentation)
+                insertedSection = section
                 afterUpdateModel.insertSection(section, at: sectionIndex)
-                insertedSectionsIndexes.insert(sectionIndex)
-            case let .itemInsert(itemIndexPath: indexPath):
-                let item = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: indexPath))
-                insertedIndexes.insert(indexPath)
-                afterUpdateModel.insertItem(item, at: indexPath)
-            case let .sectionDelete(sectionIndex: sectionIndex):
-                let section = layoutBeforeUpdate.sections[sectionIndex]
-                deletedSectionsIndexes.insert(sectionIndex)
-                afterUpdateModel.removeSection(by: section.id)
-            case let .itemDelete(itemIndexPath: indexPath):
-                let itemId = itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate)!
-                afterUpdateModel.removeItem(by: itemId)
-                deletedIndexes.insert(indexPath)
-            case let .sectionReload(sectionIndex: sectionIndex):
-                reloadedSectionsIndexes.insert(sectionIndex)
-                var section = layoutBeforeUpdate.sections[sectionIndex]
-
-                var header: ItemModel?
-                if layoutRepresentation.shouldPresentHeader(at: sectionIndex) == true {
-                    let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    var newHeader = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header,
-                                                                                                         at: headerIndexPath))
-                    let configuration = layoutRepresentation.configuration(for: .header, at: headerIndexPath)
-                    applyConfiguration(configuration, to: &newHeader)
-                    header = newHeader
-                } else {
-                    header = nil
-                }
-                section.set(header: header)
-
-                var footer: ItemModel?
-                if layoutRepresentation.shouldPresentFooter(at: sectionIndex) == true {
-                    let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                    var newFooter = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer,
-                                                                                                         at: footerIndexPath))
-                    let configuration = layoutRepresentation.configuration(for: .footer, at: footerIndexPath)
-                    applyConfiguration(configuration, to: &newFooter)
-                    footer = newFooter
-                } else {
-                    footer = nil
-                }
-                section.set(footer: footer)
-
-                let oldItems = section.items
-                let items: [ItemModel] = (0..<layoutRepresentation.numberOfItems(in: sectionIndex)).map { index in
-                    var newItem: ItemModel
-                    let itemIndexPath = IndexPath(item: index, section: sectionIndex)
-                    if index < oldItems.count {
-                        newItem = oldItems[index]
-                        let configuration = layoutRepresentation.configuration(for: .cell, at: itemIndexPath)
-                        applyConfiguration(configuration, to: &newItem)
-                    } else {
-                        newItem = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: itemIndexPath))
+            }
+            if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates {
+                if let localItemToRestore = itemToRestore {
+                    guard let originalIndexPath = itemPathFor(localItemToRestore.globalIndex, kind: localItemToRestore.kind, state: .model(afterUpdateModel)) else {
+                        return
                     }
-                    return newItem
+                    if localItemToRestore.globalIndex >= originalIndexPath.section {
+                        itemToRestore?.globalIndex = localItemToRestore.globalIndex + insertedSection.items.count
+                    }
+                } else {
+                    if insertedSection.footer != nil {
+                        itemToRestore?.kind = .footer
+                        itemToRestore?.globalIndex = globalIndexFor(ItemPath(item: 0, section: sectionIndex), kind: .footer, state: .model(afterUpdateModel))
+                    } else if !insertedSection.items.isEmpty {
+                        itemToRestore?.kind = .cell
+                        itemToRestore?.globalIndex = globalIndexFor(ItemPath(item: insertedSection.items.count - 1, section: sectionIndex), kind: .cell, state: .model(afterUpdateModel))
+                    } else if insertedSection.header != nil {
+                        itemToRestore?.kind = .header
+                        itemToRestore?.globalIndex = globalIndexFor(ItemPath(item: 0, section: sectionIndex), kind: .header, state: .model(afterUpdateModel))
+                    } else {
+                        itemToRestore = nil
+                    }
                 }
-                section.set(items: ContiguousArray(items))
-                afterUpdateModel.removeSection(for: sectionIndex)
-                afterUpdateModel.insertSection(section, at: sectionIndex)
-            case let .itemReload(itemIndexPath: indexPath):
-                guard var item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
-                    assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
-                    return
+            }
+        }
+
+        reloadedItemsIndexesArray.forEach { indexPath in
+            guard var item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
+                assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
+                return
+            }
+            let oldHeight = item.frame.height
+            let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath)
+            applyConfiguration(configuration, to: &item)
+            afterUpdateModel.replaceItem(item, at: indexPath)
+            visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height - oldHeight)
+        }
+
+        deletedItemsIndexesArray.forEach { indexPath in
+            guard let itemId = itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
+                assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
+                return
+            }
+            afterUpdateModel.removeItem(by: itemId)
+            if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates {
+                let globalIndex = globalIndexFor(indexPath.itemPath, kind: .cell, state: .beforeUpdate)
+                if let localItemToRestore = itemToRestore,
+                   localItemToRestore.kind == .cell,
+                   localItemToRestore.globalIndex >= globalIndex {
+                    if localItemToRestore.globalIndex != 0 {
+                        itemToRestore?.globalIndex = localItemToRestore.globalIndex - 1
+                    } else {
+                        itemToRestore = nil
+                    }
                 }
-                let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath)
-                applyConfiguration(configuration, to: &item)
-                afterUpdateModel.replaceItem(item, at: indexPath)
-                reloadedIndexes.insert(indexPath)
-            case let .itemReconfigure(itemIndexPath: indexPath):
-                guard var item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
-                    assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
-                    return
+            }
+        }
+
+        insertedItemsIndexesArray.forEach { indexPath, item in
+            if let item {
+                afterUpdateModel.insertItem(item, at: indexPath)
+                visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height)
+            } else {
+                let item = ItemModel(with: layoutRepresentation.configuration(for: .cell, at: indexPath))
+                visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height)
+                afterUpdateModel.insertItem(item, at: indexPath)
+            }
+            if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates {
+                let globalIndex = globalIndexFor(indexPath.itemPath, kind: .cell, state: .model(afterUpdateModel))
+                if let localItemToRestore = itemToRestore {
+                    if localItemToRestore.kind == .cell,
+                       localItemToRestore.globalIndex + 1 >= globalIndex {
+                        itemToRestore?.globalIndex = localItemToRestore.globalIndex + 1
+                    }
+                } else {
+                    itemToRestore = ItemToRestore(globalIndex: globalIndex, kind: .cell, offset: 0)
                 }
-                let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath)
-                applyConfiguration(configuration, to: &item)
-                afterUpdateModel.replaceItem(item, at: indexPath)
-                reconfiguredIndexes.insert(indexPath)
-            case let .sectionMove(initialSectionIndex: initialSectionIndex, finalSectionIndex: finalSectionIndex):
-                let section = layoutBeforeUpdate.sections[initialSectionIndex]
-                movedSectionsIndexes.insert(finalSectionIndex)
-                afterUpdateModel.removeSection(by: section.id)
-                afterUpdateModel.insertSection(section, at: finalSectionIndex)
-            case let .itemMove(initialItemIndexPath: initialItemIndexPath, finalItemIndexPath: finalItemIndexPath):
-                let itemId = itemIdentifier(for: initialItemIndexPath.itemPath, kind: .cell, at: .beforeUpdate)!
-                let item = layoutBeforeUpdate.sections[initialItemIndexPath.section].items[initialItemIndexPath.item]
-                movedIndexes.insert(initialItemIndexPath)
-                afterUpdateModel.removeItem(by: itemId)
-                afterUpdateModel.insertItem(item, at: finalItemIndexPath)
             }
         }
 
@@ -640,91 +802,15 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         layoutAfterUpdate = afterUpdateModel
 
-        let visibleBounds = layoutRepresentation.visibleBounds
-
         // Calculating potential content offset changes after the updates
-        insertedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            let section = section(at: $0, at: .afterUpdate)
-            compensateOffsetOfSectionIfNeeded(for: $0,
-                                              action: .insert(spacing: section.interSectionSpacing),
-                                              visibleBounds: visibleBounds)
+        if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
+           let itemToRestore,
+           let itemPath = itemPathFor(itemToRestore.globalIndex, kind: itemToRestore.kind, state: .model(afterUpdateModel)),
+           let item = item(for: itemPath, kind: itemToRestore.kind, at: .afterUpdate),
+           isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: layoutRepresentation.visibleBounds) {
+            let newProposedCompensationOffset = (item.frame.maxY - itemToRestore.offset) - layoutRepresentation.visibleBounds.maxY
+            proposedCompensatingOffset = newProposedCompensationOffset
         }
-        reloadedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            let oldSection = section(at: $0, at: .beforeUpdate)
-            guard let newSectionIndex = sectionIndex(for: oldSection.id, at: .afterUpdate) else {
-                assertionFailure("Section with identifier \(oldSection.id) does not exist.")
-                return
-            }
-            let newSection = section(at: newSectionIndex, at: .afterUpdate)
-            compensateOffsetOfSectionIfNeeded(for: $0,
-                                              action: .frameUpdate(previousFrame: oldSection.frame,
-                                                                   newFrame: newSection.frame,
-                                                                   previousSpacing: oldSection.interSectionSpacing,
-                                                                   newSpacing: newSection.interSectionSpacing),
-                                              visibleBounds: visibleBounds)
-        }
-        deletedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
-            let section = section(at: $0, at: .beforeUpdate)
-            compensateOffsetOfSectionIfNeeded(for: $0,
-                                              action: .delete(spacing: section.interSectionSpacing),
-                                              visibleBounds: visibleBounds)
-        }
-
-        reloadedIndexes.sorted(by: { $0 < $1 }).forEach {
-            let newItemPath = $0.itemPath
-            guard let oldItem = item(for: newItemPath, kind: .cell, at: .beforeUpdate),
-                  let newItemIndexPath = itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
-                  let newItem = item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
-                assertionFailure("Internal inconsistency.")
-                return
-            }
-            compensateOffsetIfNeeded(for: newItemPath,
-                                     kind: .cell,
-                                     action: .frameUpdate(previousFrame: oldItem.frame,
-                                                          newFrame: newItem.frame,
-                                                          previousSpacing: oldItem.interItemSpacing,
-                                                          newSpacing: newItem.interItemSpacing),
-                                     visibleBounds: visibleBounds)
-        }
-        reconfiguredIndexes.sorted(by: { $0 < $1 }).forEach {
-            let newItemPath = $0.itemPath
-            guard let oldItem = item(for: newItemPath, kind: .cell, at: .beforeUpdate),
-                  let newItemIndexPath = itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
-                  let newItem = item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
-                assertionFailure("Internal inconsistency.")
-                return
-            }
-            compensateOffsetIfNeeded(for: newItemPath,
-                                     kind: .cell,
-                                     action: .frameUpdate(previousFrame: oldItem.frame,
-                                                          newFrame: newItem.frame,
-                                                          previousSpacing: oldItem.interItemSpacing,
-                                                          newSpacing: newItem.interItemSpacing),
-                                     visibleBounds: visibleBounds)
-        }
-        insertedIndexes.sorted(by: { $0 < $1 }).forEach {
-            let itemPath = $0.itemPath
-            guard let item = item(for: itemPath, kind: .cell, at: .afterUpdate) else {
-                assertionFailure("Internal inconsistency.")
-                return
-            }
-            compensateOffsetIfNeeded(for: itemPath,
-                                     kind: .cell,
-                                     action: .insert(spacing: item.interItemSpacing),
-                                     visibleBounds: visibleBounds)
-        }
-        deletedIndexes.sorted(by: { $0 < $1 }).forEach {
-            let itemPath = $0.itemPath
-            guard let item = item(for: itemPath, kind: .cell, at: .beforeUpdate) else {
-                assertionFailure("Internal inconsistency.")
-                return
-            }
-            compensateOffsetIfNeeded(for: itemPath,
-                                     kind: .cell,
-                                     action: .delete(spacing: item.interItemSpacing),
-                                     visibleBounds: visibleBounds)
-        }
-
         totalProposedCompensatingOffset = proposedCompensatingOffset
     }
 
@@ -995,7 +1081,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                   let itemFrame = itemFrame(for: itemPath, kind: kind, at: .afterUpdate) else {
                 return
             }
-            if itemFrame.minY.rounded() - interItemSpacing <= minY {
+            if (itemFrame.minY - interItemSpacing).rounded() <= minY {
                 proposedCompensatingOffset += itemFrame.height + interItemSpacing
             }
         case let .frameUpdate(previousFrame, newFrame, oldInterItemSpacing, newInterItemSpacing):
@@ -1015,6 +1101,16 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 // So we are using targetContentOffset(forProposedContentOffset:) which is going to be called after.
                 proposedCompensatingOffset -= (deletedFrame.height + interItemSpacing)
             }
+        }
+    }
+
+    private func isLastItemInSection(_ itemPath: ItemPath, at state: ModelState) -> Bool {
+        let layout = layout(at: state)
+        if itemPath.section < layout.sections.count,
+           itemPath.item < layout.sections[itemPath.section].items.count - 1 {
+            return false
+        } else {
+            return true
         }
     }
 
@@ -1072,6 +1168,72 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             return
         }
         frame.offsettingBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))
+    }
+
+    private func globalIndexFor(_ itemPath: ItemPath, kind: ItemKind, state: GlobalIndexModel) -> Int {
+        func numberOfItemsBeforeSection(_ sectionIndex: Int, state: GlobalIndexModel) -> Int {
+            let layout = state.layout ?? layout(at: .beforeUpdate)
+            var total = 0
+            for index in 0..<max(sectionIndex - 1, 0) {
+                let section = layout.sections[index]
+                total += section.items.count
+            }
+            return total
+        }
+
+        switch kind {
+        case .header:
+            return numberOfItemsBeforeSection(itemPath.section, state: state)
+        case .footer:
+            return numberOfItemsBeforeSection(itemPath.section, state: state)
+        case .cell:
+            return numberOfItemsBeforeSection(itemPath.section, state: state) + itemPath.item
+        }
+    }
+
+    private func itemPathFor(_ globalIndex: Int, kind: ItemKind, state: GlobalIndexModel) -> ItemPath? {
+        let layout = state.layout ?? layout(at: .beforeUpdate)
+        var sectionIndex = 0
+        var itemsCount = 0
+        for index in 0..<layout.sections.count {
+            sectionIndex = index
+            let section = layout.sections[index]
+            let countIncludingThisSection = itemsCount + section.items.count
+            if countIncludingThisSection > globalIndex {
+                break
+            }
+            itemsCount = countIncludingThisSection
+        }
+        guard sectionIndex < layout.sections.count,
+              sectionIndex >= 0 else {
+            assertionFailure("Internal inconsistency. Section index \(sectionIndex) is invalid. Amount of sections is \(layout.sections.count).")
+            return nil
+        }
+        switch kind {
+        case .header:
+            let section = layout.sections[sectionIndex]
+            guard section.header != nil else {
+                assertionFailure("Internal inconsistency. Section index \(sectionIndex) does not have header.")
+                return nil
+            }
+            return ItemPath(item: 0, section: sectionIndex)
+        case .footer:
+            let section = layout.sections[sectionIndex]
+            guard section.footer != nil else {
+                assertionFailure("Internal inconsistency. Section index \(sectionIndex) does not have footer.")
+                return nil
+            }
+            return ItemPath(item: 0, section: sectionIndex)
+        case .cell:
+            let itemIndex = globalIndex - itemsCount
+            let section = layout.sections[sectionIndex]
+            guard itemIndex >= 0,
+                  itemIndex < section.items.count else {
+                assertionFailure("Internal inconsistency. Item index \(itemIndex) is invalid. Amount of items is \(section.items.count).")
+                return nil
+            }
+            return ItemPath(item: itemIndex, section: sectionIndex)
+        }
     }
 
 }
