@@ -1169,17 +1169,17 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         frame.offsettingBy(dx: 0, dy: proposedCompensatingOffset * (backward ? -1 : 1))
     }
 
-    private func numberOfItemsBeforeSection(_ sectionIndex: Int, state: GlobalIndexModel) -> Int {
-        let layout = state.layout ?? layout(at: .beforeUpdate)
-        var total = 0
-        for index in 0..<max(sectionIndex - 1, 0) {
-            let section = layout.sections[index]
-            total += section.items.count
-        }
-        return total
-    }
-
     private func globalIndexFor(_ itemPath: ItemPath, kind: ItemKind, state: GlobalIndexModel) -> Int {
+        func numberOfItemsBeforeSection(_ sectionIndex: Int, state: GlobalIndexModel) -> Int {
+            let layout = state.layout ?? layout(at: .beforeUpdate)
+            var total = 0
+            for index in 0..<max(sectionIndex - 1, 0) {
+                let section = layout.sections[index]
+                total += section.items.count
+            }
+            return total
+        }
+
         switch kind {
         case .header:
             return numberOfItemsBeforeSection(itemPath.section, state: state)
