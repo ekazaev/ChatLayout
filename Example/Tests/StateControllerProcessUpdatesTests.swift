@@ -29,7 +29,7 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.settings.estimatedItemSize!.height * (102 * 3) + layout.settings.interItemSpacing * (100 * 3) + layout.settings.interSectionSpacing * 2)
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.settings.estimatedItemSize!.height * (102 * 3) + layout.settings.interItemSpacing * (99 * 3) + layout.settings.interSectionSpacing * 2)
 
         for i in 0..<layout.numberOfItemsInSection.count {
             let header = layout.controller.item(for: ItemPath(item: 0, section: i), kind: .header, at: .beforeUpdate)
@@ -128,7 +128,7 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         var changeItems: [ChangeItem] = []
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.settings.estimatedItemSize!.height * (102 + 102 + 2) + layout.settings.interItemSpacing * (100 + 100 + 0) + layout.settings.interSectionSpacing * 2)
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.settings.estimatedItemSize!.height * (102 + 102 + 2) + layout.settings.interItemSpacing * (99 + 99 + 0) + layout.settings.interSectionSpacing * 2)
 
         changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: 100, section: 0)))
         changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: 0, section: 1)))
@@ -136,7 +136,7 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: 1, section: 2)))
 
         layout.controller.process(changeItems: changeItems)
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) + layout.settings.estimatedItemSize!.height * 4.0 + layout.settings.interItemSpacing * 4.0, layout.controller.contentHeight(at: .afterUpdate))
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) + layout.settings.estimatedItemSize!.height * 4.0 + layout.settings.interItemSpacing * 3.0, layout.controller.contentHeight(at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 99, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 99, section: 0), kind: .cell, at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 1), kind: .cell, at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 2), kind: .cell, at: .afterUpdate))
@@ -206,7 +206,7 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         changeItems.append(.itemDelete(itemIndexPath: IndexPath(item: 0, section: 2)))
 
         layout.controller.process(changeItems: changeItems)
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) - layout.settings.estimatedItemSize!.height * 3.0 - layout.settings.interItemSpacing * 3.0, layout.controller.contentHeight(at: .afterUpdate))
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) - layout.settings.estimatedItemSize!.height * 3.0 - layout.settings.interItemSpacing * 2.0, layout.controller.contentHeight(at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 98, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 98, section: 0), kind: .cell, at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
         XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 2), kind: .cell, at: .afterUpdate))
@@ -317,9 +317,9 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 100)
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 300)
         XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .beforeUpdate), 200)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 200)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 100)
         XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .beforeUpdate), 300)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .afterUpdate), 100)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .afterUpdate), 200)
         XCTAssertEqual(layout.controller.numberOfSections(at: .beforeUpdate), 3)
         XCTAssertEqual(layout.controller.numberOfSections(at: .afterUpdate), 3)
 
@@ -330,9 +330,9 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 40))
         XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 40))
 
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
+        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .afterUpdate))
 
         layout.controller.commitUpdates()
     }

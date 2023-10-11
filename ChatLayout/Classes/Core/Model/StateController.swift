@@ -562,6 +562,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 reloadedItemsIndexesArray.append(indexPath)
             case let .sectionDelete(sectionIndex):
                 deletedSectionsIndexes.insert(sectionIndex)
+
                 deletedSectionsIndexesArray.append(sectionIndex)
             case let .itemDelete(itemIndexPath: indexPath):
                 deletedIndexes.insert(indexPath)
@@ -590,7 +591,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         }
 
-        deletedSectionsIndexesArray = deletedSectionsIndexes.sorted(by: { $0 > $1 })
+        deletedSectionsIndexesArray = deletedSectionsIndexesArray.sorted(by: { $0 > $1 })
         insertedSectionsIndexesArray = insertedSectionsIndexesArray.sorted(by: { $0.0 < $1.0 })
 
         deletedItemsIndexesArray = deletedItemsIndexesArray.sorted(by: { $0 > $1 })

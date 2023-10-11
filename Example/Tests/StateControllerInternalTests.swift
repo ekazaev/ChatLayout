@@ -135,7 +135,7 @@ class StateControllerInternalTests: XCTestCase {
         layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
-        let estimatedContentHeight = layout.settings.additionalInsets.top + layout.settings.additionalInsets.bottom + layout.settings.estimatedItemSize!.height * (7 * 3) + layout.settings.interItemSpacing * (5 * 3) + layout.settings.interSectionSpacing * 2
+        let estimatedContentHeight = layout.settings.additionalInsets.top + layout.settings.additionalInsets.bottom + layout.settings.estimatedItemSize!.height * (7 * 3) + layout.settings.interItemSpacing * (4 * 3) + layout.settings.interSectionSpacing * 2
         XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), estimatedContentHeight)
         XCTAssertEqual(layout.controller.contentSize(for: .beforeUpdate), CGSize(width: layout.viewSize.width - 0.0001, height: estimatedContentHeight))
     }
