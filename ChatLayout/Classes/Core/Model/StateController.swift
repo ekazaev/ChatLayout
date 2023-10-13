@@ -782,7 +782,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 let globalIndex = globalIndexFor(indexPath.itemPath, kind: .cell, state: .model(afterUpdateModel))
                 if let localItemToRestore = itemToRestore {
                     if localItemToRestore.kind == .cell,
-                       localItemToRestore.globalIndex + 1 >= globalIndex {
+                       localItemToRestore.globalIndex >= globalIndex {
                         itemToRestore?.globalIndex = localItemToRestore.globalIndex + 1
                     }
                 } else {
