@@ -482,7 +482,6 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
             switch message.data {
             case let .text(text):
                 let view = (view as? TextMessageViewItem) ?? scrollView.dequeueReusableViewForIndex(index) ?? {
-                    print("NEW")
                     return TextMessageViewItem()
                 }()
                 setupMessageContainerView(view, messageId: message.id, alignment: cell.alignment)

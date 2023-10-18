@@ -26,7 +26,6 @@ extension RecyclerScrollView {
             completion: ((Bool) -> Void)? = nil,
             setData: @escaping ([Section]) -> Void
     ) {
-        print("BEGIN")
         var originalData = originalData
         if case .none = window,
            let data = stagedChangeset.last?.data {
@@ -37,7 +36,6 @@ extension RecyclerScrollView {
                 reloadData()
             }
             completion?(false)
-            print("END")
             return
         }
 
@@ -57,12 +55,11 @@ extension RecyclerScrollView {
                     self.reloadData()
                 }
                 completion?(false)
-                print("END")
                 return
             }
 
             setData(changeset.data)
-            print("I:\(changeset.elementInserted) D:\(changeset.elementDeleted) U:\(changeset.elementUpdated) M:\(changeset.elementMoved)")
+//            print("I:\(changeset.elementInserted) D:\(changeset.elementDeleted) U:\(changeset.elementUpdated) M:\(changeset.elementMoved)")
             var modifications: [ModificationActions] = []
             changeset.elementDeleted.forEach({ indexPath in
                 modifications.append(.delete(indexPath.element))
@@ -96,7 +93,6 @@ extension RecyclerScrollView {
         }
 
         dispatchGroup?.notify(queue: .main) {
-            print("END")
             modificationContext.commit()
             completion!(true)
         }
