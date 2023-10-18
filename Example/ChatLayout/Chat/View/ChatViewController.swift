@@ -18,7 +18,7 @@ import InputBarAccessoryView
 import UIKit
 import RecyclerView
 
-struct VoidPayload: Equatable, TapSelectionStateSupporting, InteractivelyMovingItemSupporting, SimpleLayoutSupporting {
+struct VoidPayload: Equatable, TapSelectionStateSupporting, InteractivelyMovingItemSupporting, ContinuousLayoutEngineSupporting {
     var isSticky: Bool = false
     var spacing: CGFloat = 8
     var isInteractiveMovingPossible: Bool = false
@@ -38,7 +38,7 @@ let enableReconfigure = false
 
 final class ChatViewController: UIViewController {
 
-    lazy var scrollView = RecyclerScrollView(frame: UIScreen.main.bounds, engine: SimpleLayoutEngine<VoidPayload>())
+    lazy var scrollView = RecyclerScrollView(frame: UIScreen.main.bounds, engine: ContinuousLayoutEngine<VoidPayload>())
 
     private enum ReactionTypes {
         case delayedUpdate
@@ -608,7 +608,7 @@ extension ChatViewController: UIGestureRecognizerDelegate {
 
 extension ChatViewController: InputBarAccessoryViewDelegate {
     public func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
-        guard !currentInterfaceActions.options.contains(.sendingMessage) else {
+        guard !currentInterfaceActions.options.contains(.sendingMessage), size.width > 0 else {
             return
         }
         scrollToBottom()

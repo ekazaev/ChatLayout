@@ -15,7 +15,7 @@ import Foundation
 import UIKit
 import RecyclerView
 
-protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegate, RecyclerViewDataSource<VoidPayload>, SimpleLayoutEngineDelegate {
+protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegate, RecyclerViewDataSource<VoidPayload>, ContinuousLayoutEngineDelegate {
 
     var sections: [Section] { get set }
 

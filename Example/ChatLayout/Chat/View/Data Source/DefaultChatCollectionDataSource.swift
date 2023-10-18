@@ -32,7 +32,7 @@ typealias TextTitleView = ContainerCollectionReusableView<UILabel>
 
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
 
-    weak var scrollView: RecyclerScrollView<SimpleLayoutEngine<VoidPayload>>!
+    weak var scrollView: RecyclerScrollView<ContinuousLayoutEngine<VoidPayload>>!
 
     private unowned var reloadDelegate: ReloadDelegate
 
@@ -433,7 +433,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     }
 }
 
-extension DefaultChatCollectionDataSource: SimpleLayoutEngineDelegate {
+extension DefaultChatCollectionDataSource: ContinuousLayoutEngineDelegate {
     public func heightForView(_ view: UIView, with index: Int, width: CGFloat) -> CGFloat? {
         if let view = view as? TextMessageViewItem {
             view.customView.customView.customView.applyWidth(width)
