@@ -32,7 +32,7 @@ typealias TextTitleView = ContainerCollectionReusableView<UILabel>
 
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
 
-    weak var scrollView: RecyclerScrollView<SimpleLayoutEngine<Cell.Identifier, VoidPayload>>!
+    weak var scrollView: RecyclerScrollView<SimpleLayoutEngine<VoidPayload>>!
 
     private unowned var reloadDelegate: ReloadDelegate
 
@@ -42,17 +42,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
 
     private let swipeNotifier: SwipeNotifier
 
-    var sections: [Section] = [] {
-        didSet {
-            oldSections = oldValue
-            cellsDictionary.removeAll(keepingCapacity: true)
-            sections.first?.cells.forEach({ cell in
-                cellsDictionary[cell.differenceIdentifier] = cell
-            })
-        }
-    }
-
-    var cellsDictionary: Dictionary<Cell.Identifier, Cell> = [:]
+    var sections: [Section] = []
 
     private var oldSections: [Section] = []
 
@@ -444,11 +434,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
 }
 
 extension DefaultChatCollectionDataSource: SimpleLayoutEngineDelegate {
-    func estimatedHeightForIdentifier(_ identifier: Identifier) -> CGFloat? {
-        return 100
-    }
-
-    public func heightForView(_ view: UIView, with identifier: Identifier, width: CGFloat) -> CGFloat? {
+    public func heightForView(_ view: UIView, with index: Int, width: CGFloat) -> CGFloat? {
         if let view = view as? TextMessageViewItem {
             view.customView.customView.customView.applyWidth(width)
         }
@@ -457,18 +443,22 @@ extension DefaultChatCollectionDataSource: SimpleLayoutEngineDelegate {
                 verticalFittingPriority: .fittingSizeLevel)
         return systemLayoutSize.height
     }
+
+    public func estimatedHeightForIndex(_ index: Int) -> CGFloat? {
+        return 100
+    }
 }
 
 extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
-    func allIdentifiers() -> [Identifier] {
-        return sections.first?.cells.map({ $0.differenceIdentifier }) ?? []
+    public func numberOfCells() -> Int {
+        return sections.first?.cells.count ?? 0
     }
 
-    func viewForIdentifier(_ identifier: Identifier) -> UIView {
-        return createView(nil, with: identifier)
+    public func viewForCellAtIndex(_ index: Int) -> UIView {
+        return createView(nil, with: index)
     }
 
-    func payloadForIdentifier(_ identifier: Identifier) -> Payload {
+    public func payloadForCellAtIndex(_ index: Int) -> Payload {
         var payload =  VoidPayload()
 //        if case .date = identifier {
 //            payload.isSticky = true
@@ -478,21 +468,20 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
         return payload
     }
 
-    func reconfigureView(_ view: UIView, with identifier: Identifier) {
-        createView(view, with: identifier)
+    public func reconfigureView(_ view: UIView, with payload: Payload, forCellAtIndex index: Int) {
+        createView(view, with: index)
     }
 
-
     @discardableResult
-    func createView(_ view: UIView?, with identifier: Identifier) -> UIView {
-        guard let cell = cellsDictionary[identifier] else {
+    func createView(_ view: UIView?, with index: Int) -> UIView {
+        guard let cell = sections.first?.cells[index] else {
             fatalError("Internal inconsistency.")
         }
         switch cell {
         case let .message(message, bubbleType: bubbleType):
             switch message.data {
             case let .text(text):
-                let view = (view as? TextMessageViewItem) ?? scrollView.dequeueReusableViewWithIdentifier(identifier) ?? {
+                let view = (view as? TextMessageViewItem) ?? scrollView.dequeueReusableViewForIndex(index) ?? {
                     print("NEW")
                     return TextMessageViewItem()
                 }()
@@ -514,7 +503,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
                 fatalError()
             }
         case let .messageGroup(group):
-            let view = (view as? UserTitleViewItem) ?? scrollView.dequeueReusableViewWithIdentifier(identifier) ?? UserTitleViewItem()
+            let view = (view as? UserTitleViewItem) ?? scrollView.dequeueReusableViewForIndex(index) ?? UserTitleViewItem()
             view.spacing = 2
 
             view.customView.customView.text = group.title
@@ -545,7 +534,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
             view.layoutMargins = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
             return view
         case let .date(group):
-            let view = (view as? TitleViewItem) ?? scrollView.dequeueReusableViewWithIdentifier(identifier) ?? TitleViewItem()
+            let view = (view as? TitleViewItem) ?? scrollView.dequeueReusableViewForIndex(index) ?? TitleViewItem()
             view.preferredMaxLayoutWidth = scrollView.visibleRect.width
             view.text = group.value
             view.textAlignment = .center
@@ -555,7 +544,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
             view.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
             return view
         case .typingIndicator:
-            let view = (view as? TypingIndicatorItem) ?? scrollView.dequeueReusableViewWithIdentifier(identifier) ?? TypingIndicatorItem()
+            let view = (view as? TypingIndicatorItem) ?? scrollView.dequeueReusableViewForIndex(index) ?? TypingIndicatorItem()
             let alignment = ChatItemAlignment.leading
             view.alignment = alignment
             let bubbleView = view.customView.customView

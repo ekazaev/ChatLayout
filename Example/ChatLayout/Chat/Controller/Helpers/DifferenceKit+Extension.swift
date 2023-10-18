@@ -16,7 +16,7 @@ import Foundation
 import UIKit
 import RecyclerView
 
-extension RecyclerScrollView where Engine.Identifier == Cell.Identifier {
+extension RecyclerScrollView {
 
     func reload(
             originalData: [Section],
@@ -63,24 +63,24 @@ extension RecyclerScrollView where Engine.Identifier == Cell.Identifier {
 
             setData(changeset.data)
             print("I:\(changeset.elementInserted) D:\(changeset.elementDeleted) U:\(changeset.elementUpdated) M:\(changeset.elementMoved)")
-            var modifications: [ModificationActions<Engine.Identifier>] = []
+            var modifications: [ModificationActions] = []
             changeset.elementDeleted.forEach({ indexPath in
-                modifications.append(.delete(originalData[indexPath.section].cells[indexPath.element].differenceIdentifier))
+                modifications.append(.delete(indexPath.element))
             })
             changeset.elementInserted.forEach({ indexPath in
-                modifications.append(.insert(changeset.data[indexPath.section].cells[indexPath.element].differenceIdentifier, at: indexPath.element))
+                modifications.append(.insert(indexPath.element))
             })
             changeset.elementUpdated.forEach({ indexPath in
                 let originalIdentifier = originalData[indexPath.section].cells[indexPath.element].differenceIdentifier
                 let newIdentifier = changeset.data[indexPath.section].cells[indexPath.element].differenceIdentifier
                 if originalIdentifier != newIdentifier {
-                    modifications.append(.reload(originalIdentifier, with: newIdentifier))
+                    modifications.append(.reload(indexPath.element))
                 } else {
-                    modifications.append(.reconfigure(originalIdentifier))
+                    modifications.append(.reconfigure(indexPath.element))
                 }
             })
             changeset.elementMoved.forEach({ sourceIndexPath, targetIndexPath in
-                modifications.append(.move(originalData[sourceIndexPath.section].cells[sourceIndexPath.element].differenceIdentifier, to: targetIndexPath.element))
+                modifications.append(.move(sourceIndexPath.element, to: targetIndexPath.element))
             })
             UIView.animate(withDuration: 0.25, animations: { [weak self] in
                 dispatchGroup?.enter()

@@ -1,10 +1,10 @@
 PODS:
-  - ChatLayout (1.3.4):
-    - ChatLayout/Ultimate (= 1.3.4)
-  - ChatLayout/Core (1.3.4)
-  - ChatLayout/Extras (1.3.4):
+  - ChatLayout (2.0.1):
+    - ChatLayout/Ultimate (= 2.0.1)
+  - ChatLayout/Core (2.0.1)
+  - ChatLayout/Extras (2.0.1):
     - ChatLayout/Core
-  - ChatLayout/Ultimate (1.3.4):
+  - ChatLayout/Ultimate (2.0.1):
     - ChatLayout/Core
     - ChatLayout/Extras
   - DifferenceKit (1.3.0):
@@ -48,7 +48,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/steipete/InterposeKit
 
 SPEC CHECKSUMS:
-  ChatLayout: e07c2fd8ac2ba7a78684e5a8aa32291eb746cab1
+  ChatLayout: ee00cfb92f79eae9e0a8d33264d8f3c8cc9d3fe8
   DifferenceKit: ab185c4d7f9cef8af3fcf593e5b387fb81e999ca
   FPSCounter: 884afec377de66637808c4f52ecc3b85a404732b
   InputBarAccessoryView: 1d7b0a672b36e370f01f264b3907ef39d03328e3

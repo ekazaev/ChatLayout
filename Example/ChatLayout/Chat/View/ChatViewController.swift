@@ -38,7 +38,7 @@ let enableReconfigure = false
 
 final class ChatViewController: UIViewController {
 
-    lazy var scrollView = RecyclerScrollView(frame: UIScreen.main.bounds, engine: SimpleLayoutEngine<Cell.Identifier, VoidPayload>(identifiers: []))
+    lazy var scrollView = RecyclerScrollView(frame: UIScreen.main.bounds, engine: SimpleLayoutEngine<VoidPayload>())
 
     private enum ReactionTypes {
         case delayedUpdate
@@ -230,7 +230,7 @@ final class ChatViewController: UIViewController {
         }
         currentInterfaceActions.options.insert(.changingFrameSize)
         let positionSnapshot = scrollView.getPositionSnapshot(from: .bottom)
-        let cellFrame = positionSnapshot.flatMap({ scrollView.engine.configurationForIdentifier($0.identifier).frame })
+        let cellFrame = positionSnapshot.flatMap({ scrollView.engine.configurationForIndex($0.index).frame })
 
         coordinator.animate(alongsideTransition: { _ in
         }, completion: { [weak self] _ in
@@ -241,11 +241,11 @@ final class ChatViewController: UIViewController {
                let cellFrame,
                let newSnapshot = self.scrollView.getPositionSnapshot(from: .bottom),
                !self.isUserInitiatedScrolling {
-                let adjustedOffset = scrollView.engine.configurationForIdentifier(newSnapshot.identifier).frame.height * positionSnapshot.offset / cellFrame.height
+                let adjustedOffset = scrollView.engine.configurationForIndex(newSnapshot.index).frame.height * positionSnapshot.offset / cellFrame.height
                 // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
                 // to compact and back. `CollectionViewChatLayout` may not properly predict the final position of the element. So we try
                 // to restore it after the rotation manually.
-                self.scrollView.scrollToPositionSnapshot(.init(identifier: positionSnapshot.identifier, edge: positionSnapshot.edge, offset: adjustedOffset), animated: false)
+                self.scrollView.scrollToPositionSnapshot(.init(index: positionSnapshot.index, edge: positionSnapshot.edge, offset: adjustedOffset), animated: false)
             }
             self.currentInterfaceActions.options.remove(.changingFrameSize)
         })
@@ -363,11 +363,11 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     func scrollToBottom(completion: (() -> Void)? = nil) {
-        guard let identifier = dataSource.sections.first?.cells.last?.differenceIdentifier else {
+        guard let index = dataSource.sections.first?.cells.count else {
             return
         }
         currentInterfaceActions.options.insert(.scrollingToBottom)
-        scrollView.scrollToPositionSnapshot(.init(identifier: identifier, edge: .bottom), animated: true, completion: { _ in
+        scrollView.scrollToPositionSnapshot(.init(index: index - 1, edge: .bottom), animated: true, completion: { _ in
             self.currentInterfaceActions.options.remove(.scrollingToBottom)
             completion?()
         })
