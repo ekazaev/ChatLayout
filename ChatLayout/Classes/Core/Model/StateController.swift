@@ -528,10 +528,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             itemToRestore = ItemToRestore(globalIndex: globalIndexFor(lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
                                           kind: lastVisibleAttribute.kind,
                                           offset: (item.frame.maxY - layoutRepresentation.visibleBounds.maxY).rounded())
+        } else {
+            print("\(#function) NO ITEM TO RESTORE????")
         }
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
 
+        print("\(#function) \(itemToRestore?.globalIndex)")
         var afterUpdateModel = LayoutModel(sections: layoutBeforeUpdate.sections,
                                            collectionLayout: layoutRepresentation)
         resetCachedAttributeObjects()
@@ -809,8 +812,73 @@ final class StateController<Layout: ChatLayoutRepresentation> {
            let item = item(for: itemPath, kind: itemToRestore.kind, at: .afterUpdate),
            isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: layoutRepresentation.visibleBounds) {
             let newProposedCompensationOffset = (item.frame.maxY - itemToRestore.offset) - layoutRepresentation.visibleBounds.maxY
-            proposedCompensatingOffset = newProposedCompensationOffset
+//            proposedCompensatingOffset = newProposedCompensationOffset
+            print("\(#function) \(itemToRestore.globalIndex) \(newProposedCompensationOffset)")
+        } else {
+            print("\(#function) \(itemToRestore?.globalIndex) NO CORRECTION")
         }
+
+        let visibleBounds = layoutRepresentation.visibleBounds
+        reloadedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
+            let oldSection = section(at: $0, at: .beforeUpdate)
+            guard let newSectionIndex = sectionIndex(for: oldSection.id, at: .afterUpdate) else {
+                assertionFailure("Section with identifier \(oldSection.id) does not exist.")
+                return
+            }
+            let newSection = section(at: newSectionIndex, at: .afterUpdate)
+            compensateOffsetOfSectionIfNeeded(for: $0,
+                                              action: .frameUpdate(previousFrame: oldSection.frame,
+                                                                   newFrame: newSection.frame,
+                                                                   previousSpacing: oldSection.interSectionSpacing,
+                                                                   newSpacing: newSection.interSectionSpacing),
+                                              visibleBounds: visibleBounds)
+        }
+        deletedSectionsIndexes.sorted(by: { $0 < $1 }).forEach {
+            let section = section(at: $0, at: .beforeUpdate)
+            compensateOffsetOfSectionIfNeeded(for: $0,
+                                              action: .delete(spacing: section.interSectionSpacing),
+                                              visibleBounds: visibleBounds)
+        }
+
+        [reloadedIndexes, reconfiguredIndexes].joined().sorted(by: { $0 < $1 }).forEach {
+            let newItemPath = $0.itemPath
+            guard let oldItem = item(for: newItemPath, kind: .cell, at: .beforeUpdate),
+                  let newItemIndexPath = itemPath(by: oldItem.id, kind: .cell, at: .afterUpdate),
+                  let newItem = item(for: newItemIndexPath, kind: .cell, at: .afterUpdate) else {
+                assertionFailure("Internal inconsistency.")
+                return
+            }
+            compensateOffsetIfNeeded(for: newItemPath,
+                                     kind: .cell,
+                                     action: .frameUpdate(previousFrame: oldItem.frame,
+                                                          newFrame: newItem.frame,
+                                                          previousSpacing: oldItem.interItemSpacing,
+                                                          newSpacing: newItem.interItemSpacing),
+                                     visibleBounds: visibleBounds)
+        }
+        insertedIndexes.sorted(by: { $0 < $1 }).forEach {
+            let itemPath = $0.itemPath
+            guard let item = item(for: itemPath, kind: .cell, at: .afterUpdate) else {
+                assertionFailure("Internal inconsistency.")
+                return
+            }
+            compensateOffsetIfNeeded(for: itemPath,
+                                     kind: .cell,
+                                     action: .insert(spacing: item.interItemSpacing),
+                                     visibleBounds: visibleBounds)
+        }
+        deletedIndexes.sorted(by: { $0 < $1 }).forEach {
+            let itemPath = $0.itemPath
+            guard let item = item(for: itemPath, kind: .cell, at: .beforeUpdate) else {
+                assertionFailure("Internal inconsistency.")
+                return
+            }
+            compensateOffsetIfNeeded(for: itemPath,
+                                     kind: .cell,
+                                     action: .delete(spacing: item.interItemSpacing),
+                                     visibleBounds: visibleBounds)
+        }
+
         totalProposedCompensatingOffset = proposedCompensatingOffset
     }
 

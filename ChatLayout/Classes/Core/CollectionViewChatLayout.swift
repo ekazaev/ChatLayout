@@ -307,6 +307,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Tells the layout object to update the current layout.
     open override func prepare() {
+        print("\(#function) \(collectionView?.contentOffset.y)")
         super.prepare()
 
         guard let collectionView,
@@ -325,6 +326,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             state = .beforeUpdate
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
+            print("\(#function) SWITCHING CONTEXT \(collectionView.contentOffset.y)")
         }
 
         if prepareActions.contains(.recreateSectionModels) {
@@ -487,6 +489,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Cleans up after any animated changes to the view’s bounds or after the insertion or deletion of items.
     open override func finalizeAnimatedBoundsChange() {
+        print("\(#function) \(collectionView?.contentOffset.y)")
         if controller.isAnimatedBoundsChange {
             state = .beforeUpdate
             resetInvalidatedAttributes()
@@ -600,6 +603,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.
     open override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
+        print("\(#function) \(collectionView?.contentOffset.y)")
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext
         invalidationContext.invalidateLayoutMetrics = false
         return invalidationContext
@@ -607,6 +611,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Invalidates the current layout using the information in the provided context object.
     open override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        print("\(#function) \(collectionView?.contentOffset.y)")
         guard let collectionView else {
             super.invalidateLayout(with: context)
             return
@@ -664,6 +669,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         super.invalidateLayout()
     }
 
+    private var lastUpdateProposedContentOffset: CGPoint?
+
     /// Retrieves the content offset to use after an animated layout update or change.
     open override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
         if controller.proposedCompensatingOffset != 0,
@@ -671,6 +678,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             let minPossibleContentOffset = -collectionView.adjustedContentInset.top
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(collectionView.contentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
+            print("\(#function) new: \(newProposedContentOffset.y) old: \(proposedContentOffset.y) current: \(collectionView.contentOffset.y) \(state)")
+            if state == .afterUpdate {
+                lastUpdateProposedContentOffset = newProposedContentOffset
+            }
             if needsIOS15_1IssueFix {
                 controller.proposedCompensatingOffset = 0
                 collectionView.contentOffset = newProposedContentOffset
@@ -687,6 +698,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Notifies the layout object that the contents of the collection view are about to change.
     open override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+        print("\(#function) \(updateItems) \(reconfigureItemsIndexPaths) \(collectionView?.contentOffset.y)")
         var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
         controller.process(changeItems: changeItems)
@@ -714,15 +726,28 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Performs any additional animations or clean up needed during a collection view update.
     open override func finalizeCollectionViewUpdates() {
+        print("\(#function) \(controller.batchUpdateCompensatingOffset) \(controller.isLayoutBiggerThanVisibleBounds(at: state)) \(collectionView?.contentOffset.y)")
         controller.proposedCompensatingOffset = 0
+
+//        if keepContentOffsetAtBottomOnBatchUpdates,
+//           !isUserInitiatedScrolling,
+//           let collectionView,
+//           controller.isLayoutBiggerThanVisibleBounds(at: state),
+//           let lastUpdateProposedContentOffset,
+//           collectionView.contentOffset != lastUpdateProposedContentOffset {
+//            collectionView.contentOffset = lastUpdateProposedContentOffset
+//        }
+
+        let totalCompensatingOffset = controller.batchUpdateCompensatingOffset //+ (lastUpdateProposedContentOffset?.y ?? 0)
 
         if keepContentOffsetAtBottomOnBatchUpdates,
            controller.isLayoutBiggerThanVisibleBounds(at: state),
-           controller.batchUpdateCompensatingOffset != 0,
+           totalCompensatingOffset != 0,
            let collectionView {
+            print("\(#function) A")
             let compensatingOffset: CGFloat
             if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
-                compensatingOffset = controller.batchUpdateCompensatingOffset
+                compensatingOffset = totalCompensatingOffset
             } else {
                 compensatingOffset = maxPossibleContentOffset.y - collectionView.contentOffset.y
             }
@@ -731,10 +756,12 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             context.contentOffsetAdjustment.y = compensatingOffset
             invalidateLayout(with: context)
         } else {
+            print("\(#function) B")
             controller.batchUpdateCompensatingOffset = 0
             let context = ChatLayoutInvalidationContext()
             invalidateLayout(with: context)
         }
+        self.lastUpdateProposedContentOffset = nil
 
         prepareActions.formUnion(.switchStates)
         super.finalizeCollectionViewUpdates()
