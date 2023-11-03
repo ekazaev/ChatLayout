@@ -22,7 +22,13 @@ final class URLController {
 
     weak var delegate: ReloadDelegate?
 
-    weak var view: URLView?
+    weak var view: URLView? {
+        didSet {
+            UIView.performWithoutAnimation {
+                view?.reloadData()
+            }
+        }
+    }
 
     private let provider = LPMetadataProvider()
 
@@ -55,7 +61,13 @@ final class URLController {
                     guard let self else {
                         return
                     }
-                    delegate?.reloadMessage(with: messageId)
+                    if #available(iOS 16.0, *),
+                       enableSelfSizingSupport {
+                        self.metadata = metadata
+                        view?.reloadData()
+                    } else {
+                        delegate?.reloadMessage(with: messageId)
+                    }
                 }
             }
         }

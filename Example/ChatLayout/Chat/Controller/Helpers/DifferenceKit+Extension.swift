@@ -10,6 +10,7 @@
 // https://github.com/sponsors/ekazaev
 //
 
+import ChatLayout
 import DifferenceKit
 import Foundation
 import UIKit
@@ -88,9 +89,16 @@ public extension UICollectionView {
                 }
 
                 if !changeset.elementUpdated.isEmpty {
-                    reloadItems(at: changeset.elementUpdated.map {
+                    let indexPaths = changeset.elementUpdated.map {
                         IndexPath(item: $0.element, section: $0.section)
-                    })
+                    }
+                    if #available(iOS 15.0, *),
+                       enableReconfigure {
+                        reconfigureItems(at: indexPaths)
+                        (collectionViewLayout as? CollectionViewChatLayout)?.reconfigureItems(at: indexPaths)
+                    } else {
+                        reloadItems(at: indexPaths)
+                    }
                 }
 
                 for (source, target) in changeset.elementMoved {

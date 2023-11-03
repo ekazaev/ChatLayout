@@ -130,6 +130,18 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
 
 }
 
+extension TextMessageView: AvatarViewDelegate {
+    func avatarTapped() {
+        if enableSelfSizingSupport {
+            layoutMargins = layoutMargins == .zero ? UIEdgeInsets(top: 50, left: 0, bottom: 50, right: 0) : .zero
+            setNeedsLayout()
+            if let cell = superview(of: UICollectionViewCell.self) {
+                cell.contentView.invalidateIntrinsicContentSize()
+            }
+        }
+    }
+}
+
 /// UITextView with hacks to avoid selection
 private final class MessageTextView: UITextView {
 

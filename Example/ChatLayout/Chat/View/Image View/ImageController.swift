@@ -17,7 +17,9 @@ final class ImageController {
 
     weak var view: ImageView? {
         didSet {
-            view?.reloadData()
+            UIView.performWithoutAnimation {
+                view?.reloadData()
+            }
         }
     }
 
@@ -52,11 +54,18 @@ final class ImageController {
                 self.image = image
                 view?.reloadData()
             } else {
-                loader.loadImage(from: url) { [weak self] _ in
-                    guard let self else {
+                loader.loadImage(from: url) { [weak self] result in
+                    guard let self,
+                          case let .success(image) = result else {
                         return
                     }
-                    delegate?.reloadMessage(with: messageId)
+                    if #available(iOS 16.0, *),
+                       enableSelfSizingSupport {
+                        self.image = image
+                        view?.reloadData()
+                    } else {
+                        delegate?.reloadMessage(with: messageId)
+                    }
                 }
             }
         case let .image(image):

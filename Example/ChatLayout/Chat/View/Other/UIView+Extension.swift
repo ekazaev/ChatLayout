@@ -15,6 +15,14 @@ import UIKit
 
 extension UIView {
 
+    func superview<T>(of type: T.Type) -> T? {
+        superview as? T ?? superview.flatMap { $0.superview(of: type) }
+    }
+
+    func subview<T>(of type: T.Type) -> T? {
+        subviews.compactMap { $0 as? T ?? $0.subview(of: type) }.first
+    }
+
     // Even though we do not set it animated - it can happen during the animated batch update
     // http://www.openradar.me/25087688
     // https://github.com/nkukushkin/StackView-Hiding-With-Animation-Bug-Example

@@ -198,25 +198,6 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         }
     }
 
-    private func setupCellLayoutView(_ cellView: CellLayoutContainerView<AvatarView, some Any, StatusView>,
-                                     user: User,
-                                     alignment: ChatItemAlignment,
-                                     bubble: Cell.BubbleType,
-                                     status: MessageStatus) {
-        cellView.alignment = .bottom
-        cellView.leadingView?.isHiddenSafe = !alignment.isIncoming
-        cellView.leadingView?.alpha = alignment.isIncoming ? 1 : 0
-        cellView.trailingView?.isHiddenSafe = alignment.isIncoming
-        cellView.trailingView?.alpha = alignment.isIncoming ? 0 : 1
-        cellView.trailingView?.setup(with: status)
-
-        if let avatarView = cellView.leadingView {
-            let avatarViewController = AvatarViewController(user: user, bubble: bubble)
-            avatarView.setup(with: avatarViewController)
-            avatarViewController.view = avatarView
-        }
-    }
-
     private func setupMainMessageView(_ cellView: MainContainerView<AvatarView, some Any, StatusView>,
                                       user: User,
                                       alignment: ChatItemAlignment,
@@ -232,6 +213,11 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
             let avatarViewController = AvatarViewController(user: user, bubble: bubble)
             avatarView.setup(with: avatarViewController)
             avatarViewController.view = avatarView
+            if let avatarDelegate = cellView.customView.customView as? AvatarViewDelegate {
+                avatarView.delegate = avatarDelegate
+            } else {
+                avatarView.delegate = nil
+            }
         }
     }
 

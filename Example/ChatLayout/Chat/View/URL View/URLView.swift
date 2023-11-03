@@ -50,11 +50,13 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
 
     func reloadData() {
         setupLinkView()
+        if let cell = superview(of: UICollectionViewCell.self) {
+            cell.contentView.invalidateIntrinsicContentSize()
+        }
     }
 
     func setup(with controller: URLController) {
         self.controller = controller
-        reloadData()
     }
 
     private func setupLinkView() {
@@ -69,39 +71,36 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
 //            }
 //            return
 //        }
-        UIView.performWithoutAnimation {
-            linkView?.removeFromSuperview()
-            guard let controller else {
-                return
-            }
-
-            let newLinkView: LPLinkView
-            switch controller.metadata {
-            case let .some(metadata):
-                newLinkView = LPLinkView(metadata: metadata)
-            case .none:
-                newLinkView = LPLinkView(url: controller.url)
-            }
-            addSubview(newLinkView)
-            newLinkView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                newLinkView.topAnchor.constraint(equalTo: self.topAnchor),
-                newLinkView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-                newLinkView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-                newLinkView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-            ])
-
-            linkWidthConstraint = newLinkView.widthAnchor.constraint(equalToConstant: 310)
-            linkWidthConstraint?.priority = UILayoutPriority(999)
-            linkWidthConstraint?.isActive = true
-
-            linkHeightConstraint = newLinkView.heightAnchor.constraint(equalToConstant: 40)
-            linkHeightConstraint?.priority = UILayoutPriority(999)
-            linkHeightConstraint?.isActive = true
-
-            self.linkView = newLinkView
+        linkView?.removeFromSuperview()
+        guard let controller else {
+            return
         }
 
+        let newLinkView: LPLinkView
+        switch controller.metadata {
+        case let .some(metadata):
+            newLinkView = LPLinkView(metadata: metadata)
+        case .none:
+            newLinkView = LPLinkView(url: controller.url)
+        }
+        addSubview(newLinkView)
+        newLinkView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            newLinkView.topAnchor.constraint(equalTo: topAnchor),
+            newLinkView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            newLinkView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            newLinkView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
+
+        linkWidthConstraint = newLinkView.widthAnchor.constraint(equalToConstant: 310)
+        linkWidthConstraint?.priority = UILayoutPriority(999)
+        linkWidthConstraint?.isActive = true
+
+        linkHeightConstraint = newLinkView.heightAnchor.constraint(equalToConstant: 40)
+        linkHeightConstraint?.priority = UILayoutPriority(999)
+        linkHeightConstraint?.isActive = true
+
+        linkView = newLinkView
     }
 
     private func setupSize() {

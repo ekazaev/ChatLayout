@@ -71,6 +71,22 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// This flag is only to provide fine control over the batch updates. If in doubts - keep it `true`.
     public var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
 
+    /// A mode that enables automatic self-sizing invalidation after Auto Layout changes. It's advisable to continue using the reload/reconfigure method, especially when multiple
+    /// changes occur concurrently in an animated fashion. This approach ensures that the `CollectionViewChatLayout` can handle these changes while maintaining the content offset accurately.
+    /// Consider using it when no better alternatives are available.
+    ///
+    /// **NB:**
+    /// This is an experimental flag.
+    @available(iOS 16.0, *)
+    public var supportSelfSizingInvalidation: Bool {
+        get {
+            _supportSelfSizingInvalidation
+        }
+        set {
+            _supportSelfSizingInvalidation = newValue
+        }
+    }
+
     /// Represent the currently visible rectangle.
     open var visibleBounds: CGRect {
         guard let collectionView else {
@@ -198,6 +214,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     private let _flipsHorizontallyInOppositeLayoutDirection: Bool
 
     private var reconfigureItemsIndexPaths: [IndexPath] = []
+
+    private var _supportSelfSizingInvalidation: Bool = false
 
     // MARK: IOS 15.1 fix flags
 
@@ -509,7 +527,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             return true
         }
 
-        let shouldInvalidateLayout = item.calculatedSize == nil || item.alignment != preferredMessageAttributes.alignment || item.interItemSpacing != preferredMessageAttributes.interItemSpacing
+        let shouldInvalidateLayout = item.calculatedSize == nil
+            || (_supportSelfSizingInvalidation ? (item.size.height - preferredMessageAttributes.size.height).rounded() != 0 : false)
+            || item.alignment != preferredMessageAttributes.alignment
+            || item.interItemSpacing != preferredMessageAttributes.interItemSpacing
 
         return shouldInvalidateLayout
     }

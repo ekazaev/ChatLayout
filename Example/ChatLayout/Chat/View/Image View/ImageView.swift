@@ -71,33 +71,36 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
     }
 
     func reloadData() {
-        UIView.performWithoutAnimation {
-            switch controller.state {
-            case .loading:
-                loadingIndicator.isHidden = false
-                imageView.isHidden = true
-                imageView.image = nil
-                stackView.removeArrangedSubview(imageView)
-                stackView.addArrangedSubview(loadingIndicator)
-                if !loadingIndicator.isAnimating {
-                    loadingIndicator.startAnimating()
-                }
-                if #available(iOS 13.0, *) {
-                    backgroundColor = .systemGray5
-                } else {
-                    backgroundColor = UIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
-                }
-                setupSize()
-            case let .image(image):
-                loadingIndicator.isHidden = true
-                loadingIndicator.stopAnimating()
-                imageView.isHidden = false
-                imageView.image = image
-                stackView.removeArrangedSubview(loadingIndicator)
-                stackView.addArrangedSubview(imageView)
-                setupSize()
-                backgroundColor = .clear
+        switch controller.state {
+        case .loading:
+            loadingIndicator.isHidden = false
+            imageView.isHidden = true
+            imageView.image = nil
+            stackView.removeArrangedSubview(imageView)
+            stackView.addArrangedSubview(loadingIndicator)
+            if !loadingIndicator.isAnimating {
+                loadingIndicator.startAnimating()
             }
+            if #available(iOS 13.0, *) {
+                backgroundColor = .systemGray5
+            } else {
+                backgroundColor = UIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
+            }
+            setupSize()
+        case let .image(image):
+            loadingIndicator.isHidden = true
+            loadingIndicator.stopAnimating()
+            imageView.isHidden = false
+            imageView.image = image
+            stackView.removeArrangedSubview(loadingIndicator)
+            stackView.addArrangedSubview(imageView)
+            setupSize()
+            stackView.setNeedsLayout()
+            stackView.layoutIfNeeded()
+            backgroundColor = .clear
+        }
+        if let cell = superview(of: UICollectionViewCell.self) {
+            cell.contentView.invalidateIntrinsicContentSize()
         }
     }
 
