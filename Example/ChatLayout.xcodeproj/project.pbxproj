@@ -82,6 +82,7 @@
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift */; };
+		9AFBC4D67E8B479EBB4A22B9 /* DateGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFBC3B63E80B01C4070A1AD /* DateGroupView.swift */; };
 		D485620BBB16CFDEEEDE8C29 /* Pods_ChatLayout_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B7D563FDE00BE672CF1F717 /* Pods_ChatLayout_Example.framework */; };
 		D5A31E60E9BF6F8C13EDFDC5 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A31C93E56F2602C9BA605B /* PerformanceTests.swift */; };
 		FC74F4BD95DB64DC36F0366B /* Pods_ChatLayout_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB9EF31446D0BAF8EB59C573 /* Pods_ChatLayout_Tests.framework */; };
@@ -180,6 +181,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateControllerProcessUpdatesTests.swift; sourceTree = "<group>"; };
 		64592CA533CB86F42E40CA80 /* Pods-ChatLayout_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatLayout_Example.debug.xcconfig"; path = "Target Support Files/Pods-ChatLayout_Example/Pods-ChatLayout_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		9AFBC3B63E80B01C4070A1AD /* DateGroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateGroupView.swift; sourceTree = "<group>"; };
 		9B7D563FDE00BE672CF1F717 /* Pods_ChatLayout_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatLayout_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CA6A2F5631E2814924C15C5 /* Pods-ChatLayout_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatLayout_Tests.debug.xcconfig"; path = "Target Support Files/Pods-ChatLayout_Tests/Pods-ChatLayout_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A7BC3E7EC6986752E73178A2 /* ChatLayout.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ChatLayout.podspec; path = ../ChatLayout.podspec; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 				4504F3EB24FA66F600385590 /* ReloadDelegate.swift */,
 				4504F3EF24FA66F600385590 /* Editing Accessory View */,
 				1BE54045B95D5085108FD967 /* Date Accessory View */,
+				9AFBC3B63E80B01C4070A1AD /* DateGroupView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -798,6 +801,7 @@
 				1BE540F15C168BCEAB24B916 /* DateAccessoryView.swift in Sources */,
 				1BE54EDDBD81A201D12D68B8 /* SwipeNotifier.swift in Sources */,
 				1BE54AF532AEF1F560A5A912 /* DateAccessoryController.swift in Sources */,
+				9AFBC4D67E8B479EBB4A22B9 /* DateGroupView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

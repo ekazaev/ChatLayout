@@ -17,7 +17,7 @@ import RecyclerView
 
 typealias TextMessageViewItem = MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, TextMessageView, StatusView>>
 typealias TypingIndicatorItem = MessageContainerView<EditingAccessoryView, MainContainerView<AvatarPlaceholderView, TextMessageView, VoidViewFactory>>
-typealias TitleViewItem = UILabel
+typealias TitleViewItem = DateGroupView
 typealias UserTitleViewItem = SwappingContainerView<EdgeAligningView<UILabel>, UIImageView>
 
 typealias TextMessageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, TextMessageView, StatusView>>>
@@ -536,12 +536,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
             return view
         case let .date(group):
             let view = (view as? TitleViewItem) ?? scrollView.dequeueReusableViewForIndex(index) ?? TitleViewItem()
-            view.preferredMaxLayoutWidth = scrollView.visibleRect.width
-            view.text = group.value
-            view.textAlignment = .center
-            view.textColor = .gray
-            view.numberOfLines = 0
-            view.font = .preferredFont(forTextStyle: .caption2)
+            view.setup(with: group.value)
             view.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
             return view
         case .typingIndicator:
