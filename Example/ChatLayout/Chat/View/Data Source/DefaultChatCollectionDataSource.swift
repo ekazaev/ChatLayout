@@ -460,11 +460,13 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
 
     public func payloadForCellAtIndex(_ index: Int) -> Payload {
         var payload =  VoidPayload()
-//        if case .date = identifier {
-//            payload.isSticky = true
-//        } else {
-//            payload.isSticky = false
-//        }
+        payload.spacing.leading = 4
+        payload.spacing.trailing = 4
+        if case .date = sections.first?.cells[index] {
+            payload.isSticky = true
+        } else {
+            payload.isSticky = false
+        }
         return payload
     }
 

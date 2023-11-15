@@ -20,7 +20,7 @@ import RecyclerView
 
 struct VoidPayload: Equatable, TapSelectionStateSupporting, InteractivelyMovingItemSupporting, ContinuousLayoutEngineSupporting {
     var isSticky: Bool = false
-    var spacing: CGFloat = 8
+    var spacing: ContinuousLayoutEngineSpacing = .zero
     var isInteractiveMovingPossible: Bool = false
     var isInteractiveMovingEnabled: Bool = false
     var selectionState: TapSelectionState = .init(isHighlighted: false, isSelected: false)
