@@ -19,7 +19,7 @@ import UIKit
 import RecyclerView
 
 struct VoidPayload: Equatable, TapSelectionStateSupporting, InteractivelyMovingItemSupporting, ContinuousLayoutEngineSupporting {
-    var isSticky: Bool = false
+    var isPinned: Bool = false
     var spacing: ContinuousLayoutEngineSpacing = .zero
     var isInteractiveMovingPossible: Bool = false
     var isInteractiveMovingEnabled: Bool = false

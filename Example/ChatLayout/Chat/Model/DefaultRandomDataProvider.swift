@@ -54,9 +54,9 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let dispatchQueue = DispatchQueue.global(qos: .userInteractive)
 
-    private let enableTyping = true
+    private let enableTyping = false
 
-    private let enableNewMessages = true
+    private let enableNewMessages = false
 
     private let enableRichContent = false
 
