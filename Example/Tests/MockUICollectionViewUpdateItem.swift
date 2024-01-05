@@ -12,9 +12,11 @@
 
 @testable import ChatLayout
 import Foundation
+
+#if canImport(UIKit)
 import UIKit
 
-class MockUICollectionViewUpdateItem: UICollectionViewUpdateItem {
+class MockUICollectionViewUpdateItem: CollectionViewUpdateItem {
 
     // swiftlint:disable identifier_name
     var _indexPathBeforeUpdate: IndexPath?
@@ -42,3 +44,5 @@ class MockUICollectionViewUpdateItem: UICollectionViewUpdateItem {
     }
 
 }
+
+#endif

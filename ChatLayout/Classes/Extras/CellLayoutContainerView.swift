@@ -11,7 +11,11 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
+
 
 /// Alignment for `CellLayoutContainerView` that corresponds to `UIStackView.Alignment`
 public enum CellLayoutContainerViewAlignment {
@@ -146,3 +150,5 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
     }
 
 }
+
+#endif

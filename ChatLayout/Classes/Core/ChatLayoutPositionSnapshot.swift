@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// Represents content offset position expressed by the specific item and it offset from the top or bottom edge.
 public struct ChatLayoutPositionSnapshot: Hashable {

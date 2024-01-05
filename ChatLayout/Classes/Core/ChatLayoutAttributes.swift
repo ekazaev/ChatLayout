@@ -11,11 +11,16 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// Custom implementation of `UICollectionViewLayoutAttributes`
-public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
-
+public final class ChatLayoutAttributes: CollectionViewLayoutAttributes {
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var alignment: ChatItemAlignment = .fullWidth
 
@@ -23,13 +28,13 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     public var interItemSpacing: CGFloat = 0
 
     /// `CollectionViewChatLayout`s additional insets setup using `ChatLayoutSettings`. Added for convenience.
-    public internal(set) var additionalInsets: UIEdgeInsets = .zero
+    public internal(set) var additionalInsets: EdgeInsets = .zero
 
     /// `UICollectionView`s frame size. Added for convenience.
     public internal(set) var viewSize: CGSize = .zero
 
     /// `UICollectionView`s adjusted content insets. Added for convenience.
-    public internal(set) var adjustedContentInsets: UIEdgeInsets = .zero
+    public internal(set) var adjustedContentInsets: EdgeInsets = .zero
 
     /// `CollectionViewChatLayout`s visible bounds size excluding `adjustedContentInsets`. Added for convenience.
     public internal(set) var visibleBoundsSize: CGSize = .zero
@@ -44,11 +49,17 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     convenience init(kind: ItemKind, indexPath: IndexPath = IndexPath(item: 0, section: 0)) {
         switch kind {
         case .cell:
+            #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+            self.init(forItemWith: indexPath)
+            #endif
+
+            #if canImport(UIKit)
             self.init(forCellWith: indexPath)
+            #endif
         case .header:
-            self.init(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: indexPath)
+            self.init(forSupplementaryViewOfKind: CollectionView.elementKindSectionHeader, with: indexPath)
         case .footer:
-            self.init(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: indexPath)
+            self.init(forSupplementaryViewOfKind: CollectionView.elementKindSectionFooter, with: indexPath)
         }
     }
 
@@ -78,11 +89,17 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// `ItemKind` represented by this attributes object.
     public var kind: ItemKind {
         switch (representedElementCategory, representedElementKind) {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        case (.item, nil):
+            return .cell
+        #endif
+        #if canImport(UIKit)
         case (.cell, nil):
             return .cell
-        case (.supplementaryView, .some(UICollectionView.elementKindSectionHeader)):
+        #endif
+        case (.supplementaryView, .some(CollectionView.elementKindSectionHeader)):
             return .header
-        case (.supplementaryView, .some(UICollectionView.elementKindSectionFooter)):
+        case (.supplementaryView, .some(CollectionView.elementKindSectionFooter)):
             return .footer
         default:
             preconditionFailure("Unsupported element kind.")
@@ -95,5 +112,4 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         }
         return typedCopy
     }
-
 }

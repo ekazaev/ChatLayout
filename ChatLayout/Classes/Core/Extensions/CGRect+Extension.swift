@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 extension CGRect {
 
@@ -33,3 +39,18 @@ extension CGRect {
     }
 
 }
+
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+extension CGRect {
+
+    func inset(by edgeInsets: NSEdgeInsets) -> CGRect {
+        var result = self
+        result.origin.x += edgeInsets.left
+        result.origin.y += edgeInsets.top
+        result.size.width -= edgeInsets.left + edgeInsets.right
+        result.size.height -= edgeInsets.top + edgeInsets.bottom
+        return result
+    }
+}
+#endif
+

@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 /// This container view is designed to hold two `UIView` elements and arrange them in a horizontal or vertical axis.
@@ -407,3 +410,5 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
     }
 
 }
+
+#endif

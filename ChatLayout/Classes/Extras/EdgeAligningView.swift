@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 /// Container view that allows its `CustomView` to have lose connection to the margins of the container according to the
@@ -207,3 +210,5 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     }
 
 }
+
+#endif

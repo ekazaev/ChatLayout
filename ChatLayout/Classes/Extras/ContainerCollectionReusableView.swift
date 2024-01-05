@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 /// A container `UICollectionReusableView` that constraints its contained view to its margins.
@@ -93,3 +96,5 @@ public final class ContainerCollectionReusableView<CustomView: UIView>: UICollec
     }
 
 }
+
+#endif

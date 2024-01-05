@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 /// A container view that helps to layout the message view and its accessory
@@ -86,3 +89,5 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
     }
 
 }
+
+#endif

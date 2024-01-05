@@ -90,3 +90,5 @@ fastlane/test_output
 iOSInjectionProject/
 Example/Pods
 Gemfile.lock
+.DS_Store
+contents.xcworkspacedata

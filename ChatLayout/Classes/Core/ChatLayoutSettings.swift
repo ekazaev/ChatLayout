@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// `CollectionViewChatLayout` settings.
 public struct ChatLayoutSettings: Equatable {
@@ -27,6 +33,6 @@ public struct ChatLayoutSettings: Equatable {
     public var interSectionSpacing: CGFloat = 0
 
     /// Additional insets for the `CollectionViewChatLayout` content.
-    public var additionalInsets: UIEdgeInsets = .zero
+    public var additionalInsets: EdgeInsets = .zero
 
 }

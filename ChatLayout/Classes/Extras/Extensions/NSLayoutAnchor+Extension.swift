@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 extension NSLayoutAnchor {
@@ -38,3 +41,5 @@ extension NSLayoutAnchor {
         return constraint
     }
 }
+
+#endif

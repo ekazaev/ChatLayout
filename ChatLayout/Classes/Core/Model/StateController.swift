@@ -11,8 +11,13 @@
 //
 
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
+#if canImport(UIKit)
+import UIKit
+#endif
 /// This protocol exists only to serve an ability to unit test `StateController`.
 protocol ChatLayoutRepresentation: AnyObject {
 
@@ -24,7 +29,7 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     var layoutFrame: CGRect { get }
 
-    var adjustedContentInset: UIEdgeInsets { get }
+    var adjustedContentInset: EdgeInsets { get }
 
     var keepContentOffsetAtBottomOnBatchUpdates: Bool { get }
 
@@ -46,11 +51,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     // Helps to reduce the amount of looses in bridging calls to objc `UICollectionView` getter methods.
     struct AdditionalLayoutAttributes {
 
-        fileprivate let additionalInsets: UIEdgeInsets
+        fileprivate let additionalInsets: EdgeInsets
 
         fileprivate let viewSize: CGSize
 
-        fileprivate let adjustedContentInsets: UIEdgeInsets
+        fileprivate let adjustedContentInsets: EdgeInsets
 
         fileprivate let visibleBounds: CGRect
 
@@ -188,7 +193,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             let totalRect: CGRect
             switch state {
             case .beforeUpdate:
-                totalRect = rect.inset(by: UIEdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))
+                totalRect = rect.inset(by: EdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))
             case .afterUpdate:
                 totalRect = rect
             }
@@ -247,7 +252,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if let cachedAttributes = cachedAttributeObjects[state]?[.header]?[itemPath] {
                 attributes = cachedAttributes
             } else {
-                attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: CollectionView.elementKindSectionHeader,
                                                   with: itemIndexPath)
                 cachedAttributeObjects[state]?[.header]?[itemPath] = attributes
             }
@@ -276,7 +281,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if let cachedAttributes = cachedAttributeObjects[state]?[.footer]?[itemPath] {
                 attributes = cachedAttributes
             } else {
-                attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: itemIndexPath)
+                attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: CollectionView.elementKindSectionFooter, with: itemIndexPath)
                 cachedAttributeObjects[state]?[.footer]?[itemPath] = attributes
             }
             #if DEBUG
@@ -304,7 +309,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if let cachedAttributes = cachedAttributeObjects[state]?[.cell]?[itemPath] {
                 attributes = cachedAttributes
             } else {
-                attributes = ChatLayoutAttributes(forCellWith: itemIndexPath)
+                attributes = ChatLayoutAttributes(kind: .cell, indexPath: itemIndexPath)
                 cachedAttributeObjects[state]?[.cell]?[itemPath] = attributes
             }
             #if DEBUG
@@ -524,8 +529,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         var itemToRestore: ItemToRestore?
         if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
            let lastVisibleAttribute = allAttributes(at: .beforeUpdate, visibleRect: layoutRepresentation.visibleBounds).last,
-           let item = item(for: lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
-            itemToRestore = ItemToRestore(globalIndex: globalIndexFor(lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
+           let lastVisibleAttributeIndexPath = lastVisibleAttribute.platformIndexPath,
+           let item = item(for: lastVisibleAttributeIndexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
+            itemToRestore = ItemToRestore(globalIndex: globalIndexFor(lastVisibleAttributeIndexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
                                           kind: lastVisibleAttribute.kind,
                                           offset: (item.frame.maxY - layoutRepresentation.visibleBounds.maxY).rounded())
         }
@@ -854,7 +860,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         return contentSize
     }
 
-    func offsetByTotalCompensation(attributes: UICollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
+    func offsetByTotalCompensation(attributes: CollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
               state == .afterUpdate,
               let attributes else {

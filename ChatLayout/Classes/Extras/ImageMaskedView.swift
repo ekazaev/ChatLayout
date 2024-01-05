@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 /// A transformation to apply to the `ImageMaskedView.maskingImage`
@@ -118,3 +121,5 @@ public final class ImageMaskedView<CustomView: UIView>: UIView {
     }
 
 }
+
+#endif

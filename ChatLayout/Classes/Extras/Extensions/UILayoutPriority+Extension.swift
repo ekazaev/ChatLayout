@@ -11,8 +11,13 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 extension UILayoutPriority {
     static let almostRequired = UILayoutPriority(rawValue: UILayoutPriority.required.rawValue - 1)
 }
+
+#endif

@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 /// A delegate of `ContainerCollectionViewCell`/`ContainerCollectionReusableView` should implement this methods if
@@ -61,3 +64,5 @@ public extension ContainerCollectionViewCellDelegate {
     func apply(_ layoutAttributes: ChatLayoutAttributes) {}
 
 }
+
+#endif

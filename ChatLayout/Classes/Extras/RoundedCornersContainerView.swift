@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 /// A container view that keeps its `CustomView` masked with the corner radius provided.
@@ -61,3 +64,5 @@ public final class RoundedCornersContainerView<CustomView: UIView>: UIView {
     }
 
 }
+
+#endif

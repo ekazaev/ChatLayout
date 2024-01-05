@@ -11,7 +11,6 @@
 //
 
 import Foundation
-import UIKit
 
 /// Represent item alignment in collection view layout
 public enum ChatItemAlignment: Hashable {

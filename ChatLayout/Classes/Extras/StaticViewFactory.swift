@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 /// A factory that creates optional contained `UIView`s should conform to this protocol.
@@ -63,3 +66,5 @@ public struct VoidViewFactory: StaticViewFactory {
     }
 
 }
+
+#endif
