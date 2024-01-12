@@ -435,9 +435,6 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
 
 extension DefaultChatCollectionDataSource: ContinuousLayoutEngineDelegate {
     public func heightForView(_ view: UIView, with index: Int, width: CGFloat) -> CGFloat? {
-        if let view = view as? TextMessageViewItem {
-            view.customView.customView.customView.applyWidth(width)
-        }
         let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
                 withHorizontalFittingPriority: .required,
                 verticalFittingPriority: .fittingSizeLevel)
@@ -498,6 +495,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
                         bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: message.type, bubbleType: bubbleType))
                 bubbleView.customView.setup(with: controller)
                 controller.view = bubbleView.customView
+                view.delegate = bubbleView.customView
                 return view
             case let .url(url, isLocallyStored: _):
                 fatalError()
@@ -562,4 +560,21 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
 
 
 
+}
+
+private var delegateHook = 0
+
+extension MessageContainerView: RecyclerViewCellEvenHandler {
+    var delegate: RecyclerViewCellEvenHandler? {
+        get {
+            return objc_getAssociatedObject(self, &delegateHook) as? RecyclerViewCellEvenHandler
+        }
+        set {
+            objc_setAssociatedObject(self, &delegateHook, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+
+    public func applyLayoutAttributes(_ attributes: LayoutAttributes) {
+        delegate?.applyLayoutAttributes(attributes)
+    }
 }

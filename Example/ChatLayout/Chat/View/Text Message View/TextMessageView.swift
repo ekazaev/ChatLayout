@@ -13,8 +13,10 @@
 import ChatLayout
 import Foundation
 import UIKit
+import RecyclerView
 
-final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
+final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, RecyclerViewCellEvenHandler {
+
     private var viewPortWidth: CGFloat = 300
 
     private lazy var textView = MessageTextView()
@@ -60,8 +62,8 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         setupSize()
     }
 
-    func applyWidth(_ width: CGFloat) {
-        viewPortWidth = width
+    func applyLayoutAttributes(_ attributes: LayoutAttributes) {
+        viewPortWidth = attributes.frame.width
         setupSize()
     }
 
@@ -129,9 +131,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
             self.textViewWidthConstraint?.constant = newValue
 
             if oldValue != newValue {
-//            textView.invalidateIntrinsicContentSize()
-                textView.setNeedsUpdateConstraints()
-//            setNeedsLayout()
+                textView.invalidateIntrinsicContentSize()
             }
         }
     }
