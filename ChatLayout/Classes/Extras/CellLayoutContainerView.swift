@@ -12,14 +12,16 @@
 
 import Foundation
 
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
 #if canImport(UIKit)
-
 import UIKit
-
+#endif
 
 /// Alignment for `CellLayoutContainerView` that corresponds to `UIStackView.Alignment`
 public enum CellLayoutContainerViewAlignment {
-
     /// Align the top and bottom edges of horizontally stacked items tightly to the container.
     case fill
 
@@ -32,6 +34,18 @@ public enum CellLayoutContainerViewAlignment {
     /// Align the bottom edges of horizontally stacked items tightly to the container.
     case bottom
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    fileprivate var stackAlignment: NSLayoutConstraint.Attribute {
+        switch self {
+        case .fill: return .notAnAttribute
+        case .top: return .top
+        case .center: return .centerY
+        case .bottom: return .bottom
+        }
+    }
+    #endif
+
+    #if canImport(UIKit)
     fileprivate var stackAlignment: UIStackView.Alignment {
         switch self {
         case .fill: return .fill
@@ -40,14 +54,13 @@ public enum CellLayoutContainerViewAlignment {
         case .bottom: return .bottom
         }
     }
-
+    #endif
 }
 
 /// `CellLayoutContainerView` is a container view that helps to arrange the views in a horizontal cell-alike layout with an optional `LeadingAccessory` first,
 /// a `CustomView` next and am optional `TrailingAccessory` last. Use `VoidViewFactory` to specify that `LeadingAccessory` or `TrailingAccessory` views should not be
 /// allocated.
-public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, CustomView: UIView, TrailingAccessory: StaticViewFactory>: UIView {
-
+public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, CustomView: View, TrailingAccessory: StaticViewFactory>: View {
     /// Leading accessory view.
     public lazy var leadingView: LeadingAccessory.View? = LeadingAccessory.buildView(within: bounds)
 
@@ -100,7 +113,7 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
         }
     }
 
-    private let stackView = UIStackView()
+    private let stackView = StackView()
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative
@@ -119,10 +132,17 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
+
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        stackView.orientation = .horizontal
+        #endif
+
+        #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
 
         stackView.axis = .horizontal
+        #endif
         stackView.alignment = alignment.stackAlignment
         stackView.spacing = spacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -132,7 +152,7 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
             stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
 
         if let leadingAccessoryView = leadingView {
@@ -148,7 +168,4 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
             trailingAccessoryView.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-
 }
-
-#endif

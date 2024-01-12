@@ -34,11 +34,14 @@
 		45A45FF12568570300F0A68A /* IndexPath+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A45FF02568570300F0A68A /* IndexPath+Extension.swift */; };
 		45E987C8261340C9008ECE6E /* ChangeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E987C7261340C9008ECE6E /* ChangeItem.swift */; };
 		841578F82A1E2572002EB2EC /* RandomAccessCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841578F72A1E2572002EB2EC /* RandomAccessCollection+Extension.swift */; };
-		841578FA2A1E2580002EB2EC /* UILayoutPriority+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841578F92A1E2580002EB2EC /* UILayoutPriority+Extension.swift */; };
+		841578FA2A1E2580002EB2EC /* LayoutPriority+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841578F92A1E2580002EB2EC /* LayoutPriority+Extension.swift */; };
 		84424F702A17E7320079E09E /* SwappingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84424F6F2A17E7320079E09E /* SwappingContainerView.swift */; };
 		84424F742A17E7420079E09E /* NSLayoutAnchor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84424F722A17E7420079E09E /* NSLayoutAnchor+Extension.swift */; };
 		84424F752A17E7420079E09E /* NSLayoutDimension+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84424F732A17E7420079E09E /* NSLayoutDimension+Extension.swift */; };
 		84D248F0296354B90060BBF1 /* CollectionViewChatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D248EF296354B90060BBF1 /* CollectionViewChatLayout.swift */; };
+		E93614332B4FD77100413751 /* ContainerCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93614322B4FD77100413751 /* ContainerCollectionViewItem.swift */; };
+		E97131652B50E16700AA3D66 /* NSView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97131642B50E16700AA3D66 /* NSView+Extension.swift */; };
+		E97131672B50ED7D00AA3D66 /* CollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97131662B50ED7D00AA3D66 /* CollectionReusableView.swift */; };
 		E97495E62B47E4FB00B6E6C2 /* NSEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97495E32B47E4FB00B6E6C2 /* NSEdgeInsets+Extension.swift */; };
 		E97495E72B47E4FB00B6E6C2 /* CollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97495E42B47E4FB00B6E6C2 /* CollectionView+Extension.swift */; };
 		E97495E82B47E4FB00B6E6C2 /* CollectionViewLayoutAttributes+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97495E52B47E4FB00B6E6C2 /* CollectionViewLayoutAttributes+Extension.swift */; };
@@ -75,11 +78,14 @@
 		45AF49BA24D9F3C000B5BBC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		45E987C7261340C9008ECE6E /* ChangeItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeItem.swift; sourceTree = "<group>"; };
 		841578F72A1E2572002EB2EC /* RandomAccessCollection+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+Extension.swift"; sourceTree = "<group>"; };
-		841578F92A1E2580002EB2EC /* UILayoutPriority+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILayoutPriority+Extension.swift"; sourceTree = "<group>"; };
+		841578F92A1E2580002EB2EC /* LayoutPriority+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LayoutPriority+Extension.swift"; sourceTree = "<group>"; };
 		84424F6F2A17E7320079E09E /* SwappingContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwappingContainerView.swift; sourceTree = "<group>"; };
 		84424F722A17E7420079E09E /* NSLayoutAnchor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutAnchor+Extension.swift"; sourceTree = "<group>"; };
 		84424F732A17E7420079E09E /* NSLayoutDimension+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutDimension+Extension.swift"; sourceTree = "<group>"; };
 		84D248EF296354B90060BBF1 /* CollectionViewChatLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewChatLayout.swift; sourceTree = "<group>"; };
+		E93614322B4FD77100413751 /* ContainerCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerCollectionViewItem.swift; sourceTree = "<group>"; };
+		E97131642B50E16700AA3D66 /* NSView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Extension.swift"; sourceTree = "<group>"; };
+		E97131662B50ED7D00AA3D66 /* CollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionReusableView.swift; sourceTree = "<group>"; };
 		E97495E32B47E4FB00B6E6C2 /* NSEdgeInsets+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
 		E97495E42B47E4FB00B6E6C2 /* CollectionView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionView+Extension.swift"; sourceTree = "<group>"; };
 		E97495E52B47E4FB00B6E6C2 /* CollectionViewLayoutAttributes+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionViewLayoutAttributes+Extension.swift"; sourceTree = "<group>"; };
@@ -124,6 +130,7 @@
 				E97495E42B47E4FB00B6E6C2 /* CollectionView+Extension.swift */,
 				E97495E52B47E4FB00B6E6C2 /* CollectionViewLayoutAttributes+Extension.swift */,
 				E97495E32B47E4FB00B6E6C2 /* NSEdgeInsets+Extension.swift */,
+				E97131642B50E16700AA3D66 /* NSView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -150,7 +157,9 @@
 				84424F712A17E7420079E09E /* Extensions */,
 				4570EE5C264C276C00103D39 /* ContainerCollectionViewCellDelegate.swift */,
 				455ED43F2534BF1B00F4A83F /* ContainerCollectionViewCell.swift */,
+				E93614322B4FD77100413751 /* ContainerCollectionViewItem.swift */,
 				455ED43A2534BF1B00F4A83F /* ContainerCollectionReusableView.swift */,
+				E97131662B50ED7D00AA3D66 /* CollectionReusableView.swift */,
 				455ED4382534BF1B00F4A83F /* CellLayoutContainerView.swift */,
 				455ED4392534BF1B00F4A83F /* StaticViewFactory.swift */,
 				455ED43B2534BF1B00F4A83F /* ImageMaskedView.swift */,
@@ -194,7 +203,7 @@
 			children = (
 				84424F722A17E7420079E09E /* NSLayoutAnchor+Extension.swift */,
 				84424F732A17E7420079E09E /* NSLayoutDimension+Extension.swift */,
-				841578F92A1E2580002EB2EC /* UILayoutPriority+Extension.swift */,
+				841578F92A1E2580002EB2EC /* LayoutPriority+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -282,12 +291,13 @@
 				E97495E82B47E4FB00B6E6C2 /* CollectionViewLayoutAttributes+Extension.swift in Sources */,
 				455ED44B2534BF1B00F4A83F /* StateController.swift in Sources */,
 				E97495E72B47E4FB00B6E6C2 /* CollectionView+Extension.swift in Sources */,
-				841578FA2A1E2580002EB2EC /* UILayoutPriority+Extension.swift in Sources */,
+				841578FA2A1E2580002EB2EC /* LayoutPriority+Extension.swift in Sources */,
 				455ED4432534BF1B00F4A83F /* ChatLayoutPositionSnapshot.swift in Sources */,
 				455ED4442534BF1B00F4A83F /* ChatItemAlignment.swift in Sources */,
 				84D248F0296354B90060BBF1 /* CollectionViewChatLayout.swift in Sources */,
 				84424F752A17E7420079E09E /* NSLayoutDimension+Extension.swift in Sources */,
 				84424F702A17E7320079E09E /* SwappingContainerView.swift in Sources */,
+				E97131672B50ED7D00AA3D66 /* CollectionReusableView.swift in Sources */,
 				E97495EA2B47E50400B6E6C2 /* Typealias.swift in Sources */,
 				455ED4542534BF1B00F4A83F /* RoundedCornersContainerView.swift in Sources */,
 				455ED4532534BF1B00F4A83F /* MessageContainerView.swift in Sources */,
@@ -307,9 +317,11 @@
 				841578F82A1E2572002EB2EC /* RandomAccessCollection+Extension.swift in Sources */,
 				455ED4472534BF1B00F4A83F /* SectionModel.swift in Sources */,
 				455ED4422534BF1B00F4A83F /* ChatLayoutInvalidationContext.swift in Sources */,
+				E97131652B50E16700AA3D66 /* NSView+Extension.swift in Sources */,
 				455ED4452534BF1B00F4A83F /* CGRect+Extension.swift in Sources */,
 				455ED4502534BF1B00F4A83F /* StaticViewFactory.swift in Sources */,
 				455ED4402534BF1B00F4A83F /* ChatLayoutDelegate.swift in Sources */,
+				E93614332B4FD77100413751 /* ContainerCollectionViewItem.swift in Sources */,
 				455ED4562534BF1B00F4A83F /* ContainerCollectionViewCell.swift in Sources */,
 				4570EE5D264C276C00103D39 /* ContainerCollectionViewCellDelegate.swift in Sources */,
 				45A45FEE256856ED00F0A68A /* ItemPath.swift in Sources */,

@@ -1,34 +1,27 @@
 //
-// ChatLayout
-// ContainerCollectionReusableView.swift
-// https://github.com/ekazaev/ChatLayout
+//  ContainerCollectionViewItem.swift
+//  ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
-// Distributed under the MIT license.
-//
-// Become a sponsor:
-// https://github.com/sponsors/ekazaev
+//  Created by JH on 2024/1/11.
+//  Copyright © 2024 Eugene Kazaev. All rights reserved.
 //
 
 import Foundation
 
-#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+#if canImport(AppKit)
+
 import AppKit
-#endif
 
-#if canImport(UIKit)
-import UIKit
-#endif
+/// A container `UICollectionViewCell` that constraints its contained view to its margins.
+public final class ContainerCollectionViewItem<CustomView: NSView>: NSCollectionViewItem {
 
-/// A container `UICollectionReusableView` that constraints its contained view to its margins.
-public final class ContainerCollectionReusableView<CustomView: View>: CollectionReusableView {
     /// Default reuse identifier is set with the class name.
     public static var reuseIdentifier: String {
         String(describing: self)
     }
 
     /// Contained view.
-    public lazy var customView = CustomView(frame: bounds)
+    public lazy var customView = CustomView(frame: view.bounds)
 
     /// An instance of `ContainerCollectionViewCellDelegate`
     public weak var delegate: ContainerCollectionViewCellDelegate?
@@ -36,15 +29,18 @@ public final class ContainerCollectionReusableView<CustomView: View>: Collection
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative
     ///   to the superview in which you plan to add it.
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupSubviews()
+    public override init(nibName nibNameOrNil: NSNib.Name?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    public override func loadView() {
+        view = customView
     }
 
-    @available(*, unavailable, message: "Use init(frame:) instead")
+    @available(*, unavailable, message: "Use init(reuseIdentifier:) instead.")
     /// This constructor is unavailable.
     public required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implemented.")
     }
 
     /// Performs any clean up necessary to prepare the view for use again.
@@ -61,7 +57,6 @@ public final class ContainerCollectionReusableView<CustomView: View>: Collection
             return super.preferredLayoutAttributesFitting(layoutAttributes)
         }
         delegate?.apply(chatLayoutAttributes)
-
         let resultingLayoutAttributes: ChatLayoutAttributes
         if let preferredLayoutAttributes = delegate?.preferredLayoutAttributesFitting(chatLayoutAttributes) {
             resultingLayoutAttributes = preferredLayoutAttributes
@@ -84,23 +79,6 @@ public final class ContainerCollectionReusableView<CustomView: View>: Collection
         delegate?.apply(chatLayoutAttributes)
     }
 
-    private func setupSubviews() {
-        addSubview(customView)
-        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-
-        #endif
-
-        #if canImport(UIKit)
-        insetsLayoutMarginsFromSafeArea = false
-        layoutMargins = .zero
-        #endif
-
-        customView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
-            customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-        ])
-    }
 }
+
+#endif

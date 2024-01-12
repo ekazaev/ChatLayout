@@ -12,14 +12,17 @@
 
 import Foundation
 
-#if canImport(UIKit)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// A container view that helps to layout the message view and its accessory
-public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: UIView>: UIView {
-
-    private lazy var stackView = UIStackView(frame: bounds)
+public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: View>: View {
+    private lazy var stackView = StackView(frame: bounds)
 
     /// An accessory view.
     public lazy var accessoryView: AccessoryViewFactory.View? = AccessoryViewFactory.buildView(within: bounds)
@@ -64,19 +67,27 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+        #endif
         addSubview(stackView)
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        stackView.orientation = .horizontal
+        #endif
+
+        #if canImport(UIKit)
         stackView.axis = .horizontal
+        #endif
         stackView.spacing = .zero
 
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
 
         if let accessoryView {
@@ -87,7 +98,4 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
         internalContentView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(internalContentView)
     }
-
 }
-
-#endif

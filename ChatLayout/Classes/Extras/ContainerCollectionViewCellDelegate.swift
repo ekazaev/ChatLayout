@@ -12,9 +12,13 @@
 
 import Foundation
 
-#if canImport(UIKit)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// A delegate of `ContainerCollectionViewCell`/`ContainerCollectionReusableView` should implement this methods if
 /// it is required to participate in containers lifecycle.
@@ -65,4 +69,3 @@ public extension ContainerCollectionViewCellDelegate {
 
 }
 
-#endif

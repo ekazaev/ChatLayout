@@ -12,12 +12,14 @@
 
 import Foundation
 
-#if canImport(UIKit)
-
-import UIKit
-
-extension UILayoutPriority {
-    static let almostRequired = UILayoutPriority(rawValue: UILayoutPriority.required.rawValue - 1)
-}
-
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
 #endif
+
+#if canImport(UIKit)
+import UIKit
+#endif
+
+extension LayoutPriority {
+    static let almostRequired = LayoutPriority(rawValue: LayoutPriority.required.rawValue - 1)
+}

@@ -12,15 +12,20 @@
 
 import Foundation
 
-#if canImport(UIKit)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
+#if canImport(UIKit)
 import UIKit
+#endif
+
 
 extension NSLayoutDimension {
     @objc func constraint(equalTo anchor: NSLayoutDimension,
                           multiplier m: CGFloat = 1,
                           constant c: CGFloat = 0,
-                          priority: UILayoutPriority) -> NSLayoutConstraint {
+                          priority: LayoutPriority) -> NSLayoutConstraint {
         let constraint = constraint(equalTo: anchor, multiplier: m, constant: c)
         constraint.priority = priority
         return constraint
@@ -29,7 +34,7 @@ extension NSLayoutDimension {
     @objc func constraint(greaterThanOrEqualTo anchor: NSLayoutDimension,
                           multiplier m: CGFloat = 1,
                           constant c: CGFloat = 0,
-                          priority: UILayoutPriority) -> NSLayoutConstraint {
+                          priority: LayoutPriority) -> NSLayoutConstraint {
         let constraint = constraint(greaterThanOrEqualTo: anchor, multiplier: m, constant: c)
         constraint.priority = priority
         return constraint
@@ -38,32 +43,32 @@ extension NSLayoutDimension {
     @objc func constraint(lessThanOrEqualTo anchor: NSLayoutDimension,
                           multiplier m: CGFloat = 1,
                           constant c: CGFloat = 0,
-                          priority: UILayoutPriority) -> NSLayoutConstraint {
+                          priority: LayoutPriority) -> NSLayoutConstraint {
         let constraint = constraint(lessThanOrEqualTo: anchor, multiplier: m, constant: c)
         constraint.priority = priority
         return constraint
     }
 
     @objc func constraint(equalToConstant c: CGFloat,
-                          priority: UILayoutPriority) -> NSLayoutConstraint {
+                          priority: LayoutPriority) -> NSLayoutConstraint {
         let constraint = constraint(equalToConstant: c)
         constraint.priority = priority
         return constraint
     }
 
     @objc func constraint(greaterThanOrEqualToConstant c: CGFloat,
-                          priority: UILayoutPriority) -> NSLayoutConstraint {
+                          priority: LayoutPriority) -> NSLayoutConstraint {
         let constraint = constraint(greaterThanOrEqualToConstant: c)
         constraint.priority = priority
         return constraint
     }
 
     @objc func constraint(lessThanOrEqualToConstant c: CGFloat,
-                          priority: UILayoutPriority) -> NSLayoutConstraint {
+                          priority: LayoutPriority) -> NSLayoutConstraint {
         let constraint = constraint(lessThanOrEqualToConstant: c)
         constraint.priority = priority
         return constraint
     }
 }
 
-#endif
+

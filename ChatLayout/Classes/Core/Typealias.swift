@@ -6,6 +6,9 @@ public typealias CollectionView = NSCollectionView
 public typealias CollectionViewLayoutInvalidationContext = NSCollectionViewLayoutInvalidationContext
 public typealias CollectionViewLayout = NSCollectionViewLayout
 public typealias CollectionViewUpdateItem = NSCollectionViewUpdateItem
+public typealias View = NSView
+public typealias LayoutPriority = NSLayoutConstraint.Priority
+public typealias StackView = NSStackView
 #endif
 
 #if canImport(UIKit)
@@ -16,4 +19,8 @@ public typealias CollectionView = UICollectionView
 public typealias CollectionViewLayoutInvalidationContext = UICollectionViewLayoutInvalidationContext
 public typealias CollectionViewLayout = UICollectionViewLayout
 public typealias CollectionViewUpdateItem = UICollectionViewUpdateItem
+public typealias View = UIView
+public typealias LayoutPriority = UILayoutPriority
+public typealias StackView = UIStackView
+public typealias CollectionReusableView = UICollectionReusableView
 #endif

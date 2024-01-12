@@ -48,13 +48,7 @@ extension NSCollectionView {
         isLiveScrolling = false
     }
 
-    func layoutIfNeeded() {
-        layoutSubtreeIfNeeded()
-    }
-
-    func setNeedsLayout() {
-        needsLayout = true
-    }
+    
 }
 #endif
 
