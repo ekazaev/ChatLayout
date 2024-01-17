@@ -435,8 +435,10 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
 
 extension DefaultChatCollectionDataSource: ContinuousLayoutEngineDelegate {
     public func heightForView(_ view: UIView, with index: Int, width: CGFloat) -> CGFloat? {
+        // UICollectionViewCell measures wiht fittingSizeLevel and I have the feeling it is faster. In instruments no fittingSizeLevel
+        // adds another function call.
         let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
-                withHorizontalFittingPriority: .required,
+                withHorizontalFittingPriority: .fittingSizeLevel,
                 verticalFittingPriority: .fittingSizeLevel)
         return systemLayoutSize.height
     }

@@ -352,6 +352,7 @@ extension ChatViewController: UIScrollViewDelegate {
             }
             // Reloading the content without animation just because it looks better is the scrolling is in process.
             let animated = !isUserInitiatedScrolling
+            print("LOADED PREVIOUS MESSAGES")
             processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
                 self.currentControllerActions.options.remove(.loadingPreviousMessages)
             }

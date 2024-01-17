@@ -81,7 +81,7 @@ extension RecyclerScrollView {
             })
             UIView.animate(withDuration: 0.25, animations: { [weak self] in
                 dispatchGroup?.enter()
-                guard let self else {
+                guard self != nil else {
                     return
                 }
 

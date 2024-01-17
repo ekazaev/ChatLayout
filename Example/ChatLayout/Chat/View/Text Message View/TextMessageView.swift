@@ -108,6 +108,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
         textView.scrollsToTop = false
         textView.bounces = false
         textView.bouncesZoom = false
+        textView.isSelectable = false
         textView.showsHorizontalScrollIndicator = false
         textView.showsVerticalScrollIndicator = false
         textView.isExclusiveTouch = true
