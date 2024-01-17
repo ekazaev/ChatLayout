@@ -296,6 +296,7 @@ extension DefaultChatController: ReloadDelegate {
 
 extension DefaultChatController: EditingAccessoryControllerDelegate {
     func deleteMessage(with id: UUID) {
+        print("DELETE")
         messages = Array(messages.filter { $0.id != id })
         repopulateMessages(requiresIsolatedProcess: true)
     }
