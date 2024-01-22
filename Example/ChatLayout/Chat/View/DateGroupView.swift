@@ -53,7 +53,7 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
         }
         if attributes.frame.minY.rounded() <= containerSnapshot.visibleRect.minY.rounded() + 8 {
             if layer.shadowOpacity == 0 {
-                UIView.animate(withDuration: 0.1, animations: { [weak self] in
+                UIView.animate(withDuration: 0.25, animations: { [weak self] in
                     guard let self else {
                         return
                     }
@@ -65,7 +65,7 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
             }
         } else {
             if layer.shadowOpacity != 0 {
-                UIView.animate(withDuration: 0.1, animations: { [weak self] in
+                UIView.animate(withDuration: 0.25, animations: { [weak self] in
                     guard let self else {
                         return
                     }
@@ -99,6 +99,7 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
             label.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor)
         ])
 
+        label.customView.adjustsFontForContentSizeCategory = true
         label.customView.textAlignment = .center
         label.customView.textColor = .gray
         label.backgroundColor = .white
