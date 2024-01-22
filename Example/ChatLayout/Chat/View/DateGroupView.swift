@@ -12,9 +12,10 @@
 
 import ChatLayout
 import Foundation
+import RecyclerView
 import UIKit
 
-final class DateGroupView: UIView, ContainerCollectionViewCellDelegate {
+final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, RecyclerViewCellEvenHandler {
 
     private var viewPortWidth: CGFloat = 300
 
@@ -41,9 +42,40 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate {
         setupSize()
     }
 
-    func applyWidth(_ width: CGFloat) {
-        viewPortWidth = width
-        setupSize()
+    func prepareForDequeue() {
+        layer.removeAllAnimations()
+    }
+
+    func applyLayoutAttributes(_ attributes: LayoutAttributes, at state: RecyclerViewContainerState) {
+        guard case let .final(state, container: containerSnapshot) = state,
+              state != .disappearing else {
+            return
+        }
+        if attributes.frame.minY.rounded() <= containerSnapshot.visibleRect.minY.rounded() + 8 {
+            if layer.shadowOpacity == 0 {
+                UIView.animate(withDuration: 0.1, animations: { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    layer.shadowRadius = 2
+                    layer.shadowOpacity = 0.3
+                    layer.shadowOffset = .zero
+                })
+                label.backgroundColor = .white
+            }
+        } else {
+            if layer.shadowOpacity != 0 {
+                UIView.animate(withDuration: 0.1, animations: { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    layer.shadowRadius = 0
+                    layer.shadowOpacity = 0
+                    layer.shadowOffset = .zero
+                })
+                label.backgroundColor = .clear
+            }
+        }
     }
 
     func setup(with string: String) {
