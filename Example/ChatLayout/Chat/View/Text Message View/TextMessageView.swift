@@ -97,6 +97,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
         insetsLayoutMarginsFromSafeArea = false
 
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.adjustsFontForContentSizeCategory = true
         textView.isScrollEnabled = false
         textView.isEditable = false
         textView.spellCheckingType = .no
