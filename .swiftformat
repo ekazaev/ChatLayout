@@ -35,6 +35,6 @@
 --wrapcollections preserve
 --xcodeindentation disabled
 --modifierorder public,override
---disable blankLinesAtEndOfScope,blankLinesAtStartOfScope,wrapMultilineStatementBraces
+--disable blankLinesAtEndOfScope,blankLinesAtStartOfScope,wrapMultilineStatementBraces,preferKeyPath,preferForLoop
 --enable isEmpty
 --exclude Pods,docs,Example/Pods

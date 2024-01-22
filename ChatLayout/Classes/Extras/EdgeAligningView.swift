@@ -3,7 +3,7 @@
 // EdgeAligningView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -135,11 +135,11 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
             return
         }
 
-        flexibleEdges.forEach { edge in
+        for edge in flexibleEdges {
             rigidConstraints[edge]?.isActive = false
             flexibleConstraints[edge]?.isActive = true
         }
-        Set(Edge.allCases).subtracting(flexibleEdges).forEach { edge in
+        for edge in Set(Edge.allCases).subtracting(flexibleEdges) {
             flexibleConstraints[edge]?.isActive = false
             rigidConstraints[edge]?.isActive = true
         }

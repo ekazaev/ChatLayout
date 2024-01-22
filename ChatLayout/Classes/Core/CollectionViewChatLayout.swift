@@ -3,7 +3,7 @@
 // CollectionViewChatLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -1013,14 +1013,14 @@ extension CollectionViewChatLayout {
     }
 
     private func resetAttributesForPendingAnimations() {
-        ItemKind.allCases.forEach {
-            attributesForPendingAnimations[$0] = [:]
+        for kind in ItemKind.allCases {
+            attributesForPendingAnimations[kind] = [:]
         }
     }
 
     private func resetInvalidatedAttributes() {
-        ItemKind.allCases.forEach {
-            invalidatedAttributes[$0] = []
+        for kind in ItemKind.allCases {
+            invalidatedAttributes[kind] = []
         }
     }
 
