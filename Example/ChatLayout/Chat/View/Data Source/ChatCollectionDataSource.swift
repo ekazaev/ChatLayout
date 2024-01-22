@@ -12,8 +12,8 @@
 
 import ChatLayout
 import Foundation
-import UIKit
 import RecyclerView
+import UIKit
 
 protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegate, RecyclerViewDataSource<VoidPayload>, ContinuousLayoutEngineDelegate {
 

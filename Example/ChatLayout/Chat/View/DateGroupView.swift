@@ -1,11 +1,18 @@
 //
-// Created by Evgeny Kazaev on 15/11/2023.
-// Copyright (c) 2023 CocoaPods. All rights reserved.
+// ChatLayout
+// DateGroupView.swift
+// https://github.com/ekazaev/ChatLayout
+//
+// Created by Eugene Kazaev in 2020-2024.
+// Distributed under the MIT license.
+//
+// Become a sponsor:
+// https://github.com/sponsors/ekazaev
 //
 
+import ChatLayout
 import Foundation
 import UIKit
-import ChatLayout
 
 final class DateGroupView: UIView, ContainerCollectionViewCellDelegate {
 
@@ -27,8 +34,7 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate {
         setupSubviews()
     }
 
-    func prepareForReuse() {
-    }
+    func prepareForReuse() {}
 
     func apply(_ layoutAttributes: ChatLayoutAttributes) {
         viewPortWidth = layoutAttributes.layoutFrame.width
@@ -41,7 +47,7 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate {
     }
 
     func setup(with string: String) {
-        self.label.customView.text = string
+        label.customView.text = string
     }
 
     private func setupSubviews() {

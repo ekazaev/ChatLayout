@@ -55,7 +55,6 @@ extension Cell: Differentiable {
         case date(UUID)
     }
 
-
     public var differenceIdentifier: Identifier {
         switch self {
         case let .message(message, _):

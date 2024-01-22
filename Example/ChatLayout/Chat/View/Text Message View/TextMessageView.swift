@@ -12,8 +12,8 @@
 
 import ChatLayout
 import Foundation
-import UIKit
 import RecyclerView
+import UIKit
 
 final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, RecyclerViewCellEvenHandler {
 

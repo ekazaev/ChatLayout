@@ -15,8 +15,8 @@ import DifferenceKit
 import Foundation
 import FPSCounter
 import InputBarAccessoryView
-import UIKit
 import RecyclerView
+import UIKit
 
 struct VoidPayload: Equatable, TapSelectionStateSupporting, InteractivelyMovingItemSupporting, ContinuousLayoutEngineSupporting {
     var isPinned: Bool = false
@@ -74,7 +74,7 @@ final class ChatViewController: UIViewController {
     private var currentControllerActions: SetActor<Set<ControllerActions>, ReactionTypes> = SetActor()
     private let editNotifier: EditNotifier
     private let swipeNotifier: SwipeNotifier
-    //private var collectionView: UICollectionView!
+    // private var collectionView: UICollectionView!
     private var chatLayout = CollectionViewChatLayout()
     private let inputBarView = InputBarAccessoryView()
     private let chatController: ChatController
@@ -212,7 +212,7 @@ final class ChatViewController: UIViewController {
         }
 
         KeyboardListener.shared.add(delegate: self)
-        //collectionView.addGestureRecognizer(panGesture)
+        // collectionView.addGestureRecognizer(panGesture)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -230,7 +230,7 @@ final class ChatViewController: UIViewController {
         }
         currentInterfaceActions.options.insert(.changingFrameSize)
         let positionSnapshot = scrollView.getPositionSnapshot(from: .bottom)
-        let cellFrame = positionSnapshot.flatMap({ scrollView.engine.configurationForIndex($0.index).frame })
+        let cellFrame = positionSnapshot.flatMap { scrollView.engine.configurationForIndex($0.index).frame }
 
         coordinator.animate(alongsideTransition: { _ in
         }, completion: { [weak self] _ in
@@ -239,15 +239,15 @@ final class ChatViewController: UIViewController {
             }
             if let positionSnapshot,
                let cellFrame,
-               let newSnapshot = self.scrollView.getPositionSnapshot(from: .bottom),
+               let newSnapshot = scrollView.getPositionSnapshot(from: .bottom),
                !self.isUserInitiatedScrolling {
                 let adjustedOffset = scrollView.engine.configurationForIndex(newSnapshot.index).frame.height * positionSnapshot.offset / cellFrame.height
                 // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
                 // to compact and back. `CollectionViewChatLayout` may not properly predict the final position of the element. So we try
                 // to restore it after the rotation manually.
-                self.scrollView.scrollToPositionSnapshot(.init(index: positionSnapshot.index, edge: positionSnapshot.edge, offset: adjustedOffset), animated: false)
+                scrollView.scrollToPositionSnapshot(.init(index: positionSnapshot.index, edge: positionSnapshot.edge, offset: adjustedOffset), animated: false)
             }
-            self.currentInterfaceActions.options.remove(.changingFrameSize)
+            currentInterfaceActions.options.remove(.changingFrameSize)
         })
         super.viewWillTransition(to: size, with: coordinator)
     }
@@ -505,35 +505,35 @@ extension ChatViewController: ChatControllerDelegate {
                 currentInterfaceActions.options.insert(.updatingCollectionInIsolation)
             }
             currentControllerActions.options.insert(.updatingCollection)
-            self.currentControllerActions.options.remove(.updatingCollection)
+            currentControllerActions.options.remove(.updatingCollection)
             scrollView.reload(originalData: dataSource.sections,
-                    using: changeSet,
-                                  interrupt: { changeSet in
-                                      guard changeSet.sectionInserted.isEmpty else {
-                                          return true
+                              using: changeSet,
+                              interrupt: { changeSet in
+                                  guard changeSet.sectionInserted.isEmpty else {
+                                      return true
+                                  }
+                                  return false
+                              },
+                              onInterruptedReload: {
+                                  let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
+                                  self.scrollView.reloadData()
+                                  print("RELOAD DATA")
+                                  // We want so that user on reload appeared at the very bottom of the layout
+                                  self.chatLayout.restoreContentOffset(with: positionSnapshot)
+                              },
+                              completion: { _ in
+                                  DispatchQueue.main.async {
+                                      self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
+                                      if requiresIsolatedProcess {
+                                          self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
                                       }
-                                      return false
-                                  },
-                                  onInterruptedReload: {
-                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
-                                      self.scrollView.reloadData()
-                                      print("RELOAD DATA")
-                                      // We want so that user on reload appeared at the very bottom of the layout
-                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                                  },
-                                  completion: { _ in
-                                      DispatchQueue.main.async {
-                                          self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
-                                          if requiresIsolatedProcess {
-                                              self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
-                                          }
-                                          completion?()
-                                          self.currentControllerActions.options.remove(.updatingCollection)
-                                      }
-                                  },
-                                  setData: { data in
-                                      self.dataSource.sections = data
-                                  })
+                                      completion?()
+                                      self.currentControllerActions.options.remove(.updatingCollection)
+                                  }
+                              },
+                              setData: { data in
+                                  self.dataSource.sections = data
+                              })
         }
 
         if animated {
@@ -673,13 +673,13 @@ extension ChatViewController: KeyboardListenerDelegate {
                     self.scrollView.scrollToPositionSnapshot(positionSnapshot, animated: false)
                 }
             }
-            let completionBlock: (Bool) -> () = { _ in
+            let completionBlock: (Bool) -> Void = { _ in
                 self.currentInterfaceActions.options.remove(.changingContentInsets)
             }
             if info.animationDuration > 0 {
                 UIView.animate(withDuration: info.animationDuration,
-                        animations: animationBlock,
-                        completion: completionBlock)
+                               animations: animationBlock,
+                               completion: completionBlock)
 
             } else {
                 animationBlock()

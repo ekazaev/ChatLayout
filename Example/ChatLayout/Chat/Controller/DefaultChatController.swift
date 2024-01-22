@@ -150,7 +150,7 @@ final class DefaultChatController: ChatController {
                 guard self != nil else {
                     return
                 }
-                completion([Section(id: 0, title: "Loading...", cells: Array(cells))]) //.filter({ "\($0)".contains("Group") })
+                completion([Section(id: 0, title: "Loading...", cells: Array(cells))]) // .filter({ "\($0)".contains("Group") })
             }
         }
     }

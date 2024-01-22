@@ -12,8 +12,8 @@
 
 import ChatLayout
 import Foundation
-import UIKit
 import RecyclerView
+import UIKit
 
 typealias TextMessageViewItem = MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, TextMessageView, StatusView>>
 typealias TypingIndicatorItem = MessageContainerView<EditingAccessoryView, MainContainerView<AvatarPlaceholderView, TextMessageView, VoidViewFactory>>
@@ -438,28 +438,28 @@ extension DefaultChatCollectionDataSource: ContinuousLayoutEngineDelegate {
         // UICollectionViewCell measures wiht fittingSizeLevel and I have the feeling it is faster. In instruments no fittingSizeLevel
         // adds another function call.
         let systemLayoutSize = view.systemLayoutSizeFitting(CGSize(width: width, height: 0),
-                withHorizontalFittingPriority: .fittingSizeLevel,
-                verticalFittingPriority: .fittingSizeLevel)
+                                                            withHorizontalFittingPriority: .fittingSizeLevel,
+                                                            verticalFittingPriority: .fittingSizeLevel)
         return systemLayoutSize.height
     }
 
     public func estimatedHeightForIndex(_ index: Int) -> CGFloat? {
-        return 100
+        100
     }
 }
 
 @MainActor
 extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
     public func numberOfCells() -> Int {
-        return sections.first?.cells.count ?? 0
+        sections.first?.cells.count ?? 0
     }
 
     public func viewForCellAtIndex(_ index: Int) -> UIView {
-        return createView(nil, with: index)
+        createView(nil, with: index)
     }
 
     public func payloadForCellAtIndex(_ index: Int) -> Payload {
-        var payload =  VoidPayload()
+        var payload = VoidPayload()
         payload.spacing.leading = 4
         payload.spacing.trailing = 4
         if case .date = sections.first?.cells[index] {
@@ -483,9 +483,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
         case let .message(message, bubbleType: bubbleType):
             switch message.data {
             case let .text(text):
-                let view = (view as? TextMessageViewItem) ?? scrollView.dequeueReusableViewForIndex(index) ?? {
-                    return TextMessageViewItem()
-                }()
+                let view = (view as? TextMessageViewItem) ?? scrollView.dequeueReusableViewForIndex(index) ?? TextMessageViewItem()
                 setupMessageContainerView(view, messageId: message.id, alignment: cell.alignment)
                 setupMainMessageView(view.customView, user: message.owner, alignment: cell.alignment, bubble: bubbleType, status: message.status)
 
@@ -493,8 +491,8 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
 
                 let bubbleView = view.customView.customView
                 let controller = TextMessageController(text: text,
-                        type: message.type,
-                        bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: message.type, bubbleType: bubbleType))
+                                                       type: message.type,
+                                                       bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: message.type, bubbleType: bubbleType))
                 bubbleView.customView.setup(with: controller)
                 controller.view = bubbleView.customView
                 view.delegate = bubbleView.customView
@@ -546,8 +544,8 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
             view.alignment = alignment
             let bubbleView = view.customView.customView
             let controller = TextMessageController(text: "Typing...",
-                    type: .incoming,
-                    bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: .incoming, bubbleType: .tailed))
+                                                   type: .incoming,
+                                                   bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: .incoming, bubbleType: .tailed))
             bubbleView.customView.setup(with: controller)
             controller.view = bubbleView.customView
             view.accessoryView?.isHiddenSafe = true
@@ -560,8 +558,6 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
 
     typealias Payload = VoidPayload
 
-
-
 }
 
 private var delegateHook = 0
@@ -569,7 +565,7 @@ private var delegateHook = 0
 extension MessageContainerView: RecyclerViewCellEvenHandler {
     var delegate: RecyclerViewCellEvenHandler? {
         get {
-            return objc_getAssociatedObject(self, &delegateHook) as? RecyclerViewCellEvenHandler
+            objc_getAssociatedObject(self, &delegateHook) as? RecyclerViewCellEvenHandler
         }
         set {
             objc_setAssociatedObject(self, &delegateHook, newValue, .OBJC_ASSOCIATION_RETAIN)
