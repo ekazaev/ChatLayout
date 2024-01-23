@@ -664,16 +664,24 @@ extension ChatViewController: KeyboardListenerDelegate {
 
             // Blocks possible updates when keyboard is being hidden interactively
             currentInterfaceActions.options.insert(.changingContentInsets)
+
+            // During keyboard presentation UITransaction completion block for whatever reason is being called immediately
+            // and not at the end of animation (I think similar thing happens within UICollectionView as well).
+            // By keeping modification context until the endo animation allows all the animations to finish till the end of
+            // our modification.
+            let modificationContext = scrollView.prepareForModifications()
             let animationBlock = {
                 self.scrollView.contentInset.bottom = newBottomInset
                 self.scrollView.verticalScrollIndicatorInsets.bottom = newBottomInset
                 self.scrollView.setNeedsLayout()
-                self.scrollView.layoutIfNeeded()
                 if let positionSnapshot, !self.isUserInitiatedScrolling {
                     self.scrollView.scrollToPositionSnapshot(positionSnapshot, animated: false)
+                } else {
+                    self.scrollView.layoutIfNeeded()
                 }
             }
             let completionBlock: (Bool) -> Void = { _ in
+                modificationContext.commit()
                 self.currentInterfaceActions.options.remove(.changingContentInsets)
             }
             if info.animationDuration > 0 {

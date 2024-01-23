@@ -25,6 +25,8 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
 
     private var textViewWidthConstraint: NSLayoutConstraint?
 
+    private var payload = VoidPayload()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -44,15 +46,19 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
 
     func prepareForDequeue() {
         layer.removeAllAnimations()
+        layer.shouldRasterize = false
     }
 
     func applyLayoutAttributes(_ attributes: LayoutAttributes, at state: RecyclerViewContainerState) {
-        guard case let .final(state, container: containerSnapshot) = state,
+        guard payload.isPinned,
+              case let .final(state, container: containerSnapshot) = state,
               state != .disappearing else {
             return
         }
         if attributes.frame.minY.rounded() <= containerSnapshot.visibleRect.minY.rounded() + 8 {
             if layer.shadowOpacity == 0 {
+                layer.shouldRasterize = false
+                label.backgroundColor = .white
                 UIView.animate(withDuration: 0.25, animations: { [weak self] in
                     guard let self else {
                         return
@@ -60,11 +66,17 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
                     layer.shadowRadius = 2
                     layer.shadowOpacity = 0.3
                     layer.shadowOffset = .zero
+                }, completion: { [weak self] _ in
+                    guard let self else {
+                        return
+                    }
+                    layer.rasterizationScale = window?.screen.scale ?? 1
+                    layer.shouldRasterize = true
                 })
-                label.backgroundColor = .white
             }
         } else {
             if layer.shadowOpacity != 0 {
+                layer.shouldRasterize = false
                 UIView.animate(withDuration: 0.25, animations: { [weak self] in
                     guard let self else {
                         return
@@ -72,10 +84,23 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
                     layer.shadowRadius = 0
                     layer.shadowOpacity = 0
                     layer.shadowOffset = .zero
+                }, completion: { [weak self] _ in
+                    guard let self else {
+                        return
+                    }
+                    label.backgroundColor = .clear
+                    layer.rasterizationScale = window?.screen.scale ?? 1
+                    layer.shouldRasterize = true
                 })
-                label.backgroundColor = .clear
             }
         }
+    }
+
+    func updateRecyclerItemPayload(_ payload: Any, index: Int) {
+        guard let payload = payload as? VoidPayload else {
+            return
+        }
+        self.payload = payload
     }
 
     func setup(with string: String) {
