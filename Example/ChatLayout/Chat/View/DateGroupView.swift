@@ -27,6 +27,8 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
 
     private var payload = VoidPayload()
 
+    private var isPinnedState = false
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -47,53 +49,47 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
     func prepareForDequeue() {
         layer.removeAllAnimations()
         layer.shouldRasterize = false
+        layer.shadowRadius = 0
+        layer.shadowOpacity = 0
+        layer.shadowOffset = .zero
+        label.backgroundColor = .clear
+        isPinnedState = false
     }
 
-    func applyLayoutAttributes(_ attributes: LayoutAttributes, at state: RecyclerViewContainerState) {
+    func applyLayoutAttributes(_ attributes: LayoutAttributes, at state: RecyclerViewContainerState, index: Int) {
         guard payload.isPinned,
               case let .final(state, container: containerSnapshot) = state,
               state != .disappearing else {
             return
         }
-        if attributes.frame.minY.rounded() <= containerSnapshot.visibleRect.minY.rounded() + 8 {
-            if layer.shadowOpacity == 0 {
-                layer.shouldRasterize = false
-                label.backgroundColor = .white
-                UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                    guard let self else {
-                        return
-                    }
-                    layer.shadowRadius = 2
-                    layer.shadowOpacity = 0.3
-                    layer.shadowOffset = .zero
-                }, completion: { [weak self] _ in
-                    guard let self else {
-                        return
-                    }
-                    layer.rasterizationScale = window?.screen.scale ?? 1
-                    layer.shouldRasterize = true
-                })
-            }
+
+        let containerMinY = (containerSnapshot.visibleRect.minY + 8).rounded(.up)
+        let cellY = attributes.frame.minY.rounded(.up)
+        let maxOffsetY: CGFloat = attributes.frame.height * 2.5
+        let distance = cellY >= containerMinY ? cellY - containerMinY : 0
+        let absDistance = min(maxOffsetY, abs(distance))
+        let coefficient = absDistance / maxOffsetY
+        let oppositeCoefficient = 1 - coefficient
+
+        layer.shadowRadius = 2 * oppositeCoefficient
+        layer.shadowOpacity = Float(0.3 * oppositeCoefficient)
+        if coefficient == 1,
+           layer.shouldRasterize {
+            layer.shouldRasterize = false
+            label.backgroundColor = .clear
+            isPinnedState = false
         } else {
-            if layer.shadowOpacity != 0 {
-                layer.shouldRasterize = false
-                UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                    guard let self else {
-                        return
-                    }
-                    layer.shadowRadius = 0
-                    layer.shadowOpacity = 0
-                    layer.shadowOffset = .zero
-                }, completion: { [weak self] _ in
-                    guard let self else {
-                        return
-                    }
-                    label.backgroundColor = .clear
-                    layer.rasterizationScale = window?.screen.scale ?? 1
-                    layer.shouldRasterize = true
-                })
+            if !isPinnedState {
+                label.backgroundColor = .white
+                isPinnedState = true
+            }
+            if coefficient == 0,
+               !layer.shouldRasterize {
+                layer.rasterizationScale = window?.screen.scale ?? 1
+                layer.shouldRasterize = true
             }
         }
+        setupCornerRadius()
     }
 
     func updateRecyclerItemPayload(_ payload: Any, index: Int) {
@@ -127,11 +123,13 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
         label.customView.adjustsFontForContentSizeCategory = true
         label.customView.textAlignment = .center
         label.customView.textColor = .gray
-        label.backgroundColor = .white
+        label.backgroundColor = .clear
         label.customView.numberOfLines = 0
         label.customView.font = .preferredFont(forTextStyle: .caption2)
         label.clipsToBounds = true
         label.layoutMargins = UIEdgeInsets(top: 2, left: 5, bottom: 2, right: 5)
+
+        layer.shadowOffset = .zero
     }
 
     private func setupSize() {
@@ -140,8 +138,16 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
         }
     }
 
+    private func setupCornerRadius() {
+        if isPinnedState {
+            label.layer.cornerRadius = label.frame.height / 2
+        } else {
+            label.layer.cornerRadius = 0
+        }
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        label.layer.cornerRadius = label.frame.height / 2
+        setupCornerRadius()
     }
 }

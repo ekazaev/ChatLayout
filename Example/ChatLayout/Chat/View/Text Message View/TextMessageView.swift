@@ -62,7 +62,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
         setupSize()
     }
 
-    func applyLayoutAttributes(_ attributes: LayoutAttributes, at state: RecyclerViewContainerState) {
+    func applyLayoutAttributes(_ attributes: LayoutAttributes, at state: RecyclerViewContainerState, index: Int) {
         viewPortWidth = attributes.frame.width
         setupSize()
     }
