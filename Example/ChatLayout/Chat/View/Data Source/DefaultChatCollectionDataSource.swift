@@ -467,6 +467,9 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
         } else {
             payload.isPinned = false
         }
+        if case .messageGroup = sections.first?.cells[index] {
+            payload.spacing.trailing = 0
+        }
         return payload
     }
 
