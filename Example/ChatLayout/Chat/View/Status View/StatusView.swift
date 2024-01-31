@@ -17,6 +17,8 @@ import UIKit
 final class StatusView: UIView, StaticViewFactory {
     private lazy var imageView = UIImageView(frame: bounds)
 
+    private var status: MessageStatus?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -51,6 +53,10 @@ final class StatusView: UIView, StaticViewFactory {
     }
 
     func setup(with status: MessageStatus) {
+        guard status != self.status else {
+            return
+        }
+        
         switch status {
         case .sent:
             imageView.image = UIImage(named: "sent_status")
@@ -62,5 +68,6 @@ final class StatusView: UIView, StaticViewFactory {
             imageView.image = UIImage(named: "read_status")
             imageView.tintColor = .systemBlue
         }
+        self.status = status
     }
 }
