@@ -170,7 +170,7 @@ final class ChatViewController: UIViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.frame = view.bounds
 
-        // scrollView.addInteraction(ContextMenuInteraction(engine: scrollView.engine, delegate: self))
+//        scrollView.addInteraction(ContextMenuInteraction(engine: scrollView.engine, delegate: self))
         scrollView.addInteraction(CustomContextMenuInteraction(engine: scrollView.engine, delegate: self))
 
         NSLayoutConstraint.activate([
@@ -721,10 +721,8 @@ extension ChatViewController: CustomContextMenuInteractionDelegate {
             case .text:
                 let parameters = UIPreviewParameters()
                 parameters.visiblePath = cell.customView.customView.maskingPath
-                var center = cell.customView.customView.center
-                center.x += (message.type.isIncoming ? cell.customView.customView.offset : -cell.customView.customView.offset) / 2
+                let center = cell.customView.customView.center
                 let view = createPortalView(of: cell.customView.customView)
-
                 return UITargetedPreview(view: view,
                         parameters: parameters,
                         target: UIPreviewTarget(container: cell.customView, center: center))
@@ -780,6 +778,10 @@ extension ChatViewController: CustomContextMenuInteractionDelegate {
                 completion: { _ in
             self.currentInterfaceActions.options.remove(.showingPreview)
         })
+    }
+
+    public func customContextMenuCancelledAtIndex(_ index: Int, configuration: CustomContextMenuConfiguration) {
+        self.currentInterfaceActions.options.remove(.showingPreview)
     }
 }
 
