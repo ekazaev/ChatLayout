@@ -169,6 +169,7 @@ final class ChatViewController: UIViewController {
         scrollView.contentInsetAdjustmentBehavior = .always
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.frame = view.bounds
+        scrollView.addInteraction(ContextMenuInteraction(engine: scrollView.engine, delegate: self))
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
@@ -701,6 +702,75 @@ extension ChatViewController: KeyboardListenerDelegate {
             return
         }
         currentInterfaceActions.options.remove(.changingKeyboardFrame)
+    }
+}
+
+extension ChatViewController: ContextMenuInteractionDelegate {
+
+    private func preview(for index: Int) -> UITargetedPreview? {
+        guard let cell = scrollView.visibleViewForIndex(index) as? TextMessageViewItem,
+              let item = dataSource.sections.first?.cells[index] else {
+            return nil
+        }
+
+        switch item {
+        case let .message(message, bubbleType: _):
+            switch message.data {
+            case .text:
+                let parameters = UIPreviewParameters()
+                parameters.visiblePath = cell.customView.customView.maskingPath
+                var center = cell.customView.customView.center
+                center.x += (message.type.isIncoming ? cell.customView.customView.offset : -cell.customView.customView.offset) / 2
+
+                return UITargetedPreview(view: cell.customView.customView,
+                                         parameters: parameters,
+                                         target: UIPreviewTarget(container: cell.customView, center: center))
+            default:
+                return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    public func contextMenuConfigurationForCellsAt(_ indexes: Set<Int>, atLocation location: CGPoint) -> ContextMenuConfiguration? {
+        guard !currentInterfaceActions.options.contains(.showingPreview),
+              !currentControllerActions.options.contains(.updatingCollection),
+              let index = indexes.first,
+              let item = dataSource.sections.first?.cells[index] else {
+            return nil
+        }
+        switch item {
+        case let .message(message, bubbleType: _):
+            switch message.data {
+            case let .text(body):
+                let actions = [UIAction(title: "Copy", image: nil, identifier: nil) { [body] _ in
+                    let pasteboard = UIPasteboard.general
+                    pasteboard.string = body
+                }]
+                let menu = UIMenu(title: "", children: actions)
+                currentInterfaceActions.options.insert(.showingPreview)
+                return ContextMenuConfiguration(previewProvider: nil, actionProvider: { _ in menu })
+            default:
+                return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    public func contextMenuHighlightPreview(_ configuration: ContextMenuConfiguration, for index: Int) -> UITargetedPreview? {
+        preview(for: index)
+    }
+
+    public func contextMenuDismissalPreview(_ configuration: ContextMenuConfiguration, for index: Int) -> UITargetedPreview? {
+        preview(for: index)
+    }
+
+    public func contextMenuWillEnd(_ configuration: ContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+        animator?.addCompletion {
+            self.currentInterfaceActions.options.remove(.showingPreview)
+        }
     }
 }
 
