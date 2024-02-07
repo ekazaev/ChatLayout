@@ -169,7 +169,10 @@ final class ChatViewController: UIViewController {
         scrollView.contentInsetAdjustmentBehavior = .always
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.frame = view.bounds
-        scrollView.addInteraction(ContextMenuInteraction(engine: scrollView.engine, delegate: self))
+
+        // scrollView.addInteraction(ContextMenuInteraction(engine: scrollView.engine, delegate: self))
+        scrollView.addInteraction(CustomContextMenuInteraction(engine: scrollView.engine, delegate: self))
+
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
@@ -702,6 +705,81 @@ extension ChatViewController: KeyboardListenerDelegate {
             return
         }
         currentInterfaceActions.options.remove(.changingKeyboardFrame)
+    }
+}
+
+extension ChatViewController: CustomContextMenuInteractionDelegate {
+    public func customContextMenuHighlightPreviewForItemAt(_ index: Int, configuration: CustomContextMenuConfiguration) -> UITargetedPreview? {
+        guard let cell = scrollView.visibleViewForIndex(index) as? TextMessageViewItem,
+              let item = dataSource.sections.first?.cells[index] else {
+            return nil
+        }
+
+        switch item {
+        case let .message(message, bubbleType: _):
+            switch message.data {
+            case .text:
+                let parameters = UIPreviewParameters()
+                parameters.visiblePath = cell.customView.customView.maskingPath
+                var center = cell.customView.customView.center
+                center.x += (message.type.isIncoming ? cell.customView.customView.offset : -cell.customView.customView.offset) / 2
+                let view = createPortalView(of: cell.customView.customView)
+
+                return UITargetedPreview(view: view,
+                        parameters: parameters,
+                        target: UIPreviewTarget(container: cell.customView, center: center))
+            default:
+                return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    private func createPortalView(of view: UIView) -> UIView {
+        // Get a reference to the `_UIPortalView` class
+        let portalViewClass = NSClassFromString("_UIPortalView") as! UIView.Type
+
+        // Create a `_UIPortalView` instance
+        let portalView = portalViewClass.init()
+        portalView.bounds.size = view.bounds.size
+
+        // Set the source of the portal view
+        portalView.perform(NSSelectorFromString("setSourceView:"), with: view)
+
+        return portalView
+    }
+
+    public func configurationForCustomMenuAtIndex(_ index: Int) -> CustomContextMenuConfiguration? {
+        guard !currentInterfaceActions.options.contains(.showingPreview),
+              !currentControllerActions.options.contains(.updatingCollection),
+              let item = dataSource.sections.first?.cells[index] else {
+            return nil
+        }
+        switch item {
+        case let .message(message, bubbleType: _):
+            switch message.data {
+            case let .text(body):
+                let actions = [UIAction(title: "Copy", image: nil, identifier: nil) { [body] _ in
+                    let pasteboard = UIPasteboard.general
+                    pasteboard.string = body
+                }]
+                let menu = UIMenu(title: "", children: actions)
+                currentInterfaceActions.options.insert(.showingPreview)
+                return CustomContextMenuConfiguration(previewProvider: nil, actionProvider: { _ in menu })
+            default:
+                return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    public func interactionWillDismissCustomContextMenuAtIndex(_ index: Int, configuration: CustomContextMenuConfiguration, animator: CustomContextMenuInteractionTransitionCoordinator?) {
+        animator?.animateAlongsideTransition({ },
+                completion: { _ in
+            self.currentInterfaceActions.options.remove(.showingPreview)
+        })
     }
 }
 
