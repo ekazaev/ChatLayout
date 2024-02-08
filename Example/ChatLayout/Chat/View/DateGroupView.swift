@@ -80,7 +80,7 @@ final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, Recycler
             isPinnedState = false
         } else {
             if !isPinnedState {
-                label.backgroundColor = .white
+                label.backgroundColor = .systemBackground
                 isPinnedState = true
             }
             if coefficient == 0,
