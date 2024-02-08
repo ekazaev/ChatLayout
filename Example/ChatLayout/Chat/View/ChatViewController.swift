@@ -67,7 +67,7 @@ final class ChatViewController: UIViewController {
     }
 
     override var canBecomeFirstResponder: Bool {
-        true
+        presentedViewController == nil
     }
 
     private var currentInterfaceActions: SetActor<Set<InterfaceActions>, ReactionTypes> = SetActor()
@@ -722,10 +722,10 @@ extension ChatViewController: CustomContextMenuInteractionDelegate {
                 let parameters = UIPreviewParameters()
                 parameters.visiblePath = cell.customView.customView.maskingPath
                 let center = cell.customView.customView.center
-                let view = createPortalView(of: cell.customView.customView)
+                let view = cell.customView.customView.snapshotView(afterScreenUpdates: true)! // createPortalView(of: cell.customView.customView)
                 return UITargetedPreview(view: view,
-                        parameters: parameters,
-                        target: UIPreviewTarget(container: cell.customView, center: center))
+                                         parameters: parameters,
+                                         target: UIPreviewTarget(container: cell.customView, center: center))
             default:
                 return nil
             }
@@ -774,14 +774,14 @@ extension ChatViewController: CustomContextMenuInteractionDelegate {
     }
 
     public func interactionWillDismissCustomContextMenuAtIndex(_ index: Int, configuration: CustomContextMenuConfiguration, animator: CustomContextMenuInteractionTransitionCoordinator?) {
-        animator?.animateAlongsideTransition({ },
-                completion: { _ in
-            self.currentInterfaceActions.options.remove(.showingPreview)
-        })
+        animator?.animateAlongsideTransition({},
+                                             completion: { _ in
+                                                 self.currentInterfaceActions.options.remove(.showingPreview)
+                                             })
     }
 
     public func customContextMenuCancelledAtIndex(_ index: Int, configuration: CustomContextMenuConfiguration) {
-        self.currentInterfaceActions.options.remove(.showingPreview)
+        currentInterfaceActions.options.remove(.showingPreview)
     }
 }
 
