@@ -39,8 +39,6 @@ extension RecyclerScrollView {
             return
         }
 
-        let modificationContext = prepareForModifications()
-
         let dispatchGroup: DispatchGroup? = completion != nil ? DispatchGroup() : nil
         let completionHandler: ((Bool) -> Void)? = completion != nil ? { _ in
             dispatchGroup!.leave()
@@ -79,7 +77,7 @@ extension RecyclerScrollView {
             changeset.elementMoved.forEach { sourceIndexPath, targetIndexPath in
                 modifications.append(.move(sourceIndexPath.element, to: targetIndexPath.element))
             }
-            UIView.animate(withDuration: 0.25, animations: { [weak self] in
+            self.performBatchUpdates(withDuration: 0.25, animations: { [weak self] modificationContext in
                 dispatchGroup?.enter()
                 guard self != nil else {
                     return
@@ -93,7 +91,6 @@ extension RecyclerScrollView {
         }
 
         dispatchGroup?.notify(queue: .main) {
-            modificationContext.commit()
             completion!(true)
         }
     }
