@@ -19,11 +19,15 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
 
     private var viewPortWidth: CGFloat = 300
 
-    private lazy var textView = MessageTextView()
+    private lazy var textView = MessageTextView(frame: bounds)
 
     private var controller: TextMessageController?
 
-    private var textViewWidthConstraint: NSLayoutConstraint?
+    private var cachedIntrinsicContentSize: CGSize?
+
+    private var textViewWidth: CGFloat {
+        (viewPortWidth * Constants.maxWidth).rounded(.up)
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,18 +62,25 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
 //    }
 
     func apply(_ layoutAttributes: ChatLayoutAttributes) {
+        guard viewPortWidth != layoutAttributes.layoutFrame.width else {
+            return
+        }
         viewPortWidth = layoutAttributes.layoutFrame.width
-        setupSize()
+        cachedIntrinsicContentSize = nil
+        invalidateIntrinsicContentSize()
     }
 
     func applyLayoutAttributes(_ attributes: LayoutAttributes, at state: RecyclerViewContainerState, index: Int) {
+        guard viewPortWidth != attributes.frame.width else {
+            return
+        }
         viewPortWidth = attributes.frame.width
-        setupSize()
+        cachedIntrinsicContentSize = nil
+        invalidateIntrinsicContentSize()
     }
 
     func setup(with controller: TextMessageController) {
         self.controller = controller
-        reloadData()
     }
 
     func reloadData() {
@@ -77,6 +88,8 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
             return
         }
         textView.text = controller.text
+        cachedIntrinsicContentSize = nil
+        invalidateIntrinsicContentSize()
         UIView.performWithoutAnimation {
             if #available(iOS 13.0, *) {
                 textView.textColor = controller.type.isIncoming ? UIColor.label : .systemBackground
@@ -96,7 +109,8 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
         translatesAutoresizingMaskIntoConstraints = false
         insetsLayoutMarginsFromSafeArea = false
 
-        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        textView.translatesAutoresizingMaskIntoConstraints = true
         textView.adjustsFontForContentSizeCategory = true
         textView.isScrollEnabled = false
         textView.isEditable = false
@@ -115,26 +129,17 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
         textView.isExclusiveTouch = true
         textView.font = UIFont.preferredFont(forTextStyle: .body)
         textView.insetsLayoutMarginsFromSafeArea = false
+        textView.isOpaque = false
         addSubview(textView)
-        NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
-            textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
-        ])
-        textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
-        textViewWidthConstraint?.isActive = true
     }
 
-    private func setupSize() {
-        UIView.performWithoutAnimation {
-            let oldValue = self.textViewWidthConstraint?.constant
-            let newValue = viewPortWidth * Constants.maxWidth
-            self.textViewWidthConstraint?.constant = newValue
-
-            if oldValue != newValue {
-                textView.invalidateIntrinsicContentSize()
-            }
+    override var intrinsicContentSize: CGSize {
+        if let cachedIntrinsicContentSize  {
+            return cachedIntrinsicContentSize
+        } else {
+            let textViewSize = textView.sizeThatFits(CGSize(width: textViewWidth, height: CGFloat.greatestFiniteMagnitude))
+            cachedIntrinsicContentSize = textViewSize
+            return textViewSize
         }
     }
 }
