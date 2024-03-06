@@ -38,7 +38,7 @@ let enableReconfigure = false
 
 final class ChatViewController: UIViewController {
 
-    lazy var scrollView = RecyclerScrollView(frame: UIScreen.main.bounds, engine: ContinuousLayoutEngine<VoidPayload>())
+    lazy var scrollView = RecyclerView(frame: UIScreen.main.bounds, engine: ContinuousLayoutEngine<VoidPayload>())
 
     private enum ReactionTypes {
         case delayedUpdate
@@ -673,7 +673,7 @@ extension ChatViewController: KeyboardListenerDelegate {
             // and not at the end of animation (I think similar thing happens within UICollectionView as well).
             // By keeping modification context until the endo animation allows all the animations to finish till the end of
             // our modification.
-            let animationBlock: (DataModificationContext) -> () = { _ in
+            let animationBlock: (DataModificationContext) -> Void = { _ in
                 self.scrollView.contentInset.bottom = newBottomInset
                 self.scrollView.verticalScrollIndicatorInsets.bottom = newBottomInset
                 self.scrollView.setNeedsLayout()
@@ -687,8 +687,8 @@ extension ChatViewController: KeyboardListenerDelegate {
                 self.currentInterfaceActions.options.remove(.changingContentInsets)
             }
             scrollView.performBatchUpdates(withDuration: info.animationDuration,
-                    animations: animationBlock,
-                    completion: completionBlock)
+                                           animations: animationBlock,
+                                           completion: completionBlock)
         }
     }
 

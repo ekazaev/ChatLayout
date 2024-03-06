@@ -134,7 +134,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
     }
 
     override var intrinsicContentSize: CGSize {
-        if let cachedIntrinsicContentSize  {
+        if let cachedIntrinsicContentSize {
             return cachedIntrinsicContentSize
         } else {
             let textViewSize = textView.sizeThatFits(CGSize(width: textViewWidth, height: CGFloat.greatestFiniteMagnitude))

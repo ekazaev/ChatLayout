@@ -32,7 +32,7 @@ typealias TextTitleView = ContainerCollectionReusableView<UILabel>
 
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
 
-    weak var scrollView: RecyclerScrollView<ContinuousLayoutEngine<VoidPayload>>!
+    weak var scrollView: RecyclerView<ContinuousLayoutEngine<VoidPayload>>!
 
     private unowned var reloadDelegate: ReloadDelegate
 

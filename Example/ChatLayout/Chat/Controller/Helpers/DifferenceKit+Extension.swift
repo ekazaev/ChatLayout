@@ -16,7 +16,7 @@ import Foundation
 import RecyclerView
 import UIKit
 
-extension RecyclerScrollView {
+extension RecyclerView {
 
     func reload(
         originalData: [Section],
@@ -77,7 +77,7 @@ extension RecyclerScrollView {
             changeset.elementMoved.forEach { sourceIndexPath, targetIndexPath in
                 modifications.append(.move(sourceIndexPath.element, to: targetIndexPath.element))
             }
-            self.performBatchUpdates(withDuration: 0.25, animations: { [weak self] modificationContext in
+            performBatchUpdates(withDuration: 0.25, animations: { [weak self] modificationContext in
                 dispatchGroup?.enter()
                 guard self != nil else {
                     return
