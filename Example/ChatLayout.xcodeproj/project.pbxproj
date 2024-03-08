@@ -688,7 +688,7 @@
 				"${BUILT_PRODUCTS_DIR}/FPSCounter/FPSCounter.framework",
 				"${BUILT_PRODUCTS_DIR}/InputBarAccessoryView/InputBarAccessoryView.framework",
 				"${BUILT_PRODUCTS_DIR}/InterposeKit/InterposeKit.framework",
-				"${BUILT_PRODUCTS_DIR}/RecyclerView/RecyclerView.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/RecyclerView/RecyclerView.framework/RecyclerView",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (

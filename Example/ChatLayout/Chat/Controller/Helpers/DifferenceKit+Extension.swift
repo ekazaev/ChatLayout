@@ -16,7 +16,7 @@ import Foundation
 import RecyclerView
 import UIKit
 
-extension RecyclerView {
+extension RecyclerScrollView {
 
     func reload(
         originalData: [Section],

@@ -38,7 +38,7 @@ let enableReconfigure = false
 
 final class ChatViewController: UIViewController {
 
-    lazy var scrollView = RecyclerView(frame: UIScreen.main.bounds, engine: ContinuousLayoutEngine<VoidPayload>())
+    lazy var scrollView = RecyclerScrollView(frame: UIScreen.main.bounds, engine: ContinuousLayoutEngine<VoidPayload>())
 
     private enum ReactionTypes {
         case delayedUpdate
