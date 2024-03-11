@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class EditingAccessoryView: UIView, StaticViewFactory {
-
     private lazy var button = UIButton(type: .system)
 
     override init(frame: CGRect) {
@@ -52,14 +51,13 @@ final class EditingAccessoryView: UIView, StaticViewFactory {
         self.controller = controller
     }
 
-    @objc private func buttonTapped() {
+    @objc
+    private func buttonTapped() {
         controller?.deleteButtonTapped()
     }
-
 }
 
 extension EditingAccessoryView: EditNotifierDelegate {
-
     var isEditing: Bool {
         get {
             !isHidden
@@ -84,5 +82,4 @@ extension EditingAccessoryView: EditNotifierDelegate {
             self.setNeedsLayout()
         }
     }
-
 }

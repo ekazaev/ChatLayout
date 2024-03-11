@@ -15,7 +15,6 @@ import UIKit
 
 /// This protocol exists only to serve an ability to unit test `StateController`.
 protocol ChatLayoutRepresentation: AnyObject {
-
     var settings: ChatLayoutSettings { get }
 
     var viewSize: CGSize { get }
@@ -42,10 +41,8 @@ protocol ChatLayoutRepresentation: AnyObject {
 }
 
 final class StateController<Layout: ChatLayoutRepresentation> {
-
     // Helps to reduce the amount of looses in bridging calls to objc `UICollectionView` getter methods.
     struct AdditionalLayoutAttributes {
-
         fileprivate let additionalInsets: UIEdgeInsets
 
         fileprivate let viewSize: CGSize
@@ -410,7 +407,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
             let rowModel = sectionModel.items[itemPath.item]
             return rowModel.id
-        case .header, .footer:
+        case .footer,
+             .header:
             guard let item = item(for: ItemPath(item: 0, section: itemPath.section), kind: kind, at: state) else {
                 return nil
             }
@@ -1235,5 +1233,4 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             return ItemPath(item: itemIndex, section: sectionIndex)
         }
     }
-
 }

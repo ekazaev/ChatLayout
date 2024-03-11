@@ -15,7 +15,6 @@ import LinkPresentation
 
 @available(iOS 13, *)
 final class URLController {
-
     let url: URL
 
     var metadata: LPLinkMetadata?
@@ -71,7 +70,5 @@ final class URLController {
                 }
             }
         }
-
     }
-
 }

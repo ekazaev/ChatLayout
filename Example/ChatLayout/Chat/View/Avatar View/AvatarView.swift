@@ -16,13 +16,10 @@ import UIKit
 
 // Just to visually test `ChatLayout.supportSelfSizingInvalidation`
 protocol AvatarViewDelegate: AnyObject {
-
     func avatarTapped()
-
 }
 
 final class AvatarView: UIView, StaticViewFactory {
-
     weak var delegate: AvatarViewDelegate?
 
     private lazy var circleImageView = RoundedCornersContainerView<UIImageView>(frame: bounds)
@@ -78,8 +75,8 @@ final class AvatarView: UIView, StaticViewFactory {
         gestureRecogniser.addTarget(self, action: #selector(avatarTapped))
     }
 
-    @objc private func avatarTapped() {
+    @objc
+    private func avatarTapped() {
         delegate?.avatarTapped()
     }
-
 }

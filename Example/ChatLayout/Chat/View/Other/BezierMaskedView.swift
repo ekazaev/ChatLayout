@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 final class BezierMaskedView<CustomView: UIView>: UIView {
-
     lazy var customView = CustomView(frame: bounds)
 
     var bubbleType: Cell.BubbleType = .tailed {
@@ -33,9 +32,9 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
     var offset: CGFloat {
         switch bubbleType {
         case .tailed:
-            return 2
+            2
         case .normal:
-            return 6
+            6
         }
     }
 
@@ -108,7 +107,6 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
             layer.mask = maskLayer
         }
     }
-
 }
 
 private func generateIncomingTailedBezierPath(offset: CGFloat, size: CGSize) -> UIBezierPath {

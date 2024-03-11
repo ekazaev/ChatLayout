@@ -15,7 +15,6 @@ import UIKit
 
 /// Represents desired item size.
 public enum ItemSize: Hashable {
-
     /// Item size should be fully calculated by the `CollectionViewChatLayout`.
     /// Initial estimated size will be taken from `ChatLayoutSettings`.
     case auto
@@ -41,11 +40,11 @@ public enum ItemSize: Hashable {
     public var caseType: CaseType {
         switch self {
         case .auto:
-            return .auto
+            .auto
         case .estimated:
-            return .estimated
+            .estimated
         case .exact:
-            return .exact
+            .exact
         }
     }
 
@@ -62,5 +61,4 @@ public enum ItemSize: Hashable {
             hasher.combine(size.height)
         }
     }
-
 }

@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 final class AvatarViewController {
-
     var image: UIImage? {
         guard bubble == .tailed else {
             return nil
@@ -47,5 +46,4 @@ final class AvatarViewController {
         self.user = user
         self.bubble = bubble
     }
-
 }

@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
-
     var numberOfItemsInSection: [Int: Int] = [0: 100, 1: 100, 2: 100]
     var shouldPresentHeaderAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
     var shouldPresentFooterAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
@@ -98,5 +97,4 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
         }
         return sections
     }
-
 }

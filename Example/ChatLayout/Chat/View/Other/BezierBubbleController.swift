@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 final class BezierBubbleController<CustomView: UIView>: BubbleController {
-
     private let controllerProxy: BubbleController
 
     private let type: MessageType
@@ -43,5 +42,4 @@ final class BezierBubbleController<CustomView: UIView>: BubbleController {
         bubbleView.messageType = type
         bubbleView.bubbleType = bubbleType
     }
-
 }

@@ -13,9 +13,7 @@
 import Foundation
 
 extension ProcessInfo {
-
     static var isRunningTests: Bool {
         processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
-
 }

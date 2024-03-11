@@ -14,13 +14,10 @@ import Foundation
 import UIKit
 
 protocol EditingAccessoryControllerDelegate: AnyObject {
-
     func deleteMessage(with id: UUID)
-
 }
 
 final class EditingAccessoryController {
-
     weak var delegate: EditingAccessoryControllerDelegate?
 
     weak var view: EditingAccessoryView?
@@ -34,5 +31,4 @@ final class EditingAccessoryController {
     func deleteButtonTapped() {
         delegate?.deleteMessage(with: messageId)
     }
-
 }

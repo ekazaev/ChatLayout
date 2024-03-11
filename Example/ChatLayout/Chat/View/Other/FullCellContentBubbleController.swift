@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class FullCellContentBubbleController<CustomView: UIView>: BubbleController {
-
     weak var bubbleView: BezierMaskedView<CustomView>? {
         didSet {
             setupBubbleView()
@@ -37,5 +36,4 @@ final class FullCellContentBubbleController<CustomView: UIView>: BubbleControlle
             bubbleView.customView.layoutMargins = .zero
         }
     }
-
 }

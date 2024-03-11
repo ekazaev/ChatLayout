@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 protocol RandomDataProviderDelegate: AnyObject {
-
     func received(messages: [RawMessage])
 
     func typingStateChanged(to state: TypingState)
@@ -22,21 +21,17 @@ protocol RandomDataProviderDelegate: AnyObject {
     func lastReadIdChanged(to id: UUID)
 
     func lastReceivedIdChanged(to id: UUID)
-
 }
 
 protocol RandomDataProvider {
-
     func loadInitialMessages(completion: @escaping ([RawMessage]) -> Void)
 
     func loadPreviousMessages(completion: @escaping ([RawMessage]) -> Void)
 
     func stop()
-
 }
 
 final class DefaultRandomDataProvider: RandomDataProvider {
-
     weak var delegate: RandomDataProviderDelegate?
 
     private var messageTimer: Timer?
@@ -211,5 +206,4 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         }
         return messages
     }
-
 }

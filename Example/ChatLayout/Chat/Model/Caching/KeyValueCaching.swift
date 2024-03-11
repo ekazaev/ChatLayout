@@ -13,7 +13,6 @@
 import Foundation
 
 public protocol KeyValueCaching {
-
     associatedtype CachingKey
 
     associatedtype Entity
@@ -23,5 +22,4 @@ public protocol KeyValueCaching {
     func getEntity(for key: CachingKey) throws -> Entity
 
     func store(entity: Entity, for key: CachingKey) throws
-
 }

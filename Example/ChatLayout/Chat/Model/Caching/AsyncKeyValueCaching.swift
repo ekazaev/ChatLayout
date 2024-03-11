@@ -13,17 +13,14 @@
 import Foundation
 
 public protocol AsyncKeyValueCaching: KeyValueCaching {
-
     associatedtype CachingKey
 
     associatedtype Entity
 
     func getEntity(for key: CachingKey, completion: @escaping (Result<Entity, Error>) -> Void)
-
 }
 
 public extension AsyncKeyValueCaching {
-
     func getEntity(for key: CachingKey, completion: @escaping (Result<Entity, Error>) -> Void) {
         DispatchQueue.global().async {
             do {
@@ -38,5 +35,4 @@ public extension AsyncKeyValueCaching {
             }
         }
     }
-
 }

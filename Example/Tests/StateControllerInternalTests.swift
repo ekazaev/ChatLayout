@@ -14,7 +14,6 @@
 import XCTest
 
 class StateControllerInternalTests: XCTestCase {
-
     func testUpdatePreferredSize() {
         let layout = MockCollectionLayout()
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
@@ -139,5 +138,4 @@ class StateControllerInternalTests: XCTestCase {
         XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), estimatedContentHeight)
         XCTAssertEqual(layout.controller.contentSize(for: .beforeUpdate), CGSize(width: layout.viewSize.width - 0.0001, height: estimatedContentHeight))
     }
-
 }

@@ -15,7 +15,6 @@ import DifferenceKit
 import Foundation
 
 enum MessageType: Hashable {
-
     case incoming
 
     case outgoing
@@ -23,29 +22,23 @@ enum MessageType: Hashable {
     var isIncoming: Bool {
         self == .incoming
     }
-
 }
 
 enum MessageStatus: Hashable {
-
     case sent
 
     case received
 
     case read
-
 }
 
 extension ChatItemAlignment {
-
     var isIncoming: Bool {
         self == .leading
     }
-
 }
 
 struct DateGroup: Hashable {
-
     var id: UUID
 
     var date: Date
@@ -58,11 +51,9 @@ struct DateGroup: Hashable {
         self.id = id
         self.date = date
     }
-
 }
 
 extension DateGroup: Differentiable {
-
     public var differenceIdentifier: Int {
         hashValue
     }
@@ -70,11 +61,9 @@ extension DateGroup: Differentiable {
     public func isContentEqual(to source: DateGroup) -> Bool {
         self == source
     }
-
 }
 
 struct MessageGroup: Hashable {
-
     var id: UUID
 
     var title: String
@@ -86,11 +75,9 @@ struct MessageGroup: Hashable {
         self.title = title
         self.type = type
     }
-
 }
 
 extension MessageGroup: Differentiable {
-
     public var differenceIdentifier: Int {
         hashValue
     }
@@ -98,19 +85,15 @@ extension MessageGroup: Differentiable {
     public func isContentEqual(to source: MessageGroup) -> Bool {
         self == source
     }
-
 }
 
 struct Message: Hashable {
-
     enum Data: Hashable {
-
         case text(String)
 
         case url(URL, isLocallyStored: Bool)
 
         case image(ImageMessageSource, isLocallyStored: Bool)
-
     }
 
     var id: UUID
@@ -124,11 +107,9 @@ struct Message: Hashable {
     var type: MessageType
 
     var status: MessageStatus = .sent
-
 }
 
 extension Message: Differentiable {
-
     public var differenceIdentifier: Int {
         id.hashValue
     }
@@ -136,5 +117,4 @@ extension Message: Differentiable {
     public func isContentEqual(to source: Message) -> Bool {
         self == source
     }
-
 }

@@ -14,9 +14,7 @@ import Foundation
 import UIKit
 
 struct ItemModel {
-
     struct Configuration {
-
         let alignment: ChatItemAlignment
 
         let preferredSize: CGSize
@@ -24,7 +22,6 @@ struct ItemModel {
         let calculatedSize: CGSize?
 
         let interItemSpacing: CGFloat
-
     }
 
     let id: UUID
@@ -72,5 +69,4 @@ struct ItemModel {
         self.calculatedSize = nil
         preferredSize = calculatedSize
     }
-
 }

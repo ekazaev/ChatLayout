@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class ImageView: UIView, ContainerCollectionViewCellDelegate {
-
     private lazy var stackView = UIStackView(frame: bounds)
 
     private lazy var loadingIndicator = UIActivityIndicatorView(style: .gray)
@@ -157,5 +156,4 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
             }
         }
     }
-
 }

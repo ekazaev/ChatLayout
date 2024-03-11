@@ -26,7 +26,6 @@ let enableSelfSizingSupport = false
 let enableReconfigure = false
 
 final class ChatViewController: UIViewController {
-
     private enum ReactionTypes {
         case delayedUpdate
     }
@@ -177,7 +176,6 @@ final class ChatViewController: UIViewController {
 
         KeyboardListener.shared.add(delegate: self)
         collectionView.addGestureRecognizer(panGesture)
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -215,7 +213,8 @@ final class ChatViewController: UIViewController {
         super.viewWillTransition(to: size, with: coordinator)
     }
 
-    @objc private func showHideKeyboard() {
+    @objc
+    private func showHideKeyboard() {
         if inputBarView.inputTextView.isFirstResponder {
             navigationItem.leftBarButtonItem?.title = "Show Keyboard"
             inputBarView.inputTextView.resignFirstResponder()
@@ -225,7 +224,8 @@ final class ChatViewController: UIViewController {
         }
     }
 
-    @objc private func setEditNotEdit() {
+    @objc
+    private func setEditNotEdit() {
         isEditing = !isEditing
         editNotifier.setIsEditing(isEditing, duration: .animated(duration: 0.25))
         navigationItem.rightBarButtonItem?.title = isEditing ? "Done" : "Edit"
@@ -255,7 +255,6 @@ final class ChatViewController: UIViewController {
 }
 
 extension ChatViewController: UIScrollViewDelegate {
-
     public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         guard scrollView.contentSize.height > 0,
               !currentInterfaceActions.options.contains(.showingAccessory),
@@ -362,11 +361,9 @@ extension ChatViewController: UIScrollViewDelegate {
             })
         }
     }
-
 }
 
 extension ChatViewController: UICollectionViewDelegate {
-
     @available(iOS 13.0, *)
     private func preview(for configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         guard let identifier = configuration.identifier as? String else {
@@ -452,11 +449,9 @@ extension ChatViewController: UICollectionViewDelegate {
             self.currentInterfaceActions.options.remove(.showingPreview)
         }
     }
-
 }
 
 extension ChatViewController: ChatControllerDelegate {
-
     func update(with sections: [Section], requiresIsolatedProcess: Bool) {
         processUpdates(with: sections, animated: true, requiresIsolatedProcess: requiresIsolatedProcess)
     }
@@ -532,12 +527,11 @@ extension ChatViewController: ChatControllerDelegate {
             }
         }
     }
-
 }
 
 extension ChatViewController: UIGestureRecognizerDelegate {
-
-    @objc private func handleRevealPan(_ gesture: UIPanGestureRecognizer) {
+    @objc
+    private func handleRevealPan(_ gesture: UIPanGestureRecognizer) {
         guard let collectionView = gesture.view as? UICollectionView,
               !editNotifier.isEditing else {
             currentInterfaceActions.options.remove(.showingAccessory)
@@ -566,7 +560,9 @@ extension ChatViewController: UIGestureRecognizerDelegate {
 
     private func updateTransforms(in collectionView: UICollectionView, transform: CGAffineTransform? = nil) {
         collectionView.indexPathsForVisibleItems.forEach {
-            guard let cell = collectionView.cellForItem(at: $0) else { return }
+            guard let cell = collectionView.cellForItem(at: $0) else {
+                return
+            }
             updateTransform(transform: transform, cell: cell, indexPath: $0)
         }
     }
@@ -593,11 +589,9 @@ extension ChatViewController: UIGestureRecognizerDelegate {
 
         return true
     }
-
 }
 
 extension ChatViewController: InputBarAccessoryViewDelegate {
-
     public func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
         guard !currentInterfaceActions.options.contains(.sendingMessage) else {
             return
@@ -626,11 +620,9 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         inputBar.inputTextView.text = String()
         inputBar.invalidatePlugins()
     }
-
 }
 
 extension ChatViewController: KeyboardListenerDelegate {
-
     func keyboardWillChangeFrame(info: KeyboardInfo) {
         guard !currentInterfaceActions.options.contains(.changingFrameSize),
               collectionView.contentInsetAdjustmentBehavior != .never,
@@ -681,13 +673,10 @@ extension ChatViewController: KeyboardListenerDelegate {
         }
         currentInterfaceActions.options.remove(.changingKeyboardFrame)
     }
-
 }
 
 extension ChatViewController: FPSCounterDelegate {
-
     public func fpsCounter(_ counter: FPSCounter, didUpdateFramesPerSecond fps: Int) {
         fpsView.customView.text = "FPS: \(fps)"
     }
-
 }

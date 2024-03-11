@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 struct SectionModel<Layout: ChatLayoutRepresentation> {
-
     let id: UUID
 
     let interSectionSpacing: CGFloat
@@ -190,5 +189,4 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         }
         items.remove(at: index)
     }
-
 }

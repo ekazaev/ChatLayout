@@ -16,7 +16,6 @@ import Foundation
 import UIKit
 
 enum Cell: Hashable {
-
     enum BubbleType {
         case normal
         case tailed
@@ -33,35 +32,32 @@ enum Cell: Hashable {
     var alignment: ChatItemAlignment {
         switch self {
         case let .message(message, _):
-            return message.type == .incoming ? .leading : .trailing
+            message.type == .incoming ? .leading : .trailing
         case .typingIndicator:
-            return .leading
+            .leading
         case let .messageGroup(group):
-            return group.type == .incoming ? .leading : .trailing
+            group.type == .incoming ? .leading : .trailing
         case .date:
-            return .center
+            .center
         }
     }
-
 }
 
 extension Cell: Differentiable {
-
     public var differenceIdentifier: Int {
         switch self {
         case let .message(message, _):
-            return message.differenceIdentifier
+            message.differenceIdentifier
         case .typingIndicator:
-            return hashValue
+            hashValue
         case let .messageGroup(group):
-            return group.differenceIdentifier
+            group.differenceIdentifier
         case let .date(group):
-            return group.differenceIdentifier
+            group.differenceIdentifier
         }
     }
 
     public func isContentEqual(to source: Cell) -> Bool {
         self == source
     }
-
 }

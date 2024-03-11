@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class AvatarPlaceholderView: UIView, StaticViewFactory {
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -35,5 +34,4 @@ final class AvatarPlaceholderView: UIView, StaticViewFactory {
         constraint.isActive = true
         heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
     }
-
 }

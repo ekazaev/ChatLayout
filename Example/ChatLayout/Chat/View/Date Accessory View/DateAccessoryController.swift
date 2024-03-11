@@ -13,7 +13,6 @@
 import Foundation
 
 final class DateAccessoryController {
-
     private let date: Date
 
     let accessoryText: String
@@ -22,5 +21,4 @@ final class DateAccessoryController {
         self.date = date
         accessoryText = MessageDateFormatter.shared.string(from: date)
     }
-
 }

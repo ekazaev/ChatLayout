@@ -13,9 +13,6 @@
 import Foundation
 
 enum ModelState: Hashable, CaseIterable {
-
     case beforeUpdate
-
     case afterUpdate
-
 }

@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class TextBubbleController<CustomView: UIView>: BubbleController {
-
     private let type: MessageType
 
     private let bubbleType: Cell.BubbleType
@@ -50,5 +49,4 @@ final class TextBubbleController<CustomView: UIView>: BubbleController {
             }
         }
     }
-
 }

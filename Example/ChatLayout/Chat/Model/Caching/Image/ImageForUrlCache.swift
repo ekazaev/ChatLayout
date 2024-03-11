@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching where Cache.CachingKey: Hashable, Cache.Entity == Data {
-
     private let cache: Cache
 
     public init(cache: Cache) {
@@ -62,5 +61,4 @@ public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueC
         }
         try cache.store(entity: data, for: key)
     }
-
 }

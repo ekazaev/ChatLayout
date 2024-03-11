@@ -15,7 +15,6 @@ import UIKit
 
 /// Internal replacement for `UICollectionViewUpdateItem`.
 enum ChangeItem: Equatable {
-
     /// Delete section at `sectionIndex`
     case sectionDelete(sectionIndex: Int)
 
@@ -98,5 +97,4 @@ enum ChangeItem: Equatable {
             return nil
         }
     }
-
 }

@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 public struct DefaultImageLoader: ImageLoader {
-
     public enum ImageError: Error {
         case unknown
         case corruptedData
@@ -50,5 +49,4 @@ public struct DefaultImageLoader: ImageLoader {
         })
         sessionDataTask.resume()
     }
-
 }

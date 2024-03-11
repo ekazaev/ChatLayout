@@ -16,7 +16,6 @@ import UIKit
 
 @available(iOS 13, *)
 final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching where Cache.CachingKey == URL, Cache.Entity == Data {
-
     private var cache: Cache
 
     init(cache: Cache) {
@@ -56,16 +55,13 @@ final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching whe
         // swiftlint:enable force_try
         try cache.store(entity: codedData, for: key)
     }
-
 }
 
 extension URL: PersistentlyCacheable {
-
     var persistentIdentifier: String {
         guard let percentEncoding = absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
             fatalError()
         }
         return percentEncoding
     }
-
 }

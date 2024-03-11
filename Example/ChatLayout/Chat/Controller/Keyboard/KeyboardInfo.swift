@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 struct KeyboardInfo: Equatable {
-
     let animationDuration: Double
 
     let animationCurve: UIView.AnimationCurve
@@ -43,5 +42,4 @@ struct KeyboardInfo: Equatable {
         frameBegin = keyboardFrameBegin
         frameEnd = keyboardFrameEnd
     }
-
 }

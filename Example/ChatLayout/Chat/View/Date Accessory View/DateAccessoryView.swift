@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 final class DateAccessoryView: UIView {
-
     private var accessoryView = UILabel()
 
     private var controller: DateAccessoryController?
@@ -56,5 +55,4 @@ final class DateAccessoryView: UIView {
         accessoryView.font = UIFont.preferredFont(forTextStyle: .caption1)
         accessoryView.textColor = .gray
     }
-
 }

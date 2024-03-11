@@ -15,7 +15,6 @@ import UIKit
 
 /// Alignment for `CellLayoutContainerView` that corresponds to `UIStackView.Alignment`
 public enum CellLayoutContainerViewAlignment {
-
     /// Align the top and bottom edges of horizontally stacked items tightly to the container.
     case fill
 
@@ -30,20 +29,18 @@ public enum CellLayoutContainerViewAlignment {
 
     fileprivate var stackAlignment: UIStackView.Alignment {
         switch self {
-        case .fill: return .fill
-        case .top: return .top
-        case .center: return .center
-        case .bottom: return .bottom
+        case .fill: .fill
+        case .top: .top
+        case .center: .center
+        case .bottom: .bottom
         }
     }
-
 }
 
 /// `CellLayoutContainerView` is a container view that helps to arrange the views in a horizontal cell-alike layout with an optional `LeadingAccessory` first,
 /// a `CustomView` next and am optional `TrailingAccessory` last. Use `VoidViewFactory` to specify that `LeadingAccessory` or `TrailingAccessory` views should not be
 /// allocated.
 public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, CustomView: UIView, TrailingAccessory: StaticViewFactory>: UIView {
-
     /// Leading accessory view.
     public lazy var leadingView: LeadingAccessory.View? = LeadingAccessory.buildView(within: bounds)
 
@@ -144,5 +141,4 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
             trailingAccessoryView.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-
 }

@@ -14,15 +14,12 @@ import Foundation
 import UIKit
 
 struct RawMessage: Hashable {
-
     enum Data: Hashable {
-
         case text(String)
 
         case url(URL)
 
         case image(ImageMessageSource)
-
     }
 
     var id: UUID
@@ -34,5 +31,4 @@ struct RawMessage: Hashable {
     var userId: Int
 
     var status: MessageStatus = .sent
-
 }

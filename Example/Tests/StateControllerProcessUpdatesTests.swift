@@ -14,7 +14,6 @@
 import XCTest
 
 class StateControllerProcessUpdatesTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -375,5 +374,4 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 4)
     }
-
 }

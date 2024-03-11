@@ -13,7 +13,6 @@
 import Foundation
 
 final class TextMessageController {
-
     weak var view: TextMessageView? {
         didSet {
             view?.reloadData()
@@ -31,5 +30,4 @@ final class TextMessageController {
         self.type = type
         self.bubbleController = bubbleController
     }
-
 }

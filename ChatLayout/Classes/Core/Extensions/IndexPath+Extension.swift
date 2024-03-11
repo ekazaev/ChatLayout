@@ -13,9 +13,7 @@
 import Foundation
 
 extension IndexPath {
-
     var itemPath: ItemPath {
         ItemPath(for: self)
     }
-
 }

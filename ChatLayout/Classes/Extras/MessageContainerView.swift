@@ -15,7 +15,6 @@ import UIKit
 
 /// A container view that helps to layout the message view and its accessory
 public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: UIView>: UIView {
-
     private lazy var stackView = UIStackView(frame: bounds)
 
     /// An accessory view.
@@ -84,5 +83,4 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
         internalContentView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(internalContentView)
     }
-
 }

@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 class MockUICollectionViewUpdateItem: UICollectionViewUpdateItem {
-
     // swiftlint:disable identifier_name
     var _indexPathBeforeUpdate: IndexPath?
     var _indexPathAfterUpdate: IndexPath?
@@ -40,5 +39,4 @@ class MockUICollectionViewUpdateItem: UICollectionViewUpdateItem {
     override var updateAction: Action {
         _updateAction
     }
-
 }

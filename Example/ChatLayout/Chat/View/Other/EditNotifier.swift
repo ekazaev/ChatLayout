@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 final class EditNotifier {
-
     private(set) var isEditing = false
 
     private var delegates = NSHashTable<AnyObject>.weakObjects()
@@ -27,5 +26,4 @@ final class EditNotifier {
         self.isEditing = isEditing
         delegates.allObjects.compactMap { $0 as? EditNotifierDelegate }.forEach { $0.setIsEditing(isEditing, duration: duration) }
     }
-
 }

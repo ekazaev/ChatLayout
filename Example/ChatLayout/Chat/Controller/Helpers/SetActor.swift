@@ -13,9 +13,7 @@
 import Foundation
 
 public final class SetActor<Option: SetAlgebra, ReactionType> {
-
     public enum Action {
-
         case onEmpty
 
         case onChange
@@ -23,19 +21,15 @@ public final class SetActor<Option: SetAlgebra, ReactionType> {
         case onInsertion(_ option: Option)
 
         case onRemoval(_ option: Option)
-
     }
 
     public enum ExecutionType {
-
         case once
 
         case eternal
-
     }
 
     public final class Reaction {
-
         public let type: ReactionType
 
         public let action: Action
@@ -50,7 +44,6 @@ public final class SetActor<Option: SetAlgebra, ReactionType> {
             self.executionType = executionType
             self.actionBlock = actionBlock
         }
-
     }
 
     public var options: Option {
@@ -147,15 +140,11 @@ public final class SetActor<Option: SetAlgebra, ReactionType> {
                 }
             }
         }
-
     }
-
 }
 
 public extension SetActor where ReactionType: Equatable {
-
     func removeAllReactions(_ type: ReactionType) {
         reactions.removeAll(where: { $0.type == type })
     }
-
 }

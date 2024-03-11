@@ -16,10 +16,8 @@ import UIKit
 /// Container view that allows its `CustomView` to have lose connection to the margins of the container according to the
 /// settings provided in `EdgeAligningView.flexibleEdges`
 public final class EdgeAligningView<CustomView: UIView>: UIView {
-
     /// Represents an edge of `EdgeAligningView`
     public enum Edge: CaseIterable {
-
         /// Top edge
         case top
 
@@ -31,7 +29,6 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
 
         /// Bottom edge
         case bottom
-
     }
 
     /// Set of edge constraints  to be set as loose.
@@ -205,5 +202,4 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
          .leading: view.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
          .trailing: view.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
     }
-
 }

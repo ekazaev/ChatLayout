@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class StatusView: UIView, StaticViewFactory {
-
     private lazy var imageView = UIImageView(frame: bounds)
 
     override init(frame: CGRect) {
@@ -64,5 +63,4 @@ final class StatusView: UIView, StaticViewFactory {
             imageView.tintColor = .systemBlue
         }
     }
-
 }

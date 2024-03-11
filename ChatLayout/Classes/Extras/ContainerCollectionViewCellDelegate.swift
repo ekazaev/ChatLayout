@@ -16,7 +16,6 @@ import UIKit
 /// A delegate of `ContainerCollectionViewCell`/`ContainerCollectionReusableView` should implement this methods if
 /// it is required to participate in containers lifecycle.
 public protocol ContainerCollectionViewCellDelegate: AnyObject {
-
     /// Perform any clean up necessary to prepare the view for use again.
     func prepareForReuse()
 
@@ -40,12 +39,10 @@ public protocol ContainerCollectionViewCellDelegate: AnyObject {
     /// Keep in mind that this method can be called multiple times.
     /// - Parameter layoutAttributes: `ChatLayoutAttributes` provided by `CollectionViewChatLayout`.
     func apply(_ layoutAttributes: ChatLayoutAttributes)
-
 }
 
 /// Default extension to make the methods optional for implementation in the successor
 public extension ContainerCollectionViewCellDelegate {
-
     /// Default implementation does nothing.
     func prepareForReuse() {}
 
@@ -59,5 +56,4 @@ public extension ContainerCollectionViewCellDelegate {
 
     /// Default implementation does nothing.
     func apply(_ layoutAttributes: ChatLayoutAttributes) {}
-
 }

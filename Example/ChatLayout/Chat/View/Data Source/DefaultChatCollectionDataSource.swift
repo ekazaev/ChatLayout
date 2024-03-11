@@ -25,7 +25,6 @@ typealias TypingIndicatorCollectionCell = ContainerCollectionViewCell<MessageCon
 typealias TextTitleView = ContainerCollectionReusableView<UILabel>
 
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
-
     private unowned var reloadDelegate: ReloadDelegate
 
     private unowned var editingDelegate: EditingAccessoryControllerDelegate
@@ -242,11 +241,9 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         let bubbleController = BezierBubbleController(bubbleView: bubbleView, controllerProxy: contentBubbleController, type: messageType, bubbleType: bubbleType)
         return bubbleController
     }
-
 }
 
 extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
-
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         sections.count
     }
@@ -310,11 +307,9 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
             fatalError()
         }
     }
-
 }
 
 extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
-
     public func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
         true
     }
@@ -349,7 +344,8 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             case .messageGroup:
                 return .estimated(CGSize(width: min(85, chatLayout.layoutFrame.width / 3), height: 18))
             }
-        case .footer, .header:
+        case .footer,
+             .header:
             return .auto
         }
     }
@@ -365,7 +361,8 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
                 return .center
             case .message:
                 return .fullWidth
-            case .messageGroup, .typingIndicator:
+            case .messageGroup,
+                 .typingIndicator:
                 return .leading
             }
         case .footer:

@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 final class ImageController {
-
     weak var view: ImageView? {
         didSet {
             UIView.performWithoutAnimation {
@@ -73,5 +72,4 @@ final class ImageController {
             view?.reloadData()
         }
     }
-
 }

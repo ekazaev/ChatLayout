@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 struct ChatViewControllerBuilder {
-
     func build() -> UIViewController {
         let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [1, 2, 3])
         let messageController = DefaultChatController(dataProvider: dataProvider, userId: 0)
@@ -33,5 +32,4 @@ struct ChatViewControllerBuilder {
 
         return messageViewController
     }
-
 }

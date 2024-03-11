@@ -13,21 +13,18 @@
 import Foundation
 
 struct URLSource: Hashable {
-
     let url: URL
 
     var isPresentLocally: Bool {
         if #available(iOS 13, *) {
-            return metadataCache.isEntityCached(for: url)
+            metadataCache.isEntityCached(for: url)
         } else {
-            return true
+            true
         }
-
     }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(url)
         hasher.combine(isPresentLocally)
     }
-
 }

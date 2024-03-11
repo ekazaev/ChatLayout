@@ -15,7 +15,6 @@ import UIKit
 
 /// A container view that keeps its `CustomView` masked with the corner radius provided.
 public final class RoundedCornersContainerView<CustomView: UIView>: UIView {
-
     /// Corner radius. If not provided then the half of the current view height will be used.
     public var cornerRadius: CGFloat?
 
@@ -59,5 +58,4 @@ public final class RoundedCornersContainerView<CustomView: UIView>: UIView {
         layer.cornerRadius = cornerRadius ?? frame.height / 2
         clipsToBounds = true
     }
-
 }

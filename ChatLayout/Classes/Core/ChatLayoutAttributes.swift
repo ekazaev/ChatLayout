@@ -15,7 +15,6 @@ import UIKit
 
 /// Custom implementation of `UICollectionViewLayoutAttributes`
 public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
-
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var alignment: ChatItemAlignment = .fullWidth
 
@@ -79,11 +78,11 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     public var kind: ItemKind {
         switch (representedElementCategory, representedElementKind) {
         case (.cell, nil):
-            return .cell
+            .cell
         case (.supplementaryView, .some(UICollectionView.elementKindSectionHeader)):
-            return .header
+            .header
         case (.supplementaryView, .some(UICollectionView.elementKindSectionFooter)):
-            return .footer
+            .footer
         default:
             preconditionFailure("Unsupported element kind.")
         }
@@ -95,5 +94,4 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         }
         return typedCopy
     }
-
 }

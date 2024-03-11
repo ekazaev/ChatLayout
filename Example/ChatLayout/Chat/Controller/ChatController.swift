@@ -13,11 +13,9 @@
 import Foundation
 
 protocol ChatController {
-
     func loadInitialMessages(completion: @escaping ([Section]) -> Void)
 
     func loadPreviousMessages(completion: @escaping ([Section]) -> Void)
 
     func sendMessage(_ data: Message.Data, completion: @escaping ([Section]) -> Void)
-
 }

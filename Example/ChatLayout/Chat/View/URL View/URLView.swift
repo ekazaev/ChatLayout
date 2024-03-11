@@ -17,7 +17,6 @@ import UIKit
 
 @available(iOS 13, *)
 final class URLView: UIView, ContainerCollectionViewCellDelegate {
-
     private var linkView: LPLinkView?
 
     private var controller: URLController?
@@ -124,5 +123,4 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
         setNeedsLayout()
         layoutIfNeeded()
     }
-
 }

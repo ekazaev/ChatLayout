@@ -14,9 +14,6 @@ import Foundation
 import UIKit
 
 enum ImageMessageSource: Hashable {
-
     case image(UIImage)
-
     case imageURL(URL)
-
 }

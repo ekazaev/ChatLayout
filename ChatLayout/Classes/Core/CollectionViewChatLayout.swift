@@ -36,7 +36,6 @@ import UIKit
 ///
 /// `CollectionViewChatLayout.restoreContentOffset(...)`
 open class CollectionViewChatLayout: UICollectionViewLayout {
-
     // MARK: Custom Properties
 
     /// `CollectionViewChatLayout` delegate.
@@ -169,7 +168,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: Private Properties
 
     private struct PrepareActions: OptionSet {
-
         let rawValue: UInt
 
         static let recreateSectionModels = PrepareActions(rawValue: 1 << 0)
@@ -177,15 +175,12 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         static let cachePreviousWidth = PrepareActions(rawValue: 1 << 2)
         static let cachePreviousContentInsets = PrepareActions(rawValue: 1 << 3)
         static let switchStates = PrepareActions(rawValue: 1 << 4)
-
     }
 
     private struct InvalidationActions: OptionSet {
-
         let rawValue: UInt
 
         static let shouldInvalidateOnBoundsChange = InvalidationActions(rawValue: 1 << 0)
-
     }
 
     private lazy var controller = StateController(layoutRepresentation: self)
@@ -220,9 +215,15 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: IOS 15.1 fix flags
 
     private var needsIOS15_1IssueFix: Bool {
-        guard enableIOS15_1Fix else { return false }
-        guard #unavailable(iOS 15.2) else { return false }
-        guard #available(iOS 15.1, *) else { return false }
+        guard enableIOS15_1Fix else {
+            return false
+        }
+        guard #unavailable(iOS 15.2) else {
+            return false
+        }
+        guard #available(iOS 15.1, *) else {
+            return false
+        }
         return isUserInitiatedScrolling && !controller.isAnimatedBoundsChange
     }
 
@@ -599,7 +600,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             switch preferredMessageAttributes.kind {
             case .cell:
                 context.invalidateItems(at: [preferredMessageAttributes.indexPath])
-            case .header, .footer:
+            case .footer,
+                 .header:
                 context.invalidateSupplementaryElements(ofKind: preferredMessageAttributes.kind.supplementaryElementStringType, at: [preferredMessageAttributes.indexPath])
             }
         }
@@ -939,11 +941,9 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         }
         return attributes
     }
-
 }
 
 extension CollectionViewChatLayout {
-
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
         let itemSize = estimatedSize(for: element, at: indexPath)
         let interItemSpacing: CGFloat
@@ -1023,11 +1023,9 @@ extension CollectionViewChatLayout {
             invalidatedAttributes[kind] = []
         }
     }
-
 }
 
 extension CollectionViewChatLayout: ChatLayoutRepresentation {
-
     func numberOfItems(in section: Int) -> Int {
         guard let collectionView else {
             return .zero
@@ -1056,7 +1054,6 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
 }
 
 extension CollectionViewChatLayout {
-
     private var maxPossibleContentOffset: CGPoint {
         guard let collectionView else {
             return .zero
@@ -1071,5 +1068,4 @@ extension CollectionViewChatLayout {
         }
         return collectionView.isDragging || collectionView.isDecelerating
     }
-
 }

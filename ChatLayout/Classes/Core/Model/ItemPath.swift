@@ -18,7 +18,6 @@ import Foundation
 /// On an iPhone X, compiled with -Os optimizations, it's about 35x faster to initialize this struct
 /// compared to an `IndexPath`.
 struct ItemPath: Hashable {
-
     let section: Int
 
     let item: Int
@@ -36,5 +35,4 @@ struct ItemPath: Hashable {
         section = indexPath.section
         item = indexPath.item
     }
-
 }

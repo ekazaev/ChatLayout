@@ -14,13 +14,10 @@ import Foundation
 import UIKit
 
 final class LayoutModel<Layout: ChatLayoutRepresentation> {
-
     private struct ItemUUIDKey: Hashable {
-
         let kind: ItemKind
 
         let id: UUID
-
     }
 
     private(set) var sections: ContiguousArray<SectionModel<Layout>>
@@ -207,5 +204,4 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         itemPathByIdentifierCache = nil
         sectionIndexByIdentifierCache = nil
     }
-
 }

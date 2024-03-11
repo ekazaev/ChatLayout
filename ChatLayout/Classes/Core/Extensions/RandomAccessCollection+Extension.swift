@@ -13,7 +13,6 @@
 import Foundation
 
 extension RandomAccessCollection where Index == Int {
-
     func binarySearch(predicate: (Element) -> ComparisonResult) -> Index? {
         var lowerBound = startIndex
         var upperBound = endIndex
@@ -79,5 +78,4 @@ extension RandomAccessCollection where Index == Int {
 
         return Array(self[lowerBound...upperBound])
     }
-
 }

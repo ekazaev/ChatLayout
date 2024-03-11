@@ -13,7 +13,6 @@
 import Foundation
 
 public class TextGenerator {
-
     private static let words = [
         "alias", "consequatur", "aut", "perferendis", "sit", "voluptatem",
         "accusantium", "doloremque", "aperiam", "eaque", "ipsa", "quae", "ab",
@@ -63,5 +62,4 @@ public class TextGenerator {
         result.replaceSubrange(result.startIndex...result.startIndex, with: String(result[result.startIndex]).capitalized)
         return result + "."
     }
-
 }
