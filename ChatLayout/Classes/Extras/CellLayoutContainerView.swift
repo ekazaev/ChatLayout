@@ -30,10 +30,10 @@ public enum CellLayoutContainerViewAlignment {
 
     fileprivate var stackAlignment: UIStackView.Alignment {
         switch self {
-        case .fill: return .fill
-        case .top: return .top
-        case .center: return .center
-        case .bottom: return .bottom
+        case .fill: .fill
+        case .top: .top
+        case .center: .center
+        case .bottom: .bottom
         }
     }
 

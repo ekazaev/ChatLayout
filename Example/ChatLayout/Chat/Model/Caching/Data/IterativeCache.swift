@@ -32,9 +32,9 @@ public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: As
 
     public func getEntity(for key: FastCache.CachingKey) throws -> FastCache.Entity {
         if let image = try? mainCache.getEntity(for: key) {
-            return image
+            image
         } else {
-            return try backupCache.getEntity(for: key)
+            try backupCache.getEntity(for: key)
         }
     }
 

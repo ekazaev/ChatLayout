@@ -567,6 +567,7 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
 
 private var delegateHook = 0
 
+// Quick adoption.
 extension MessageContainerView: RecyclerViewCellEvenHandler {
     var delegate: RecyclerViewCellEvenHandler? {
         get {
@@ -575,6 +576,10 @@ extension MessageContainerView: RecyclerViewCellEvenHandler {
         set {
             objc_setAssociatedObject(self, &delegateHook, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
+    }
+
+    public func prepareForReuseAtIndex(_ index: Int, with context: CellLayoutContext) {
+        delegate?.prepareForReuseAtIndex(index, with: context)
     }
 
     public func applyLayoutAttributes(_ attributes: LayoutAttributes, at state: RecyclerViewContainerState, index: Int) {

@@ -18,9 +18,9 @@ struct URLSource: Hashable {
 
     var isPresentLocally: Bool {
         if #available(iOS 13, *) {
-            return metadataCache.isEntityCached(for: url)
+            metadataCache.isEntityCached(for: url)
         } else {
-            return true
+            true
         }
 
     }

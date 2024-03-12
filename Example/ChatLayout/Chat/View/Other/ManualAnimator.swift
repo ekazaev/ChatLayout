@@ -24,15 +24,15 @@ class ManualAnimator {
         func modify(_ x: CGFloat) -> CGFloat {
             switch self {
             case .linear:
-                return x
+                x
             case .parametric:
-                return x.parametric
+                x.parametric
             case .easeInOut:
-                return x.quadraticEaseInOut
+                x.quadraticEaseInOut
             case .easeIn:
-                return x.quadraticEaseIn
+                x.quadraticEaseIn
             case .easeOut:
-                return x.quadraticEaseOut
+                x.quadraticEaseOut
             }
         }
 

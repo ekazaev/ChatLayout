@@ -41,11 +41,11 @@ public enum ItemSize: Hashable {
     public var caseType: CaseType {
         switch self {
         case .auto:
-            return .auto
+            .auto
         case .estimated:
-            return .estimated
+            .estimated
         case .exact:
-            return .exact
+            .exact
         }
     }
 

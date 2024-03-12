@@ -79,11 +79,11 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     public var kind: ItemKind {
         switch (representedElementCategory, representedElementKind) {
         case (.cell, nil):
-            return .cell
+            .cell
         case (.supplementaryView, .some(UICollectionView.elementKindSectionHeader)):
-            return .header
+            .header
         case (.supplementaryView, .some(UICollectionView.elementKindSectionFooter)):
-            return .footer
+            .footer
         default:
             preconditionFailure("Unsupported element kind.")
         }

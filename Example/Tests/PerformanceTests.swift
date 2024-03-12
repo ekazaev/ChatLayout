@@ -20,11 +20,11 @@ final class PerformanceTests: XCTestCase {
         let constant = 1257
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < constant {
-                return .orderedAscending
+                .orderedAscending
             } else if integer > constant {
-                return .orderedDescending
+                .orderedDescending
             } else {
-                return .orderedSame
+                .orderedSame
             }
         }
         let values = (0...100000).map { $0 }
@@ -40,11 +40,11 @@ final class PerformanceTests: XCTestCase {
         let constant = 1257
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < constant {
-                return .orderedAscending
+                .orderedAscending
             } else if integer > constant + 111 {
-                return .orderedDescending
+                .orderedDescending
             } else {
-                return .orderedSame
+                .orderedSame
             }
         }
         let values = (0...100000).map { $0 }

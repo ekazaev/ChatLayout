@@ -18,7 +18,7 @@ PODS:
     - InputBarAccessoryView/Core (= 5.5.0)
   - InputBarAccessoryView/Core (5.5.0)
   - InterposeKit (0.0.2)
-  - RecyclerView (0.1.16)
+  - RecyclerView (0.1.17)
 
 DEPENDENCIES:
   - ChatLayout (from `../`)
@@ -52,7 +52,7 @@ SPEC CHECKSUMS:
   FPSCounter: 884afec377de66637808c4f52ecc3b85a404732b
   InputBarAccessoryView: 1d7b0a672b36e370f01f264b3907ef39d03328e3
   InterposeKit: 68d76ff4680cec89f21fd3798596b751599fc95a
-  RecyclerView: 6da2a2908143c87f4f0748c26d0718512b19482e
+  RecyclerView: f4bfaeb57a12bd9d18c81cfb7dfd25a74f79df85
 
 PODFILE CHECKSUM: 6b6bc450f44e075c86319a6c088d9f092eb018cb
 

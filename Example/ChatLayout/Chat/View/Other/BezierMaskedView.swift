@@ -33,9 +33,9 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
     var offset: CGFloat {
         switch bubbleType {
         case .tailed:
-            return 2
+            2
         case .normal:
-            return 6
+            6
         }
     }
 

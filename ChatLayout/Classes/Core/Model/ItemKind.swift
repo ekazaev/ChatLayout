@@ -40,9 +40,9 @@ public enum ItemKind: CaseIterable, Hashable {
     public var isSupplementaryItem: Bool {
         switch self {
         case .cell:
-            return false
+            false
         case .header, .footer:
-            return true
+            true
         }
     }
 
@@ -51,9 +51,9 @@ public enum ItemKind: CaseIterable, Hashable {
         case .cell:
             preconditionFailure("Cell type is not a supplementary view.")
         case .header:
-            return UICollectionView.elementKindSectionHeader
+            UICollectionView.elementKindSectionHeader
         case .footer:
-            return UICollectionView.elementKindSectionFooter
+            UICollectionView.elementKindSectionFooter
         }
     }
 

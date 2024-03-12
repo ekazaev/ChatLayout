@@ -46,11 +46,11 @@ final class HelpersTests: XCTestCase {
     func testBinarySearch() {
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < 100 {
-                return .orderedAscending
+                .orderedAscending
             } else if integer > 100 {
-                return .orderedDescending
+                .orderedDescending
             } else {
-                return .orderedSame
+                .orderedSame
             }
         }
         XCTAssertEqual([Int]().binarySearch(predicate: predicate), nil)
@@ -96,11 +96,11 @@ final class HelpersTests: XCTestCase {
     func testSearchInRange() {
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < 100 {
-                return .orderedAscending
+                .orderedAscending
             } else if integer > 200 {
-                return .orderedDescending
+                .orderedDescending
             } else {
-                return .orderedSame
+                .orderedSame
             }
         }
         XCTAssertEqual([Int]().binarySearchRange(predicate: predicate), [])
