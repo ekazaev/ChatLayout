@@ -25,6 +25,8 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
 
     private var cachedIntrinsicContentSize: CGSize?
 
+    private var cellContext: CellLayoutContext?
+
     private var textViewWidth: CGFloat {
         (viewPortWidth * Constants.maxWidth).rounded(.up)
     }
@@ -37,6 +39,12 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupSubviews()
+    }
+
+    func prepareForReuseAtIndex(_ index: Int, with context: CellLayoutContext) {
+        if cellContext == nil {
+            cellContext = context
+        }
     }
 
     func prepareForReuse() {
@@ -147,11 +155,10 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, Recycl
 extension TextMessageView: AvatarViewDelegate {
     func avatarTapped() {
         if enableSelfSizingSupport {
-            layoutMargins = layoutMargins == .zero ? UIEdgeInsets(top: 50, left: 0, bottom: 50, right: 0) : .zero
+            textView.font = textView.font == UIFont.preferredFont(forTextStyle: .title1) ? UIFont.preferredFont(forTextStyle: .body) : UIFont.preferredFont(forTextStyle: .title1)
+            cachedIntrinsicContentSize = nil
             setNeedsLayout()
-            if let cell = superview(of: UICollectionViewCell.self) {
-                cell.contentView.invalidateIntrinsicContentSize()
-            }
+            cellContext?.invalidateLayout()
         }
     }
 }

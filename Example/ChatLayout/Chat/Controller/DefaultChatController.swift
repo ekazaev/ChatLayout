@@ -169,11 +169,10 @@ final class DefaultChatController: ChatController {
     private func convert(_ data: RawMessage.Data) -> Message.Data {
         switch data {
         case let .url(url):
-            let isLocallyStored: Bool
-            if #available(iOS 13, *) {
-                isLocallyStored = metadataCache.isEntityCached(for: url)
+            let isLocallyStored: Bool = if #available(iOS 13, *) {
+                metadataCache.isEntityCached(for: url)
             } else {
-                isLocallyStored = true
+                true
             }
             return .url(url, isLocallyStored: isLocallyStored)
         case let .image(source):

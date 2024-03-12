@@ -133,11 +133,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// The width and height of the collection view’s contents.
     open override var collectionViewContentSize: CGSize {
-        let contentSize: CGSize
-        if state == .beforeUpdate {
-            contentSize = controller.contentSize(for: .beforeUpdate)
+        let contentSize: CGSize = if state == .beforeUpdate {
+            controller.contentSize(for: .beforeUpdate)
         } else {
-            contentSize = controller.contentSize(for: .afterUpdate)
+            controller.contentSize(for: .afterUpdate)
         }
         return contentSize
     }
@@ -743,11 +742,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
            controller.isLayoutBiggerThanVisibleBounds(at: state),
            controller.batchUpdateCompensatingOffset != 0,
            let collectionView {
-            let compensatingOffset: CGFloat
-            if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
-                compensatingOffset = controller.batchUpdateCompensatingOffset
+            let compensatingOffset: CGFloat = if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
+                controller.batchUpdateCompensatingOffset
             } else {
-                compensatingOffset = maxPossibleContentOffset.y - collectionView.contentOffset.y
+                maxPossibleContentOffset.y - collectionView.contentOffset.y
             }
             controller.batchUpdateCompensatingOffset = 0
             let context = ChatLayoutInvalidationContext()
@@ -946,11 +944,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 extension CollectionViewChatLayout {
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
         let itemSize = estimatedSize(for: element, at: indexPath)
-        let interItemSpacing: CGFloat
-        if element == .cell {
-            interItemSpacing = self.interItemSpacing(for: element, at: indexPath)
+        let interItemSpacing: CGFloat = if element == .cell {
+            self.interItemSpacing(for: element, at: indexPath)
         } else {
-            interItemSpacing = 0
+            0
         }
         return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact, interItemSpacing: interItemSpacing)
     }
@@ -973,23 +970,21 @@ extension CollectionViewChatLayout {
     }
 
     private func itemSize(with preferredAttributes: ChatLayoutAttributes) -> CGSize {
-        let itemSize: CGSize
-        if let delegate,
-           case let .exact(size) = delegate.sizeForItem(self, of: preferredAttributes.kind, at: preferredAttributes.indexPath) {
-            itemSize = size
+        let itemSize: CGSize = if let delegate,
+                                  case let .exact(size) = delegate.sizeForItem(self, of: preferredAttributes.kind, at: preferredAttributes.indexPath) {
+            size
         } else {
-            itemSize = preferredAttributes.size
+            preferredAttributes.size
         }
         return itemSize
     }
 
     private func interItemSpacing(for kind: ItemKind, at indexPath: IndexPath) -> CGFloat {
-        let interItemSpacing: CGFloat
-        if let delegate,
-           let customInterItemSpacing = delegate.interItemSpacing(self, of: kind, after: indexPath) {
-            interItemSpacing = customInterItemSpacing
+        let interItemSpacing: CGFloat = if let delegate,
+                                           let customInterItemSpacing = delegate.interItemSpacing(self, of: kind, after: indexPath) {
+            customInterItemSpacing
         } else {
-            interItemSpacing = settings.interItemSpacing
+            settings.interItemSpacing
         }
         return interItemSpacing
     }
@@ -1042,12 +1037,11 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
     }
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {
-        let interItemSpacing: CGFloat
-        if let delegate,
-           let customInterItemSpacing = delegate.interSectionSpacing(self, after: sectionIndex) {
-            interItemSpacing = customInterItemSpacing
+        let interItemSpacing: CGFloat = if let delegate,
+                                           let customInterItemSpacing = delegate.interSectionSpacing(self, after: sectionIndex) {
+            customInterItemSpacing
         } else {
-            interItemSpacing = settings.interSectionSpacing
+            settings.interSectionSpacing
         }
         return interItemSpacing
     }

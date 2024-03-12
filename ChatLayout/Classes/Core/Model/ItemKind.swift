@@ -40,8 +40,7 @@ public enum ItemKind: CaseIterable, Hashable {
         switch self {
         case .cell:
             false
-        case .footer,
-             .header:
+        case .header, .footer:
             true
         }
     }

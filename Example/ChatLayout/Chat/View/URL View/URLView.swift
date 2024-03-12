@@ -75,12 +75,11 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
             return
         }
 
-        let newLinkView: LPLinkView
-        switch controller.metadata {
+        let newLinkView = switch controller.metadata {
         case let .some(metadata):
-            newLinkView = LPLinkView(metadata: metadata)
+            LPLinkView(metadata: metadata)
         case .none:
-            newLinkView = LPLinkView(url: controller.url)
+            LPLinkView(url: controller.url)
         }
         addSubview(newLinkView)
         newLinkView.translatesAutoresizingMaskIntoConstraints = false

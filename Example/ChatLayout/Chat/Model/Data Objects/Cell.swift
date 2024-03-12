@@ -58,13 +58,13 @@ extension Cell: Differentiable {
     public var differenceIdentifier: Identifier {
         switch self {
         case let .message(message, _):
-            return .message(message.id)
+            .message(message.id)
         case .typingIndicator:
-            return .typingIndicator
+            .typingIndicator
         case let .messageGroup(group):
-            return .messageGroup(group.id)
+            .messageGroup(group.id)
         case let .date(group):
-            return .date(group.id)
+            .date(group.id)
         }
     }
 

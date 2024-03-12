@@ -149,12 +149,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     }
 
     func contentHeight(at state: ModelState) -> CGFloat {
-        let locationHeight: CGFloat?
-        switch state {
+        let locationHeight: CGFloat? = switch state {
         case .beforeUpdate:
-            locationHeight = layoutBeforeUpdate.sections.withUnsafeBufferPointer { $0.last?.locationHeight }
+            layoutBeforeUpdate.sections.withUnsafeBufferPointer { $0.last?.locationHeight }
         case .afterUpdate:
-            locationHeight = layoutAfterUpdate?.sections.withUnsafeBufferPointer { $0.last?.locationHeight }
+            layoutAfterUpdate?.sections.withUnsafeBufferPointer { $0.last?.locationHeight }
         }
 
         guard let locationHeight else {
@@ -182,12 +181,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
            cachedAttributesState.rect.contains(rect) {
             return cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
         } else {
-            let totalRect: CGRect
-            switch state {
+            let totalRect: CGRect = switch state {
             case .beforeUpdate:
-                totalRect = rect.inset(by: UIEdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))
+                rect.inset(by: UIEdgeInsets(top: -rect.height / 2, left: -rect.width / 2, bottom: -rect.height / 2, right: -rect.width / 2))
             case .afterUpdate:
-                totalRect = rect
+                rect
             }
             let attributes = allAttributes(at: state, visibleRect: totalRect)
             if !ignoreCache {
