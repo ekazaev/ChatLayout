@@ -50,9 +50,7 @@ final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching whe
     }
 
     func store(entity: LPLinkMetadata, for key: URL) throws {
-        // swiftlint:disable force_try
-        let codedData = try! NSKeyedArchiver.archivedData(withRootObject: entity, requiringSecureCoding: true)
-        // swiftlint:enable force_try
+        let codedData = try NSKeyedArchiver.archivedData(withRootObject: entity, requiringSecureCoding: true)
         try cache.store(entity: codedData, for: key)
     }
 }
