@@ -28,9 +28,9 @@ final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching whe
 
     func getEntity(for url: URL) throws -> LPLinkMetadata {
         let data = try cache.getEntity(for: url)
-        // swiftlint:disable force_try force_cast
-        let entity = try! NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as! LPLinkMetadata
-        // swiftlint:enable force_try force_cast
+        guard let entity = try NSKeyedUnarchiver.unarchivedObject(ofClass: LPLinkMetadata.self, from: data) else {
+            throw CacheError.invalidData
+        }
         return entity
     }
 
