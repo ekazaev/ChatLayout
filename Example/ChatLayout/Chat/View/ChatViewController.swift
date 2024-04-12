@@ -756,7 +756,13 @@ extension ChatViewController: CustomContextMenuInteractionDelegate {
                 }]
                 let menu = UIMenu(title: "", children: actions)
                 currentInterfaceActions.options.insert(.showingPreview)
-                return CustomContextMenuConfiguration(previewProvider: nil, actionProvider: { _ in menu })
+                return CustomContextMenuConfiguration(previewProvider: nil,
+                                                      actionProvider: { _ in menu },
+                                                      accessoryPosition: .above,
+                                                      accessoryViewProvider: {
+                                                          let view = EmojiMenuView(frame: .init(origin: .zero, size: .init(width: 350, height: 50)))
+                                                          return view
+                                                      })
             default:
                 return nil
             }
