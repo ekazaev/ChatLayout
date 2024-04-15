@@ -697,7 +697,7 @@ extension ChatViewController: KeyboardListenerDelegate {
 }
 
 extension ChatViewController: CustomContextMenuInteractionDelegate {
-    public func customContextMenuHighlightPreviewForItemAt(_ index: Int, configuration: CustomContextMenuConfiguration) -> UITargetedPreview? {
+    func customContextMenuHighlightPreviewForItemAt(_ index: Int, configuration: CustomContextMenuConfiguration) -> UITargetedPreview? {
         guard let cell = scrollView.visibleViewForIndex(index) as? TextMessageViewItem,
               let item = dataSource.sections.first?.cells[index] else {
             return nil
@@ -736,7 +736,7 @@ extension ChatViewController: CustomContextMenuInteractionDelegate {
         return portalView
     }
 
-    public func configurationForCustomMenuAtIndex(_ index: Int) -> CustomContextMenuConfiguration? {
+    func configurationForCustomMenuAtIndex(_ index: Int) -> CustomContextMenuConfiguration? {
         guard !currentInterfaceActions.options.contains(.showingPreview),
               !currentControllerActions.options.contains(.updatingCollection),
               let item = dataSource.sections.first?.cells[index] else {
@@ -746,10 +746,15 @@ extension ChatViewController: CustomContextMenuInteractionDelegate {
         case let .message(message, bubbleType: _):
             switch message.data {
             case let .text(body):
-                let actions = [UIAction(title: "Copy", image: nil, identifier: nil) { [body] _ in
-                    let pasteboard = UIPasteboard.general
-                    pasteboard.string = body
-                }]
+                let actions = [
+                    UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc"), identifier: nil) { [body] _ in
+                        let pasteboard = UIPasteboard.general
+                        pasteboard.string = body
+                    },
+                    UIAction(title: "Delete", image: UIImage(systemName: "trash"), identifier: nil, attributes: [.destructive]) { _ in
+                        print("Delete")
+                    }
+                ]
                 let menu = UIMenu(title: "", children: actions)
                 currentInterfaceActions.options.insert(.showingPreview)
                 return CustomContextMenuConfiguration(previewProvider: nil,
@@ -767,14 +772,25 @@ extension ChatViewController: CustomContextMenuInteractionDelegate {
         }
     }
 
-    public func interactionWillDismissCustomContextMenuAtIndex(_ index: Int, configuration: CustomContextMenuConfiguration, animator: CustomContextMenuInteractionTransitionCoordinator?) {
-        animator?.animateAlongsideTransition({},
+    func interactionWillDisplayCustomContextMenuAtIndex(_ index: Int, configuration: CustomContextMenuConfiguration, animator: CustomContextMenuInteractionTransitionCoordinator?) {
+        panGesture.state = .cancelled
+
+        // Hiding the cell, if portal view is not used.
+        animator?.animateAlongsideTransition({
+            self.scrollView.visibleViewForIndex(index)?.alpha = 0
+        })
+    }
+
+    func interactionWillDismissCustomContextMenuAtIndex(_ index: Int, configuration: CustomContextMenuConfiguration, animator: CustomContextMenuInteractionTransitionCoordinator?) {
+        animator?.animateAlongsideTransition({
+                                                 self.scrollView.visibleViewForIndex(index)?.alpha = 1
+                                             },
                                              completion: { _ in
                                                  self.currentInterfaceActions.options.remove(.showingPreview)
                                              })
     }
 
-    public func customContextMenuCancelledAtIndex(_ index: Int, configuration: CustomContextMenuConfiguration) {
+    func customContextMenuCancelledAtIndex(_ index: Int, configuration: CustomContextMenuConfiguration) {
         currentInterfaceActions.options.remove(.showingPreview)
     }
 }
