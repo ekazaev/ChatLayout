@@ -16,7 +16,6 @@ import RecyclerView
 import UIKit
 
 final class TextMessageView: UIView, ContainerCollectionViewCellDelegate, RecyclerViewCellEvenHandler {
-
     private var viewPortWidth: CGFloat = 300
 
     private lazy var textView = MessageTextView(frame: bounds)

@@ -89,14 +89,13 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
 
     private func updateAccessoryView() {
         accessoryView.removeFromSuperview()
-        guard let avatarConnectingView = accessoryConnectingView,
-              let avatarConnectingSuperview = avatarConnectingView.superview else {
+        guard let accessoryConnectingView else {
             return
         }
-        avatarConnectingSuperview.addSubview(accessoryView)
-        accessoryOffsetConstraint = accessoryView.leadingAnchor.constraint(equalTo: avatarConnectingView.trailingAnchor, constant: accessorySafeAreaInsets.right)
+        accessoryConnectingView.addSubview(accessoryView)
+        accessoryOffsetConstraint = accessoryView.leadingAnchor.constraint(equalTo: accessoryConnectingView.trailingAnchor, constant: accessorySafeAreaInsets.right + 5)
         accessoryOffsetConstraint?.isActive = true
-        accessoryView.centerYAnchor.constraint(equalTo: avatarConnectingView.centerYAnchor).isActive = true
+        accessoryView.centerYAnchor.constraint(equalTo: accessoryConnectingView.centerYAnchor).isActive = true
     }
 
     private func updateOffsets() {

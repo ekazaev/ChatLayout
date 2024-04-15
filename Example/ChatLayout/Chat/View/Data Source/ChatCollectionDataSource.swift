@@ -16,7 +16,6 @@ import RecyclerView
 import UIKit
 
 protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegate, RecyclerViewDataSource<VoidPayload>, ContinuousLayoutEngineDelegate {
-
     var sections: [Section] { get set }
 
     func prepare(with collectionView: UICollectionView)

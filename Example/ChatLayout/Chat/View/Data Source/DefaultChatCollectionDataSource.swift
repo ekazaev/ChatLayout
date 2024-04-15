@@ -31,7 +31,6 @@ typealias TypingIndicatorCollectionCell = ContainerCollectionViewCell<MessageCon
 typealias TextTitleView = ContainerCollectionReusableView<UILabel>
 
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
-
     weak var scrollView: RecyclerScrollView<ContinuousLayoutEngine<VoidPayload>>!
 
     private unowned var reloadDelegate: ReloadDelegate
@@ -560,7 +559,6 @@ extension DefaultChatCollectionDataSource: RecyclerViewDataSource {
     typealias Identifier = Cell.Identifier
 
     typealias Payload = VoidPayload
-
 }
 
 private var delegateHook = 0

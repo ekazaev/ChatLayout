@@ -44,7 +44,6 @@ enum Cell: Hashable {
 }
 
 extension Cell: Differentiable {
-
     enum Identifier: Hashable {
         case message(UUID)
 

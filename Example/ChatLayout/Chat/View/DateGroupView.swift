@@ -16,7 +16,6 @@ import RecyclerView
 import UIKit
 
 final class DateGroupView: UIView, ContainerCollectionViewCellDelegate, RecyclerViewCellEvenHandler {
-
     private var viewPortWidth: CGFloat = 300
 
     private lazy var label = EdgeAligningView<UILabel>()

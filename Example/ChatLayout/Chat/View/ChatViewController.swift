@@ -37,7 +37,6 @@ let enableSelfSizingSupport = true
 let enableReconfigure = false
 
 final class ChatViewController: UIViewController {
-
     lazy var scrollView = RecyclerScrollView(frame: UIScreen.main.bounds, engine: ContinuousLayoutEngine<VoidPayload>())
 
     private enum ReactionTypes {
@@ -216,7 +215,7 @@ final class ChatViewController: UIViewController {
         }
 
         KeyboardListener.shared.add(delegate: self)
-        // collectionView.addGestureRecognizer(panGesture)
+        scrollView.addGestureRecognizer(panGesture)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -278,9 +277,9 @@ final class ChatViewController: UIViewController {
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         swipeNotifier.setAccessoryOffset(UIEdgeInsets(top: view.safeAreaInsets.top,
-                                                      left: view.safeAreaInsets.left + chatLayout.settings.additionalInsets.left,
+                                                      left: view.safeAreaInsets.left + scrollView.engine.settings.additionalInsets.left,
                                                       bottom: view.safeAreaInsets.bottom,
-                                                      right: view.safeAreaInsets.right + chatLayout.settings.additionalInsets.right))
+                                                      right: view.safeAreaInsets.right + scrollView.engine.settings.additionalInsets.right))
     }
 
     // Apple doesnt return sometimes inputBarView back to the app. This is an attempt to fix that
@@ -380,7 +379,6 @@ extension ChatViewController: UIScrollViewDelegate {
 }
 
 extension ChatViewController: UICollectionViewDelegate {
-
 //    @available(iOS 13.0, *)
 //    private func preview(for configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
 //        guard let identifier = configuration.identifier as? String else {
@@ -466,7 +464,6 @@ extension ChatViewController: UICollectionViewDelegate {
 //            self.currentInterfaceActions.options.remove(.showingPreview)
 //        }
 //    }
-
 }
 
 extension ChatViewController: ChatControllerDelegate {
@@ -553,7 +550,7 @@ extension ChatViewController: ChatControllerDelegate {
 extension ChatViewController: UIGestureRecognizerDelegate {
     @objc
     private func handleRevealPan(_ gesture: UIPanGestureRecognizer) {
-        guard let collectionView = gesture.view as? UICollectionView,
+        guard let scrollView = gesture.view as? RecyclerScrollView<ContinuousLayoutEngine<VoidPayload>>,
               !editNotifier.isEditing else {
             currentInterfaceActions.options.remove(.showingAccessory)
             return
@@ -567,28 +564,28 @@ extension ChatViewController: UIGestureRecognizerDelegate {
             currentOffset += translationX
 
             gesture.setTranslation(.zero, in: gesture.view)
-            updateTransforms(in: collectionView)
+            updateTransforms(in: scrollView)
         default:
             UIView.animate(withDuration: 0.25, animations: { () in
                 self.translationX = 0
                 self.currentOffset = 0
-                self.updateTransforms(in: collectionView, transform: .identity)
+                self.updateTransforms(in: scrollView, transform: .identity)
             }, completion: { _ in
                 self.currentInterfaceActions.options.remove(.showingAccessory)
             })
         }
     }
 
-    private func updateTransforms(in collectionView: UICollectionView, transform: CGAffineTransform? = nil) {
-        collectionView.indexPathsForVisibleItems.forEach {
-            guard let cell = collectionView.cellForItem(at: $0) else {
+    private func updateTransforms(in collectionView: RecyclerScrollView<ContinuousLayoutEngine<VoidPayload>>, transform: CGAffineTransform? = nil) {
+        collectionView.visibleIndexes.forEach {
+            guard let cell = collectionView.visibleViewForIndex($0) else {
                 return
             }
             updateTransform(transform: transform, cell: cell, indexPath: $0)
         }
     }
 
-    private func updateTransform(transform: CGAffineTransform?, cell: UICollectionViewCell, indexPath: IndexPath) {
+    private func updateTransform(transform: CGAffineTransform?, cell: UIView, indexPath: Int) {
         var x = currentOffset
 
         let maxOffset: CGFloat = -100
@@ -644,7 +641,6 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 }
 
 extension ChatViewController: KeyboardListenerDelegate {
-
     func keyboardWillChangeFrame(info: KeyboardInfo) {
         guard !currentInterfaceActions.options.contains(.changingFrameSize),
               scrollView.contentInsetAdjustmentBehavior != .never,
@@ -784,7 +780,6 @@ extension ChatViewController: CustomContextMenuInteractionDelegate {
 }
 
 extension ChatViewController: ContextMenuInteractionDelegate {
-
     private func preview(for index: Int) -> UITargetedPreview? {
         guard let cell = scrollView.visibleViewForIndex(index) as? TextMessageViewItem,
               let item = dataSource.sections.first?.cells[index] else {

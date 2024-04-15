@@ -17,7 +17,6 @@ import RecyclerView
 import UIKit
 
 extension RecyclerScrollView {
-
     func reload(
         originalData: [Section],
         using stagedChangeset: StagedChangeset<[Section]>,
