@@ -116,7 +116,7 @@ final class ChatViewController: UIViewController {
         super.viewDidLoad()
         (dataSource as? DefaultChatCollectionDataSource)?.scrollView = scrollView
         scrollView.dataSource = dataSource as? DefaultChatCollectionDataSource
-        scrollView.engine.enableOppositeAnchor = true
+        scrollView.engine.inverseDefaultScrollAnchor = true
         scrollView.engine.settings.additionalInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         scrollView.engine.delegate = dataSource as? DefaultChatCollectionDataSource
         scrollView.delegate = self

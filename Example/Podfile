@@ -5,7 +5,7 @@ target 'ChatLayout_Example' do
   pod 'ChatLayout', :path => '../'
   pod 'InputBarAccessoryView'
   pod 'DifferenceKit'
-  pod 'RecyclerView', '0.1.39'
+  pod 'RecyclerView', '0.1.45'
   # pod 'RecyclerView', :path => '../../RecyclerView/RecyclerView.podspec'
   pod 'FPSCounter', '~> 4.0'
   pod 'InterposeKit', :git => 'https://github.com/steipete/InterposeKit'
