@@ -529,10 +529,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         var itemToRestore: ItemToRestore?
         if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
            let lastVisibleAttribute = allAttributes(at: .beforeUpdate, visibleRect: layoutRepresentation.visibleBounds).last,
-           let item = item(for: lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
+           let itemFrame = itemFrame(for: lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
             itemToRestore = ItemToRestore(globalIndex: globalIndexFor(lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
                                           kind: lastVisibleAttribute.kind,
-                                          offset: (item.frame.maxY - layoutRepresentation.visibleBounds.maxY).rounded())
+                                          offset: (itemFrame.maxY - layoutRepresentation.visibleBounds.maxY).rounded())
         }
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
@@ -811,9 +811,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
            let itemToRestore,
            let itemPath = itemPathFor(itemToRestore.globalIndex, kind: itemToRestore.kind, state: .model(afterUpdateModel)),
-           let item = item(for: itemPath, kind: itemToRestore.kind, at: .afterUpdate),
+           let itemFrame = itemFrame(for: itemPath, kind: itemToRestore.kind, at: .afterUpdate),
            isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: layoutRepresentation.visibleBounds) {
-            let newProposedCompensationOffset = (item.frame.maxY - itemToRestore.offset) - layoutRepresentation.visibleBounds.maxY
+            let newProposedCompensationOffset = (itemFrame.maxY - itemToRestore.offset) - layoutRepresentation.visibleBounds.maxY
             proposedCompensatingOffset = newProposedCompensationOffset
         }
         totalProposedCompensatingOffset = proposedCompensatingOffset
@@ -1179,7 +1179,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         func numberOfItemsBeforeSection(_ sectionIndex: Int, state: GlobalIndexModel) -> Int {
             let layout = state.layout ?? layout(at: .beforeUpdate)
             var total = 0
-            for index in 0..<max(sectionIndex - 1, 0) {
+            for index in 0..<max(sectionIndex, 0) {
                 let section = layout.sections[index]
                 total += section.items.count
             }
