@@ -133,6 +133,7 @@ final class ChatViewController: UIViewController {
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
+        chatLayout.keepContentAtBottomOfVisibleArea = true
 
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: chatLayout)
         view.addSubview(collectionView)
@@ -453,6 +454,10 @@ extension ChatViewController: UICollectionViewDelegate {
 
 extension ChatViewController: ChatControllerDelegate {
     func update(with sections: [Section], requiresIsolatedProcess: Bool) {
+        // if `chatLayout.keepContentAtBottomOfVisibleArea` is enabled and content size is actually smaller than the visible size - it is better to process each batch update
+        // in isolation. Example: If you insert a cell animatingly and then reload some cell - the reload animation will appear on top of the insertion animation.
+        // Basically everytime you see any animation glitches - process batch updates in isolation.
+        let requiresIsolatedProcess = chatLayout.keepContentAtBottomOfVisibleArea == true && chatLayout.collectionViewContentSize.height < chatLayout.visibleBounds.height ? true : requiresIsolatedProcess
         processUpdates(with: sections, animated: true, requiresIsolatedProcess: requiresIsolatedProcess)
     }
 

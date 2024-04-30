@@ -27,6 +27,8 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     var keepContentOffsetAtBottomOnBatchUpdates: Bool { get }
 
+    var keepContentAtBottomOfVisibleArea: Bool { get }
+
     var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool { get }
 
     func numberOfItems(in section: Int) -> Int
@@ -358,6 +360,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
         if isFinal {
             offsetByCompensation(frame: &itemFrame, at: itemPath, for: state, backward: true)
+        }
+        if layoutRepresentation.keepContentAtBottomOfVisibleArea == true,
+           !(kind == .header && itemPath.section == 0),
+           !isLayoutBiggerThanVisibleBounds(at: state, withFullCompensation: false, visibleBounds: visibleBounds) {
+            itemFrame.offsettingBy(dx: 0, dy: visibleBounds.height.rounded() - contentSize(for: state).height.rounded())
         }
         return itemFrame
     }

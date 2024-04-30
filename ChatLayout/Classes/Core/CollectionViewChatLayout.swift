@@ -52,7 +52,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         }
     }
 
-    /// Default `UIScrollView` behaviour is to keep content offset constant from the top edge. If this flag is set to `true`
+    /// The default `UIScrollView` behaviour is to keep content offset constant from the top edge. If this flag is set to `true`
     /// `CollectionViewChatLayout` should try to compensate batch update changes to keep the current content at the bottom of the visible
     /// part of `UICollectionView`.
     ///
@@ -60,6 +60,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// Keep in mind that if during the batch content inset changes also (e.g. keyboard frame changes), `CollectionViewChatLayout` will usually get that information after
     /// the animation starts and wont be able to compensate that change too. It should be done manually.
     public var keepContentOffsetAtBottomOnBatchUpdates: Bool = false
+
+    /// The default behavior of UICollectionView is to maintain UICollectionViewCells at the top of the visible rectangle
+    /// when the content size is smaller than the visible area. By setting the respective flag to true, this behavior can be
+    /// reversed to achieve the result like in Telegram..
+    public var keepContentAtBottomOfVisibleArea: Bool = false
 
     /// Sometimes `UIScrollView` can behave weirdly if there are too many corrections in it's `contentOffset` during the animation. Especially when content size of the `UIScrollView`
     // is getting smaller first and then expands again as the newly appearing cells sizes are being calculated. That is why `CollectionViewChatLayout`
