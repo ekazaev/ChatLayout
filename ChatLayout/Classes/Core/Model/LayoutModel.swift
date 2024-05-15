@@ -110,7 +110,6 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
     func itemPath(by itemId: UUID, kind: ItemKind) -> ItemPath? {
         guard let itemPathByIdentifierCache else {
-            assertionFailure("Internal inconsistency. Cache is not prepared.")
             for (sectionIndex, section) in sections.enumerated() {
                 switch kind {
                 case .header:
