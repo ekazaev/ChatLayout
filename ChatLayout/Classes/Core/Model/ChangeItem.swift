@@ -83,7 +83,7 @@ enum ChangeItem: Equatable {
                 self = .itemDelete(itemIndexPath: indexPath)
             }
         case .reload:
-            guard let indexPath = indexPathAfterUpdate else {
+            guard let indexPath = indexPathBeforeUpdate else {
                 assertionFailure("`indexPathAfterUpdate` cannot be `nil` for a `.reload` update action.")
                 return nil
             }
