@@ -156,6 +156,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         if index < items.count &- 1 {
             let nextIndex = index &+ 1
             items.withUnsafeMutableBufferPointer { directlyMutableItems in
+                nonisolated(unsafe) let directlyMutableItems = directlyMutableItems
                 DispatchQueue.concurrentPerform(iterations: directlyMutableItems.count &- nextIndex) { internalIndex in
                     directlyMutableItems[internalIndex &+ nextIndex].offsetY += heightDiff
                 }
