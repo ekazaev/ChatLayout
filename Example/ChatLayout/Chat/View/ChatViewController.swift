@@ -17,6 +17,328 @@ import FPSCounter
 import InputBarAccessoryView
 import UIKit
 
+struct AccessoryConfiguration: Equatable {
+    public var frame: CGRect
+    public var alpha: CGFloat
+    public var transform: CGAffineTransform
+    public var isHidden: Bool
+    
+    public init(frame: CGRect,
+                alpha: CGFloat = 1,
+                transform: CGAffineTransform = .identity,
+                isHidden: Bool = false) {
+        self.frame = frame
+        self.alpha = alpha
+        self.transform = transform
+        self.isHidden = isHidden
+    }
+
+    public init(_ cell: UICollectionViewCell) {
+        self.frame = cell.frame
+        self.alpha = cell.alpha
+        self.transform = cell.transform//.scaledBy(x: 0.5, y: 0.5)
+        self.isHidden = cell.isHidden
+    }
+}
+
+final class AccesoryCell: UIView {
+    final let reuseIdentifier: String
+    final let customView: UIView
+    final var configuration: AccessoryConfiguration
+
+    final var index: Int
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(customView: UIView, configuration: AccessoryConfiguration, index: Int) {
+        self.reuseIdentifier = "\(ObjectIdentifier(type(of: customView)))"
+        self.customView = customView
+        self.configuration = configuration
+        self.index = index
+        super.init(frame: configuration.frame)
+        insetsLayoutMarginsFromSafeArea = false
+        translatesAutoresizingMaskIntoConstraints = true
+        customView.translatesAutoresizingMaskIntoConstraints = true
+        autoresizingMask = []
+        autoresizesSubviews = false
+
+        addSubview(customView)
+        commitGeometryUpdates()
+    }
+
+    func commitGeometryUpdates(noPositionCommit: Bool = false) {
+        if transform != .identity {
+            transform = .identity
+        }
+        self.frame = configuration.frame
+        customView.frame = CGRect(origin: .zero, size: configuration.frame.size)
+
+        if alpha != configuration.alpha {
+            alpha = min(0.5, configuration.alpha)
+        }
+
+        if isHidden != configuration.isHidden {
+            isHidden = configuration.isHidden
+        }
+
+        if configuration.transform != .identity {
+            let persistedOrigin = frame.origin
+            let persistedSize = bounds.size
+
+            transform = configuration.transform
+            center = CGPoint(x: persistedOrigin.x + persistedSize.width / 2,
+                             y: persistedOrigin.y + persistedSize.height / 2)
+        }
+    }
+
+}
+
+final class MyCollectionView: UICollectionView {
+    struct WeakCellReference {
+        let indexPath: IndexPath
+        weak var cell: UICollectionViewCell?
+    }
+    private var lastCycleCells: Array<WeakCellReference> = []
+    private var currentCells = Array<AccesoryCell>()
+    private var currentCellsDict = [Int: AccesoryCell]()
+    private var dequeueCellsDictionary: [String: Set<AccesoryCell>] = Dictionary(minimumCapacity: 100)
+
+    func dequeueReusableViewForIndex<View: UIView>(_ index: Int, reuseIdentifier: String? = nil) -> View? {
+        let reuseIdentifier = reuseIdentifier ?? "\(ObjectIdentifier(View.self))"
+        guard let cell = dequeueCellsDictionary[reuseIdentifier]?.popFirst() else {
+            return nil
+        }
+        guard let view = cell.customView as? View else {
+            fatalError("Internal inconsistency")
+        }
+//        let configuration = engine.configurationForIndex(index)
+//        cell.cellContext.state = .default
+//        cell.update(index: index, configuration: configuration)
+//        UIView.performWithoutAnimation {
+//            cell.commitGeometryUpdates()
+//        }
+        return view
+    }
+
+    private func getVisibleCells() -> [(indexPath: IndexPath?, cell: UICollectionViewCell)] {
+        subviews.compactMap { view -> UICollectionViewCell? in
+            guard let view = view as? UICollectionViewCell,
+                  !view.isHidden else {
+                return nil
+            }
+            return view
+        }.map { cell in
+            (indexPath: indexPath(for: cell), cell: cell)
+        }
+    }
+
+    private func reuseCell(_ cell: AccesoryCell) {
+        var configuration = cell.configuration
+        configuration.alpha = 1
+        configuration.transform = .identity
+        configuration.isHidden = true
+        cell.configuration = configuration
+        cell.commitGeometryUpdates(noPositionCommit: true)
+
+        let reuseIdentifier = cell.reuseIdentifier
+        dequeueCellsDictionary[reuseIdentifier, default: []].insert(cell)
+    }
+
+    override func layoutSubviews() {
+        func printAttributes() {
+//            indexPathsForVisibleItems.sorted().forEach { indexPath in
+//                let attributes = collectionViewLayout.layoutAttributesForItem(at: indexPath)
+//                print("\(indexPath.item) - \(attributes?.frame)")
+//            }
+//            print("----")
+//            getVisibleCells().forEach { result in
+//                print("\(result.indexPath?.item) - \(result.cell.frame) \(result.cell.alpha)")
+//            }
+        }
+        let oldContentOffset = contentOffset
+        print("\(Self.self) \(#function) START")
+//        print("\(Self.self) \(#function) before \(UIView.inheritedAnimationDuration) \(contentOffset)")
+        printAttributes()
+        super.layoutSubviews()
+        
+        let visibleCells = getVisibleCells()
+        print("----\nVISIBLE \(visibleCells.compactMap({ $0.indexPath?.item }).sorted())\nPRESENT \(currentCellsDict.keys.map({ $0 }).sorted())")
+
+        let currentlyPresentCells = visibleCells.compactMap { item -> (index: Int, cell: AccesoryCell, originalCell: UICollectionViewCell)? in
+            guard let index = item.indexPath?.item,
+               let cell = currentCellsDict[index] else {
+                return nil
+            }
+            return (index: index, cell: cell, originalCell: item.cell)
+        }
+
+        for currentCell in currentlyPresentCells {
+            let configuration = AccessoryConfiguration(currentCell.originalCell)
+            if currentCell.cell.configuration != configuration {
+                currentCell.cell.configuration = configuration
+                currentCell.cell.commitGeometryUpdates()
+            }
+        }
+
+        let appearingIndexes = visibleCells.compactMap({ cell -> (index: Int, cell: UICollectionViewCell)? in
+            guard let index = cell.indexPath?.item,
+                  !currentlyPresentCells.contains(where: { $0.index == index }) else {
+                return nil
+            }
+            return (index: index, cell: cell.cell)
+        })
+
+        if !appearingIndexes.isEmpty {
+            print("APPEARING: \(appearingIndexes.map({ $0.index }))")
+            print("--")
+        }
+
+        let cellsToRemove = currentCellsDict.filter({ cell in !currentlyPresentCells.contains(where: { $0.cell === cell.value })})
+
+        if !cellsToRemove.isEmpty {
+            print("DISAPPEARING: \(cellsToRemove.map({ $0.key }))")
+            print("--")
+        }
+
+        currentCells = currentCells.filter({ !cellsToRemove.values.contains($0) })
+        currentCellsDict = Dictionary(uniqueKeysWithValues: currentCells.lazy.map({ ($0.index, $0) }))
+
+        for appearingIndex in appearingIndexes {
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            let customView: UIView = dequeueReusableViewForIndex(appearingIndex.index) ?? UIView()
+            customView.backgroundColor = .red
+            var cell: AccesoryCell
+            let configuration = AccessoryConfiguration(appearingIndex.cell)
+
+            var initialConfiguration = configuration
+            initialConfiguration.alpha = 0
+            if let value = (appearingIndex.cell.layer.animation(forKey: "position") as? CABasicAnimation)?.fromValue as? CGPoint {
+                initialConfiguration.frame.origin.y += value.y
+            } else {
+                initialConfiguration.frame.origin.y += contentOffset.y - oldContentOffset.y
+            }
+            if let value = (appearingIndex.cell.layer.animation(forKey: "opacity") as? CABasicAnimation)?.fromValue as? CGFloat {
+                initialConfiguration.alpha = value
+            }
+
+            if let localCell = customView.superview as? AccesoryCell {
+                cell = localCell
+                cell.index = appearingIndex.index
+                cell.configuration = initialConfiguration
+                UIView.performWithoutAnimation {
+                    cell.commitGeometryUpdates()
+                }
+                customView.backgroundColor = .blue
+            } else {
+                let newCell = AccesoryCell(customView: customView, configuration: initialConfiguration, index: appearingIndex.index)
+                addSubview(newCell)
+                cell = newCell
+            }
+            UIView.performWithoutAnimation({
+                cell.center.y -= oldContentOffset.y - contentOffset.y
+            })
+
+            cell.setNeedsLayout()
+            CATransaction.commit()
+
+            let duration: TimeInterval
+            if UIView.inheritedAnimationDuration == 0,
+               let animationKey = appearingIndex.cell.layer.animationKeys()?.first,
+               let animation = appearingIndex.cell.layer.animation(forKey: animationKey) {
+                duration = animation.duration
+            } else {
+                duration = UIView.inheritedAnimationDuration
+            }
+            currentCells.append(cell)
+            currentCellsDict[cell.index] = cell
+            print("APPEARED \(cell.index) PRESENT \(currentCellsDict.keys.map({ $0 }).sorted())")
+
+            if duration != 0 {
+                UIView.transition(with: self,
+                                  duration: duration,
+                                  options: .beginFromCurrentState,
+                                  animations: { [weak self] in
+                                      guard let self else {
+                                          return
+                                      }
+                                        cell.configuration = configuration
+                                        cell.commitGeometryUpdates()
+                                  }, completion: { [weak self] _ in
+                                      guard let self else {
+                                          return
+                                      }
+                                  })
+            } else {
+                UIView.performWithoutAnimation {
+                    cell.configuration = configuration
+                    cell.commitGeometryUpdates()
+                }
+            }
+        }
+
+
+        for cellToRemove in cellsToRemove {
+            let oldCell = lastCycleCells.first(where: { $0.indexPath == IndexPath(item: cellToRemove.key, section: 0) })?.cell
+            let duration: TimeInterval
+            if UIView.inheritedAnimationDuration == 0,
+               let oldCell,
+               let animationKey = oldCell.layer.animationKeys()?.first,
+               let animation = oldCell.layer.animation(forKey: animationKey) {
+                duration = animation.duration
+            } else {
+                duration = UIView.inheritedAnimationDuration
+            }
+            print("REMOVE \(cellToRemove.key)")
+            if duration != 0 {
+                UIView.transition(with: self,
+                                  duration: duration,
+                                  options: .beginFromCurrentState,
+                                  animations: { [weak self] in
+                                      guard let self else {
+                                          return
+                                      }
+                    if let oldCell =  lastCycleCells.first(where: { $0.indexPath == IndexPath(item: cellToRemove.key, section: 0) })?.cell {
+                        var configuration = AccessoryConfiguration(oldCell)
+                        configuration.isHidden = false
+                        cellToRemove.value.configuration = configuration
+                    } else {
+                        cellToRemove.value.configuration.alpha = 0
+                    }
+                    cellToRemove.value.commitGeometryUpdates()
+                                  }, completion: { [weak self] _ in
+                                      guard let self else {
+                                          return
+                                      }
+                                      print("REMOVED \(cellToRemove.key)")
+                                      reuseCell(cellToRemove.value)
+    //                                  cellToRemove.value.removeFromSuperview()
+                                  })
+            } else {
+                UIView.performWithoutAnimation {
+                    reuseCell(cellToRemove.value)
+                }
+            }
+
+        }
+
+        print("\(Self.self) \(#function) FINISH\n\n\n")
+
+//        print("\(Self.self) \(#function) after \(UIView.inheritedAnimationDuration) \(contentOffset)")
+        printAttributes()
+
+        lastCycleCells = visibleCells.compactMap({ item -> WeakCellReference? in
+            guard let indexPath = item.indexPath else {
+                return nil
+            }
+            return WeakCellReference(indexPath: indexPath, cell: item.cell)
+        })
+    }
+}
+
 // It's advisable to continue using the reload/reconfigure method, especially when multiple changes occur concurrently in an animated fashion.
 // This approach ensures that the ChatLayout can handle these changes while maintaining the content offset accurately.
 // Consider using it when no better alternatives are available.
@@ -135,7 +457,7 @@ final class ChatViewController: UIViewController {
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
         chatLayout.keepContentAtBottomOfVisibleArea = true
 
-        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: chatLayout)
+        collectionView = MyCollectionView(frame: view.frame, collectionViewLayout: chatLayout)
         view.addSubview(collectionView)
         collectionView.alwaysBounceVertical = true
         collectionView.dataSource = dataSource
@@ -496,6 +818,7 @@ extension ChatViewController: ChatControllerDelegate {
                 currentInterfaceActions.options.insert(.updatingCollectionInIsolation)
             }
             currentControllerActions.options.insert(.updatingCollection)
+            print("\(Self.self) \(#function) pre reload")
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
                                       guard changeSet.sectionInserted.isEmpty else {
@@ -510,6 +833,7 @@ extension ChatViewController: ChatControllerDelegate {
                                       self.chatLayout.restoreContentOffset(with: positionSnapshot)
                                   },
                                   completion: { _ in
+                                      print("\(Self.self) \(#function) completion\n")
                                       DispatchQueue.main.async {
                                           self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
                                           if requiresIsolatedProcess {
