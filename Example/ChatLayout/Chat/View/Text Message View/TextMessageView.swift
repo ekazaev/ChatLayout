@@ -119,7 +119,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
         textViewWidthConstraint?.isActive = true
 
-        let view = BezierView(frame: .init(origin: .zero, size: .init(width: 50, height: 50)))
+        let view = BezierView(frame: .init(origin: .zero, size: .init(width: 30, height: 100)))
         addSubview(view)
     }
 
@@ -173,7 +173,7 @@ struct FromMePathPart: PathPart {
     var frame: CGRect
 
     var initialPoint: CGPoint {
-        CGPoint(x: frame.width, y: frame.height / 2)
+        CGPoint(x: frame.maxX, y: frame.center.y)
     }
 
     func addToPath(_ path: UIBezierPath) {
@@ -181,6 +181,43 @@ struct FromMePathPart: PathPart {
         path.addLine(to: fromPoint)
         let toPoint = CGPoint(x: frame.minX, y: frame.center.y + curveSize)
         path.addCurve(to: toPoint, controlPoint1: CGPoint(x: fromPoint.x - abs(fromPoint.x - toPoint.x) * 0.65, y: fromPoint.y), controlPoint2: CGPoint(x: toPoint.x, y: toPoint.y - abs(fromPoint.y - toPoint.y) * 0.65))
+        path.addLine(to: CGPoint(x: frame.minX, y: frame.maxY))
+    }
+}
+
+struct ToMePathPart: PathPart {
+    var frame: CGRect
+
+    var initialPoint: CGPoint {
+        CGPoint(x: frame.minX, y: frame.minY)
+    }
+
+    func addToPath(_ path: UIBezierPath) {
+        let fromPoint = CGPoint(x: frame.minX, y: frame.center.y - curveSize)
+        path.addLine(to: fromPoint)
+        let toPoint = CGPoint(x: frame.minX + curveSize, y: frame.center.y)
+        path.addCurve(to: toPoint, controlPoint1: CGPoint(x: fromPoint.x, y: fromPoint.y + abs(fromPoint.x - toPoint.x) * 0.65), controlPoint2: CGPoint(x: toPoint.x - abs(fromPoint.y - toPoint.y) * 0.65, y: toPoint.y))
+        path.addLine(to: CGPoint(x: frame.maxX, y: frame.center.y))
+    }
+}
+
+struct LoopPathPart: PathPart {
+    var frame: CGRect
+
+    var initialPoint: CGPoint {
+        CGPoint(x: frame.minX, y: frame.minY)
+    }
+
+    func addToPath(_ path: UIBezierPath) {
+        let halfCurveSize = curveSize / 2
+        let point1 = CGPoint(x: frame.minX, y: frame.center.y - halfCurveSize * 1.2)
+        path.addLine(to: point1)
+        let point2 = CGPoint(x: frame.minX + halfCurveSize * 1, y: frame.center.y + halfCurveSize * 0.8)
+        path.addCurve(to: point2, controlPoint1: CGPoint(x: point1.x, y: point1.y + abs(point1.y - point2.y) * 0.8), controlPoint2: CGPoint(x: point2.x - abs(point1.x - point2.x) * 0.4, y: point2.y))
+        let point3 = CGPoint(x: frame.minX + halfCurveSize * 1, y: frame.center.y - halfCurveSize * 0.8)
+        path.addCurve(to: point3, controlPoint1: CGPoint(x: point2.x + halfCurveSize * 1.1, y: point2.y), controlPoint2: CGPoint(x: point3.x + halfCurveSize * 1.1, y: point3.y))
+        let point4 = CGPoint(x: frame.minX, y: frame.center.y + halfCurveSize * 1.2)
+        path.addCurve(to: point4, controlPoint1: CGPoint(x: point4.x + abs(point3.x - point4.x) * 0.4, y: point3.y), controlPoint2: CGPoint(x: point4.x, y: point4.y - abs(point3.y - point4.y) * 0.8))
         path.addLine(to: CGPoint(x: frame.minX, y: frame.maxY))
     }
 }
@@ -202,11 +239,14 @@ final class BezierView: UIView {
         let path = UIBezierPath()
         path.lineJoinStyle = .round
         path.lineCapStyle = .round
-        path.lineWidth = 20
+        path.lineWidth = 1
 
-        let part = FromMePathPart(frame: bounds)
-        path.move(to: part.initialPoint)
-        part.addToPath(path)
+        let part1 = FromMePathPart(frame: CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height / 2))
+        path.move(to: part1.initialPoint)
+        part1.addToPath(path)
+
+        let part2 = LoopPathPart(frame: CGRect(x: bounds.minX, y: part1.frame.maxY, width: bounds.width, height: bounds.height / 2))
+        part2.addToPath(path)
 
 //        path.move(to: CGPoint(x: bounds.width, y: bounds.height / 2))
 //        let fromPoint = CGPoint(x: bounds.width - 10, y: bounds.height / 2)
