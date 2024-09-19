@@ -119,7 +119,8 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
         textViewWidthConstraint?.isActive = true
 
-        let view = BezierView(frame: .init(origin: .zero, size: .init(width: 30, height: 100)))
+        let view = BezierView(frame: .init(origin: .zero, size: .init(width: 30, height: 120)))
+        view.backgroundColor = .green
         addSubview(view)
     }
 
@@ -165,6 +166,26 @@ private final class MessageTextView: UITextView {
 protocol PathPart {
     var initialPoint: CGPoint { get }
     func addToPath(_ path: UIBezierPath)
+}
+
+enum ReplyPath {
+    case fromMe(FromMePathPart)
+    case loop(LoopPathPart)
+    case line(LinePathPart)
+    case toMe(ToMePathPart)
+
+    var stringValue: String {
+        switch self {
+        case fromMe:
+            return "fromMe"
+        case loop:
+            return "loop"
+        case line:
+            return "line"
+        case toMe:
+            return "toMe"
+        }
+    }
 }
 
 let curveSize: CGFloat = 16
@@ -222,6 +243,45 @@ struct LoopPathPart: PathPart {
     }
 }
 
+struct LinePathPart: PathPart {
+    var frame: CGRect
+
+    var initialPoint: CGPoint {
+        CGPoint(x: frame.minX, y: frame.minY)
+    }
+
+    func addToPath(_ path: UIBezierPath) {
+        path.addLine(to: CGPoint(x: frame.minX, y: frame.maxY))
+    }
+}
+
+extension [ReplyPath] {
+    func clear() {
+//        var result = [ReplyPath]()
+//        var index = 0
+//        while index < count {
+//            let block = self[index]
+//            switch block {
+//            case .line:
+//                let resultString = NSMutableAttributedString()
+//                while index < count,
+//                      case let .plain(attributedString) = self[index] {
+//                    resultString.append(attributedString)
+//                    index += 1
+//                }
+//                index -= 1
+//                result.append(.plain(resultString))
+//            case .fromMe,
+//                    .toMe,
+//                    .loop:
+//                result.append(block)
+//            }
+//            index += 1
+//        }
+//        return result
+//
+    }
+}
 
 final class BezierView: UIView {
 
@@ -241,12 +301,18 @@ final class BezierView: UIView {
         path.lineCapStyle = .round
         path.lineWidth = 1
 
-        let part1 = FromMePathPart(frame: CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height / 2))
+        let part1 = FromMePathPart(frame: CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height / 4))
         path.move(to: part1.initialPoint)
         part1.addToPath(path)
 
-        let part2 = LoopPathPart(frame: CGRect(x: bounds.minX, y: part1.frame.maxY, width: bounds.width, height: bounds.height / 2))
+        let part2 = LoopPathPart(frame: CGRect(x: bounds.minX, y: part1.frame.maxY, width: bounds.width, height: bounds.height / 4))
         part2.addToPath(path)
+
+        let part3 = LinePathPart(frame: CGRect(x: bounds.minX, y: part2.frame.maxY, width: bounds.width, height: bounds.height / 4))
+        part3.addToPath(path)
+
+        let part4 = ToMePathPart(frame: CGRect(x: bounds.minX, y: part3.frame.maxY, width: bounds.width, height: bounds.height / 4))
+        part4.addToPath(path)
 
 //        path.move(to: CGPoint(x: bounds.width, y: bounds.height / 2))
 //        let fromPoint = CGPoint(x: bounds.width - 10, y: bounds.height / 2)
