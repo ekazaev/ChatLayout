@@ -46,14 +46,14 @@ final class AccesoryCell: UIView {
     final let customView: UIView
     final var configuration: AccessoryConfiguration
 
-    final var id: UUID
+    final var id: String
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(customView: UIView, configuration: AccessoryConfiguration, id: UUID) {
+    init(customView: UIView, configuration: AccessoryConfiguration, id: String) {
         self.reuseIdentifier = "\(ObjectIdentifier(type(of: customView)))"
         self.customView = customView
         self.configuration = configuration
@@ -98,11 +98,11 @@ final class AccesoryCell: UIView {
 
 final class MyCollectionView: UICollectionView {
     struct WeakCellReference {
-        let id: UUID
+        let id: String
         weak var cell: UICollectionViewCell?
     }
     private var lastCycleCells: Array<WeakCellReference> = []
-    private var currentCellsDict = [UUID: AccesoryCell]()
+    private var currentCellsDict = [String: AccesoryCell]()
     private var dequeueCellsDictionary: [String: Set<AccesoryCell>] = Dictionary(minimumCapacity: 100)
 
     func dequeueReusableViewForIndex<View: UIView>(reuseIdentifier: String? = nil) -> View? {
@@ -159,25 +159,50 @@ final class MyCollectionView: UICollectionView {
         
         let visibleCells1 = getVisibleCells()
         let d = Dictionary(grouping: visibleCells1, by: { $0.cell.replyInfo?.replyUUID })
-        let visibleCells = d.reduce(into: [(id: UUID, frame: CGRect, cell: UICollectionViewCell, duration: CGFloat)]()) { result, element in
+        let visibleCells = d.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, duration: CGFloat)]()) { result, element in
             guard let id = element.key,
-                  let firstElement = element.value.first,
-                  let lastElement = element.value.last  else {
+                  element.value.count > 1 else {
                 return
             }
-            var combineRect = firstElement.cell.frame
-            for i in 1..<element.value.count {
-                combineRect = combineRect.union(element.value[i].cell.frame)
-            }
-            combineRect.origin.x = 18
-            combineRect.size.width = 18
+            let values = element.value.sorted(by: { $0.cell.frame.minY < $1.cell.frame.minY })
+            var combineRect: CGRect? = nil
+            var idAddition = 0
+            for value in values {
+                if combineRect == nil {
+                    combineRect = value.cell.frame
+                } else {
+                    combineRect = combineRect?.union(value.cell.frame)
+                }
+                if let replyBreak = value.cell.replyBreak,
+                    let currentRect = combineRect {
+                    let top = self.convert(CGPoint(x: 0, y: replyBreak.top), from: value.cell)
 
-            let duration = element.value.compactMap({ $0.cell.layer.animation(forKey: "position")?.duration }).max()
-            result.append((id: id, frame: combineRect, cell: lastElement.cell, duration: duration ?? 0))
+                    var previousRect = currentRect.intersection(CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: top.y))
+                    previousRect.origin.x = 20
+                    previousRect.size.width = 18
+                    let duration = value.cell.layer.animation(forKey: "position")?.duration
+                    result.append((id: "\(id)-\(idAddition)", frame: previousRect, cell: value.cell, duration: duration ?? 0))
+                    idAddition += 1
+                    let bottom = self.convert(CGPoint(x: 0, y: replyBreak.bottom), from: value.cell)
+                    let intersection = currentRect.intersection(CGRect(origin: .init(x: 0, y: bottom.y), size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
+                    if values.last?.cell !== value.cell {
+                        combineRect = intersection
+                    } else {
+                        combineRect = nil
+                    }
+                }
+            }
+            if var combineRect,
+                let lastElement = values.last {
+                combineRect.origin.x = 20
+                combineRect.size.width = 18
+                let duration = lastElement.cell.layer.animation(forKey: "position")?.duration
+                result.append((id: "\(id)-\(idAddition)", frame: combineRect, cell: lastElement.cell, duration: duration ?? 0))
+            }
         }
         print("----\nVISIBLE \(visibleCells1.compactMap({ $0.indexPath?.item }).sorted())\nPRESENT \(currentCellsDict.keys.map({ $0 }).sorted())")
 
-        let currentlyPresentCells = visibleCells.compactMap { item -> (id: UUID, cell: AccesoryCell, originalCell: UICollectionViewCell, frame: CGRect, duration: CGFloat)? in
+        let currentlyPresentCells = visibleCells.compactMap { item -> (id: String, cell: AccesoryCell, originalCell: UICollectionViewCell, frame: CGRect, duration: CGFloat)? in
             guard let cell = currentCellsDict[item.id] else {
                 return nil
             }
@@ -190,28 +215,28 @@ final class MyCollectionView: UICollectionView {
             if currentCell.cell.configuration != configuration {
                 currentCell.cell.configuration = configuration
                 let duration = currentCell.duration
-                if duration == 0 {
+//                if duration == 0 {
                     currentCell.cell.commitGeometryUpdates()
-                } else {
-                    UIView.transition(with: self,
-                                      duration: duration,
-                                      options: .beginFromCurrentState,
-                                      animations: { [weak self] in
-                                          guard let self else {
-                                              return
-                                          }
-                        currentCell.cell.configuration = configuration
-                        currentCell.cell.commitGeometryUpdates()
-                                      }, completion: { [weak self] _ in
-                                          guard let self else {
-                                              return
-                                          }
-                                      })
-                }
+//                } else {
+//                    UIView.transition(with: self,
+//                                      duration: duration,
+//                                      options: .beginFromCurrentState,
+//                                      animations: { [weak self] in
+//                                          guard let self else {
+//                                              return
+//                                          }
+//                        currentCell.cell.configuration = configuration
+//                        currentCell.cell.commitGeometryUpdates()
+//                                      }, completion: { [weak self] _ in
+//                                          guard let self else {
+//                                              return
+//                                          }
+//                                      })
+//                }
             }
         }
 
-        let appearingIndexes = visibleCells.compactMap({ cell -> (id: UUID, cell: UICollectionViewCell, frame: CGRect)? in
+        let appearingIndexes = visibleCells.compactMap({ cell -> (id: String, cell: UICollectionViewCell, frame: CGRect)? in
             guard !currentlyPresentCells.contains(where: { $0.id == cell.id }) else {
                 return nil
             }
@@ -362,15 +387,25 @@ final class MyCollectionView: UICollectionView {
     }
 }
 
-private let animatorKey = UnsafeRawPointer(UnsafeMutablePointer.allocate(capacity: 0))
+private let replyInfoKey = UnsafeRawPointer(UnsafeMutablePointer.allocate(capacity: 0))
+private let replyBreakKey = UnsafeRawPointer(UnsafeMutablePointer.allocate(capacity: 0))
 
 extension UICollectionViewCell {
     var replyInfo: ReplyInfo? {
         get {
-            objc_getAssociatedObject(self, animatorKey) as? ReplyInfo
+            objc_getAssociatedObject(self, replyInfoKey) as? ReplyInfo
         }
         set {
-            objc_setAssociatedObject(self, animatorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, replyInfoKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
+    var replyBreak: (top: CGFloat, bottom: CGFloat)? {
+        get {
+            objc_getAssociatedObject(self, replyBreakKey) as? (top: CGFloat, bottom: CGFloat)
+        }
+        set {
+            objc_setAssociatedObject(self, replyBreakKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 }

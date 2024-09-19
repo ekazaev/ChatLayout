@@ -43,6 +43,8 @@ final class AvatarView: UIView, StaticViewFactory {
         UIView.performWithoutAnimation {
             circleImageView.customView.image = controller.image
         }
+        setNeedsLayout()
+        updateBreakingPoints()
     }
 
     func setup(with controller: AvatarViewController) {
@@ -73,6 +75,28 @@ final class AvatarView: UIView, StaticViewFactory {
         let gestureRecogniser = UITapGestureRecognizer()
         circleImageView.addGestureRecognizer(gestureRecogniser)
         gestureRecogniser.addTarget(self, action: #selector(avatarTapped))
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateBreakingPoints()
+    }
+
+    private func updateBreakingPoints() {
+        guard let controller else {
+            return
+        }
+        if let cell = superview(of: UICollectionViewCell.self) {
+            if !isHidden,
+                controller.image != nil {
+                let frame = cell.convert(self.circleImageView.bounds, from: self.circleImageView)
+                print("A \(frame)")
+                cell.replyBreak = (top: frame.minY - 5, bottom: frame.maxY + 5)
+            } else {
+                print("B")
+                cell.replyBreak = nil
+            }
+        }
     }
 
     @objc
