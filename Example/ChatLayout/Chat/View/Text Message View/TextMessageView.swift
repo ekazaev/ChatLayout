@@ -118,10 +118,6 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         ])
         textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
         textViewWidthConstraint?.isActive = true
-
-        let view = BezierView(frame: .init(origin: .zero, size: .init(width: 30, height: 120)))
-        view.backgroundColor = .green
-        addSubview(view)
     }
 
     private func setupSize() {
