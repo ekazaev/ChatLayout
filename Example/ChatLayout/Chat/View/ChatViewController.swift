@@ -114,12 +114,6 @@ final class MyCollectionView: UICollectionView {
         guard let view = cell.customView as? View else {
             fatalError("Internal inconsistency")
         }
-//        let configuration = engine.configurationForIndex(index)
-//        cell.cellContext.state = .default
-//        cell.update(index: index, configuration: configuration)
-//        UIView.performWithoutAnimation {
-//            cell.commitGeometryUpdates()
-//        }
         return view
     }
 
@@ -149,14 +143,14 @@ final class MyCollectionView: UICollectionView {
 
     override func layoutSubviews() {
         func printAttributes() {
-//            indexPathsForVisibleItems.sorted().forEach { indexPath in
-//                let attributes = collectionViewLayout.layoutAttributesForItem(at: indexPath)
-//                print("\(indexPath.item) - \(attributes?.frame)")
-//            }
-//            print("----")
-//            getVisibleCells().forEach { result in
-//                print("\(result.indexPath?.item) - \(result.cell.frame) \(result.cell.alpha)")
-//            }
+            indexPathsForVisibleItems.sorted().forEach { indexPath in
+                let attributes = collectionViewLayout.layoutAttributesForItem(at: indexPath)
+                print("\(indexPath.item) - \(attributes?.frame)")
+            }
+            print("----")
+            getVisibleCells().forEach { result in
+                print("\(result.indexPath?.item) - \(result.cell.frame) \(result.cell.alpha)")
+            }
         }
         let oldContentOffset = contentOffset
         print("\(Self.self) \(#function) START")
@@ -209,7 +203,7 @@ final class MyCollectionView: UICollectionView {
         for appearingIndex in appearingIndexes {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            let customView: UIView = dequeueReusableViewForIndex(appearingIndex.index) ?? UIView()
+            let customView: UIView = /* dequeueReusableViewForIndex(appearingIndex.index) ?? */ BezierView()
             customView.backgroundColor = .red
             var cell: AccesoryCell
             let configuration = AccessoryConfiguration(appearingIndex.cell)
@@ -217,7 +211,7 @@ final class MyCollectionView: UICollectionView {
             var initialConfiguration = configuration
             initialConfiguration.alpha = 0
             if let value = (appearingIndex.cell.layer.animation(forKey: "position") as? CABasicAnimation)?.fromValue as? CGPoint {
-                initialConfiguration.frame.origin.y += value.y
+                initialConfiguration.frame.origin.y += value.y - (contentOffset.y - oldContentOffset.y)
             } else {
                 initialConfiguration.frame.origin.y += contentOffset.y - oldContentOffset.y
             }
@@ -336,6 +330,19 @@ final class MyCollectionView: UICollectionView {
             }
             return WeakCellReference(indexPath: indexPath, cell: item.cell)
         })
+    }
+}
+
+private let animatorKey = UnsafeRawPointer(UnsafeMutablePointer.allocate(capacity: 0))
+
+extension UICollectionViewCell {
+    var replyInfo: ReplyInfo? {
+        get {
+            objc_getAssociatedObject(self, animatorKey) as? ReplyInfo
+        }
+        set {
+            objc_setAssociatedObject(self, animatorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
     }
 }
 

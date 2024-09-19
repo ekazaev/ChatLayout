@@ -176,13 +176,13 @@ enum ReplyPath {
 
     var stringValue: String {
         switch self {
-        case fromMe:
+        case .fromMe:
             return "fromMe"
-        case loop:
+        case .loop:
             return "loop"
-        case line:
+        case .line:
             return "line"
-        case toMe:
+        case .toMe:
             return "toMe"
         }
     }
@@ -333,6 +333,43 @@ final class BezierView: UIView {
         self.layer.addSublayer(cursorLayer)
     }
 
+    override func layoutSubviews() {
+        let path = UIBezierPath()
+        path.lineJoinStyle = .round
+        path.lineCapStyle = .round
+        path.lineWidth = 1
+
+        let part1 = FromMePathPart(frame: CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height / 4))
+        path.move(to: part1.initialPoint)
+        part1.addToPath(path)
+
+        let part2 = LoopPathPart(frame: CGRect(x: bounds.minX, y: part1.frame.maxY, width: bounds.width, height: bounds.height / 4))
+        part2.addToPath(path)
+
+        let part3 = LinePathPart(frame: CGRect(x: bounds.minX, y: part2.frame.maxY, width: bounds.width, height: bounds.height / 4))
+        part3.addToPath(path)
+
+        let part4 = ToMePathPart(frame: CGRect(x: bounds.minX, y: part3.frame.maxY, width: bounds.width, height: bounds.height / 4))
+        part4.addToPath(path)
+
+//        path.move(to: CGPoint(x: bounds.width, y: bounds.height / 2))
+//        let fromPoint = CGPoint(x: bounds.width - 10, y: bounds.height / 2)
+//        path.addLine(to: CGPoint(x: bounds.width - 10, y: bounds.height / 2))
+//        let toPoint = CGPoint(x: bounds.width / 2, y: bounds.height - 10)
+//        path.addCurve(to: toPoint, controlPoint1: CGPoint(x: fromPoint.x - abs(fromPoint.x - toPoint.x) * 0.65, y: fromPoint.y), controlPoint2: CGPoint(x: toPoint.x, y: toPoint.y - abs(fromPoint.y - toPoint.y) * 0.65))
+//        path.addLine(to: CGPoint(x: bounds.width / 2, y: bounds.height))
+
+        //adding calyer
+        let cursorLayer = CAShapeLayer()
+        cursorLayer.lineWidth = 4;
+        cursorLayer.path = path.cgPath
+        cursorLayer.strokeColor = UIColor.black.cgColor
+        cursorLayer.fillColor = nil
+        cursorLayer.lineCap = .round
+        cursorLayer.lineJoin = .round
+        self.layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
+        self.layer.addSublayer(cursorLayer)
+    }
 }
 
 extension CGRect {

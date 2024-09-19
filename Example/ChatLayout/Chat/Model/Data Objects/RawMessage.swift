@@ -31,4 +31,6 @@ struct RawMessage: Hashable {
     var userId: Int
 
     var status: MessageStatus = .sent
+
+    var replyUUID: UUID
 }

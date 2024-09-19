@@ -62,7 +62,7 @@ final class DefaultChatController: ChatController {
     }
 
     func sendMessage(_ data: Message.Data, completion: @escaping ([Section]) -> Void) {
-        messages.append(RawMessage(id: UUID(), date: Date(), data: convert(data), userId: userId))
+        messages.append(RawMessage(id: UUID(), date: Date(), data: convert(data), userId: userId, replyUUID: UUID()))
         propagateLatestMessages { sections in
             completion(sections)
         }
@@ -86,7 +86,8 @@ final class DefaultChatController: ChatController {
                                data: self.convert($0.data),
                                owner: User(id: $0.userId),
                                type: $0.userId == self.userId ? .outgoing : .incoming,
-                               status: $0.status) }
+                               status: $0.status,
+                               replyUUID: $0.replyUUID) }
                 .reduce(into: [[Message]]()) { result, message in
                     guard var section = result.last,
                           let prevMessage = section.last else {

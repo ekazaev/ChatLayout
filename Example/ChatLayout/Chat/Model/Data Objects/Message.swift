@@ -87,6 +87,11 @@ extension MessageGroup: Differentiable {
     }
 }
 
+struct ReplyInfo {
+    let replyUUID: UUID
+    let type: MessageType
+}
+
 struct Message: Hashable {
     enum Data: Hashable {
         case text(String)
@@ -107,6 +112,12 @@ struct Message: Hashable {
     var type: MessageType
 
     var status: MessageStatus = .sent
+
+    var replyUUID: UUID
+
+    var replyInfo: ReplyInfo {
+        return ReplyInfo(replyUUID: replyUUID, type: type)
+    }
 }
 
 extension Message: Differentiable {

@@ -177,25 +177,30 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         typingTimer = Timer.scheduledTimer(timeInterval: TimeInterval(Int.random(in: 1...3)), target: self, selector: #selector(handleTypingTimer), userInfo: nil, repeats: true)
     }
 
+    private var lastReplyUUID = UUID()
+
     private func createRandomMessage(date: Date = Date()) -> RawMessage {
         let sender = allUsersIds[Int.random(in: 0..<allUsersIds.count)] // allUsersIds.first!//
         lastMessageIndex += 1
+        if Int.random(in: 0...10) == 10 {
+            lastReplyUUID = UUID()
+        }
         switch (Int.random(in: 0...8), enableRichContent) {
         case (5, true):
-            return RawMessage(id: UUID(), date: date, data: .url(websiteUrls[Int.random(in: 0..<websiteUrls.count)]), userId: sender)
+            return RawMessage(id: UUID(), date: date, data: .url(websiteUrls[Int.random(in: 0..<websiteUrls.count)]), userId: sender, replyUUID: lastReplyUUID)
         case (6, true):
-            return RawMessage(id: UUID(), date: date, data: .image(.imageURL(imageUrls[Int.random(in: 0..<imageUrls.count)])), userId: sender)
+            return RawMessage(id: UUID(), date: date, data: .image(.imageURL(imageUrls[Int.random(in: 0..<imageUrls.count)])), userId: sender, replyUUID: lastReplyUUID)
         case (7, true):
-            return RawMessage(id: UUID(), date: date, data: .image(.image(images[Int.random(in: 0..<images.count)])), userId: sender)
+            return RawMessage(id: UUID(), date: date, data: .image(.image(images[Int.random(in: 0..<images.count)])), userId: sender, replyUUID: lastReplyUUID)
         case (8, true):
             return RawMessage(id: UUID(),
                               date: date,
                               data: .text(TextGenerator.getString(of: 5) +
                                   " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " +
                                   TextGenerator.getString(of: 5)),
-                              userId: sender)
+                              userId: sender, replyUUID: lastReplyUUID)
         default:
-            return RawMessage(id: UUID(), date: date, data: .text(TextGenerator.getString(of: 20)), userId: sender)
+            return RawMessage(id: UUID(), date: date, data: .text(TextGenerator.getString(of: 20)), userId: sender, replyUUID: lastReplyUUID)
         }
     }
 
