@@ -3,7 +3,7 @@
 // ItemModel.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -20,9 +20,7 @@ import UIKit
 #endif
 
 struct ItemModel {
-
     struct Configuration {
-
         let alignment: ChatItemAlignment
 
         let preferredSize: CGSize
@@ -30,7 +28,6 @@ struct ItemModel {
         let calculatedSize: CGSize?
 
         let interItemSpacing: CGFloat
-
     }
 
     let id: UUID
@@ -78,5 +75,4 @@ struct ItemModel {
         self.calculatedSize = nil
         preferredSize = calculatedSize
     }
-
 }

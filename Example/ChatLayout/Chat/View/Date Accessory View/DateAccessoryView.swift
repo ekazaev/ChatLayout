@@ -3,7 +3,7 @@
 // DateAccessoryView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 final class DateAccessoryView: UIView {
-
     private var accessoryView = UILabel()
 
     private var controller: DateAccessoryController?
@@ -56,5 +55,4 @@ final class DateAccessoryView: UIView {
         accessoryView.font = UIFont.preferredFont(forTextStyle: .caption1)
         accessoryView.textColor = .gray
     }
-
 }

@@ -3,7 +3,7 @@
 // KeyboardListener.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 final class KeyboardListener {
-
     static let shared = KeyboardListener()
 
     private(set) var isKeyboardVisible: Bool = false
@@ -31,7 +30,8 @@ final class KeyboardListener {
         subscribeToKeyboardNotifications()
     }
 
-    @objc private func keyboardWillShow(_ notification: Notification) {
+    @objc
+    private func keyboardWillShow(_ notification: Notification) {
         guard let info = KeyboardInfo(notification) else {
             return
         }
@@ -43,7 +43,8 @@ final class KeyboardListener {
         }
     }
 
-    @objc private func keyboardWillChangeFrame(_ notification: Notification) {
+    @objc
+    private func keyboardWillChangeFrame(_ notification: Notification) {
         guard let info = KeyboardInfo(notification) else {
             return
         }
@@ -53,7 +54,8 @@ final class KeyboardListener {
         }
     }
 
-    @objc private func keyboardDidChangeFrame(_ notification: Notification) {
+    @objc
+    private func keyboardDidChangeFrame(_ notification: Notification) {
         guard let info = KeyboardInfo(notification) else {
             return
         }
@@ -63,7 +65,8 @@ final class KeyboardListener {
         }
     }
 
-    @objc private func keyboardDidShow(_ notification: Notification) {
+    @objc
+    private func keyboardDidShow(_ notification: Notification) {
         guard let info = KeyboardInfo(notification) else {
             return
         }
@@ -73,7 +76,8 @@ final class KeyboardListener {
         }
     }
 
-    @objc private func keyboardWillHide(_ notification: Notification) {
+    @objc
+    private func keyboardWillHide(_ notification: Notification) {
         guard let info = KeyboardInfo(notification) else {
             return
         }
@@ -83,7 +87,8 @@ final class KeyboardListener {
         }
     }
 
-    @objc private func keyboardDidHide(_ notification: Notification) {
+    @objc
+    private func keyboardDidHide(_ notification: Notification) {
         guard let info = KeyboardInfo(notification) else {
             return
         }
@@ -120,5 +125,4 @@ final class KeyboardListener {
                                                name: UIResponder.keyboardDidChangeFrameNotification,
                                                object: nil)
     }
-
 }

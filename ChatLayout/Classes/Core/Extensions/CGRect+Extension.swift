@@ -3,7 +3,7 @@
 // CGRect+Extension.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -20,7 +20,6 @@ import UIKit
 #endif
 
 extension CGRect {
-
     var higherPoint: CGPoint {
         origin
     }
@@ -33,11 +32,11 @@ extension CGRect {
         CGPoint(x: origin.x + size.width / 2, y: origin.y + size.height / 2)
     }
 
-    @inline(__always) mutating func offsettingBy(dx: CGFloat, dy: CGFloat) {
+    @inline(__always)
+    mutating func offsettingBy(dx: CGFloat, dy: CGFloat) {
         origin.x += dx
         origin.y += dy
     }
-
 }
 
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)

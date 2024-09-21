@@ -3,7 +3,7 @@
 // TextBubbleController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class TextBubbleController<CustomView: UIView>: BubbleController {
-
     private let type: MessageType
 
     private let bubbleType: Cell.BubbleType
@@ -50,5 +49,4 @@ final class TextBubbleController<CustomView: UIView>: BubbleController {
             }
         }
     }
-
 }

@@ -3,7 +3,7 @@
 // DateAccessoryController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -13,7 +13,6 @@
 import Foundation
 
 final class DateAccessoryController {
-
     private let date: Date
 
     let accessoryText: String
@@ -22,5 +21,4 @@ final class DateAccessoryController {
         self.date = date
         accessoryText = MessageDateFormatter.shared.string(from: date)
     }
-
 }

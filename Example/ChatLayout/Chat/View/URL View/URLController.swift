@@ -3,7 +3,7 @@
 // URLController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -15,7 +15,6 @@ import LinkPresentation
 
 @available(iOS 13, *)
 final class URLController {
-
     let url: URL
 
     var metadata: LPLinkMetadata?
@@ -71,7 +70,5 @@ final class URLController {
                 }
             }
         }
-
     }
-
 }

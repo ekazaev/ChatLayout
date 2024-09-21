@@ -3,7 +3,7 @@
 // AsyncKeyValueCaching.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -13,17 +13,14 @@
 import Foundation
 
 public protocol AsyncKeyValueCaching: KeyValueCaching {
-
     associatedtype CachingKey
 
     associatedtype Entity
 
     func getEntity(for key: CachingKey, completion: @escaping (Result<Entity, Error>) -> Void)
-
 }
 
 public extension AsyncKeyValueCaching {
-
     func getEntity(for key: CachingKey, completion: @escaping (Result<Entity, Error>) -> Void) {
         DispatchQueue.global().async {
             do {
@@ -38,5 +35,4 @@ public extension AsyncKeyValueCaching {
             }
         }
     }
-
 }

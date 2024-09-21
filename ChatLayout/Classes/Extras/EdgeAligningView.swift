@@ -3,7 +3,7 @@
 // EdgeAligningView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -21,11 +21,11 @@ import UIKit
 
 /// Container view that allows its `CustomView` to have lose connection to the margins of the container according to the
 /// settings provided in `EdgeAligningView.flexibleEdges`
+
 public final class EdgeAligningView<CustomView: View>: View {
 
     /// Represents an edge of `EdgeAligningView`
     public enum Edge: CaseIterable {
-
         /// Top edge
         case top
 
@@ -37,7 +37,6 @@ public final class EdgeAligningView<CustomView: View>: View {
 
         /// Bottom edge
         case bottom
-
     }
 
     /// Set of edge constraints  to be set as loose.
@@ -141,11 +140,11 @@ public final class EdgeAligningView<CustomView: View>: View {
             return
         }
 
-        flexibleEdges.forEach { edge in
+        for edge in flexibleEdges {
             rigidConstraints[edge]?.isActive = false
             flexibleConstraints[edge]?.isActive = true
         }
-        Set(Edge.allCases).subtracting(flexibleEdges).forEach { edge in
+        for edge in Set(Edge.allCases).subtracting(flexibleEdges) {
             flexibleConstraints[edge]?.isActive = false
             rigidConstraints[edge]?.isActive = true
         }
@@ -217,5 +216,4 @@ public final class EdgeAligningView<CustomView: View>: View {
          .leading: view.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
          .trailing: view.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
     }
-
 }

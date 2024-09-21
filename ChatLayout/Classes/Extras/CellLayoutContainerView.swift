@@ -3,7 +3,7 @@
 // CellLayoutContainerView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -48,10 +48,10 @@ public enum CellLayoutContainerViewAlignment {
     #if canImport(UIKit)
     fileprivate var stackAlignment: UIStackView.Alignment {
         switch self {
-        case .fill: return .fill
-        case .top: return .top
-        case .center: return .center
-        case .bottom: return .bottom
+        case .fill: .fill
+        case .top: .top
+        case .center: .center
+        case .bottom: .bottom
         }
     }
     #endif
@@ -60,7 +60,9 @@ public enum CellLayoutContainerViewAlignment {
 /// `CellLayoutContainerView` is a container view that helps to arrange the views in a horizontal cell-alike layout with an optional `LeadingAccessory` first,
 /// a `CustomView` next and am optional `TrailingAccessory` last. Use `VoidViewFactory` to specify that `LeadingAccessory` or `TrailingAccessory` views should not be
 /// allocated.
+
 public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, CustomView: View, TrailingAccessory: StaticViewFactory>: View {
+
     /// Leading accessory view.
     public lazy var leadingView: LeadingAccessory.View? = LeadingAccessory.buildView(within: bounds)
 

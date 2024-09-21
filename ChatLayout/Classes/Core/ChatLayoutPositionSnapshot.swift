@@ -3,7 +3,7 @@
 // ChatLayoutPositionSnapshot.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -21,16 +21,13 @@ import UIKit
 
 /// Represents content offset position expressed by the specific item and it offset from the top or bottom edge.
 public struct ChatLayoutPositionSnapshot: Hashable {
-
     /// Represents the edge.
     public enum Edge: Hashable {
-
         /// Top edge of the `UICollectionView`
         case top
 
         /// Bottom edge of the `UICollectionView`
         case bottom
-
     }
 
     /// Item's `IndexPath`
@@ -60,5 +57,4 @@ public struct ChatLayoutPositionSnapshot: Hashable {
         self.offset = offset
         self.kind = kind
     }
-
 }

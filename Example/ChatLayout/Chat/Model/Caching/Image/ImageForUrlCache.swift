@@ -3,7 +3,7 @@
 // ImageForUrlCache.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching where Cache.CachingKey: Hashable, Cache.Entity == Data {
-
     private let cache: Cache
 
     public init(cache: Cache) {
@@ -62,5 +61,4 @@ public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueC
         }
         try cache.store(entity: data, for: key)
     }
-
 }

@@ -3,7 +3,7 @@
 // ChatDateFormatter.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -13,7 +13,6 @@
 import Foundation
 
 public final class ChatDateFormatter {
-
     // MARK: - Properties
 
     public static let shared = ChatDateFormatter()
@@ -50,11 +49,9 @@ public final class ChatDateFormatter {
             formatter.dateFormat = "MMM d, yyyy, hh:mm"
         }
     }
-
 }
 
 public final class MessageDateFormatter {
-
     public static let shared = MessageDateFormatter()
 
     private let formatter = DateFormatter()
@@ -73,5 +70,4 @@ public final class MessageDateFormatter {
         let dateString = string(from: date)
         return NSAttributedString(string: dateString, attributes: attributes)
     }
-
 }

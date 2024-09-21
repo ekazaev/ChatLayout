@@ -3,7 +3,7 @@
 // KeyboardInfo.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 struct KeyboardInfo: Equatable {
-
     let animationDuration: Double
 
     let animationCurve: UIView.AnimationCurve
@@ -43,5 +42,4 @@ struct KeyboardInfo: Equatable {
         frameBegin = keyboardFrameBegin
         frameEnd = keyboardFrameEnd
     }
-
 }

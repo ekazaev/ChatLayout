@@ -3,7 +3,7 @@
 // ManualAnimator.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -16,26 +16,27 @@ import UIKit
 // Read why this class is needed here:
 // https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
 class ManualAnimator {
-
     enum AnimationCurve {
-
-        case linear, parametric, easeInOut, easeIn, easeOut
+        case linear
+        case parametric
+        case easeInOut
+        case easeIn
+        case easeOut
 
         func modify(_ x: CGFloat) -> CGFloat {
             switch self {
             case .linear:
-                return x
+                x
             case .parametric:
-                return x.parametric
+                x.parametric
             case .easeInOut:
-                return x.quadraticEaseInOut
+                x.quadraticEaseInOut
             case .easeIn:
-                return x.quadraticEaseIn
+                x.quadraticEaseIn
             case .easeOut:
-                return x.quadraticEaseOut
+                x.quadraticEaseOut
             }
         }
-
     }
 
     private var displayLink: CADisplayLink?
@@ -58,7 +59,8 @@ class ManualAnimator {
         displayLink = d
     }
 
-    @objc private func tick() {
+    @objc
+    private func tick() {
         let delta = Date().timeIntervalSince(start)
         var percentage = animationCurve.modify(CGFloat(delta) / CGFloat(total))
         if percentage < 0.0 {
@@ -74,11 +76,9 @@ class ManualAnimator {
         displayLink?.invalidate()
         displayLink = nil
     }
-
 }
 
 private extension CGFloat {
-
     var parametric: CGFloat {
         guard self > 0.0 else {
             return 0.0
@@ -121,5 +121,4 @@ private extension CGFloat {
         }
         return self * self
     }
-
 }

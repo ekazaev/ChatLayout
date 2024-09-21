@@ -3,7 +3,7 @@
 // SectionModel.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -20,7 +20,6 @@ import UIKit
 #endif
 
 struct SectionModel<Layout: ChatLayoutRepresentation> {
-
     let id: UUID
 
     let interSectionSpacing: CGFloat
@@ -163,6 +162,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         if index < items.count &- 1 {
             let nextIndex = index &+ 1
             items.withUnsafeMutableBufferPointer { directlyMutableItems in
+                nonisolated(unsafe) let directlyMutableItems = directlyMutableItems
                 DispatchQueue.concurrentPerform(iterations: directlyMutableItems.count &- nextIndex) { internalIndex in
                     directlyMutableItems[internalIndex &+ nextIndex].offsetY += heightDiff
                 }
@@ -196,5 +196,4 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         }
         items.remove(at: index)
     }
-
 }

@@ -3,7 +3,7 @@
 // IndexPath+Extension.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -13,9 +13,7 @@
 import Foundation
 
 extension IndexPath {
-
     var itemPath: ItemPath {
         ItemPath(for: self)
     }
-
 }

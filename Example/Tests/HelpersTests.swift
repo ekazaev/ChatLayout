@@ -3,7 +3,7 @@
 // HelpersTests.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -15,7 +15,6 @@ import Foundation
 import XCTest
 
 final class HelpersTests: XCTestCase {
-
     func testItemKindInit() {
         let header = ItemKind(CollectionView.elementKindSectionHeader)
         XCTAssertTrue(header == ItemKind.header)
@@ -46,11 +45,11 @@ final class HelpersTests: XCTestCase {
     func testBinarySearch() {
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < 100 {
-                return .orderedAscending
+                .orderedAscending
             } else if integer > 100 {
-                return .orderedDescending
+                .orderedDescending
             } else {
-                return .orderedSame
+                .orderedSame
             }
         }
         XCTAssertEqual([Int]().binarySearch(predicate: predicate), nil)
@@ -96,11 +95,11 @@ final class HelpersTests: XCTestCase {
     func testSearchInRange() {
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < 100 {
-                return .orderedAscending
+                .orderedAscending
             } else if integer > 200 {
-                return .orderedDescending
+                .orderedDescending
             } else {
-                return .orderedSame
+                .orderedSame
             }
         }
         XCTAssertEqual([Int]().binarySearchRange(predicate: predicate), [])
@@ -132,5 +131,4 @@ final class HelpersTests: XCTestCase {
         XCTAssertEqual(dictionary[.exact(.zero)], 3)
         XCTAssertEqual(dictionary[.exact(size)], 4)
     }
-
 }

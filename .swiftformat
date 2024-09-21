@@ -24,17 +24,18 @@
 --octalgrouping none
 --operatorfunc spaced
 --patternlet hoist
---self remove
---selfrequired 
+--selfrequired
 --semicolons inline
 --stripunusedargs closure-only
 --tabwidth unspecified
---trailingclosures 
 --trimwhitespace always
 --wraparguments preserve
 --wrapcollections preserve
 --xcodeindentation disabled
 --modifierorder public,override
---disable blankLinesAtEndOfScope,blankLinesAtStartOfScope,wrapMultilineStatementBraces
---enable isEmpty
---exclude Pods,docs,Example/Pods
+--nevertrailing map, flatMap, compactMap
+--funcattributes prev-line
+--typeattributes prev-line
+--disable wrapMultilineStatementBraces, preferKeyPath, trailingclosures, preferForLoop,conditionalAssignment
+--enable isEmpty,wrapConditionalBodies,noExplicitOwnership,wrapEnumCases,wrapSwitchCases,sortSwitchCases,wrapAttributes
+--exclude Pods,docs,Example/Pods,RecyclerView/Classes/Utils/Stolen

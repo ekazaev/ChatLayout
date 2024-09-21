@@ -3,7 +3,7 @@
 // TextGenerator.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -13,7 +13,6 @@
 import Foundation
 
 public class TextGenerator {
-
     private static let words = [
         "alias", "consequatur", "aut", "perferendis", "sit", "voluptatem",
         "accusantium", "doloremque", "aperiam", "eaque", "ipsa", "quae", "ab",
@@ -63,5 +62,4 @@ public class TextGenerator {
         result.replaceSubrange(result.startIndex...result.startIndex, with: String(result[result.startIndex]).capitalized)
         return result + "."
     }
-
 }

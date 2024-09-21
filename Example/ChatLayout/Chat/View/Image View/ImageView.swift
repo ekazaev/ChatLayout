@@ -3,7 +3,7 @@
 // ImageView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class ImageView: UIView, ContainerCollectionViewCellDelegate {
-
     private lazy var stackView = UIStackView(frame: bounds)
 
     private lazy var loadingIndicator = UIActivityIndicatorView(style: .gray)
@@ -157,5 +156,4 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
             }
         }
     }
-
 }

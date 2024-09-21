@@ -3,7 +3,7 @@
 // DifferenceKit+Extension.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -16,7 +16,6 @@ import Foundation
 import UIKit
 
 public extension UICollectionView {
-
     func reload<C>(
         using stagedChangeset: StagedChangeset<C>,
         interrupt: ((Changeset<C>) -> Bool)? = nil,
@@ -110,11 +109,9 @@ public extension UICollectionView {
             completion!(true)
         }
     }
-
 }
 
 extension StagedChangeset {
-
     // DifferenceKit splits different type of actions into the different change sets to avoid the limitations of UICollectionView
     // But it may lead to the situations that `UICollectionViewLayout` doesnt know what change will happen next within the single portion
     // of changes. As we know that at least insertions and deletions can be processed together, we fix that in the StagedChangeset we got from
@@ -129,5 +126,4 @@ extension StagedChangeset {
         }
         return self
     }
-
 }

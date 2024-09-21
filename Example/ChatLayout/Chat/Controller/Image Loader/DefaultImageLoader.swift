@@ -3,7 +3,7 @@
 // DefaultImageLoader.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 public struct DefaultImageLoader: ImageLoader {
-
     public enum ImageError: Error {
         case unknown
         case corruptedData
@@ -50,5 +49,4 @@ public struct DefaultImageLoader: ImageLoader {
         })
         sessionDataTask.resume()
     }
-
 }

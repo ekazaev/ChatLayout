@@ -3,7 +3,7 @@
 // LayoutModel.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -20,13 +20,10 @@ import UIKit
 #endif
 
 final class LayoutModel<Layout: ChatLayoutRepresentation> {
-
     private struct ItemUUIDKey: Hashable {
-
         let kind: ItemKind
 
         let id: UUID
-
     }
 
     private(set) var sections: ContiguousArray<SectionModel<Layout>>
@@ -119,7 +116,6 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
     func itemPath(by itemId: UUID, kind: ItemKind) -> ItemPath? {
         guard let itemPathByIdentifierCache else {
-            assertionFailure("Internal inconsistency. Cache is not prepared.")
             for (sectionIndex, section) in sections.enumerated() {
                 switch kind {
                 case .header:
@@ -148,6 +144,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         if index < sections.count &- 1 {
             let nextIndex = index &+ 1
             sections.withUnsafeMutableBufferPointer { directlyMutableSections in
+                nonisolated(unsafe) let directlyMutableSections = directlyMutableSections
                 DispatchQueue.concurrentPerform(iterations: directlyMutableSections.count &- nextIndex) { internalIndex in
                     directlyMutableSections[internalIndex &+ nextIndex].offsetY += heightDiff
                 }
@@ -213,5 +210,4 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         itemPathByIdentifierCache = nil
         sectionIndexByIdentifierCache = nil
     }
-
 }

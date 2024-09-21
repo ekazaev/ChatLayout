@@ -3,7 +3,7 @@
 // StateController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -20,7 +20,6 @@ import UIKit
 #endif
 /// This protocol exists only to serve an ability to unit test `StateController`.
 protocol ChatLayoutRepresentation: AnyObject {
-
     var settings: ChatLayoutSettings { get }
 
     var viewSize: CGSize { get }
@@ -32,6 +31,8 @@ protocol ChatLayoutRepresentation: AnyObject {
     var adjustedContentInset: EdgeInsets { get }
 
     var keepContentOffsetAtBottomOnBatchUpdates: Bool { get }
+
+    var keepContentAtBottomOfVisibleArea: Bool { get }
 
     var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool { get }
 
@@ -47,7 +48,6 @@ protocol ChatLayoutRepresentation: AnyObject {
 }
 
 final class StateController<Layout: ChatLayoutRepresentation> {
-
     // Helps to reduce the amount of looses in bridging calls to objc `UICollectionView` getter methods.
     struct AdditionalLayoutAttributes {
 
@@ -211,14 +211,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     }
 
     func resetCachedAttributeObjects() {
-        ModelState.allCases.forEach { state in
+        for state in ModelState.allCases {
             resetCachedAttributeObjects(at: state)
         }
     }
 
     private func resetCachedAttributeObjects(at state: ModelState) {
         cachedAttributeObjects[state] = [:]
-        ItemKind.allCases.forEach { kind in
+        for kind in ItemKind.allCases {
             cachedAttributeObjects[state]?[kind] = [:]
         }
     }
@@ -367,6 +367,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         if isFinal {
             offsetByCompensation(frame: &itemFrame, at: itemPath, for: state, backward: true)
         }
+        if layoutRepresentation.keepContentAtBottomOfVisibleArea == true,
+           !(kind == .header && itemPath.section == 0),
+           !isLayoutBiggerThanVisibleBounds(at: state, withFullCompensation: false, visibleBounds: visibleBounds) {
+            itemFrame.offsettingBy(dx: 0, dy: visibleBounds.height.rounded() - contentSize(for: state).height.rounded())
+        }
         return itemFrame
     }
 
@@ -415,7 +420,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
             let rowModel = sectionModel.items[itemPath.item]
             return rowModel.id
-        case .header, .footer:
+        case .footer,
+             .header:
             guard let item = item(for: ItemPath(item: 0, section: itemPath.section), kind: kind, at: state) else {
                 return nil
             }
@@ -530,10 +536,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
            let lastVisibleAttribute = allAttributes(at: .beforeUpdate, visibleRect: layoutRepresentation.visibleBounds).last,
            let lastVisibleAttributeIndexPath = lastVisibleAttribute.platformIndexPath,
-           let item = item(for: lastVisibleAttributeIndexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
+           let itemFrame = itemFrame(for: lastVisibleAttributeIndexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
             itemToRestore = ItemToRestore(globalIndex: globalIndexFor(lastVisibleAttributeIndexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
+
                                           kind: lastVisibleAttribute.kind,
-                                          offset: (item.frame.maxY - layoutRepresentation.visibleBounds.maxY).rounded())
+                                          offset: (itemFrame.maxY - layoutRepresentation.visibleBounds.maxY).rounded())
         }
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
@@ -547,25 +554,22 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         var insertedSectionsIndexesArray = [(Int, SectionModel<Layout>?)]()
 
         var reloadedItemsIndexesArray = [IndexPath]()
+        var reconfiguredItemsIndexesArray = [IndexPath]()
         var deletedItemsIndexesArray = [IndexPath]()
         var insertedItemsIndexesArray = [(IndexPath, ItemModel?)]()
 
         var visibleBoundsBeforeUpdate = layoutRepresentation.visibleBounds
 
-        changeItems.forEach { item in
+        for item in changeItems {
             switch item {
             case let .sectionReload(sectionIndex):
                 reloadedSectionsIndexes.insert(sectionIndex)
 
                 reloadedSectionsIndexesArray.append(sectionIndex)
             case let .itemReload(itemIndexPath: indexPath):
-                reloadedIndexes.insert(indexPath)
-
                 reloadedItemsIndexesArray.append(indexPath)
             case let .itemReconfigure(itemIndexPath: indexPath):
-                reconfiguredIndexes.insert(indexPath)
-
-                reloadedItemsIndexesArray.append(indexPath)
+                reconfiguredItemsIndexesArray.append(indexPath)
             case let .sectionDelete(sectionIndex):
                 deletedSectionsIndexes.insert(sectionIndex)
 
@@ -603,7 +607,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         deletedItemsIndexesArray = deletedItemsIndexesArray.sorted(by: { $0 > $1 })
         insertedItemsIndexesArray = insertedItemsIndexesArray.sorted(by: { $0.0 < $1.0 })
 
-        reloadedSectionsIndexesArray.forEach { sectionIndex in
+        for sectionIndex in reloadedSectionsIndexesArray {
             var section = layoutBeforeUpdate.sections[sectionIndex]
 
             var header: ItemModel?
@@ -650,12 +654,12 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             afterUpdateModel.insertSection(section, at: sectionIndex)
         }
 
-        deletedSectionsIndexesArray.forEach { sectionIndex in
+        for sectionIndex in deletedSectionsIndexesArray {
             afterUpdateModel.removeSection(for: sectionIndex)
             if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates {
                 if let localItemToRestore = itemToRestore {
                     guard let originalIndexPath = itemPathFor(localItemToRestore.globalIndex, kind: localItemToRestore.kind, state: .beforeUpdate) else {
-                        return
+                        continue
                     }
                     if originalIndexPath.section >= sectionIndex {
                         if originalIndexPath.section != 0 {
@@ -686,7 +690,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         }
 
-        insertedSectionsIndexesArray.forEach { sectionIndex, section in
+        for (sectionIndex, section) in insertedSectionsIndexesArray {
             let insertedSection: SectionModel<Layout>
             if let section {
                 insertedSection = section
@@ -721,7 +725,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates {
                 if let localItemToRestore = itemToRestore {
                     guard let originalIndexPath = itemPathFor(localItemToRestore.globalIndex, kind: localItemToRestore.kind, state: .model(afterUpdateModel)) else {
-                        return
+                        continue
                     }
                     if localItemToRestore.globalIndex >= originalIndexPath.section {
                         itemToRestore?.globalIndex = localItemToRestore.globalIndex + insertedSection.items.count
@@ -743,22 +747,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         }
 
-        reloadedItemsIndexesArray.forEach { indexPath in
-            guard var item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
-                assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
-                return
-            }
-            let oldHeight = item.frame.height
-            let configuration = layoutRepresentation.configuration(for: .cell, at: indexPath)
-            applyConfiguration(configuration, to: &item)
-            afterUpdateModel.replaceItem(item, at: indexPath)
-            visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height - oldHeight)
-        }
-
-        deletedItemsIndexesArray.forEach { indexPath in
+        for indexPath in deletedItemsIndexesArray {
             guard let itemId = itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate) else {
                 assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
-                return
+                continue
             }
             afterUpdateModel.removeItem(by: itemId)
             if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates {
@@ -775,7 +767,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         }
 
-        insertedItemsIndexesArray.forEach { indexPath, item in
+        for (indexPath, item) in insertedItemsIndexesArray {
             if let item {
                 afterUpdateModel.insertItem(item, at: indexPath)
                 visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height)
@@ -797,6 +789,35 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         }
 
+        for indexPath in reloadedItemsIndexesArray {
+            guard var item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate),
+                  let indexPathAfterUpdate = afterUpdateModel.itemPath(by: item.id, kind: .cell)?.indexPath else {
+                assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
+                continue
+            }
+            reloadedIndexes.insert(indexPathAfterUpdate)
+            let oldHeight = item.frame.height
+            let configuration = layoutRepresentation.configuration(for: .cell, at: indexPathAfterUpdate)
+            applyConfiguration(configuration, to: &item)
+            afterUpdateModel.replaceItem(item, at: indexPathAfterUpdate)
+            visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height - oldHeight)
+        }
+
+        for indexPath in reconfiguredItemsIndexesArray {
+            guard var item = item(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate),
+                  let indexPathAfterUpdate = afterUpdateModel.itemPath(by: item.id, kind: .cell)?.indexPath else {
+                assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
+                continue
+            }
+            reconfiguredIndexes.insert(indexPathAfterUpdate)
+
+            let oldHeight = item.frame.height
+            let configuration = layoutRepresentation.configuration(for: .cell, at: indexPathAfterUpdate)
+            applyConfiguration(configuration, to: &item)
+            afterUpdateModel.replaceItem(item, at: indexPathAfterUpdate)
+            visibleBoundsBeforeUpdate.offsettingBy(dx: 0, dy: item.frame.height - oldHeight)
+        }
+
         var afterUpdateModelSections = afterUpdateModel.sections
         afterUpdateModelSections.withUnsafeMutableBufferPointer { directlyMutableSections in
             for index in 0..<directlyMutableSections.count {
@@ -812,9 +833,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
            let itemToRestore,
            let itemPath = itemPathFor(itemToRestore.globalIndex, kind: itemToRestore.kind, state: .model(afterUpdateModel)),
-           let item = item(for: itemPath, kind: itemToRestore.kind, at: .afterUpdate),
+           let itemFrame = itemFrame(for: itemPath, kind: itemToRestore.kind, at: .afterUpdate),
            isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: layoutRepresentation.visibleBounds) {
-            let newProposedCompensationOffset = (item.frame.maxY - itemToRestore.offset) - layoutRepresentation.visibleBounds.maxY
+            let newProposedCompensationOffset = (itemFrame.maxY - itemToRestore.offset) - layoutRepresentation.visibleBounds.maxY
             proposedCompensatingOffset = newProposedCompensationOffset
         }
         totalProposedCompensatingOffset = proposedCompensatingOffset
@@ -1050,7 +1071,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             // Debug purposes only.
             var attributes = [ChatLayoutAttributes]()
             attributes.reserveCapacity(layout.sections.reduce(into: 0) { $0 += $1.items.count })
-            layout.sections.enumerated().forEach { sectionIndex, section in
+            for (sectionIndex, section) in layout.sections.enumerated() {
                 let sectionPath = ItemPath(item: 0, section: sectionIndex)
                 if let headerAttributes = itemAttributes(for: sectionPath, kind: .header, at: state, additionalAttributes: additionalAttributes) {
                     attributes.append(headerAttributes)
@@ -1058,7 +1079,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 if let footerAttributes = itemAttributes(for: sectionPath, kind: .footer, at: state, additionalAttributes: additionalAttributes) {
                     attributes.append(footerAttributes)
                 }
-                section.items.enumerated().forEach { itemIndex, _ in
+                for itemIndex in 0..<section.items.count {
                     let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
                     if let itemAttributes = itemAttributes(for: itemPath, kind: .cell, at: state, additionalAttributes: additionalAttributes) {
                         attributes.append(itemAttributes)
@@ -1180,7 +1201,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         func numberOfItemsBeforeSection(_ sectionIndex: Int, state: GlobalIndexModel) -> Int {
             let layout = state.layout ?? layout(at: .beforeUpdate)
             var total = 0
-            for index in 0..<max(sectionIndex - 1, 0) {
+            for index in 0..<max(sectionIndex, 0) {
                 let section = layout.sections[index]
                 total += section.items.count
             }
@@ -1241,5 +1262,4 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             return ItemPath(item: itemIndex, section: sectionIndex)
         }
     }
-
 }

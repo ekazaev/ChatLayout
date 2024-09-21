@@ -3,7 +3,7 @@
 // CollectionViewChatLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -41,7 +41,9 @@ import UIKit
 /// `CollectionViewChatLayout.getContentOffsetSnapshot(...)`
 ///
 /// `CollectionViewChatLayout.restoreContentOffset(...)`
+
 open class CollectionViewChatLayout: CollectionViewLayout {
+
     // MARK: Custom Properties
 
     /// `CollectionViewChatLayout` delegate.
@@ -58,7 +60,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
         }
     }
 
-    /// Default `UIScrollView` behaviour is to keep content offset constant from the top edge. If this flag is set to `true`
+    /// The default `UIScrollView` behaviour is to keep content offset constant from the top edge. If this flag is set to `true`
     /// `CollectionViewChatLayout` should try to compensate batch update changes to keep the current content at the bottom of the visible
     /// part of `UICollectionView`.
     ///
@@ -66,6 +68,11 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     /// Keep in mind that if during the batch content inset changes also (e.g. keyboard frame changes), `CollectionViewChatLayout` will usually get that information after
     /// the animation starts and wont be able to compensate that change too. It should be done manually.
     public var keepContentOffsetAtBottomOnBatchUpdates: Bool = false
+
+    /// The default behavior of UICollectionView is to maintain UICollectionViewCells at the top of the visible rectangle
+    /// when the content size is smaller than the visible area. By setting the respective flag to true, this behavior can be
+    /// reversed to achieve the result like in Telegram..
+    public var keepContentAtBottomOfVisibleArea: Bool = false
 
     /// Sometimes `UIScrollView` can behave weirdly if there are too many corrections in it's `contentOffset` during the animation. Especially when content size of the `UIScrollView`
     // is getting smaller first and then expands again as the newly appearing cells sizes are being calculated. That is why `CollectionViewChatLayout`
@@ -226,9 +233,15 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     // MARK: IOS 15.1 fix flags
 
     private var needsIOS15_1IssueFix: Bool {
-        guard enableIOS15_1Fix else { return false }
-        guard #unavailable(iOS 15.2) else { return false }
-        guard #available(iOS 15.1, *) else { return false }
+        guard enableIOS15_1Fix else {
+            return false
+        }
+        guard #unavailable(iOS 15.2) else {
+            return false
+        }
+        guard #available(iOS 15.1, *) else {
+            return false
+        }
         return isUserInitiatedScrolling && !controller.isAnimatedBoundsChange
     }
 
@@ -356,12 +369,6 @@ open class CollectionViewChatLayout: CollectionViewLayout {
             return
         }
 
-        #if DEBUG && canImport(UIKit)
-        if collectionView.isPrefetchingEnabled {
-            preconditionFailure("UICollectionView with prefetching enabled is not supported due to https://openradar.appspot.com/40926834 bug.")
-        }
-        #endif
-
         if prepareActions.contains(.switchStates) {
             controller.commitUpdates()
             state = .beforeUpdate
@@ -425,6 +432,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
                     // Items
                     var items: ContiguousArray<ItemModel> = section.items
                     items.withUnsafeMutableBufferPointer { directlyMutableItems in
+                        nonisolated(unsafe) let directlyMutableItems = directlyMutableItems
                         DispatchQueue.concurrentPerform(iterations: directlyMutableItems.count) { rowIndex in
                             directlyMutableItems[rowIndex].resetSize()
                         }
@@ -640,12 +648,13 @@ open class CollectionViewChatLayout: CollectionViewLayout {
             layoutAttributesForPendingAnimation?.frame.size = newItemSize
         }
 
-        if #available(iOS 13.0, *) {
+        if #available(iOS 13.0, *), let indexPath = preferredMessageAttributes.platformIndexPath {
             switch preferredMessageAttributes.kind {
             case .cell:
-                context.invalidateItems(at: [preferredAttributesIndexPath])
-            case .header, .footer:
-                context.invalidateSupplementaryElements(ofKind: preferredMessageAttributes.kind.supplementaryElementStringType, at: [preferredAttributesIndexPath])
+                context.invalidateItems(at: [indexPath])
+            case .footer,
+                 .header:
+                context.invalidateSupplementaryElements(ofKind: preferredMessageAttributes.kind.supplementaryElementStringType, at: [indexPath])
             }
         }
 
@@ -659,6 +668,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
         let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) ||
             cachedCollectionViewInset != .some(adjustedContentInset) ||
             invalidationActions.contains(.shouldInvalidateOnBoundsChange)
+            || (isUserInitiatedScrolling && state == .beforeUpdate)
 
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
         return shouldInvalidateLayout
@@ -774,8 +784,13 @@ open class CollectionViewChatLayout: CollectionViewLayout {
                     let cell = collectionView.cellForItem(at: indexPath)
                     #endif
                     if let originalAttributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate),
-                       let preferredAttributes = cell?.preferredLayoutAttributesFitting(originalAttributes),
-                       shouldInvalidateLayout(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes) {
+                       let preferredAttributes = cell?.preferredLayoutAttributesFitting(originalAttributes.typedCopy()) as? ChatLayoutAttributes,
+                       let itemIdentifierBeforeUpdate = controller.itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate),
+                       let indexPathAfterUpdate = controller.itemPath(by: itemIdentifierBeforeUpdate, kind: .cell, at: .afterUpdate)?.indexPath,
+                       let itemAfterUpdate = controller.item(for: indexPathAfterUpdate.itemPath, kind: .cell, at: .afterUpdate),
+                       (itemAfterUpdate.size.height - preferredAttributes.size.height).rounded() != 0 {
+                        originalAttributes.indexPath = indexPathAfterUpdate
+                        preferredAttributes.indexPath = indexPathAfterUpdate
                         _ = invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
                     }
                 }
@@ -1069,14 +1084,14 @@ extension CollectionViewChatLayout {
     }
 
     private func resetAttributesForPendingAnimations() {
-        ItemKind.allCases.forEach {
-            attributesForPendingAnimations[$0] = [:]
+        for kind in ItemKind.allCases {
+            attributesForPendingAnimations[kind] = [:]
         }
     }
 
     private func resetInvalidatedAttributes() {
-        ItemKind.allCases.forEach {
-            invalidatedAttributes[$0] = []
+        for kind in ItemKind.allCases {
+            invalidatedAttributes[kind] = []
         }
     }
 }

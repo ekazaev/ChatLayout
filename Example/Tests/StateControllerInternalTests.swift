@@ -3,7 +3,7 @@
 // StateControllerInternalTests.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,7 +14,6 @@
 import XCTest
 
 class StateControllerInternalTests: XCTestCase {
-
     func testUpdatePreferredSize() {
         let layout = MockCollectionLayout()
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
@@ -139,5 +138,4 @@ class StateControllerInternalTests: XCTestCase {
         XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), estimatedContentHeight)
         XCTAssertEqual(layout.controller.contentSize(for: .beforeUpdate), CGSize(width: layout.viewSize.width - 0.0001, height: estimatedContentHeight))
     }
-
 }

@@ -3,7 +3,7 @@
 // MainContainerView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: UIView, TrailingAccessory: StaticViewFactory>: UIView, SwipeNotifierDelegate {
-
     var swipeCompletionRate: CGFloat = 0 {
         didSet {
             updateOffsets()
@@ -121,5 +120,4 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
 
         accessoryView.transform = CGAffineTransform(translationX: -((accessoryView.bounds.width + accessorySafeAreaInsets.right) * swipeCompletionRate), y: 0)
     }
-
 }

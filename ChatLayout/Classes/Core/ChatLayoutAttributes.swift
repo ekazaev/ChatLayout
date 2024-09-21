@@ -3,7 +3,7 @@
 // ChatLayoutAttributes.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -91,16 +91,16 @@ public final class ChatLayoutAttributes: CollectionViewLayoutAttributes {
         switch (representedElementCategory, representedElementKind) {
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         case (.item, nil):
-            return .cell
+            .cell
         #endif
         #if canImport(UIKit)
         case (.cell, nil):
-            return .cell
+            .cell
         #endif
         case (.supplementaryView, .some(CollectionView.elementKindSectionHeader)):
-            return .header
+            .header
         case (.supplementaryView, .some(CollectionView.elementKindSectionFooter)):
-            return .footer
+            .footer
         default:
             preconditionFailure("Unsupported element kind.")
         }

@@ -3,7 +3,7 @@
 // DefaultChatController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,7 +14,6 @@ import ChatLayout
 import Foundation
 
 final class DefaultChatController: ChatController {
-
     weak var delegate: ChatControllerDelegate?
 
     private let dataProvider: RandomDataProvider
@@ -154,17 +153,16 @@ final class DefaultChatController: ChatController {
                 completion([Section(id: 0, title: "Loading...", cells: Array(cells))])
             }
         }
-
     }
 
     private func convert(_ data: Message.Data) -> RawMessage.Data {
         switch data {
         case let .url(url, isLocallyStored: _):
-            return .url(url)
+            .url(url)
         case let .image(source, isLocallyStored: _):
-            return .image(source)
+            .image(source)
         case let .text(text):
-            return .text(text)
+            .text(text)
         }
     }
 
@@ -182,9 +180,9 @@ final class DefaultChatController: ChatController {
             func isPresentLocally(_ source: ImageMessageSource) -> Bool {
                 switch source {
                 case .image:
-                    return true
+                    true
                 case let .imageURL(url):
-                    return imageCache.isEntityCached(for: CacheableImageKey(url: url))
+                    imageCache.isEntityCached(for: CacheableImageKey(url: url))
                 }
             }
             return .image(source, isLocallyStored: isPresentLocally(source))
@@ -198,11 +196,9 @@ final class DefaultChatController: ChatController {
             self.delegate?.update(with: sections, requiresIsolatedProcess: requiresIsolatedProcess)
         }
     }
-
 }
 
 extension DefaultChatController: RandomDataProviderDelegate {
-
     func received(messages: [RawMessage]) {
         appendConvertingToMessages(messages)
         markAllMessagesAsReceived {
@@ -290,22 +286,17 @@ extension DefaultChatController: RandomDataProviderDelegate {
             }
         }
     }
-
 }
 
 extension DefaultChatController: ReloadDelegate {
-
     func reloadMessage(with id: UUID) {
         repopulateMessages()
     }
-
 }
 
 extension DefaultChatController: EditingAccessoryControllerDelegate {
-
     func deleteMessage(with id: UUID) {
         messages = Array(messages.filter { $0.id != id })
         repopulateMessages(requiresIsolatedProcess: true)
     }
-
 }

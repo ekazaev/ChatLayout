@@ -3,7 +3,7 @@
 // MemoryDataCache.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -13,9 +13,7 @@
 import Foundation
 
 public final class MemoryDataCache<CachingKey: Hashable>: AsyncKeyValueCaching {
-
     private final class WrappedKey: NSObject {
-
         let key: CachingKey
 
         init(_ key: CachingKey) {
@@ -33,17 +31,14 @@ public final class MemoryDataCache<CachingKey: Hashable>: AsyncKeyValueCaching {
 
             return value.key == key
         }
-
     }
 
     private final class Entry {
-
         let data: Data
 
         init(_ data: Data) {
             self.data = data
         }
-
     }
 
     private let cache = NSCache<WrappedKey, Entry>()
@@ -83,5 +78,4 @@ public final class MemoryDataCache<CachingKey: Hashable>: AsyncKeyValueCaching {
     public func store(entity: Data, for key: CachingKey) {
         cache.setObject(Entry(entity), forKey: WrappedKey(key), cost: Int(Date().timeIntervalSince1970))
     }
-
 }

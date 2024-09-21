@@ -3,7 +3,7 @@
 // PerformanceTests.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -15,16 +15,15 @@ import Foundation
 import XCTest
 
 final class PerformanceTests: XCTestCase {
-
     func testBinarySearchPerformance() {
         let constant = 1257
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < constant {
-                return .orderedAscending
+                .orderedAscending
             } else if integer > constant {
-                return .orderedDescending
+                .orderedDescending
             } else {
-                return .orderedSame
+                .orderedSame
             }
         }
         let values = (0...100000).map { $0 }
@@ -40,11 +39,11 @@ final class PerformanceTests: XCTestCase {
         let constant = 1257
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < constant {
-                return .orderedAscending
+                .orderedAscending
             } else if integer > constant + 111 {
-                return .orderedDescending
+                .orderedDescending
             } else {
-                return .orderedSame
+                .orderedSame
             }
         }
         let values = (0...100000).map { $0 }
@@ -76,7 +75,6 @@ final class PerformanceTests: XCTestCase {
                 _ = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate, ignoreCache: true)
             }
         }
-
     }
 
     func testInsertionPerformance() {
@@ -131,5 +129,4 @@ final class PerformanceTests: XCTestCase {
             }
         }
     }
-
 }

@@ -3,7 +3,7 @@
 // MockCollectionLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -21,7 +21,6 @@ import UIKit
 #endif
 
 class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
-
     var numberOfItemsInSection: [Int: Int] = [0: 100, 1: 100, 2: 100]
     var shouldPresentHeaderAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
     var shouldPresentFooterAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
@@ -50,6 +49,8 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     let adjustedContentInset: EdgeInsets = .zero
 
     let keepContentOffsetAtBottomOnBatchUpdates: Bool = true
+
+    let keepContentAtBottomOfVisibleArea: Bool = false
 
     let processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
 
@@ -104,5 +105,4 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
         }
         return sections
     }
-
 }

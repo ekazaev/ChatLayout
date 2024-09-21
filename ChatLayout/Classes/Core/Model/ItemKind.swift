@@ -3,7 +3,7 @@
 // ItemKind.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -21,7 +21,6 @@ import UIKit
 
 /// Type of the item supported by `CollectionViewChatLayout`
 public enum ItemKind: CaseIterable, Hashable {
-
     /// Header item
     case header
 
@@ -46,9 +45,10 @@ public enum ItemKind: CaseIterable, Hashable {
     public var isSupplementaryItem: Bool {
         switch self {
         case .cell:
-            return false
-        case .header, .footer:
-            return true
+            false
+        case .footer,
+             .header:
+            true
         }
     }
 
@@ -62,5 +62,4 @@ public enum ItemKind: CaseIterable, Hashable {
             return CollectionView.elementKindSectionFooter
         }
     }
-
 }

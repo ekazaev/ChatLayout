@@ -3,7 +3,7 @@
 // ImageMaskedView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -18,18 +18,15 @@ import UIKit
 
 /// A transformation to apply to the `ImageMaskedView.maskingImage`
 public enum ImageMaskedViewTransformation {
-
     /// Keep image as it is.
     case asIs
 
     /// Flip image vertically.
     case flippedVertically
-
 }
 
 /// A container view that masks its contained view with an image provided.
 public final class ImageMaskedView<CustomView: UIView>: UIView {
-
     /// Contained view.
     public lazy var customView = CustomView(frame: bounds)
 
@@ -119,7 +116,6 @@ public final class ImageMaskedView<CustomView: UIView>: UIView {
             imageView.frame = bounds
         }
     }
-
 }
 
 #endif

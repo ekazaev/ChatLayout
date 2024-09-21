@@ -3,7 +3,7 @@
 // SwipeNotifier.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,15 +14,12 @@ import Foundation
 import UIKit
 
 public protocol SwipeNotifierDelegate: AnyObject {
-
     var swipeCompletionRate: CGFloat { get set }
 
     var accessorySafeAreaInsets: UIEdgeInsets { get set }
-
 }
 
 final class SwipeNotifier {
-
     private var delegates = NSHashTable<AnyObject>.weakObjects()
 
     private(set) var accessorySafeAreaInsets: UIEdgeInsets = .zero
@@ -42,5 +39,4 @@ final class SwipeNotifier {
         self.accessorySafeAreaInsets = accessorySafeAreaInsets
         delegates.allObjects.compactMap { $0 as? SwipeNotifierDelegate }.forEach { $0.accessorySafeAreaInsets = accessorySafeAreaInsets }
     }
-
 }

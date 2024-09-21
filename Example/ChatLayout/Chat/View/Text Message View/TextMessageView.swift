@@ -3,7 +3,7 @@
 // TextMessageView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
-
     private var viewPortWidth: CGFloat = 300
 
     private lazy var textView = MessageTextView()
@@ -127,7 +126,6 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
             setNeedsLayout()
         }
     }
-
 }
 
 extension TextMessageView: AvatarViewDelegate {
@@ -144,7 +142,6 @@ extension TextMessageView: AvatarViewDelegate {
 
 /// UITextView with hacks to avoid selection
 private final class MessageTextView: UITextView {
-
     override var isFocused: Bool {
         false
     }
@@ -160,5 +157,4 @@ private final class MessageTextView: UITextView {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         false
     }
-
 }

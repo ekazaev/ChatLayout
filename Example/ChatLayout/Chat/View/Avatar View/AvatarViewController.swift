@@ -3,7 +3,7 @@
 // AvatarViewController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 final class AvatarViewController {
-
     var image: UIImage? {
         guard bubble == .tailed else {
             return nil
@@ -47,5 +46,4 @@ final class AvatarViewController {
         self.user = user
         self.bubble = bubble
     }
-
 }

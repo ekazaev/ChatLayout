@@ -3,7 +3,7 @@
 // ChatLayoutInvalidationContext.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -25,5 +25,4 @@ public final class ChatLayoutInvalidationContext: CollectionViewLayoutInvalidati
     /// Indicates whether to recompute the positions and sizes of the items based on the current
     /// collection view and delegate layout metrics.
     public var invalidateLayoutMetrics = true
-
 }

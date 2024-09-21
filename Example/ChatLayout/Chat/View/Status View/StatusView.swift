@@ -3,7 +3,7 @@
 // StatusView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 final class StatusView: UIView, StaticViewFactory {
-
     private lazy var imageView = UIImageView(frame: bounds)
 
     override init(frame: CGRect) {
@@ -64,5 +63,4 @@ final class StatusView: UIView, StaticViewFactory {
             imageView.tintColor = .systemBlue
         }
     }
-
 }

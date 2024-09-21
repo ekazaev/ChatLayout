@@ -3,7 +3,7 @@
 // UIView+Extension.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -14,7 +14,6 @@ import Foundation
 import UIKit
 
 extension UIView {
-
     func superview<T>(of type: T.Type) -> T? {
         superview as? T ?? superview.flatMap { $0.superview(of: type) }
     }
@@ -37,7 +36,6 @@ extension UIView {
             isHidden = newValue
         }
     }
-
 }
 
 extension UIViewController {

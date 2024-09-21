@@ -3,7 +3,7 @@
 // ChatLayoutDelegate.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -21,18 +21,15 @@ import UIKit
 
 /// Represents the point in time when `CollectionViewChatLayout` asks about layout attributes modification.
 public enum InitialAttributesRequestType: Hashable {
-
     /// `UICollectionView` initially asks about the layout of an item.
     case initial
 
     /// An item is being invalidated.
     case invalidation
-
 }
 
 /// `CollectionViewChatLayout` delegate
 public protocol ChatLayoutDelegate: AnyObject {
-
     /// `CollectionViewChatLayout` will call this method to ask if it should present the header in the current layout.
     /// - Parameters:
     ///   - chatLayout: `CollectionViewChatLayout` reference.
@@ -127,12 +124,10 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - sectionIndex: Index of the section.
     func interSectionSpacing(_ chatLayout: CollectionViewChatLayout,
                              after sectionIndex: Int) -> CGFloat?
-
 }
 
 /// Default extension.
 public extension ChatLayoutDelegate {
-
     /// Default implementation returns: `false`.
     func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool {
@@ -188,5 +183,4 @@ public extension ChatLayoutDelegate {
                              after sectionIndex: Int) -> CGFloat? {
         nil
     }
-
 }

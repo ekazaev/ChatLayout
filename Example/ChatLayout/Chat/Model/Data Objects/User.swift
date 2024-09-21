@@ -3,7 +3,7 @@
 // User.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2023.
+// Created by Eugene Kazaev in 2020-2024.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -15,24 +15,22 @@ import Foundation
 import UIKit
 
 struct User: Hashable {
-
     var id: Int
 
     var name: String {
         switch id {
         case 0:
-            return "Chat Layout"
+            "Chat Layout"
         case 1:
-            return "Eugene Kazaev"
+            "Eugene Kazaev"
         case 2:
-            return "Cathal Murphy"
+            "Cathal Murphy"
         case 3:
-            return "Aliaksandra Mikhailouskaya"
+            "Aliaksandra Mikhailouskaya"
         default:
             fatalError()
         }
     }
-
 }
 
 extension User: Differentiable {}

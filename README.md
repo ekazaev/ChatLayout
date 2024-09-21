@@ -1,7 +1,3 @@
-<p align="right">
-<a href="https://websummit.com"><img src="https://habrastorage.org/webt/jh/an/e-/jhane-_nukqskoq49iqidftm0-4.png" alt="Websummit"/></a>
-</p>
-
 # ChatLayout
 
 [![Release](https://img.shields.io/github/release/ekazaev/ChatLayout.svg?style=flat&color=darkcyan)](https://github.com/ekazaev/ChatLayout/releases)
@@ -11,7 +7,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b97c279a50984376ab2649f5a7d09e69)](https://www.codacy.com/gh/ekazaev/ChatLayout/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ekazaev/ChatLayout&amp;utm_campaign=Badge_Grade)
 [![Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BA51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Swift 5.8](https://img.shields.io/badge/language-Swift5.8-orange.svg?style=flat)](https://developer.apple.com/swift)
+[![Swift 5.10](https://img.shields.io/badge/language-Swift5.10-orange.svg?style=flat)](https://developer.apple.com/swift)
 [![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2017-yellow.svg)](https://www.apple.com/ios)
 
 <p align="center">
@@ -120,12 +116,7 @@ read [the contribution guidelines](https://github.com/ekazaev/route-composer/blo
 ### About `UICollectionViewDiffableDataSource`
 
 `ChatLayout` can process any update commands that you send to your `UICollectionView`, so you can use 
-`UICollectionViewDiffableDataSource` as well. But you have to keep in mind that `UICollectionViewDiffableDataSource` 
-does not support the reloading of cells out of the box if you are relying on the `Hashable` protocol implementation.
-It will delete the changed cell and insert the new version of said cell. That may lead to strange animations on 
-the screen, especially when the reloaded cell changes its size. In order to get the best behaviour of the update animation 
-I would strongly recommend you rely on [DifferenceKit](https://github.com/ra1028/DifferenceKit) or a similar library 
-to process the model changes. The Example app does it as well.
+`UICollectionViewDiffableDataSource` as well. 
 
 ### About Supplementary Views
 
