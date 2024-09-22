@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "ChatLayout",
     platforms: [
-        .iOS(.v12), .macOS(.v10_14), .macCatalyst(.v13)
+        .iOS(.v12), .macOS(.v11), .macCatalyst(.v13)
     ],
     products: [
         .library(
