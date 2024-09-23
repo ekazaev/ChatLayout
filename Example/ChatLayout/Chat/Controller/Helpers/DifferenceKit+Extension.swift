@@ -76,12 +76,19 @@ public extension UICollectionView {
                 }
 
                 if !changeset.elementDeleted.isEmpty {
+                    (self as? MyCollectionView)?.deletedIndexPaths = changeset.elementDeleted.map {
+                        IndexPath(item: $0.element, section: $0.section)
+                    }
                     deleteItems(at: changeset.elementDeleted.map {
                         IndexPath(item: $0.element, section: $0.section)
                     })
                 }
 
                 if !changeset.elementInserted.isEmpty {
+                    (self as? MyCollectionView)?.insertedIndexPaths = changeset.elementInserted.map {
+                        IndexPath(item: $0.element, section: $0.section)
+                    }
+
                     insertItems(at: changeset.elementInserted.map {
                         IndexPath(item: $0.element, section: $0.section)
                     })

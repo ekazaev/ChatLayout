@@ -99,7 +99,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
             guard let self else {
                 return
             }
-            let messages = createBunchOfMessages(number: 50)
+            let messages = createBunchOfMessages(number: 2)
             if messages.count > 10 {
                 lastReceivedUUID = messages[messages.count - 10].id
             }
@@ -182,7 +182,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     private func createRandomMessage(date: Date = Date()) -> RawMessage {
         let sender = allUsersIds[Int.random(in: 0..<allUsersIds.count)] // allUsersIds.first!//
         lastMessageIndex += 1
-        if Int.random(in: 0...10) == 10 {
+        if lastReplyUUID == nil {//Int.random(in: 0...10) == 10 {
             lastReplyUUID = UUID()
         }
         switch (Int.random(in: 0...8), enableRichContent) {

@@ -113,11 +113,23 @@ struct Message: Hashable {
 
     var status: MessageStatus = .sent
 
-    var replyUUID: UUID
+    var replyPattern: ReplyPathPattern?
 
-    var replyInfo: ReplyInfo {
-        return ReplyInfo(replyUUID: replyUUID, type: type)
-    }
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(id)
+//        hasher.combine(date)
+//        hasher.combine(data)
+//        hasher.combine(owner)
+//        hasher.combine(type)
+//        hasher.combine(status)
+//        hasher.combine(replyPattern?.replyUUID)
+//    }
+}
+
+struct ReplyPathPattern: Hashable {
+    var id: UUID
+    var replyUUID: UUID
+    var replySegment: ReplySegments
 }
 
 extension Message: Differentiable {

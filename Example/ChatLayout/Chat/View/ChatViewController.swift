@@ -102,6 +102,7 @@ final class MyCollectionView: UICollectionView {
         weak var cell: UICollectionViewCell?
     }
     private var lastCycleCells: Array<WeakCellReference> = []
+    private var lastCycleAccesoryCells: Array<WeakCellReference> = []
     private var currentCellsDict = [String: AccesoryCell]()
     private var dequeueCellsDictionary: [String: Set<AccesoryCell>] = Dictionary(minimumCapacity: 100)
 
@@ -140,6 +141,10 @@ final class MyCollectionView: UICollectionView {
         dequeueCellsDictionary[reuseIdentifier, default: []].insert(cell)
     }
 
+    var insertedIndexPaths: [IndexPath] = []
+    var deletedIndexPaths: [IndexPath] = []
+    var allVisibleReplyItems: [String] = []
+
     override func layoutSubviews() {
         func printAttributes() {
 //            indexPathsForVisibleItems.sorted().forEach { indexPath in
@@ -156,17 +161,30 @@ final class MyCollectionView: UICollectionView {
 //        print("\(Self.self) \(#function) before \(UIView.inheritedAnimationDuration) \(contentOffset)")
         printAttributes()
         super.layoutSubviews()
-        
-        let visibleCells1 = getVisibleCells()
-        let d = Dictionary(grouping: visibleCells1, by: { $0.cell.replyInfo?.replyUUID })
-        let visibleCells = d.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, duration: CGFloat)]()) { result, element in
-            guard let id = element.key else {
+
+        let allVisibleCells = getVisibleCells()
+
+        let jsutLastCycleCells = lastCycleCells.compactMap({ $0.cell })
+        let insertedCells = allVisibleCells.filter({ $0.indexPath != nil }).filter({ !jsutLastCycleCells.contains($0.cell) }).map({ $0.cell })
+        let deletedCells = allVisibleCells.filter({ $0.indexPath == nil }).filter({ jsutLastCycleCells.contains($0.cell) }).map({ $0.cell })
+
+        let d = Dictionary(grouping: allVisibleCells, by: { $0.cell.replyPattern?.replyUUID })
+        var shapesForIds = [String: [(segment: ReplySegments, till: CGFloat)]]()
+        let visibleAccessyCells = d.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, indexPath: IndexPath?, duration: CGFloat)]()) { result, element in
+            guard let id = element.key,
+                  allVisibleReplyItems.contains(id.uuidString) else {
                 return
             }
+            print("\(insertedCells.count)")
             let values = element.value.sorted(by: { $0.cell.frame.minY < $1.cell.frame.minY })
             var combineRect: CGRect? = nil
             var idAddition = 0
+            var shapes = [(segment: ReplySegments, till: CGFloat)]()
             for value in values {
+                guard let replyPattern = value.cell.replyPattern,
+                        !deletedCells.contains(value.cell) else {
+                    continue
+                }
                 if combineRect == nil {
                     combineRect = value.cell.frame
                 } else {
@@ -179,8 +197,15 @@ final class MyCollectionView: UICollectionView {
                     var previousRect = currentRect.intersection(CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: top.y))
                     previousRect.origin.x = 20
                     previousRect.size.width = 18
+
+                    let accessoryId = "\(id)-\(idAddition)"
+                    shapes.append((segment: replyPattern.replySegment, till: previousRect.height))
+                    shapesForIds[accessoryId] = shapes
+                    shapes = .init()
+
                     let duration = value.cell.layer.animation(forKey: "position")?.duration
-                    result.append((id: "\(id)-\(idAddition)", frame: previousRect, cell: value.cell, duration: duration ?? 0))
+                    result.append((id: accessoryId, frame: previousRect, cell: value.cell, indexPath: value.indexPath, duration: duration ?? 0))
+
                     idAddition += 1
                     let bottom = self.convert(CGPoint(x: 0, y: replyBreak.bottom), from: value.cell)
                     var nextRect: CGRect
@@ -196,19 +221,29 @@ final class MyCollectionView: UICollectionView {
                     } else {
                         combineRect = nil
                     }
+                } else {
+                    if let combineRect {
+                        shapes.append((segment: replyPattern.replySegment, till: combineRect.height))
+                    }
                 }
             }
+            let accessoryId = "\(id)-\(idAddition)"
             if var combineRect,
                 let lastElement = values.last {
                 combineRect.origin.x = 20
                 combineRect.size.width = 18
                 let duration = lastElement.cell.layer.animation(forKey: "position")?.duration
-                result.append((id: "\(id)-\(idAddition)", frame: combineRect, cell: lastElement.cell, duration: duration ?? 0))
+                result.append((id: accessoryId, frame: combineRect, cell: lastElement.cell, indexPath: lastElement.indexPath, duration: duration ?? 0))
+            }
+            if !shapes.isEmpty {
+                shapesForIds[accessoryId] = shapes
             }
         }
-        print("----\nVISIBLE \(visibleCells1.compactMap({ $0.indexPath?.item }).sorted())\nPRESENT \(currentCellsDict.keys.map({ $0 }).sorted())")
+        print("----\nVISIBLE \(allVisibleCells.compactMap({ $0.indexPath?.item }).sorted())\nPRESENT \(currentCellsDict.keys.map({ $0 }).sorted())\n\(shapesForIds)\nACCESORIES\n\(visibleAccessyCells.sorted(by: { ($0.indexPath?.item ?? 0) < ($1.indexPath?.item ?? 0) }).compactMap({"\($0.id) \($0.indexPath?.item)"}))\nINSERTED:\(insertedIndexPaths)\nDELETED\(deletedIndexPaths)")
 
-        let currentlyPresentCells = visibleCells.compactMap { item -> (id: String, cell: AccesoryCell, originalCell: UICollectionViewCell, frame: CGRect, duration: CGFloat)? in
+        print("-")
+
+        let currentlyPresentCells = visibleAccessyCells.compactMap { item -> (id: String, cell: AccesoryCell, originalCell: UICollectionViewCell, frame: CGRect, duration: CGFloat)? in
             guard let cell = currentCellsDict[item.id] else {
                 return nil
             }
@@ -216,33 +251,39 @@ final class MyCollectionView: UICollectionView {
         }
 
         for currentCell in currentlyPresentCells {
+            if let shape = shapesForIds[currentCell.id] {
+                (currentCell.cell.customView as? BezierView)?.setupWith(.init(segments: shape))
+            } else {
+                (currentCell.cell.customView as? BezierView)?.setupWith(nil)
+            }
+
             var configuration = currentCell.cell.configuration
             configuration.frame = currentCell.frame
             if currentCell.cell.configuration != configuration {
                 currentCell.cell.configuration = configuration
-                let duration = currentCell.duration
-//                if duration == 0 {
+                let duration = currentCell.originalCell.layer.animation(forKey: "position")?.duration ?? UIView.inheritedAnimationDuration
+                if duration == 0 {
                     currentCell.cell.commitGeometryUpdates()
-//                } else {
-//                    UIView.transition(with: self,
-//                                      duration: duration,
-//                                      options: .beginFromCurrentState,
-//                                      animations: { [weak self] in
-//                                          guard let self else {
-//                                              return
-//                                          }
-//                        currentCell.cell.configuration = configuration
-//                        currentCell.cell.commitGeometryUpdates()
-//                                      }, completion: { [weak self] _ in
-//                                          guard let self else {
-//                                              return
-//                                          }
-//                                      })
-//                }
+                } else {
+                    UIView.transition(with: self,
+                                      duration: duration,
+                                      options: .beginFromCurrentState,
+                                      animations: { [weak self] in
+                                          guard let self else {
+                                              return
+                                          }
+                        currentCell.cell.configuration = configuration
+                        currentCell.cell.commitGeometryUpdates()
+                                      }, completion: { [weak self] _ in
+                                          guard let self else {
+                                              return
+                                          }
+                                      })
+                }
             }
         }
 
-        let appearingIndexes = visibleCells.compactMap({ cell -> (id: String, cell: UICollectionViewCell, frame: CGRect)? in
+        let appearingIndexes = visibleAccessyCells.compactMap({ cell -> (id: String, cell: UICollectionViewCell, frame: CGRect)? in
             guard !currentlyPresentCells.contains(where: { $0.id == cell.id }) else {
                 return nil
             }
@@ -250,15 +291,15 @@ final class MyCollectionView: UICollectionView {
         })
 
         if !appearingIndexes.isEmpty {
-//            print("APPEARING: \(appearingIndexes.map({ $0.index }))")
-//            print("--")
+            print("APPEARING: \(appearingIndexes.map({ $0.id }))")
+            print("--")
         }
 
-        let cellsToRemove = currentCellsDict.filter({ cell in !currentlyPresentCells.contains(where: { $0.cell === cell.value })})
+        let cellsToRemove = currentCellsDict.filter({ cell in !currentlyPresentCells.contains(where: { $0.cell === cell.value }) })
 
         if !cellsToRemove.isEmpty {
-//            print("DISAPPEARING: \(cellsToRemove.map({ $0.key }))")
-//            print("--")
+            print("DISAPPEARING: \(cellsToRemove.map({ $0.key }))")
+            print("--")
         }
 
         currentCellsDict = currentCellsDict.filter({ !cellsToRemove.values.contains($0.value) })
@@ -266,8 +307,13 @@ final class MyCollectionView: UICollectionView {
         for appearingIndex in appearingIndexes {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            let customView: UIView = dequeueReusableViewForIndex() ?? BezierView()
-//            customView.backgroundColor = .red
+            let customView: BezierView = dequeueReusableViewForIndex() ?? BezierView()
+            if let shape = shapesForIds[appearingIndex.id] {
+                customView.setupWith(.init(segments: shape))
+            } else {
+                customView.setupWith(nil)
+            }
+            customView.backgroundColor = .red
             var cell: AccesoryCell
             var configuration = AccessoryConfiguration(appearingIndex.cell)
             configuration.frame = appearingIndex.frame
@@ -339,7 +385,7 @@ final class MyCollectionView: UICollectionView {
 
 
         for cellToRemove in cellsToRemove {
-            let oldCell = lastCycleCells.first(where: { $0.id == cellToRemove.key })?.cell
+            let oldCell = lastCycleAccesoryCells.first(where: { $0.id == cellToRemove.key })?.cell
             let duration: TimeInterval
             if UIView.inheritedAnimationDuration == 0,
                let oldCell,
@@ -358,9 +404,11 @@ final class MyCollectionView: UICollectionView {
                                       guard let self else {
                                           return
                                       }
-                    if let oldCell =  lastCycleCells.first(where: { $0.id == cellToRemove.key })?.cell {
-                        var configuration = AccessoryConfiguration(oldCell)
-                        configuration.isHidden = false
+                    if let oldCell = lastCycleCells.first(where: { $0.id == cellToRemove.key })?.cell {
+//                        var configuration = AccessoryConfiguration(oldCell)
+//                        configuration.isHidden = false
+                        var configuration = cellToRemove.value.configuration
+                        configuration.frame.center = oldCell.frame.center
                         cellToRemove.value.configuration = configuration
                     } else {
                         cellToRemove.value.configuration.alpha = 0
@@ -387,9 +435,16 @@ final class MyCollectionView: UICollectionView {
 //        print("\(Self.self) \(#function) after \(UIView.inheritedAnimationDuration) \(contentOffset)")
         printAttributes()
 
-        lastCycleCells = visibleCells.compactMap({ item -> WeakCellReference? in
+        lastCycleAccesoryCells = visibleAccessyCells.compactMap({ item -> WeakCellReference? in
             return WeakCellReference(id: item.id, cell: item.cell)
         })
+
+        lastCycleCells = allVisibleCells.map({
+            return WeakCellReference(id: "\($0.indexPath)", cell: $0.cell)
+        })
+
+        insertedIndexPaths = []
+        deletedIndexPaths = []
     }
 }
 
@@ -397,9 +452,9 @@ private let replyInfoKey = UnsafeRawPointer(UnsafeMutablePointer.allocate(capaci
 private let replyBreakKey = UnsafeRawPointer(UnsafeMutablePointer.allocate(capacity: 0))
 
 extension UICollectionViewCell {
-    var replyInfo: ReplyInfo? {
+    var replyPattern: ReplyPathPattern? {
         get {
-            objc_getAssociatedObject(self, replyInfoKey) as? ReplyInfo
+            objc_getAssociatedObject(self, replyInfoKey) as? ReplyPathPattern
         }
         set {
             objc_setAssociatedObject(self, replyInfoKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -704,19 +759,20 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     private func loadPreviousMessages() {
+        return
         // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
         // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
-        currentControllerActions.options.insert(.loadingPreviousMessages)
-        chatController.loadPreviousMessages { [weak self] sections in
-            guard let self else {
-                return
-            }
-            // Reloading the content without animation just because it looks better is the scrolling is in process.
-            let animated = !isUserInitiatedScrolling
-            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
-                self.currentControllerActions.options.remove(.loadingPreviousMessages)
-            }
-        }
+//        currentControllerActions.options.insert(.loadingPreviousMessages)
+//        chatController.loadPreviousMessages { [weak self] sections in
+//            guard let self else {
+//                return
+//            }
+//            // Reloading the content without animation just because it looks better is the scrolling is in process.
+//            let animated = !isUserInitiatedScrolling
+//            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
+//                self.currentControllerActions.options.remove(.loadingPreviousMessages)
+//            }
+//        }
     }
 
     fileprivate var isUserInitiatedScrolling: Bool {
@@ -896,6 +952,12 @@ extension ChatViewController: ChatControllerDelegate {
             }
             currentControllerActions.options.insert(.updatingCollection)
             print("\(Self.self) \(#function) pre reload")
+            (collectionView as? MyCollectionView)?.allVisibleReplyItems = (sections.first?.cells ?? []).compactMap({ cell1 -> String? in
+                guard case let .message(message, bubbleType: bubbleType) = cell1 else {
+                    return nil
+                }
+                return message.replyPattern?.replyUUID.uuidString
+            })
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
                                       guard changeSet.sectionInserted.isEmpty else {

@@ -165,10 +165,23 @@ protocol PathPart {
 }
 
 enum ReplySegments {
-    case fromMe(CGPoint)
-    case loop(CGPoint)
-    case line(CGPoint)
-    case toMe(CGPoint)
+    case fromMe
+    case loop
+    case line
+    case toMe
+
+    func pathPartIn(_ frame: CGRect) -> PathPart {
+        switch self {
+        case .fromMe:
+            return FromMePathPart(frame: frame)
+        case .line:
+            return LinePathPart(frame: frame)
+        case .loop:
+            return LoopPathPart(frame: frame)
+        case .toMe:
+            return ToMePathPart(frame: frame)
+        }
+    }
 }
 
 enum ReplyPath {
@@ -286,7 +299,13 @@ extension [ReplyPath] {
     }
 }
 
+struct BezierViewDataModel {
+    let segments: [(segment: ReplySegments, till: CGFloat)]
+}
+
 final class BezierView: UIView {
+
+    private var model: BezierViewDataModel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -298,27 +317,50 @@ final class BezierView: UIView {
         setupSubviews()
     }
 
+    func setupWith(_ model: BezierViewDataModel?) {
+        self.model = model
+        setNeedsLayout()
+    }
+
     private func setupSubviews() {
     }
 
     override func layoutSubviews() {
+        guard let model,
+              !model.segments.isEmpty else {
+            self.layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
+            return
+        }
         let path = UIBezierPath()
         path.lineJoinStyle = .round
         path.lineCapStyle = .round
         path.lineWidth = 1
 
-        let part1 = LinePathPart(frame: CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height / 4))
-        path.move(to: part1.initialPoint)
-        part1.addToPath(path)
+        var segments = model.segments
+        let first = segments.removeFirst()
+        let firstPart = first.segment.pathPartIn(CGRect(origin: .init(x: 0, y: 0), size: CGSize(width: bounds.width, height: first.till)))
+        var offsetY = first.till
+        path.move(to: firstPart.initialPoint)
+        firstPart.addToPath(path)
+        for segment in segments {
+            let frame = CGRect(origin: .init(x: 0, y: offsetY), size: CGSize(width: bounds.width, height: segment.till - offsetY))
+            let pathPart = segment.segment.pathPartIn(frame)
+            pathPart.addToPath(path)
+            offsetY = frame.maxY
+        }
 
-        let part2 = LinePathPart(frame: CGRect(x: bounds.minX, y: part1.frame.maxY, width: bounds.width, height: bounds.height / 4))
-        part2.addToPath(path)
-
-        let part3 = LinePathPart(frame: CGRect(x: bounds.minX, y: part2.frame.maxY, width: bounds.width, height: bounds.height / 4))
-        part3.addToPath(path)
-
-        let part4 = LinePathPart(frame: CGRect(x: bounds.minX, y: part3.frame.maxY, width: bounds.width, height: bounds.height / 4))
-        part4.addToPath(path)
+//        let part1 = LinePathPart(frame: CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height / 4))
+//        path.move(to: part1.initialPoint)
+//        part1.addToPath(path)
+//
+//        let part2 = LinePathPart(frame: CGRect(x: bounds.minX, y: part1.frame.maxY, width: bounds.width, height: bounds.height / 4))
+//        part2.addToPath(path)
+//
+//        let part3 = LinePathPart(frame: CGRect(x: bounds.minX, y: part2.frame.maxY, width: bounds.width, height: bounds.height / 4))
+//        part3.addToPath(path)
+//
+//        let part4 = LinePathPart(frame: CGRect(x: bounds.minX, y: part3.frame.maxY, width: bounds.width, height: bounds.height / 4))
+//        part4.addToPath(path)
 
 //        path.move(to: CGPoint(x: bounds.width, y: bounds.height / 2))
 //        let fromPoint = CGPoint(x: bounds.width - 10, y: bounds.height / 2)

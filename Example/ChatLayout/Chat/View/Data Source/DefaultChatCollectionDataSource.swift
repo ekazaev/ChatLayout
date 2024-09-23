@@ -259,7 +259,7 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
             switch message.data {
             case let .text(text):
                 let cell = createTextCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, text: text, date: message.date, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
-                cell.replyInfo = message.replyInfo
+                cell.replyPattern = message.replyPattern
                 return cell
             case let .url(url, isLocallyStored: _):
                 if #available(iOS 13.0, *) {

@@ -80,14 +80,32 @@ final class DefaultChatController: ChatController {
             guard let self else {
                 return
             }
-            let messagesSplitByDay = messages
+            let convertedMessages = messages
                 .map { Message(id: $0.id,
                                date: $0.date,
                                data: self.convert($0.data),
                                owner: User(id: $0.userId),
                                type: $0.userId == self.userId ? .outgoing : .incoming,
                                status: $0.status,
-                               replyUUID: $0.replyUUID) }
+                               replyPattern: .init(id: $0.id, replyUUID: $0.replyUUID, replySegment: .line) ) }
+
+            let replyCells = convertedMessages.enumerated().reduce(into: [Message]()) { result, element in
+                guard var replyPattern = element.element.replyPattern else {
+                    result.append(element.element)
+                    return
+                }
+                var message = element.element
+                let index = element.offset
+                if (index == 0 || convertedMessages[index - 1].replyPattern?.replyUUID != message.replyPattern?.replyUUID) {
+                    replyPattern.replySegment = .fromMe
+                } else if (index == convertedMessages.count - 1 || convertedMessages[index + 1].replyPattern?.replyUUID == nil || convertedMessages[index + 1].replyPattern?.replyUUID != message.replyPattern?.replyUUID) {
+                    replyPattern.replySegment = .toMe
+                }
+                message.replyPattern = replyPattern
+                result.append(message)
+            }
+
+            let messagesSplitByDay = replyCells
                 .reduce(into: [[Message]]()) { result, message in
                     guard var section = result.last,
                           let prevMessage = section.last else {
