@@ -160,8 +160,7 @@ final class MyCollectionView: UICollectionView {
         let visibleCells1 = getVisibleCells()
         let d = Dictionary(grouping: visibleCells1, by: { $0.cell.replyInfo?.replyUUID })
         let visibleCells = d.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, duration: CGFloat)]()) { result, element in
-            guard let id = element.key,
-                  element.value.count > 1 else {
+            guard let id = element.key else {
                 return
             }
             let values = element.value.sorted(by: { $0.cell.frame.minY < $1.cell.frame.minY })
@@ -184,9 +183,16 @@ final class MyCollectionView: UICollectionView {
                     result.append((id: "\(id)-\(idAddition)", frame: previousRect, cell: value.cell, duration: duration ?? 0))
                     idAddition += 1
                     let bottom = self.convert(CGPoint(x: 0, y: replyBreak.bottom), from: value.cell)
-                    let intersection = currentRect.intersection(CGRect(origin: .init(x: 0, y: bottom.y), size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
-                    if values.last?.cell !== value.cell {
-                        combineRect = intersection
+                    var nextRect: CGRect
+                    if bottom.y < currentRect.maxY {
+                        nextRect = currentRect.intersection(CGRect(origin: .init(x: 0, y: bottom.y), size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
+                    } else {
+                        nextRect = CGRect(origin: .init(x: value.cell.frame.minX, y: bottom.y), size: .zero)
+                    }
+
+                    if !nextRect.isNull,
+                        values.last?.cell !== value.cell {
+                        combineRect = nextRect
                     } else {
                         combineRect = nil
                     }

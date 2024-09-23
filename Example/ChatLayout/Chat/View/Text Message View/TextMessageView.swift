@@ -164,6 +164,13 @@ protocol PathPart {
     func addToPath(_ path: UIBezierPath)
 }
 
+enum ReplySegments {
+    case fromMe(CGPoint)
+    case loop(CGPoint)
+    case line(CGPoint)
+    case toMe(CGPoint)
+}
+
 enum ReplyPath {
     case fromMe(FromMePathPart)
     case loop(LoopPathPart)
