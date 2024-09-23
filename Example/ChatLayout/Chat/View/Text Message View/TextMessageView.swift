@@ -173,13 +173,13 @@ enum ReplySegments {
     func pathPartIn(_ frame: CGRect) -> PathPart {
         switch self {
         case .fromMe:
-            return FromMePathPart(frame: frame)
+            FromMePathPart(frame: frame)
         case .line:
-            return LinePathPart(frame: frame)
+            LinePathPart(frame: frame)
         case .loop:
-            return LoopPathPart(frame: frame)
+            LoopPathPart(frame: frame)
         case .toMe:
-            return ToMePathPart(frame: frame)
+            ToMePathPart(frame: frame)
         }
     }
 }
@@ -193,18 +193,18 @@ enum ReplyPath {
     var stringValue: String {
         switch self {
         case .fromMe:
-            return "fromMe"
+            "fromMe"
         case .loop:
-            return "loop"
+            "loop"
         case .line:
-            return "line"
+            "line"
         case .toMe:
-            return "toMe"
+            "toMe"
         }
     }
 }
 
-let curveSize: CGFloat = 16
+private let curveSize: CGFloat = 16
 
 struct FromMePathPart: PathPart {
     var frame: CGRect
@@ -299,13 +299,12 @@ extension [ReplyPath] {
     }
 }
 
-struct BezierViewDataModel {
+struct ReplyAccessoryViewDataModel {
     let segments: [(segment: ReplySegments, till: CGFloat)]
 }
 
-final class BezierView: UIView {
-
-    private var model: BezierViewDataModel?
+final class ReplyAccessoryView: UIView {
+    private var model: ReplyAccessoryViewDataModel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -317,18 +316,17 @@ final class BezierView: UIView {
         setupSubviews()
     }
 
-    func setupWith(_ model: BezierViewDataModel?) {
+    func setupWith(_ model: ReplyAccessoryViewDataModel?) {
         self.model = model
         setNeedsLayout()
     }
 
-    private func setupSubviews() {
-    }
+    private func setupSubviews() {}
 
     override func layoutSubviews() {
         guard let model,
               !model.segments.isEmpty else {
-            self.layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
+            layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
             return
         }
         let path = UIBezierPath()
@@ -369,16 +367,16 @@ final class BezierView: UIView {
 //        path.addCurve(to: toPoint, controlPoint1: CGPoint(x: fromPoint.x - abs(fromPoint.x - toPoint.x) * 0.65, y: fromPoint.y), controlPoint2: CGPoint(x: toPoint.x, y: toPoint.y - abs(fromPoint.y - toPoint.y) * 0.65))
 //        path.addLine(to: CGPoint(x: bounds.width / 2, y: bounds.height))
 
-        //adding calyer
+        // adding calyer
         let cursorLayer = CAShapeLayer()
-        cursorLayer.lineWidth = 4;
+        cursorLayer.lineWidth = 4
         cursorLayer.path = path.cgPath
         cursorLayer.strokeColor = UIColor.black.cgColor
         cursorLayer.fillColor = nil
         cursorLayer.lineCap = .round
         cursorLayer.lineJoin = .round
-        self.layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
-        self.layer.addSublayer(cursorLayer)
+        layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
+        layer.addSublayer(cursorLayer)
     }
 }
 

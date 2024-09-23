@@ -17,94 +17,92 @@ import FPSCounter
 import InputBarAccessoryView
 import UIKit
 
-struct AccessoryConfiguration: Equatable {
-    public var frame: CGRect
-    public var alpha: CGFloat
-    public var isHidden: Bool
-    
-    public init(frame: CGRect,
-                alpha: CGFloat = 1,
-                isHidden: Bool = false) {
-        self.frame = frame
-        self.alpha = alpha
-        self.isHidden = isHidden
-    }
-
-    public init(_ cell: UICollectionViewCell) {
-        self.frame = cell.frame
-        self.alpha = cell.alpha
-        self.isHidden = cell.isHidden
-    }
-}
-
-final class AccesoryCell: UIView {
-    final let reuseIdentifier: String
-    final let customView: UIView
-    final var configuration: AccessoryConfiguration
-
-    final var id: String
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    init(customView: UIView, configuration: AccessoryConfiguration, id: String) {
-        self.reuseIdentifier = "\(ObjectIdentifier(type(of: customView)))"
-        self.customView = customView
-        self.configuration = configuration
-        self.id = id
-        super.init(frame: configuration.frame)
-        insetsLayoutMarginsFromSafeArea = false
-        translatesAutoresizingMaskIntoConstraints = true
-        customView.translatesAutoresizingMaskIntoConstraints = true
-        autoresizingMask = []
-        autoresizesSubviews = false
-
-        addSubview(customView)
-        commitGeometryUpdates()
-    }
-
-    func commitGeometryUpdates() {
-        if transform != .identity {
-            transform = .identity
-        }
-        self.frame = configuration.frame
-        customView.frame = CGRect(origin: .zero, size: configuration.frame.size)
-
-        if alpha != configuration.alpha {
-            alpha = min(0.5, configuration.alpha)
-        }
-
-        if isHidden != configuration.isHidden {
-            isHidden = configuration.isHidden
-        }
-    }
-
-}
-
+// swiftlint:disable:next type_body_length
 final class ChatCollectionView: UICollectionView {
-    struct WeakAccessoryCellReference {
+    private struct AccessoryConfiguration: Equatable {
+        var frame: CGRect
+        var alpha: CGFloat
+        var isHidden: Bool
+
+        init(frame: CGRect,
+             alpha: CGFloat = 1,
+             isHidden: Bool = false) {
+            self.frame = frame
+            self.alpha = alpha
+            self.isHidden = isHidden
+        }
+
+        init(_ cell: UICollectionViewCell) {
+            frame = cell.frame
+            alpha = cell.alpha
+            isHidden = cell.isHidden
+        }
+    }
+
+    private final class AccesoryCell: UIView {
+        let reuseIdentifier: String
+        let customView: ReplyAccessoryView
+        var configuration: AccessoryConfiguration
+
+        var id: String
+
+        @available(*, unavailable)
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
+        init(customView: ReplyAccessoryView, configuration: AccessoryConfiguration, id: String) {
+            reuseIdentifier = "\(ObjectIdentifier(type(of: customView)))"
+            self.customView = customView
+            self.configuration = configuration
+            self.id = id
+            super.init(frame: configuration.frame)
+            insetsLayoutMarginsFromSafeArea = false
+            translatesAutoresizingMaskIntoConstraints = true
+            customView.translatesAutoresizingMaskIntoConstraints = true
+            autoresizingMask = []
+            autoresizesSubviews = false
+
+            addSubview(customView)
+            commitGeometryUpdates()
+        }
+
+        func commitGeometryUpdates() {
+            if transform != .identity {
+                transform = .identity
+            }
+            frame = configuration.frame
+            customView.frame = CGRect(origin: .zero, size: configuration.frame.size)
+
+            if alpha != configuration.alpha {
+                alpha = min(0.5, configuration.alpha)
+            }
+
+            if isHidden != configuration.isHidden {
+                isHidden = configuration.isHidden
+            }
+        }
+    }
+
+    private struct WeakAccessoryCellReference {
         let id: String
         weak var cell: UICollectionViewCell?
     }
-    struct WeakCellReference {
+
+    private struct WeakCellReference {
         weak var cell: UICollectionViewCell?
     }
-    private var lastCycleCells: Array<WeakCellReference> = []
-    private var lastCycleAccesoryCells: Array<WeakAccessoryCellReference> = []
-    private var currentCellsDict = [String: AccesoryCell]()
-    private var dequeueCellsDictionary: [String: Set<AccesoryCell>] = [:]
 
-    func dequeueReusableViewForIndex<View: UIView>(reuseIdentifier: String? = nil) -> View? {
-        let reuseIdentifier = reuseIdentifier ?? "\(ObjectIdentifier(View.self))"
-        guard let cell = dequeueCellsDictionary[reuseIdentifier]?.popFirst() else {
+    private var lastCycleCells: [WeakCellReference] = []
+    private var lastCycleAccesoryCells: [WeakAccessoryCellReference] = []
+    private var currentCellsDict = [String: AccesoryCell]()
+    private var dequeueCellsSet: Set<AccesoryCell> = []
+
+    private func dequeueReusableViewForIndex() -> ReplyAccessoryView? {
+        guard let cell = dequeueCellsSet.popFirst() else {
             return nil
         }
-        guard let view = cell.customView as? View else {
-            fatalError("Internal inconsistency")
-        }
-        return view
+        return cell.customView
     }
 
     private func reuseCell(_ cell: AccesoryCell) {
@@ -114,10 +112,8 @@ final class ChatCollectionView: UICollectionView {
         cell.configuration = configuration
         cell.commitGeometryUpdates()
 
-        let reuseIdentifier = cell.reuseIdentifier
-        dequeueCellsDictionary[reuseIdentifier, default: []].insert(cell)
+        dequeueCellsSet.insert(cell)
     }
-
 
     private func getVisibleItems() -> [(indexPath: IndexPath?, cell: UICollectionViewCell)] {
         subviews.compactMap { view -> UICollectionViewCell? in
@@ -126,38 +122,40 @@ final class ChatCollectionView: UICollectionView {
                 return nil
             }
             return view
-        }.map { cell in
+        }
+        .map { cell in
             (indexPath: indexPath(for: cell), cell: cell)
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func layoutSubviews() {
         let oldContentOffset = contentOffset
         super.layoutSubviews()
 
         let allVisibleItems = getVisibleItems()
 
-        let jsutLastCycleCellsSet = Set(lastCycleCells.compactMap({ $0.cell }))
-        let deletedCellsSet = Set(allVisibleItems.filter({ $0.indexPath == nil }).filter({ jsutLastCycleCellsSet.contains($0.cell) }).map({ $0.cell }))
+        let jsutLastCycleCellsSet = Set(lastCycleCells.compactMap { $0.cell })
+        let deletedCellsSet = Set(allVisibleItems.filter { $0.indexPath == nil }.filter { jsutLastCycleCellsSet.contains($0.cell) }.map { $0.cell })
 
-        let itemsGrouppedByReplyId = Dictionary(grouping: allVisibleItems, by: { $0.cell.replyPattern?.replyUUID })
+        let itemsGrouppedByReplyId = Dictionary(grouping: allVisibleItems) { $0.cell.replyPattern?.replyId }
         var pathSegmentsById = [String: [(segment: ReplySegments, till: CGFloat)]]()
         let visibleAccessyItems = itemsGrouppedByReplyId.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, indexPath: IndexPath?, duration: CGFloat)]()) { result, element in
             guard let id = element.key else {
                 return
             }
-            let items = element.value.sorted(by: { $0.cell.frame.minY < $1.cell.frame.minY })
-            var combineRect: CGRect? = nil
+            let items = element.value.sorted { $0.cell.frame.minY < $1.cell.frame.minY }
+            var combineRect: CGRect?
             var pathSegments = [(segment: ReplySegments, till: CGFloat)]()
             var currentSegmentHasher = Hasher()
 
             for item in items {
                 guard let replyPattern = item.cell.replyPattern,
-                        !deletedCellsSet.contains(item.cell) else {
+                      !deletedCellsSet.contains(item.cell) else {
                     continue
                 }
                 currentSegmentHasher.combine(replyPattern.id)
-                currentSegmentHasher.combine(replyPattern.replyUUID)
+                currentSegmentHasher.combine(replyPattern.replyId)
                 var currentRect: CGRect
                 if let combineRect {
                     let difference = item.cell.frame.minY - combineRect.maxY
@@ -193,7 +191,7 @@ final class ChatCollectionView: UICollectionView {
                     }
 
                     if !nextRect.isNull,
-                        items.last?.cell !== item.cell {
+                       items.last?.cell !== item.cell {
                         combineRect = nextRect
                     } else {
                         combineRect = nil
@@ -205,7 +203,7 @@ final class ChatCollectionView: UICollectionView {
             }
             let accessoryId = "\(id)-\(currentSegmentHasher.finalize())"
             if var combineRect,
-                let lastElement = items.last {
+               let lastElement = items.last {
                 combineRect.origin.x = 20
                 combineRect.size.width = 18
                 let duration = lastElement.cell.layer.animation(forKey: "position")?.duration
@@ -225,9 +223,9 @@ final class ChatCollectionView: UICollectionView {
 
         for item in currentlyPresentAccessoryItems {
             if let pathSegments = pathSegmentsById[item.id] {
-                (item.cell.customView as? BezierView)?.setupWith(.init(segments: pathSegments))
+                item.cell.customView.setupWith(.init(segments: pathSegments))
             } else {
-                (item.cell.customView as? BezierView)?.setupWith(nil)
+                item.cell.customView.setupWith(nil)
             }
 
             var configuration = item.cell.configuration
@@ -238,33 +236,34 @@ final class ChatCollectionView: UICollectionView {
                 if duration == 0 {
                     item.cell.commitGeometryUpdates()
                 } else {
-                    UIView.transition(with: self,
-                                      duration: duration,
-                                      options: .beginFromCurrentState,
-                                      animations: {
+                    UIView.transition(
+                        with: self,
+                        duration: duration,
+                        options: .beginFromCurrentState
+                    ) {
                         item.cell.configuration = configuration
                         item.cell.commitGeometryUpdates()
-                                      })
+                    }
                 }
             }
         }
 
-        let currentlyPresentAccessoryIdsSet = Set(currentlyPresentAccessoryItems.map({ $0.id }))
-        let appearingItems = visibleAccessyItems.compactMap({ cell -> (id: String, cell: UICollectionViewCell, frame: CGRect)? in
+        let currentlyPresentAccessoryIdsSet = Set(currentlyPresentAccessoryItems.map { $0.id })
+        let appearingItems = visibleAccessyItems.compactMap { cell -> (id: String, cell: UICollectionViewCell, frame: CGRect)? in
             guard !currentlyPresentAccessoryIdsSet.contains(cell.id) else {
                 return nil
             }
             return (id: cell.id, cell: cell.cell, frame: cell.frame)
-        })
+        }
 
-        let disappearingItems = currentCellsDict.filter({ element in !currentlyPresentAccessoryIdsSet.contains(element.key) })
+        let disappearingItems = currentCellsDict.filter { element in !currentlyPresentAccessoryIdsSet.contains(element.key) }
 
-        currentCellsDict = currentCellsDict.filter({ !disappearingItems.values.contains($0.value) })
+        currentCellsDict = currentCellsDict.filter { !disappearingItems.values.contains($0.value) }
 
         for item in appearingItems {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            let customView: BezierView = dequeueReusableViewForIndex() ?? BezierView()
+            let customView: ReplyAccessoryView = dequeueReusableViewForIndex() ?? ReplyAccessoryView()
             if let shape = pathSegmentsById[item.id] {
                 customView.setupWith(.init(segments: shape))
             } else {
@@ -297,9 +296,9 @@ final class ChatCollectionView: UICollectionView {
                 addSubview(newCell)
                 cell = newCell
             }
-            UIView.performWithoutAnimation({
+            UIView.performWithoutAnimation {
                 cell.center.y -= oldContentOffset.y - contentOffset.y
-            })
+            }
 
             cell.setNeedsLayout()
             CATransaction.commit()
@@ -315,13 +314,14 @@ final class ChatCollectionView: UICollectionView {
             currentCellsDict[cell.id] = cell
 
             if duration != 0 {
-                UIView.transition(with: self,
-                                  duration: duration,
-                                  options: .beginFromCurrentState,
-                                  animations: {
-                                        cell.configuration = configuration
-                                        cell.commitGeometryUpdates()
-                                  })
+                UIView.transition(
+                    with: self,
+                    duration: duration,
+                    options: .beginFromCurrentState
+                ) {
+                    cell.configuration = configuration
+                    cell.commitGeometryUpdates()
+                }
             } else {
                 UIView.performWithoutAnimation {
                     cell.configuration = configuration
@@ -330,9 +330,8 @@ final class ChatCollectionView: UICollectionView {
             }
         }
 
-
         for item in disappearingItems {
-            let oldCell = lastCycleAccesoryCells.first(where: { $0.id == item.key })?.cell
+            let oldCell = lastCycleAccesoryCells.first { $0.id == item.key }?.cell
             let duration: TimeInterval
             if UIView.inheritedAnimationDuration == 0,
                let oldCell,
@@ -343,42 +342,44 @@ final class ChatCollectionView: UICollectionView {
                 duration = UIView.inheritedAnimationDuration
             }
             if duration != 0 {
-                UIView.transition(with: self,
-                                  duration: duration,
-                                  options: .beginFromCurrentState,
-                                  animations: { [weak self] in
-                                      guard let self else {
-                                          return
-                                      }
-                    if let oldCell = lastCycleAccesoryCells.first(where: { $0.id == item.key })?.cell {
-                        var configuration = item.value.configuration
-                        configuration.frame.center.y = oldCell.frame.center.y
-                        item.value.configuration = configuration
-                    } else {
-                        item.value.configuration.alpha = 0
+                UIView.transition(
+                    with: self,
+                    duration: duration,
+                    options: .beginFromCurrentState,
+                    animations: { [weak self] in
+                        guard let self else {
+                            return
+                        }
+                        if let oldCell = lastCycleAccesoryCells.first(where: { $0.id == item.key })?.cell {
+                            var configuration = item.value.configuration
+                            configuration.frame.center.y = oldCell.frame.center.y
+                            item.value.configuration = configuration
+                        } else {
+                            item.value.configuration.alpha = 0
+                        }
+                        item.value.commitGeometryUpdates()
+                    },
+                    completion: { [weak self] _ in
+                        guard let self else {
+                            return
+                        }
+                        reuseCell(item.value)
                     }
-                    item.value.commitGeometryUpdates()
-                                  }, completion: { [weak self] _ in
-                                      guard let self else {
-                                          return
-                                      }
-                                      reuseCell(item.value)
-                                  })
+                )
             } else {
                 UIView.performWithoutAnimation {
                     reuseCell(item.value)
                 }
             }
-
         }
 
-        lastCycleAccesoryCells = visibleAccessyItems.compactMap({ item -> WeakAccessoryCellReference? in
-            return WeakAccessoryCellReference(id: item.id, cell: item.cell)
-        })
+        lastCycleAccesoryCells = visibleAccessyItems.compactMap {
+            WeakAccessoryCellReference(id: $0.id, cell: $0.cell)
+        }
 
-        lastCycleCells = allVisibleItems.map({
-            return WeakCellReference(cell: $0.cell)
-        })
+        lastCycleCells = allVisibleItems.map {
+            WeakCellReference(cell: $0.cell)
+        }
     }
 }
 
@@ -693,7 +694,6 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     private func loadPreviousMessages() {
-        return
         // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
         // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
 //        currentControllerActions.options.insert(.loadingPreviousMessages)

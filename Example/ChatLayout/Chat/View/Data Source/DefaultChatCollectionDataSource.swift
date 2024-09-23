@@ -326,15 +326,16 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             switch item {
             case let .message(message, bubbleType: _):
                 switch message.data {
-// Uncomment to test exact sizes
+                // Uncomment to test exact sizes
                 case let .text(text):
-                    let rect = (text as NSString).boundingRect(with: .init(width: chatLayout.layoutFrame.width * Constants.maxWidth, height: CGFloat.greatestFiniteMagnitude),options: [NSStringDrawingOptions.usesLineFragmentOrigin, NSStringDrawingOptions.usesFontLeading] , attributes: [.font: UIFont.preferredFont(forTextStyle: .body)], context: nil)
+                    let rect = (text as NSString).boundingRect(with: .init(width: chatLayout.layoutFrame.width * Constants.maxWidth, height: CGFloat.greatestFiniteMagnitude), options: [NSStringDrawingOptions.usesLineFragmentOrigin, NSStringDrawingOptions.usesFontLeading], attributes: [.font: UIFont.preferredFont(forTextStyle: .body)], context: nil)
                     return .exact(CGSize(width: chatLayout.layoutFrame.width, height: rect.height + 16))
 
 //                case .text:
 //                    return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 36))
                 case let .image(_, isLocallyStored: isDownloaded):
                     return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 120 : 80))
+
                 case let .url(_, isLocallyStored: isDownloaded):
                     return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 60 : 36))
                 }

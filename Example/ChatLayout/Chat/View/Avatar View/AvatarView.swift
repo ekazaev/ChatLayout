@@ -88,8 +88,8 @@ final class AvatarView: UIView, StaticViewFactory {
         }
         if let cell = superview(of: UICollectionViewCell.self) {
             if !isHidden,
-                controller.image != nil {
-                let frame = cell.convert(self.circleImageView.bounds, from: self.circleImageView)
+               controller.image != nil {
+                let frame = cell.convert(circleImageView.bounds, from: circleImageView)
                 print("A \(frame)")
                 cell.replyBreak = (top: frame.minY - 5, bottom: frame.maxY + 5)
             } else {

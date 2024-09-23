@@ -87,7 +87,7 @@ final class DefaultChatController: ChatController {
                                owner: User(id: $0.userId),
                                type: $0.userId == self.userId ? .outgoing : .incoming,
                                status: $0.status,
-                               replyPattern: .init(id: $0.id, replyUUID: $0.replyUUID, replySegment: .line) ) }
+                               replyPattern: .init(id: $0.id, replyId: $0.replyUUID, replySegment: .line)) }
 
             let replyCells = convertedMessages.enumerated().reduce(into: [Message]()) { result, element in
                 guard var replyPattern = element.element.replyPattern else {
@@ -96,9 +96,9 @@ final class DefaultChatController: ChatController {
                 }
                 var message = element.element
                 let index = element.offset
-                if (index == 0 || convertedMessages[index - 1].replyPattern?.replyUUID != message.replyPattern?.replyUUID) {
+                if index == 0 || convertedMessages[index - 1].replyPattern?.replyId != message.replyPattern?.replyId {
                     replyPattern.replySegment = .fromMe
-                } else if (index == convertedMessages.count - 1 || convertedMessages[index + 1].replyPattern?.replyUUID == nil || convertedMessages[index + 1].replyPattern?.replyUUID != message.replyPattern?.replyUUID) {
+                } else if index == convertedMessages.count - 1 || convertedMessages[index + 1].replyPattern?.replyId == nil || convertedMessages[index + 1].replyPattern?.replyId != message.replyPattern?.replyId {
                     replyPattern.replySegment = .toMe
                 }
                 message.replyPattern = replyPattern

@@ -128,7 +128,7 @@ struct Message: Hashable {
 
 struct ReplyPathPattern: Hashable {
     var id: UUID
-    var replyUUID: UUID
+    var replyId: UUID
     var replySegment: ReplySegments
 }
 
