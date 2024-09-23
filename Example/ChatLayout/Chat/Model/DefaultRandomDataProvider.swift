@@ -182,9 +182,9 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     private func createRandomMessage(date: Date = Date()) -> RawMessage {
         let sender = allUsersIds[Int.random(in: 0..<allUsersIds.count)] // allUsersIds.first!//
         lastMessageIndex += 1
-        if lastReplyUUID == nil {//Int.random(in: 0...10) == 10 {
-            lastReplyUUID = UUID()
-        }
+//        if Int.random(in: 0...10) == 10 {
+//            lastReplyUUID = UUID()
+//        }
         switch (Int.random(in: 0...8), enableRichContent) {
         case (5, true):
             return RawMessage(id: UUID(), date: date, data: .url(websiteUrls[Int.random(in: 0..<websiteUrls.count)]), userId: sender, replyUUID: lastReplyUUID)

@@ -83,7 +83,7 @@ final class AccesoryCell: UIView {
 
 }
 
-final class MyCollectionView: UICollectionView {
+final class ChatCollectionView: UICollectionView {
     struct WeakAccessoryCellReference {
         let id: String
         weak var cell: UICollectionViewCell?
@@ -119,7 +119,7 @@ final class MyCollectionView: UICollectionView {
     }
 
 
-    private func getVisibleCells() -> [(indexPath: IndexPath?, cell: UICollectionViewCell)] {
+    private func getVisibleItems() -> [(indexPath: IndexPath?, cell: UICollectionViewCell)] {
         subviews.compactMap { view -> UICollectionViewCell? in
             guard let view = view as? UICollectionViewCell,
                   !view.isHidden else {
@@ -135,14 +135,14 @@ final class MyCollectionView: UICollectionView {
         let oldContentOffset = contentOffset
         super.layoutSubviews()
 
-        let allVisibleCells = getVisibleCells()
+        let allVisibleItems = getVisibleItems()
 
-        let jsutLastCycleCells = Set(lastCycleCells.compactMap({ $0.cell }))
-        let deletedCells = allVisibleCells.filter({ $0.indexPath == nil }).filter({ jsutLastCycleCells.contains($0.cell) }).map({ $0.cell })
+        let jsutLastCycleCellsSet = Set(lastCycleCells.compactMap({ $0.cell }))
+        let deletedCellsSet = Set(allVisibleItems.filter({ $0.indexPath == nil }).filter({ jsutLastCycleCellsSet.contains($0.cell) }).map({ $0.cell }))
 
-        let cellsGrouppedByReplyId = Dictionary(grouping: allVisibleCells, by: { $0.cell.replyPattern?.replyUUID })
+        let itemsGrouppedByReplyId = Dictionary(grouping: allVisibleItems, by: { $0.cell.replyPattern?.replyUUID })
         var pathSegmentsById = [String: [(segment: ReplySegments, till: CGFloat)]]()
-        let visibleAccessyCells = cellsGrouppedByReplyId.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, indexPath: IndexPath?, duration: CGFloat)]()) { result, element in
+        let visibleAccessyItems = itemsGrouppedByReplyId.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, indexPath: IndexPath?, duration: CGFloat)]()) { result, element in
             guard let id = element.key else {
                 return
             }
@@ -153,7 +153,7 @@ final class MyCollectionView: UICollectionView {
 
             for item in items {
                 guard let replyPattern = item.cell.replyPattern,
-                        !deletedCells.contains(item.cell) else {
+                        !deletedCellsSet.contains(item.cell) else {
                     continue
                 }
                 currentSegmentHasher.combine(replyPattern.id)
@@ -216,83 +216,84 @@ final class MyCollectionView: UICollectionView {
             }
         }
 
-        let currentlyPresentCells = visibleAccessyCells.compactMap { item -> (id: String, cell: AccesoryCell, originalCell: UICollectionViewCell, frame: CGRect, duration: CGFloat)? in
+        let currentlyPresentAccessoryItems = visibleAccessyItems.compactMap { item -> (id: String, cell: AccesoryCell, originalCell: UICollectionViewCell, frame: CGRect, duration: CGFloat)? in
             guard let cell = currentCellsDict[item.id] else {
                 return nil
             }
             return (id: item.id, cell: cell, originalCell: item.cell, frame: item.frame, duration: item.duration)
         }
 
-        for currentCell in currentlyPresentCells {
-            if let shape = pathSegmentsById[currentCell.id] {
-                (currentCell.cell.customView as? BezierView)?.setupWith(.init(segments: shape))
+        for item in currentlyPresentAccessoryItems {
+            if let pathSegments = pathSegmentsById[item.id] {
+                (item.cell.customView as? BezierView)?.setupWith(.init(segments: pathSegments))
             } else {
-                (currentCell.cell.customView as? BezierView)?.setupWith(nil)
+                (item.cell.customView as? BezierView)?.setupWith(nil)
             }
 
-            var configuration = currentCell.cell.configuration
-            configuration.frame = currentCell.frame
-            if currentCell.cell.configuration != configuration {
-                currentCell.cell.configuration = configuration
-                let duration = currentCell.originalCell.layer.animation(forKey: "position")?.duration ?? UIView.inheritedAnimationDuration
+            var configuration = item.cell.configuration
+            configuration.frame = item.frame
+            if item.cell.configuration != configuration {
+                item.cell.configuration = configuration
+                let duration = item.originalCell.layer.animation(forKey: "position")?.duration ?? UIView.inheritedAnimationDuration
                 if duration == 0 {
-                    currentCell.cell.commitGeometryUpdates()
+                    item.cell.commitGeometryUpdates()
                 } else {
                     UIView.transition(with: self,
                                       duration: duration,
                                       options: .beginFromCurrentState,
                                       animations: {
-                        currentCell.cell.configuration = configuration
-                        currentCell.cell.commitGeometryUpdates()
+                        item.cell.configuration = configuration
+                        item.cell.commitGeometryUpdates()
                                       })
                 }
             }
         }
 
-        let appearingIndexes = visibleAccessyCells.compactMap({ cell -> (id: String, cell: UICollectionViewCell, frame: CGRect)? in
-            guard !currentlyPresentCells.contains(where: { $0.id == cell.id }) else {
+        let currentlyPresentAccessoryIdsSet = Set(currentlyPresentAccessoryItems.map({ $0.id }))
+        let appearingItems = visibleAccessyItems.compactMap({ cell -> (id: String, cell: UICollectionViewCell, frame: CGRect)? in
+            guard !currentlyPresentAccessoryIdsSet.contains(cell.id) else {
                 return nil
             }
             return (id: cell.id, cell: cell.cell, frame: cell.frame)
         })
 
-        let cellsToRemove = currentCellsDict.filter({ cell in !currentlyPresentCells.contains(where: { $0.cell === cell.value }) })
+        let disappearingItems = currentCellsDict.filter({ element in !currentlyPresentAccessoryIdsSet.contains(element.key) })
 
-        currentCellsDict = currentCellsDict.filter({ !cellsToRemove.values.contains($0.value) })
+        currentCellsDict = currentCellsDict.filter({ !disappearingItems.values.contains($0.value) })
 
-        for appearingIndex in appearingIndexes {
+        for item in appearingItems {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             let customView: BezierView = dequeueReusableViewForIndex() ?? BezierView()
-            if let shape = pathSegmentsById[appearingIndex.id] {
+            if let shape = pathSegmentsById[item.id] {
                 customView.setupWith(.init(segments: shape))
             } else {
                 customView.setupWith(nil)
             }
             var cell: AccesoryCell
-            var configuration = AccessoryConfiguration(appearingIndex.cell)
-            configuration.frame = appearingIndex.frame
+            var configuration = AccessoryConfiguration(item.cell)
+            configuration.frame = item.frame
 
             var initialConfiguration = configuration
             initialConfiguration.alpha = 0
-            if let value = (appearingIndex.cell.layer.animation(forKey: "position") as? CABasicAnimation)?.fromValue as? CGPoint {
+            if let value = (item.cell.layer.animation(forKey: "position") as? CABasicAnimation)?.fromValue as? CGPoint {
                 initialConfiguration.frame.origin.y += value.y - (contentOffset.y - oldContentOffset.y)
             } else {
                 initialConfiguration.frame.origin.y += contentOffset.y - oldContentOffset.y
             }
-            if let value = (appearingIndex.cell.layer.animation(forKey: "opacity") as? CABasicAnimation)?.fromValue as? CGFloat {
+            if let value = (item.cell.layer.animation(forKey: "opacity") as? CABasicAnimation)?.fromValue as? CGFloat {
                 initialConfiguration.alpha = value
             }
 
             if let localCell = customView.superview as? AccesoryCell {
                 cell = localCell
-                cell.id = appearingIndex.id
+                cell.id = item.id
                 cell.configuration = initialConfiguration
                 UIView.performWithoutAnimation {
                     cell.commitGeometryUpdates()
                 }
             } else {
-                let newCell = AccesoryCell(customView: customView, configuration: initialConfiguration, id: appearingIndex.id)
+                let newCell = AccesoryCell(customView: customView, configuration: initialConfiguration, id: item.id)
                 addSubview(newCell)
                 cell = newCell
             }
@@ -305,8 +306,8 @@ final class MyCollectionView: UICollectionView {
 
             let duration: TimeInterval
             if UIView.inheritedAnimationDuration == 0,
-               let animationKey = appearingIndex.cell.layer.animationKeys()?.first,
-               let animation = appearingIndex.cell.layer.animation(forKey: animationKey) {
+               let animationKey = item.cell.layer.animationKeys()?.first,
+               let animation = item.cell.layer.animation(forKey: animationKey) {
                 duration = animation.duration
             } else {
                 duration = UIView.inheritedAnimationDuration
@@ -330,8 +331,8 @@ final class MyCollectionView: UICollectionView {
         }
 
 
-        for cellToRemove in cellsToRemove {
-            let oldCell = lastCycleAccesoryCells.first(where: { $0.id == cellToRemove.key })?.cell
+        for item in disappearingItems {
+            let oldCell = lastCycleAccesoryCells.first(where: { $0.id == item.key })?.cell
             let duration: TimeInterval
             if UIView.inheritedAnimationDuration == 0,
                let oldCell,
@@ -341,7 +342,6 @@ final class MyCollectionView: UICollectionView {
             } else {
                 duration = UIView.inheritedAnimationDuration
             }
-            print("REMOVE \(cellToRemove.key)")
             if duration != 0 {
                 UIView.transition(with: self,
                                   duration: duration,
@@ -350,39 +350,33 @@ final class MyCollectionView: UICollectionView {
                                       guard let self else {
                                           return
                                       }
-                    if let oldCell = lastCycleAccesoryCells.first(where: { $0.id == cellToRemove.key })?.cell {
-//                        var configuration = AccessoryConfiguration(oldCell)
-//                        configuration.isHidden = false
-                        var configuration = cellToRemove.value.configuration
-                        configuration.frame.center = oldCell.frame.center
-                        cellToRemove.value.configuration = configuration
+                    if let oldCell = lastCycleAccesoryCells.first(where: { $0.id == item.key })?.cell {
+                        var configuration = item.value.configuration
+                        configuration.frame.center.y = oldCell.frame.center.y
+                        item.value.configuration = configuration
                     } else {
-                        cellToRemove.value.configuration.alpha = 0
+                        item.value.configuration.alpha = 0
                     }
-                    cellToRemove.value.commitGeometryUpdates()
+                    item.value.commitGeometryUpdates()
                                   }, completion: { [weak self] _ in
                                       guard let self else {
                                           return
                                       }
-                                      print("REMOVED \(cellToRemove.key)")
-                                      reuseCell(cellToRemove.value)
-    //                                  cellToRemove.value.removeFromSuperview()
+                                      reuseCell(item.value)
                                   })
             } else {
                 UIView.performWithoutAnimation {
-                    reuseCell(cellToRemove.value)
+                    reuseCell(item.value)
                 }
             }
 
         }
 
-        print("\(Self.self) \(#function) FINISH\n\n\n")
-
-        lastCycleAccesoryCells = visibleAccessyCells.compactMap({ item -> WeakAccessoryCellReference? in
+        lastCycleAccesoryCells = visibleAccessyItems.compactMap({ item -> WeakAccessoryCellReference? in
             return WeakAccessoryCellReference(id: item.id, cell: item.cell)
         })
 
-        lastCycleCells = allVisibleCells.map({
+        lastCycleCells = allVisibleItems.map({
             return WeakCellReference(cell: $0.cell)
         })
     }
@@ -529,7 +523,7 @@ final class ChatViewController: UIViewController {
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
         chatLayout.keepContentAtBottomOfVisibleArea = true
 
-        collectionView = MyCollectionView(frame: view.frame, collectionViewLayout: chatLayout)
+        collectionView = ChatCollectionView(frame: view.frame, collectionViewLayout: chatLayout)
         view.addSubview(collectionView)
         collectionView.alwaysBounceVertical = true
         collectionView.dataSource = dataSource
