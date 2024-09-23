@@ -188,14 +188,17 @@ final class MyCollectionView: UICollectionView {
                 }
                 hasher.combine(replyPattern.id)
                 hasher.combine(replyPattern.replyUUID)
-
-                if combineRect == nil {
-                    combineRect = value.cell.frame
+                var currentRect: CGRect
+                if let combineRect {
+                    let diff = value.cell.frame.minY - combineRect.maxY
+                    if diff.rounded(.down) != 0 {
+                        shapes.append((segment: .line, till: combineRect.height + diff))
+                    }
+                    currentRect = combineRect.union(value.cell.frame)
                 } else {
-                    combineRect = combineRect?.union(value.cell.frame)
+                    currentRect = value.cell.frame
                 }
-                if let replyBreak = value.cell.replyBreak,
-                    let currentRect = combineRect {
+                if let replyBreak = value.cell.replyBreak {
                     let top = self.convert(CGPoint(x: 0, y: replyBreak.top), from: value.cell)
 
                     var previousRect = currentRect.intersection(CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: top.y))
@@ -226,9 +229,8 @@ final class MyCollectionView: UICollectionView {
                         combineRect = nil
                     }
                 } else {
-                    if let combineRect {
-                        shapes.append((segment: replyPattern.replySegment, till: combineRect.height))
-                    }
+                    shapes.append((segment: replyPattern.replySegment, till: currentRect.height))
+                    combineRect = currentRect
                 }
             }
             let accessoryId = "\(id)-\(hasher.finalize())"
