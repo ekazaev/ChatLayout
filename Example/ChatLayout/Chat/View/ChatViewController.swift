@@ -141,10 +141,6 @@ final class MyCollectionView: UICollectionView {
         dequeueCellsDictionary[reuseIdentifier, default: []].insert(cell)
     }
 
-    var insertedIndexPaths: [IndexPath] = []
-    var deletedIndexPaths: [IndexPath] = []
-    var allVisibleReplyItems: [String] = []
-
     override func layoutSubviews() {
         func printAttributes() {
 //            indexPathsForVisibleItems.sorted().forEach { indexPath in
@@ -171,8 +167,7 @@ final class MyCollectionView: UICollectionView {
         let d = Dictionary(grouping: allVisibleCells, by: { $0.cell.replyPattern?.replyUUID })
         var shapesForIds = [String: [(segment: ReplySegments, till: CGFloat)]]()
         let visibleAccessyCells = d.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, indexPath: IndexPath?, duration: CGFloat)]()) { result, element in
-            guard let id = element.key,
-                  allVisibleReplyItems.contains(id.uuidString) else {
+            guard let id = element.key else {
                 return
             }
             print("\(insertedCells.count)")
@@ -245,7 +240,7 @@ final class MyCollectionView: UICollectionView {
                 shapesForIds[accessoryId] = shapes
             }
         }
-        print("----\nVISIBLE \(allVisibleCells.compactMap({ $0.indexPath?.item }).sorted())\nPRESENT \(currentCellsDict.keys.map({ $0 }).sorted())\n\(shapesForIds)\nACCESORIES\n\(visibleAccessyCells.sorted(by: { ($0.indexPath?.item ?? 0) < ($1.indexPath?.item ?? 0) }).compactMap({"\($0.id) \($0.indexPath?.item)"}))\nINSERTED:\(insertedIndexPaths)\nDELETED\(deletedIndexPaths)")
+        print("----\nVISIBLE \(allVisibleCells.compactMap({ $0.indexPath?.item }).sorted())\nPRESENT \(currentCellsDict.keys.map({ $0 }).sorted())\n\(shapesForIds)\nACCESORIES\n\(visibleAccessyCells.sorted(by: { ($0.indexPath?.item ?? 0) < ($1.indexPath?.item ?? 0) }).compactMap({"\($0.id) \($0.indexPath?.item)"}))")
 
         print("-")
 
@@ -448,9 +443,6 @@ final class MyCollectionView: UICollectionView {
         lastCycleCells = allVisibleCells.map({
             return WeakCellReference(id: "\($0.indexPath)", cell: $0.cell)
         })
-
-        insertedIndexPaths = []
-        deletedIndexPaths = []
     }
 }
 
@@ -958,12 +950,6 @@ extension ChatViewController: ChatControllerDelegate {
             }
             currentControllerActions.options.insert(.updatingCollection)
             print("\(Self.self) \(#function) pre reload")
-            (collectionView as? MyCollectionView)?.allVisibleReplyItems = (sections.first?.cells ?? []).compactMap({ cell1 -> String? in
-                guard case let .message(message, bubbleType: bubbleType) = cell1 else {
-                    return nil
-                }
-                return message.replyPattern?.replyUUID.uuidString
-            })
             collectionView.reload(using: changeSet,
                                   interrupt: { changeSet in
                                       guard changeSet.sectionInserted.isEmpty else {
