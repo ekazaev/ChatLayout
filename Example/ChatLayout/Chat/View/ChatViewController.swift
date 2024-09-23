@@ -178,13 +178,17 @@ final class MyCollectionView: UICollectionView {
             print("\(insertedCells.count)")
             let values = element.value.sorted(by: { $0.cell.frame.minY < $1.cell.frame.minY })
             var combineRect: CGRect? = nil
-            var idAddition = 0
             var shapes = [(segment: ReplySegments, till: CGFloat)]()
+            var hasher = Hasher()
+
             for value in values {
                 guard let replyPattern = value.cell.replyPattern,
                         !deletedCells.contains(value.cell) else {
                     continue
                 }
+                hasher.combine(replyPattern.id)
+                hasher.combine(replyPattern.replyUUID)
+
                 if combineRect == nil {
                     combineRect = value.cell.frame
                 } else {
@@ -198,7 +202,7 @@ final class MyCollectionView: UICollectionView {
                     previousRect.origin.x = 20
                     previousRect.size.width = 18
 
-                    let accessoryId = "\(id)-\(idAddition)"
+                    let accessoryId = "\(id)-\(hasher.finalize())"
                     shapes.append((segment: replyPattern.replySegment, till: previousRect.height))
                     shapesForIds[accessoryId] = shapes
                     shapes = .init()
@@ -206,7 +210,7 @@ final class MyCollectionView: UICollectionView {
                     let duration = value.cell.layer.animation(forKey: "position")?.duration
                     result.append((id: accessoryId, frame: previousRect, cell: value.cell, indexPath: value.indexPath, duration: duration ?? 0))
 
-                    idAddition += 1
+                    hasher = Hasher()
                     let bottom = self.convert(CGPoint(x: 0, y: replyBreak.bottom), from: value.cell)
                     var nextRect: CGRect
                     if bottom.y < currentRect.maxY {
@@ -227,7 +231,7 @@ final class MyCollectionView: UICollectionView {
                     }
                 }
             }
-            let accessoryId = "\(id)-\(idAddition)"
+            let accessoryId = "\(id)-\(hasher.finalize())"
             if var combineRect,
                 let lastElement = values.last {
                 combineRect.origin.x = 20
