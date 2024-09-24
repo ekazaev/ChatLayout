@@ -2,12 +2,12 @@
 
 import AppKit
 
-class NSLabel: NSTextField {
-    convenience init() {
+public class NSLabel: NSTextField {
+    public convenience init() {
         self.init(labelWithString: "")
     }
-    
-    var text: String? {
+
+    public var text: String? {
         set {
             stringValue = newValue ?? ""
         }
@@ -15,8 +15,8 @@ class NSLabel: NSTextField {
             stringValue
         }
     }
-    
-    var numberOfLines: Int {
+
+    public var numberOfLines: Int {
         set {
             maximumNumberOfLines = newValue
         }

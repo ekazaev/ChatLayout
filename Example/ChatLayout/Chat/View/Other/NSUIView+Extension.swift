@@ -46,7 +46,7 @@ extension NSUIView {
 
 extension NSUIViewController {
     /// https://github.com/ekazaev/route-composer can do it better
-    func topMostViewController() -> UIViewController {
+    func topMostViewController() -> NSUIViewController {
         if presentedViewController == nil {
             return self
         }
@@ -74,11 +74,11 @@ extension NSUIViewController {
 extension NSUIApplication {
     func topMostViewController() -> NSUIViewController? {
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        NSApplication.shared.windows.filter(\.isKeyWindow).first?.contentViewController?.topMostViewController()
+        return NSApplication.shared.windows.filter(\.isKeyWindow).first?.contentViewController?.topMostViewController()
         #endif
 
         #if canImport(UIKit)
-        UIApplication.shared.windows.filter(\.isKeyWindow).first?.rootViewController?.topMostViewController()
+        return UIApplication.shared.windows.filter(\.isKeyWindow).first?.rootViewController?.topMostViewController()
         #endif
     }
 }

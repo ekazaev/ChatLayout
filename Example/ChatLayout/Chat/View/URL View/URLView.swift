@@ -43,10 +43,19 @@ final class URLView: NSUIView, ContainerCollectionViewCellDelegate {
         translatesAutoresizingMaskIntoConstraints = false
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    override func prepareForReuse() {
+        linkView?.removeFromSuperview()
+        linkView = nil
+    }
+    #endif
+
+    #if canImport(UIKit)
     func prepareForReuse() {
         linkView?.removeFromSuperview()
         linkView = nil
     }
+    #endif
 
     func apply(_ layoutAttributes: ChatLayoutAttributes) {
         viewPortWidth = layoutAttributes.layoutFrame.width
@@ -123,10 +132,15 @@ final class URLView: NSUIView, ContainerCollectionViewCellDelegate {
         linkHeightConstraint?.constant = newContentRect.height
 
         linkView.bounds = newContentRect
+
+        #if canImport(UIKit)
+
         // It is funny that since IOS 14 it can give slightly different values depending if it was drawn before or not.
         // Thank you Apple. Dont be surprised that the web preview may lightly jump and cause the small jumps
         // of the whole layout.
         linkView.sizeToFit()
+
+        #endif
 
         setNeedsLayout()
         layoutIfNeeded()

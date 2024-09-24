@@ -20,7 +20,7 @@ import AppKit
 import UIKit
 #endif
 
-// Just to visually test `ChatLayout.supportSelfSizingInvalidation`
+/// Just to visually test `ChatLayout.supportSelfSizingInvalidation`
 protocol AvatarViewDelegate: AnyObject {
     func avatarTapped()
 }
@@ -57,8 +57,12 @@ final class AvatarView: NSUIView, StaticViewFactory {
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(UIKit)
+
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+
+        #endif
         addSubview(circleImageView)
 
         circleImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -66,7 +70,7 @@ final class AvatarView: NSUIView, StaticViewFactory {
             circleImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             circleImageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             circleImageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            circleImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            circleImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
 
         let constraint = circleImageView.widthAnchor.constraint(equalToConstant: 30)
@@ -75,10 +79,22 @@ final class AvatarView: NSUIView, StaticViewFactory {
         circleImageView.heightAnchor.constraint(equalTo: circleImageView.widthAnchor, multiplier: 1).isActive = true
 
         circleImageView.customView.contentMode = .scaleAspectFill
+        
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+
+        let gestureRecogniser = NSClickGestureRecognizer()
+        circleImageView.addGestureRecognizer(gestureRecogniser)
+        gestureRecogniser.target = self
+        gestureRecogniser.action = #selector(avatarTapped)
+        
+        #endif
+
+        #if canImport(UIKit)
 
         let gestureRecogniser = UITapGestureRecognizer()
         circleImageView.addGestureRecognizer(gestureRecogniser)
         gestureRecogniser.addTarget(self, action: #selector(avatarTapped))
+        #endif
     }
 
     @objc

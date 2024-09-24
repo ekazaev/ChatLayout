@@ -23,7 +23,7 @@ final class URLController {
 
     weak var view: URLView? {
         didSet {
-            UIView.performWithoutAnimation {
+            NSUIView.performWithoutAnimation {
                 view?.reloadData()
             }
         }

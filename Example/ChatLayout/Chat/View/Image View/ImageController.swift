@@ -22,7 +22,7 @@ import UIKit
 final class ImageController {
     weak var view: ImageView? {
         didSet {
-            UIView.performWithoutAnimation {
+            NSUIView.performWithoutAnimation {
                 view?.reloadData()
             }
         }

@@ -20,8 +20,8 @@ import AppKit
 import UIKit
 #endif
 
-protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegate {
+protocol ChatCollectionDataSource: NSUICollectionViewDataSource, ChatLayoutDelegate {
     var sections: [Section] { get set }
 
-    func prepare(with collectionView: UICollectionView)
+    func prepare(with collectionView: NSUICollectionView)
 }

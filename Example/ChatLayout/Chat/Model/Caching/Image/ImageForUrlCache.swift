@@ -32,10 +32,19 @@ public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueC
 
     public func getEntity(for key: CachingKey) throws -> NSUIImage {
         let data = try cache.getEntity(for: key)
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        guard let image = NSUIImage(data: data) else {
+            throw CacheError.invalidData
+        }
+        return image
+        #endif
+
+        #if canImport(UIKit)
         guard let image = NSUIImage(data: data, scale: 1) else {
             throw CacheError.invalidData
         }
         return image
+        #endif
     }
 
     public func getEntity(for key: Cache.CachingKey, completion: @escaping (Result<NSUIImage, Error>) -> Void) {
@@ -62,9 +71,17 @@ public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueC
     }
 
     public func store(entity: NSUIImage, for key: Cache.CachingKey) throws {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        guard let data = entity.tiffRepresentation else {
+            return
+        }
+        #endif
+
+        #if canImport(UIKit)
         guard let data = entity.jpegData(compressionQuality: 1.0) else {
             return
         }
+        #endif
         try cache.store(entity: data, for: key)
     }
 }

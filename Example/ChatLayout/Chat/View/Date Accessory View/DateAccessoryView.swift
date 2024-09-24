@@ -44,15 +44,14 @@ final class DateAccessoryView: NSUIView {
     }
 
     private func setupSubviews() {
-        translatesAutoresizingMaskIntoConstraints = false
         #if canImport(UIKit)
-
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
-
         #endif
 
+        translatesAutoresizingMaskIntoConstraints = false
         addSubview(accessoryView)
+        
         NSLayoutConstraint.activate([
             accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),

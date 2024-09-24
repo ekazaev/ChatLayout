@@ -29,7 +29,7 @@
 		1BE54C3A0AEA8365F02479C3 /* ManualAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5499F258CDCA615EA3460 /* ManualAnimator.swift */; };
 		1BE54DBD5F84AF25128B6789 /* MockUICollectionViewUpdateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */; };
 		1BE54E0ABF0E8D9E61D2662B /* ChatViewControllerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54241EB5DD7BC464607EE /* ChatViewControllerBuilder.swift */; };
-		1BE54ECBD0FC824B71DE1044 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */; };
+		1BE54ECBD0FC824B71DE1044 /* NSUIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5411FF1A0B76EF404E0A1 /* NSUIView+Extension.swift */; };
 		1BE54EDDBD81A201D12D68B8 /* SwipeNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE545E2A0EB495C252F9478 /* SwipeNotifier.swift */; };
 		1BE54F39DA113D0A9C7F54E7 /* BezierMaskedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE544EA57EC941CB029E3BB /* BezierMaskedView.swift */; };
 		1BE54FDB9836397E2694B9D7 /* HelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE542A452EBF25EC59440C0 /* HelpersTests.swift */; };
@@ -124,12 +124,11 @@
 		E9A2836A2CA2EF34007C8383 /* ReloadDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3EB24FA66F600385590 /* ReloadDelegate.swift */; };
 		E9A2836B2CA2EF94007C8383 /* DateAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE542560FF01F7121E86D91 /* DateAccessoryView.swift */; };
 		E9A2836C2CA2EF94007C8383 /* DateAccessoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE545F202AA9CBACB504941 /* DateAccessoryController.swift */; };
-		E9A2836E2CA2EFDC007C8383 /* NSLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A2836D2CA2EFDC007C8383 /* NSLabel.swift */; };
 		E9A2836F2CA2EFDC007C8383 /* NSLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A2836D2CA2EFDC007C8383 /* NSLabel.swift */; };
 		E9A283702CA2F049007C8383 /* EditingAccessoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3F024FA66F600385590 /* EditingAccessoryController.swift */; };
 		E9A283712CA2F056007C8383 /* EditingAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3F124FA66F600385590 /* EditingAccessoryView.swift */; };
-		E9A283732CA2F0BC007C8383 /* NSView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A283722CA2F0BC007C8383 /* NSView+.swift */; };
-		E9A283742CA2F0BC007C8383 /* NSView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A283722CA2F0BC007C8383 /* NSView+.swift */; };
+		E9A283732CA2F0BC007C8383 /* AppKit+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A283722CA2F0BC007C8383 /* AppKit+.swift */; };
+		E9A283742CA2F0BC007C8383 /* AppKit+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A283722CA2F0BC007C8383 /* AppKit+.swift */; };
 		E9A283752CA2F16B007C8383 /* EditNotifierDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3D924FA66F500385590 /* EditNotifierDelegate.swift */; };
 		E9A283762CA2F1A0007C8383 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3E324FA66F500385590 /* ImageController.swift */; };
 		E9A283772CA2F1AC007C8383 /* ImageViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3E924FA66F600385590 /* ImageViewState.swift */; };
@@ -145,7 +144,7 @@
 		E9A283812CA2F247007C8383 /* URLSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3E124FA66F500385590 /* URLSource.swift */; };
 		E9A283822CA2F247007C8383 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3CC24FA66F500385590 /* StatusView.swift */; };
 		E9A283832CA2F247007C8383 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3DC24FA66F500385590 /* AvatarView.swift */; };
-		E9A283842CA2F247007C8383 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */; };
+		E9A283842CA2F247007C8383 /* NSUIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5411FF1A0B76EF404E0A1 /* NSUIView+Extension.swift */; };
 		E9A283852CA2F247007C8383 /* BezierMaskedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE544EA57EC941CB029E3BB /* BezierMaskedView.swift */; };
 		E9A283862CA2F247007C8383 /* ManualAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5499F258CDCA615EA3460 /* ManualAnimator.swift */; };
 		E9A283872CA2F247007C8383 /* TextBubbleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3D524FA66F500385590 /* TextBubbleController.swift */; };
@@ -155,8 +154,8 @@
 		E9A2838B2CA2F247007C8383 /* EditNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3D724FA66F500385590 /* EditNotifier.swift */; };
 		E9A2838C2CA2F247007C8383 /* URLController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3E024FA66F500385590 /* URLController.swift */; };
 		E9A2838D2CA2F247007C8383 /* TextMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3D224FA66F500385590 /* TextMessageView.swift */; };
-		E9A2838F2CA2F7F8007C8383 /* NSImageView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A2838E2CA2F7F8007C8383 /* NSImageView+.swift */; };
-		E9A283902CA2F7F8007C8383 /* NSImageView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A2838E2CA2F7F8007C8383 /* NSImageView+.swift */; };
+		E9A283922CA32133007C8383 /* NSLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A2836D2CA2EFDC007C8383 /* NSLabel.swift */; };
+		E9A283932CA3283F007C8383 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504F3CA24FA66F500385590 /* ChatViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,7 +171,7 @@
 /* Begin PBXFileReference section */
 		12FB56A5FF321AA24C456635 /* Pods_ChatLayout_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatLayout_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		187B89468A68AF411025A59A /* Pods_ChatLayout_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatLayout_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		1BE5411FF1A0B76EF404E0A1 /* NSUIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUIView+Extension.swift"; sourceTree = "<group>"; };
 		1BE54241EB5DD7BC464607EE /* ChatViewControllerBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewControllerBuilder.swift; sourceTree = "<group>"; };
 		1BE542560FF01F7121E86D91 /* DateAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateAccessoryView.swift; sourceTree = "<group>"; };
 		1BE542A452EBF25EC59440C0 /* HelpersTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpersTests.swift; sourceTree = "<group>"; };
@@ -270,8 +269,7 @@
 		E9A283452CA2EB75007C8383 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E9A283472CA2EB75007C8383 /* ChatLayout_Example_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChatLayout_Example_macOS.entitlements; sourceTree = "<group>"; };
 		E9A2836D2CA2EFDC007C8383 /* NSLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLabel.swift; sourceTree = "<group>"; };
-		E9A283722CA2F0BC007C8383 /* NSView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+.swift"; sourceTree = "<group>"; };
-		E9A2838E2CA2F7F8007C8383 /* NSImageView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+.swift"; sourceTree = "<group>"; };
+		E9A283722CA2F0BC007C8383 /* AppKit+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppKit+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -315,8 +313,6 @@
 		1BE54045B95D5085108FD967 /* Date Accessory View */ = {
 			isa = PBXGroup;
 			children = (
-				E9A2836D2CA2EFDC007C8383 /* NSLabel.swift */,
-				E9A2838E2CA2F7F8007C8383 /* NSImageView+.swift */,
 				1BE542560FF01F7121E86D91 /* DateAccessoryView.swift */,
 				1BE545F202AA9CBACB504941 /* DateAccessoryController.swift */,
 			);
@@ -370,6 +366,8 @@
 				4504F3C924FA66F500385590 /* View */,
 				1BE54E2EEA9F69AC301137BC /* Builder */,
 				E9622F332CA2B6DE00EEA1CA /* Typealias.swift */,
+				E9A2836D2CA2EFDC007C8383 /* NSLabel.swift */,
+				E9A283722CA2F0BC007C8383 /* AppKit+.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -506,7 +504,7 @@
 				4504F3D624FA66F500385590 /* FullCellContentBubbleController.swift */,
 				4504F3D724FA66F500385590 /* EditNotifier.swift */,
 				4504F3D924FA66F500385590 /* EditNotifierDelegate.swift */,
-				1BE5411FF1A0B76EF404E0A1 /* UIView+Extension.swift */,
+				1BE5411FF1A0B76EF404E0A1 /* NSUIView+Extension.swift */,
 				1BE5499F258CDCA615EA3460 /* ManualAnimator.swift */,
 				1BE544EA57EC941CB029E3BB /* BezierMaskedView.swift */,
 				1BE54F26FB528AA26139CF57 /* BezierBubbleController.swift */,
@@ -551,7 +549,6 @@
 			children = (
 				4504F3F024FA66F600385590 /* EditingAccessoryController.swift */,
 				4504F3F124FA66F600385590 /* EditingAccessoryView.swift */,
-				E9A283722CA2F0BC007C8383 /* NSView+.swift */,
 			);
 			path = "Editing Accessory View";
 			sourceTree = "<group>";
@@ -944,7 +941,6 @@
 				4504F41124FA66F600385590 /* FullCellContentBubbleController.swift in Sources */,
 				4504F40D24FA66F600385590 /* TextMessageController.swift in Sources */,
 				4504F3F924FA66F600385590 /* Cell.swift in Sources */,
-				E9A2838F2CA2F7F8007C8383 /* NSImageView+.swift in Sources */,
 				4504F42B24FA67F400385590 /* SceneDelegate.swift in Sources */,
 				4504F40E24FA66F600385590 /* TextMessageView.swift in Sources */,
 				4504F41224FA66F600385590 /* EditNotifier.swift in Sources */,
@@ -956,7 +952,7 @@
 				4504F40924FA66F600385590 /* ChatViewController.swift in Sources */,
 				4504F3F724FA66F600385590 /* DefaultRandomDataProvider.swift in Sources */,
 				4504F41424FA66F600385590 /* EditNotifierDelegate.swift in Sources */,
-				E9A283732CA2F0BC007C8383 /* NSView+.swift in Sources */,
+				E9A283732CA2F0BC007C8383 /* AppKit+.swift in Sources */,
 				4504F3FC24FA66F600385590 /* Section.swift in Sources */,
 				4504F3F624FA66F600385590 /* ChatController.swift in Sources */,
 				4504F3FB24FA66F600385590 /* User.swift in Sources */,
@@ -975,10 +971,10 @@
 				1BE5423ADDEC30417584C100 /* ImageMessageSource.swift in Sources */,
 				1BE546BC2257F3C448BA54F2 /* KeyboardListener.swift in Sources */,
 				1BE5475E09C9696745B113F1 /* KeyboardListenerDelegate.swift in Sources */,
+				E9A283922CA32133007C8383 /* NSLabel.swift in Sources */,
 				1BE5496732EAB127C8019477 /* KeyboardInfo.swift in Sources */,
-				1BE54ECBD0FC824B71DE1044 /* UIView+Extension.swift in Sources */,
+				1BE54ECBD0FC824B71DE1044 /* NSUIView+Extension.swift in Sources */,
 				1BE54C3A0AEA8365F02479C3 /* ManualAnimator.swift in Sources */,
-				E9A2836E2CA2EFDC007C8383 /* NSLabel.swift in Sources */,
 				1BE54F39DA113D0A9C7F54E7 /* BezierMaskedView.swift in Sources */,
 				1BE5414502ACF8741EF496CD /* BezierBubbleController.swift in Sources */,
 				1BE546DB3B8341357F3FD91E /* MainContainerView.swift in Sources */,
@@ -1013,7 +1009,6 @@
 				E9A2834E2CA2EBA4007C8383 /* DefaultRandomDataProvider.swift in Sources */,
 				E9A2834F2CA2EBA4007C8383 /* Message.swift in Sources */,
 				E9A283752CA2F16B007C8383 /* EditNotifierDelegate.swift in Sources */,
-				E9A283902CA2F7F8007C8383 /* NSImageView+.swift in Sources */,
 				E9A283502CA2EBA4007C8383 /* User.swift in Sources */,
 				E9A283512CA2EBA4007C8383 /* PersistentDataCache.swift in Sources */,
 				E9A283522CA2EBA4007C8383 /* CacheError.swift in Sources */,
@@ -1047,10 +1042,11 @@
 				E9A283812CA2F247007C8383 /* URLSource.swift in Sources */,
 				E9A283822CA2F247007C8383 /* StatusView.swift in Sources */,
 				E9A283832CA2F247007C8383 /* AvatarView.swift in Sources */,
-				E9A283842CA2F247007C8383 /* UIView+Extension.swift in Sources */,
+				E9A283842CA2F247007C8383 /* NSUIView+Extension.swift in Sources */,
 				E9A283852CA2F247007C8383 /* BezierMaskedView.swift in Sources */,
 				E9A283862CA2F247007C8383 /* ManualAnimator.swift in Sources */,
 				E9A283872CA2F247007C8383 /* TextBubbleController.swift in Sources */,
+				E9A283932CA3283F007C8383 /* ChatViewController.swift in Sources */,
 				E9A283882CA2F247007C8383 /* DefaultChatCollectionDataSource.swift in Sources */,
 				E9A283892CA2F247007C8383 /* MainContainerView.swift in Sources */,
 				E9A2838A2CA2F247007C8383 /* ChatCollectionDataSource.swift in Sources */,
@@ -1061,7 +1057,7 @@
 				E9A283702CA2F049007C8383 /* EditingAccessoryController.swift in Sources */,
 				E9A283602CA2EBA4007C8383 /* DefaultImageLoader.swift in Sources */,
 				E9A283612CA2EBA4007C8383 /* TypingState.swift in Sources */,
-				E9A283742CA2F0BC007C8383 /* NSView+.swift in Sources */,
+				E9A283742CA2F0BC007C8383 /* AppKit+.swift in Sources */,
 				E9A283622CA2EBA4007C8383 /* MetaDataCache.swift in Sources */,
 				E9A2836F2CA2EFDC007C8383 /* NSLabel.swift in Sources */,
 				E9A283632CA2EBA4007C8383 /* ChatController.swift in Sources */,

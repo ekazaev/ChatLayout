@@ -13,9 +13,6 @@
 import ChatLayout
 import DifferenceKit
 import Foundation
-import FPSCounter
-import InputBarAccessoryView
-import UIKit
 
 // It's advisable to continue using the reload/reconfigure method, especially when multiple changes occur concurrently in an animated fashion.
 // This approach ensures that the ChatLayout can handle these changes while maintaining the content offset accurately.
@@ -24,6 +21,11 @@ let enableSelfSizingSupport = false
 
 // By setting this flag to true you can test reconfigure instead of reload.
 let enableReconfigure = false
+#if canImport(UIKit)
+import FPSCounter
+import InputBarAccessoryView
+import UIKit
+
 
 final class ChatViewController: UIViewController {
     private enum ReactionTypes {
@@ -685,3 +687,6 @@ extension ChatViewController: FPSCounterDelegate {
         fpsView.customView.text = "FPS: \(fps)"
     }
 }
+
+
+#endif

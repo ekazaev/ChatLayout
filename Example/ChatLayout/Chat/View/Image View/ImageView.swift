@@ -23,7 +23,13 @@ import UIKit
 final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
     private lazy var stackView = NSUIStackView(frame: bounds)
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    private lazy var loadingIndicator = NSProgressIndicator()
+    #endif
+
+    #if canImport(UIKit)
     private lazy var loadingIndicator = UIActivityIndicatorView(style: .gray)
+    #endif
 
     private lazy var imageView = NSUIImageView(frame: bounds)
 
@@ -45,9 +51,17 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
         setupSubviews()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    override func prepareForReuse() {
+        imageView.image = nil
+    }
+    #endif
+
+    #if canImport(UIKit)
     func prepareForReuse() {
         imageView.image = nil
     }
+    #endif
 
     func apply(_ layoutAttributes: ChatLayoutAttributes) {
         viewPortWidth = layoutAttributes.layoutFrame.width
@@ -86,11 +100,17 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
             if !loadingIndicator.isAnimating {
                 loadingIndicator.startAnimating()
             }
+            #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+            backgroundColor = NSUIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
+            #endif
+
+            #if canImport(UIKit)
             if #available(iOS 13.0, *) {
                 backgroundColor = .systemGray5
             } else {
-                backgroundColor = UIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
+                backgroundColor = NSUIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
             }
+            #endif
             setupSize()
         case let .image(image):
             loadingIndicator.isHidden = true
@@ -104,18 +124,22 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
             stackView.layoutIfNeeded()
             backgroundColor = .clear
         }
+        #if canImport(UIKit)
+
         if let cell = superview(of: UICollectionViewCell.self) {
             cell.contentView.invalidateIntrinsicContentSize()
         }
+
+        #endif
     }
 
     private func setupSubviews() {
-#if canImport(UIKit)
-        
+        #if canImport(UIKit)
+
         layoutMargins = .zero
         insetsLayoutMarginsFromSafeArea = false
-        
-#endif
+
+        #endif
         translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(stackView)
@@ -124,15 +148,13 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
             stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
-#if canImport(UIKit)
-        
+
         imageView.contentMode = .scaleAspectFill
-        
-#endif
+
         imageView.isHidden = true
 
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
