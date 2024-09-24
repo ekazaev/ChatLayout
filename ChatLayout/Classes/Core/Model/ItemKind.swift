@@ -32,9 +32,9 @@ public enum ItemKind: CaseIterable, Hashable {
 
     init(_ elementKind: String) {
         switch elementKind {
-        case CollectionView.elementKindSectionHeader:
+        case NSUICollectionView.elementKindSectionHeader:
             self = .header
-        case CollectionView.elementKindSectionFooter:
+        case NSUICollectionView.elementKindSectionFooter:
             self = .footer
         default:
             preconditionFailure("Unsupported supplementary view kind.")
@@ -57,9 +57,9 @@ public enum ItemKind: CaseIterable, Hashable {
         case .cell:
             preconditionFailure("Cell type is not a supplementary view.")
         case .header:
-            return CollectionView.elementKindSectionHeader
+            return NSUICollectionView.elementKindSectionHeader
         case .footer:
-            return CollectionView.elementKindSectionFooter
+            return NSUICollectionView.elementKindSectionFooter
         }
     }
 }

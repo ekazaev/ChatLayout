@@ -1,6 +1,6 @@
 import Foundation
 
-extension CollectionViewLayoutAttributes {
+extension NSUICollectionViewLayoutAttributes {
     var platformIndexPath: IndexPath? {
         indexPath
     }

@@ -13,10 +13,16 @@
 import ChatLayout
 import Foundation
 import LinkPresentation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 @available(iOS 13, *)
-final class URLView: UIView, ContainerCollectionViewCellDelegate {
+final class URLView: NSUIView, ContainerCollectionViewCellDelegate {
     private var linkView: LPLinkView?
 
     private var controller: URLController?
@@ -49,9 +55,11 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
 
     func reloadData() {
         setupLinkView()
+        #if canImport(UIKit)
         if let cell = superview(of: UICollectionViewCell.self) {
             cell.contentView.invalidateIntrinsicContentSize()
         }
+        #endif
     }
 
     func setup(with controller: URLController) {
@@ -88,15 +96,15 @@ final class URLView: UIView, ContainerCollectionViewCellDelegate {
             newLinkView.topAnchor.constraint(equalTo: topAnchor),
             newLinkView.bottomAnchor.constraint(equalTo: bottomAnchor),
             newLinkView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            newLinkView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            newLinkView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
 
         linkWidthConstraint = newLinkView.widthAnchor.constraint(equalToConstant: 310)
-        linkWidthConstraint?.priority = UILayoutPriority(999)
+        linkWidthConstraint?.priority = NSUILayoutPriority(999)
         linkWidthConstraint?.isActive = true
 
         linkHeightConstraint = newLinkView.heightAnchor.constraint(equalToConstant: 40)
-        linkHeightConstraint?.priority = UILayoutPriority(999)
+        linkHeightConstraint?.priority = NSUILayoutPriority(999)
         linkHeightConstraint?.isActive = true
 
         linkView = newLinkView

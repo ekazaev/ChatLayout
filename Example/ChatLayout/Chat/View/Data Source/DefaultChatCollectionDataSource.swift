@@ -12,17 +12,23 @@
 
 import ChatLayout
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
-typealias TextMessageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, TextMessageView, StatusView>>>
+typealias TextMessageCollectionCell = NSUIContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, TextMessageView, StatusView>>>
 @available(iOS 13, *)
-typealias URLCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, URLView, StatusView>>>
-typealias ImageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, ImageView, StatusView>>>
-typealias TitleCollectionCell = ContainerCollectionViewCell<UILabel>
-typealias UserTitleCollectionCell = ContainerCollectionViewCell<SwappingContainerView<EdgeAligningView<UILabel>, UIImageView>>
-typealias TypingIndicatorCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarPlaceholderView, TextMessageView, VoidViewFactory>>>
+typealias URLCollectionCell = NSUIContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, URLView, StatusView>>>
+typealias ImageCollectionCell = NSUIContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, ImageView, StatusView>>>
+typealias TitleCollectionCell = NSUIContainerCollectionViewCell<NSUILabel>
+typealias UserTitleCollectionCell = NSUIContainerCollectionViewCell<SwappingContainerView<EdgeAligningView<NSUILabel>, NSUIImageView>>
+typealias TypingIndicatorCollectionCell = NSUIContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarPlaceholderView, TextMessageView, VoidViewFactory>>>
 
-typealias TextTitleView = ContainerCollectionReusableView<UILabel>
+typealias TextTitleView = ContainerCollectionReusableView<NSUILabel>
 
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
     private unowned var reloadDelegate: ReloadDelegate
@@ -51,7 +57,21 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         self.swipeNotifier = swipeNotifier
     }
 
-    func prepare(with collectionView: UICollectionView) {
+    func prepare(with collectionView: NSUICollectionView) {
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        collectionView.register(TextMessageCollectionCell.self, forCellWithReuseIdentifier: TextMessageCollectionCell.reuseIdentifier)
+        collectionView.register(ImageCollectionCell.self, forCellWithReuseIdentifier: ImageCollectionCell.reuseIdentifier)
+        collectionView.register(TitleCollectionCell.self, forCellWithReuseIdentifier: TitleCollectionCell.reuseIdentifier)
+        collectionView.register(UserTitleCollectionCell.self, forCellWithReuseIdentifier: UserTitleCollectionCell.reuseIdentifier)
+        collectionView.register(TypingIndicatorCollectionCell.self, forCellWithReuseIdentifier: TypingIndicatorCollectionCell.reuseIdentifier)
+        collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: NSUICollectionView.elementKindSectionHeader, withReuseIdentifier: TextTitleView.reuseIdentifier)
+        collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: NSUICollectionView.elementKindSectionFooter, withReuseIdentifier: TextTitleView.reuseIdentifier)
+        if #available(iOS 13.0, *) {
+            collectionView.register(URLCollectionCell.self, forCellWithReuseIdentifier: URLCollectionCell.reuseIdentifier)
+        }
+#endif
+        
+#if canImport(UIKit)
         collectionView.register(TextMessageCollectionCell.self, forCellWithReuseIdentifier: TextMessageCollectionCell.reuseIdentifier)
         collectionView.register(ImageCollectionCell.self, forCellWithReuseIdentifier: ImageCollectionCell.reuseIdentifier)
         collectionView.register(TitleCollectionCell.self, forCellWithReuseIdentifier: TitleCollectionCell.reuseIdentifier)
@@ -62,9 +82,10 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         if #available(iOS 13.0, *) {
             collectionView.register(URLCollectionCell.self, forCellWithReuseIdentifier: URLCollectionCell.reuseIdentifier)
         }
+#endif
     }
 
-    private func createTextCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, text: String, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
+    private func createTextCell(collectionView: NSUICollectionView, messageId: UUID, indexPath: IndexPath, text: String, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> NSUICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextMessageCollectionCell.reuseIdentifier, for: indexPath) as! TextMessageCollectionCell
         setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)
         setupMainMessageView(cell.customView.customView, user: user, alignment: alignment, bubble: bubbleType, status: status)
@@ -83,7 +104,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
     }
 
     @available(iOS 13, *)
-    private func createURLCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, url: URL, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
+    private func createURLCell(collectionView: NSUICollectionView, messageId: UUID, indexPath: IndexPath, url: URL, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> NSUICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: URLCollectionCell.reuseIdentifier, for: indexPath) as! URLCollectionCell
         setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)
         setupMainMessageView(cell.customView.customView, user: user, alignment: alignment, bubble: bubbleType, status: status)
@@ -103,7 +124,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createImageCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, alignment: ChatItemAlignment, user: User, source: ImageMessageSource, date: Date, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> ImageCollectionCell {
+    private func createImageCell(collectionView: NSUICollectionView, messageId: UUID, indexPath: IndexPath, alignment: ChatItemAlignment, user: User, source: ImageMessageSource, date: Date, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> ImageCollectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionCell.reuseIdentifier, for: indexPath) as! ImageCollectionCell
 
         setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)
@@ -124,7 +145,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createTypingIndicatorCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+    private func createTypingIndicatorCell(collectionView: NSUICollectionView, indexPath: IndexPath) -> NSUICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TypingIndicatorCollectionCell.reuseIdentifier, for: indexPath) as! TypingIndicatorCollectionCell
         let alignment = ChatItemAlignment.leading
         cell.customView.alignment = alignment
@@ -140,7 +161,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createGroupTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> UserTitleCollectionCell {
+    private func createGroupTitle(collectionView: NSUICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> UserTitleCollectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserTitleCollectionCell.reuseIdentifier, for: indexPath) as! UserTitleCollectionCell
         cell.customView.spacing = 2
 
@@ -156,12 +177,12 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         cell.customView.accessoryView.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 13.0, *) {
             if cell.customView.accessoryView.image == nil {
-                cell.customView.accessoryView.image = UIImage(systemName: "person")
+                cell.customView.accessoryView.image = NSUIImage(systemName: "person")
                 let constraints = [
                     cell.customView.accessoryView.widthAnchor.constraint(equalTo: cell.customView.accessoryView.heightAnchor),
                     cell.customView.accessoryView.heightAnchor.constraint(equalTo: cell.customView.customView.customView.heightAnchor, constant: 2)
                 ]
-                constraints.forEach { $0.priority = UILayoutPriority(rawValue: 999) }
+                constraints.forEach { $0.priority = NSUILayoutPriority(rawValue: 999) }
                 cell.customView.customView.customView.setContentHuggingPriority(.required, for: .vertical)
                 cell.customView.accessoryView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
                 NSLayoutConstraint.activate(constraints)
@@ -169,18 +190,18 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         } else {
             cell.customView.accessoryView.isHidden = true
         }
-        cell.contentView.layoutMargins = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
+        cell.contentView.layoutMargins = NSUIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
         return cell
     }
 
-    private func createDateTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
+    private func createDateTitle(collectionView: NSUICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionCell.reuseIdentifier, for: indexPath) as! TitleCollectionCell
         cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
         cell.customView.text = title
         cell.customView.textColor = .gray
         cell.customView.numberOfLines = 0
         cell.customView.font = .preferredFont(forTextStyle: .caption2)
-        cell.contentView.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
+        cell.contentView.layoutMargins = NSUIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
         return cell
     }
 
@@ -222,7 +243,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
 
     private func setupSwipeHandlingAccessory(_ cellView: MainContainerView<AvatarView, some Any, StatusView>,
                                              date: Date,
-                                             accessoryConnectingView: UIView) {
+                                             accessoryConnectingView: NSUIView) {
         cellView.accessoryConnectingView = accessoryConnectingView
         cellView.accessoryView.setup(with: DateAccessoryController(date: date))
         cellView.accessorySafeAreaInsets = swipeNotifier.accessorySafeAreaInsets
@@ -243,16 +264,16 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
     }
 }
 
-extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
+extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
+    public func numberOfSections(in collectionView: NSUICollectionView) -> Int {
         sections.count
     }
 
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: NSUICollectionView, numberOfItemsInSection section: Int) -> Int {
         sections[section].cells.count
     }
 
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: NSUICollectionView, cellForItemAt indexPath: IndexPath) -> NSUICollectionViewCell {
         let cell = sections[indexPath.section].cells[indexPath.item]
         switch cell {
         case let .message(message, bubbleType: bubbleType):
@@ -281,9 +302,9 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
         }
     }
 
-    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    public func collectionView(_ collectionView: NSUICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> NSUICollectionReusableView {
         switch kind {
-        case UICollectionView.elementKindSectionHeader:
+        case NSUICollectionView.elementKindSectionHeader:
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                        withReuseIdentifier: TextTitleView.reuseIdentifier,
                                                                        for: indexPath) as! TextTitleView
@@ -293,7 +314,7 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
             view.customView.numberOfLines = 0
             view.customView.font = .preferredFont(forTextStyle: .caption2)
             return view
-        case UICollectionView.elementKindSectionFooter:
+        case NSUICollectionView.elementKindSectionFooter:
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                        withReuseIdentifier: TextTitleView.reuseIdentifier,
                                                                        for: indexPath) as! TextTitleView

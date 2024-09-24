@@ -1,30 +1,30 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
-public typealias CollectionViewLayoutAttributes = NSCollectionViewLayoutAttributes
-public typealias EdgeInsets = NSEdgeInsets
-public typealias CollectionView = NSCollectionView
-public typealias CollectionViewLayoutInvalidationContext = NSCollectionViewLayoutInvalidationContext
-public typealias CollectionViewLayout = NSCollectionViewLayout
-public typealias CollectionViewUpdateItem = NSCollectionViewUpdateItem
-public typealias View = NSView
-public typealias LayoutPriority = NSLayoutConstraint.Priority
-public typealias StackView = NSStackView
-public typealias Image = NSImage
-public typealias ImageView = NSImageView
+public typealias NSUICollectionViewLayoutAttributes = NSCollectionViewLayoutAttributes
+public typealias NSUIEdgeInsets = NSEdgeInsets
+public typealias NSUICollectionView = NSCollectionView
+public typealias NSUICollectionViewLayoutInvalidationContext = NSCollectionViewLayoutInvalidationContext
+public typealias NSUICollectionViewLayout = NSCollectionViewLayout
+public typealias NSUICollectionViewUpdateItem = NSCollectionViewUpdateItem
+public typealias NSUIView = NSView
+public typealias NSUILayoutPriority = NSLayoutConstraint.Priority
+public typealias NSUIStackView = NSStackView
+public typealias NSUIImage = NSImage
+public typealias NSUIImageView = NSImageView
 #endif
 
 #if canImport(UIKit)
 import UIKit
-public typealias CollectionViewLayoutAttributes = UICollectionViewLayoutAttributes
-public typealias EdgeInsets = UIEdgeInsets
-public typealias CollectionView = UICollectionView
-public typealias CollectionViewLayoutInvalidationContext = UICollectionViewLayoutInvalidationContext
-public typealias CollectionViewLayout = UICollectionViewLayout
-public typealias CollectionViewUpdateItem = UICollectionViewUpdateItem
-public typealias View = UIView
-public typealias LayoutPriority = UILayoutPriority
-public typealias StackView = UIStackView
+public typealias NSUICollectionViewLayoutAttributes = UICollectionViewLayoutAttributes
+public typealias NSUIEdgeInsets = UIEdgeInsets
+public typealias NSUICollectionView = UICollectionView
+public typealias NSUICollectionViewLayoutInvalidationContext = UICollectionViewLayoutInvalidationContext
+public typealias NSUICollectionViewLayout = UICollectionViewLayout
+public typealias NSUICollectionViewUpdateItem = UICollectionViewUpdateItem
+public typealias NSUIView = UIView
+public typealias NSUILayoutPriority = UILayoutPriority
+public typealias NSUIStackView = UIStackView
 public typealias CollectionReusableView = UICollectionReusableView
-public typealias Image = UIImage
-public typealias ImageView = UIImageView
+public typealias NSUIImage = UIImage
+public typealias NSUIImageView = UIImageView
 #endif

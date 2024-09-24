@@ -11,10 +11,16 @@
 //
 
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-final class DateAccessoryView: UIView {
-    private var accessoryView = UILabel()
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class DateAccessoryView: NSUIView {
+    private var accessoryView = NSUILabel()
 
     private var controller: DateAccessoryController?
 
@@ -39,20 +45,24 @@ final class DateAccessoryView: UIView {
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(UIKit)
+
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+
+        #endif
 
         addSubview(accessoryView)
         NSLayoutConstraint.activate([
             accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
 
         accessoryView.translatesAutoresizingMaskIntoConstraints = false
 
-        accessoryView.font = UIFont.preferredFont(forTextStyle: .caption1)
+        accessoryView.font = NSUIFont.preferredFont(forTextStyle: .caption1)
         accessoryView.textColor = .gray
     }
 }

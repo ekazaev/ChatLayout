@@ -11,7 +11,6 @@
 //
 
 import Foundation
-import UIKit
 
 final class EditNotifier {
     private(set) var isEditing = false

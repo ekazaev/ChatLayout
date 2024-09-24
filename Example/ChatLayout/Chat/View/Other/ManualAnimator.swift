@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 // Read why this class is needed here:
 // https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/

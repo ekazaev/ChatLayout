@@ -16,10 +16,10 @@ import XCTest
 
 final class HelpersTests: XCTestCase {
     func testItemKindInit() {
-        let header = ItemKind(CollectionView.elementKindSectionHeader)
+        let header = ItemKind(NSUICollectionView.elementKindSectionHeader)
         XCTAssertTrue(header == ItemKind.header)
 
-        let footer = ItemKind(CollectionView.elementKindSectionFooter)
+        let footer = ItemKind(NSUICollectionView.elementKindSectionFooter)
         XCTAssertTrue(footer == ItemKind.footer)
     }
 
@@ -35,11 +35,11 @@ final class HelpersTests: XCTestCase {
     }
 
     func testSupplementaryElementStringType() {
-        let header = ItemKind(CollectionView.elementKindSectionHeader)
-        XCTAssertTrue(header.supplementaryElementStringType == CollectionView.elementKindSectionHeader)
+        let header = ItemKind(NSUICollectionView.elementKindSectionHeader)
+        XCTAssertTrue(header.supplementaryElementStringType == NSUICollectionView.elementKindSectionHeader)
 
-        let footer = ItemKind(CollectionView.elementKindSectionFooter)
-        XCTAssertTrue(footer.supplementaryElementStringType == CollectionView.elementKindSectionFooter)
+        let footer = ItemKind(NSUICollectionView.elementKindSectionFooter)
+        XCTAssertTrue(footer.supplementaryElementStringType == NSUICollectionView.elementKindSectionFooter)
     }
 
     func testBinarySearch() {

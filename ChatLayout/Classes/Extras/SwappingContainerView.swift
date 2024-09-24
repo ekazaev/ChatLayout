@@ -23,7 +23,7 @@ import UIKit
 /// This container view is designed to hold two `UIView` elements and arrange them in a horizontal or vertical axis.
 /// It also allows to easily change the order of the views if needed.
 
-public final class SwappingContainerView<CustomView: View, AccessoryView: View>: View {
+public final class SwappingContainerView<CustomView: NSUIView, AccessoryView: NSUIView>: NSUIView {
 
     /// Keys that specify a horizontal or vertical layout constraint between views.
     public enum Axis: Hashable {
@@ -76,7 +76,7 @@ public final class SwappingContainerView<CustomView: View, AccessoryView: View>:
     }
 
     /// Preferred priority of the internal constraints.
-    public var preferredPriority: LayoutPriority = .required {
+    public var preferredPriority: NSUILayoutPriority = .required {
         didSet {
             guard preferredPriority != oldValue else {
                 return
@@ -157,7 +157,7 @@ public final class SwappingContainerView<CustomView: View, AccessoryView: View>:
                 axis: Axis = .horizontal,
                 distribution: Distribution = .accessoryFirst,
                 spacing: CGFloat,
-                preferredPriority: LayoutPriority = .required) {
+                preferredPriority: NSUILayoutPriority = .required) {
         self.customView = CustomView(frame: frame)
         self.accessoryView = AccessoryView(frame: frame)
         self.axis = axis
@@ -328,7 +328,7 @@ public final class SwappingContainerView<CustomView: View, AccessoryView: View>:
         setNeedsLayout()
     }
 
-    private func spacingPriority() -> LayoutPriority {
+    private func spacingPriority() -> NSUILayoutPriority {
         preferredPriority == .required ? .almostRequired : preferredPriority
     }
 

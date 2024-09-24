@@ -11,10 +11,16 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 final class AvatarViewController {
-    var image: UIImage? {
+    var image: NSUIImage? {
         guard bubble == .tailed else {
             return nil
         }
@@ -22,11 +28,11 @@ final class AvatarViewController {
         case 0:
             return nil
         case 1:
-            return UIImage(named: "Eugene")
+            return NSUIImage(named: "Eugene")
         case 2:
-            return UIImage(named: "Cathal")
+            return NSUIImage(named: "Cathal")
         case 3:
-            return UIImage(named: "Sasha")
+            return NSUIImage(named: "Sasha")
         default:
             fatalError("Support for the user id \(user.id) is not implemented.")
         }

@@ -12,17 +12,23 @@
 
 import ChatLayout
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 // Just to visually test `ChatLayout.supportSelfSizingInvalidation`
 protocol AvatarViewDelegate: AnyObject {
     func avatarTapped()
 }
 
-final class AvatarView: UIView, StaticViewFactory {
+final class AvatarView: NSUIView, StaticViewFactory {
     weak var delegate: AvatarViewDelegate?
 
-    private lazy var circleImageView = RoundedCornersContainerView<UIImageView>(frame: bounds)
+    private lazy var circleImageView = RoundedCornersContainerView<NSUIImageView>(frame: bounds)
 
     private var controller: AvatarViewController?
 
@@ -40,7 +46,7 @@ final class AvatarView: UIView, StaticViewFactory {
         guard let controller else {
             return
         }
-        UIView.performWithoutAnimation {
+        NSUIView.performWithoutAnimation {
             circleImageView.customView.image = controller.image
         }
     }
@@ -64,7 +70,7 @@ final class AvatarView: UIView, StaticViewFactory {
         ])
 
         let constraint = circleImageView.widthAnchor.constraint(equalToConstant: 30)
-        constraint.priority = UILayoutPriority(rawValue: 999)
+        constraint.priority = NSUILayoutPriority(rawValue: 999)
         constraint.isActive = true
         circleImageView.heightAnchor.constraint(equalTo: circleImageView.widthAnchor, multiplier: 1).isActive = true
 

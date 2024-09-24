@@ -20,7 +20,7 @@ import UIKit
 #endif
 
 /// Custom implementation of `UICollectionViewLayoutInvalidationContext`
-public final class ChatLayoutInvalidationContext: CollectionViewLayoutInvalidationContext {
+public final class ChatLayoutInvalidationContext: NSUICollectionViewLayoutInvalidationContext {
 
     /// Indicates whether to recompute the positions and sizes of the items based on the current
     /// collection view and delegate layout metrics.

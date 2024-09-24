@@ -12,9 +12,15 @@
 
 import ChatLayout
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: UIView, TrailingAccessory: StaticViewFactory>: UIView, SwipeNotifierDelegate {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: NSUIView, TrailingAccessory: StaticViewFactory>: NSUIView, SwipeNotifierDelegate {
     var swipeCompletionRate: CGFloat = 0 {
         didSet {
             updateOffsets()
@@ -33,7 +39,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
         containerView.trailingView
     }
 
-    weak var accessoryConnectingView: UIView? {
+    weak var accessoryConnectingView: NSUIView? {
         didSet {
             guard accessoryConnectingView != oldValue else {
                 return
@@ -44,7 +50,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
 
     var accessoryView = DateAccessoryView()
 
-    var accessorySafeAreaInsets: UIEdgeInsets = .zero {
+    var accessorySafeAreaInsets: NSUIEdgeInsets = .zero {
         didSet {
             guard accessorySafeAreaInsets != oldValue else {
                 return
@@ -71,8 +77,12 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
+#if canImport(UIKit)
+        
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+        
+#endif
         clipsToBounds = false
         addSubview(containerView)
         NSLayoutConstraint.activate([

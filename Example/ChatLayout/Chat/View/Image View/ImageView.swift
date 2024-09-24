@@ -12,14 +12,20 @@
 
 import ChatLayout
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-final class ImageView: UIView, ContainerCollectionViewCellDelegate {
-    private lazy var stackView = UIStackView(frame: bounds)
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
+    private lazy var stackView = NSUIStackView(frame: bounds)
 
     private lazy var loadingIndicator = UIActivityIndicatorView(style: .gray)
 
-    private lazy var imageView = UIImageView(frame: bounds)
+    private lazy var imageView = NSUIImageView(frame: bounds)
 
     private var controller: ImageController!
 
@@ -104,9 +110,13 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
     }
 
     private func setupSubviews() {
+#if canImport(UIKit)
+        
         layoutMargins = .zero
-        translatesAutoresizingMaskIntoConstraints = false
         insetsLayoutMarginsFromSafeArea = false
+        
+#endif
+        translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -118,29 +128,33 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
         ])
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
+#if canImport(UIKit)
+        
         imageView.contentMode = .scaleAspectFill
+        
+#endif
         imageView.isHidden = true
 
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         loadingIndicator.isHidden = true
 
         let loadingWidthConstraint = loadingIndicator.widthAnchor.constraint(equalToConstant: 100)
-        loadingWidthConstraint.priority = UILayoutPriority(999)
+        loadingWidthConstraint.priority = NSUILayoutPriority(999)
         loadingWidthConstraint.isActive = true
 
         let loadingHeightConstraint = loadingIndicator.heightAnchor.constraint(equalToConstant: 100)
-        loadingHeightConstraint.priority = UILayoutPriority(999)
+        loadingHeightConstraint.priority = NSUILayoutPriority(999)
         loadingHeightConstraint.isActive = true
 
         imageWidthConstraint = imageView.widthAnchor.constraint(equalToConstant: 310)
-        imageWidthConstraint?.priority = UILayoutPriority(999)
+        imageWidthConstraint?.priority = NSUILayoutPriority(999)
 
         imageHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: 40)
-        imageHeightConstraint?.priority = UILayoutPriority(999)
+        imageHeightConstraint?.priority = NSUILayoutPriority(999)
     }
 
     private func setupSize() {
-        UIView.performWithoutAnimation {
+        NSUIView.performWithoutAnimation {
             switch controller.state {
             case .loading:
                 imageWidthConstraint?.isActive = false

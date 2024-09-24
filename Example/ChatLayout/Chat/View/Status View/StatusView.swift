@@ -12,10 +12,16 @@
 
 import ChatLayout
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-final class StatusView: UIView, StaticViewFactory {
-    private lazy var imageView = UIImageView(frame: bounds)
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class StatusView: NSUIView, StaticViewFactory {
+    private lazy var imageView = NSUIImageView(frame: bounds)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,8 +35,12 @@ final class StatusView: UIView, StaticViewFactory {
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
+#if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
+        
         layoutMargins = .zero
+        
+#endif
         addSubview(imageView)
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -41,10 +51,10 @@ final class StatusView: UIView, StaticViewFactory {
             imageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
         let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 15)
-        widthConstraint.priority = UILayoutPriority(rawValue: 999)
+        widthConstraint.priority = NSUILayoutPriority(rawValue: 999)
         widthConstraint.isActive = true
         let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 15)
-        heightConstraint.priority = UILayoutPriority(rawValue: 999)
+        heightConstraint.priority = NSUILayoutPriority(rawValue: 999)
         heightConstraint.isActive = true
 
         imageView.contentMode = .center
@@ -53,13 +63,13 @@ final class StatusView: UIView, StaticViewFactory {
     func setup(with status: MessageStatus) {
         switch status {
         case .sent:
-            imageView.image = UIImage(named: "sent_status")
+            imageView.image = NSUIImage(named: "sent_status")
             imageView.tintColor = .lightGray
         case .received:
-            imageView.image = UIImage(named: "sent_status")
+            imageView.image = NSUIImage(named: "sent_status")
             imageView.tintColor = .systemBlue
         case .read:
-            imageView.image = UIImage(named: "read_status")
+            imageView.image = NSUIImage(named: "read_status")
             imageView.tintColor = .systemBlue
         }
     }

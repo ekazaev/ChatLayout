@@ -20,7 +20,7 @@ import UIKit
 #endif
 
 /// Custom implementation of `UICollectionViewLayoutAttributes`
-public final class ChatLayoutAttributes: CollectionViewLayoutAttributes {
+public final class ChatLayoutAttributes: NSUICollectionViewLayoutAttributes {
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var alignment: ChatItemAlignment = .fullWidth
 
@@ -28,13 +28,13 @@ public final class ChatLayoutAttributes: CollectionViewLayoutAttributes {
     public var interItemSpacing: CGFloat = 0
 
     /// `CollectionViewChatLayout`s additional insets setup using `ChatLayoutSettings`. Added for convenience.
-    public internal(set) var additionalInsets: EdgeInsets = .zero
+    public internal(set) var additionalInsets: NSUIEdgeInsets = .zero
 
     /// `UICollectionView`s frame size. Added for convenience.
     public internal(set) var viewSize: CGSize = .zero
 
     /// `UICollectionView`s adjusted content insets. Added for convenience.
-    public internal(set) var adjustedContentInsets: EdgeInsets = .zero
+    public internal(set) var adjustedContentInsets: NSUIEdgeInsets = .zero
 
     /// `CollectionViewChatLayout`s visible bounds size excluding `adjustedContentInsets`. Added for convenience.
     public internal(set) var visibleBoundsSize: CGSize = .zero
@@ -57,9 +57,9 @@ public final class ChatLayoutAttributes: CollectionViewLayoutAttributes {
             self.init(forCellWith: indexPath)
             #endif
         case .header:
-            self.init(forSupplementaryViewOfKind: CollectionView.elementKindSectionHeader, with: indexPath)
+            self.init(forSupplementaryViewOfKind: NSUICollectionView.elementKindSectionHeader, with: indexPath)
         case .footer:
-            self.init(forSupplementaryViewOfKind: CollectionView.elementKindSectionFooter, with: indexPath)
+            self.init(forSupplementaryViewOfKind: NSUICollectionView.elementKindSectionFooter, with: indexPath)
         }
     }
 
@@ -97,9 +97,9 @@ public final class ChatLayoutAttributes: CollectionViewLayoutAttributes {
         case (.cell, nil):
             .cell
         #endif
-        case (.supplementaryView, .some(CollectionView.elementKindSectionHeader)):
+        case (.supplementaryView, .some(NSUICollectionView.elementKindSectionHeader)):
             .header
-        case (.supplementaryView, .some(CollectionView.elementKindSectionFooter)):
+        case (.supplementaryView, .some(NSUICollectionView.elementKindSectionFooter)):
             .footer
         default:
             preconditionFailure("Unsupported element kind.")

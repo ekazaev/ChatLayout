@@ -12,10 +12,23 @@
 
 import ChatLayout
 import Foundation
-import UIKit
 
-final class EditingAccessoryView: UIView, StaticViewFactory {
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class EditingAccessoryView: NSUIView, StaticViewFactory {
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    private lazy var button = NSButton()
+    #endif
+
+    #if canImport(UIKit)
     private lazy var button = UIButton(type: .system)
+    #endif
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,9 +43,11 @@ final class EditingAccessoryView: UIView, StaticViewFactory {
     }
 
     private func setupSubviews() {
-        translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+        #endif
+        translatesAutoresizingMaskIntoConstraints = false
         addSubview(button)
 
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -40,11 +55,19 @@ final class EditingAccessoryView: UIView, StaticViewFactory {
             button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             button.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             button.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
 
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        button.title = "Delete"
+        button.target = self
+        button.action = #selector(buttonTapped)
+        #endif
+
+        #if canImport(UIKit)
         button.setTitle("Delete", for: .normal)
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        #endif
     }
 
     func setup(with controller: EditingAccessoryController) {
@@ -77,7 +100,7 @@ extension EditingAccessoryView: EditNotifierDelegate {
             return
         }
 
-        UIView.animate(withDuration: duration) {
+        NSUIView.animate(withDuration: duration) {
             self.isEditing = isEditing
             self.setNeedsLayout()
         }

@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 final class ImageController {
     weak var view: ImageView? {
@@ -31,7 +37,7 @@ final class ImageController {
         return .image(image)
     }
 
-    private var image: UIImage?
+    private var image: NSUIImage?
 
     private let messageId: UUID
 

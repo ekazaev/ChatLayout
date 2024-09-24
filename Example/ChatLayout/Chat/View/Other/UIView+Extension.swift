@@ -11,9 +11,15 @@
 //
 
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-extension UIView {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+extension NSUIView {
     func superview<T>(of type: T.Type) -> T? {
         superview as? T ?? superview.flatMap { $0.superview(of: type) }
     }
@@ -22,9 +28,9 @@ extension UIView {
         subviews.compactMap { $0 as? T ?? $0.subview(of: type) }.first
     }
 
-    // Even though we do not set it animated - it can happen during the animated batch update
-    // http://www.openradar.me/25087688
-    // https://github.com/nkukushkin/StackView-Hiding-With-Animation-Bug-Example
+    /// Even though we do not set it animated - it can happen during the animated batch update
+    /// http://www.openradar.me/25087688
+    /// https://github.com/nkukushkin/StackView-Hiding-With-Animation-Bug-Example
     var isHiddenSafe: Bool {
         get {
             isHidden
@@ -38,12 +44,14 @@ extension UIView {
     }
 }
 
-extension UIViewController {
-    // https://github.com/ekazaev/route-composer can do it better
+extension NSUIViewController {
+    /// https://github.com/ekazaev/route-composer can do it better
     func topMostViewController() -> UIViewController {
         if presentedViewController == nil {
             return self
         }
+        #if canImport(UIKit)
+
         if let navigationViewController = presentedViewController as? UINavigationController {
             if let visibleViewController = navigationViewController.visibleViewController {
                 return visibleViewController.topMostViewController()
@@ -57,12 +65,20 @@ extension UIViewController {
             }
             return tabBarViewController.topMostViewController()
         }
+
+        #endif
         return presentedViewController!.topMostViewController()
     }
 }
 
-extension UIApplication {
-    func topMostViewController() -> UIViewController? {
+extension NSUIApplication {
+    func topMostViewController() -> NSUIViewController? {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSApplication.shared.windows.filter(\.isKeyWindow).first?.contentViewController?.topMostViewController()
+        #endif
+
+        #if canImport(UIKit)
         UIApplication.shared.windows.filter(\.isKeyWindow).first?.rootViewController?.topMostViewController()
+        #endif
     }
 }

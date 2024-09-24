@@ -30,12 +30,12 @@ public enum ImageMaskedViewTransformation {
 }
 
 /// A container view that masks its contained view with an image provided.
-public final class ImageMaskedView<CustomView: View>: View {
+public final class ImageMaskedView<CustomView: NSUIView>: NSUIView {
     /// Contained view.
     public lazy var customView = CustomView(frame: bounds)
 
     /// An Image to be used as a mask for the `customView`.
-    public var maskingImage: Image? {
+    public var maskingImage: NSUIImage? {
         didSet {
             setupMask()
         }
@@ -51,7 +51,7 @@ public final class ImageMaskedView<CustomView: View>: View {
         }
     }
 
-    private lazy var imageView = ImageView(frame: bounds)
+    private lazy var imageView = NSUIImageView(frame: bounds)
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative
@@ -102,7 +102,7 @@ public final class ImageMaskedView<CustomView: View>: View {
     }
 
     private func updateMask() {
-        View.performWithoutAnimation {
+        NSUIView.performWithoutAnimation {
             let multiplier = effectiveUserInterfaceLayoutDirection == .leftToRight ? 1 : -1
             switch maskTransformation {
             case .flippedVertically:

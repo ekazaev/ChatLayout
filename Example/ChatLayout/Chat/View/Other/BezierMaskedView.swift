@@ -11,9 +11,15 @@
 //
 
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-final class BezierMaskedView<CustomView: UIView>: UIView {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class BezierMaskedView<CustomView: NSUIView>: NSUIView {
     lazy var customView = CustomView(frame: bounds)
 
     var bubbleType: Cell.BubbleType = .tailed {
@@ -28,7 +34,7 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
         }
     }
 
-    // Here we are trying to mimic the offsets in the bubbles represented by UIImage in `ImageMaskedView`
+    /// Here we are trying to mimic the offsets in the bubbles represented by UIImage in `ImageMaskedView`
     var offset: CGFloat {
         switch bubbleType {
         case .tailed:
@@ -40,7 +46,7 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
 
     private var cachedBounds: CGRect?
 
-    var maskingPath: UIBezierPath {
+    var maskingPath: NSUIBezierPath {
         let bezierPath: UIBezierPath
         let size = bounds.size
         switch bubbleType {
@@ -84,34 +90,38 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
     }
 
     private func setupSubviews() {
+        #if canImport(UIKit)
+
         layoutMargins = .zero
-        translatesAutoresizingMaskIntoConstraints = false
         insetsLayoutMarginsFromSafeArea = false
         preservesSuperviewLayoutMargins = false
+
+        #endif
+        translatesAutoresizingMaskIntoConstraints = false
         addSubview(customView)
         customView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+            customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
     }
 
     private func updateChannelStyle() {
         cachedBounds = nil
-        UIView.performWithoutAnimation {
+        NSUIView.performWithoutAnimation {
             let maskLayer = CAShapeLayer()
             maskLayer.frame = bounds
             maskLayer.path = maskingPath.cgPath
-            layer.mask = maskLayer
+            platformLayer?.mask = maskLayer
         }
     }
 }
 
-private func generateIncomingTailedBezierPath(offset: CGFloat, size: CGSize) -> UIBezierPath {
+private func generateIncomingTailedBezierPath(offset: CGFloat, size: CGSize) -> NSUIBezierPath {
     let size = CGSize(width: size.width - offset, height: size.height)
-    let bezierPath = UIBezierPath()
+    let bezierPath = NSUIBezierPath()
     bezierPath.move(to: CGPoint(x: 22, y: size.height))
     bezierPath.addLine(to: CGPoint(x: size.width - 17, y: size.height))
     bezierPath.addCurve(to: CGPoint(x: size.width, y: size.height - 17), controlPoint1: CGPoint(x: size.width - 7.61, y: size.height), controlPoint2: CGPoint(x: size.width, y: size.height - 7.61))
@@ -130,19 +140,19 @@ private func generateIncomingTailedBezierPath(offset: CGFloat, size: CGSize) -> 
     return bezierPath
 }
 
-private func generateOutgoingTailedBezierPath(offset: CGFloat, size: CGSize) -> UIBezierPath {
+private func generateOutgoingTailedBezierPath(offset: CGFloat, size: CGSize) -> NSUIBezierPath {
     let bezierPath = generateIncomingTailedBezierPath(offset: offset, size: size)
     bezierPath.apply(CGAffineTransform(scaleX: -1, y: 1))
     bezierPath.apply(CGAffineTransform(translationX: size.width, y: 0))
     return bezierPath
 }
 
-private func generateIncomingNormalBezierPath(offset: CGFloat, size: CGSize) -> UIBezierPath {
-    let bezierPath = UIBezierPath(roundedRect: CGRect(x: offset, y: 0, width: size.width - offset, height: size.height), cornerRadius: 17)
+private func generateIncomingNormalBezierPath(offset: CGFloat, size: CGSize) -> NSUIBezierPath {
+    let bezierPath = NSUIBezierPath(roundedRect: CGRect(x: offset, y: 0, width: size.width - offset, height: size.height), cornerRadius: 17)
     return bezierPath
 }
 
-private func generateOutgoingNormalBezierPath(offset: CGFloat, size: CGSize) -> UIBezierPath {
+private func generateOutgoingNormalBezierPath(offset: CGFloat, size: CGSize) -> NSUIBezierPath {
     let bezierPath = generateIncomingNormalBezierPath(offset: offset, size: size)
     bezierPath.apply(CGAffineTransform(scaleX: -1, y: 1))
     bezierPath.apply(CGAffineTransform(translationX: size.width, y: 0))

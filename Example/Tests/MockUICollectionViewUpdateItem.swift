@@ -16,7 +16,7 @@ import Foundation
 #if canImport(UIKit)
 import UIKit
 
-class MockUICollectionViewUpdateItem: CollectionViewUpdateItem {
+class MockUICollectionViewUpdateItem: NSUICollectionViewUpdateItem {
 
 
     // swiftlint:disable identifier_name

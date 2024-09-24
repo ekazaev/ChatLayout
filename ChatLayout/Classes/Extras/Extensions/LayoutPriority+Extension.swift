@@ -20,6 +20,6 @@ import AppKit
 import UIKit
 #endif
 
-extension LayoutPriority {
-    static let almostRequired = LayoutPriority(rawValue: LayoutPriority.required.rawValue - 1)
+extension NSUILayoutPriority {
+    static let almostRequired = NSUILayoutPriority(rawValue: NSUILayoutPriority.required.rawValue - 1)
 }

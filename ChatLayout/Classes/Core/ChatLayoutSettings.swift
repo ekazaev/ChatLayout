@@ -32,6 +32,6 @@ public struct ChatLayoutSettings: Equatable {
     public var interSectionSpacing: CGFloat = 0
 
     /// Additional insets for the `CollectionViewChatLayout` content.
-    public var additionalInsets: EdgeInsets = .zero
+    public var additionalInsets: NSUIEdgeInsets = .zero
 
 }

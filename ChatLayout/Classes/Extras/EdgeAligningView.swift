@@ -22,7 +22,7 @@ import UIKit
 /// Container view that allows its `CustomView` to have lose connection to the margins of the container according to the
 /// settings provided in `EdgeAligningView.flexibleEdges`
 
-public final class EdgeAligningView<CustomView: View>: View {
+public final class EdgeAligningView<CustomView: NSUIView>: NSUIView {
 
     /// Represents an edge of `EdgeAligningView`
     public enum Edge: CaseIterable {
@@ -63,7 +63,7 @@ public final class EdgeAligningView<CustomView: View>: View {
     }
 
     /// Preferred priority of the internal constraints.
-    public var preferredPriority: LayoutPriority = .required {
+    public var preferredPriority: NSUILayoutPriority = .required {
         didSet {
             guard preferredPriority != oldValue else {
                 return
@@ -89,7 +89,7 @@ public final class EdgeAligningView<CustomView: View>: View {
     ///   - preferredPriority: Preferred priority of the internal constraints.
     public init(with customView: CustomView,
                 flexibleEdges: Set<Edge> = [.top],
-                preferredPriority: LayoutPriority = .required) {
+                preferredPriority: NSUILayoutPriority = .required) {
         self.customView = customView
         self.flexibleEdges = flexibleEdges
         self.preferredPriority = preferredPriority
@@ -114,7 +114,7 @@ public final class EdgeAligningView<CustomView: View>: View {
     ///   to the superview in which you plan to add it.
     public init(frame: CGRect,
                 flexibleEdges: Set<Edge> = [],
-                preferredPriority: LayoutPriority = .required) {
+                preferredPriority: NSUILayoutPriority = .required) {
         customView = CustomView(frame: frame)
         self.flexibleEdges = flexibleEdges
         self.preferredPriority = preferredPriority
@@ -198,19 +198,19 @@ public final class EdgeAligningView<CustomView: View>: View {
         setNeedsLayout()
     }
 
-    private func buildCenterConstraints(_ view: View) -> (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint) {
+    private func buildCenterConstraints(_ view: NSUIView) -> (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint) {
         (centerX: view.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor, priority: preferredPriority),
          centerY: view.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor, priority: preferredPriority))
     }
 
-    private func buildRigidConstraints(_ view: View) -> [Edge: NSLayoutConstraint] {
+    private func buildRigidConstraints(_ view: NSUIView) -> [Edge: NSLayoutConstraint] {
         [.top: view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
          .bottom: view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
          .leading: view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
          .trailing: view.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
     }
 
-    private func buildFlexibleConstraints(_ view: View) -> [Edge: NSLayoutConstraint] {
+    private func buildFlexibleConstraints(_ view: NSUIView) -> [Edge: NSLayoutConstraint] {
         [.top: view.topAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
          .bottom: view.bottomAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
          .leading: view.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),

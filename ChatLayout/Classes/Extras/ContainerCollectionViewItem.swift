@@ -8,7 +8,7 @@
 
 import Foundation
 
-#if canImport(AppKit)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
 
 import AppKit
 
@@ -52,7 +52,7 @@ public final class ContainerCollectionViewItem<CustomView: NSView>: NSCollection
     /// Gives the cell a chance to modify the attributes provided by the layout object.
     /// - Parameter layoutAttributes: The attributes provided by the layout object. These attributes represent the values that the layout intends to apply to the cell.
     /// - Returns: Modified `UICollectionViewLayoutAttributes`
-    public override func preferredLayoutAttributesFitting(_ layoutAttributes: CollectionViewLayoutAttributes) -> CollectionViewLayoutAttributes {
+    public override func preferredLayoutAttributesFitting(_ layoutAttributes: NSUICollectionViewLayoutAttributes) -> NSUICollectionViewLayoutAttributes {
         guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {
             return super.preferredLayoutAttributesFitting(layoutAttributes)
         }
@@ -71,7 +71,7 @@ public final class ContainerCollectionViewItem<CustomView: NSView>: NSCollection
 
     /// Applies the specified layout attributes to the view.
     /// - Parameter layoutAttributes: The layout attributes to apply.
-    public override func apply(_ layoutAttributes: CollectionViewLayoutAttributes) {
+    public override func apply(_ layoutAttributes: NSUICollectionViewLayoutAttributes) {
         guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {
             return
         }

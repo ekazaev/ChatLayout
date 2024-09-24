@@ -46,7 +46,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
                height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom)
     }
 
-    let adjustedContentInset: EdgeInsets = .zero
+    let adjustedContentInset: NSUIEdgeInsets = .zero
 
     let keepContentOffsetAtBottomOnBatchUpdates: Bool = true
 

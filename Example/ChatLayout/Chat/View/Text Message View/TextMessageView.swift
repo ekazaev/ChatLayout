@@ -12,6 +12,15 @@
 
 import ChatLayout
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+
+final class TextMessageView: NSView, ContainerCollectionViewCellDelegate {
+    
+}
+#endif
+
+#if canImport(UIKit)
 import UIKit
 
 final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
@@ -158,3 +167,6 @@ private final class MessageTextView: UITextView {
         false
     }
 }
+
+#endif
+

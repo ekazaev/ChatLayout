@@ -42,7 +42,7 @@ import UIKit
 ///
 /// `CollectionViewChatLayout.restoreContentOffset(...)`
 
-open class CollectionViewChatLayout: CollectionViewLayout {
+open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     // MARK: Custom Properties
 
@@ -169,7 +169,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
 
     // MARK: Internal Properties
 
-    var adjustedContentInset: EdgeInsets {
+    var adjustedContentInset: NSUIEdgeInsets {
         guard let collectionView else {
             return .zero
         }
@@ -211,7 +211,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
 
     private var cachedCollectionViewSize: CGSize?
 
-    private var cachedCollectionViewInset: EdgeInsets?
+    private var cachedCollectionViewInset: NSUIEdgeInsets?
 
     // These properties are used to keep the layout attributes copies used for insert/delete
     // animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
@@ -283,7 +283,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
             return nil
         }
 
-        let insets = EdgeInsets(
+        let insets = NSUIEdgeInsets(
             top: -collectionView.frame.height,
             left: 0,
             bottom: -collectionView.frame.height,
@@ -464,11 +464,11 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     }
 
     #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-    public typealias LayoutAttributesForElementsReturnValue = [CollectionViewLayoutAttributes]
+    public typealias LayoutAttributesForElementsReturnValue = [NSUICollectionViewLayoutAttributes]
     #endif
 
     #if canImport(UIKit)
-    public typealias LayoutAttributesForElementsReturnValue = [CollectionViewLayoutAttributes]?
+    public typealias LayoutAttributesForElementsReturnValue = [NSUICollectionViewLayoutAttributes]?
     #endif
 
     /// Retrieves the layout attributes for all of the cells and views in the specified rectangle.
@@ -510,7 +510,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     }
 
     /// Retrieves layout information for an item at the specified index path with a corresponding cell.
-    open override func layoutAttributesForItem(at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
+    open override func layoutAttributesForItem(at indexPath: IndexPath) -> NSUICollectionViewLayoutAttributes? {
         guard !dontReturnAttributes else {
             return nil
         }
@@ -521,7 +521,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
 
     /// Retrieves the layout attributes for the specified supplementary view.
     open override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
-                                                            at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
+                                                            at indexPath: IndexPath) -> NSUICollectionViewLayoutAttributes? {
         guard !dontReturnAttributes else {
             return nil
         }
@@ -567,8 +567,8 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     // MARK: Context Invalidation
 
     /// Asks the layout object if changes to a self-sizing cell require a layout update.
-    open override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: CollectionViewLayoutAttributes,
-                                              withOriginalAttributes originalAttributes: CollectionViewLayoutAttributes) -> Bool {
+    open override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: NSUICollectionViewLayoutAttributes,
+                                              withOriginalAttributes originalAttributes: NSUICollectionViewLayoutAttributes) -> Bool {
         guard let preferredAttributesItemPath = preferredAttributes.platformIndexPath?.itemPath,
               let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
               let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
@@ -584,8 +584,8 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     }
 
     /// Retrieves a context object that identifies the portions of the layout that should change in response to dynamic cell changes.
-    open override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: CollectionViewLayoutAttributes,
-                                           withOriginalAttributes originalAttributes: CollectionViewLayoutAttributes) -> CollectionViewLayoutInvalidationContext {
+    open override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: NSUICollectionViewLayoutAttributes,
+                                           withOriginalAttributes originalAttributes: NSUICollectionViewLayoutAttributes) -> NSUICollectionViewLayoutInvalidationContext {
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
               let preferredAttributesIndexPath = preferredMessageAttributes.platformIndexPath,
               controller.item(for: preferredAttributesIndexPath.itemPath, kind: .cell, at: state) != nil
@@ -675,14 +675,14 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     }
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.
-    open override func invalidationContext(forBoundsChange newBounds: CGRect) -> CollectionViewLayoutInvalidationContext {
+    open override func invalidationContext(forBoundsChange newBounds: CGRect) -> NSUICollectionViewLayoutInvalidationContext {
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext
         invalidationContext.invalidateLayoutMetrics = false
         return invalidationContext
     }
 
     /// Invalidates the current layout using the information in the provided context object.
-    open override func invalidateLayout(with context: CollectionViewLayoutInvalidationContext) {
+    open override func invalidateLayout(with context: NSUICollectionViewLayoutInvalidationContext) {
         guard let collectionView else {
             super.invalidateLayout(with: context)
             return
@@ -720,7 +720,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
             if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, kind: currentPositionSnapshot.kind, at: state, isFinal: true),
                contentHeight != 0,
                contentHeight > visibleBounds.size.height {
-                let adjustedContentInset: EdgeInsets = collectionView.adjustedContentInset
+                let adjustedContentInset: NSUIEdgeInsets = collectionView.adjustedContentInset
                 let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.frame.height + adjustedContentInset.bottom)
                 switch currentPositionSnapshot.edge {
                 case .top:
@@ -762,7 +762,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     // MARK: Responding to Collection View Updates
 
     /// Notifies the layout object that the contents of the collection view are about to change.
-    open override func prepare(forCollectionViewUpdates updateItems: [CollectionViewUpdateItem]) {
+    open override func prepare(forCollectionViewUpdates updateItems: [NSUICollectionViewUpdateItem]) {
         var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
         controller.process(changeItems: changeItems)
@@ -831,7 +831,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     // MARK: - Cell Appearance Animation
 
     /// Retrieves the starting layout information for an item being inserted into the collection view.
-    open override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> CollectionViewLayoutAttributes? {
+    open override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> NSUICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let itemPath = itemIndexPath.itemPath
@@ -868,7 +868,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
     }
 
     /// Retrieves the final layout information for an item that is about to be removed from the collection view.
-    open override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> CollectionViewLayoutAttributes? {
+    open override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> NSUICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let itemPath = itemIndexPath.itemPath
@@ -922,7 +922,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
 
     /// Retrieves the starting layout information for a supplementary view being inserted into the collection view.
     open override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String,
-                                                                               at elementIndexPath: IndexPath) -> CollectionViewLayoutAttributes? {
+                                                                               at elementIndexPath: IndexPath) -> NSUICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let kind = ItemKind(elementKind)
@@ -962,7 +962,7 @@ open class CollectionViewChatLayout: CollectionViewLayout {
 
     /// Retrieves the final layout information for a supplementary view that is about to be removed from the collection view.
     open override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String,
-                                                                                at elementIndexPath: IndexPath) -> CollectionViewLayoutAttributes? {
+                                                                                at elementIndexPath: IndexPath) -> NSUICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let kind = ItemKind(elementKind)

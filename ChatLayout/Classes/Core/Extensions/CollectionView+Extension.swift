@@ -52,7 +52,7 @@ extension NSCollectionView {
 }
 #endif
 
-extension CollectionView {
+extension NSUICollectionView {
     var platformIndexPathsForVisibleItems: [IndexPath] {
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         return [IndexPath](indexPathsForVisibleItems())

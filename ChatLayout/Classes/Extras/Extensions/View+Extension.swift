@@ -6,12 +6,12 @@ import AppKit
 import UIKit
 #endif
 
-extension View {
+extension NSUIView {
     var platformLayer: CALayer? {
         layer
     }
 
-    #if canImport(AppKit)
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 
     var effectiveUserInterfaceLayoutDirection: NSUserInterfaceLayoutDirection {
         userInterfaceLayoutDirection

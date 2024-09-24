@@ -25,7 +25,7 @@ extension NSLayoutDimension {
     @objc func constraint(equalTo anchor: NSLayoutDimension,
                           multiplier m: CGFloat = 1,
                           constant c: CGFloat = 0,
-                          priority: LayoutPriority) -> NSLayoutConstraint {
+                          priority: NSUILayoutPriority) -> NSLayoutConstraint {
 
         let constraint = constraint(equalTo: anchor, multiplier: m, constant: c)
         constraint.priority = priority
@@ -35,7 +35,7 @@ extension NSLayoutDimension {
     @objc func constraint(greaterThanOrEqualTo anchor: NSLayoutDimension,
                           multiplier m: CGFloat = 1,
                           constant c: CGFloat = 0,
-                          priority: LayoutPriority) -> NSLayoutConstraint {
+                          priority: NSUILayoutPriority) -> NSLayoutConstraint {
 
         let constraint = constraint(greaterThanOrEqualTo: anchor, multiplier: m, constant: c)
         constraint.priority = priority
@@ -45,7 +45,7 @@ extension NSLayoutDimension {
     @objc func constraint(lessThanOrEqualTo anchor: NSLayoutDimension,
                           multiplier m: CGFloat = 1,
                           constant c: CGFloat = 0,
-                          priority: LayoutPriority) -> NSLayoutConstraint {
+                          priority: NSUILayoutPriority) -> NSLayoutConstraint {
 
         let constraint = constraint(lessThanOrEqualTo: anchor, multiplier: m, constant: c)
         constraint.priority = priority
@@ -53,7 +53,7 @@ extension NSLayoutDimension {
     }
 
     @objc func constraint(equalToConstant c: CGFloat,
-                          priority: LayoutPriority) -> NSLayoutConstraint {
+                          priority: NSUILayoutPriority) -> NSLayoutConstraint {
 
         let constraint = constraint(equalToConstant: c)
         constraint.priority = priority
@@ -61,7 +61,7 @@ extension NSLayoutDimension {
     }
 
     @objc func constraint(greaterThanOrEqualToConstant c: CGFloat,
-                          priority: LayoutPriority) -> NSLayoutConstraint {
+                          priority: NSUILayoutPriority) -> NSLayoutConstraint {
 
         let constraint = constraint(greaterThanOrEqualToConstant: c)
         constraint.priority = priority
@@ -69,7 +69,7 @@ extension NSLayoutDimension {
     }
 
     @objc func constraint(lessThanOrEqualToConstant c: CGFloat,
-                          priority: LayoutPriority) -> NSLayoutConstraint {
+                          priority: NSUILayoutPriority) -> NSLayoutConstraint {
 
         let constraint = constraint(lessThanOrEqualToConstant: c)
         constraint.priority = priority

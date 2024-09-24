@@ -28,7 +28,7 @@ class StateControllerInternalTests: XCTestCase {
 
     func testUpdatePreferredAlignment() {
         let layout = MockCollectionLayout()
-        layout.settings.additionalInsets = EdgeInsets(top: 0, left: 13, bottom: 0, right: 7)
+        layout.settings.additionalInsets = NSUIEdgeInsets(top: 0, left: 13, bottom: 0, right: 7)
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
         layout.controller.update(preferredSize: CGSize(width: 100, height: 100), alignment: .center, interItemSpacing: 0, for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)
@@ -73,7 +73,7 @@ class StateControllerInternalTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.numberOfItemsInSection[0] = 5
         layout.numberOfItemsInSection[1] = 5
-        layout.settings.additionalInsets = EdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+        layout.settings.additionalInsets = NSUIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
         let rect = CGRect(origin: .zero, size: CGSize(width: 300, height: 400))
@@ -88,7 +88,7 @@ class StateControllerInternalTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.numberOfItemsInSection[0] = 5
         layout.numberOfItemsInSection[1] = 5
-        layout.settings.additionalInsets = EdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+        layout.settings.additionalInsets = NSUIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
         let rect = CGRect(origin: .zero, size: CGSize(width: 300, height: 400))
@@ -131,7 +131,7 @@ class StateControllerInternalTests: XCTestCase {
         layout.numberOfItemsInSection[0] = 5
         layout.numberOfItemsInSection[1] = 5
         layout.numberOfItemsInSection[2] = 5
-        layout.settings.additionalInsets = EdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+        layout.settings.additionalInsets = NSUIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
         let estimatedContentHeight = layout.settings.additionalInsets.top + layout.settings.additionalInsets.bottom + layout.settings.estimatedItemSize!.height * (7 * 3) + layout.settings.interItemSpacing * (4 * 3) + layout.settings.interSectionSpacing * 2

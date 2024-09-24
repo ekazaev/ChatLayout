@@ -61,7 +61,7 @@ public enum CellLayoutContainerViewAlignment {
 /// a `CustomView` next and am optional `TrailingAccessory` last. Use `VoidViewFactory` to specify that `LeadingAccessory` or `TrailingAccessory` views should not be
 /// allocated.
 
-public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, CustomView: View, TrailingAccessory: StaticViewFactory>: View {
+public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, CustomView: NSUIView, TrailingAccessory: StaticViewFactory>: NSUIView {
 
     /// Leading accessory view.
     public lazy var leadingView: LeadingAccessory.View? = LeadingAccessory.buildView(within: bounds)
@@ -115,7 +115,7 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
         }
     }
 
-    private let stackView = StackView()
+    private let stackView = NSUIStackView()
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative

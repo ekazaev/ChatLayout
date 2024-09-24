@@ -12,7 +12,13 @@
 
 import ChatLayout
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegate {
     var sections: [Section] { get set }

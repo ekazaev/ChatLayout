@@ -21,7 +21,7 @@ import AppKit
 import UIKit
 #endif
 
-public extension UICollectionView {
+public extension NSUICollectionView {
     func reload<C>(
         using stagedChangeset: StagedChangeset<C>,
         interrupt: ((Changeset<C>) -> Bool)? = nil,

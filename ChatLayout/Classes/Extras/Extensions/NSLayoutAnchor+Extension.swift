@@ -23,7 +23,7 @@ import UIKit
 extension NSLayoutAnchor {
     @objc func constraint(equalTo anchor: NSLayoutAnchor<AnchorType>,
                           constant c: CGFloat = 0,
-                          priority: LayoutPriority) -> NSLayoutConstraint {
+                          priority: NSUILayoutPriority) -> NSLayoutConstraint {
 
         let constraint = constraint(equalTo: anchor, constant: c)
         constraint.priority = priority
@@ -32,7 +32,7 @@ extension NSLayoutAnchor {
 
     @objc func constraint(greaterThanOrEqualTo anchor: NSLayoutAnchor<AnchorType>,
                           constant c: CGFloat = 0,
-                          priority: LayoutPriority) -> NSLayoutConstraint {
+                          priority: NSUILayoutPriority) -> NSLayoutConstraint {
 
         let constraint = constraint(greaterThanOrEqualTo: anchor, constant: c)
         constraint.priority = priority
@@ -41,7 +41,7 @@ extension NSLayoutAnchor {
 
     @objc func constraint(lessThanOrEqualTo anchor: NSLayoutAnchor<AnchorType>,
                           constant c: CGFloat = 0,
-                          priority: LayoutPriority) -> NSLayoutConstraint {
+                          priority: NSUILayoutPriority) -> NSLayoutConstraint {
 
         let constraint = constraint(lessThanOrEqualTo: anchor, constant: c)
         constraint.priority = priority
