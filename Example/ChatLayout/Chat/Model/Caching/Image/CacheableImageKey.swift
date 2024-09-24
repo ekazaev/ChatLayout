@@ -11,7 +11,6 @@
 //
 
 import Foundation
-import UIKit
 
 public struct CacheableImageKey: Hashable, PersistentlyCacheable {
     public let url: URL

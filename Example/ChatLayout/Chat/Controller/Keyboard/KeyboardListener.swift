@@ -10,6 +10,8 @@
 // https://github.com/sponsors/ekazaev
 //
 
+#if canImport(UIKit)
+
 import Foundation
 import UIKit
 
@@ -126,3 +128,6 @@ final class KeyboardListener {
                                                object: nil)
     }
 }
+
+
+#endif

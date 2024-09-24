@@ -23,7 +23,6 @@ import UIKit
 /// A container `UICollectionReusableView` that constraints its contained view to its margins.
 
 public final class ContainerCollectionReusableView<CustomView: View>: CollectionReusableView {
-
     /// Default reuse identifier is set with the class name.
     public static var reuseIdentifier: String {
         String(describing: self)
@@ -87,10 +86,10 @@ public final class ContainerCollectionReusableView<CustomView: View>: Collection
     }
 
     private func setupSubviews() {
-        addSubview(customView)
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-
+        setWantsLayer()
         #endif
+        addSubview(customView)
 
         #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false

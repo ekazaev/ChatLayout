@@ -9,6 +9,8 @@ public typealias CollectionViewUpdateItem = NSCollectionViewUpdateItem
 public typealias View = NSView
 public typealias LayoutPriority = NSLayoutConstraint.Priority
 public typealias StackView = NSStackView
+public typealias Image = NSImage
+public typealias ImageView = NSImageView
 #endif
 
 #if canImport(UIKit)
@@ -23,4 +25,6 @@ public typealias View = UIView
 public typealias LayoutPriority = UILayoutPriority
 public typealias StackView = UIStackView
 public typealias CollectionReusableView = UICollectionReusableView
+public typealias Image = UIImage
+public typealias ImageView = UIImageView
 #endif

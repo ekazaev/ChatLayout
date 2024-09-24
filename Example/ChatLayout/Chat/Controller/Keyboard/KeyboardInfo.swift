@@ -10,6 +10,8 @@
 // https://github.com/sponsors/ekazaev
 //
 
+#if canImport(UIKit)
+
 import Foundation
 import UIKit
 
@@ -43,3 +45,6 @@ struct KeyboardInfo: Equatable {
         frameEnd = keyboardFrameEnd
     }
 }
+
+
+#endif

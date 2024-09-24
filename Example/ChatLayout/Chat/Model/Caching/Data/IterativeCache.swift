@@ -11,7 +11,7 @@
 //
 
 import Foundation
-import UIKit
+
 
 public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: AsyncKeyValueCaching>: AsyncKeyValueCaching
     where

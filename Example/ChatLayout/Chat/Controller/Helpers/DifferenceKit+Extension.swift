@@ -13,7 +13,13 @@
 import ChatLayout
 import DifferenceKit
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public extension UICollectionView {
     func reload<C>(

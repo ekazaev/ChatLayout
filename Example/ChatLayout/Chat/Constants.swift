@@ -11,7 +11,7 @@
 //
 
 import Foundation
-import UIKit
+import CoreGraphics
 
 struct Constants {
     static let tailSize: CGFloat = 5

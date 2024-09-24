@@ -11,9 +11,15 @@
 //
 
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-public struct CachingImageLoader<C: AsyncKeyValueCaching>: ImageLoader where C.CachingKey == CacheableImageKey, C.Entity == UIImage {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+public struct CachingImageLoader<C: AsyncKeyValueCaching>: ImageLoader where C.CachingKey == CacheableImageKey, C.Entity == NSUIImage {
     private let cache: C
 
     private let loader: ImageLoader
@@ -24,7 +30,7 @@ public struct CachingImageLoader<C: AsyncKeyValueCaching>: ImageLoader where C.C
     }
 
     public func loadImage(from url: URL,
-                          completion: @escaping (Result<UIImage, Error>) -> Void) {
+                          completion: @escaping (Result<NSUIImage, Error>) -> Void) {
         let imageKey = CacheableImageKey(url: url)
         cache.getEntity(for: imageKey, completion: { result in
             guard case .failure = result else {

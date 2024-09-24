@@ -11,8 +11,14 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public protocol ImageLoader {
-    func loadImage(from url: URL, completion: @escaping (Result<UIImage, Error>) -> Void)
+    func loadImage(from url: URL, completion: @escaping (Result<NSUIImage, Error>) -> Void)
 }

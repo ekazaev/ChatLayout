@@ -137,6 +137,8 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
 
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         stackView.orientation = .horizontal
+        setWantsLayer()
+        stackView.setWantsLayer()
         #endif
 
         #if canImport(UIKit)

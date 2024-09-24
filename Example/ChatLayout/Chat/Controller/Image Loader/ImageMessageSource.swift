@@ -11,9 +11,15 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 enum ImageMessageSource: Hashable {
-    case image(UIImage)
+    case image(NSUIImage)
     case imageURL(URL)
 }
