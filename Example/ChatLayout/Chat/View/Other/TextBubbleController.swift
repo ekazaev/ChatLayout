@@ -47,12 +47,20 @@ final class TextBubbleController<CustomView: NSUIView>: BubbleController {
             let edgeInsets = NSUIEdgeInsets(top: 8, left: 16 - marginOffset, bottom: 8, right: 16 + marginOffset)
             bubbleView.layoutMargins = edgeInsets
 
+            #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+            let systemGray5 = NSUIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
+            bubbleView.backgroundColor = type.isIncoming ? systemGray5 : .systemBlue
+            #endif
+
+            #if canImport(UIKit)
+
             if #available(iOS 13.0, *) {
                 bubbleView.backgroundColor = type.isIncoming ? .systemGray5 : .systemBlue
             } else {
                 let systemGray5 = NSUIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
                 bubbleView.backgroundColor = type.isIncoming ? systemGray5 : .systemBlue
             }
+            #endif
         }
     }
 }

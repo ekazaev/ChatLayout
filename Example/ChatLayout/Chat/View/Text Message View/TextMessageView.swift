@@ -16,7 +16,112 @@ import Foundation
 import AppKit
 
 final class TextMessageView: NSView, ContainerCollectionViewCellDelegate {
-    
+    private var viewPortWidth: CGFloat = 300
+
+    private lazy var textView = NSLabel()
+
+    private var controller: TextMessageController?
+
+    private var textViewWidthConstraint: NSLayoutConstraint?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSubviews()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupSubviews()
+    }
+
+    override func prepareForReuse() {
+//        textView.resignFirstResponder()
+        super.prepareForReuse()
+    }
+
+    // Uncomment this method to test the performance without calculating text cell size using autolayout
+    // For the better illustration set DefaultRandomDataProvider.enableRichContent/enableNewMessages
+    // to false
+//    func preferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) -> ChatLayoutAttributes? {
+//        viewPortWidth = layoutAttributes.layoutFrame.width
+//        guard let text = controller?.text as NSString? else {
+//            return layoutAttributes
+//        }
+//        let maxWidth = viewPortWidth * Constants.maxWidth
+//        var rect = text.boundingRect(with: CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude),
+//            options: [.usesLineFragmentOrigin, .usesFontLeading],
+//            attributes: [NSAttributedString.Key.font: textView.font as Any], context: nil)
+//        rect = rect.insetBy(dx: 0, dy: -8)
+//        layoutAttributes.size = CGSize(width: layoutAttributes.layoutFrame.width, height: rect.height)
+//        setupSize()
+//        return layoutAttributes
+//    }
+
+    func apply(_ layoutAttributes: ChatLayoutAttributes) {
+        viewPortWidth = layoutAttributes.layoutFrame.width
+        setupSize()
+    }
+
+    func setup(with controller: TextMessageController) {
+        self.controller = controller
+        reloadData()
+    }
+
+    func reloadData() {
+        guard let controller else {
+            return
+        }
+        textView.text = controller.text
+        NSUIView.performWithoutAnimation {
+            textView.textColor = controller.type.isIncoming ? NSColor.labelColor : .textBackgroundColor
+//            textView.linkTextAttributes = [.foregroundColor: controller.type.isIncoming ? NSColor.systemBlue : .systemGray,
+//                                           .underlineStyle: 1]
+        }
+    }
+
+    private func setupSubviews() {
+        translatesAutoresizingMaskIntoConstraints = false
+
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.isEditable = false
+//        textView.backgroundColor = .clear
+//        textView.textContainerInset = .zero
+//        textView.textContainer?.lineFragmentPadding = 0
+        textView.font = .preferredFont(forTextStyle: .body)
+        addSubview(textView)
+        NSLayoutConstraint.activate([
+            textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+            textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+        ])
+        textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
+        textViewWidthConstraint?.isActive = true
+    }
+
+    private func setupSize() {
+        NSUIView.performWithoutAnimation {
+            self.textViewWidthConstraint?.constant = viewPortWidth * Constants.maxWidth
+            setNeedsLayout()
+        }
+    }
+}
+
+extension TextMessageView: AvatarViewDelegate {
+    func avatarTapped() {
+//        if enableSelfSizingSupport {
+//            layoutMargins = layoutMargins == .zero ? UIEdgeInsets(top: 50, left: 0, bottom: 50, right: 0) : .zero
+//            setNeedsLayout()
+//            if let cell = superview(of: UICollectionViewCell.self) {
+//                cell.contentView.invalidateIntrinsicContentSize()
+//            }
+//        }
+    }
+}
+
+/// NSTextView with hacks to avoid selection
+private final class MessageTextView: NSTextView {
+    override var acceptsFirstResponder: Bool { false }
 }
 #endif
 
@@ -123,7 +228,7 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
             textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+            textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
         textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
         textViewWidthConstraint?.isActive = true
@@ -169,4 +274,3 @@ private final class MessageTextView: UITextView {
 }
 
 #endif
-

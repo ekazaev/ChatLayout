@@ -43,7 +43,6 @@ import UIKit
 /// `CollectionViewChatLayout.restoreContentOffset(...)`
 
 open class CollectionViewChatLayout: NSUICollectionViewLayout {
-
     // MARK: Custom Properties
 
     /// `CollectionViewChatLayout` delegate.
@@ -107,8 +106,8 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         return CGRect(
             x: adjustedContentInset.left,
             y: collectionView.contentOffset.y + adjustedContentInset.top,
-            width: collectionView.bounds.width - adjustedContentInset.left - adjustedContentInset.right,
-            height: collectionView.bounds.height - adjustedContentInset.top - adjustedContentInset.bottom
+            width: collectionView.scrollViewBounds.width - adjustedContentInset.left - adjustedContentInset.right,
+            height: collectionView.scrollViewBounds.height - adjustedContentInset.top - adjustedContentInset.bottom
         )
     }
 
@@ -121,7 +120,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         return CGRect(
             x: adjustedContentInset.left + additionalInsets.left,
             y: adjustedContentInset.top + additionalInsets.top,
-            width: collectionView.bounds.width - additionalInsets.left - additionalInsets.right - adjustedContentInset.left - adjustedContentInset.right,
+            width: collectionView.scrollViewBounds.width - additionalInsets.left - additionalInsets.right - adjustedContentInset.left - adjustedContentInset.right,
             height: controller.contentHeight(at: state) - additionalInsets.top - additionalInsets.bottom - adjustedContentInset.top - adjustedContentInset.bottom
         )
     }
@@ -180,7 +179,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         guard let collectionView else {
             return .zero
         }
-        return collectionView.frame.size
+        return collectionView.scrollViewFrame.size
     }
 
     // MARK: Private Properties
@@ -284,9 +283,9 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         }
 
         let insets = NSUIEdgeInsets(
-            top: -collectionView.frame.height,
+            top: -collectionView.scrollViewFrame.height,
             left: 0,
-            bottom: -collectionView.frame.height,
+            bottom: -collectionView.scrollViewFrame.height,
             right: 0
         )
         let visibleBounds = visibleBounds
@@ -457,7 +456,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         }
 
         if prepareActions.contains(.cachePreviousWidth) {
-            cachedCollectionViewSize = collectionView.bounds.size
+            cachedCollectionViewSize = collectionView.scrollViewBounds.size
         }
 
         prepareActions = []
@@ -540,13 +539,15 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         controller.process(changeItems: [])
         state = .afterUpdate
         prepareActions.remove(.switchStates)
-        guard let collectionView,
-              oldBounds.width != collectionView.bounds.width,
+
+        let newBounds = collectionView?.scrollViewBounds
+        guard let newBounds,
+              oldBounds.width != newBounds.width,
               keepContentOffsetAtBottomOnBatchUpdates,
               controller.isLayoutBiggerThanVisibleBounds(at: state) else {
             return
         }
-        let newBounds = collectionView.bounds
+
         let heightDifference = oldBounds.height - newBounds.height
         controller.proposedCompensatingOffset += heightDifference + (oldBounds.origin.y - newBounds.origin.y)
     }
@@ -621,7 +622,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         if heightDifference != 0,
            (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded()) || isUserInitiatedScrolling,
            isAboveBottomEdge {
-            let offsetCompensation: CGFloat = min(controller.contentHeight(at: state) - collectionView!.frame.height + adjustedContentInset.bottom + adjustedContentInset.top, heightDifference)
+            let offsetCompensation: CGFloat = min(controller.contentHeight(at: state) - collectionView!.scrollViewFrame.height + adjustedContentInset.bottom + adjustedContentInset.top, heightDifference)
             context.contentOffsetAdjustment.y += offsetCompensation
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
@@ -703,7 +704,8 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
         // Checking `cachedCollectionViewWidth != collectionView.bounds.size.width` is necessary
         // because the collection view's width can change without a `contentSizeAdjustment` occurring.
-        if context.contentSizeAdjustment.width != 0 || cachedCollectionViewSize != collectionView.bounds.size {
+
+        if context.contentSizeAdjustment.width != 0 || cachedCollectionViewSize != collectionView.scrollViewBounds.size {
             prepareActions.formUnion([.cachePreviousWidth])
         }
 
@@ -721,13 +723,14 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
                contentHeight != 0,
                contentHeight > visibleBounds.size.height {
                 let adjustedContentInset: NSUIEdgeInsets = collectionView.adjustedContentInset
-                let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.frame.height + adjustedContentInset.bottom)
+                let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.scrollViewFrame.height + adjustedContentInset.bottom)
                 switch currentPositionSnapshot.edge {
                 case .top:
                     let desiredOffset = max(min(maxAllowed, frame.minY - currentPositionSnapshot.offset - adjustedContentInset.top - settings.additionalInsets.top), -adjustedContentInset.top)
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 case .bottom:
-                    let desiredOffset = max(min(maxAllowed, frame.maxY + currentPositionSnapshot.offset - collectionView.bounds.height + adjustedContentInset.bottom + settings.additionalInsets.bottom), -adjustedContentInset.top)
+
+                    let desiredOffset = max(min(maxAllowed, frame.maxY + currentPositionSnapshot.offset - collectionView.scrollViewBounds.height + adjustedContentInset.bottom + settings.additionalInsets.bottom), -adjustedContentInset.top)
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
                 }
             }
@@ -773,7 +776,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
            let collectionView {
             reconfigureItemsIndexPaths
                 .filter { collectionView.platformIndexPathsForVisibleItems.contains($0) && !controller.reloadedIndexes.contains($0) }
-
                 .forEach { indexPath in
 
                     #if canImport(AppKit) && !targetEnvironment(macCatalyst)
@@ -1129,7 +1131,8 @@ extension CollectionViewChatLayout {
         guard let collectionView else {
             return .zero
         }
-        let maxContentOffset = max(0 - collectionView.adjustedContentInset.top, controller.contentHeight(at: state) - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
+
+        let maxContentOffset = max(0 - collectionView.adjustedContentInset.top, controller.contentHeight(at: state) - collectionView.scrollViewFrame.height + collectionView.adjustedContentInset.bottom)
         return CGPoint(x: 0, y: maxContentOffset)
     }
 

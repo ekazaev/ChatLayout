@@ -3,9 +3,7 @@
 import AppKit
 
 extension NSView {
-    public enum ContentMode : Int, @unchecked Sendable {
-
-        
+    public enum ContentMode: Int, @unchecked Sendable {
         case scaleToFill = 0
 
         case scaleAspectFit = 1 // contents scaled to fit with fixed aspect. remainder is transparent
@@ -32,7 +30,7 @@ extension NSView {
 
         case bottomRight = 12
     }
-    
+
     var contentMode: ContentMode {
         set {
             setWantsLayer()
@@ -94,13 +92,17 @@ extension NSView {
         .bottomRight: .bottomRight,
         .resize: .scaleToFill,
         .resizeAspect: .scaleAspectFit,
-        .resizeAspectFill: .scaleAspectFill
+        .resizeAspectFill: .scaleAspectFill,
     ]
-    
-    static func animate(withDuration duration: TimeInterval, block: () -> Void) {
+
+    static func animate(withDuration duration: TimeInterval, animations: () -> Void, completion: ((Bool) -> Void)? = nil) {
         NSAnimationContext.runAnimationGroup { context in
+            context.allowsImplicitAnimation = true
             context.duration = duration
-            block()
+            animations()
+            context.completionHandler = {
+                completion?(true)
+            }
         }
     }
 
@@ -161,6 +163,27 @@ extension NSView {
             return layer?.backgroundColor.flatMap { NSColor(cgColor: $0) }
         }
     }
+
+    static var layoutMarginsKey: Void = ()
+
+    var layoutMargins: NSEdgeInsets {
+        set {
+            objc_setAssociatedObject(self, &Self.layoutMarginsKey, NSValue(edgeInsets: newValue), .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+        get {
+            (objc_getAssociatedObject(self, &Self.layoutMarginsKey) as? NSValue)?.edgeInsetsValue ?? .zero
+        }
+    }
+
+    @objc func _marginsInsetsForSafeAreaInsets(_ insets: NSEdgeInsets) -> NSEdgeInsets {
+        layoutMargins + safeAreaInsets
+    }
+}
+
+extension NSEdgeInsets {
+    static func + (lhs: Self, rhs: Self) -> Self {
+        return .init(top: lhs.top + rhs.top, left: lhs.left + rhs.left, bottom: lhs.bottom + rhs.bottom, right: lhs.right + rhs.right)
+    }
 }
 
 extension NSCollectionView {
@@ -171,6 +194,7 @@ extension NSCollectionView {
     ) -> NSUICollectionReusableView {
         makeSupplementaryView(ofKind: elementKind, withIdentifier: .init(identifier), for: indexPath)
     }
+
     func dequeueReusableCell(withReuseIdentifier reuseIdentifier: String, for indexPath: IndexPath) -> NSUICollectionViewCell {
         makeItem(withIdentifier: .init(reuseIdentifier), for: indexPath)
     }
@@ -181,6 +205,25 @@ extension NSCollectionView {
 
     func register(_ viewClass: AnyClass?, forSupplementaryViewOfKind kind: String, withReuseIdentifier identifier: String) {
         register(viewClass, forSupplementaryViewOfKind: kind, withIdentifier: .init(identifier))
+    }
+
+    func deleteItems(at indexPaths: [IndexPath]) {
+        let indexSets = Set(indexPaths)
+        deleteItems(at: indexSets)
+    }
+
+    func insertItems(at indexPaths: [IndexPath]) {
+        let indexSets = Set(indexPaths)
+        insertItems(at: indexSets)
+    }
+
+    func reloadItems(at indexPaths: [IndexPath]) {
+        let indexSets = Set(indexPaths)
+        reloadItems(at: indexSets)
+    }
+
+    func performBatchUpdates(_ updates: () -> Void, completion: ((Bool) -> Void)? = nil) {
+        performBatchUpdates(updates, completionHandler: completion)
     }
 }
 
@@ -225,7 +268,7 @@ extension NSCollectionViewLayoutAttributes {
             (value(forKeyPath: #function) as? NSValue).map(\.rectValue) ?? .zero
         }
     }
-    
+
     var center: CGPoint {
         set {
             setValue(NSValue(point: newValue), forKeyPath: #function)
@@ -244,11 +287,82 @@ extension NSProgressIndicator {
     func startAnimating() {
         startAnimation(nil)
     }
+
     func stopAnimating() {
         stopAnimation(nil)
     }
+
     var isAnimating: Bool {
-        (value(forKeyPath: "_animating") as? Bool) ?? false
+//        (value(forKeyPath: "animating") as? Bool) ?? false
+        false
+    }
+}
+
+extension NSBezierPath {
+    func addLine(to point: NSPoint) {
+        line(to: point)
+    }
+
+    func addCurve(to endPoint: NSPoint, controlPoint1: NSPoint, controlPoint2: NSPoint) {
+        curve(to: endPoint, controlPoint1: controlPoint1, controlPoint2: controlPoint2)
+    }
+
+    func addQuadCurve(to endPoint: NSPoint, controlPoint: NSPoint) {
+        let startPoint = currentPoint
+        let controlPoint1 = NSPoint(x: startPoint.x + ((controlPoint.x - startPoint.x) * 2 / 3), y: startPoint.y + ((controlPoint.y - startPoint.y) * 2 / 3))
+        let controlPoint2 = NSPoint(x: endPoint.x + ((controlPoint.x - endPoint.x) * 2 / 3), y: endPoint.y + ((controlPoint.y - endPoint.y) * 2 / 3))
+        curve(to: endPoint, controlPoint1: controlPoint1, controlPoint2: controlPoint2)
+    }
+
+    func apply(_ transform: CGAffineTransform) {
+        self.transform(using: transform.affineTransform)
+    }
+
+    convenience init(roundedRect rect: NSRect, cornerRadius: CGFloat) {
+        self.init(roundedRect: rect, xRadius: cornerRadius, yRadius: cornerRadius)
+    }
+}
+
+extension NSAffineTransform {
+    static func makeScale(_ sx: CGFloat, _ sy: CGFloat) -> AffineTransform {
+        return AffineTransform(scaleByX: sx, byY: sy)
+    }
+
+    static func makeTranslation(_ tx: CGFloat, _ ty: CGFloat) -> AffineTransform {
+        return AffineTransform(translationByX: tx, byY: ty)
+    }
+}
+
+extension AffineTransform {
+    init(_ cgAffineTransform: CGAffineTransform) {
+        self.init(
+            m11: cgAffineTransform.a,
+            m12: cgAffineTransform.b,
+            m21: cgAffineTransform.c,
+            m22: cgAffineTransform.d,
+            tX: cgAffineTransform.tx,
+            tY: cgAffineTransform.ty
+        )
+    }
+}
+
+extension CGAffineTransform {
+    var affineTransform: AffineTransform {
+        return AffineTransform(self)
+    }
+}
+
+extension NSCollectionViewItem {
+    var contentView: NSView {
+        view
+    }
+}
+
+extension NSGestureRecognizer {
+    convenience init(target: AnyObject?, action: Selector?) {
+        self.init()
+        self.target = target
+        self.action = action
     }
 }
 

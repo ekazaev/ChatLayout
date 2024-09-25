@@ -21,6 +21,7 @@ let enableSelfSizingSupport = false
 
 // By setting this flag to true you can test reconfigure instead of reload.
 let enableReconfigure = false
+
 #if canImport(UIKit)
 import FPSCounter
 import InputBarAccessoryView

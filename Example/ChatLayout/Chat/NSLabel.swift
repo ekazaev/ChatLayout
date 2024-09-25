@@ -3,10 +3,19 @@
 import AppKit
 
 public class NSLabel: NSTextField {
-    public convenience init() {
-        self.init(labelWithString: "")
+    
+    public override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        isEditable = false
+        drawsBackground = false
+        isBordered = false
+        wantsLayer = true
     }
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     public var text: String? {
         set {
             stringValue = newValue ?? ""

@@ -176,7 +176,13 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         cell.customView.spacing = 2
 
         cell.customView.customView.customView.text = title
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        cell.customView.customView.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.visibleRect.width
+#endif
+        
+#if canImport(UIKit)
         cell.customView.customView.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
+#endif
         cell.customView.customView.customView.textColor = .gray
         cell.customView.customView.customView.numberOfLines = 0
         cell.customView.customView.customView.font = .preferredFont(forTextStyle: .caption2)

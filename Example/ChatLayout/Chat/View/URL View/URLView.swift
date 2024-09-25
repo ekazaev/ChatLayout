@@ -45,6 +45,7 @@ final class URLView: NSUIView, ContainerCollectionViewCellDelegate {
 
     #if canImport(AppKit) && !targetEnvironment(macCatalyst)
     override func prepareForReuse() {
+        super.prepareForReuse()
         linkView?.removeFromSuperview()
         linkView = nil
     }

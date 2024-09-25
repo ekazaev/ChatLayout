@@ -6,12 +6,10 @@ import AppKit
 extension NSCollectionView {
     var contentOffset: CGPoint {
         set {
-            guard let scrollView = enclosingScrollView else { return }
-            scrollView.documentView?.scroll(newValue)
+            scroll(newValue)
         }
         get {
-            guard let scrollView = enclosingScrollView else { return .zero }
-            return scrollView.documentVisibleRect.origin
+            visibleRect.origin
         }
     }
 
@@ -47,8 +45,6 @@ extension NSCollectionView {
     @objc private func didEndLiveScroll() {
         isLiveScrolling = false
     }
-
-    
 }
 #endif
 
@@ -60,6 +56,26 @@ extension NSUICollectionView {
 
         #if canImport(UIKit)
         return indexPathsForVisibleItems
+        #endif
+    }
+
+    var scrollViewFrame: CGRect {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        return CGRect(x: frame.minX, y: frame.minY, width: visibleRect.width, height: visibleRect.height)
+        #endif
+
+        #if canImport(UIKit)
+        return frame
+        #endif
+    }
+
+    var scrollViewBounds: CGRect {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        return visibleRect
+        #endif
+
+        #if canImport(UIKit)
+        return bounds
         #endif
     }
 }

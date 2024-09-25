@@ -21,7 +21,7 @@ public final class ContainerCollectionViewItem<CustomView: NSView>: NSCollection
     }
 
     /// Contained view.
-    public lazy var customView = CustomView(frame: view.bounds)
+    public lazy var customView = CustomView()
 
     /// An instance of `ContainerCollectionViewCellDelegate`
     public weak var delegate: ContainerCollectionViewCellDelegate?

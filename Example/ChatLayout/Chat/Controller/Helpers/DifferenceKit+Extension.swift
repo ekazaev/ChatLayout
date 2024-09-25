@@ -11,8 +11,8 @@
 //
 
 import ChatLayout
-import DifferenceKit
 import Foundation
+import DifferenceKit
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 #endif
@@ -21,8 +21,8 @@ import AppKit
 import UIKit
 #endif
 
-public extension NSUICollectionView {
-    func reload<C>(
+extension NSUICollectionView {
+    public func reload<C>(
         using stagedChangeset: StagedChangeset<C>,
         interrupt: ((Changeset<C>) -> Bool)? = nil,
         onInterruptedReload: (() -> Void)? = nil,
@@ -97,6 +97,11 @@ public extension NSUICollectionView {
                     let indexPaths = changeset.elementUpdated.map {
                         IndexPath(item: $0.element, section: $0.section)
                     }
+                    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+                    reloadItems(at: indexPaths)
+                    #endif
+
+                    #if canImport(UIKit)
                     if #available(iOS 15.0, *),
                        enableReconfigure {
                         reconfigureItems(at: indexPaths)
@@ -104,6 +109,7 @@ public extension NSUICollectionView {
                     } else {
                         reloadItems(at: indexPaths)
                     }
+                    #endif
                 }
 
                 for (source, target) in changeset.elementMoved {

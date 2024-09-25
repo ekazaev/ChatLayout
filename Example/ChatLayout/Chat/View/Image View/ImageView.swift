@@ -53,6 +53,7 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
 
     #if canImport(AppKit) && !targetEnvironment(macCatalyst)
     override func prepareForReuse() {
+        super.prepareForReuse()
         imageView.image = nil
     }
     #endif
@@ -95,7 +96,9 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
             loadingIndicator.isHidden = false
             imageView.isHidden = true
             imageView.image = nil
-            stackView.removeArrangedSubview(imageView)
+            if stackView.arrangedSubviews.contains(imageView) {
+                stackView.removeArrangedSubview(imageView)
+            }
             stackView.addArrangedSubview(loadingIndicator)
             if !loadingIndicator.isAnimating {
                 loadingIndicator.startAnimating()
@@ -117,7 +120,9 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
             loadingIndicator.stopAnimating()
             imageView.isHidden = false
             imageView.image = image
-            stackView.removeArrangedSubview(loadingIndicator)
+            if stackView.arrangedSubviews.contains(loadingIndicator) {
+                stackView.removeArrangedSubview(loadingIndicator)
+            }
             stackView.addArrangedSubview(imageView)
             setupSize()
             stackView.setNeedsLayout()
@@ -134,11 +139,9 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
     }
 
     private func setupSubviews() {
-        #if canImport(UIKit)
-
         layoutMargins = .zero
+        #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
-
         #endif
         translatesAutoresizingMaskIntoConstraints = false
 

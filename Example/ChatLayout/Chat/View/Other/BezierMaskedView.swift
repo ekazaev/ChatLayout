@@ -47,7 +47,7 @@ final class BezierMaskedView<CustomView: NSUIView>: NSUIView {
     private var cachedBounds: CGRect?
 
     var maskingPath: NSUIBezierPath {
-        let bezierPath: UIBezierPath
+        let bezierPath: NSUIBezierPath
         let size = bounds.size
         switch bubbleType {
         case .tailed:
@@ -80,6 +80,18 @@ final class BezierMaskedView<CustomView: NSUIView>: NSUIView {
         setupSubviews()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    override func layout() {
+        super.layout()
+        guard cachedBounds != bounds else {
+            return
+        }
+        cachedBounds = bounds
+        updateChannelStyle()
+    }
+    #endif
+
+    #if canImport(UIKit)
     override func layoutSubviews() {
         super.layoutSubviews()
         guard cachedBounds != bounds else {
@@ -88,6 +100,7 @@ final class BezierMaskedView<CustomView: NSUIView>: NSUIView {
         cachedBounds = bounds
         updateChannelStyle()
     }
+    #endif
 
     private func setupSubviews() {
         #if canImport(UIKit)
