@@ -140,12 +140,13 @@ final class ChatCollectionView: UICollectionView {
 
         let itemsGrouppedByReplyId = Dictionary(grouping: allVisibleItems) { $0.cell.replyPattern?.replyId }
         var pathSegmentsById = [String: [(segment: ReplySegments, till: CGFloat)]]()
-        let visibleAccessyItems = itemsGrouppedByReplyId.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, indexPath: IndexPath?, duration: CGFloat)]()) { result, element in
+        let visibleAccessyItems = itemsGrouppedByReplyId.reduce(into: [(id: String, frame: CGRect, cell: UICollectionViewCell, indexPath: IndexPath?, duration: TimeInterval?)]()) { result, element in
             guard let id = element.key else {
                 return
             }
             let items = element.value.sorted { $0.cell.frame.minY < $1.cell.frame.minY }
             var combineRect: CGRect?
+            var combineDuration: TimeInterval = 0
             var pathSegments = [(segment: ReplySegments, till: CGFloat)]()
             var currentSegmentHasher = Hasher()
 
@@ -154,6 +155,7 @@ final class ChatCollectionView: UICollectionView {
                       !deletedCellsSet.contains(item.cell) else {
                     continue
                 }
+                combineDuration = max(combineDuration, item.cell.layer.animation(forKey: "position")?.duration ?? 0)
                 currentSegmentHasher.combine(replyPattern.id)
                 currentSegmentHasher.combine(replyPattern.replyId)
                 var currentRect: CGRect
@@ -178,10 +180,11 @@ final class ChatCollectionView: UICollectionView {
                     pathSegmentsById[accessoryId] = pathSegments
                     pathSegments = .init()
 
-                    let duration = item.cell.layer.animation(forKey: "position")?.duration
-                    result.append((id: accessoryId, frame: previousRect, cell: item.cell, indexPath: item.indexPath, duration: duration ?? 0))
+                    result.append((id: accessoryId, frame: previousRect, cell: item.cell, indexPath: item.indexPath, duration: combineDuration != 0 ? combineDuration : nil))
 
                     currentSegmentHasher = Hasher()
+                    combineDuration = 0
+
                     let bottom = self.convert(CGPoint(x: 0, y: replyBreak.bottom), from: item.cell)
                     var nextRect: CGRect
                     if bottom.y < currentRect.maxY {
@@ -206,20 +209,21 @@ final class ChatCollectionView: UICollectionView {
                let lastElement = items.last {
                 combineRect.origin.x = 20
                 combineRect.size.width = 18
-                let duration = lastElement.cell.layer.animation(forKey: "position")?.duration
-                result.append((id: accessoryId, frame: combineRect, cell: lastElement.cell, indexPath: lastElement.indexPath, duration: duration ?? 0))
+                result.append((id: accessoryId, frame: combineRect, cell: lastElement.cell, indexPath: lastElement.indexPath, duration: combineDuration != 0 ? combineDuration : nil))
             }
             if !pathSegments.isEmpty {
                 pathSegmentsById[accessoryId] = pathSegments
             }
         }
 
-        let currentlyPresentAccessoryItems = visibleAccessyItems.compactMap { item -> (id: String, cell: AccesoryCell, originalCell: UICollectionViewCell, frame: CGRect, duration: CGFloat)? in
+        let currentlyPresentAccessoryItems = visibleAccessyItems.compactMap { item -> (id: String, cell: AccesoryCell, originalCell: UICollectionViewCell, frame: CGRect, duration: TimeInterval?)? in
             guard let cell = currentCellsDict[item.id] else {
                 return nil
             }
             return (id: item.id, cell: cell, originalCell: item.cell, frame: item.frame, duration: item.duration)
         }
+
+        print("\(currentlyPresentAccessoryItems.map({ "\($0.id) - \($0.frame) \($0.duration)" }).joined(separator: "\n"))\n")
 
         for item in currentlyPresentAccessoryItems {
             if let pathSegments = pathSegmentsById[item.id] {
@@ -232,7 +236,8 @@ final class ChatCollectionView: UICollectionView {
             configuration.frame = item.frame
             if item.cell.configuration != configuration {
                 item.cell.configuration = configuration
-                let duration = item.originalCell.layer.animation(forKey: "position")?.duration ?? UIView.inheritedAnimationDuration
+                let duration = item.originalCell.layer.animation(forKey: "position")?.duration ?? item.duration ?? UIView.inheritedAnimationDuration
+                print("DURATION: \(duration)")
                 if duration == 0 {
                     item.cell.commitGeometryUpdates()
                 } else {
@@ -241,7 +246,6 @@ final class ChatCollectionView: UICollectionView {
                         duration: duration,
                         options: .beginFromCurrentState
                     ) {
-                        item.cell.configuration = configuration
                         item.cell.commitGeometryUpdates()
                     }
                 }
