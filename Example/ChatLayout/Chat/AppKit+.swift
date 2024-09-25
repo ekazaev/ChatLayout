@@ -223,7 +223,7 @@ extension NSCollectionView {
     }
 
     func performBatchUpdates(_ updates: () -> Void, completion: ((Bool) -> Void)? = nil) {
-        performBatchUpdates(updates, completionHandler: completion)
+        animator().performBatchUpdates(updates, completionHandler: completion)
     }
 }
 
