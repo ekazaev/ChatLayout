@@ -108,8 +108,10 @@ extension NSView {
 
     static func performWithoutAnimation(_ block: () -> Void) {
         NSAnimationContext.runAnimationGroup { context in
+            let allowsImplicitAnimation = context.allowsImplicitAnimation
             context.allowsImplicitAnimation = false
             block()
+            context.allowsImplicitAnimation = allowsImplicitAnimation
         }
     }
 
@@ -178,6 +180,11 @@ extension NSView {
     @objc func _marginsInsetsForSafeAreaInsets(_ insets: NSEdgeInsets) -> NSEdgeInsets {
         layoutMargins + safeAreaInsets
     }
+    
+    
+//    @objc var isFlipped: Bool {
+//        true
+//    }
 }
 
 extension NSEdgeInsets {

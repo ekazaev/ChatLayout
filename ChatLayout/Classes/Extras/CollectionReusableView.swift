@@ -10,7 +10,9 @@
 import AppKit
 
 public class CollectionReusableView: NSView, NSCollectionViewElement {
-    public override func prepareForReuse() {}
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+    }
 
     public func apply(_ layoutAttributes: NSCollectionViewLayoutAttributes) {}
 

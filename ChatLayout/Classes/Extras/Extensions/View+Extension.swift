@@ -19,8 +19,10 @@ extension NSUIView {
 
     static func performWithoutAnimation(_ block: () -> Void) {
         NSAnimationContext.runAnimationGroup { context in
+            let allowsImplicitAnimation = context.allowsImplicitAnimation
             context.allowsImplicitAnimation = false
             block()
+            context.allowsImplicitAnimation = allowsImplicitAnimation
         }
     }
 

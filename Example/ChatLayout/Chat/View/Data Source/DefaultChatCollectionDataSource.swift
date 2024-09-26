@@ -60,7 +60,6 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
     }
 
     func prepare(with collectionView: NSUICollectionView) {
-        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         collectionView.register(TextMessageCollectionCell.self, forCellWithReuseIdentifier: TextMessageCollectionCell.reuseIdentifier)
         collectionView.register(ImageCollectionCell.self, forCellWithReuseIdentifier: ImageCollectionCell.reuseIdentifier)
         collectionView.register(TitleCollectionCell.self, forCellWithReuseIdentifier: TitleCollectionCell.reuseIdentifier)
@@ -68,23 +67,10 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         collectionView.register(TypingIndicatorCollectionCell.self, forCellWithReuseIdentifier: TypingIndicatorCollectionCell.reuseIdentifier)
         collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: NSUICollectionView.elementKindSectionHeader, withReuseIdentifier: TextTitleView.reuseIdentifier)
         collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: NSUICollectionView.elementKindSectionFooter, withReuseIdentifier: TextTitleView.reuseIdentifier)
+        collectionView.register(URLCollectionCell.self, forCellWithReuseIdentifier: URLCollectionCell.reuseIdentifier)
         if #available(iOS 13.0, *) {
             collectionView.register(URLCollectionCell.self, forCellWithReuseIdentifier: URLCollectionCell.reuseIdentifier)
         }
-        #endif
-
-        #if canImport(UIKit)
-        collectionView.register(TextMessageCollectionCell.self, forCellWithReuseIdentifier: TextMessageCollectionCell.reuseIdentifier)
-        collectionView.register(ImageCollectionCell.self, forCellWithReuseIdentifier: ImageCollectionCell.reuseIdentifier)
-        collectionView.register(TitleCollectionCell.self, forCellWithReuseIdentifier: TitleCollectionCell.reuseIdentifier)
-        collectionView.register(UserTitleCollectionCell.self, forCellWithReuseIdentifier: UserTitleCollectionCell.reuseIdentifier)
-        collectionView.register(TypingIndicatorCollectionCell.self, forCellWithReuseIdentifier: TypingIndicatorCollectionCell.reuseIdentifier)
-        collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TextTitleView.reuseIdentifier)
-        collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: TextTitleView.reuseIdentifier)
-        if #available(iOS 13.0, *) {
-            collectionView.register(URLCollectionCell.self, forCellWithReuseIdentifier: URLCollectionCell.reuseIdentifier)
-        }
-        #endif
     }
 
     private func createTextCell(collectionView: NSUICollectionView, messageId: UUID, indexPath: IndexPath, text: String, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> NSUICollectionViewCell {
@@ -176,13 +162,13 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         cell.customView.spacing = 2
 
         cell.customView.customView.customView.text = title
-#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         cell.customView.customView.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.visibleRect.width
-#endif
-        
-#if canImport(UIKit)
+        #endif
+
+        #if canImport(UIKit)
         cell.customView.customView.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
-#endif
+        #endif
         cell.customView.customView.customView.textColor = .gray
         cell.customView.customView.customView.numberOfLines = 0
         cell.customView.customView.customView.font = .preferredFont(forTextStyle: .caption2)
@@ -343,6 +329,7 @@ extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
             view.customView.textColor = .lightGray
             view.customView.numberOfLines = 0
             view.customView.font = .preferredFont(forTextStyle: .caption2)
+            view.customView.alignment = .center
             return view
         case NSUICollectionView.elementKindSectionFooter:
             let view = collectionView.dequeueReusableSupplementaryView(
@@ -355,6 +342,7 @@ extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
             view.customView.textColor = .lightGray
             view.customView.numberOfLines = 0
             view.customView.font = .preferredFont(forTextStyle: .caption2)
+            view.customView.alignment = .right
             return view
         default:
             fatalError()

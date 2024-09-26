@@ -6,10 +6,10 @@ import AppKit
 extension NSCollectionView {
     var contentOffset: CGPoint {
         set {
-            scroll(newValue)
+            animator().enclosingScrollView?.contentView.setBoundsOrigin(newValue)
         }
         get {
-            visibleRect.origin
+            enclosingScrollView?.contentView.bounds.origin ?? visibleRect.origin
         }
     }
 

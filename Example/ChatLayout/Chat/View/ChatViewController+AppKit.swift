@@ -43,8 +43,8 @@ final class ChatViewController: NSViewController {
     private var currentControllerActions: SetActor<Set<ControllerActions>, ReactionTypes> = SetActor()
     private let editNotifier: EditNotifier
     private let swipeNotifier: SwipeNotifier
-    private var collectionView: NSCollectionView!
-    private var scrollView: NSScrollView!
+    private let collectionView: NSCollectionView = .init(frame: .zero)
+    private let scrollView: NSScrollView = .init()
     private var chatLayout = CollectionViewChatLayout()
     private let chatController: ChatController
     private let dataSource: ChatCollectionDataSource
@@ -85,35 +85,36 @@ final class ChatViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.frame = .init(x: 0, y: 0, width: 1024, height: 768)
+        view.addSubview(scrollView)
         chatLayout.settings.interItemSpacing = 8
         chatLayout.settings.interSectionSpacing = 8
         chatLayout.settings.additionalInsets = NSEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
         chatLayout.keepContentAtBottomOfVisibleArea = true
-
-        scrollView = NSScrollView()
-        collectionView = NSCollectionView(frame: view.frame)
-        collectionView.collectionViewLayout = chatLayout
-        view.addSubview(scrollView)
-        scrollView.documentView = collectionView
-        collectionView.dataSource = dataSource
         chatLayout.delegate = dataSource
-        collectionView.delegate = self
 
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.collectionViewLayout = chatLayout
+        collectionView.dataSource = dataSource
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+        
+        scrollView.documentView = collectionView
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.frame = view.bounds
+        scrollView.hasHorizontalScroller = false
+        scrollView.hasVerticalScroller = true
+        scrollView.drawsBackground = false
+        scrollView.backgroundColor = .clear
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
         ])
-        scrollView.hasHorizontalScroller = false
-        scrollView.hasVerticalScroller = true
-        scrollView.drawsBackground = false
-        scrollView.backgroundColor = .clear
-        collectionView.backgroundColor = .clear
+
+        
         dataSource.prepare(with: collectionView)
 
         currentControllerActions.options.insert(.loadingInitialMessages)

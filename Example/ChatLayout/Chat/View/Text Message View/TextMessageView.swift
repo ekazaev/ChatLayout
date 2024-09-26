@@ -122,6 +122,11 @@ extension TextMessageView: AvatarViewDelegate {
 /// NSTextView with hacks to avoid selection
 private final class MessageTextView: NSTextView {
     override var acceptsFirstResponder: Bool { false }
+    
+    var text: String {
+        set { string = newValue }
+        get { string }
+    }
 }
 #endif
 

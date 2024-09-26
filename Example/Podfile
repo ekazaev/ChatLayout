@@ -29,6 +29,9 @@ target 'ChatLayout_Example_macOS' do
   platform :osx, '11.0'
   pod 'ChatLayout', :path => '../'
   pod 'DifferenceKit'
+  target 'ChatLayout_Tests_macOS' do
+    inherit! :search_paths
+  end
 end
 
 

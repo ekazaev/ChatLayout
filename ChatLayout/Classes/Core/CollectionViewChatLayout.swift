@@ -138,6 +138,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         _flipsHorizontallyInOppositeLayoutDirection
     }
     #endif
+    
     /// Custom layoutAttributesClass is `ChatLayoutAttributes`.
     public override class var layoutAttributesClass: AnyClass {
         ChatLayoutAttributes.self
@@ -232,6 +233,12 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
     // MARK: IOS 15.1 fix flags
 
     private var needsIOS15_1IssueFix: Bool {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        return false
+        #endif
+
+        #if canImport(UIKit)
+
         guard enableIOS15_1Fix else {
             return false
         }
@@ -242,6 +249,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
             return false
         }
         return isUserInitiatedScrolling && !controller.isAnimatedBoundsChange
+        #endif
     }
 
     // MARK: Constructors
