@@ -83,33 +83,32 @@ final class BezierMaskedView<CustomView: NSUIView>: NSUIView {
     #if canImport(AppKit) && !targetEnvironment(macCatalyst)
     override func layout() {
         super.layout()
-        guard cachedBounds != bounds else {
-            return
-        }
-        cachedBounds = bounds
-        updateChannelStyle()
+        didLayout()
     }
     #endif
 
     #if canImport(UIKit)
     override func layoutSubviews() {
         super.layoutSubviews()
+        didLayout()
+    }
+    #endif
+
+    private func didLayout() {
         guard cachedBounds != bounds else {
             return
         }
         cachedBounds = bounds
         updateChannelStyle()
     }
-    #endif
-
+    
     private func setupSubviews() {
         #if canImport(UIKit)
-
-        layoutMargins = .zero
         insetsLayoutMarginsFromSafeArea = false
         preservesSuperviewLayoutMargins = false
-
         #endif
+        
+        layoutMargins = .zero
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(customView)
         customView.translatesAutoresizingMaskIntoConstraints = false

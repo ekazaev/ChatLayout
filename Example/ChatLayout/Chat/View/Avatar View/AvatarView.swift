@@ -57,11 +57,9 @@ final class AvatarView: NSUIView, StaticViewFactory {
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-        #if canImport(UIKit)
-
-        insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
-
+        #if canImport(UIKit)
+        insetsLayoutMarginsFromSafeArea = false
         #endif
         addSubview(circleImageView)
 
@@ -81,16 +79,11 @@ final class AvatarView: NSUIView, StaticViewFactory {
         circleImageView.customView.contentMode = .scaleAspectFill
         
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-
-        let gestureRecogniser = NSClickGestureRecognizer()
+        let gestureRecogniser = NSClickGestureRecognizer(target: self, action: #selector(avatarTapped))
         circleImageView.addGestureRecognizer(gestureRecogniser)
-        gestureRecogniser.target = self
-        gestureRecogniser.action = #selector(avatarTapped)
-        
         #endif
 
         #if canImport(UIKit)
-
         let gestureRecogniser = UITapGestureRecognizer()
         circleImageView.addGestureRecognizer(gestureRecogniser)
         gestureRecogniser.addTarget(self, action: #selector(avatarTapped))

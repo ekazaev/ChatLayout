@@ -187,19 +187,19 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         let sender = allUsersIds[Int.random(in: 0..<allUsersIds.count)] // allUsersIds.first!//
         lastMessageIndex += 1
         switch (Int.random(in: 0...8), enableRichContent) {
-        case (5, true):
-            return RawMessage(id: UUID(), date: date, data: .url(websiteUrls[Int.random(in: 0..<websiteUrls.count)]), userId: sender)
-        case (6, true):
-            return RawMessage(id: UUID(), date: date, data: .image(.imageURL(imageUrls[Int.random(in: 0..<imageUrls.count)])), userId: sender)
-        case (7, true):
-            return RawMessage(id: UUID(), date: date, data: .image(.image(images[Int.random(in: 0..<images.count)])), userId: sender)
-        case (8, true):
-            return RawMessage(id: UUID(),
-                              date: date,
-                              data: .text(TextGenerator.getString(of: 5) +
-                                  " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " +
-                                  TextGenerator.getString(of: 5)),
-                              userId: sender)
+//        case (5, true):
+//            return RawMessage(id: UUID(), date: date, data: .url(websiteUrls[Int.random(in: 0..<websiteUrls.count)]), userId: sender)
+//        case (6, true):
+//            return RawMessage(id: UUID(), date: date, data: .image(.imageURL(imageUrls[Int.random(in: 0..<imageUrls.count)])), userId: sender)
+//        case (7, true):
+//            return RawMessage(id: UUID(), date: date, data: .image(.image(images[Int.random(in: 0..<images.count)])), userId: sender)
+//        case (8, true):
+//            return RawMessage(id: UUID(),
+//                              date: date,
+//                              data: .text(TextGenerator.getString(of: 5) +
+//                                  " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " +
+//                                  TextGenerator.getString(of: 5)),
+//                              userId: sender)
         default:
             return RawMessage(id: UUID(), date: date, data: .text(TextGenerator.getString(of: 20)), userId: sender)
         }

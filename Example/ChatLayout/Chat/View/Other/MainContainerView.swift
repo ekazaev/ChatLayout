@@ -77,19 +77,17 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: N
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-#if canImport(UIKit)
-        
-        insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
-        
-#endif
+        #if canImport(UIKit)
+        insetsLayoutMarginsFromSafeArea = false
+        #endif
         clipsToBounds = false
         addSubview(containerView)
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             containerView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            containerView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
 
         accessoryView.translatesAutoresizingMaskIntoConstraints = false

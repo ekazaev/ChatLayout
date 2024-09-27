@@ -392,11 +392,11 @@
 			isa = PBXGroup;
 			children = (
 				4504F3AB24FA66F500385590 /* Constants.swift */,
+				E9622F332CA2B6DE00EEA1CA /* Typealias.swift */,
 				4504F3AC24FA66F500385590 /* Controller */,
 				4504F3B024FA66F500385590 /* Model */,
 				4504F3C924FA66F500385590 /* View */,
 				1BE54E2EEA9F69AC301137BC /* Builder */,
-				E9622F332CA2B6DE00EEA1CA /* Typealias.swift */,
 				E9E60AB82CA54DAF00D49A5E /* Extension */,
 			);
 			path = Chat;

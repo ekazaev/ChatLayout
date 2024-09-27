@@ -35,20 +35,18 @@ final class StatusView: NSUIView, StaticViewFactory {
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-#if canImport(UIKit)
-        insetsLayoutMarginsFromSafeArea = false
-        
         layoutMargins = .zero
-        
-#endif
         addSubview(imageView)
+        #if canImport(UIKit)
+        insetsLayoutMarginsFromSafeArea = false
+        #endif
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             imageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            imageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
         let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 15)
         widthConstraint.priority = NSUILayoutPriority(rawValue: 999)

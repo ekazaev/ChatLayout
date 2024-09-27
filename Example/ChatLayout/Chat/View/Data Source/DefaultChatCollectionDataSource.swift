@@ -162,13 +162,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         cell.customView.spacing = 2
 
         cell.customView.customView.customView.text = title
-        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        cell.customView.customView.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.visibleRect.width
-        #endif
-
-        #if canImport(UIKit)
         cell.customView.customView.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
-        #endif
         cell.customView.customView.customView.textColor = .gray
         cell.customView.customView.customView.numberOfLines = 0
         cell.customView.customView.customView.font = .preferredFont(forTextStyle: .caption2)
@@ -329,7 +323,9 @@ extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
             view.customView.textColor = .lightGray
             view.customView.numberOfLines = 0
             view.customView.font = .preferredFont(forTextStyle: .caption2)
+            #if canImport(AppKit) && !targetEnvironment(macCatalyst)
             view.customView.alignment = .center
+            #endif
             return view
         case NSUICollectionView.elementKindSectionFooter:
             let view = collectionView.dequeueReusableSupplementaryView(
@@ -342,7 +338,9 @@ extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
             view.customView.textColor = .lightGray
             view.customView.numberOfLines = 0
             view.customView.font = .preferredFont(forTextStyle: .caption2)
+            #if canImport(AppKit) && !targetEnvironment(macCatalyst)
             view.customView.alignment = .right
+            #endif
             return view
         default:
             fatalError()

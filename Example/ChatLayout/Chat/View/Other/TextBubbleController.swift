@@ -52,7 +52,6 @@ final class TextBubbleController<CustomView: NSUIView>: BubbleController {
             #endif
 
             #if canImport(UIKit)
-
             if #available(iOS 13.0, *) {
                 bubbleView.backgroundColor = type.isIncoming ? .systemGray5 : .systemBlue
             } else {

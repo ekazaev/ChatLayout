@@ -33,12 +33,10 @@ final class AvatarPlaceholderView: NSUIView, StaticViewFactory {
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-#if canImport(UIKit)
-        
-        insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
-        
-#endif
+        #if canImport(UIKit)
+        insetsLayoutMarginsFromSafeArea = false
+        #endif
         let constraint = widthAnchor.constraint(equalToConstant: 30)
         constraint.priority = NSUILayoutPriority(rawValue: 999)
         constraint.isActive = true

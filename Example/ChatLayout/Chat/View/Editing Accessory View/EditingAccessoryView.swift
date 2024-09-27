@@ -45,8 +45,8 @@ final class EditingAccessoryView: NSUIView, StaticViewFactory {
     private func setupSubviews() {
         #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
-        layoutMargins = .zero
         #endif
+        layoutMargins = .zero
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(button)
 
