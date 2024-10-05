@@ -323,9 +323,6 @@ extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
             view.customView.textColor = .lightGray
             view.customView.numberOfLines = 0
             view.customView.font = .preferredFont(forTextStyle: .caption2)
-            #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-            view.customView.alignment = .center
-            #endif
             return view
         case NSUICollectionView.elementKindSectionFooter:
             let view = collectionView.dequeueReusableSupplementaryView(
@@ -338,9 +335,6 @@ extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
             view.customView.textColor = .lightGray
             view.customView.numberOfLines = 0
             view.customView.font = .preferredFont(forTextStyle: .caption2)
-            #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-            view.customView.alignment = .right
-            #endif
             return view
         default:
             fatalError()
@@ -351,10 +345,12 @@ extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
 extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     public func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
         true
+//        false
     }
 
     public func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
         true
+//        false
     }
 
     public func sizeForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {

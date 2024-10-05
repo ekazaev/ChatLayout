@@ -20,7 +20,7 @@ import AppKit
 import UIKit
 #endif
 
-/// A container `UICollectionReusableView` that constraints its contained view to its margins.
+// A container `UICollectionReusableView` that constraints its contained view to its margins.
 
 public final class ContainerCollectionReusableView<CustomView: NSUIView>: CollectionReusableView {
     /// Default reuse identifier is set with the class name.
@@ -54,6 +54,48 @@ public final class ContainerCollectionReusableView<CustomView: NSUIView>: Collec
         delegate?.prepareForReuse()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    func callPrivatePreferredLayoutAttributes(fittingAttributes: NSCollectionViewLayoutAttributes) -> NSCollectionViewLayoutAttributes {
+        let selector = NSSelectorFromString("preferredLayoutAttributesFittingAttributes:")
+        let method = class_getInstanceMethod(NSView.self, selector)
+        typealias Function = @convention(c) (Any, Selector, NSCollectionViewLayoutAttributes) -> NSCollectionViewLayoutAttributes
+        let implementation = method.flatMap { method_getImplementation($0) }
+        let function = unsafeBitCast(implementation, to: Function.self)
+        return function(self, selector, fittingAttributes)
+    }
+
+    /// Gives the cell a chance to modify the attributes provided by the layout object.
+    /// - Parameter layoutAttributes: The attributes provided by the layout object. These attributes represent the values that the layout intends to apply to the cell.
+    /// - Returns: Modified `UICollectionViewLayoutAttributes`
+    public func preferredLayoutAttributesFitting(_ layoutAttributes: NSUICollectionViewLayoutAttributes) -> NSUICollectionViewLayoutAttributes {
+        guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {
+            return callPrivatePreferredLayoutAttributes(fittingAttributes: layoutAttributes)
+        }
+        delegate?.apply(chatLayoutAttributes)
+
+        let resultingLayoutAttributes: ChatLayoutAttributes
+        if let preferredLayoutAttributes = delegate?.preferredLayoutAttributesFitting(chatLayoutAttributes) {
+            resultingLayoutAttributes = preferredLayoutAttributes
+        } else if let chatLayoutAttributes = callPrivatePreferredLayoutAttributes(fittingAttributes: chatLayoutAttributes) as? ChatLayoutAttributes {
+            delegate?.modifyPreferredLayoutAttributesFitting(chatLayoutAttributes)
+            resultingLayoutAttributes = chatLayoutAttributes
+        } else {
+            resultingLayoutAttributes = chatLayoutAttributes
+        }
+        return resultingLayoutAttributes
+    }
+
+    /// Applies the specified layout attributes to the view.
+    /// - Parameter layoutAttributes: The layout attributes to apply.
+    public func apply(_ layoutAttributes: NSUICollectionViewLayoutAttributes) {
+        guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {
+            return
+        }
+        delegate?.apply(chatLayoutAttributes)
+    }
+    #endif
+
+    #if canImport(UIKit)
     /// Gives the cell a chance to modify the attributes provided by the layout object.
     /// - Parameter layoutAttributes: The attributes provided by the layout object. These attributes represent the values that the layout intends to apply to the cell.
     /// - Returns: Modified `UICollectionViewLayoutAttributes`
@@ -84,6 +126,7 @@ public final class ContainerCollectionReusableView<CustomView: NSUIView>: Collec
         super.apply(layoutAttributes)
         delegate?.apply(chatLayoutAttributes)
     }
+    #endif
 
     private func setupSubviews() {
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)

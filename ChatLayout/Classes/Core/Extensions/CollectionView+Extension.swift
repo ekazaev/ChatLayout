@@ -67,7 +67,7 @@ extension NSUICollectionView {
 
     var scrollViewFrame: CGRect {
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        return enclosingScrollView?.contentView.frame ?? visibleRect
+        return enclosingScrollView?.contentView.frame ?? frame
 //        return CGRect(x: frame.origin.x, y: frame.minY, width: bounds.width, height: bounds.height)
         #endif
 

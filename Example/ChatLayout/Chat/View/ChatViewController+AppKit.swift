@@ -73,7 +73,7 @@ final class ChatViewController: NSViewController {
     }
 
     @available(*, unavailable, message: "Use init(messageController:) instead")
-    override convenience init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         fatalError()
     }
 

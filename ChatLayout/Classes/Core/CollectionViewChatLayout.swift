@@ -89,7 +89,8 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
     ///
     /// **NB:**
     /// This is an experimental flag.
-    @available(iOS 16.0, *)
+    @available(iOS 16.0, macCatalyst 16.0, *)
+    @available(macOS, unavailable)
     public var supportSelfSizingInvalidation: Bool {
         get {
             _supportSelfSizingInvalidation
@@ -235,8 +236,8 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     private var needsIOS15_1IssueFix: Bool {
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        return true
-//        return false
+//        return true
+        return false
         #endif
 
         #if canImport(UIKit)
@@ -563,7 +564,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Cleans up after any animated changes to the view’s bounds or after the insertion or deletion of items.
     open override func finalizeAnimatedBoundsChange() {
-        print("\(#function)")
         if controller.isAnimatedBoundsChange {
             state = .beforeUpdate
             resetInvalidatedAttributes()
@@ -597,7 +597,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
     /// Retrieves a context object that identifies the portions of the layout that should change in response to dynamic cell changes.
     open override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: NSUICollectionViewLayoutAttributes,
                                            withOriginalAttributes originalAttributes: NSUICollectionViewLayoutAttributes) -> NSUICollectionViewLayoutInvalidationContext {
-        print("\(#function)")
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
               let preferredAttributesIndexPath = preferredMessageAttributes.platformIndexPath,
               controller.item(for: preferredAttributesIndexPath.itemPath, kind: .cell, at: state) != nil
@@ -616,7 +615,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         let newItemSize = itemSize(with: preferredMessageAttributes)
         let newItemAlignment = alignment(for: preferredMessageAttributes.kind, at: preferredAttributesIndexPath)
         let newInterItemSpacing = interItemSpacing(for: preferredMessageAttributes.kind, at: preferredAttributesIndexPath)
-        print("newItemSize: \(newItemSize)")
         controller.update(
             preferredSize: newItemSize,
             alignment: newItemAlignment,
@@ -689,15 +687,16 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.
     open override func invalidationContext(forBoundsChange newBounds: CGRect) -> NSUICollectionViewLayoutInvalidationContext {
-        print("\(#function)")
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext
         invalidationContext.invalidateLayoutMetrics = false
+//#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+//        collectionView?.contentOffset = newBounds.origin
+//#endif
         return invalidationContext
     }
 
     /// Invalidates the current layout using the information in the provided context object.
     open override func invalidateLayout(with context: NSUICollectionViewLayoutInvalidationContext) {
-        print("\(#function), invalidateDataSourceCounts: \(context.invalidateDataSourceCounts), invalidateEverything: \(context.invalidateEverything)")
         guard let collectionView else {
             super.invalidateLayout(with: context)
             return
@@ -713,7 +712,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
         if context.invalidateEverything {
             prepareActions.formUnion([.recreateSectionModels])
-            print("prepareActions add `recreateSectionModels`")
         }
 
         // Checking `cachedCollectionViewWidth != collectionView.bounds.size.width` is necessary
@@ -721,17 +719,14 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
         if context.contentSizeAdjustment.width != 0 || cachedCollectionViewSize != collectionView.scrollViewBounds.size {
             prepareActions.formUnion([.cachePreviousWidth])
-            print("prepareActions add `cachePreviousWidth`")
         }
 
         if cachedCollectionViewInset != adjustedContentInset {
             prepareActions.formUnion([.cachePreviousContentInsets])
-            print("prepareActions add `cachePreviousContentInsets`")
         }
 
         if context.invalidateLayoutMetrics, !context.invalidateDataSourceCounts {
             prepareActions.formUnion([.updateLayoutMetrics])
-            print("prepareActions add `updateLayoutMetrics`")
         }
 
         if let currentPositionSnapshot {

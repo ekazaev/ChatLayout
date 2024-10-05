@@ -9,20 +9,6 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-public class CollectionReusableView: NSView, NSCollectionViewElement {
-    public override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-
-    public func apply(_ layoutAttributes: NSCollectionViewLayoutAttributes) {}
-
-    public func willTransition(from oldLayout: NSCollectionViewLayout, to newLayout: NSCollectionViewLayout) {}
-
-    public func didTransition(from oldLayout: NSCollectionViewLayout, to newLayout: NSCollectionViewLayout) {}
-
-    public func preferredLayoutAttributesFitting(_ layoutAttributes: NSCollectionViewLayoutAttributes) -> NSCollectionViewLayoutAttributes {
-        layoutAttributes
-    }
-}
+public class CollectionReusableView: NSView, NSCollectionViewElement {}
 
 #endif
