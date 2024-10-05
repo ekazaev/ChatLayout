@@ -12,9 +12,15 @@
 
 import ChatLayout
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: UIView, TrailingAccessory: StaticViewFactory>: UIView, SwipeNotifierDelegate {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: NSUIView, TrailingAccessory: StaticViewFactory>: NSUIView, SwipeNotifierDelegate {
     var swipeCompletionRate: CGFloat = 0 {
         didSet {
             updateOffsets()
@@ -33,7 +39,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
         containerView.trailingView
     }
 
-    weak var accessoryConnectingView: UIView? {
+    weak var accessoryConnectingView: NSUIView? {
         didSet {
             guard accessoryConnectingView != oldValue else {
                 return
@@ -44,7 +50,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
 
     var accessoryView = DateAccessoryView()
 
-    var accessorySafeAreaInsets: UIEdgeInsets = .zero {
+    var accessorySafeAreaInsets: NSUIEdgeInsets = .zero {
         didSet {
             guard accessorySafeAreaInsets != oldValue else {
                 return
@@ -71,15 +77,17 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-        insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+        #if canImport(UIKit)
+        insetsLayoutMarginsFromSafeArea = false
+        #endif
         clipsToBounds = false
         addSubview(containerView)
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             containerView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            containerView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
 
         accessoryView.translatesAutoresizingMaskIntoConstraints = false

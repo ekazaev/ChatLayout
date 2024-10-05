@@ -12,9 +12,15 @@
 
 import ChatLayout
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-final class AvatarPlaceholderView: UIView, StaticViewFactory {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class AvatarPlaceholderView: NSUIView, StaticViewFactory {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -27,10 +33,12 @@ final class AvatarPlaceholderView: UIView, StaticViewFactory {
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-        insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+        #if canImport(UIKit)
+        insetsLayoutMarginsFromSafeArea = false
+        #endif
         let constraint = widthAnchor.constraint(equalToConstant: 30)
-        constraint.priority = UILayoutPriority(rawValue: 999)
+        constraint.priority = NSUILayoutPriority(rawValue: 999)
         constraint.isActive = true
         heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
     }

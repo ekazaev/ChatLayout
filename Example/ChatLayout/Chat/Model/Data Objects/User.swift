@@ -12,7 +12,6 @@
 
 import DifferenceKit
 import Foundation
-import UIKit
 
 struct User: Hashable {
     var id: Int

@@ -11,11 +11,19 @@
 //
 
 import Foundation
-import UIKit
 
-/// A container view that helps to layout the message view and its accessory
-public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: UIView>: UIView {
-    private lazy var stackView = UIStackView(frame: bounds)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
+import UIKit
+#endif
+
+// A container view that helps to layout the message view and its accessory
+
+public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: NSUIView>: NSUIView {
+    private lazy var stackView = NSUIStackView(frame: bounds)
 
     /// An accessory view.
     public lazy var accessoryView: AccessoryViewFactory.View? = AccessoryViewFactory.buildView(within: bounds)
@@ -59,21 +67,38 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
     }
 
     private func setupSubviews() {
-        translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+        #endif
+        translatesAutoresizingMaskIntoConstraints = false
         addSubview(stackView)
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
         stackView.spacing = .zero
-
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        stackView.orientation = .horizontal
+        #endif
+        #if canImport(UIKit)
+        stackView.axis = .horizontal
+        #endif
+        
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+        ])
+        #endif
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
+        #endif
 
         if let accessoryView {
             stackView.addArrangedSubview(accessoryView)

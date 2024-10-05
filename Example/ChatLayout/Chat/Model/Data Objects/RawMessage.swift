@@ -11,7 +11,6 @@
 //
 
 import Foundation
-import UIKit
 
 struct RawMessage: Hashable {
     enum Data: Hashable {

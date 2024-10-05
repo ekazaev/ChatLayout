@@ -12,7 +12,13 @@
 
 import Foundation
 import LinkPresentation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 @available(iOS 13, *)
 final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching where Cache.CachingKey == URL, Cache.Entity == Data {

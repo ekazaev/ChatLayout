@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// Internal replacement for `UICollectionViewUpdateItem`.
 enum ChangeItem: Equatable {
@@ -42,7 +48,7 @@ enum ChangeItem: Equatable {
     /// Move item from `initialItemIndexPath` to `finalItemIndexPath`
     case itemMove(initialItemIndexPath: IndexPath, finalItemIndexPath: IndexPath)
 
-    init?(with updateItem: UICollectionViewUpdateItem) {
+    init?(with updateItem: NSUICollectionViewUpdateItem) {
         let updateAction = updateItem.updateAction
         let indexPathBeforeUpdate = updateItem.indexPathBeforeUpdate
         let indexPathAfterUpdate = updateItem.indexPathAfterUpdate

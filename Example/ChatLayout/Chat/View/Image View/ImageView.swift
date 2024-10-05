@@ -12,14 +12,26 @@
 
 import ChatLayout
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
-final class ImageView: UIView, ContainerCollectionViewCellDelegate {
-    private lazy var stackView = UIStackView(frame: bounds)
+final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
+    private lazy var stackView = NSUIStackView(frame: bounds)
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    private lazy var loadingIndicator = NSProgressIndicator()
+    #endif
+
+    #if canImport(UIKit)
     private lazy var loadingIndicator = UIActivityIndicatorView(style: .gray)
+    #endif
 
-    private lazy var imageView = UIImageView(frame: bounds)
+    private lazy var imageView = NSUIImageView(frame: bounds)
 
     private var controller: ImageController!
 
@@ -39,9 +51,18 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
         setupSubviews()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
+    #endif
+
+    #if canImport(UIKit)
     func prepareForReuse() {
         imageView.image = nil
     }
+    #endif
 
     func apply(_ layoutAttributes: ChatLayoutAttributes) {
         viewPortWidth = layoutAttributes.layoutFrame.width
@@ -75,38 +96,54 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
             loadingIndicator.isHidden = false
             imageView.isHidden = true
             imageView.image = nil
-            stackView.removeArrangedSubview(imageView)
+            if stackView.arrangedSubviews.contains(imageView) {
+                stackView.removeArrangedSubview(imageView)
+            }
             stackView.addArrangedSubview(loadingIndicator)
             if !loadingIndicator.isAnimating {
                 loadingIndicator.startAnimating()
             }
+            #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+            backgroundColor = NSUIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
+            #endif
+
+            #if canImport(UIKit)
             if #available(iOS 13.0, *) {
                 backgroundColor = .systemGray5
             } else {
-                backgroundColor = UIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
+                backgroundColor = NSUIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
             }
+            #endif
             setupSize()
         case let .image(image):
             loadingIndicator.isHidden = true
             loadingIndicator.stopAnimating()
             imageView.isHidden = false
             imageView.image = image
-            stackView.removeArrangedSubview(loadingIndicator)
+            if stackView.arrangedSubviews.contains(loadingIndicator) {
+                stackView.removeArrangedSubview(loadingIndicator)
+            }
             stackView.addArrangedSubview(imageView)
             setupSize()
             stackView.setNeedsLayout()
             stackView.layoutIfNeeded()
             backgroundColor = .clear
         }
+        #if canImport(UIKit)
+
         if let cell = superview(of: UICollectionViewCell.self) {
             cell.contentView.invalidateIntrinsicContentSize()
         }
+
+        #endif
     }
 
     private func setupSubviews() {
         layoutMargins = .zero
-        translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
+        #endif
+        translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -114,33 +151,35 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
             stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
+
         imageView.contentMode = .scaleAspectFill
+
         imageView.isHidden = true
 
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         loadingIndicator.isHidden = true
 
         let loadingWidthConstraint = loadingIndicator.widthAnchor.constraint(equalToConstant: 100)
-        loadingWidthConstraint.priority = UILayoutPriority(999)
+        loadingWidthConstraint.priority = NSUILayoutPriority(999)
         loadingWidthConstraint.isActive = true
 
         let loadingHeightConstraint = loadingIndicator.heightAnchor.constraint(equalToConstant: 100)
-        loadingHeightConstraint.priority = UILayoutPriority(999)
+        loadingHeightConstraint.priority = NSUILayoutPriority(999)
         loadingHeightConstraint.isActive = true
 
         imageWidthConstraint = imageView.widthAnchor.constraint(equalToConstant: 310)
-        imageWidthConstraint?.priority = UILayoutPriority(999)
+        imageWidthConstraint?.priority = NSUILayoutPriority(999)
 
         imageHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: 40)
-        imageHeightConstraint?.priority = UILayoutPriority(999)
+        imageHeightConstraint?.priority = NSUILayoutPriority(999)
     }
 
     private func setupSize() {
-        UIView.performWithoutAnimation {
+        NSUIView.performWithoutAnimation {
             switch controller.state {
             case .loading:
                 imageWidthConstraint?.isActive = false
