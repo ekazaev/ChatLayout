@@ -33,10 +33,8 @@ public protocol StaticViewFactory {
 
 /// Default extension build the `UIView` using its default constructor.
 
-public extension StaticViewFactory where Self: ChatLayout.NSUIView {
-
-
-    static func buildView(within bounds: CGRect) -> Self? {
+extension StaticViewFactory where Self: ChatLayout.NSUIView {
+    public static func buildView(within bounds: CGRect) -> Self? {
         Self(frame: bounds)
     }
 }
@@ -46,8 +44,6 @@ public struct VoidViewFactory: StaticViewFactory {
     /// Nil view placeholder type.
 
     public final class VoidView: ChatLayout.NSUIView {
-
-
         @available(*, unavailable, message: "This view can not be instantiated.")
         public required init?(coder aDecoder: NSCoder) {
             fatalError("This view can not be instantiated.")
@@ -68,4 +64,3 @@ public struct VoidViewFactory: StaticViewFactory {
         nil
     }
 }
-

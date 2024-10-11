@@ -68,12 +68,16 @@ public final class ImageMaskedView<CustomView: NSUIView>: NSUIView {
         setupSubviews()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    public override var isFlipped: Bool { true }
+    #endif
+
     private func setupSubviews() {
+        translatesAutoresizingMaskIntoConstraints = false
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         setWantsLayer()
         imageView.setWantsLayer()
         #endif
-        translatesAutoresizingMaskIntoConstraints = false
         #if canImport(UIKit)
         layoutMargins = .zero
         insetsLayoutMarginsFromSafeArea = false
@@ -81,12 +85,23 @@ public final class ImageMaskedView<CustomView: NSUIView>: NSUIView {
 
         addSubview(customView)
         customView.translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            customView.topAnchor.constraint(equalTo: topAnchor),
+            customView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            customView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            customView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
+        #endif
     }
 
     private func setupMask() {

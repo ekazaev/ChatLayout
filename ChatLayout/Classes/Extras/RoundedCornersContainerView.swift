@@ -43,6 +43,10 @@ public final class RoundedCornersContainerView<CustomView: NSUIView>: NSUIView {
         setupSubviews()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    public override var isFlipped: Bool { true }
+    #endif
+
     private func setupSubviews() {
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         setWantsLayer()
@@ -56,12 +60,23 @@ public final class RoundedCornersContainerView<CustomView: NSUIView>: NSUIView {
         #endif
 
         customView.translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            customView.topAnchor.constraint(equalTo: topAnchor),
+            customView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            customView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            customView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
+        #endif
     }
 
     /// Lays out subviews.

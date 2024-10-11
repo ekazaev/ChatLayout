@@ -185,25 +185,25 @@ final class ChatViewController: UIViewController {
         guard isViewLoaded else {
             return
         }
-        currentInterfaceActions.options.insert(.changingFrameSize)
-        let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
-        collectionView.collectionViewLayout.invalidateLayout()
-        collectionView.setNeedsLayout()
-        coordinator.animate(alongsideTransition: { _ in
-            // Gives nicer transition behaviour
-            // self.collectionView.collectionViewLayout.invalidateLayout()
-            self.collectionView.performBatchUpdates(nil)
-        }, completion: { _ in
-            if let positionSnapshot,
-               !self.isUserInitiatedScrolling {
-                // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
-                // to compact and back. `CollectionViewChatLayout` may not properly predict the final position of the element. So we try
-                // to restore it after the rotation manually.
-                self.chatLayout.restoreContentOffset(with: positionSnapshot)
-            }
-            self.collectionView.collectionViewLayout.invalidateLayout()
-            self.currentInterfaceActions.options.remove(.changingFrameSize)
-        })
+//        currentInterfaceActions.options.insert(.changingFrameSize)
+//        let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
+//        collectionView.collectionViewLayout.invalidateLayout()
+//        collectionView.setNeedsLayout()
+//        coordinator.animate(alongsideTransition: { _ in
+//            // Gives nicer transition behaviour
+//            // self.collectionView.collectionViewLayout.invalidateLayout()
+//            self.collectionView.performBatchUpdates(nil)
+//        }, completion: { _ in
+//            if let positionSnapshot,
+//               !self.isUserInitiatedScrolling {
+//                // As contentInsets may change when size transition has already started. For example, `UINavigationBar` height may change
+//                // to compact and back. `CollectionViewChatLayout` may not properly predict the final position of the element. So we try
+//                // to restore it after the rotation manually.
+//                self.chatLayout.restoreContentOffset(with: positionSnapshot)
+//            }
+//            self.collectionView.collectionViewLayout.invalidateLayout()
+//            self.currentInterfaceActions.options.remove(.changingFrameSize)
+//        })
         super.viewWillTransition(to: size, with: coordinator)
     }
 
@@ -249,53 +249,53 @@ final class ChatViewController: UIViewController {
 }
 
 extension ChatViewController: UIScrollViewDelegate {
-    public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        guard scrollView.contentSize.height > 0,
-              !currentInterfaceActions.options.contains(.showingAccessory),
-              !currentInterfaceActions.options.contains(.showingPreview),
-              !currentInterfaceActions.options.contains(.scrollingToTop),
-              !currentInterfaceActions.options.contains(.scrollingToBottom) else {
-            return false
-        }
-        // Blocking the call of loadPreviousMessages() as UIScrollView behaves the way that it will scroll to the top even if we keep adding
-        // content there and keep changing the content offset until it actually reaches the top. So instead we wait until it reaches the top and initiate
-        // the loading after.
-        currentInterfaceActions.options.insert(.scrollingToTop)
-        return true
-    }
-
-    public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        guard !currentControllerActions.options.contains(.loadingInitialMessages),
-              !currentControllerActions.options.contains(.loadingPreviousMessages) else {
-            return
-        }
-        currentInterfaceActions.options.remove(.scrollingToTop)
-        loadPreviousMessages()
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if currentControllerActions.options.contains(.updatingCollection), collectionView.isDragging {
-            // Interrupting current update animation if user starts to scroll while batchUpdate is performed. It helps to
-            // avoid presenting blank area if user scrolls out of the animation rendering area.
-            UIView.performWithoutAnimation {
-                self.collectionView.performBatchUpdates({}, completion: { _ in
-                    let context = ChatLayoutInvalidationContext()
-                    context.invalidateLayoutMetrics = false
-                    self.collectionView.collectionViewLayout.invalidateLayout(with: context)
-                })
-            }
-        }
-        guard !currentControllerActions.options.contains(.loadingInitialMessages),
-              !currentControllerActions.options.contains(.loadingPreviousMessages),
-              !currentInterfaceActions.options.contains(.scrollingToTop),
-              !currentInterfaceActions.options.contains(.scrollingToBottom) else {
-            return
-        }
-
-        if scrollView.contentOffset.y <= -scrollView.adjustedContentInset.top + scrollView.bounds.height {
-            loadPreviousMessages()
-        }
-    }
+//    public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+//        guard scrollView.contentSize.height > 0,
+//              !currentInterfaceActions.options.contains(.showingAccessory),
+//              !currentInterfaceActions.options.contains(.showingPreview),
+//              !currentInterfaceActions.options.contains(.scrollingToTop),
+//              !currentInterfaceActions.options.contains(.scrollingToBottom) else {
+//            return false
+//        }
+//        // Blocking the call of loadPreviousMessages() as UIScrollView behaves the way that it will scroll to the top even if we keep adding
+//        // content there and keep changing the content offset until it actually reaches the top. So instead we wait until it reaches the top and initiate
+//        // the loading after.
+//        currentInterfaceActions.options.insert(.scrollingToTop)
+//        return true
+//    }
+//
+//    public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+//        guard !currentControllerActions.options.contains(.loadingInitialMessages),
+//              !currentControllerActions.options.contains(.loadingPreviousMessages) else {
+//            return
+//        }
+//        currentInterfaceActions.options.remove(.scrollingToTop)
+//        loadPreviousMessages()
+//    }
+//
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        if currentControllerActions.options.contains(.updatingCollection), collectionView.isDragging {
+//            // Interrupting current update animation if user starts to scroll while batchUpdate is performed. It helps to
+//            // avoid presenting blank area if user scrolls out of the animation rendering area.
+//            UIView.performWithoutAnimation {
+//                self.collectionView.performBatchUpdates({}, completion: { _ in
+//                    let context = ChatLayoutInvalidationContext()
+//                    context.invalidateLayoutMetrics = false
+//                    self.collectionView.collectionViewLayout.invalidateLayout(with: context)
+//                })
+//            }
+//        }
+//        guard !currentControllerActions.options.contains(.loadingInitialMessages),
+//              !currentControllerActions.options.contains(.loadingPreviousMessages),
+//              !currentInterfaceActions.options.contains(.scrollingToTop),
+//              !currentInterfaceActions.options.contains(.scrollingToBottom) else {
+//            return
+//        }
+//
+//        if scrollView.contentOffset.y <= -scrollView.adjustedContentInset.top + scrollView.bounds.height {
+//            loadPreviousMessages()
+//        }
+//    }
 
     private func loadPreviousMessages() {
         // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
@@ -316,45 +316,45 @@ extension ChatViewController: UIScrollViewDelegate {
     fileprivate var isUserInitiatedScrolling: Bool {
         collectionView.isDragging || collectionView.isDecelerating
     }
-
-    func scrollToBottom(completion: (() -> Void)? = nil) {
-        // I ask content size from the layout because on IOs 12 collection view contains not updated one
-        let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x,
-                                            y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
-
-        guard contentOffsetAtBottom.y > collectionView.contentOffset.y else {
-            completion?()
-            return
-        }
-
-        let initialOffset = collectionView.contentOffset.y
-        let delta = contentOffsetAtBottom.y - initialOffset
-        if abs(delta) > chatLayout.visibleBounds.height {
-            // See: https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
-            animator = ManualAnimator()
-            animator?.animate(duration: TimeInterval(0.25), curve: .easeInOut) { [weak self] percentage in
-                guard let self else {
-                    return
-                }
-                collectionView.contentOffset = CGPoint(x: collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
-                if percentage == 1.0 {
-                    animator = nil
-                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
-                    chatLayout.restoreContentOffset(with: positionSnapshot)
-                    currentInterfaceActions.options.remove(.scrollingToBottom)
-                    completion?()
-                }
-            }
-        } else {
-            currentInterfaceActions.options.insert(.scrollingToBottom)
-            UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                self?.collectionView.setContentOffset(contentOffsetAtBottom, animated: true)
-            }, completion: { [weak self] _ in
-                self?.currentInterfaceActions.options.remove(.scrollingToBottom)
-                completion?()
-            })
-        }
-    }
+//
+//    func scrollToBottom(completion: (() -> Void)? = nil) {
+//        // I ask content size from the layout because on IOs 12 collection view contains not updated one
+//        let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x,
+//                                            y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
+//
+//        guard contentOffsetAtBottom.y > collectionView.contentOffset.y else {
+//            completion?()
+//            return
+//        }
+//
+//        let initialOffset = collectionView.contentOffset.y
+//        let delta = contentOffsetAtBottom.y - initialOffset
+//        if abs(delta) > chatLayout.visibleBounds.height {
+//            // See: https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
+//            animator = ManualAnimator()
+//            animator?.animate(duration: TimeInterval(0.25), curve: .easeInOut) { [weak self] percentage in
+//                guard let self else {
+//                    return
+//                }
+//                collectionView.contentOffset = CGPoint(x: collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
+//                if percentage == 1.0 {
+//                    animator = nil
+//                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
+//                    chatLayout.restoreContentOffset(with: positionSnapshot)
+//                    currentInterfaceActions.options.remove(.scrollingToBottom)
+//                    completion?()
+//                }
+//            }
+//        } else {
+//            currentInterfaceActions.options.insert(.scrollingToBottom)
+//            UIView.animate(withDuration: 0.25, animations: { [weak self] in
+//                self?.collectionView.setContentOffset(contentOffsetAtBottom, animated: true)
+//            }, completion: { [weak self] _ in
+//                self?.currentInterfaceActions.options.remove(.scrollingToBottom)
+//                completion?()
+//            })
+//        }
+//    }
 }
 
 extension ChatViewController: UICollectionViewDelegate {
@@ -590,34 +590,34 @@ extension ChatViewController: UIGestureRecognizerDelegate {
 }
 
 extension ChatViewController: InputBarAccessoryViewDelegate {
-    public func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
-        guard !currentInterfaceActions.options.contains(.sendingMessage) else {
-            return
-        }
-        scrollToBottom()
-    }
-
-    public func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-        let messageText = inputBar.inputTextView.text
-        currentInterfaceActions.options.insert(.sendingMessage)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
-            guard let self else {
-                return
-            }
-            guard let messageText else {
-                currentInterfaceActions.options.remove(.sendingMessage)
-                return
-            }
-            scrollToBottom(completion: {
-                self.chatController.sendMessage(.text(messageText)) { sections in
-                    self.currentInterfaceActions.options.remove(.sendingMessage)
-                    self.processUpdates(with: sections, animated: true, requiresIsolatedProcess: false)
-                }
-            })
-        }
-        inputBar.inputTextView.text = String()
-        inputBar.invalidatePlugins()
-    }
+//    public func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
+//        guard !currentInterfaceActions.options.contains(.sendingMessage) else {
+//            return
+//        }
+//        scrollToBottom()
+//    }
+//
+//    public func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
+//        let messageText = inputBar.inputTextView.text
+//        currentInterfaceActions.options.insert(.sendingMessage)
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
+//            guard let self else {
+//                return
+//            }
+//            guard let messageText else {
+//                currentInterfaceActions.options.remove(.sendingMessage)
+//                return
+//            }
+//            scrollToBottom(completion: {
+//                self.chatController.sendMessage(.text(messageText)) { sections in
+//                    self.currentInterfaceActions.options.remove(.sendingMessage)
+//                    self.processUpdates(with: sections, animated: true, requiresIsolatedProcess: false)
+//                }
+//            })
+//        }
+//        inputBar.inputTextView.text = String()
+//        inputBar.invalidatePlugins()
+//    }
 }
 
 extension ChatViewController: KeyboardListenerDelegate {

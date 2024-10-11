@@ -180,11 +180,6 @@ extension NSView {
     @objc func _marginsInsetsForSafeAreaInsets(_ insets: NSEdgeInsets) -> NSEdgeInsets {
         layoutMargins + safeAreaInsets
     }
-    
-    
-//    @objc var isFlipped: Bool {
-//        true
-//    }
 }
 
 extension NSEdgeInsets {
@@ -362,14 +357,6 @@ extension CGAffineTransform {
 extension NSCollectionViewItem {
     var contentView: NSView {
         view
-    }
-}
-
-extension NSGestureRecognizer {
-    convenience init(target: AnyObject?, action: Selector?) {
-        self.init()
-        self.target = target
-        self.action = action
     }
 }
 

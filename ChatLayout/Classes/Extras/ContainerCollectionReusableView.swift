@@ -140,11 +140,22 @@ public final class ContainerCollectionReusableView<CustomView: NSUIView>: Collec
         #endif
 
         customView.translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            customView.topAnchor.constraint(equalTo: topAnchor),
+            customView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            customView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            customView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
+        #endif
     }
 }

@@ -344,8 +344,8 @@ extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
 
 extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     public func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
-        true
-//        false
+//        true
+        false
     }
 
     public func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {

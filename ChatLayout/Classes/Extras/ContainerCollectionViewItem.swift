@@ -14,7 +14,6 @@ import AppKit
 
 /// A container `UICollectionViewCell` that constraints its contained view to its margins.
 public final class ContainerCollectionViewItem<CustomView: NSView>: NSCollectionViewItem {
-
     /// Default reuse identifier is set with the class name.
     public static var reuseIdentifier: String {
         String(describing: self)
@@ -32,7 +31,7 @@ public final class ContainerCollectionViewItem<CustomView: NSView>: NSCollection
     public override init(nibName nibNameOrNil: NSNib.Name?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     public override func loadView() {
         view = customView
     }
@@ -78,7 +77,6 @@ public final class ContainerCollectionViewItem<CustomView: NSView>: NSCollection
         super.apply(layoutAttributes)
         delegate?.apply(chatLayoutAttributes)
     }
-
 }
 
 #endif

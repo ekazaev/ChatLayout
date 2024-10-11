@@ -66,6 +66,10 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
         setupSubviews()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    public override var isFlipped: Bool { true }
+    #endif
+
     private func setupSubviews() {
         #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
@@ -82,13 +86,13 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
         #if canImport(UIKit)
         stackView.axis = .horizontal
         #endif
-        
+
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         #endif
         #if canImport(UIKit)

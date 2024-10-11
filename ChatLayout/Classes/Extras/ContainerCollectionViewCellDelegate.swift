@@ -49,19 +49,18 @@ public protocol ContainerCollectionViewCellDelegate: AnyObject {
 }
 
 /// Default extension to make the methods optional for implementation in the successor
-public extension ContainerCollectionViewCellDelegate {
+extension ContainerCollectionViewCellDelegate {
     /// Default implementation does nothing.
-    func prepareForReuse() {}
+    public func prepareForReuse() {}
 
     /// Default implementation returns: `nil`.
-    func preferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) -> ChatLayoutAttributes? {
+    public func preferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) -> ChatLayoutAttributes? {
         nil
     }
 
     /// Default implementation does nothing.
-    func modifyPreferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) {}
+    public func modifyPreferredLayoutAttributesFitting(_ layoutAttributes: ChatLayoutAttributes) {}
 
     /// Default implementation does nothing.
-    func apply(_ layoutAttributes: ChatLayoutAttributes) {}
+    public func apply(_ layoutAttributes: ChatLayoutAttributes) {}
 }
-

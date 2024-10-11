@@ -62,7 +62,6 @@ public enum CellLayoutContainerViewAlignment {
 /// allocated.
 
 public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, CustomView: NSUIView, TrailingAccessory: StaticViewFactory>: NSUIView {
-
     /// Leading accessory view.
     public lazy var leadingView: LeadingAccessory.View? = LeadingAccessory.buildView(within: bounds)
 
@@ -132,6 +131,10 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
         setupSubviews()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    public override var isFlipped: Bool { true }
+    #endif
+
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
 
@@ -152,12 +155,23 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
         stackView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(stackView)
 
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
+        #endif
 
         if let leadingAccessoryView = leadingView {
             stackView.addArrangedSubview(leadingAccessoryView)

@@ -143,23 +143,23 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         guard enableNewMessages else {
             return
         }
-        let message = createRandomMessage()
-        delegate?.received(messages: [message])
-
-        if message.userId != receiverId {
-            if Int.random(in: 0...1) == 0 {
-                lastReceivedUUID = message.id
-                delegate?.lastReceivedIdChanged(to: message.id)
-            }
-            if Int.random(in: 0...3) == 0 {
-                lastReadUUID = lastReceivedUUID
-                lastReceivedUUID = message.id
-                delegate?.lastReadIdChanged(to: message.id)
-            }
-        }
-
-        restartMessageTimer()
-        restartTypingTimer()
+//        let message = createRandomMessage()
+//        delegate?.received(messages: [message])
+//
+//        if message.userId != receiverId {
+//            if Int.random(in: 0...1) == 0 {
+//                lastReceivedUUID = message.id
+//                delegate?.lastReceivedIdChanged(to: message.id)
+//            }
+//            if Int.random(in: 0...3) == 0 {
+//                lastReadUUID = lastReceivedUUID
+//                lastReceivedUUID = message.id
+//                delegate?.lastReadIdChanged(to: message.id)
+//            }
+//        }
+//
+//        restartMessageTimer()
+//        restartTypingTimer()
     }
 
     @objc
@@ -167,8 +167,8 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         guard enableTyping else {
             return
         }
-        typingState = typingState == .idle ? TypingState.typing : .idle
-        delegate?.typingStateChanged(to: typingState)
+//        typingState = typingState == .idle ? TypingState.typing : .idle
+//        delegate?.typingStateChanged(to: typingState)
     }
 
     private func restartMessageTimer() {
@@ -184,7 +184,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     }
 
     private func createRandomMessage(date: Date = Date()) -> RawMessage {
-        let sender = allUsersIds[Int.random(in: 0..<allUsersIds.count)] // allUsersIds.first!//
+        let sender = allUsersIds[0] // allUsersIds.first!//
         lastMessageIndex += 1
         switch (Int.random(in: 0...8), enableRichContent) {
 //        case (5, true):
@@ -207,7 +207,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private func createBunchOfMessages(number: Int = 50) -> [RawMessage] {
         let messages = (0..<number).map { _ -> RawMessage in
-            startingTimestamp -= TimeInterval(Int.random(in: 100...1000))
+            startingTimestamp -= TimeInterval(100)
             return self.createRandomMessage(date: Date(timeIntervalSince1970: startingTimestamp))
         }
         return messages
