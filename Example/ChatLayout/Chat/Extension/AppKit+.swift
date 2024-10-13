@@ -168,18 +168,18 @@ extension NSView {
 
     static var layoutMarginsKey: Void = ()
 
-    var layoutMargins: NSEdgeInsets {
-        set {
-            objc_setAssociatedObject(self, &Self.layoutMarginsKey, NSValue(edgeInsets: newValue), .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-        get {
-            (objc_getAssociatedObject(self, &Self.layoutMarginsKey) as? NSValue)?.edgeInsetsValue ?? .zero
-        }
-    }
+//    var layoutMargins: NSEdgeInsets {
+//        set {
+//            objc_setAssociatedObject(self, &Self.layoutMarginsKey, NSValue(edgeInsets: newValue), .OBJC_ASSOCIATION_COPY_NONATOMIC)
+//        }
+//        get {
+//            (objc_getAssociatedObject(self, &Self.layoutMarginsKey) as? NSValue)?.edgeInsetsValue ?? .zero
+//        }
+//    }
 
-    @objc func _marginsInsetsForSafeAreaInsets(_ insets: NSEdgeInsets) -> NSEdgeInsets {
-        layoutMargins + safeAreaInsets
-    }
+//    @objc func _marginsInsetsForSafeAreaInsets(_ insets: NSEdgeInsets) -> NSEdgeInsets {
+//        layoutMargins + safeAreaInsets
+//    }
 }
 
 extension NSEdgeInsets {

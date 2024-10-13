@@ -550,7 +550,6 @@ final class StateController<Layout: ChatLayoutRepresentation> {
            let lastVisibleAttribute = allAttributes(at: .beforeUpdate, visibleRect: layoutRepresentation.visibleBounds).last,
            let lastVisibleAttributeIndexPath = lastVisibleAttribute.platformIndexPath,
            let itemFrame = itemFrame(for: lastVisibleAttributeIndexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
-            print("itemFrameMaxY: \(itemFrame.maxY), visibleBoundsMaxY: \(layoutRepresentation.visibleBounds.maxY)")
             itemToRestore = ItemToRestore(
                 globalIndex: globalIndexFor(lastVisibleAttributeIndexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
                 kind: lastVisibleAttribute.kind,

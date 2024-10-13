@@ -19,7 +19,14 @@ import AppKit
 import UIKit
 #endif
 
+extension NSResponder {
+    func viewController<T>(of type: T.Type) -> T? {
+        nextResponder as? T ?? nextResponder.flatMap { $0.viewController(of: type) }
+    }
+}
+
 extension NSUIView {
+    
     func superview<T>(of type: T.Type) -> T? {
         superview as? T ?? superview.flatMap { $0.superview(of: type) }
     }

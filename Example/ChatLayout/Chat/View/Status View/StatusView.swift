@@ -33,21 +33,36 @@ final class StatusView: NSUIView, StaticViewFactory {
         setupSubviews()
     }
 
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    override var isFlipped: Bool { true }
+#endif
+    
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-        layoutMargins = .zero
         addSubview(imageView)
         #if canImport(UIKit)
+        layoutMargins = .zero
         insetsLayoutMarginsFromSafeArea = false
         #endif
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             imageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             imageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
+        #endif
         let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 15)
         widthConstraint.priority = NSUILayoutPriority(rawValue: 999)
         widthConstraint.isActive = true

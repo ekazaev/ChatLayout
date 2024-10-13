@@ -143,23 +143,23 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         guard enableNewMessages else {
             return
         }
-//        let message = createRandomMessage()
-//        delegate?.received(messages: [message])
-//
-//        if message.userId != receiverId {
-//            if Int.random(in: 0...1) == 0 {
-//                lastReceivedUUID = message.id
-//                delegate?.lastReceivedIdChanged(to: message.id)
-//            }
-//            if Int.random(in: 0...3) == 0 {
-//                lastReadUUID = lastReceivedUUID
-//                lastReceivedUUID = message.id
-//                delegate?.lastReadIdChanged(to: message.id)
-//            }
-//        }
-//
-//        restartMessageTimer()
-//        restartTypingTimer()
+        let message = createRandomMessage()
+        delegate?.received(messages: [message])
+
+        if message.userId != receiverId {
+            if Int.random(in: 0...1) == 0 {
+                lastReceivedUUID = message.id
+                delegate?.lastReceivedIdChanged(to: message.id)
+            }
+            if Int.random(in: 0...3) == 0 {
+                lastReadUUID = lastReceivedUUID
+                lastReceivedUUID = message.id
+                delegate?.lastReadIdChanged(to: message.id)
+            }
+        }
+
+        restartMessageTimer()
+        restartTypingTimer()
     }
 
     @objc
@@ -167,8 +167,8 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         guard enableTyping else {
             return
         }
-//        typingState = typingState == .idle ? TypingState.typing : .idle
-//        delegate?.typingStateChanged(to: typingState)
+        typingState = typingState == .idle ? TypingState.typing : .idle
+        delegate?.typingStateChanged(to: typingState)
     }
 
     private func restartMessageTimer() {

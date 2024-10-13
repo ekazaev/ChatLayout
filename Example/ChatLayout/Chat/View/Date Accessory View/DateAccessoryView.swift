@@ -46,8 +46,8 @@ final class DateAccessoryView: NSUIView {
     private func setupSubviews() {
         #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
-        #endif
         layoutMargins = .zero
+        #endif
 
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(accessoryView)

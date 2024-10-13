@@ -24,6 +24,8 @@ final class TextMessageView: NSView, ContainerCollectionViewCellDelegate {
 
     private var textViewWidthConstraint: NSLayoutConstraint?
 
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -34,10 +36,7 @@ final class TextMessageView: NSView, ContainerCollectionViewCellDelegate {
         setupSubviews()
     }
 
-    override func prepareForReuse() {
-//        textView.resignFirstResponder()
-        super.prepareForReuse()
-    }
+    override var isFlipped: Bool { true }
 
     // Uncomment this method to test the performance without calculating text cell size using autolayout
     // For the better illustration set DefaultRandomDataProvider.enableRichContent/enableNewMessages
@@ -90,10 +89,10 @@ final class TextMessageView: NSView, ContainerCollectionViewCellDelegate {
         textView.font = .preferredFont(forTextStyle: .body)
         addSubview(textView)
         NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
-            textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            textView.topAnchor.constraint(equalTo: topAnchor),
+            textView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            textView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            textView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
         textViewWidthConstraint?.isActive = true

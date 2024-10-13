@@ -55,21 +55,38 @@ final class AvatarView: NSUIView, StaticViewFactory {
         self.controller = controller
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+
+    override var isFlipped: Bool { true }
+
+    #endif
+
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-        layoutMargins = .zero
         #if canImport(UIKit)
+        layoutMargins = .zero
         insetsLayoutMarginsFromSafeArea = false
         #endif
         addSubview(circleImageView)
 
         circleImageView.translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            circleImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            circleImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            circleImageView.topAnchor.constraint(equalTo: topAnchor),
+            circleImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             circleImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             circleImageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             circleImageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             circleImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
+        #endif
 
         let constraint = circleImageView.widthAnchor.constraint(equalToConstant: 30)
         constraint.priority = NSUILayoutPriority(rawValue: 999)
@@ -77,7 +94,7 @@ final class AvatarView: NSUIView, StaticViewFactory {
         circleImageView.heightAnchor.constraint(equalTo: circleImageView.widthAnchor, multiplier: 1).isActive = true
 
         circleImageView.customView.contentMode = .scaleAspectFill
-        
+
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         let gestureRecogniser = NSClickGestureRecognizer(target: self, action: #selector(avatarTapped))
         circleImageView.addGestureRecognizer(gestureRecogniser)

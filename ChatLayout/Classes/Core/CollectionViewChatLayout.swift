@@ -11,7 +11,7 @@
 //
 
 import Foundation
-import OSLog
+
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 #endif
@@ -241,7 +241,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         #endif
 
         #if canImport(UIKit)
-        
         guard enableIOS15_1Fix else {
             return false
         }
@@ -634,7 +633,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
            isAboveBottomEdge {
             let offsetCompensation: CGFloat = min(controller.contentHeight(at: state) - collectionView!.scrollViewFrame.height + adjustedContentInset.bottom + adjustedContentInset.top, heightDifference)
             context.contentOffsetAdjustment.y += offsetCompensation
-            print(#function, context.contentOffsetAdjustment.y)
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
 
@@ -690,9 +688,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
     open override func invalidationContext(forBoundsChange newBounds: CGRect) -> NSUICollectionViewLayoutInvalidationContext {
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext
         invalidationContext.invalidateLayoutMetrics = false
-//#if canImport(AppKit) && !targetEnvironment(macCatalyst)
-//        collectionView?.contentOffset = newBounds.origin
-//#endif
+        collectionView?.contentOffset = newBounds.origin
         return invalidationContext
     }
 
@@ -741,12 +737,10 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
                 case .top:
                     let desiredOffset = max(min(maxAllowed, frame.minY - currentPositionSnapshot.offset - adjustedContentInset.top - settings.additionalInsets.top), -adjustedContentInset.top)
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
-                    print(#function, context.contentOffsetAdjustment.y)
                 case .bottom:
 
                     let desiredOffset = max(min(maxAllowed, frame.maxY + currentPositionSnapshot.offset - collectionView.scrollViewBounds.height + adjustedContentInset.bottom + settings.additionalInsets.bottom), -adjustedContentInset.top)
                     context.contentOffsetAdjustment.y = desiredOffset - collectionView.contentOffset.y
-                    print(#function, context.contentOffsetAdjustment.y)
                 }
             }
         }
@@ -760,12 +754,10 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Retrieves the content offset to use after an animated layout update or change.
     open override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        print("\(#function), controller.proposedCompensatingOffset: \(controller.proposedCompensatingOffset)")
         if controller.proposedCompensatingOffset != 0, let collectionView {
             let minPossibleContentOffset = -collectionView.adjustedContentInset.top
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(collectionView.contentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
-            print("proposedContentOffset: \(proposedContentOffset), newProposedContentOffset: \(newProposedContentOffset)")
             if needsIOS15_1IssueFix {
                 controller.proposedCompensatingOffset = 0
                 collectionView.contentOffset = newProposedContentOffset
@@ -835,7 +827,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
             controller.batchUpdateCompensatingOffset = 0
             let context = ChatLayoutInvalidationContext()
             context.contentOffsetAdjustment.y = compensatingOffset
-            print(#function, context.contentOffsetAdjustment.y)
             invalidateLayout(with: context)
         } else {
             controller.batchUpdateCompensatingOffset = 0

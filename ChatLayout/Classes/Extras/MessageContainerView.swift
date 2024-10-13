@@ -22,7 +22,7 @@ import UIKit
 
 // A container view that helps to layout the message view and its accessory
 
-public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: NSUIView>: NSUIView {
+public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: NSUIView>: BaseView {
     private lazy var stackView = NSUIStackView(frame: bounds)
 
     /// An accessory view.
@@ -71,6 +71,9 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
     #endif
 
     private func setupSubviews() {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        setWantsLayer()
+        #endif
         #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
@@ -89,10 +92,10 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
 
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor),
         ])
         #endif
         #if canImport(UIKit)

@@ -75,20 +75,38 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: N
         setupSubviews()
     }
 
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    override var isFlipped: Bool { true }
+#endif
+    
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-        layoutMargins = .zero
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        setWantsLayer()
+        #endif
         #if canImport(UIKit)
+        layoutMargins = .zero
         insetsLayoutMarginsFromSafeArea = false
         #endif
         clipsToBounds = false
         addSubview(containerView)
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             containerView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
+        #endif
 
         accessoryView.translatesAutoresizingMaskIntoConstraints = false
 

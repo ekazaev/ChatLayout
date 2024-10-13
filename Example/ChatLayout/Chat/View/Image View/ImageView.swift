@@ -129,6 +129,15 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
             stackView.layoutIfNeeded()
             backgroundColor = .clear
         }
+        
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        
+        if let item = viewController(of: NSCollectionViewItem.self) {
+            item.contentView.invalidateIntrinsicContentSize()
+        }
+        
+#endif
+        
         #if canImport(UIKit)
 
         if let cell = superview(of: UICollectionViewCell.self) {
@@ -139,20 +148,32 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
     }
 
     private func setupSubviews() {
-        layoutMargins = .zero
         #if canImport(UIKit)
+        layoutMargins = .zero
         insetsLayoutMarginsFromSafeArea = false
         #endif
         translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
+
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
+        #endif
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
 

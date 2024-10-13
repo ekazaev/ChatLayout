@@ -9,7 +9,7 @@
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-public class CollectionReusableView: NSView, NSCollectionViewElement {
+public class CollectionReusableView: BaseView, NSCollectionViewElement {
     public override var isFlipped: Bool { true }
 }
 
