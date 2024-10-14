@@ -61,7 +61,7 @@ public enum CellLayoutContainerViewAlignment {
 /// a `CustomView` next and am optional `TrailingAccessory` last. Use `VoidViewFactory` to specify that `LeadingAccessory` or `TrailingAccessory` views should not be
 /// allocated.
 
-public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, CustomView: NSUIView, TrailingAccessory: StaticViewFactory>: BaseView {
+public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, CustomView: NSUIView, TrailingAccessory: StaticViewFactory>: NSUIView {
     /// Leading accessory view.
     public lazy var leadingView: LeadingAccessory.View? = LeadingAccessory.buildView(within: bounds)
 

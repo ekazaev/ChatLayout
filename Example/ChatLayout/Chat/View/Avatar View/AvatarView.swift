@@ -72,10 +72,10 @@ final class AvatarView: NSUIView, StaticViewFactory {
         circleImageView.translatesAutoresizingMaskIntoConstraints = false
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         NSLayoutConstraint.activate([
-            circleImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            circleImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            circleImageView.topAnchor.constraint(equalTo: topAnchor),
-            circleImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            circleImageView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor),
+            circleImageView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor),
+            circleImageView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor),
+            circleImageView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor),
         ])
         #endif
 

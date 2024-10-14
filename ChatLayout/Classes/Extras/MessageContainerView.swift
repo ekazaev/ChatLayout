@@ -22,7 +22,7 @@ import UIKit
 
 // A container view that helps to layout the message view and its accessory
 
-public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: NSUIView>: BaseView {
+public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: NSUIView>: NSUIView {
     private lazy var stackView = NSUIStackView(frame: bounds)
 
     /// An accessory view.

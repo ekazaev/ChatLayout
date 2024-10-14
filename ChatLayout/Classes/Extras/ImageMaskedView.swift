@@ -30,7 +30,7 @@ public enum ImageMaskedViewTransformation {
 }
 
 /// A container view that masks its contained view with an image provided.
-public final class ImageMaskedView<CustomView: NSUIView>: BaseView {
+public final class ImageMaskedView<CustomView: NSUIView>: NSUIView {
     /// Contained view.
     public lazy var customView = CustomView(frame: bounds)
 

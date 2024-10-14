@@ -23,7 +23,7 @@ import UIKit
 /// This container view is designed to hold two `UIView` elements and arrange them in a horizontal or vertical axis.
 /// It also allows to easily change the order of the views if needed.
 
-public final class SwappingContainerView<CustomView: NSUIView, AccessoryView: NSUIView>: BaseView {
+public final class SwappingContainerView<CustomView: NSUIView, AccessoryView: NSUIView>: NSUIView {
     /// Keys that specify a horizontal or vertical layout constraint between views.
     public enum Axis: Hashable {
         /// The constraint applied when laying out the horizontal relationship between views.

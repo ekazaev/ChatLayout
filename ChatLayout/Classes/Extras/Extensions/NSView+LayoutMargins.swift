@@ -11,9 +11,8 @@ import Foundation
 import AppKit
 
 extension NSView {
-    
     private static var layoutMarginsKey = malloc(1)!
-    
+
     public var layoutMargins: NSUIEdgeInsets {
         set {
             objc_setAssociatedObject(self, Self.layoutMarginsKey, NSValue(edgeInsets: newValue), .OBJC_ASSOCIATION_COPY_NONATOMIC)
@@ -27,9 +26,9 @@ extension NSView {
             }
         }
     }
-    
+
     private static var customLayoutMarginsGuideKey = malloc(1)!
-    
+
     public var customLayoutMarginsGuide: NSLayoutGuide {
         if let layoutGuide = objc_getAssociatedObject(self, Self.customLayoutMarginsGuideKey) as? NSLayoutGuide {
             return layoutGuide
@@ -42,20 +41,19 @@ extension NSView {
             return layoutGuide
         }
     }
-    
-    private class LayoutConstraints: NSObject {
-        
-        var topConstraint: NSLayoutConstraint?
-        
-        var bottomConstraint: NSLayoutConstraint?
-        
-        var leftConstraint: NSLayoutConstraint?
-        
-        var rightConstraint: NSLayoutConstraint?
 
+    private class LayoutConstraints: NSObject {
+        var topConstraint: NSLayoutConstraint?
+
+        var bottomConstraint: NSLayoutConstraint?
+
+        var leftConstraint: NSLayoutConstraint?
+
+        var rightConstraint: NSLayoutConstraint?
     }
+
     private static var layoutConstraintsKey = malloc(1)!
-    
+
     private var layoutConstraints: LayoutConstraints {
         if let layoutGuide = objc_getAssociatedObject(self, Self.layoutConstraintsKey) as? LayoutConstraints {
             return layoutGuide
@@ -65,14 +63,14 @@ extension NSView {
             return layoutGuide
         }
     }
-    
+
     private func setupLayoutGuideConstraints() {
         layoutConstraints.topConstraint?.constant = layoutMargins.top
         layoutConstraints.bottomConstraint?.constant = -layoutMargins.bottom
         layoutConstraints.leftConstraint?.constant = layoutMargins.left
         layoutConstraints.rightConstraint?.constant = -layoutMargins.right
     }
-    
+
     private func commonInit() {
         addLayoutGuide(customLayoutMarginsGuide)
         let topConstraint = customLayoutMarginsGuide.topAnchor.constraint(equalTo: topAnchor)
@@ -85,22 +83,11 @@ extension NSView {
             leftConstraint,
             rightConstraint,
         ])
-        self.layoutConstraints.topConstraint = topConstraint
-        self.layoutConstraints.bottomConstraint = bottomConstraint
-        self.layoutConstraints.leftConstraint = leftConstraint
-        self.layoutConstraints.rightConstraint = rightConstraint
+        layoutConstraints.topConstraint = topConstraint
+        layoutConstraints.bottomConstraint = bottomConstraint
+        layoutConstraints.leftConstraint = leftConstraint
+        layoutConstraints.rightConstraint = rightConstraint
     }
 }
 
-
-open class BaseView: NSUIView {}
-
 #endif
-
-#if canImport(UIKit)
-import UIKit
-
-public typealias BaseView = NSUIView
-#endif
-
-

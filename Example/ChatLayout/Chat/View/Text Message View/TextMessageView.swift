@@ -89,10 +89,10 @@ final class TextMessageView: NSView, ContainerCollectionViewCellDelegate {
         textView.font = .preferredFont(forTextStyle: .body)
         addSubview(textView)
         NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: topAnchor),
-            textView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            textView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            textView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor),
+            textView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor),
+            textView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor),
+            textView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor),
         ])
         textViewWidthConstraint = textView.widthAnchor.constraint(lessThanOrEqualToConstant: viewPortWidth)
         textViewWidthConstraint?.isActive = true

@@ -22,7 +22,7 @@ import UIKit
 // Container view that allows its `CustomView` to have lose connection to the margins of the container according to the
 // settings provided in `EdgeAligningView.flexibleEdges`
 
-public final class EdgeAligningView<CustomView: NSUIView>: BaseView {
+public final class EdgeAligningView<CustomView: NSUIView>: NSUIView {
     /// Represents an edge of `EdgeAligningView`
     public enum Edge: CaseIterable {
         /// Top edge

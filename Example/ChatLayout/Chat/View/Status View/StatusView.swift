@@ -48,10 +48,10 @@ final class StatusView: NSUIView, StaticViewFactory {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            imageView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor),
         ])
         #endif
 

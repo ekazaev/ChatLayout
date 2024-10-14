@@ -129,15 +129,15 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
             stackView.layoutIfNeeded()
             backgroundColor = .clear
         }
-        
-#if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        
+
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+
         if let item = viewController(of: NSCollectionViewItem.self) {
             item.contentView.invalidateIntrinsicContentSize()
         }
-        
-#endif
-        
+
+        #endif
+
         #if canImport(UIKit)
 
         if let cell = superview(of: UICollectionViewCell.self) {
@@ -159,10 +159,10 @@ final class ImageView: NSUIView, ContainerCollectionViewCellDelegate {
 
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor),
         ])
         #endif
 
