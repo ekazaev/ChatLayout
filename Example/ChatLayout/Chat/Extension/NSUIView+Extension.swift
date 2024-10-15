@@ -19,11 +19,13 @@ import AppKit
 import UIKit
 #endif
 
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
 extension NSResponder {
     func viewController<T>(of type: T.Type) -> T? {
         nextResponder as? T ?? nextResponder.flatMap { $0.viewController(of: type) }
     }
 }
+#endif
 
 extension NSUIView {
     

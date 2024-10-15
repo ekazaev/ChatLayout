@@ -688,7 +688,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
     open override func invalidationContext(forBoundsChange newBounds: CGRect) -> NSUICollectionViewLayoutInvalidationContext {
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext
         invalidationContext.invalidateLayoutMetrics = false
-        collectionView?.contentOffset = newBounds.origin
         return invalidationContext
     }
 
