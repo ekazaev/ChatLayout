@@ -11,11 +11,19 @@
 //
 
 import Foundation
+
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// This container view is designed to hold two `UIView` elements and arrange them in a horizontal or vertical axis.
 /// It also allows to easily change the order of the views if needed.
-public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIView>: UIView {
+
+public final class SwappingContainerView<CustomView: NSUIView, AccessoryView: NSUIView>: NSUIView {
     /// Keys that specify a horizontal or vertical layout constraint between views.
     public enum Axis: Hashable {
         /// The constraint applied when laying out the horizontal relationship between views.
@@ -67,7 +75,7 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
     }
 
     /// Preferred priority of the internal constraints.
-    public var preferredPriority: UILayoutPriority = .required {
+    public var preferredPriority: NSUILayoutPriority = .required {
         didSet {
             guard preferredPriority != oldValue else {
                 return
@@ -148,9 +156,9 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
                 axis: Axis = .horizontal,
                 distribution: Distribution = .accessoryFirst,
                 spacing: CGFloat,
-                preferredPriority: UILayoutPriority = .required) {
-        customView = CustomView(frame: frame)
-        accessoryView = AccessoryView(frame: frame)
+                preferredPriority: NSUILayoutPriority = .required) {
+        self.customView = CustomView(frame: frame)
+        self.accessoryView = AccessoryView(frame: frame)
         self.axis = axis
         self.distribution = distribution
         self.spacing = spacing
@@ -162,8 +170,8 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative
     ///   to the superview in which you plan to add it.
     public override init(frame: CGRect) {
-        customView = CustomView(frame: frame)
-        accessoryView = AccessoryView(frame: frame)
+        self.customView = CustomView(frame: frame)
+        self.accessoryView = AccessoryView(frame: frame)
         super.init(frame: frame)
         setupSubviews()
     }
@@ -181,11 +189,13 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
 
     /// Updates constraints for the view.
     public override func updateConstraints() {
-        let currentState = SwappingContainerState(axis: axis,
-                                                  distribution: distribution,
-                                                  spacing: spacing,
-                                                  isAccessoryHidden: accessoryView.isHidden,
-                                                  isCustomViewHidden: customView.isHidden)
+        let currentState = SwappingContainerState(
+            axis: axis,
+            distribution: distribution,
+            spacing: spacing,
+            isAccessoryHidden: accessoryView.isHidden,
+            isCustomViewHidden: customView.isHidden
+        )
         guard currentState != cachedState else {
             super.updateConstraints()
             return
@@ -245,12 +255,20 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         super.updateConstraints()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    public override var isFlipped: Bool { true }
+    #endif
+
     private func setupSubviews() {
-        translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        setWantsLayer()
+        #endif
+        #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+        #endif
         clipsToBounds = false
-
+        translatesAutoresizingMaskIntoConstraints = false
         setupContainer()
     }
 
@@ -315,86 +333,185 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         setNeedsLayout()
     }
 
-    private func spacingPriority() -> UILayoutPriority {
+    private func spacingPriority() -> NSUILayoutPriority {
         preferredPriority == .required ? .almostRequired : preferredPriority
     }
 
     private func buildAccessoryFirstConstraints() -> [NSLayoutConstraint] {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         switch axis {
         case .horizontal:
-            [
+            return [
                 accessoryView.trailingAnchor.constraint(equalTo: customView.leadingAnchor, constant: spacing, priority: spacingPriority()),
-                accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-                customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+                accessoryView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                customView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor, priority: preferredPriority),
             ]
         case .vertical:
-            [
+            return [
                 accessoryView.bottomAnchor.constraint(equalTo: customView.topAnchor, constant: spacing, priority: spacingPriority()),
-                accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-                customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+                accessoryView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor, priority: preferredPriority),
+                customView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor, priority: preferredPriority),
             ]
         }
+        #endif
+
+        #if canImport(UIKit)
+        switch axis {
+        case .horizontal:
+            return [
+                accessoryView.trailingAnchor.constraint(equalTo: customView.leadingAnchor, constant: spacing, priority: spacingPriority()),
+                accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority),
+            ]
+        case .vertical:
+            return [
+                accessoryView.bottomAnchor.constraint(equalTo: customView.topAnchor, constant: spacing, priority: spacingPriority()),
+                accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
+            ]
+        }
+        #endif
     }
 
     private func buildCustomViewFirstConstraints() -> [NSLayoutConstraint] {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         switch axis {
         case .horizontal:
-            [
+            return [
                 customView.trailingAnchor.constraint(equalTo: accessoryView.leadingAnchor, constant: -spacing, priority: spacingPriority()),
-                customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-                accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+                customView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                accessoryView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor, priority: preferredPriority),
             ]
         case .vertical:
-            [
+            return [
                 customView.bottomAnchor.constraint(equalTo: accessoryView.topAnchor, constant: -spacing, priority: spacingPriority()),
-                customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-                accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+                customView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor, priority: preferredPriority),
+                accessoryView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor, priority: preferredPriority),
             ]
         }
+        #endif
+
+        #if canImport(UIKit)
+        switch axis {
+        case .horizontal:
+            return [
+                customView.trailingAnchor.constraint(equalTo: accessoryView.leadingAnchor, constant: -spacing, priority: spacingPriority()),
+                customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority),
+            ]
+        case .vertical:
+            return [
+                customView.bottomAnchor.constraint(equalTo: accessoryView.topAnchor, constant: -spacing, priority: spacingPriority()),
+                customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
+            ]
+        }
+        #endif
     }
 
     private func buildAccessoryFullConstraints() -> [NSLayoutConstraint] {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         switch axis {
         case .horizontal:
-            [
-                accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-                accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+            return [
+                accessoryView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                accessoryView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor, priority: preferredPriority),
             ]
         case .vertical:
-            [
-                accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-                accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+            return [
+                accessoryView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor, priority: preferredPriority),
+                accessoryView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor, priority: preferredPriority),
             ]
         }
+        #endif
+
+        #if canImport(UIKit)
+        switch axis {
+        case .horizontal:
+            return [
+                accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority),
+            ]
+        case .vertical:
+            return [
+                accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
+            ]
+        }
+        #endif
     }
 
     private func buildCustomViewFullConstraints() -> [NSLayoutConstraint] {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         switch axis {
         case .horizontal:
-            [
-                customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-                customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+            return [
+                customView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                customView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor, priority: preferredPriority),
             ]
         case .vertical:
-            [
-                customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-                customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+            return [
+                customView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor, priority: preferredPriority),
+                customView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor, priority: preferredPriority),
             ]
         }
+        #endif
+
+        #if canImport(UIKit)
+        switch axis {
+        case .horizontal:
+            return [
+                customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority),
+            ]
+        case .vertical:
+            return [
+                customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
+            ]
+        }
+        #endif
     }
 
     private func buildEdgeConstraints() -> (accessory: [NSLayoutConstraint], customView: [NSLayoutConstraint]) {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         switch axis {
         case .horizontal:
-            (accessory: [accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-                         accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)],
-             customView: [customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-                          customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)])
+
+            return (
+                accessory: [accessoryView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor, priority: preferredPriority),
+                            accessoryView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor, priority: preferredPriority)],
+                customView: [customView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor, priority: preferredPriority),
+                             customView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor, priority: preferredPriority)]
+            )
         case .vertical:
-            (accessory: [accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-                         accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)],
-             customView: [customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-                          customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)])
+            return (
+                accessory: [accessoryView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                            accessoryView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor, priority: preferredPriority)],
+                customView: [customView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                             customView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
+            )
         }
+        #endif
+
+        #if canImport(UIKit)
+        switch axis {
+        case .horizontal:
+
+            return (
+                accessory: [accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                            accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)],
+                customView: [customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                             customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)]
+            )
+        case .vertical:
+            return (
+                accessory: [accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                            accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)],
+                customView: [customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                             customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
+            )
+        }
+        #endif
     }
 }

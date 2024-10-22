@@ -12,17 +12,23 @@
 
 import ChatLayout
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-// Just to visually test `ChatLayout.supportSelfSizingInvalidation`
+#if canImport(UIKit)
+import UIKit
+#endif
+
+/// Just to visually test `ChatLayout.supportSelfSizingInvalidation`
 protocol AvatarViewDelegate: AnyObject {
     func avatarTapped()
 }
 
-final class AvatarView: UIView, StaticViewFactory {
+final class AvatarView: NSUIView, StaticViewFactory {
     weak var delegate: AvatarViewDelegate?
 
-    private lazy var circleImageView = RoundedCornersContainerView<UIImageView>(frame: bounds)
+    private lazy var circleImageView = RoundedCornersContainerView<NSUIImageView>(frame: bounds)
 
     private var controller: AvatarViewController?
 
@@ -40,7 +46,7 @@ final class AvatarView: UIView, StaticViewFactory {
         guard let controller else {
             return
         }
-        UIView.performWithoutAnimation {
+        NSUIView.performWithoutAnimation {
             circleImageView.customView.image = controller.image
         }
     }
@@ -49,30 +55,56 @@ final class AvatarView: UIView, StaticViewFactory {
         self.controller = controller
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+
+    override var isFlipped: Bool { true }
+
+    #endif
+
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-        insetsLayoutMarginsFromSafeArea = false
+        #if canImport(UIKit)
         layoutMargins = .zero
+        insetsLayoutMarginsFromSafeArea = false
+        #endif
         addSubview(circleImageView)
 
         circleImageView.translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            circleImageView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor),
+            circleImageView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor),
+            circleImageView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor),
+            circleImageView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             circleImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             circleImageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             circleImageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            circleImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            circleImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
+        #endif
 
         let constraint = circleImageView.widthAnchor.constraint(equalToConstant: 30)
-        constraint.priority = UILayoutPriority(rawValue: 999)
+        constraint.priority = NSUILayoutPriority(rawValue: 999)
         constraint.isActive = true
         circleImageView.heightAnchor.constraint(equalTo: circleImageView.widthAnchor, multiplier: 1).isActive = true
 
         circleImageView.customView.contentMode = .scaleAspectFill
 
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        let gestureRecogniser = NSClickGestureRecognizer(target: self, action: #selector(avatarTapped))
+        circleImageView.addGestureRecognizer(gestureRecogniser)
+        #endif
+
+        #if canImport(UIKit)
         let gestureRecogniser = UITapGestureRecognizer()
         circleImageView.addGestureRecognizer(gestureRecogniser)
         gestureRecogniser.addTarget(self, action: #selector(avatarTapped))
+        #endif
     }
 
     @objc

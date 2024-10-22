@@ -11,10 +11,16 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 struct ChatViewControllerBuilder {
-    func build() -> UIViewController {
+    func build() -> NSUIViewController {
         let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [1, 2, 3])
         let messageController = DefaultChatController(dataProvider: dataProvider, userId: 0)
 

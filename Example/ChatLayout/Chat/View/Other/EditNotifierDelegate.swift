@@ -11,7 +11,6 @@
 //
 
 import Foundation
-import UIKit
 
 public enum ActionDuration {
     case notAnimated

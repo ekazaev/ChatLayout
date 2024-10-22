@@ -10,6 +10,8 @@
 // https://github.com/sponsors/ekazaev
 //
 
+#if canImport(UIKit)
+
 import Foundation
 
 protocol KeyboardListenerDelegate: AnyObject {
@@ -29,3 +31,6 @@ extension KeyboardListenerDelegate {
     func keyboardWillChangeFrame(info: KeyboardInfo) {}
     func keyboardDidChangeFrame(info: KeyboardInfo) {}
 }
+
+
+#endif

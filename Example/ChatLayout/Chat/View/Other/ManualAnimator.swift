@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 // Read why this class is needed here:
 // https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
@@ -54,7 +60,13 @@ class ManualAnimator {
         closure = animations
         total = duration
         animationCurve = curve
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        let d = NSScreen.main!.displayLink(target: self, selector: #selector(tick))
+        #endif
+
+        #if canImport(UIKit)
         let d = CADisplayLink(target: self, selector: #selector(tick))
+        #endif
         d.add(to: .current, forMode: .common)
         displayLink = d
     }
@@ -78,8 +90,8 @@ class ManualAnimator {
     }
 }
 
-private extension CGFloat {
-    var parametric: CGFloat {
+extension CGFloat {
+    fileprivate var parametric: CGFloat {
         guard self > 0.0 else {
             return 0.0
         }
@@ -89,7 +101,7 @@ private extension CGFloat {
         return (self * self) / (2.0 * ((self * self) - self) + 1.0)
     }
 
-    var quadraticEaseInOut: CGFloat {
+    fileprivate var quadraticEaseInOut: CGFloat {
         guard self > 0.0 else {
             return 0.0
         }
@@ -102,7 +114,7 @@ private extension CGFloat {
         return (-2 * self * self) + (4 * self) - 1
     }
 
-    var quadraticEaseOut: CGFloat {
+    fileprivate var quadraticEaseOut: CGFloat {
         guard self > 0.0 else {
             return 0.0
         }
@@ -112,7 +124,7 @@ private extension CGFloat {
         return -self * (self - 2)
     }
 
-    var quadraticEaseIn: CGFloat {
+    fileprivate var quadraticEaseIn: CGFloat {
         guard self > 0.0 else {
             return 0.0
         }

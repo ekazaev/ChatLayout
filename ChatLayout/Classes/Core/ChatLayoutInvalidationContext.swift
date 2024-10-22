@@ -11,10 +11,17 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// Custom implementation of `UICollectionViewLayoutInvalidationContext`
-public final class ChatLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
+public final class ChatLayoutInvalidationContext: NSUICollectionViewLayoutInvalidationContext {
+
     /// Indicates whether to recompute the positions and sizes of the items based on the current
     /// collection view and delegate layout metrics.
     public var invalidateLayoutMetrics = true

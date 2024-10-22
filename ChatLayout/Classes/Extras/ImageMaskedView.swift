@@ -11,7 +11,14 @@
 //
 
 import Foundation
+
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// A transformation to apply to the `ImageMaskedView.maskingImage`
 public enum ImageMaskedViewTransformation {
@@ -23,12 +30,12 @@ public enum ImageMaskedViewTransformation {
 }
 
 /// A container view that masks its contained view with an image provided.
-public final class ImageMaskedView<CustomView: UIView>: UIView {
+public final class ImageMaskedView<CustomView: NSUIView>: NSUIView {
     /// Contained view.
     public lazy var customView = CustomView(frame: bounds)
 
     /// An Image to be used as a mask for the `customView`.
-    public var maskingImage: UIImage? {
+    public var maskingImage: NSUIImage? {
         didSet {
             setupMask()
         }
@@ -44,7 +51,7 @@ public final class ImageMaskedView<CustomView: UIView>: UIView {
         }
     }
 
-    private lazy var imageView = UIImageView(frame: bounds)
+    private lazy var imageView = NSUIImageView(frame: bounds)
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative
@@ -61,41 +68,62 @@ public final class ImageMaskedView<CustomView: UIView>: UIView {
         setupSubviews()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    public override var isFlipped: Bool { true }
+    #endif
+
     private func setupSubviews() {
-        layoutMargins = .zero
         translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        setWantsLayer()
+        imageView.setWantsLayer()
+        #endif
+        #if canImport(UIKit)
+        layoutMargins = .zero
         insetsLayoutMarginsFromSafeArea = false
+        #endif
 
         addSubview(customView)
         customView.translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            customView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor),
+            customView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor),
+            customView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor),
+            customView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+            customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
         ])
+        #endif
     }
 
     private func setupMask() {
         guard let bubbleImage = maskingImage else {
             imageView.image = nil
-            mask = nil
+            platformLayer?.mask = nil
             return
         }
 
         imageView.image = bubbleImage
-        mask = imageView
+        platformLayer?.mask = imageView.platformLayer
         updateMask()
     }
 
     private func updateMask() {
-        UIView.performWithoutAnimation {
+        NSUIView.performWithoutAnimation {
             let multiplier = effectiveUserInterfaceLayoutDirection == .leftToRight ? 1 : -1
             switch maskTransformation {
             case .flippedVertically:
-                imageView.transform = CGAffineTransform(scaleX: CGFloat(multiplier * -1), y: 1)
+                imageView.platformLayer?.setAffineTransform(CGAffineTransform(scaleX: CGFloat(multiplier * -1), y: 1))
             case .asIs:
-                imageView.transform = CGAffineTransform(scaleX: CGFloat(multiplier * 1), y: 1)
+                imageView.platformLayer?.setAffineTransform(CGAffineTransform(scaleX: CGFloat(multiplier * 1), y: 1))
             }
         }
     }

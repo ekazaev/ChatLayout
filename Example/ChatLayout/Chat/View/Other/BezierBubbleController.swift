@@ -11,9 +11,8 @@
 //
 
 import Foundation
-import UIKit
 
-final class BezierBubbleController<CustomView: UIView>: BubbleController {
+final class BezierBubbleController<CustomView: NSUIView>: BubbleController {
     private let controllerProxy: BubbleController
 
     private let type: MessageType

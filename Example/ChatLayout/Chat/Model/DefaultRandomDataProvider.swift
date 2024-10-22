@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 protocol RandomDataProviderDelegate: AnyObject {
     func received(messages: [RawMessage])
@@ -81,7 +87,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Limerick-King-Johns-Castle-2012.JPG/1920px-Limerick-King-Johns-Castle-2012.JPG")!
     ]
 
-    private let images: [UIImage] = (1...8).compactMap { UIImage(named: "demo\($0)") }
+    private let images: [NSUIImage] = (1...8).compactMap { NSUIImage(named: "demo\($0)") }
 
     private var allUsersIds: [Int] {
         Array([users, [receiverId]].joined())
@@ -137,23 +143,23 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         guard enableNewMessages else {
             return
         }
-        let message = createRandomMessage()
-        delegate?.received(messages: [message])
-
-        if message.userId != receiverId {
-            if Int.random(in: 0...1) == 0 {
-                lastReceivedUUID = message.id
-                delegate?.lastReceivedIdChanged(to: message.id)
-            }
-            if Int.random(in: 0...3) == 0 {
-                lastReadUUID = lastReceivedUUID
-                lastReceivedUUID = message.id
-                delegate?.lastReadIdChanged(to: message.id)
-            }
-        }
-
-        restartMessageTimer()
-        restartTypingTimer()
+//        let message = createRandomMessage()
+//        delegate?.received(messages: [message])
+//
+//        if message.userId != receiverId {
+//            if Int.random(in: 0...1) == 0 {
+//                lastReceivedUUID = message.id
+//                delegate?.lastReceivedIdChanged(to: message.id)
+//            }
+//            if Int.random(in: 0...3) == 0 {
+//                lastReadUUID = lastReceivedUUID
+//                lastReceivedUUID = message.id
+//                delegate?.lastReadIdChanged(to: message.id)
+//            }
+//        }
+//
+//        restartMessageTimer()
+//        restartTypingTimer()
     }
 
     @objc
@@ -161,8 +167,8 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         guard enableTyping else {
             return
         }
-        typingState = typingState == .idle ? TypingState.typing : .idle
-        delegate?.typingStateChanged(to: typingState)
+//        typingState = typingState == .idle ? TypingState.typing : .idle
+//        delegate?.typingStateChanged(to: typingState)
     }
 
     private func restartMessageTimer() {
@@ -178,22 +184,22 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     }
 
     private func createRandomMessage(date: Date = Date()) -> RawMessage {
-        let sender = allUsersIds[Int.random(in: 0..<allUsersIds.count)] // allUsersIds.first!//
+        let sender = allUsersIds[0] // allUsersIds.first!//
         lastMessageIndex += 1
         switch (Int.random(in: 0...8), enableRichContent) {
-        case (5, true):
-            return RawMessage(id: UUID(), date: date, data: .url(websiteUrls[Int.random(in: 0..<websiteUrls.count)]), userId: sender)
-        case (6, true):
-            return RawMessage(id: UUID(), date: date, data: .image(.imageURL(imageUrls[Int.random(in: 0..<imageUrls.count)])), userId: sender)
-        case (7, true):
-            return RawMessage(id: UUID(), date: date, data: .image(.image(images[Int.random(in: 0..<images.count)])), userId: sender)
-        case (8, true):
-            return RawMessage(id: UUID(),
-                              date: date,
-                              data: .text(TextGenerator.getString(of: 5) +
-                                  " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " +
-                                  TextGenerator.getString(of: 5)),
-                              userId: sender)
+//        case (5, true):
+//            return RawMessage(id: UUID(), date: date, data: .url(websiteUrls[Int.random(in: 0..<websiteUrls.count)]), userId: sender)
+//        case (6, true):
+//            return RawMessage(id: UUID(), date: date, data: .image(.imageURL(imageUrls[Int.random(in: 0..<imageUrls.count)])), userId: sender)
+//        case (7, true):
+//            return RawMessage(id: UUID(), date: date, data: .image(.image(images[Int.random(in: 0..<images.count)])), userId: sender)
+//        case (8, true):
+//            return RawMessage(id: UUID(),
+//                              date: date,
+//                              data: .text(TextGenerator.getString(of: 5) +
+//                                  " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " +
+//                                  TextGenerator.getString(of: 5)),
+//                              userId: sender)
         default:
             return RawMessage(id: UUID(), date: date, data: .text(TextGenerator.getString(of: 20)), userId: sender)
         }
@@ -201,7 +207,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private func createBunchOfMessages(number: Int = 50) -> [RawMessage] {
         let messages = (0..<number).map { _ -> RawMessage in
-            startingTimestamp -= TimeInterval(Int.random(in: 100...1000))
+            startingTimestamp -= TimeInterval(100)
             return self.createRandomMessage(date: Date(timeIntervalSince1970: startingTimestamp))
         }
         return messages

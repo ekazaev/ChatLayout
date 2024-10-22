@@ -11,11 +11,18 @@
 //
 
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-/// Container view that allows its `CustomView` to have lose connection to the margins of the container according to the
-/// settings provided in `EdgeAligningView.flexibleEdges`
-public final class EdgeAligningView<CustomView: UIView>: UIView {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+// Container view that allows its `CustomView` to have lose connection to the margins of the container according to the
+// settings provided in `EdgeAligningView.flexibleEdges`
+
+public final class EdgeAligningView<CustomView: NSUIView>: NSUIView {
     /// Represents an edge of `EdgeAligningView`
     public enum Edge: CaseIterable {
         /// Top edge
@@ -55,7 +62,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     }
 
     /// Preferred priority of the internal constraints.
-    public var preferredPriority: UILayoutPriority = .required {
+    public var preferredPriority: NSUILayoutPriority = .required {
         didSet {
             guard preferredPriority != oldValue else {
                 return
@@ -79,9 +86,11 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     ///   - customView: An instance of `CustomView`
     ///   - flexibleEdges: Set of edges to be set as loose.
     ///   - preferredPriority: Preferred priority of the internal constraints.
-    public init(with customView: CustomView,
-                flexibleEdges: Set<Edge> = [.top],
-                preferredPriority: UILayoutPriority = .required) {
+    public init(
+        with customView: CustomView,
+        flexibleEdges: Set<Edge> = [.top],
+        preferredPriority: NSUILayoutPriority = .required
+    ) {
         self.customView = customView
         self.flexibleEdges = flexibleEdges
         self.preferredPriority = preferredPriority
@@ -93,7 +102,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative
     ///   to the superview in which you plan to add it.
     public override init(frame: CGRect) {
-        customView = CustomView(frame: frame)
+        self.customView = CustomView(frame: frame)
         super.init(frame: frame)
         setupSubviews()
     }
@@ -104,10 +113,12 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     ///   - flexibleEdges: Set of edges to be set as loose.
     ///   - preferredPriority: Preferred priority of the internal constraints.
     ///   to the superview in which you plan to add it.
-    public init(frame: CGRect,
-                flexibleEdges: Set<Edge> = [],
-                preferredPriority: UILayoutPriority = .required) {
-        customView = CustomView(frame: frame)
+    public init(
+        frame: CGRect,
+        flexibleEdges: Set<Edge> = [],
+        preferredPriority: NSUILayoutPriority = .required
+    ) {
+        self.customView = CustomView(frame: frame)
         self.flexibleEdges = flexibleEdges
         self.preferredPriority = preferredPriority
         super.init(frame: frame)
@@ -124,6 +135,10 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     public override class var requiresConstraintBasedLayout: Bool {
         true
     }
+
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    public override var isFlipped: Bool { true }
+    #endif
 
     /// Updates constraints for the view.
     public override func updateConstraints() {
@@ -150,8 +165,14 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
 
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        setWantsLayer()
+        #endif
+
+        #if canImport(UIKit)
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
+        #endif
         setupContainer()
     }
 
@@ -184,22 +205,53 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         setNeedsLayout()
     }
 
-    private func buildCenterConstraints(_ view: UIView) -> (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint) {
-        (centerX: view.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor, priority: preferredPriority),
-         centerY: view.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor, priority: preferredPriority))
+    private func buildCenterConstraints(_ view: NSUIView) -> (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint) {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        return
+            (
+                centerX: view.centerXAnchor.constraint(equalTo: customLayoutMarginsGuide.centerXAnchor, priority: preferredPriority),
+                centerY: view.centerYAnchor.constraint(equalTo: customLayoutMarginsGuide.centerYAnchor, priority: preferredPriority)
+            )
+        #endif
+
+        #if canImport(UIKit)
+        return
+            (
+                centerX: view.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor, priority: preferredPriority),
+                centerY: view.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor, priority: preferredPriority)
+            )
+        #endif
     }
 
-    private func buildRigidConstraints(_ view: UIView) -> [Edge: NSLayoutConstraint] {
-        [.top: view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-         .bottom: view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
-         .leading: view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-         .trailing: view.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
+    private func buildRigidConstraints(_ view: NSUIView) -> [Edge: NSLayoutConstraint] {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        return [.top: view.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor, priority: preferredPriority),
+                .bottom: view.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor, priority: preferredPriority),
+                .leading: view.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                .trailing: view.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
+        #endif
+
+        #if canImport(UIKit)
+        return [.top: view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                .bottom: view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
+                .leading: view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                .trailing: view.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
+        #endif
     }
 
-    private func buildFlexibleConstraints(_ view: UIView) -> [Edge: NSLayoutConstraint] {
-        [.top: view.topAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-         .bottom: view.bottomAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
-         .leading: view.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-         .trailing: view.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
+    private func buildFlexibleConstraints(_ view: NSUIView) -> [Edge: NSLayoutConstraint] {
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        return [.top: view.topAnchor.constraint(greaterThanOrEqualTo: customLayoutMarginsGuide.topAnchor, priority: preferredPriority),
+                .bottom: view.bottomAnchor.constraint(lessThanOrEqualTo: customLayoutMarginsGuide.bottomAnchor, priority: preferredPriority),
+                .leading: view.leadingAnchor.constraint(greaterThanOrEqualTo: customLayoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                .trailing: view.trailingAnchor.constraint(lessThanOrEqualTo: customLayoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
+        #endif
+
+        #if canImport(UIKit)
+        return [.top: view.topAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                .bottom: view.bottomAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
+                .leading: view.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                .trailing: view.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)]
+        #endif
     }
 }

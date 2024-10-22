@@ -12,7 +12,13 @@
 
 @testable import ChatLayout
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     var numberOfItemsInSection: [Int: Int] = [0: 100, 1: 100, 2: 100]
@@ -40,7 +46,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
                height: controller.contentHeight(at: state) - settings.additionalInsets.top - settings.additionalInsets.bottom)
     }
 
-    let adjustedContentInset: UIEdgeInsets = .zero
+    let adjustedContentInset: NSUIEdgeInsets = .zero
 
     let keepContentOffsetAtBottomOnBatchUpdates: Bool = true
 
