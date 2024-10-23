@@ -1048,6 +1048,14 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
     func shouldPresentFooter(at sectionIndex: Int) -> Bool {
         delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false
     }
+    
+    func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool {
+        delegate?.shouldPinHeaderToVisibleBounds(self, at: sectionIndex) ?? false
+    }
+    
+    func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool {
+        delegate?.shouldPinFooterToVisibleBounds(self, at: sectionIndex) ?? false
+    }
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {
         let interItemSpacing: CGFloat

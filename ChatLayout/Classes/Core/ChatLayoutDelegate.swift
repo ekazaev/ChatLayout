@@ -39,6 +39,12 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// - Returns: `Bool`.
     func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool
+    
+    func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
+                                        at sectionIndex: Int) -> Bool
+    
+    func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
+                                        at sectionIndex: Int) -> Bool
 
     /// `CollectionViewChatLayout` will call this method to ask what size the item should have.
     ///
@@ -131,6 +137,18 @@ public extension ChatLayoutDelegate {
     /// Default implementation returns: `false`.
     func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool {
+        false
+    }
+    
+    /// Default implementation returns: `false`.
+    func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
+                                        at sectionIndex: Int) -> Bool {
+        false
+    }
+    
+    /// Default implementation returns: `false`.
+    func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
+                                        at sectionIndex: Int) -> Bool {
         false
     }
 
