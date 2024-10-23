@@ -346,6 +346,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
         }
+        
+        if prepareActions.contains(.updateLayoutMetrics) || prepareActions.contains(.recreateSectionModels)
+        {
+            hasPinnedHeaderOrFooter = false
+        }
 
         if prepareActions.contains(.recreateSectionModels) {
             var sections: ContiguousArray<SectionModel<CollectionViewChatLayout>> = []
@@ -379,6 +384,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                                            footer: footer,
                                            items: items,
                                            collectionLayout: self)
+                section.set(isPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
+                section.set(isPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
                 section.assembleLayout()
                 sections.append(section)
             }
@@ -470,7 +477,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             return nil
         }
         let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state)
-
         return attributes
     }
 
@@ -1050,11 +1056,15 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
     }
     
     func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool {
-        delegate?.shouldPinHeaderToVisibleBounds(self, at: sectionIndex) ?? false
+        let shouldPinHeaderToVisibleBounds = delegate?.shouldPinHeaderToVisibleBounds(self, at: sectionIndex) ?? false
+        hasPinnedHeaderOrFooter = hasPinnedHeaderOrFooter || shouldPinHeaderToVisibleBounds
+        return shouldPinHeaderToVisibleBounds
     }
     
     func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool {
-        delegate?.shouldPinFooterToVisibleBounds(self, at: sectionIndex) ?? false
+        let shouldPinFooterToVisibleBounds = delegate?.shouldPinFooterToVisibleBounds(self, at: sectionIndex) ?? false
+        hasPinnedHeaderOrFooter = hasPinnedHeaderOrFooter || shouldPinFooterToVisibleBounds
+        return shouldPinFooterToVisibleBounds
     }
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {

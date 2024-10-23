@@ -19,8 +19,12 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     let interSectionSpacing: CGFloat
 
     private(set) var header: ItemModel?
-
+    
     private(set) var footer: ItemModel?
+    
+    private(set) var isPinHeaderToVisibleBounds: Bool = false
+    
+    private(set) var isPinFooterToVisibleBounds: Bool = false
 
     private(set) var items: ContiguousArray<ItemModel>
 
@@ -143,6 +147,14 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     mutating func set(footer: ItemModel?) {
         self.footer = footer
+    }
+    
+    mutating func set(isPinHeaderToVisibleBounds: Bool) {
+        self.isPinHeaderToVisibleBounds = isPinHeaderToVisibleBounds
+    }
+    
+    mutating func set(isPinFooterToVisibleBounds: Bool) {
+        self.isPinFooterToVisibleBounds = isPinFooterToVisibleBounds
     }
 
     private mutating func offsetEverything(below index: Int, by heightDiff: CGFloat) {

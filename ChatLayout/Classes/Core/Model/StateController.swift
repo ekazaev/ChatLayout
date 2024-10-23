@@ -38,6 +38,10 @@ protocol ChatLayoutRepresentation: AnyObject {
     func shouldPresentHeader(at sectionIndex: Int) -> Bool
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool
+    
+    func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool
+    
+    func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat
 }
@@ -227,7 +231,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         let attributes: ChatLayoutAttributes
         let itemIndexPath = itemPath.indexPath
         let layout = layout(at: state)
-
+        
         switch kind {
         case .header:
             guard itemPath.section < layout.sections.count,
@@ -358,14 +362,31 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
 
         itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
+        
+        if kind == .header && section.isPinHeaderToVisibleBounds == true {
+            let offsetY = max(
+                min(visibleBounds.minY - section.offsetY, section.height - additionalInsets.bottom - (section.footer?.size.height ?? 0) - item.size.height
+                   ), item.offsetY)
+            itemFrame.offsettingBy(dx: 0, dy: offsetY)
+        }
+        
+        if kind == .footer && section.isPinFooterToVisibleBounds == true {
+            let offsetY = max(min(
+                0, visibleBounds.maxY + layoutRepresentation.adjustedContentInset.bottom - item.size.height - itemFrame.minY
+            ), section.offsetY + (section.header?.size.height ?? 0) - itemFrame.minY)
+            itemFrame.offsettingBy(dx: 0, dy: offsetY)
+        }
+        
         if isFinal {
             offsetByCompensation(frame: &itemFrame, at: itemPath, for: state, backward: true)
         }
+        
         if layoutRepresentation.keepContentAtBottomOfVisibleArea == true,
            !(kind == .header && itemPath.section == 0),
            !isLayoutBiggerThanVisibleBounds(at: state, withFullCompensation: false, visibleBounds: visibleBounds) {
             itemFrame.offsettingBy(dx: 0, dy: visibleBounds.height.rounded() - contentSize(for: state).height.rounded())
         }
+        
         return itemFrame
     }
 
