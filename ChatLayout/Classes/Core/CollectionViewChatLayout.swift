@@ -216,6 +216,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     private var reconfigureItemsIndexPaths: [IndexPath] = []
 
     private var _supportSelfSizingInvalidation: Bool = false
+  
+    private var hasPinnedHeaderOrFooter: Bool = false
 
     // MARK: IOS 15.1 fix flags
 
@@ -619,7 +621,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             || (isUserInitiatedScrolling && state == .beforeUpdate)
 
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
-        return shouldInvalidateLayout
+        return shouldInvalidateLayout || hasPinnedHeaderOrFooter
     }
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.
