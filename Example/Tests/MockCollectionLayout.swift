@@ -18,6 +18,8 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     var numberOfItemsInSection: [Int: Int] = [0: 100, 1: 100, 2: 100]
     var shouldPresentHeaderAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
     var shouldPresentFooterAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
+    var shouldPinHeaderToVisibleBoundsAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
+    var shouldPinFooterToVisibleBoundsAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
 
     // swiftlint:disable weak_delegate
     lazy var delegate: ChatLayoutDelegate? = self
@@ -47,6 +49,8 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     let keepContentAtBottomOfVisibleArea: Bool = false
 
     let processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
+    
+    var hasPinnedHeaderOrFooter: Bool = false
 
     func numberOfItems(in section: Int) -> Int {
         numberOfItemsInSection[section] ?? 0
@@ -63,7 +67,15 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     func shouldPresentFooter(at sectionIndex: Int) -> Bool {
         shouldPresentFooterAtSection[sectionIndex] ?? true
     }
-
+    
+    func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool {
+        shouldPinHeaderToVisibleBoundsAtSection[sectionIndex] ?? true
+    }
+    
+    func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool {
+        shouldPinFooterToVisibleBoundsAtSection[sectionIndex] ?? true
+    }
+    
     func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment {
         alignmentForItem(of: element, at: itemPath.indexPath)
     }
