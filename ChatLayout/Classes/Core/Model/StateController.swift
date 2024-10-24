@@ -185,8 +185,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             return .orderedSame
         }
         
+        // When using pinned (sticky) headers and footers, frames may not be aligned correctly.
+        // As a result, binary search not work properly, so iterate through the array instead.
         let hasPinnedHeaderOrFooter = layoutRepresentation.hasPinnedHeaderOrFooter
-        
+
         if !ignoreCache,
            let cachedAttributesState,
            cachedAttributesState.rect.contains(rect) {
@@ -376,7 +378,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
 
         itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
-        
+
         if kind == .header && section.isPinHeaderToVisibleBounds == true {
             layoutRepresentation.hasPinnedHeaderOrFooter = true
             let offsetY = max(
