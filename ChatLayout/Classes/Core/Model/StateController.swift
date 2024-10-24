@@ -1091,8 +1091,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                     }
                 }
 
+                // When using pinned (sticky) footers, even if the cell does not intersect with the frame, the footer can intersect.
+                // Therefore, add the footer without considering the traverseState.
                 if let footerFrame = itemFrame(for: sectionPath, kind: .footer, at: state, isFinal: true, additionalAttributes: additionalAttributes),
-                   check(rect: footerFrame) {
+                   check(rect: footerFrame) || (section.isPinFooterToVisibleBounds && section.frame.intersects(visibleRect)) {
                     allRects.append((frame: footerFrame, indexPath: sectionPath, kind: .footer))
                 }
             }
