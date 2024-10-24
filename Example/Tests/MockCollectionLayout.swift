@@ -18,8 +18,8 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     var numberOfItemsInSection: [Int: Int] = [0: 100, 1: 100, 2: 100]
     var shouldPresentHeaderAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
     var shouldPresentFooterAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
-    var shouldPinHeaderToVisibleBoundsAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
-    var shouldPinFooterToVisibleBoundsAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
+    var shouldPinHeaderToVisibleBoundsAtSection: [Int: Bool] = [0: false, 1: false, 2: false]
+    var shouldPinFooterToVisibleBoundsAtSection: [Int: Bool] = [0: false, 1: false, 2: false]
 
     // swiftlint:disable weak_delegate
     lazy var delegate: ChatLayoutDelegate? = self
@@ -106,6 +106,8 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
             }
 
             var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex), header: header, footer: footer, items: items, collectionLayout: self)
+            section.set(isPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
+            section.set(isPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
             section.assembleLayout()
             sections.append(section)
         }

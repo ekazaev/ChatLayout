@@ -374,4 +374,24 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 4)
     }
+    
+    func testPinnedHeader() {
+        let layout = MockCollectionLayout()
+        let scrollOffsetY = CGFloat(400)
+        layout.visibleBounds.origin.y = scrollOffsetY
+        layout.shouldPinHeaderToVisibleBoundsAtSection[0] = true
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+
+        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)
+        XCTAssertEqual(item?.frame.minY, scrollOffsetY)
+    }
+    
+    func testPinnedFooter() {
+        let layout = MockCollectionLayout()
+        layout.shouldPinFooterToVisibleBoundsAtSection[0] = true
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+
+        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)!
+        XCTAssertEqual(item.frame.minY, layout.visibleBounds.height - item.frame.height)
+    }
 }
