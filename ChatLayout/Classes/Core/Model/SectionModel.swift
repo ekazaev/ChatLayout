@@ -19,11 +19,11 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     let interSectionSpacing: CGFloat
 
     private(set) var header: ItemModel?
-    
+
     private(set) var footer: ItemModel?
-    
+
     private(set) var isPinHeaderToVisibleBounds: Bool = false
-    
+
     private(set) var isPinFooterToVisibleBounds: Bool = false
 
     private(set) var items: ContiguousArray<ItemModel>
