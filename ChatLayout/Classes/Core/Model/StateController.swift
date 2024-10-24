@@ -184,7 +184,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
             return .orderedSame
         }
-        
+
         // When using pinned (sticky) headers and footers, frames may not be aligned correctly.
         // As a result, binary search not work properly, so iterate through the array instead.
         let hasPinnedHeaderOrFooter = layoutRepresentation.hasPinnedHeaderOrFooter
@@ -207,7 +207,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if !ignoreCache {
                 cachedAttributesState = (rect: totalRect, attributes: attributes)
             }
-            
+
             let visibleAttributes: [ChatLayoutAttributes]
             if rect == totalRect {
                 visibleAttributes = attributes
@@ -386,7 +386,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                    ), item.offsetY)
             itemFrame.offsettingBy(dx: 0, dy: offsetY)
         }
-        
+
         if kind == .footer && section.isPinFooterToVisibleBounds == true {
             layoutRepresentation.hasPinnedHeaderOrFooter = true
             let offsetY = max(min(
@@ -394,17 +394,17 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             ), section.offsetY + (section.header?.size.height ?? 0) - itemFrame.minY)
             itemFrame.offsettingBy(dx: 0, dy: offsetY)
         }
-        
+
         if isFinal {
             offsetByCompensation(frame: &itemFrame, at: itemPath, for: state, backward: true)
         }
-        
+
         if layoutRepresentation.keepContentAtBottomOfVisibleArea == true,
            !(kind == .header && itemPath.section == 0),
            !isLayoutBiggerThanVisibleBounds(at: state, withFullCompensation: false, visibleBounds: visibleBounds) {
             itemFrame.offsettingBy(dx: 0, dy: visibleBounds.height.rounded() - contentSize(for: state).height.rounded())
         }
-        
+
         return itemFrame
     }
 
