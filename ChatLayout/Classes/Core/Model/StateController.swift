@@ -745,11 +745,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 } else {
                     footer = nil
                 }
-                let section = SectionModel(interSectionSpacing: layoutRepresentation.interSectionSpacing(at: sectionIndex),
+                var section = SectionModel(interSectionSpacing: layoutRepresentation.interSectionSpacing(at: sectionIndex),
                                            header: header,
                                            footer: footer,
                                            items: ContiguousArray(items),
                                            collectionLayout: layoutRepresentation)
+                section.set(isPinHeaderToVisibleBounds: layoutRepresentation.shouldPinHeaderToVisibleBounds(at: sectionIndex))
+                section.set(isPinFooterToVisibleBounds: layoutRepresentation.shouldPinFooterToVisibleBounds(at: sectionIndex))
                 insertedSection = section
                 afterUpdateModel.insertSection(section, at: sectionIndex)
             }
