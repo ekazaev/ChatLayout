@@ -30,7 +30,7 @@ protocol ChatLayoutRepresentation: AnyObject {
     var keepContentAtBottomOfVisibleArea: Bool { get }
 
     var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool { get }
-    
+
     var hasPinnedHeaderOrFooter: Bool { get set }
 
     func numberOfItems(in section: Int) -> Int
@@ -40,11 +40,11 @@ protocol ChatLayoutRepresentation: AnyObject {
     func shouldPresentHeader(at sectionIndex: Int) -> Bool
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool
-    
+
     func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool
-    
+
     func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool
-    
+
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat
 }
 
@@ -247,7 +247,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         let attributes: ChatLayoutAttributes
         let itemIndexPath = itemPath.indexPath
         let layout = layout(at: state)
-        
+
         switch kind {
         case .header:
             guard itemPath.section < layout.sections.count,
