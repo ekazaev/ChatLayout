@@ -40,9 +40,19 @@ public protocol ChatLayoutDelegate: AnyObject {
     func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool
     
+    /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the header to the visible bounds in the current layout.
+    /// - Parameters:
+    ///   - chatLayout: `CollectionViewChatLayout` reference.
+    ///   - sectionIndex: Index of the section.
+    /// - Returns: `Bool`.
     func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool
     
+    /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the footer to the visible bounds in the current layout.
+    /// - Parameters:
+    ///   - chatLayout: `CollectionViewChatLayout` reference.
+    ///   - sectionIndex: Index of the section.
+    /// - Returns: `Bool`.
     func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool
 
