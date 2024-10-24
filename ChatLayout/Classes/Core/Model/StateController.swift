@@ -30,6 +30,8 @@ protocol ChatLayoutRepresentation: AnyObject {
     var keepContentAtBottomOfVisibleArea: Bool { get }
 
     var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool { get }
+    
+    var hasPinnedHeaderOrFooter: Bool { get set }
 
     func numberOfItems(in section: Int) -> Int
 
@@ -42,7 +44,7 @@ protocol ChatLayoutRepresentation: AnyObject {
     func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool
     
     func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool
-
+    
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat
 }
 
@@ -182,11 +184,15 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
             return .orderedSame
         }
-
+        
+        let hasPinnedHeaderOrFooter = layoutRepresentation.hasPinnedHeaderOrFooter
+        
         if !ignoreCache,
            let cachedAttributesState,
            cachedAttributesState.rect.contains(rect) {
-            return cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+            return hasPinnedHeaderOrFooter
+            ? cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
+            : cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
         } else {
             let totalRect: CGRect
             switch state {
@@ -199,7 +205,15 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if !ignoreCache {
                 cachedAttributesState = (rect: totalRect, attributes: attributes)
             }
-            let visibleAttributes = rect != totalRect ? attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) } : attributes
+            
+            let visibleAttributes: [ChatLayoutAttributes]
+            if rect == totalRect {
+                visibleAttributes = attributes
+            } else if hasPinnedHeaderOrFooter {
+                visibleAttributes = attributes.filter { $0.frame.intersects(rect) }
+            } else {
+                visibleAttributes = attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+            }
             return visibleAttributes
         }
     }
@@ -364,6 +378,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
         
         if kind == .header && section.isPinHeaderToVisibleBounds == true {
+            layoutRepresentation.hasPinnedHeaderOrFooter = true
             let offsetY = max(
                 min(visibleBounds.minY - section.offsetY, section.height - additionalInsets.bottom - (section.footer?.size.height ?? 0) - item.size.height
                    ), item.offsetY)
@@ -371,6 +386,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
         
         if kind == .footer && section.isPinFooterToVisibleBounds == true {
+            layoutRepresentation.hasPinnedHeaderOrFooter = true
             let offsetY = max(min(
                 0, visibleBounds.maxY + layoutRepresentation.adjustedContentInset.bottom - item.size.height - itemFrame.minY
             ), section.offsetY + (section.header?.size.height ?? 0) - itemFrame.minY)

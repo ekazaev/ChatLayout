@@ -217,7 +217,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     private var _supportSelfSizingInvalidation: Bool = false
   
-    private var hasPinnedHeaderOrFooter: Bool = false
+    var hasPinnedHeaderOrFooter: Bool = false
 
     // MARK: IOS 15.1 fix flags
 
@@ -1056,15 +1056,11 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
     }
     
     func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool {
-        let shouldPinHeaderToVisibleBounds = delegate?.shouldPinHeaderToVisibleBounds(self, at: sectionIndex) ?? false
-        hasPinnedHeaderOrFooter = hasPinnedHeaderOrFooter || shouldPinHeaderToVisibleBounds
-        return shouldPinHeaderToVisibleBounds
+        delegate?.shouldPinHeaderToVisibleBounds(self, at: sectionIndex) ?? false
     }
     
     func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool {
-        let shouldPinFooterToVisibleBounds = delegate?.shouldPinFooterToVisibleBounds(self, at: sectionIndex) ?? false
-        hasPinnedHeaderOrFooter = hasPinnedHeaderOrFooter || shouldPinFooterToVisibleBounds
-        return shouldPinFooterToVisibleBounds
+        delegate?.shouldPinFooterToVisibleBounds(self, at: sectionIndex) ?? false
     }
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {
