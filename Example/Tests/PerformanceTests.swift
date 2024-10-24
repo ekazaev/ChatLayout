@@ -83,6 +83,8 @@ final class PerformanceTests: XCTestCase {
         layout.numberOfItemsInSection[1] = 100000
         layout.shouldPresentHeaderAtSection = [0: false, 1: false]
         layout.shouldPresentFooterAtSection = [0: false, 1: false]
+        layout.shouldPinHeaderToVisibleBoundsAtSection = [2: true]
+        layout.shouldPinFooterToVisibleBoundsAtSection = [2: true]
         layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         layout.settings.estimatedItemSize = CGSize(width: 300, height: 1)
         layout.settings.interItemSpacing = 0
