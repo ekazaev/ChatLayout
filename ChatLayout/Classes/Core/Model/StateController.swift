@@ -381,18 +381,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         if kind == .header && section.isPinHeaderToVisibleBounds == true {
             layoutRepresentation.hasPinnedHeaderOrFooter = true
-            let offsetY = max(
-                min(visibleBounds.minY - section.offsetY, section.height - additionalInsets.bottom - (section.footer?.size.height ?? 0) - item.size.height
-                   ), item.offsetY)
-            itemFrame.offsettingBy(dx: 0, dy: offsetY)
+            let dy = max(min(visibleBounds.minY - section.offsetY, section.height - (section.footer?.size.height ?? 0) - item.size.height), 0)
+            itemFrame.offsettingBy(dx: 0, dy: dy)
         }
-
+        
         if kind == .footer && section.isPinFooterToVisibleBounds == true {
             layoutRepresentation.hasPinnedHeaderOrFooter = true
-            let offsetY = max(min(
-                0, visibleBounds.maxY + layoutRepresentation.adjustedContentInset.bottom - item.size.height - itemFrame.minY
-            ), section.offsetY + (section.header?.size.height ?? 0) - itemFrame.minY)
-            itemFrame.offsettingBy(dx: 0, dy: offsetY)
+            let dy = max(min(0, visibleBounds.maxY - item.size.height - itemFrame.minY), section.offsetY + (section.header?.size.height ?? 0) - itemFrame.minY)
+            itemFrame.offsettingBy(dx: 0, dy: dy)
         }
 
         if isFinal {
