@@ -624,7 +624,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             cachedCollectionViewInset != .some(adjustedContentInset) ||
             invalidationActions.contains(.shouldInvalidateOnBoundsChange)
             || (isUserInitiatedScrolling && state == .beforeUpdate)
-        
+
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
         return shouldInvalidateLayout || hasPinnedHeaderOrFooter
     }

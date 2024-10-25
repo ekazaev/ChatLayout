@@ -144,15 +144,15 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     mutating func set(items: ContiguousArray<ItemModel>) {
         self.items = items
     }
-    
+
     mutating func set(footer: ItemModel?) {
         self.footer = footer
     }
-    
+
     mutating func set(isPinHeaderToVisibleBounds: Bool) {
         self.isPinHeaderToVisibleBounds = isPinHeaderToVisibleBounds
     }
-    
+
     mutating func set(isPinFooterToVisibleBounds: Bool) {
         self.isPinFooterToVisibleBounds = isPinFooterToVisibleBounds
     }

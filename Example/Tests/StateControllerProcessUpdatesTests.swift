@@ -385,7 +385,7 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)
         XCTAssertEqual(item?.frame.minY, scrollOffsetY)
     }
-    
+
     func testPinnedFooter() {
         let layout = MockCollectionLayout()
         layout.shouldPinFooterToVisibleBoundsAtSection[0] = true

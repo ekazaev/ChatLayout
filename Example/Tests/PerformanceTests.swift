@@ -91,7 +91,7 @@ final class PerformanceTests: XCTestCase {
         layout.settings.interSectionSpacing = 0
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
         layout.hasPinnedHeaderOrFooter = true
-        
+
         let rect = CGRect(origin: CGPoint(x: 0, y: 99999), size: CGSize(width: 300, height: 2))
         let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate, ignoreCache: true)
         XCTAssertEqual(attributes.count, 2)

@@ -39,7 +39,7 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// - Returns: `Bool`.
     func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout,
                              at sectionIndex: Int) -> Bool
-    
+
     /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the header to the visible bounds in the current layout.
     /// - Parameters:
     ///   - chatLayout: `CollectionViewChatLayout` reference.
@@ -47,7 +47,7 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// - Returns: `Bool`.
     func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool
-    
+
     /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the footer to the visible bounds in the current layout.
     /// - Parameters:
     ///   - chatLayout: `CollectionViewChatLayout` reference.
@@ -149,13 +149,13 @@ public extension ChatLayoutDelegate {
                              at sectionIndex: Int) -> Bool {
         false
     }
-    
+
     /// Default implementation returns: `false`.
     func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool {
         false
     }
-    
+
     /// Default implementation returns: `false`.
     func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool {

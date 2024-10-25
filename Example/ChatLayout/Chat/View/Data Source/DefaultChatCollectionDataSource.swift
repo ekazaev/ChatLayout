@@ -317,11 +317,11 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     public func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
         true
     }
-    
+
     public func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
-        true
+        false
     }
-    
+
     public func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
         true
     }
