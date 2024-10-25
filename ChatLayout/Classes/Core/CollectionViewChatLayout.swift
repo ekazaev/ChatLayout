@@ -216,7 +216,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     private var reconfigureItemsIndexPaths: [IndexPath] = []
 
     private var _supportSelfSizingInvalidation: Bool = false
-  
+
     var hasPinnedHeaderOrFooter: Bool = false
 
     // MARK: IOS 15.1 fix flags
@@ -346,9 +346,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
         }
-        
-        if prepareActions.contains(.updateLayoutMetrics) || prepareActions.contains(.recreateSectionModels)
-        {
+
+        if prepareActions.contains(.updateLayoutMetrics) || prepareActions.contains(.recreateSectionModels) {
             hasPinnedHeaderOrFooter = false
         }
 
@@ -625,7 +624,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             cachedCollectionViewInset != .some(adjustedContentInset) ||
             invalidationActions.contains(.shouldInvalidateOnBoundsChange)
             || (isUserInitiatedScrolling && state == .beforeUpdate)
-
+        
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
         return shouldInvalidateLayout || hasPinnedHeaderOrFooter
     }

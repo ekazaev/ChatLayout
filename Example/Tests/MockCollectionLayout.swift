@@ -47,11 +47,11 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     let keepContentOffsetAtBottomOnBatchUpdates: Bool = true
 
     let keepContentAtBottomOfVisibleArea: Bool = false
-
+    
     let processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
     
     var hasPinnedHeaderOrFooter: Bool = false
-
+    
     func numberOfItems(in section: Int) -> Int {
         numberOfItemsInSection[section] ?? 0
     }

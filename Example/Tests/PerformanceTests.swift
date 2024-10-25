@@ -76,7 +76,7 @@ final class PerformanceTests: XCTestCase {
             }
         }
     }
-    
+
     func testPinnedLayoutAttributesForElementsPerformance() {
         let layout = MockCollectionLayout()
         layout.numberOfItemsInSection[0] = 100000

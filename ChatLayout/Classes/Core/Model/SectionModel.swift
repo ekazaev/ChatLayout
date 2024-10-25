@@ -144,7 +144,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     mutating func set(items: ContiguousArray<ItemModel>) {
         self.items = items
     }
-
+    
     mutating func set(footer: ItemModel?) {
         self.footer = footer
     }

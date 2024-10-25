@@ -374,7 +374,7 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 4)
     }
-    
+
     func testPinnedHeader() {
         let layout = MockCollectionLayout()
         let scrollOffsetY = CGFloat(400)
