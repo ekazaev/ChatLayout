@@ -379,13 +379,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
 
-        if kind == .header && section.isPinHeaderToVisibleBounds == true {
+        if kind == .header && section.shouldPinHeaderToVisibleBounds == true {
             layoutRepresentation.hasPinnedHeaderOrFooter = true
             let offsetY = max(min(visibleBounds.minY - section.offsetY, section.height - (section.footer?.size.height ?? 0) - item.size.height), 0)
             itemFrame.offsettingBy(dx: 0, dy: offsetY)
         }
 
-        if kind == .footer && section.isPinFooterToVisibleBounds == true {
+        if kind == .footer && section.shouldPinFooterToVisibleBounds == true {
             layoutRepresentation.hasPinnedHeaderOrFooter = true
             let offsetY = max(min(0, visibleBounds.maxY - item.size.height - itemFrame.minY), section.offsetY + (section.header?.size.height ?? 0) - itemFrame.minY)
             itemFrame.offsettingBy(dx: 0, dy: offsetY)
@@ -746,8 +746,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                                            footer: footer,
                                            items: ContiguousArray(items),
                                            collectionLayout: layoutRepresentation)
-                section.set(isPinHeaderToVisibleBounds: layoutRepresentation.shouldPinHeaderToVisibleBounds(at: sectionIndex))
-                section.set(isPinFooterToVisibleBounds: layoutRepresentation.shouldPinFooterToVisibleBounds(at: sectionIndex))
+                section.set(shouldPinHeaderToVisibleBounds: layoutRepresentation.shouldPinHeaderToVisibleBounds(at: sectionIndex))
+                section.set(shouldPinFooterToVisibleBounds: layoutRepresentation.shouldPinFooterToVisibleBounds(at: sectionIndex))
                 insertedSection = section
                 afterUpdateModel.insertSection(section, at: sectionIndex)
             }
@@ -1090,7 +1090,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 // When using pinned (sticky) footers, even if the cell does not intersect with the frame, the footer can intersect.
                 // Therefore, add the footer without considering the traverseState.
                 if let footerFrame = itemFrame(for: sectionPath, kind: .footer, at: state, isFinal: true, additionalAttributes: additionalAttributes),
-                   check(rect: footerFrame) || (section.isPinFooterToVisibleBounds && section.frame.intersects(visibleRect)) {
+                   check(rect: footerFrame) || (section.shouldPinFooterToVisibleBounds && section.frame.intersects(visibleRect)) {
                     allRects.append((frame: footerFrame, indexPath: sectionPath, kind: .footer))
                 }
             }

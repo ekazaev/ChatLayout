@@ -383,8 +383,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                                            footer: footer,
                                            items: items,
                                            collectionLayout: self)
-                section.set(isPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
-                section.set(isPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
+                section.set(shouldPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
+                section.set(shouldPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
                 section.assembleLayout()
                 sections.append(section)
             }

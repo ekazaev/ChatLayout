@@ -22,9 +22,9 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     private(set) var footer: ItemModel?
 
-    private(set) var isPinHeaderToVisibleBounds: Bool = false
+    private(set) var shouldPinHeaderToVisibleBounds: Bool = false
 
-    private(set) var isPinFooterToVisibleBounds: Bool = false
+    private(set) var shouldPinFooterToVisibleBounds: Bool = false
 
     private(set) var items: ContiguousArray<ItemModel>
 
@@ -149,12 +149,12 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         self.footer = footer
     }
 
-    mutating func set(isPinHeaderToVisibleBounds: Bool) {
-        self.isPinHeaderToVisibleBounds = isPinHeaderToVisibleBounds
+    mutating func set(shouldPinHeaderToVisibleBounds: Bool) {
+        self.shouldPinHeaderToVisibleBounds = shouldPinHeaderToVisibleBounds
     }
 
-    mutating func set(isPinFooterToVisibleBounds: Bool) {
-        self.isPinFooterToVisibleBounds = isPinFooterToVisibleBounds
+    mutating func set(shouldPinFooterToVisibleBounds: Bool) {
+        self.shouldPinFooterToVisibleBounds = shouldPinFooterToVisibleBounds
     }
 
     private mutating func offsetEverything(below index: Int, by heightDiff: CGFloat) {
