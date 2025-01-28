@@ -3,7 +3,7 @@
 // CollectionViewChatLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -200,6 +200,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     private var cachedCollectionViewInset: UIEdgeInsets?
 
+    private var contentOffsetBeforeUpdate: CGPoint?
+
     // These properties are used to keep the layout attributes copies used for insert/delete
     // animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
     // animations will start from the estimated height.
@@ -343,6 +345,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             state = .beforeUpdate
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
+            contentOffsetBeforeUpdate = nil
         }
 
         if prepareActions.contains(.recreateSectionModels) {
@@ -666,8 +669,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         if let currentPositionSnapshot {
             let contentHeight = controller.contentHeight(at: state)
             if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, kind: currentPositionSnapshot.kind, at: state, isFinal: true),
-               contentHeight != 0,
-               contentHeight > visibleBounds.size.height {
+               contentHeight != 0 {
                 let adjustedContentInset: UIEdgeInsets = collectionView.adjustedContentInset
                 let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.frame.height + adjustedContentInset.bottom)
                 switch currentPositionSnapshot.edge {
@@ -713,10 +715,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     open override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
+        print("\(#function) \(changeItems)")
         controller.process(changeItems: changeItems)
         state = .afterUpdate
         dontReturnAttributes = false
-
+        contentOffsetBeforeUpdate = collectionView?.contentOffset
         if !reconfigureItemsIndexPaths.isEmpty,
            let collectionView {
             reconfigureItemsIndexPaths
@@ -751,7 +754,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
            let collectionView {
             let compensatingOffset: CGFloat
             if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
-                compensatingOffset = controller.batchUpdateCompensatingOffset
+                compensatingOffset = controller.batchUpdateCompensatingOffset - min(0, maxPossibleContentOffset.y - (contentOffsetBeforeUpdate?.y ?? 0))
             } else {
                 compensatingOffset = maxPossibleContentOffset.y - collectionView.contentOffset.y
             }

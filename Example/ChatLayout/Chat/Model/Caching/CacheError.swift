@@ -3,7 +3,7 @@
 // CacheError.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:

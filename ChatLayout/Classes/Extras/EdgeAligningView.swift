@@ -3,7 +3,7 @@
 // EdgeAligningView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -114,8 +114,8 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         setupSubviews()
     }
 
-    @available(*, unavailable, message: "Use init(with:flexibleEdges:) instead.")
     /// This constructor is unavailable.
+    @available(*, unavailable, message: "Use init(with:flexibleEdges:) instead.")
     public required init?(coder: NSCoder) {
         fatalError("Use init(with:flexibleEdges:) instead.")
     }

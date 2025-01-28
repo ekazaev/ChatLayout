@@ -3,7 +3,7 @@
 // ContainerCollectionViewCell.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -34,8 +34,8 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
         setupSubviews()
     }
 
-    @available(*, unavailable, message: "Use init(reuseIdentifier:) instead.")
     /// This constructor is unavailable.
+    @available(*, unavailable, message: "Use init(reuseIdentifier:) instead.")
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented.")
     }
