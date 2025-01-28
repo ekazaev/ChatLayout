@@ -219,6 +219,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     private var _supportSelfSizingInvalidation: Bool = false
 
+    var hasPinnedHeaderOrFooter: Bool = false
+
     // MARK: IOS 15.1 fix flags
 
     private var needsIOS15_1IssueFix: Bool {
@@ -348,6 +350,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             contentOffsetBeforeUpdate = nil
         }
 
+        if prepareActions.contains(.updateLayoutMetrics) || prepareActions.contains(.recreateSectionModels) {
+            hasPinnedHeaderOrFooter = false
+        }
+
         if prepareActions.contains(.recreateSectionModels) {
             var sections: ContiguousArray<SectionModel<CollectionViewChatLayout>> = []
             for sectionIndex in 0..<collectionView.numberOfSections {
@@ -380,6 +386,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                                            footer: footer,
                                            items: items,
                                            collectionLayout: self)
+                section.set(shouldPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
+                section.set(shouldPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
                 section.assembleLayout()
                 sections.append(section)
             }
@@ -471,7 +479,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             return nil
         }
         let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state)
-
         return attributes
     }
 
@@ -622,7 +629,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             || (isUserInitiatedScrolling && state == .beforeUpdate)
 
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
-        return shouldInvalidateLayout
+        return shouldInvalidateLayout || hasPinnedHeaderOrFooter
     }
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.
@@ -1048,6 +1055,14 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool {
         delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false
+    }
+
+    func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool {
+        delegate?.shouldPinHeaderToVisibleBounds(self, at: sectionIndex) ?? false
+    }
+
+    func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool {
+        delegate?.shouldPinFooterToVisibleBounds(self, at: sectionIndex) ?? false
     }
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {
