@@ -193,8 +193,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
            let cachedAttributesState,
            cachedAttributesState.rect.contains(rect) {
             return hasPinnedHeaderOrFooter
-            ? cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
-            : cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+                ? cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
+                : cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
         } else {
             let totalRect: CGRect
             switch state {
@@ -379,13 +379,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
 
-        if kind == .header && section.shouldPinHeaderToVisibleBounds == true {
+        if kind == .header, section.shouldPinHeaderToVisibleBounds == true {
             layoutRepresentation.hasPinnedHeaderOrFooter = true
             let offsetY = max(min(visibleBounds.minY - section.offsetY, section.height - (section.footer?.size.height ?? 0) - item.size.height), 0)
             itemFrame.offsettingBy(dx: 0, dy: offsetY)
         }
 
-        if kind == .footer && section.shouldPinFooterToVisibleBounds == true {
+        if kind == .footer, section.shouldPinFooterToVisibleBounds == true {
             layoutRepresentation.hasPinnedHeaderOrFooter = true
             let offsetY = max(min(0, visibleBounds.maxY - item.size.height - itemFrame.minY), section.offsetY + (section.header?.size.height ?? 0) - itemFrame.minY)
             itemFrame.offsettingBy(dx: 0, dy: offsetY)

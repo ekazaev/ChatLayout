@@ -722,7 +722,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     open override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
-        print("\(#function) \(changeItems)")
         controller.process(changeItems: changeItems)
         state = .afterUpdate
         dontReturnAttributes = false
