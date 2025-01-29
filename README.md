@@ -28,7 +28,6 @@
     - [About Supplementary Views](#about-supplementary-views)
     - [About Texture](#about-texture)
     - [About animation](#about-animation)
-    - [About sticky headers or footers](#about-sticky-headers-or-footers)
 - [License](#license)
 - [Articles](#articles)
 - [Sponsor this project](#sponsor-this-project)
@@ -46,7 +45,8 @@
 - Animated insertion/deletion/reloading/moving of the items.
 - Keeps content of the last visible item at the top or bottom of the `UICollectionView` during updates.
 - Provides tools for precise scrolling to the required item.
-- Shipped with generic container views to simplify the custom items implementation.  
+- Shipped with generic container views to simplify the custom items implementation.
+- Pinned (sticky) headers and footers.
 
 ![](https://habrastorage.org/webt/jt/gq/sl/jtgqsluujffi4-jnxeikbwtyyu0.gif)
 ![](https://habrastorage.org/webt/b7/cu/3s/b7cu3su6uk4hw1kqg3_ky3uklu4.gif)
@@ -139,10 +139,6 @@ If you see a strange or unexpected animation during the updates, check your data
 It is very possible that you are sending delete/insert commands when you expect to see reload. The easiest way to check it is by adding
 `print("\(updateItems)")` into `ChatLayout.prepare(forCollectionViewUpdates:)` method. `ChatLayout` doesn't know what you expected to see. 
 It just processes your changes according to the commands it has received.
-
-### About sticky headers or footers
-
-Sticky headers or footers are not supported by `ChatLayout` but your contributions are welcome.
 
 ## License
 

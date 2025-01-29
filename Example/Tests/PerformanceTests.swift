@@ -3,7 +3,7 @@
 // PerformanceTests.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -66,6 +66,31 @@ final class PerformanceTests: XCTestCase {
         layout.settings.interItemSpacing = 0
         layout.settings.interSectionSpacing = 0
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+
+        let rect = CGRect(origin: CGPoint(x: 0, y: 99999), size: CGSize(width: 300, height: 2))
+        let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate, ignoreCache: true)
+        XCTAssertEqual(attributes.count, 2)
+        measure {
+            for _ in 0..<10 {
+                _ = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate, ignoreCache: true)
+            }
+        }
+    }
+
+    func testPinnedLayoutAttributesForElementsPerformance() {
+        let layout = MockCollectionLayout()
+        layout.numberOfItemsInSection[0] = 100000
+        layout.numberOfItemsInSection[1] = 100000
+        layout.shouldPresentHeaderAtSection = [0: false, 1: false]
+        layout.shouldPresentFooterAtSection = [0: false, 1: false]
+        layout.shouldPinHeaderToVisibleBoundsAtSection = [2: true]
+        layout.shouldPinFooterToVisibleBoundsAtSection = [2: true]
+        layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+        layout.settings.estimatedItemSize = CGSize(width: 300, height: 1)
+        layout.settings.interItemSpacing = 0
+        layout.settings.interSectionSpacing = 0
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.hasPinnedHeaderOrFooter = true
 
         let rect = CGRect(origin: CGPoint(x: 0, y: 99999), size: CGSize(width: 300, height: 2))
         let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate, ignoreCache: true)

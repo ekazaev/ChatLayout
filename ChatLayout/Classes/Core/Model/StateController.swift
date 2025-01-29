@@ -3,7 +3,7 @@
 // StateController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -36,6 +36,8 @@ protocol ChatLayoutRepresentation: AnyObject {
 
     var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool { get }
 
+    var hasPinnedHeaderOrFooter: Bool { get set }
+
     func numberOfItems(in section: Int) -> Int
 
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration
@@ -43,6 +45,10 @@ protocol ChatLayoutRepresentation: AnyObject {
     func shouldPresentHeader(at sectionIndex: Int) -> Bool
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool
+
+    func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool
+
+    func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat
 }
@@ -184,10 +190,16 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             return .orderedSame
         }
 
+        // When using pinned (sticky) headers and footers, frames may not be aligned correctly.
+        // As a result, binary search not work properly, so iterate through the array instead.
+        let hasPinnedHeaderOrFooter = layoutRepresentation.hasPinnedHeaderOrFooter
+
         if !ignoreCache,
            let cachedAttributesState,
            cachedAttributesState.rect.contains(rect) {
-            return cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+            return hasPinnedHeaderOrFooter
+                ? cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
+                : cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
         } else {
             let totalRect: CGRect
             switch state {
@@ -200,7 +212,15 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if !ignoreCache {
                 cachedAttributesState = (rect: totalRect, attributes: attributes)
             }
-            let visibleAttributes = rect != totalRect ? attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) } : attributes
+
+            let visibleAttributes: [ChatLayoutAttributes]
+            if rect == totalRect {
+                visibleAttributes = attributes
+            } else if hasPinnedHeaderOrFooter {
+                visibleAttributes = attributes.filter { $0.frame.intersects(rect) }
+            } else {
+                visibleAttributes = attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+            }
             return visibleAttributes
         }
     }
@@ -371,14 +391,29 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
 
         itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
+
+        if kind == .header, section.shouldPinHeaderToVisibleBounds == true {
+            layoutRepresentation.hasPinnedHeaderOrFooter = true
+            let offsetY = max(min(visibleBounds.minY - section.offsetY, section.height - (section.footer?.size.height ?? 0) - item.size.height), 0)
+            itemFrame.offsettingBy(dx: 0, dy: offsetY)
+        }
+
+        if kind == .footer, section.shouldPinFooterToVisibleBounds == true {
+            layoutRepresentation.hasPinnedHeaderOrFooter = true
+            let offsetY = max(min(0, visibleBounds.maxY - item.size.height - itemFrame.minY), section.offsetY + (section.header?.size.height ?? 0) - itemFrame.minY)
+            itemFrame.offsettingBy(dx: 0, dy: offsetY)
+        }
+
         if isFinal {
             offsetByCompensation(frame: &itemFrame, at: itemPath, for: state, backward: true)
         }
+
         if layoutRepresentation.keepContentAtBottomOfVisibleArea == true,
            !(kind == .header && itemPath.section == 0),
            !isLayoutBiggerThanVisibleBounds(at: state, withFullCompensation: false, visibleBounds: visibleBounds) {
             itemFrame.offsettingBy(dx: 0, dy: visibleBounds.height.rounded() - contentSize(for: state).height.rounded())
         }
+
         return itemFrame
     }
 
@@ -734,13 +769,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 } else {
                     footer = nil
                 }
-                let section = SectionModel(
-                    interSectionSpacing: layoutRepresentation.interSectionSpacing(at: sectionIndex),
-                    header: header,
-                    footer: footer,
-                    items: ContiguousArray(items),
-                    collectionLayout: layoutRepresentation
-                )
+                var section = SectionModel(interSectionSpacing: layoutRepresentation.interSectionSpacing(at: sectionIndex),
+                                           header: header,
+                                           footer: footer,
+                                           items: ContiguousArray(items),
+                                           collectionLayout: layoutRepresentation)
+                section.set(shouldPinHeaderToVisibleBounds: layoutRepresentation.shouldPinHeaderToVisibleBounds(at: sectionIndex))
+                section.set(shouldPinFooterToVisibleBounds: layoutRepresentation.shouldPinFooterToVisibleBounds(at: sectionIndex))
                 insertedSection = section
                 afterUpdateModel.insertSection(section, at: sectionIndex)
             }
@@ -1094,8 +1129,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                     }
                 }
 
+                // When using pinned (sticky) footers, even if the cell does not intersect with the frame, the footer can intersect.
+                // Therefore, add the footer without considering the traverseState.
                 if let footerFrame = itemFrame(for: sectionPath, kind: .footer, at: state, isFinal: true, additionalAttributes: additionalAttributes),
-                   check(rect: footerFrame) {
+                   check(rect: footerFrame) || (section.shouldPinFooterToVisibleBounds && section.frame.intersects(visibleRect)) {
                     allRects.append((frame: footerFrame, indexPath: sectionPath, kind: .footer))
                 }
             }

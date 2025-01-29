@@ -3,7 +3,7 @@
 // MockCollectionLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -24,6 +24,8 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     var numberOfItemsInSection: [Int: Int] = [0: 100, 1: 100, 2: 100]
     var shouldPresentHeaderAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
     var shouldPresentFooterAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
+    var shouldPinHeaderToVisibleBoundsAtSection: [Int: Bool] = [0: false, 1: false, 2: false]
+    var shouldPinFooterToVisibleBoundsAtSection: [Int: Bool] = [0: false, 1: false, 2: false]
 
     // swiftlint:disable weak_delegate
     lazy var delegate: ChatLayoutDelegate? = self
@@ -54,6 +56,8 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
 
     let processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
 
+    var hasPinnedHeaderOrFooter: Bool = false
+
     func numberOfItems(in section: Int) -> Int {
         numberOfItemsInSection[section] ?? 0
     }
@@ -68,6 +72,14 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool {
         shouldPresentFooterAtSection[sectionIndex] ?? true
+    }
+
+    func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool {
+        shouldPinHeaderToVisibleBoundsAtSection[sectionIndex] ?? true
+    }
+
+    func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool {
+        shouldPinFooterToVisibleBoundsAtSection[sectionIndex] ?? true
     }
 
     func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment {
@@ -100,6 +112,8 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
             }
 
             var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex), header: header, footer: footer, items: items, collectionLayout: self)
+            section.set(shouldPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
+            section.set(shouldPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
             section.assembleLayout()
             sections.append(section)
         }

@@ -3,7 +3,7 @@
 // SectionModel.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -27,6 +27,10 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     private(set) var header: ItemModel?
 
     private(set) var footer: ItemModel?
+
+    private(set) var shouldPinHeaderToVisibleBounds: Bool = false
+
+    private(set) var shouldPinFooterToVisibleBounds: Bool = false
 
     private(set) var items: ContiguousArray<ItemModel>
 
@@ -148,11 +152,15 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     }
 
     mutating func set(footer: ItemModel?) {
-        guard let _ = self.footer, let _ = footer else {
-            self.footer = footer
-            return
-        }
         self.footer = footer
+    }
+
+    mutating func set(shouldPinHeaderToVisibleBounds: Bool) {
+        self.shouldPinHeaderToVisibleBounds = shouldPinHeaderToVisibleBounds
+    }
+
+    mutating func set(shouldPinFooterToVisibleBounds: Bool) {
+        self.shouldPinFooterToVisibleBounds = shouldPinFooterToVisibleBounds
     }
 
     private mutating func offsetEverything(below index: Int, by heightDiff: CGFloat) {

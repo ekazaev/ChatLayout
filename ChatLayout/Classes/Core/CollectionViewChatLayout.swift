@@ -3,7 +3,7 @@
 // CollectionViewChatLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -215,6 +215,8 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     private var cachedCollectionViewInset: NSUIEdgeInsets?
 
+    private var contentOffsetBeforeUpdate: CGPoint?
+
     // These properties are used to keep the layout attributes copies used for insert/delete
     // animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
     // animations will start from the estimated height.
@@ -231,6 +233,8 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
     private var reconfigureItemsIndexPaths: [IndexPath] = []
 
     private var _supportSelfSizingInvalidation: Bool = false
+
+    var hasPinnedHeaderOrFooter: Bool = false
 
     // MARK: IOS 15.1 fix flags
 
@@ -381,6 +385,11 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
             state = .beforeUpdate
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
+            contentOffsetBeforeUpdate = nil
+        }
+
+        if prepareActions.contains(.updateLayoutMetrics) || prepareActions.contains(.recreateSectionModels) {
+            hasPinnedHeaderOrFooter = false
         }
 
         if prepareActions.contains(.recreateSectionModels) {
@@ -410,13 +419,13 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
                 } else {
                     footer = nil
                 }
-                var section = SectionModel(
-                    interSectionSpacing: interSectionSpacing(at: sectionIndex),
-                    header: header,
-                    footer: footer,
-                    items: items,
-                    collectionLayout: self
-                )
+                var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex),
+                                           header: header,
+                                           footer: footer,
+                                           items: items,
+                                           collectionLayout: self)
+                section.set(shouldPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
+                section.set(shouldPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
                 section.assembleLayout()
                 sections.append(section)
             }
@@ -522,7 +531,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
             return nil
         }
         let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state)
-
         return attributes
     }
 
@@ -680,7 +688,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
             || (isUserInitiatedScrolling && state == .beforeUpdate)
 
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
-        return shouldInvalidateLayout
+        return shouldInvalidateLayout || hasPinnedHeaderOrFooter
     }
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.
@@ -727,10 +735,9 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         if let currentPositionSnapshot {
             let contentHeight = controller.contentHeight(at: state)
             if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, kind: currentPositionSnapshot.kind, at: state, isFinal: true),
-               contentHeight != 0,
-               contentHeight > visibleBounds.size.height {
+               contentHeight != 0 {
                 let adjustedContentInset: NSUIEdgeInsets = collectionView.adjustedContentInset
-                let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.scrollViewFrame.height + adjustedContentInset.bottom)
+                let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.frame.height + adjustedContentInset.bottom)
                 switch currentPositionSnapshot.edge {
                 case .top:
                     let desiredOffset = max(min(maxAllowed, frame.minY - currentPositionSnapshot.offset - adjustedContentInset.top - settings.additionalInsets.top), -adjustedContentInset.top)
@@ -777,7 +784,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         controller.process(changeItems: changeItems)
         state = .afterUpdate
         dontReturnAttributes = false
-
+        contentOffsetBeforeUpdate = collectionView?.contentOffset
         if !reconfigureItemsIndexPaths.isEmpty,
            let collectionView {
             reconfigureItemsIndexPaths
@@ -818,7 +825,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
            let collectionView {
             let compensatingOffset: CGFloat
             if controller.contentSize(for: .beforeUpdate).height > visibleBounds.size.height {
-                compensatingOffset = controller.batchUpdateCompensatingOffset
+                compensatingOffset = controller.batchUpdateCompensatingOffset - min(0, maxPossibleContentOffset.y - (contentOffsetBeforeUpdate?.y ?? 0))
             } else {
                 compensatingOffset = maxPossibleContentOffset.y - collectionView.contentOffset.y
             }
@@ -1118,6 +1125,14 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool {
         delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false
+    }
+
+    func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool {
+        delegate?.shouldPinHeaderToVisibleBounds(self, at: sectionIndex) ?? false
+    }
+
+    func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool {
+        delegate?.shouldPinFooterToVisibleBounds(self, at: sectionIndex) ?? false
     }
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {

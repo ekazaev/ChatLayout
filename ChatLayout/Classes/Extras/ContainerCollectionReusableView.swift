@@ -3,7 +3,7 @@
 // ContainerCollectionReusableView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2024.
+// Created by Eugene Kazaev in 2020-2025.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -42,8 +42,8 @@ public final class ContainerCollectionReusableView<CustomView: NSUIView>: Collec
         setupSubviews()
     }
 
-    @available(*, unavailable, message: "Use init(frame:) instead")
     /// This constructor is unavailable.
+    @available(*, unavailable, message: "Use init(frame:) instead")
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
