@@ -12,6 +12,7 @@
 
 import ChatLayout
 import Foundation
+
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 #endif

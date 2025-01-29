@@ -3,7 +3,7 @@ import Foundation
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-extension NSEdgeInsets: Equatable {
+extension NSEdgeInsets: @retroactive Equatable {
     public static func == (lhs: NSEdgeInsets, rhs: NSEdgeInsets) -> Bool {
         lhs.top == rhs.top && lhs.left == rhs.left && lhs.right == rhs.right && lhs
             .bottom == rhs.bottom

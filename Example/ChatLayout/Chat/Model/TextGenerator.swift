@@ -58,7 +58,7 @@ public class TextGenerator {
             return ""
         }
 
-        var result = words.prefix(wordsCount).joined(separator: " ")
+        var result = words.shuffled().prefix(wordsCount).joined(separator: " ")
         result.replaceSubrange(result.startIndex...result.startIndex, with: String(result[result.startIndex]).capitalized)
         return result + "."
     }

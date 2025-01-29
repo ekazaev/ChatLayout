@@ -284,7 +284,6 @@
 		E9622F332CA2B6DE00EEA1CA /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		E9A2833E2CA2EB74007C8383 /* ChatLayout_Example_macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatLayout_Example_macOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A283402CA2EB74007C8383 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E9A283422CA2EB75007C8383 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E9A283452CA2EB75007C8383 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E9A283472CA2EB75007C8383 /* ChatLayout_Example_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChatLayout_Example_macOS.entitlements; sourceTree = "<group>"; };
 		E9A2836D2CA2EFDC007C8383 /* NSLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLabel.swift; sourceTree = "<group>"; };
@@ -683,7 +682,6 @@
 			isa = PBXGroup;
 			children = (
 				E9A283402CA2EB74007C8383 /* AppDelegate.swift */,
-				E9A283422CA2EB75007C8383 /* Assets.xcassets */,
 				E9A283442CA2EB75007C8383 /* MainMenu.xib */,
 				E9A283472CA2EB75007C8383 /* ChatLayout_Example_macOS.entitlements */,
 			);

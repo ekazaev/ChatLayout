@@ -162,7 +162,9 @@ private func generateIncomingTailedBezierPath(offset: CGFloat, size: CGSize) -> 
     bezierPath.addCurve(to: CGPoint(x: 22, y: size.height), controlPoint1: CGPoint(x: 16, y: size.height), controlPoint2: CGPoint(x: 19, y: size.height))
     bezierPath.close()
     bezierPath.apply(CGAffineTransform(translationX: offset, y: 0))
-
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    bezierPath.apply(CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: size.height))
+#endif
     return bezierPath
 }
 
@@ -175,6 +177,9 @@ private func generateOutgoingTailedBezierPath(offset: CGFloat, size: CGSize) -> 
 
 private func generateIncomingNormalBezierPath(offset: CGFloat, size: CGSize) -> NSUIBezierPath {
     let bezierPath = NSUIBezierPath(roundedRect: CGRect(x: offset, y: 0, width: size.width - offset, height: size.height), cornerRadius: 17)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    bezierPath.apply(CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: size.height))
+#endif
     return bezierPath
 }
 

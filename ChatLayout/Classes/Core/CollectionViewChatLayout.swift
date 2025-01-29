@@ -236,7 +236,6 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     private var needsIOS15_1IssueFix: Bool {
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-//        return true
         return false
         #endif
 

@@ -101,11 +101,14 @@ final class ChatViewController: NSViewController {
         
         scrollView.documentView = collectionView
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.frame = view.bounds
         scrollView.hasHorizontalScroller = false
         scrollView.hasVerticalScroller = true
-        scrollView.drawsBackground = false
-        scrollView.backgroundColor = .clear
+//        scrollView.drawsBackground = false
+        scrollView.automaticallyAdjustsContentInsets = false
+        scrollView.contentInsets = .zero
+        scrollView.contentView.contentInsets = .zero
+        
+        scrollView.scrollerStyle = .legacy
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
@@ -122,8 +125,6 @@ final class ChatViewController: NSViewController {
             self.currentControllerActions.options.remove(.loadingInitialMessages)
             self.processUpdates(with: sections, animated: true, requiresIsolatedProcess: false)
         }
-
-        collectionView.addGestureRecognizer(panGesture)
     }
 
     override func viewWillAppear() {
