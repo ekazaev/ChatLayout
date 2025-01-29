@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 protocol RandomDataProviderDelegate: AnyObject {
     func received(messages: [RawMessage])
@@ -81,7 +87,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Limerick-King-Johns-Castle-2012.JPG/1920px-Limerick-King-Johns-Castle-2012.JPG")!
     ]
 
-    private let images: [UIImage] = (1...8).compactMap { UIImage(named: "demo\($0)") }
+    private let images: [NSUIImage] = (1...8).compactMap { NSUIImage(named: "demo\($0)") }
 
     private var allUsersIds: [Int] {
         Array([users, [receiverId]].joined())
@@ -201,7 +207,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private func createBunchOfMessages(number: Int = 50) -> [RawMessage] {
         let messages = (0..<number).map { _ -> RawMessage in
-            startingTimestamp -= TimeInterval(Int.random(in: 100...1000))
+            startingTimestamp -= TimeInterval(100)
             return self.createRandomMessage(date: Date(timeIntervalSince1970: startingTimestamp))
         }
         return messages

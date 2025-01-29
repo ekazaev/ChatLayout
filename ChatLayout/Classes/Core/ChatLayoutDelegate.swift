@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// Represents the point in time when `CollectionViewChatLayout` asks about layout attributes modification.
 public enum InitialAttributesRequestType: Hashable {

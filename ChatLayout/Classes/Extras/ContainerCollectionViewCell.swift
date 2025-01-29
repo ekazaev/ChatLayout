@@ -11,6 +11,9 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 
 /// A container `UICollectionViewCell` that constraints its contained view to its margins.
@@ -89,7 +92,9 @@ public final class ContainerCollectionViewCell<CustomView: UIView>: UICollection
             customView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
             customView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor),
             customView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
-            customView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor)
+            customView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
         ])
     }
 }
+
+#endif
