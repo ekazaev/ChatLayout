@@ -11,12 +11,19 @@
 //
 
 import Foundation
+
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// A factory that creates optional contained `UIView`s should conform to this protocol.
 public protocol StaticViewFactory {
     /// A type of the view to build.
-    associatedtype View: UIView
+    associatedtype View: ChatLayout.NSUIView
 
     /// Factory method that will be called by the corresponding container `UIView`
     /// - Parameter bounds: A bounds rect of the container.
@@ -25,8 +32,9 @@ public protocol StaticViewFactory {
 }
 
 /// Default extension build the `UIView` using its default constructor.
-public extension StaticViewFactory where Self: UIView {
-    static func buildView(within bounds: CGRect) -> Self? {
+
+extension StaticViewFactory where Self: ChatLayout.NSUIView {
+    public static func buildView(within bounds: CGRect) -> Self? {
         Self(frame: bounds)
     }
 }
@@ -34,7 +42,8 @@ public extension StaticViewFactory where Self: UIView {
 /// Use this factory to specify that this view should not be build and should be equal to nil within the container.
 public struct VoidViewFactory: StaticViewFactory {
     /// Nil view placeholder type.
-    public final class VoidView: UIView {
+
+    public final class VoidView: ChatLayout.NSUIView {
         @available(*, unavailable, message: "This view can not be instantiated.")
         public required init?(coder aDecoder: NSCoder) {
             fatalError("This view can not be instantiated.")

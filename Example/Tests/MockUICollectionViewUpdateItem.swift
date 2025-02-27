@@ -12,9 +12,22 @@
 
 @testable import ChatLayout
 import Foundation
-import UIKit
 
-class MockUICollectionViewUpdateItem: UICollectionViewUpdateItem {
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
+import UIKit
+#endif
+
+class MockUICollectionViewUpdateItem: NSUICollectionViewUpdateItem {
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    
+    typealias Action = NSCollectionView.UpdateAction
+    
+#endif
+
     // swiftlint:disable identifier_name
     var _indexPathBeforeUpdate: IndexPath?
     var _indexPathAfterUpdate: IndexPath?

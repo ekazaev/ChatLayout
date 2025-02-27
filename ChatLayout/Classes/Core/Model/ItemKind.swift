@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// Type of the item supported by `CollectionViewChatLayout`
 public enum ItemKind: CaseIterable, Hashable {
@@ -26,9 +32,9 @@ public enum ItemKind: CaseIterable, Hashable {
 
     init(_ elementKind: String) {
         switch elementKind {
-        case UICollectionView.elementKindSectionHeader:
+        case NSUICollectionView.elementKindSectionHeader:
             self = .header
-        case UICollectionView.elementKindSectionFooter:
+        case NSUICollectionView.elementKindSectionFooter:
             self = .footer
         default:
             preconditionFailure("Unsupported supplementary view kind.")
@@ -51,9 +57,9 @@ public enum ItemKind: CaseIterable, Hashable {
         case .cell:
             preconditionFailure("Cell type is not a supplementary view.")
         case .header:
-            UICollectionView.elementKindSectionHeader
+            return NSUICollectionView.elementKindSectionHeader
         case .footer:
-            UICollectionView.elementKindSectionFooter
+            return NSUICollectionView.elementKindSectionFooter
         }
     }
 }

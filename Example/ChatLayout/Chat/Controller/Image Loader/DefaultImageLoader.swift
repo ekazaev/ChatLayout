@@ -11,7 +11,13 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public struct DefaultImageLoader: ImageLoader {
     public enum ImageError: Error {
@@ -21,7 +27,7 @@ public struct DefaultImageLoader: ImageLoader {
 
     public init() {}
 
-    public func loadImage(from url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
+    public func loadImage(from url: URL, completion: @escaping (Result<NSUIImage, Error>) -> Void) {
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData)
         let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
         let sessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, _: URLResponse?, error: Error?) in
@@ -36,7 +42,7 @@ public struct DefaultImageLoader: ImageLoader {
                     }
                     return
                 }
-                guard let image = UIImage(data: imageData) else {
+                guard let image = NSUIImage(data: imageData) else {
                     DispatchQueue.main.async {
                         completion(.failure(ImageError.corruptedData))
                     }

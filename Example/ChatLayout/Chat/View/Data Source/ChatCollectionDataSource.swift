@@ -12,10 +12,16 @@
 
 import ChatLayout
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegate {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+protocol ChatCollectionDataSource: NSUICollectionViewDataSource, ChatLayoutDelegate {
     var sections: [Section] { get set }
 
-    func prepare(with collectionView: UICollectionView)
+    func prepare(with collectionView: NSUICollectionView)
 }

@@ -12,9 +12,15 @@
 
 import ChatLayout
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: UIView, TrailingAccessory: StaticViewFactory>: UIView, SwipeNotifierDelegate {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: NSUIView, TrailingAccessory: StaticViewFactory>: NSUIView, SwipeNotifierDelegate {
     var swipeCompletionRate: CGFloat = 0 {
         didSet {
             updateOffsets()
@@ -33,7 +39,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
         containerView.trailingView
     }
 
-    weak var accessoryConnectingView: UIView? {
+    weak var accessoryConnectingView: NSUIView? {
         didSet {
             guard accessoryConnectingView != oldValue else {
                 return
@@ -44,7 +50,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
 
     var accessoryView = DateAccessoryView()
 
-    var accessorySafeAreaInsets: UIEdgeInsets = .zero {
+    var accessorySafeAreaInsets: NSUIEdgeInsets = .zero {
         didSet {
             guard accessorySafeAreaInsets != oldValue else {
                 return
@@ -69,18 +75,38 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
         setupSubviews()
     }
 
+    #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+    override var isFlipped: Bool { true }
+    #endif
+
     private func setupSubviews() {
         translatesAutoresizingMaskIntoConstraints = false
-        insetsLayoutMarginsFromSafeArea = false
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        setWantsLayer()
+        #endif
+        #if canImport(UIKit)
         layoutMargins = .zero
+        insetsLayoutMarginsFromSafeArea = false
+        #endif
         clipsToBounds = false
         addSubview(containerView)
+        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: customLayoutMarginsGuide.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: customLayoutMarginsGuide.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: customLayoutMarginsGuide.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: customLayoutMarginsGuide.bottomAnchor),
+        ])
+        #endif
+
+        #if canImport(UIKit)
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             containerView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            containerView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
         ])
+        #endif
 
         accessoryView.translatesAutoresizingMaskIntoConstraints = false
 

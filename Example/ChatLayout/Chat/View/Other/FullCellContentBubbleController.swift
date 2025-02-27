@@ -12,9 +12,15 @@
 
 import ChatLayout
 import Foundation
-import UIKit
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 
-final class FullCellContentBubbleController<CustomView: UIView>: BubbleController {
+#if canImport(UIKit)
+import UIKit
+#endif
+
+final class FullCellContentBubbleController<CustomView: NSUIView>: BubbleController {
     weak var bubbleView: BezierMaskedView<CustomView>? {
         didSet {
             setupBubbleView()
@@ -31,7 +37,7 @@ final class FullCellContentBubbleController<CustomView: UIView>: BubbleControlle
             return
         }
 
-        UIView.performWithoutAnimation {
+        NSUIView.performWithoutAnimation {
             bubbleView.backgroundColor = .clear
             bubbleView.customView.layoutMargins = .zero
         }

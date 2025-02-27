@@ -11,19 +11,34 @@
 //
 
 import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 struct ChatViewControllerBuilder {
-    func build() -> UIViewController {
-        let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [1, 2, 3])
+    func build() -> NSUIViewController {
+//        #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+//        let dataProvider = AppKitTestDataProvider(receiverId: 0, usersIds: [1, 2, 3])
+//        #endif
+//
+//        #if canImport(UIKit)
+//        let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [1, 2, 3])
+//        #endif
+        let dataProvider = AppKitTestDataProvider(receiverId: 0, usersIds: [1, 2, 3])
         let messageController = DefaultChatController(dataProvider: dataProvider, userId: 0)
 
         let editNotifier = EditNotifier()
         let swipeNotifier = SwipeNotifier()
-        let dataSource = DefaultChatCollectionDataSource(editNotifier: editNotifier,
-                                                         swipeNotifier: swipeNotifier,
-                                                         reloadDelegate: messageController,
-                                                         editingDelegate: messageController)
+        let dataSource = DefaultChatCollectionDataSource(
+            editNotifier: editNotifier,
+            swipeNotifier: swipeNotifier,
+            reloadDelegate: messageController,
+            editingDelegate: messageController
+        )
 
         dataProvider.delegate = messageController
 
