@@ -62,4 +62,14 @@ public class TextGenerator {
         result.replaceSubrange(result.startIndex...result.startIndex, with: String(result[result.startIndex]).capitalized)
         return result + "."
     }
+    
+    public class func appkitGetString(of wordsCount: Int = 6) -> String {
+        if wordsCount <= 0 {
+            return ""
+        }
+
+        var result = words.prefix(wordsCount).joined(separator: " ")
+        result.replaceSubrange(result.startIndex...result.startIndex, with: String(result[result.startIndex]).capitalized)
+        return result + "."
+    }
 }

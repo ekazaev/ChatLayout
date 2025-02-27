@@ -344,8 +344,8 @@ extension DefaultChatCollectionDataSource: NSUICollectionViewDataSource {
 
 extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     public func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
-//        true
-        false
+        true
+//        false
     }
 
     public func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
@@ -360,13 +360,18 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
             switch item {
             case let .message(message, bubbleType: _):
                 switch message.data {
-// Uncomment to test exact sizes
-//                case let .text(text):
-//                    let rect = (text as NSString).boundingRect(with: .init(width: chatLayout.layoutFrame.width * Constants.maxWidth, height: CGFloat.greatestFiniteMagnitude),options: [NSStringDrawingOptions.usesLineFragmentOrigin, NSStringDrawingOptions.usesFontLeading] , attributes: [.font: UIFont.preferredFont(forTextStyle: .body)], context: nil)
-//                    return .exact(CGSize(width: chatLayout.layoutFrame.width, height: rect.height + 16))
+                // Uncomment to test exact sizes
+                #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+                case let .text(text):
+                    let rect = (text as NSString).boundingRect(with: .init(width: chatLayout.layoutFrame.width * Constants.maxWidth, height: CGFloat.greatestFiniteMagnitude), options: [NSString.DrawingOptions.usesLineFragmentOrigin, NSString.DrawingOptions.usesFontLeading], attributes: [.font: NSFont.preferredFont(forTextStyle: .body)], context: nil)
+                    return .exact(CGSize(width: chatLayout.layoutFrame.width, height: rect.height + 16))
+                #endif
 
+                #if canImport(UIKit)
                 case .text:
                     return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 36))
+                #endif
+
                 case let .image(_, isLocallyStored: isDownloaded):
                     return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 120 : 80))
                 case let .url(_, isLocallyStored: isDownloaded):

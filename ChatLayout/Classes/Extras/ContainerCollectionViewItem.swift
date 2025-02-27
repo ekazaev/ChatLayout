@@ -55,12 +55,16 @@ public final class ContainerCollectionViewItem<CustomView: NSView>: NSCollection
         guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {
             return super.preferredLayoutAttributesFitting(layoutAttributes)
         }
+        
+
         delegate?.apply(chatLayoutAttributes)
         let resultingLayoutAttributes: ChatLayoutAttributes
         if let preferredLayoutAttributes = delegate?.preferredLayoutAttributesFitting(chatLayoutAttributes) {
             resultingLayoutAttributes = preferredLayoutAttributes
         } else if let chatLayoutAttributes = super.preferredLayoutAttributesFitting(chatLayoutAttributes) as? ChatLayoutAttributes {
             delegate?.modifyPreferredLayoutAttributesFitting(chatLayoutAttributes)
+//            view.layoutSubtreeIfNeeded()
+//            chatLayoutAttributes.size = view.fittingSize
             resultingLayoutAttributes = chatLayoutAttributes
         } else {
             resultingLayoutAttributes = chatLayoutAttributes

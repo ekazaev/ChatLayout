@@ -6,7 +6,9 @@ import AppKit
 extension NSCollectionView {
     var contentOffset: CGPoint {
         set {
-            enclosingScrollView?.contentView.setBoundsOrigin(newValue)
+//            NSView.performWithoutAnimation {
+                enclosingScrollView?.contentView.scroll(to: newValue)
+//            }
 //            animator().scroll(newValue)
         }
         get {

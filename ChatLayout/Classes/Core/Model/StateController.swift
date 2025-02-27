@@ -590,6 +590,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 kind: lastVisibleAttribute.kind,
                 offset: (itemFrame.maxY - layoutRepresentation.visibleBounds.maxY).rounded()
             )
+//            print("itemFrameMaxY: \(itemFrame.maxY), visibleBoundsMaxY: \(layoutRepresentation.visibleBounds.maxY)")
         }
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
@@ -893,6 +894,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
            let itemFrame = itemFrame(for: itemPath, kind: itemToRestore.kind, at: .afterUpdate),
            isLayoutBiggerThanVisibleBounds(at: .afterUpdate, visibleBounds: layoutRepresentation.visibleBounds) {
             let newProposedCompensationOffset = (itemFrame.maxY - itemToRestore.offset) - layoutRepresentation.visibleBounds.maxY
+//            print("itemFrameMaxY: \(itemFrame.maxY)")
+//            print("itemToRestoreOffset: \(itemToRestore.offset)")
+//            print("layoutRepresentation.visibleBoundsMaxY: \(layoutRepresentation.visibleBounds.maxY)")
+//            print("New proposed compensation offset: \(newProposedCompensationOffset)")
             proposedCompensatingOffset = newProposedCompensationOffset
         }
         totalProposedCompensatingOffset = proposedCompensatingOffset

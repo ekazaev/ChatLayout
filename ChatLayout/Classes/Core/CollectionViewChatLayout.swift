@@ -105,12 +105,14 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         guard let collectionView else {
             return .zero
         }
-        return CGRect(
+        let visibleBounds =  CGRect(
             x: adjustedContentInset.left,
             y: collectionView.contentOffset.y + adjustedContentInset.top,
             width: collectionView.scrollViewBounds.width - adjustedContentInset.left - adjustedContentInset.right,
             height: collectionView.scrollViewBounds.height - adjustedContentInset.top - adjustedContentInset.bottom
         )
+//        print(visibleBounds)
+        return visibleBounds
     }
 
     /// Represent the rectangle where all the items are aligned.
@@ -240,7 +242,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     private var needsIOS15_1IssueFix: Bool {
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        return false
+        return true
         #endif
 
         #if canImport(UIKit)
@@ -352,8 +354,8 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
         invalidateLayout(with: context)
 
         dontReturnAttributes = false
-        collectionView.setNeedsLayout()
-        collectionView.layoutIfNeeded()
+//        collectionView.setNeedsLayout()
+//        collectionView.layoutIfNeeded()
         currentPositionSnapshot = nil
     }
 
@@ -370,6 +372,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Tells the layout object to update the current layout.
     open override func prepare() {
+        print(#function)
         super.prepare()
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
         collectionView?.observeLiveScroll()
@@ -551,6 +554,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Prepares the layout object for animated changes to the view’s bounds or the insertion or deletion of items.
     open override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
+        print(#function, oldBounds)
         controller.isAnimatedBoundsChange = true
         controller.process(changeItems: [])
         state = .afterUpdate
@@ -586,6 +590,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
     /// Asks the layout object if changes to a self-sizing cell require a layout update.
     open override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: NSUICollectionViewLayoutAttributes,
                                               withOriginalAttributes originalAttributes: NSUICollectionViewLayoutAttributes) -> Bool {
+        print(#function, preferredAttributes, originalAttributes)
         guard let preferredAttributesItemPath = preferredAttributes.platformIndexPath?.itemPath,
               let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
               let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
@@ -603,6 +608,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
     /// Retrieves a context object that identifies the portions of the layout that should change in response to dynamic cell changes.
     open override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: NSUICollectionViewLayoutAttributes,
                                            withOriginalAttributes originalAttributes: NSUICollectionViewLayoutAttributes) -> NSUICollectionViewLayoutInvalidationContext {
+        print(#function, preferredAttributes, originalAttributes)
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
               let preferredAttributesIndexPath = preferredMessageAttributes.platformIndexPath,
               controller.item(for: preferredAttributesIndexPath.itemPath, kind: .cell, at: state) != nil
@@ -640,6 +646,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
            isAboveBottomEdge {
             let offsetCompensation: CGFloat = min(controller.contentHeight(at: state) - collectionView!.scrollViewFrame.height + adjustedContentInset.bottom + adjustedContentInset.top, heightDifference)
             context.contentOffsetAdjustment.y += offsetCompensation
+            print("offsetCompensation: \(offsetCompensation)")
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
 
@@ -682,6 +689,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Asks the layout object if the new bounds require a layout update.
     open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        print(#function, newBounds)
         let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) ||
             cachedCollectionViewInset != .some(adjustedContentInset) ||
             invalidationActions.contains(.shouldInvalidateOnBoundsChange)
@@ -693,6 +701,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.
     open override func invalidationContext(forBoundsChange newBounds: CGRect) -> NSUICollectionViewLayoutInvalidationContext {
+        print(#function, newBounds)
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds) as! ChatLayoutInvalidationContext
         invalidationContext.invalidateLayoutMetrics = false
         return invalidationContext
@@ -700,6 +709,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Invalidates the current layout using the information in the provided context object.
     open override func invalidateLayout(with context: NSUICollectionViewLayoutInvalidationContext) {
+        print(#function, context)
         guard let collectionView else {
             super.invalidateLayout(with: context)
             return
@@ -737,7 +747,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
             if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, kind: currentPositionSnapshot.kind, at: state, isFinal: true),
                contentHeight != 0 {
                 let adjustedContentInset: NSUIEdgeInsets = collectionView.adjustedContentInset
-                let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.frame.height + adjustedContentInset.bottom)
+                let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.scrollViewFrame.height + adjustedContentInset.bottom)
                 switch currentPositionSnapshot.edge {
                 case .top:
                     let desiredOffset = max(min(maxAllowed, frame.minY - currentPositionSnapshot.offset - adjustedContentInset.top - settings.additionalInsets.top), -adjustedContentInset.top)
@@ -759,10 +769,18 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Retrieves the content offset to use after an animated layout update or change.
     open override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        print(#function, proposedContentOffset)
         if controller.proposedCompensatingOffset != 0, let collectionView {
+            print("before contentOffset: \(collectionView.contentOffset)")
+            print("before visibleBounds: \(visibleBounds)")
             let minPossibleContentOffset = -collectionView.adjustedContentInset.top
             let newProposedContentOffset = CGPoint(x: proposedContentOffset.x, y: max(minPossibleContentOffset, min(collectionView.contentOffset.y + controller.proposedCompensatingOffset, maxPossibleContentOffset.y)))
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
+            defer {
+                print("after contentOffset: \(collectionView.contentOffset)")
+                print("after visibleBounds: \(visibleBounds)")
+                print("proposedContentOffset: \(proposedContentOffset), newProposedContentOffset: \(newProposedContentOffset), controller.proposedCompensatingOffset: \(controller.proposedCompensatingOffset)")
+            }
             if needsIOS15_1IssueFix {
                 controller.proposedCompensatingOffset = 0
                 collectionView.contentOffset = newProposedContentOffset
@@ -779,6 +797,7 @@ open class CollectionViewChatLayout: NSUICollectionViewLayout {
 
     /// Notifies the layout object that the contents of the collection view are about to change.
     open override func prepare(forCollectionViewUpdates updateItems: [NSUICollectionViewUpdateItem]) {
+        print(#function, updateItems)
         var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
         controller.process(changeItems: changeItems)

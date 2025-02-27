@@ -68,7 +68,7 @@ public final class ContainerCollectionReusableView<CustomView: NSUIView>: Collec
     /// - Parameter layoutAttributes: The attributes provided by the layout object. These attributes represent the values that the layout intends to apply to the cell.
     /// - Returns: Modified `UICollectionViewLayoutAttributes`
     public func preferredLayoutAttributesFitting(_ layoutAttributes: NSUICollectionViewLayoutAttributes) -> NSUICollectionViewLayoutAttributes {
-        guard let chatLayoutAttributes = layoutAttributes as? ChatLayoutAttributes else {
+        guard let chatLayoutAttributes = layoutAttributes.copy() as? ChatLayoutAttributes else {
             return callPrivatePreferredLayoutAttributes(fittingAttributes: layoutAttributes)
         }
         delegate?.apply(chatLayoutAttributes)
@@ -76,10 +76,9 @@ public final class ContainerCollectionReusableView<CustomView: NSUIView>: Collec
         let resultingLayoutAttributes: ChatLayoutAttributes
         if let preferredLayoutAttributes = delegate?.preferredLayoutAttributesFitting(chatLayoutAttributes) {
             resultingLayoutAttributes = preferredLayoutAttributes
-        } else if let chatLayoutAttributes = callPrivatePreferredLayoutAttributes(fittingAttributes: chatLayoutAttributes) as? ChatLayoutAttributes {
-            delegate?.modifyPreferredLayoutAttributesFitting(chatLayoutAttributes)
-            resultingLayoutAttributes = chatLayoutAttributes
         } else {
+            chatLayoutAttributes.size = fittingSize
+            delegate?.modifyPreferredLayoutAttributesFitting(chatLayoutAttributes)
             resultingLayoutAttributes = chatLayoutAttributes
         }
         return resultingLayoutAttributes
