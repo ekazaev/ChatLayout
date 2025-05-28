@@ -572,8 +572,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
 
-        var afterUpdateModel = LayoutModel(sections: layoutBeforeUpdate.sections,
-                                           collectionLayout: layoutRepresentation)
+        var afterUpdateModel = layoutAfterUpdate ?? LayoutModel(sections: layoutBeforeUpdate.sections, collectionLayout: layoutRepresentation)
+
         resetCachedAttributeObjects()
 
         var reloadedSectionsIndexesArray = [Int]()
