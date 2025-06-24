@@ -28,12 +28,15 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
     private var itemPathByIdentifierCache: [ItemUUIDKey: ItemPath]?
 
+    private(set) var hasStickyItems: Bool = false
+
     init(sections: ContiguousArray<SectionModel<Layout>>, collectionLayout: Layout) {
         self.sections = sections
         self.collectionLayout = collectionLayout
     }
 
     func assembleLayout() {
+        var hasStickyItems = false
         var offsetY: CGFloat = collectionLayout.settings.additionalInsets.top
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
@@ -57,11 +60,16 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
                     let key = ItemUUIDKey(kind: .footer, id: footer.id)
                     itemPathByIdentifierCache[key] = ItemPath(item: 0, section: sectionIndex)
                 }
+                if !hasStickyItems,
+                   directlyMutableSections[sectionIndex].hasStickyItems {
+                    hasStickyItems = true
+                }
             }
         }
 
         self.itemPathByIdentifierCache = itemPathByIdentifierCache
         self.sectionIndexByIdentifierCache = sectionIndexByIdentifierCache
+        self.hasStickyItems = hasStickyItems
     }
 
     // MARK: To use when its is important to make the correct insertion
@@ -87,6 +95,10 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         sections[sectionIndex].setAndAssemble(item: item, at: itemIndex)
         let heightDiff = sections[sectionIndex].height - oldSection.height
         offsetEverything(below: sectionIndex, by: heightDiff)
+        if !hasStickyItems,
+           sections[sectionIndex].hasStickyItems {
+            hasStickyItems = true
+        }
     }
 
     func setAndAssemble(footer: ItemModel, sectionIndex: Int) {
@@ -144,6 +156,48 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
                 }
             }
         }
+    }
+
+    func findTopStickyItemBefore(_ indexPath: IndexPath) -> IndexPath? {
+        for sectionIndex in (0...indexPath.section).reversed() {
+            let section = sections[sectionIndex]
+            guard section.hasStickyItems else {
+                continue
+            }
+            for stickyItemIndex in (0..<section.topStickyIndexes.count).reversed() {
+                let index = section.topStickyIndexes[stickyItemIndex]
+
+                if sectionIndex == indexPath.section && index < indexPath.item {
+                    return IndexPath(item: index, section: sectionIndex)
+                }
+
+                if sectionIndex < indexPath.section {
+                    return IndexPath(item: index, section: sectionIndex)
+                }
+            }
+        }
+        return nil
+    }
+
+    func findTopStickyItemAfter(_ indexPath: IndexPath) -> IndexPath? {
+        for sectionIndex in indexPath.section..<sections.count {
+            let section = sections[sectionIndex]
+            guard section.hasStickyItems else {
+                continue
+            }
+            for stickyItemIndex in (0..<section.topStickyIndexes.count) {
+                let index = section.topStickyIndexes[stickyItemIndex]
+
+                if sectionIndex == indexPath.section && index > indexPath.item {
+                    return IndexPath(item: index, section: sectionIndex)
+                }
+
+                if sectionIndex > indexPath.section {
+                    return IndexPath(item: index, section: sectionIndex)
+                }
+            }
+        }
+        return nil
     }
 
     // MARK: To use only withing process(updateItems:)

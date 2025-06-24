@@ -27,3 +27,11 @@ public enum ChatItemAlignment: Hashable {
     /// Should be aligned using the full width of the available content width.
     case fullWidth
 }
+
+public enum ChatItemStickyBehavior: Hashable {
+    /// Should be aligned at the leading edge of the layout. That includes all the additional content offsets.
+    case top
+
+    /// Should be aligned at the center of the layout.
+    case bottom
+}

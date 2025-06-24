@@ -48,6 +48,9 @@ public protocol ChatLayoutDelegate: AnyObject {
     func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool
 
+    func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
+                                        at indexPath: IndexPath) -> ChatItemStickyBehavior?
+
     /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the footer to the visible bounds in the current layout.
     /// - Parameters:
     ///   - chatLayout: `CollectionViewChatLayout` reference.
@@ -154,6 +157,11 @@ public extension ChatLayoutDelegate {
     func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool {
         false
+    }
+
+    func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
+                                at indexPath: IndexPath) -> ChatItemStickyBehavior? {
+        nil
     }
 
     /// Default implementation returns: `false`.

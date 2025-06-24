@@ -28,6 +28,12 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     private(set) var items: ContiguousArray<ItemModel>
 
+    var hasStickyItems: Bool {
+        return !topStickyIndexes.isEmpty
+    }
+
+    private(set) var topStickyIndexes = ContiguousArray<Int>()
+
     var offsetY: CGFloat = 0
 
     private unowned var collectionLayout: Layout
@@ -71,7 +77,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     mutating func assembleLayout() {
         var offsetY: CGFloat = 0
-
+        topStickyIndexes = ContiguousArray()
         if header != nil {
             header?.offsetY = 0
             offsetY += header?.frame.height ?? 0
@@ -82,6 +88,9 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
                 directlyMutableItems[rowIndex].offsetY = offsetY
                 let offset: CGFloat = rowIndex < directlyMutableItems.count - 1 ? directlyMutableItems[rowIndex].interItemSpacing : 0
                 offsetY += directlyMutableItems[rowIndex].size.height + offset
+                if directlyMutableItems[rowIndex].stickyBehavior == .top {
+                    topStickyIndexes.append(rowIndex)
+                }
             }
         }
 
@@ -120,6 +129,17 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         }
         #endif
         items[index] = item
+
+        if item.stickyBehavior == .top {
+            if !topStickyIndexes.contains(index) {
+                topStickyIndexes.append(index)
+                topStickyIndexes = ContiguousArray(topStickyIndexes.sorted())
+            }
+        } else {
+            if let index = topStickyIndexes.firstIndex(of: index) {
+                topStickyIndexes.remove(at: index)
+            }
+        }
 
         let heightDiff = item.size.height - oldItem.size.height
         offsetEverything(below: index, by: heightDiff)

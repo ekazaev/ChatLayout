@@ -17,6 +17,8 @@ struct ItemModel {
     struct Configuration {
         let alignment: ChatItemAlignment
 
+        let stickyBehavior: ChatItemStickyBehavior?
+
         let preferredSize: CGSize
 
         let calculatedSize: CGSize?
@@ -35,6 +37,8 @@ struct ItemModel {
     var calculatedOnce: Bool = false
 
     var alignment: ChatItemAlignment
+
+    var stickyBehavior: ChatItemStickyBehavior?
 
     var interItemSpacing: CGFloat
 
@@ -57,6 +61,7 @@ struct ItemModel {
         interItemSpacing = configuration.interItemSpacing
         calculatedSize = configuration.calculatedSize
         calculatedOnce = configuration.calculatedSize != nil
+        stickyBehavior = configuration.stickyBehavior
     }
 
     // We are just resetting `calculatedSize` if needed as the actual size will be found in
