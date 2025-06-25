@@ -476,9 +476,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         let visibleAttributes = controller.layoutAttributesForElements(in: rect, state: state)
-        visibleAttributes.forEach { attributes in
-            modifyAttributesForPinnedIfNeeded(attributes)
-        }
         return visibleAttributes
     }
 
@@ -487,49 +484,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         guard !dontReturnAttributes else {
             return nil
         }
-        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state)
-        modifyAttributesForPinnedIfNeeded(attributes)
+        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state, withPinnning: true)
         return attributes
-    }
-
-    private func modifyAttributesForPinnedIfNeeded(_ attributes: ChatLayoutAttributes?) {
-        guard !controller.pinnedIndexPaths.isEmpty,
-              let attributes else {
-            return
-        }
-        let visibleBounds = visibleBounds//.insetBy(dx: 0, dy: controller.batchUpdateCompensatingOffset)
-
-        ChatItemPinningBehavior.allCases.forEach { behaviour in
-            guard let pinnedIndexPaths = controller.pinnedIndexPaths[behaviour] else {
-                return
-            }
-            switch behaviour {
-            case .top:
-                func getNextaAttributesOffset(_ attributes: ChatLayoutAttributes, to indexPath: IndexPath?) -> CGFloat {
-                    let pinOffset: CGFloat
-                    if let indexPath,
-                       let nextElementAttributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state) {
-                        pinOffset = (nextElementAttributes.frame.minY /* - nextElementAttributes.spacing.leading*/ - visibleBounds.minY) - (attributes.frame.height/* + item.spacing.trailing*/)
-                    } else {
-                        pinOffset = 0
-                    }
-                    return pinOffset
-                }
-
-                if attributes.indexPath == pinnedIndexPaths.current {
-                    let pinOffset = min(0, getNextaAttributesOffset(attributes, to: pinnedIndexPaths.next))
-                    print("BBB \(pinOffset)")
-                    attributes.frame.offsettingBy(dx: 0, dy: min(0, attributes.frame.minY - visibleBounds.minY) * -1 + pinOffset)
-        //            attributes.frame.origin.y = visibleBounds.minY + pinOffset
-                    attributes.zIndex = 15
-                }
-            case .bottom:
-                if attributes.indexPath == pinnedIndexPaths.current {
-                    attributes.frame.origin.y = visibleBounds.maxY - attributes.frame.height
-                    attributes.zIndex = 15
-                }
-            }
-        }
     }
 
     /// Retrieves the layout attributes for the specified supplementary view.
@@ -540,8 +496,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         let kind = ItemKind(elementKind)
-        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: kind, at: state)
-        modifyAttributesForPinnedIfNeeded(attributes)
+        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: kind, at: state, withPinnning: true)
 
         return attributes
     }
@@ -1083,10 +1038,10 @@ extension CollectionViewChatLayout {
             return nil
         }
         let stickyBehavior: ChatItemPinningBehavior?
-        if kind == .cell /*,
-           settings.stickyBehavior == .cells*/ {
+        if kind == .cell,
+           settings.stickyBehavior == .cells {
             stickyBehavior = delegate.pinningBehaviorForItem(self, at: indexPath)
-        } else /* if settings.stickyBehavior == .sections */ {
+        } else if settings.stickyBehavior == .sections {
             if kind == .header,
                delegate.shouldPinHeaderToVisibleBounds(self, at: indexPath.section) {
                 stickyBehavior = .top
@@ -1096,8 +1051,8 @@ extension CollectionViewChatLayout {
             } else {
                 stickyBehavior = nil
             }
-//        } else {
-//            stickyBehavior = nil
+        } else {
+            stickyBehavior = nil
         }
         return stickyBehavior
     }
