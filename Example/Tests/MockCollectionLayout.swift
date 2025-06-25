@@ -57,7 +57,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     }
 
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
-        .init(alignment: .fullWidth, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!, interItemSpacing: settings.interItemSpacing)
+        .init(alignment: .fullWidth, pinningBehavior: nil, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!, interItemSpacing: settings.interItemSpacing)
     }
 
     func shouldPresentHeader(at sectionIndex: Int) -> Bool {
@@ -106,8 +106,6 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
             }
 
             var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex), header: header, footer: footer, items: items, collectionLayout: self)
-            section.set(shouldPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
-            section.set(shouldPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
             section.assembleLayout()
             sections.append(section)
         }

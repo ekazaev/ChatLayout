@@ -130,6 +130,7 @@ final class ChatViewController: UIViewController {
 
         chatLayout.settings.interItemSpacing = 8
         chatLayout.settings.interSectionSpacing = 8
+        chatLayout.settings.stickyBehavior = .sections
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
@@ -216,13 +217,37 @@ final class ChatViewController: UIViewController {
 
     @objc
     private func showHideKeyboard() {
-        if inputBarView.inputTextView.isFirstResponder {
-            navigationItem.leftBarButtonItem?.title = "Show Keyboard"
-            inputBarView.inputTextView.resignFirstResponder()
-        } else {
-            navigationItem.leftBarButtonItem?.title = "Hide Keyboard"
-            inputBarView.inputTextView.becomeFirstResponder()
-        }
+//        if inputBarView.inputTextView.isFirstResponder {
+//            navigationItem.leftBarButtonItem?.title = "Show Keyboard"
+//            inputBarView.inputTextView.resignFirstResponder()
+//        } else {
+//            navigationItem.leftBarButtonItem?.title = "Hide Keyboard"
+//            inputBarView.inputTextView.becomeFirstResponder()
+//        }
+        chatController.dataProvider.addMessage()
+//        let cells = dataSource.sections[0].cells.map({ cell -> Cell in
+//            switch cell {
+//            case var .message(message, bubbleType: bubble):
+//                switch message.data {
+//                case let .text(text):
+//                    message.data = .text(text + "\n1")
+//                    return .message(message, bubbleType: bubble)
+//                default:
+//                    return cell
+//                }
+//            default:
+//                return cell
+//            }
+//        })
+//        processUpdates(with: [Section(source: dataSource.sections[0], elements: cells)], requiresIsolatedProcess: false)
+
+//        if inputBarView.inputTextView.isFirstResponder {
+//            navigationItem.leftBarButtonItem?.title = "Show Keyboard"
+//            inputBarView.inputTextView.resignFirstResponder()
+//        } else {
+//            navigationItem.leftBarButtonItem?.title = "Hide Keyboard"
+//            inputBarView.inputTextView.becomeFirstResponder()
+//        }
     }
 
     @objc

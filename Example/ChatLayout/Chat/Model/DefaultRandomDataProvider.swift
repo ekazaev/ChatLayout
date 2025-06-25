@@ -29,6 +29,8 @@ protocol RandomDataProvider {
     func loadPreviousMessages(completion: @escaping ([RawMessage]) -> Void)
 
     func stop()
+
+    func addMessage() 
 }
 
 final class DefaultRandomDataProvider: RandomDataProvider {
@@ -54,9 +56,9 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let dispatchQueue = DispatchQueue.global(qos: .userInteractive)
 
-    private let enableTyping = true
+    private let enableTyping = false
 
-    private let enableNewMessages = true
+    private let enableNewMessages = false
 
     private let enableRichContent = true
 
@@ -82,6 +84,11 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     ]
 
     private let images: [UIImage] = (1...8).compactMap { UIImage(named: "demo\($0)") }
+
+    func addMessage() {
+        let message = createRandomMessage()
+        delegate?.received(messages: [message])
+    }
 
     private var allUsersIds: [Int] {
         Array([users, [receiverId]].joined())

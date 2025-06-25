@@ -13,6 +13,8 @@
 import Foundation
 
 protocol ChatController {
+    var dataProvider: RandomDataProvider { get }
+    
     func loadInitialMessages(completion: @escaping ([Section]) -> Void)
 
     func loadPreviousMessages(completion: @escaping ([Section]) -> Void)

@@ -16,7 +16,7 @@ import Foundation
 final class DefaultChatController: ChatController {
     weak var delegate: ChatControllerDelegate?
 
-    private let dataProvider: RandomDataProvider
+    let dataProvider: RandomDataProvider
 
     private var typingState: TypingState = .idle
 

@@ -178,6 +178,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
         cell.customView.text = title
         cell.customView.textColor = .gray
+        cell.customView.backgroundColor = .red
         cell.customView.numberOfLines = 0
         cell.customView.font = .preferredFont(forTextStyle: .caption2)
         cell.contentView.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
@@ -315,6 +316,32 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
     }
 
     public func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
+        true
+    }
+
+    func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
+                                        at sectionIndex: Int) -> Bool {
+        true
+    }
+
+    func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
+                                        at indexPath: IndexPath) -> ChatItemPinningBehavior? {
+        let item = sections[indexPath.section].cells[indexPath.item]
+        switch item {
+        case .message:
+            return .top
+        case .date:
+            return nil
+        case .typingIndicator:
+            return nil
+        case .messageGroup:
+            return nil
+        }
+    }
+
+
+    func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
+                                        at sectionIndex: Int) -> Bool {
         true
     }
 
