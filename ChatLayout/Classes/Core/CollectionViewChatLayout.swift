@@ -495,29 +495,42 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     private func modifyAttributesForPinnedIfNeeded(_ attributes: ChatLayoutAttributes?) {
-        guard let pinnedIndexPaths = controller.pinnedIndexPaths,
+        guard !controller.pinnedIndexPaths.isEmpty,
               let attributes else {
             return
         }
         let visibleBounds = visibleBounds//.insetBy(dx: 0, dy: controller.batchUpdateCompensatingOffset)
 
-        func getNextaAttributesOffset(_ attributes: ChatLayoutAttributes, to indexPath: IndexPath?) -> CGFloat {
-            let pinOffset: CGFloat
-            if let indexPath,
-               let nextElementAttributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state) {
-                pinOffset = (nextElementAttributes.frame.minY /* - nextElementAttributes.spacing.leading*/ - visibleBounds.minY) - (attributes.frame.height/* + item.spacing.trailing*/)
-            } else {
-                pinOffset = 0
+        ChatItemPinningBehavior.allCases.forEach { behaviour in
+            guard let pinnedIndexPaths = controller.pinnedIndexPaths[behaviour] else {
+                return
             }
-            return pinOffset
-        }
+            switch behaviour {
+            case .top:
+                func getNextaAttributesOffset(_ attributes: ChatLayoutAttributes, to indexPath: IndexPath?) -> CGFloat {
+                    let pinOffset: CGFloat
+                    if let indexPath,
+                       let nextElementAttributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state) {
+                        pinOffset = (nextElementAttributes.frame.minY /* - nextElementAttributes.spacing.leading*/ - visibleBounds.minY) - (attributes.frame.height/* + item.spacing.trailing*/)
+                    } else {
+                        pinOffset = 0
+                    }
+                    return pinOffset
+                }
 
-        if attributes.indexPath == pinnedIndexPaths.current {
-            let pinOffset = min(0, getNextaAttributesOffset(attributes, to: pinnedIndexPaths.next))
-            print("BBB \(pinOffset)")
-            attributes.frame.offsettingBy(dx: 0, dy: min(0, attributes.frame.minY - visibleBounds.minY) * -1 + pinOffset)
-//            attributes.frame.origin.y = visibleBounds.minY + pinOffset
-            attributes.zIndex = 15
+                if attributes.indexPath == pinnedIndexPaths.current {
+                    let pinOffset = min(0, getNextaAttributesOffset(attributes, to: pinnedIndexPaths.next))
+                    print("BBB \(pinOffset)")
+                    attributes.frame.offsettingBy(dx: 0, dy: min(0, attributes.frame.minY - visibleBounds.minY) * -1 + pinOffset)
+        //            attributes.frame.origin.y = visibleBounds.minY + pinOffset
+                    attributes.zIndex = 15
+                }
+            case .bottom:
+                if attributes.indexPath == pinnedIndexPaths.current {
+                    attributes.frame.origin.y = visibleBounds.maxY - attributes.frame.height
+                    attributes.zIndex = 15
+                }
+            }
         }
     }
 
@@ -1066,11 +1079,11 @@ extension CollectionViewChatLayout {
         return delegate.alignmentForItem(self, of: element, at: indexPath)
     }
 
-    private func stickyBehavour(for kind: ItemKind, at indexPath: IndexPath) -> ChatItemStickyBehavior? {
+    private func stickyBehavour(for kind: ItemKind, at indexPath: IndexPath) -> ChatItemPinningBehavior? {
         guard let delegate else {
             return nil
         }
-        let stickyBehavior: ChatItemStickyBehavior?
+        let stickyBehavior: ChatItemPinningBehavior?
         if kind == .cell,
            settings.stickyBehavior == .cells {
             stickyBehavior = delegate.pinningBehaviorForItem(self, at: indexPath)

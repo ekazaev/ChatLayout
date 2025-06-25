@@ -17,7 +17,7 @@ struct ItemModel {
     struct Configuration {
         let alignment: ChatItemAlignment
 
-        let stickyBehavior: ChatItemStickyBehavior?
+        let stickyBehavior: ChatItemPinningBehavior?
 
         let preferredSize: CGSize
 
@@ -38,7 +38,7 @@ struct ItemModel {
 
     var alignment: ChatItemAlignment
 
-    var stickyBehavior: ChatItemStickyBehavior?
+    var stickyBehavior: ChatItemPinningBehavior?
 
     var interItemSpacing: CGFloat
 

@@ -138,7 +138,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
     private unowned var layoutRepresentation: Layout
     
-    private(set) var pinnedIndexPaths: PinnedIndexes?
+    private(set) var pinnedIndexPaths = [ChatItemPinningBehavior: PinnedIndexes]()
 
     struct PinnedIndexes {
         var current: IndexPath
@@ -254,12 +254,12 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     func updatePinnedInfo(at state: ModelState) {
         let layout = layout(at: state)
         guard layout.hasStickyItems else {
-            pinnedIndexPaths = nil
+            pinnedIndexPaths = [:]
             return
         }
         let visibleBounds = layoutRepresentation.visibleBounds
 
-        var visibleItems = [(indexPath: IndexPath, frame: CGRect, stickyBehavior: ChatItemStickyBehavior?)]()
+        var visibleItems = [(indexPath: IndexPath, frame: CGRect, stickyBehavior: ChatItemPinningBehavior?)]()
         for (sectionIndex, section) in layout.sections.enumerated() {
             for itemIndex in (0..<section.items.count) {
                 let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
@@ -274,59 +274,61 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 //        print(": \(visibleItems) \(visibleBounds)")
 
         // If we already have a pinned identifier.
-        func checkExistingPinnedIndex() {
-            if let pinnedIndexPaths {
+        func checkExistingPinnedIndex(_ behavior: ChatItemPinningBehavior) {
+            if let pinnedIndexPaths = self.pinnedIndexPaths[behavior] {
                 guard let currentPinnedItem = visibleItems.first(where: { $0.indexPath == pinnedIndexPaths.current }) else {
-                    self.pinnedIndexPaths = nil
+                    self.pinnedIndexPaths[behavior] = nil
                     return
                 }
 
                 // If currently pinned identifier has unpinned (went below top).
                 guard currentPinnedItem.frame.minY <= visibleBounds.minY else {
-                    self.pinnedIndexPaths = nil
+                    self.pinnedIndexPaths[behavior] = nil
                     return
                 }
             }
         }
 
-        func findNewPinnedIndex() {
-            if pinnedIndexPaths == nil {
+        func findNewPinnedIndex(_ behavior: ChatItemPinningBehavior) {
+            if self.pinnedIndexPaths[behavior] == nil {
                 // That could be not enough if we start from the bottom.
-                if let item = visibleItems.first(where: { $0.stickyBehavior != nil && $0.frame.minY <= visibleBounds.minY }) {
-                    pinnedIndexPaths = PinnedIndexes(current: item.indexPath, next: nil, previous: nil)
+                if let item = visibleItems.first(where: { $0.stickyBehavior == behavior && $0.frame.minY <= visibleBounds.minY }) {
+                    self.pinnedIndexPaths[behavior] = PinnedIndexes(current: item.indexPath, next: nil, previous: nil)
                     return
                 }
 
                 // If there are no pinned elements in the visible items - start searching backwards for the first pinned item.
                 if let firstVisibleIndexPath = visibleItems.first?.indexPath,
-                   let firstPinnedIndex = layout.findTopStickyItemBefore(firstVisibleIndexPath) {
-                    pinnedIndexPaths = PinnedIndexes(current: firstPinnedIndex, next: nil, previous: nil)
+                   let firstPinnedIndex = layout.findTopStickyItemBefore(firstVisibleIndexPath, behavior: behavior) {
+                    self.pinnedIndexPaths[behavior] = PinnedIndexes(current: firstPinnedIndex, next: nil, previous: nil)
                     return
                 }
             }
         }
 
-        func findNextPinnedPinned() {
-            if let pinnedIndexPaths,
+        func findNextPinnedPinned(_ behavior: ChatItemPinningBehavior) {
+            if let pinnedIndexPaths = self.pinnedIndexPaths[behavior],
                pinnedIndexPaths.next == nil {
-                if let nextPinnedIndex = layout.findTopStickyItemAfter(pinnedIndexPaths.current) {
-                    self.pinnedIndexPaths?.next = nextPinnedIndex
+                if let nextPinnedIndex = layout.findTopStickyItemAfter(pinnedIndexPaths.current, behavior: behavior) {
+                    self.pinnedIndexPaths[behavior]?.next = nextPinnedIndex
                 }
             }
         }
 
-        func findPreviousPinnedIndex() {
-            if let pinnedIndexPaths,
+        func findPreviousPinnedIndex(_ behavior: ChatItemPinningBehavior) {
+            if let pinnedIndexPaths = self.pinnedIndexPaths[behavior],
                pinnedIndexPaths.previous == nil {
-                let previousPinnedIndex = layout.findTopStickyItemBefore(pinnedIndexPaths.current)
-                self.pinnedIndexPaths?.previous = previousPinnedIndex
+                let previousPinnedIndex = layout.findTopStickyItemBefore(pinnedIndexPaths.current, behavior: behavior)
+                self.pinnedIndexPaths[behavior]?.previous = previousPinnedIndex
             }
         }
 
-        checkExistingPinnedIndex()
-        findNewPinnedIndex()
-        findNextPinnedPinned()
-        findPreviousPinnedIndex()
+        ChatItemPinningBehavior.allCases.forEach { behaviour in
+            checkExistingPinnedIndex(behaviour)
+            findNewPinnedIndex(behaviour)
+            findNextPinnedPinned(behaviour)
+            findPreviousPinnedIndex(behaviour)
+        }
 
         print("\(pinnedIndexPaths) = \(visibleBounds) \n")
     }
@@ -598,7 +600,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     func update(preferredSize: CGSize,
                 alignment: ChatItemAlignment,
                 interItemSpacing: CGFloat,
-                stickyBehavior: ChatItemStickyBehavior?,
+                stickyBehavior: ChatItemPinningBehavior?,
                 for itemPath: ItemPath,
                 kind: ItemKind,
                 at state: ModelState) {

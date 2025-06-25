@@ -158,14 +158,14 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    func findTopStickyItemBefore(_ indexPath: IndexPath) -> IndexPath? {
+    func findTopStickyItemBefore(_ indexPath: IndexPath, behavior: ChatItemPinningBehavior) -> IndexPath? {
         for sectionIndex in (0...indexPath.section).reversed() {
             let section = sections[sectionIndex]
-            guard section.hasStickyItems else {
+            guard let pinnedIndexes = section.pinnedIndexes[behavior] else {
                 continue
             }
-            for stickyItemIndex in (0..<section.topStickyIndexes.count).reversed() {
-                let index = section.topStickyIndexes[stickyItemIndex]
+            for stickyItemIndex in (0..<pinnedIndexes.count).reversed() {
+                let index = pinnedIndexes[stickyItemIndex]
 
                 if sectionIndex == indexPath.section && index < indexPath.item {
                     return IndexPath(item: index, section: sectionIndex)
@@ -179,14 +179,14 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         return nil
     }
 
-    func findTopStickyItemAfter(_ indexPath: IndexPath) -> IndexPath? {
+    func findTopStickyItemAfter(_ indexPath: IndexPath, behavior: ChatItemPinningBehavior) -> IndexPath? {
         for sectionIndex in indexPath.section..<sections.count {
             let section = sections[sectionIndex]
-            guard section.hasStickyItems else {
+            guard let pinnedIndexes = section.pinnedIndexes[behavior] else {
                 continue
             }
-            for stickyItemIndex in (0..<section.topStickyIndexes.count) {
-                let index = section.topStickyIndexes[stickyItemIndex]
+            for stickyItemIndex in (0..<pinnedIndexes.count) {
+                let index = pinnedIndexes[stickyItemIndex]
 
                 if sectionIndex == indexPath.section && index > indexPath.item {
                     return IndexPath(item: index, section: sectionIndex)

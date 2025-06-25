@@ -28,7 +28,7 @@ public enum ChatItemAlignment: Hashable {
     case fullWidth
 }
 
-public enum ChatItemStickyBehavior: Hashable {
+public enum ChatItemPinningBehavior: Hashable, CaseIterable {
     /// Should be aligned at the leading edge of the layout. That includes all the additional content offsets.
     case top
 
