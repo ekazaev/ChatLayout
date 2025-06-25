@@ -169,6 +169,38 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         }
     }
 
+    func findTopStickySupplementaryItemIndexBefore(_ index: Int, kind: ItemKind) -> Int? {
+        guard index > 0 else {
+            return nil
+        }
+        let index = index - 1
+        for sectionIndex in (0...index).reversed() {
+            let section = sections[sectionIndex]
+            guard let supplementaryItem = kind == .header ? section.header : section.footer,
+                  supplementaryItem.pinningBehavior != nil  else {
+                continue
+            }
+            return index
+        }
+        return nil
+    }
+
+    func findLastStickySupplementaryItemIndexAfter(_ index: Int, kind: ItemKind) -> Int? {
+        guard index < sections.count - 1 else {
+            return nil
+        }
+        let index = index + 1
+        for sectionIndex in (index...sections.count - 1) {
+            let section = sections[sectionIndex]
+            guard let supplementaryItem = kind == .header ? section.header : section.footer,
+                  supplementaryItem.pinningBehavior != nil  else {
+                continue
+            }
+            return index
+        }
+        return nil
+    }
+
     func findTopStickyItemBefore(_ indexPath: IndexPath, behavior: ChatItemPinningBehavior) -> IndexPath? {
         for sectionIndex in (0...indexPath.section).reversed() {
             let section = sections[sectionIndex]

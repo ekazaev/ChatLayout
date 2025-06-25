@@ -200,7 +200,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         if !ignoreCache,
            let cachedAttributesState,
            cachedAttributesState.rect.contains(rect) {
-            return cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+            return !pinnedIndexPaths.isEmpty
+                         ? cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
+                         : cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
         } else {
             let totalRect: CGRect
             switch state {
@@ -216,10 +218,12 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
             let visibleAttributes: [ChatLayoutAttributes]
             if rect == totalRect {
-                visibleAttributes = attributes
-            } else {
-                visibleAttributes = attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
-            }
+                 visibleAttributes = attributes
+             } else if !pinnedIndexPaths.isEmpty {
+                 visibleAttributes = attributes.filter { $0.frame.intersects(rect) }
+             } else {
+                 visibleAttributes = attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+             }
             return visibleAttributes
         }
     }
@@ -249,83 +253,183 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
         let visibleBounds = layoutRepresentation.visibleBounds
 
-        var visibleItems = [(indexPath: IndexPath, frame: CGRect, kind: ItemKind, stickyBehavior: ChatItemPinningBehavior?)]()
-        for (sectionIndex, section) in layout.sections.enumerated() {
-//            if let header = section.header,
-//                let headerFrame = itemFrame(for: ItemPath(item: 0, section: sectionIndex), kind: .header, at: state) {
-//                visibleItems.append((indexPath: IndexPath(item: 0, section: sectionIndex), frame: headerFrame, kind: .header, stickyBehavior: header.pinningBehavior))
-//            }
-            for itemIndex in (0..<section.items.count) {
-                let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state) {
-//                    print("- \(itemIndex) \(itemFrame) \(visibleBounds)")
-                    if visibleBounds.intersects(itemFrame) {
-                        visibleItems.append((indexPath: itemPath.indexPath, frame: itemFrame, kind: .cell, stickyBehavior: section.items[itemIndex].pinningBehavior))
+        switch layoutRepresentation.settings.stickyBehavior {
+        case .cells:
+            var visibleItems = [(indexPath: IndexPath, frame: CGRect, kind: ItemKind, stickyBehavior: ChatItemPinningBehavior?)]()
+            for (sectionIndex, section) in layout.sections.enumerated() {
+                for itemIndex in (0..<section.items.count) {
+                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                    if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state) {
+    //                    print("- \(itemIndex) \(itemFrame) \(visibleBounds)")
+                        if visibleBounds.intersects(itemFrame) {
+                            visibleItems.append((indexPath: itemPath.indexPath, frame: itemFrame, kind: .cell, stickyBehavior: section.items[itemIndex].pinningBehavior))
+                        }
                     }
                 }
             }
-//            if let header = section.footer,
-//                let footerFrame = itemFrame(for: ItemPath(item: 0, section: sectionIndex), kind: .header, at: state) {
-//                visibleItems.append((indexPath: IndexPath(item: 0, section: sectionIndex), frame: footerFrame, kind: .footer, stickyBehavior: header.pinningBehavior))
-//            }
-        }
-//        print(": \(visibleItems) \(visibleBounds)")
+    //        print(": \(visibleItems) \(visibleBounds)")
 
-        // If we already have a pinned identifier.
-        func checkExistingPinnedIndex(_ behavior: ChatItemPinningBehavior) {
-            if let pinnedIndexPaths = self.pinnedIndexPaths[behavior] {
-                guard let currentPinnedItem = visibleItems.first(where: { $0.indexPath == pinnedIndexPaths.current }) else {
-                    self.pinnedIndexPaths[behavior] = nil
-                    return
-                }
+            // If we already have a pinned identifier.
+            func checkExistingPinnedIndex(_ behavior: ChatItemPinningBehavior) {
+                if let pinnedIndexPaths = self.pinnedIndexPaths[behavior] {
+                    guard let currentPinnedItem = visibleItems.first(where: { $0.indexPath == pinnedIndexPaths.current }) else {
+                        self.pinnedIndexPaths[behavior] = nil
+                        return
+                    }
 
-                // If currently pinned identifier has unpinned (went below top).
-                guard currentPinnedItem.frame.minY <= visibleBounds.minY else {
-                    self.pinnedIndexPaths[behavior] = nil
-                    return
+                    // If currently pinned identifier has unpinned (went below top).
+                    guard currentPinnedItem.frame.minY <= visibleBounds.minY else {
+                        self.pinnedIndexPaths[behavior] = nil
+                        return
+                    }
                 }
             }
-        }
 
-        func findNewPinnedIndex(_ behavior: ChatItemPinningBehavior) {
-            if self.pinnedIndexPaths[behavior] == nil {
-                // That could be not enough if we start from the bottom.
-                if let item = visibleItems.first(where: { $0.stickyBehavior == behavior && $0.frame.minY <= visibleBounds.minY }) {
-                    self.pinnedIndexPaths[behavior] = PinnedIndexes(current: item.indexPath, next: nil, previous: nil)
-                    return
-                }
+            func findNewPinnedIndex(_ behavior: ChatItemPinningBehavior) {
+                if self.pinnedIndexPaths[behavior] == nil {
+                    // That could be not enough if we start from the bottom.
+                    if let item = visibleItems.first(where: { $0.stickyBehavior == behavior && $0.frame.minY <= visibleBounds.minY }) {
+                        self.pinnedIndexPaths[behavior] = PinnedIndexes(current: item.indexPath, next: nil, previous: nil)
+                        return
+                    }
 
-                // If there are no pinned elements in the visible items - start searching backwards for the first pinned item.
-                if let firstVisibleIndexPath = visibleItems.first?.indexPath,
-                   let firstPinnedIndex = layout.findTopStickyItemBefore(firstVisibleIndexPath, behavior: behavior) {
-                    self.pinnedIndexPaths[behavior] = PinnedIndexes(current: firstPinnedIndex, next: nil, previous: nil)
-                    return
-                }
-            }
-        }
-
-        func findNextPinnedPinned(_ behavior: ChatItemPinningBehavior) {
-            if let pinnedIndexPaths = self.pinnedIndexPaths[behavior],
-               pinnedIndexPaths.next == nil {
-                if let nextPinnedIndex = layout.findTopStickyItemAfter(pinnedIndexPaths.current, behavior: behavior) {
-                    self.pinnedIndexPaths[behavior]?.next = nextPinnedIndex
+                    // If there are no pinned elements in the visible items - start searching backwards for the first pinned item.
+                    if let firstVisibleIndexPath = visibleItems.first?.indexPath,
+                       let firstPinnedIndex = layout.findTopStickyItemBefore(firstVisibleIndexPath, behavior: behavior) {
+                        self.pinnedIndexPaths[behavior] = PinnedIndexes(current: firstPinnedIndex, next: nil, previous: nil)
+                        return
+                    }
                 }
             }
-        }
 
-        func findPreviousPinnedIndex(_ behavior: ChatItemPinningBehavior) {
-            if let pinnedIndexPaths = self.pinnedIndexPaths[behavior],
-               pinnedIndexPaths.previous == nil {
-                let previousPinnedIndex = layout.findTopStickyItemBefore(pinnedIndexPaths.current, behavior: behavior)
-                self.pinnedIndexPaths[behavior]?.previous = previousPinnedIndex
+            func findNextPinnedPinned(_ behavior: ChatItemPinningBehavior) {
+                if let pinnedIndexPaths = self.pinnedIndexPaths[behavior],
+                   pinnedIndexPaths.next == nil {
+                    if let nextPinnedIndex = layout.findTopStickyItemAfter(pinnedIndexPaths.current, behavior: behavior) {
+                        self.pinnedIndexPaths[behavior]?.next = nextPinnedIndex
+                    }
+                }
             }
-        }
 
-        ChatItemPinningBehavior.allCases.forEach { behaviour in
-            checkExistingPinnedIndex(behaviour)
-            findNewPinnedIndex(behaviour)
-            findNextPinnedPinned(behaviour)
-            findPreviousPinnedIndex(behaviour)
+            func findPreviousPinnedIndex(_ behavior: ChatItemPinningBehavior) {
+                if let pinnedIndexPaths = self.pinnedIndexPaths[behavior],
+                   pinnedIndexPaths.previous == nil {
+                    let previousPinnedIndex = layout.findTopStickyItemBefore(pinnedIndexPaths.current, behavior: behavior)
+                    self.pinnedIndexPaths[behavior]?.previous = previousPinnedIndex
+                }
+            }
+
+            ChatItemPinningBehavior.allCases.forEach { behaviour in
+                checkExistingPinnedIndex(behaviour)
+                findNewPinnedIndex(behaviour)
+                findNextPinnedPinned(behaviour)
+                findPreviousPinnedIndex(behaviour)
+            }
+        case .sections:
+            var visibleSections = [(index: Int, section: SectionModel<Layout>)]()
+            for (sectionIndex, section) in layout.sections.enumerated() {
+                let sectionFrame = CGRect(origin: .init(x: 0, y: section.offsetY), size: CGSize(width: visibleBounds.width, height: section.height))
+                if visibleBounds.intersects(sectionFrame) {
+                    visibleSections.append((index: sectionIndex, section))
+                }
+            }
+
+            func checkExistingPinnedHeaderIndex() {
+                if let pinnedIndexPaths = self.pinnedIndexPaths[.top] {
+                    guard let currentPinnedHeader = visibleSections.first(where: { $0.index == pinnedIndexPaths.current.section })?.section.header else {
+                        self.pinnedIndexPaths[.top] = nil
+                        return
+                    }
+
+                    // If currently pinned identifier has unpinned (went below top).
+                    guard currentPinnedHeader.frame.minY <= visibleBounds.minY else {
+                        self.pinnedIndexPaths[.top] = nil
+                        return
+                    }
+                }
+            }
+
+            func findNewPinnedHeaderIndex() {
+                if self.pinnedIndexPaths[.top] == nil {
+                    // That could be not enough if we start from the bottom.
+                    if let item = visibleSections.first(where: {
+                        guard let header = $0.section.header else {
+                            return false
+                        }
+                        return header.pinningBehavior != nil && header.frame.minY <= visibleBounds.minY
+                    }) {
+                        self.pinnedIndexPaths[.top] = PinnedIndexes(current: IndexPath(item: 0, section: item.index), next: nil, previous: nil)
+                        return
+                    }
+
+                    // If there are no pinned elements in the visible items - start searching backwards for the first pinned item.
+                    if let firstVisibleIndex = visibleSections.first?.index,
+                       let firstPinnedIndex = layout.findTopStickySupplementaryItemIndexBefore(firstVisibleIndex, kind: .header) {
+                        self.pinnedIndexPaths[.top] = PinnedIndexes(current: IndexPath(item: 0, section: firstPinnedIndex), next: nil, previous: nil)
+                        return
+                    }
+                }
+            }
+
+            func findNextPinnedHeaderPinned() {
+                if let pinnedIndexPaths = self.pinnedIndexPaths[.top],
+                   pinnedIndexPaths.next == nil {
+                    if let nextPinnedIndex = layout.findTopStickySupplementaryItemIndexBefore(pinnedIndexPaths.current.section, kind: .header) {
+                        self.pinnedIndexPaths[.top]?.next = IndexPath(item: 0, section: nextPinnedIndex)
+                    }
+                }
+            }
+
+            func checkExistingPinnedFooterIndex() {
+                if let pinnedIndexPaths = self.pinnedIndexPaths[.bottom] {
+                    guard let currentPinnedHeader = visibleSections.first(where: { $0.index == pinnedIndexPaths.current.section })?.section.footer else {
+                        self.pinnedIndexPaths[.bottom] = nil
+                        return
+                    }
+
+                    guard currentPinnedHeader.frame.maxY >= visibleBounds.maxY else {
+                        self.pinnedIndexPaths[.bottom] = nil
+                        return
+                    }
+                }
+            }
+
+            func findNewPinnedFooterIndex() {
+                if self.pinnedIndexPaths[.bottom] == nil {
+                    if let item = visibleSections.first(where: {
+                        guard let footer = $0.section.footer else {
+                            return false
+                        }
+                        return footer.pinningBehavior != nil && footer.frame.maxY >= visibleBounds.maxY
+                    }) {
+                        self.pinnedIndexPaths[.bottom] = PinnedIndexes(current: IndexPath(item: 0, section: item.index), next: nil, previous: nil)
+                        return
+                    }
+
+                    if let lasetVisibleIndex = visibleSections.last?.index,
+                       let lasetPinnedIndex = layout.findLastStickySupplementaryItemIndexAfter(lasetVisibleIndex, kind: .footer) {
+                        self.pinnedIndexPaths[.bottom] = PinnedIndexes(current: IndexPath(item: 0, section: lasetPinnedIndex), next: nil, previous: nil)
+                        return
+                    }
+                }
+            }
+
+            func findNextPinnedFooterPinned() {
+                if let pinnedIndexPaths = self.pinnedIndexPaths[.bottom],
+                   pinnedIndexPaths.next == nil {
+                    if let nextPinnedIndex = layout.findLastStickySupplementaryItemIndexAfter(pinnedIndexPaths.current.section, kind: .footer) {
+                        self.pinnedIndexPaths[.bottom]?.next = IndexPath(item: 0, section: nextPinnedIndex)
+                    }
+                }
+            }
+
+            checkExistingPinnedHeaderIndex()
+            findNewPinnedHeaderIndex()
+            findNextPinnedHeaderPinned()
+
+            checkExistingPinnedFooterIndex()
+            findNewPinnedFooterIndex()
+            findNextPinnedFooterPinned()
         }
 
         print("\(pinnedIndexPaths) = \(visibleBounds) \n")
@@ -479,11 +583,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
 
         if withPinnning,
-           kind == .cell,
            let behavior = item.pinningBehavior,
            let pinnedIndexPaths = pinnedIndexPaths[behavior] {
-            switch behavior {
-            case .top:
+            switch kind {
+            case .header:
                 func getNextaAttributesOffset(_ indexPath: IndexPath?) -> CGFloat {
                     let pinOffset: CGFloat
                     if let indexPath,
@@ -500,11 +603,37 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 //                    itemFrame.offsettingBy(dx: 0, dy: min(0, itemFrame.minY - visibleBounds.minY) * -1 + pinOffset)
                     itemFrame.origin.y = visibleBounds.minY + pinOffset
                 }
-            case .bottom:
+            case .footer:
                 if itemPath.indexPath == pinnedIndexPaths.current {
                     let pinOffset = CGFloat(0)//min(0, getNextaAttributesOffset(attributes, to: pinnedIndexPaths.next))
                     print("BBB \(pinOffset)")
                     itemFrame.origin.y = visibleBounds.maxY - itemFrame.height + pinOffset
+                }
+            case .cell:
+                switch behavior {
+                case .top:
+                    func getNextaAttributesOffset(_ indexPath: IndexPath?) -> CGFloat {
+                        let pinOffset: CGFloat
+                        if let indexPath,
+                           let nextElementFrame = self.itemFrame(for: indexPath.itemPath, kind: .cell, at: state) {
+                            pinOffset = (nextElementFrame.minY /* - nextElementAttributes.spacing.leading*/ - visibleBounds.minY) - (itemFrame.height/* + item.spacing.trailing*/)
+                        } else {
+                            pinOffset = 0
+                        }
+                        return pinOffset
+                    }
+
+                    if itemPath.indexPath == pinnedIndexPaths.current {
+                        let pinOffset = min(0, getNextaAttributesOffset(pinnedIndexPaths.next))
+    //                    itemFrame.offsettingBy(dx: 0, dy: min(0, itemFrame.minY - visibleBounds.minY) * -1 + pinOffset)
+                        itemFrame.origin.y = visibleBounds.minY + pinOffset
+                    }
+                case .bottom:
+                    if itemPath.indexPath == pinnedIndexPaths.current {
+                        let pinOffset = CGFloat(0)//min(0, getNextaAttributesOffset(attributes, to: pinnedIndexPaths.next))
+                        print("BBB \(pinOffset)")
+                        itemFrame.origin.y = visibleBounds.maxY - itemFrame.height + pinOffset
+                    }
                 }
             }
         }
