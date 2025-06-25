@@ -388,8 +388,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                                            footer: footer,
                                            items: items,
                                            collectionLayout: self)
-                section.set(shouldPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
-                section.set(shouldPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
                 section.assembleLayout()
                 sections.append(section)
             }
@@ -543,6 +541,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
         let kind = ItemKind(elementKind)
         let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: kind, at: state)
+        modifyAttributesForPinnedIfNeeded(attributes)
 
         return attributes
     }
@@ -1026,7 +1025,7 @@ extension CollectionViewChatLayout {
         }
         return ItemModel.Configuration(
             alignment: alignment(for: element, at: indexPath),
-            stickyBehavior: stickyBehavour(for: element, at: indexPath),
+            pinningBehavior: stickyBehavour(for: element, at: indexPath),
             preferredSize: itemSize.estimated,
             calculatedSize: itemSize.exact,
             interItemSpacing: interItemSpacing
@@ -1084,21 +1083,21 @@ extension CollectionViewChatLayout {
             return nil
         }
         let stickyBehavior: ChatItemPinningBehavior?
-        if kind == .cell,
-           settings.stickyBehavior == .cells {
+        if kind == .cell /*,
+           settings.stickyBehavior == .cells*/ {
             stickyBehavior = delegate.pinningBehaviorForItem(self, at: indexPath)
-        } else if settings.stickyBehavior == .sections {
+        } else /* if settings.stickyBehavior == .sections */ {
             if kind == .header,
                delegate.shouldPinHeaderToVisibleBounds(self, at: indexPath.section) {
                 stickyBehavior = .top
             } else if kind == .footer,
                       delegate.shouldPresentFooter(self, at: indexPath.section) {
-                stickyBehavior = .top
+                stickyBehavior = .bottom
             } else {
                 stickyBehavior = nil
             }
-        } else {
-            stickyBehavior = nil
+//        } else {
+//            stickyBehavior = nil
         }
         return stickyBehavior
     }

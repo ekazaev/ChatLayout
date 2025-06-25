@@ -22,14 +22,10 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     private(set) var footer: ItemModel?
 
-    private(set) var shouldPinHeaderToVisibleBounds: Bool = false
-
-    private(set) var shouldPinFooterToVisibleBounds: Bool = false
-
     private(set) var items: ContiguousArray<ItemModel>
 
-    var hasStickyItems: Bool {
-        return !pinnedIndexes.isEmpty
+    var hasPinnedItems: Bool {
+        return !pinnedIndexes.isEmpty || header?.pinningBehavior != nil || footer?.pinningBehavior != nil
     }
 
     private(set) var pinnedIndexes = [ChatItemPinningBehavior: ContiguousArray<Int>]()
@@ -88,7 +84,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
                 directlyMutableItems[rowIndex].offsetY = offsetY
                 let offset: CGFloat = rowIndex < directlyMutableItems.count - 1 ? directlyMutableItems[rowIndex].interItemSpacing : 0
                 offsetY += directlyMutableItems[rowIndex].size.height + offset
-                if let pinnedBehavior = directlyMutableItems[rowIndex].stickyBehavior {
+                if let pinnedBehavior = directlyMutableItems[rowIndex].pinningBehavior {
                     pinnedIndexes[pinnedBehavior, default: ContiguousArray()].append(rowIndex)
                 }
             }
@@ -130,10 +126,10 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         #endif
         items[index] = item
 
-        if let pinningBehavior = item.stickyBehavior {
-            if var pinnedNehavourIndexes = pinnedIndexes[pinningBehavior] {
-                pinnedNehavourIndexes.append(index)
-                pinnedIndexes[pinningBehavior] = ContiguousArray(pinnedNehavourIndexes.sorted())
+        if let pinningBehavior = item.pinningBehavior {
+            if var pinnedBehavourIndexes = pinnedIndexes[pinningBehavior] {
+                pinnedBehavourIndexes.append(index)
+                pinnedIndexes[pinningBehavior] = ContiguousArray(pinnedBehavourIndexes.sorted())
             }
         } else {
             let localPinnedIndexes = pinnedIndexes
@@ -172,14 +168,6 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     mutating func set(footer: ItemModel?) {
         self.footer = footer
-    }
-
-    mutating func set(shouldPinHeaderToVisibleBounds: Bool) {
-        self.shouldPinHeaderToVisibleBounds = shouldPinHeaderToVisibleBounds
-    }
-
-    mutating func set(shouldPinFooterToVisibleBounds: Bool) {
-        self.shouldPinFooterToVisibleBounds = shouldPinFooterToVisibleBounds
     }
 
     private mutating func offsetEverything(below index: Int, by heightDiff: CGFloat) {

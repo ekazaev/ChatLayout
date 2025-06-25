@@ -28,7 +28,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
     private var itemPathByIdentifierCache: [ItemUUIDKey: ItemPath]?
 
-    private(set) var hasStickyItems: Bool = false
+    private(set) var hasPinnedItems: Bool = false
 
     init(sections: ContiguousArray<SectionModel<Layout>>, collectionLayout: Layout) {
         self.sections = sections
@@ -36,7 +36,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
     }
 
     func assembleLayout() {
-        var hasStickyItems = false
+        var hasPinnedItems = false
         var offsetY: CGFloat = collectionLayout.settings.additionalInsets.top
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
@@ -60,16 +60,16 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
                     let key = ItemUUIDKey(kind: .footer, id: footer.id)
                     itemPathByIdentifierCache[key] = ItemPath(item: 0, section: sectionIndex)
                 }
-                if !hasStickyItems,
-                   directlyMutableSections[sectionIndex].hasStickyItems {
-                    hasStickyItems = true
+                if !hasPinnedItems,
+                   directlyMutableSections[sectionIndex].hasPinnedItems {
+                    hasPinnedItems = true
                 }
             }
         }
 
         self.itemPathByIdentifierCache = itemPathByIdentifierCache
         self.sectionIndexByIdentifierCache = sectionIndexByIdentifierCache
-        self.hasStickyItems = hasStickyItems
+        self.hasPinnedItems = hasPinnedItems
     }
 
     // MARK: To use when its is important to make the correct insertion
@@ -84,6 +84,12 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         sections[sectionIndex].setAndAssemble(header: header)
         let heightDiff = sections[sectionIndex].height - oldSection.height
         offsetEverything(below: sectionIndex, by: heightDiff)
+
+        // We are only interested in switching to `hasPinnedItems`. When the layout will be assembled the true value will be calculated.
+        if !hasPinnedItems,
+           sections[sectionIndex].hasPinnedItems {
+            hasPinnedItems = true
+        }
     }
 
     func setAndAssemble(item: ItemModel, sectionIndex: Int, itemIndex: Int) {
@@ -95,9 +101,9 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         sections[sectionIndex].setAndAssemble(item: item, at: itemIndex)
         let heightDiff = sections[sectionIndex].height - oldSection.height
         offsetEverything(below: sectionIndex, by: heightDiff)
-        if !hasStickyItems,
-           sections[sectionIndex].hasStickyItems {
-            hasStickyItems = true
+        if !hasPinnedItems,
+           sections[sectionIndex].hasPinnedItems {
+            hasPinnedItems = true
         }
     }
 
@@ -110,6 +116,11 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         sections[sectionIndex].setAndAssemble(footer: footer)
         let heightDiff = sections[sectionIndex].height - oldSection.height
         offsetEverything(below: sectionIndex, by: heightDiff)
+
+        if !hasPinnedItems,
+           sections[sectionIndex].hasPinnedItems {
+            hasPinnedItems = true
+        }
     }
 
     func sectionIndex(by sectionId: UUID) -> Int? {
