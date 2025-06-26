@@ -25,7 +25,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     private(set) var items: ContiguousArray<ItemModel>
 
     var hasPinnedItems: Bool {
-        return !pinnedIndexes.isEmpty || header?.pinningBehavior != nil || footer?.pinningBehavior != nil
+        !pinnedIndexes.isEmpty || header?.pinningBehavior != nil || footer?.pinningBehavior != nil
     }
 
     private(set) var pinnedIndexes = [ChatItemPinningBehavior: ContiguousArray<Int>]()

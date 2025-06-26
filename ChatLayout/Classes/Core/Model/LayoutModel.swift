@@ -177,7 +177,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         for sectionIndex in (0...index).reversed() {
             let section = sections[sectionIndex]
             guard let supplementaryItem = kind == .header ? section.header : section.footer,
-                  supplementaryItem.pinningBehavior != nil  else {
+                  supplementaryItem.pinningBehavior != nil else {
                 continue
             }
             return index
@@ -190,10 +190,10 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
             return nil
         }
         let index = index + 1
-        for sectionIndex in (index...sections.count - 1) {
+        for sectionIndex in index...sections.count - 1 {
             let section = sections[sectionIndex]
             guard let supplementaryItem = kind == .header ? section.header : section.footer,
-                  supplementaryItem.pinningBehavior != nil  else {
+                  supplementaryItem.pinningBehavior != nil else {
                 continue
             }
             return index
@@ -210,7 +210,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
             for stickyItemIndex in (0..<pinnedIndexes.count).reversed() {
                 let index = pinnedIndexes[stickyItemIndex]
 
-                if sectionIndex == indexPath.section && index < indexPath.item {
+                if sectionIndex == indexPath.section, index < indexPath.item {
                     return IndexPath(item: index, section: sectionIndex)
                 }
 
@@ -228,10 +228,10 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
             guard let pinnedIndexes = section.pinnedIndexes[behavior] else {
                 continue
             }
-            for stickyItemIndex in (0..<pinnedIndexes.count) {
+            for stickyItemIndex in 0..<pinnedIndexes.count {
                 let index = pinnedIndexes[stickyItemIndex]
 
-                if sectionIndex == indexPath.section && index > indexPath.item {
+                if sectionIndex == indexPath.section, index > indexPath.item {
                     return IndexPath(item: index, section: sectionIndex)
                 }
 

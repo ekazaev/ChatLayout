@@ -220,8 +220,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     private var _supportSelfSizingInvalidation: Bool = false
 
-    var hasPinnedHeaderOrFooter: Bool = false
-
     // MARK: IOS 15.1 fix flags
 
     private var needsIOS15_1IssueFix: Bool {
@@ -337,7 +335,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// Tells the layout object to update the current layout.
     open override func prepare() {
         super.prepare()
-        print("\(#function)")
 
         guard let collectionView,
               !prepareActions.isEmpty else {
@@ -350,10 +347,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
             contentOffsetBeforeUpdate = nil
-        }
-
-        if prepareActions.contains(.updateLayoutMetrics) || prepareActions.contains(.recreateSectionModels) {
-            hasPinnedHeaderOrFooter = false
         }
 
         if prepareActions.contains(.recreateSectionModels) {
@@ -439,8 +432,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         if prepareActions.contains(.updatePinnedInfo) ||
-           prepareActions.contains(.updateLayoutMetrics) ||
-           prepareActions.contains(.recreateSectionModels) {
+            prepareActions.contains(.updateLayoutMetrics) ||
+            prepareActions.contains(.recreateSectionModels) {
             controller.updatePinnedInfo(at: state)
         }
 
@@ -635,12 +628,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) ||
             cachedCollectionViewInset != .some(adjustedContentInset) ||
             invalidationActions.contains(.shouldInvalidateOnBoundsChange)
-            || (isUserInitiatedScrolling && state == .beforeUpdate)
+            || ((isUserInitiatedScrolling || !controller.pinnedIndexPaths.isEmpty) && state == .beforeUpdate)
 
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
-        print("\(#function) \(shouldInvalidateLayout)")
         prepareActions.insert(.updatePinnedInfo)
-        return shouldInvalidateLayout || hasPinnedHeaderOrFooter
+        return shouldInvalidateLayout
     }
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.

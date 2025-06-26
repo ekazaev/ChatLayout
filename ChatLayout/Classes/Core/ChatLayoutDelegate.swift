@@ -49,7 +49,7 @@ public protocol ChatLayoutDelegate: AnyObject {
                                         at sectionIndex: Int) -> Bool
 
     func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
-                                        at indexPath: IndexPath) -> ChatItemPinningBehavior?
+                                at indexPath: IndexPath) -> ChatItemPinningBehavior?
 
     /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the footer to the visible bounds in the current layout.
     /// - Parameters:

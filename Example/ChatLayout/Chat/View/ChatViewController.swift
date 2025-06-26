@@ -130,7 +130,7 @@ final class ChatViewController: UIViewController {
 
         chatLayout.settings.interItemSpacing = 8
         chatLayout.settings.interSectionSpacing = 8
-        chatLayout.settings.stickyBehavior = .sections
+        chatLayout.settings.stickyBehavior = .cells
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
