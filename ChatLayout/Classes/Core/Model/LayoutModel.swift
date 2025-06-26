@@ -169,7 +169,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    func findTopStickySupplementaryItemIndexBefore(_ index: Int, kind: ItemKind) -> Int? {
+    func findPinnedSupplementaryItemIndexBefore(_ index: Int, kind: ItemKind) -> Int? {
         guard index > 0 else {
             return nil
         }
@@ -185,7 +185,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         return nil
     }
 
-    func findLastStickySupplementaryItemIndexAfter(_ index: Int, kind: ItemKind) -> Int? {
+    func findPinnedSupplementaryItemIndexAfter(_ index: Int, kind: ItemKind) -> Int? {
         guard index < sections.count - 1 else {
             return nil
         }
@@ -201,7 +201,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         return nil
     }
 
-    func findTopStickyItemBefore(_ indexPath: IndexPath, behavior: ChatItemPinningBehavior) -> IndexPath? {
+    func findPinnedItemBefore(_ indexPath: IndexPath, behavior: ChatItemPinningBehavior) -> IndexPath? {
         for sectionIndex in (0...indexPath.section).reversed() {
             let section = sections[sectionIndex]
             guard let pinnedIndexes = section.pinnedIndexes[behavior] else {
@@ -222,7 +222,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         return nil
     }
 
-    func findTopStickyItemAfter(_ indexPath: IndexPath, behavior: ChatItemPinningBehavior) -> IndexPath? {
+    func findPinnedItemAfter(_ indexPath: IndexPath, behavior: ChatItemPinningBehavior) -> IndexPath? {
         for sectionIndex in indexPath.section..<sections.count {
             let section = sections[sectionIndex]
             guard let pinnedIndexes = section.pinnedIndexes[behavior] else {
