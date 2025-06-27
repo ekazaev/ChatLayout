@@ -30,7 +30,7 @@ protocol RandomDataProvider {
 
     func stop()
 
-    func addMessage() 
+    func addMessage()
 }
 
 final class DefaultRandomDataProvider: RandomDataProvider {

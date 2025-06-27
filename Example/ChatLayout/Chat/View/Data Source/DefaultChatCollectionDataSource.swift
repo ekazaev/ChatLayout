@@ -324,21 +324,21 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         true
     }
 
-    func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
-                                        at indexPath: IndexPath) -> ChatItemPinningBehavior? {
+    func pinningTypeForItem(_ chatLayout: CollectionViewChatLayout,
+                            at indexPath: IndexPath) -> ChatItemPinningType? {
+//        indexPath == IndexPath(item: 0, section: 0) ? .top : nil
         let item = sections[indexPath.section].cells[indexPath.item]
         switch item {
         case .message:
-            return .top
-        case .date:
             return nil
+        case .date:
+            return .top
         case .typingIndicator:
             return nil
         case .messageGroup:
-            return nil
+            return .bottom
         }
     }
-
 
     func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool {
