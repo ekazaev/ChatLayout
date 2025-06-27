@@ -46,7 +46,7 @@
 - Keeps content of the last visible item at the top or bottom of the `UICollectionView` during updates.
 - Provides tools for precise scrolling to the required item.
 - Shipped with generic container views to simplify the custom items implementation.
-- Pinned (sticky) headers and footers.
+- Pinned (sticky) headers/footers or cells.
 
 ![](https://habrastorage.org/webt/jt/gq/sl/jtgqsluujffi4-jnxeikbwtyyu0.gif)
 ![](https://habrastorage.org/webt/b7/cu/3s/b7cu3su6uk4hw1kqg3_ky3uklu4.gif)
