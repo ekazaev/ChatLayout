@@ -15,8 +15,11 @@ import UIKit
 
 /// `CollectionViewChatLayout` settings.
 public struct ChatLayoutSettings: Equatable {
-    public enum StickyBehavior: Equatable {
-        case sections
+    /// Represents type of pinnable elements in the layout.
+    public enum PinneableItems: Equatable {
+        /// Pin supplementary views (header and/or footer).
+        case supplementaryViews
+        /// Pin cells
         case cells
     }
 
@@ -33,5 +36,6 @@ public struct ChatLayoutSettings: Equatable {
     /// Additional insets for the `CollectionViewChatLayout` content.
     public var additionalInsets: UIEdgeInsets = .zero
 
-    public var stickyBehavior: StickyBehavior = .sections
+    /// Confugures what elements can be pinned in the layout.
+    public var pinnableItems: PinneableItems = .supplementaryViews
 }

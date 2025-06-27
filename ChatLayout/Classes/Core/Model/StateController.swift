@@ -242,7 +242,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
         let visibleBounds = layoutRepresentation.visibleBounds.inset(by: layoutRepresentation.settings.additionalInsets)
 
-        switch layoutRepresentation.settings.stickyBehavior {
+        switch layoutRepresentation.settings.pinnableItems {
         case .cells:
             var visibleItems = [(indexPath: IndexPath, frame: CGRect, pinningBehavior: ChatItemPinningBehavior?)]()
             for (sectionIndex, section) in layout.sections.enumerated() {
@@ -340,7 +340,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             checkExistingPinnedFooterIndex()
             findNewPinnedFooterIndex()
             findNextPinnedFooterIndex()
-        case .sections:
+        case .supplementaryViews:
             var visibleSections = [(index: Int, section: SectionModel<Layout>, headerFrame: CGRect?, footerFrame: CGRect?)]()
             for (sectionIndex, section) in layout.sections.enumerated() {
                 let sectionFrame = CGRect(origin: .init(x: 0, y: section.offsetY), size: CGSize(width: visibleBounds.width, height: section.height))
@@ -1235,8 +1235,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     }
 
     func isPinnedItem(indexPath: IndexPath, kind: ItemKind) -> Bool {
-        switch layoutRepresentation.settings.stickyBehavior {
-        case .sections:
+        switch layoutRepresentation.settings.pinnableItems {
+        case .supplementaryViews:
             switch kind {
             case .header:
                 return indexPath == pinnedIndexPaths[.top]?.current
@@ -1262,7 +1262,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         if let visibleRect {
             var traverseState: TraverseState = .notFound
-            let pinningOrigin = layoutRepresentation.settings.stickyBehavior
+            let pinnableItems = layoutRepresentation.settings.pinnableItems
 
             func check(rect: CGRect) -> Bool {
                 switch traverseState {
@@ -1302,7 +1302,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                                                isFinal: true,
                                                withPinnning: withPining,
                                                additionalAttributes: additionalAttributes),
-                    check(rect: headerFrame) || (pinningOrigin == .sections && section.header?.pinningBehavior != nil && section.frame.intersects(visibleRect)) {
+                    check(rect: headerFrame) || (pinnableItems == .supplementaryViews && section.header?.pinningBehavior != nil && section.frame.intersects(visibleRect)) {
                     allRects.append((frame: headerFrame, indexPath: sectionPath, kind: .header))
                 }
                 guard traverseState != .done else {
@@ -1362,7 +1362,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
                         if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, withPinnning: withPining,
                                                      additionalAttributes: additionalAttributes),
-                            check(rect: itemFrame) || (pinningOrigin == .cells && (itemPath.indexPath == pinnedIndexPaths[.top]?.current || itemPath.indexPath == pinnedIndexPaths[.bottom]?.current)) {
+                            check(rect: itemFrame) || (pinnableItems == .cells && (itemPath.indexPath == pinnedIndexPaths[.top]?.current || itemPath.indexPath == pinnedIndexPaths[.bottom]?.current)) {
                             if !addedPinnedHeaderCell,
                                itemPath.indexPath == pinnedIndexPaths[.top]?.current {
                                 addedPinnedHeaderCell = true
@@ -1413,13 +1413,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 }
 
                 if !addedPinnedHeaderCell,
-                   pinningOrigin == .cells,
+                   pinnableItems == .cells,
                    let pinnedHeaderIndexPath = pinnedIndexPaths[.top]?.current,
                    let itemFrame = itemFrame(for: pinnedHeaderIndexPath.itemPath, kind: .cell, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes) {
                     allRects.insert((frame: itemFrame, indexPath: pinnedHeaderIndexPath.itemPath, kind: .cell), at: 0)
                 }
                 if !addedPinnedFooterCell,
-                   pinningOrigin == .cells,
+                   pinnableItems == .cells,
                    let pinnedFooterIndexPath = pinnedIndexPaths[.bottom]?.current,
                    let itemFrame = itemFrame(for: pinnedFooterIndexPath.itemPath, kind: .cell, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes) {
                     allRects.append((frame: itemFrame, indexPath: pinnedFooterIndexPath.itemPath, kind: .cell))
@@ -1428,7 +1428,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 // When using pinned (sticky) footers, even if the cell does not intersect with the frame, the footer can intersect.
                 // Therefore, add the footer without considering the traverseState.
                 if let footerFrame = itemFrame(for: sectionPath, kind: .footer, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes),
-                   check(rect: footerFrame) || (pinningOrigin == .sections && section.footer?.pinningBehavior != nil && section.frame.intersects(visibleRect)) {
+                   check(rect: footerFrame) || (pinnableItems == .supplementaryViews && section.footer?.pinningBehavior != nil && section.frame.intersects(visibleRect)) {
                     allRects.append((frame: footerFrame, indexPath: sectionPath, kind: .footer))
                 }
             }

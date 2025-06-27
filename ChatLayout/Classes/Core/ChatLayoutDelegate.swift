@@ -45,19 +45,30 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
+    ///
+    /// **NB:** This method will be called only if the `ChatLayoutSettings.pinnableItems` is set to `.supplementaryViews`
     func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool
-
-    func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
-                                at indexPath: IndexPath) -> ChatItemPinningBehavior?
 
     /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the footer to the visible bounds in the current layout.
     /// - Parameters:
     ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
+    ///
+    /// **NB:** This method will be called only if the `ChatLayoutSettings.pinnableItems` is set to `.supplementaryViews`
     func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
                                         at sectionIndex: Int) -> Bool
+
+    /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the cell to the visible bounds in the current layout.
+    /// - Parameters:
+    ///   - chatLayout: `CollectionViewChatLayout` reference.
+    ///   - indexPath: Index path of the cell.
+    /// - Returns: `ChatItemPinningBehavior` to configure pinning behaviour or `nil` if pinning is not required.
+    ///
+    /// **NB:** This method will be called only if the `ChatLayoutSettings.pinnableItems` is set to `.cells`
+    func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
+                                at indexPath: IndexPath) -> ChatItemPinningBehavior?
 
     /// `CollectionViewChatLayout` will call this method to ask what size the item should have.
     ///
@@ -159,6 +170,7 @@ public extension ChatLayoutDelegate {
         false
     }
 
+    /// Default implementation returns: `nil`.
     func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
                                 at indexPath: IndexPath) -> ChatItemPinningBehavior? {
         nil

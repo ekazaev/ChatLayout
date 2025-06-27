@@ -1038,9 +1038,9 @@ extension CollectionViewChatLayout {
         }
         let stickyBehavior: ChatItemPinningBehavior?
         if kind == .cell,
-           settings.stickyBehavior == .cells {
+           settings.pinnableItems == .cells {
             stickyBehavior = delegate.pinningBehaviorForItem(self, at: indexPath)
-        } else if settings.stickyBehavior == .sections {
+        } else if settings.pinnableItems == .supplementaryViews {
             if kind == .header,
                delegate.shouldPinHeaderToVisibleBounds(self, at: indexPath.section) {
                 stickyBehavior = .top
