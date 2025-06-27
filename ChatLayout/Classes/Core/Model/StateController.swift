@@ -677,6 +677,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         if layoutRepresentation.keepContentAtBottomOfVisibleArea == true,
            !(kind == .header && itemPath.section == 0),
+           !isPinnedItem(indexPath: itemPath.indexPath, kind: kind),
            !isLayoutBiggerThanVisibleBounds(at: state, withFullCompensation: false, visibleBounds: visibleBounds) {
             itemFrame.offsettingBy(dx: 0, dy: visibleBounds.height.rounded() - contentSize(for: state).height.rounded())
         }
