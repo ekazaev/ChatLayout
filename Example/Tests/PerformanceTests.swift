@@ -112,8 +112,8 @@ final class PerformanceTests: XCTestCase {
         }
         measure {
             layout.controller.process(changeItems: changeItems)
+            layout.controller._resetLayoutForTests()
         }
-        layout.controller.commitUpdates()
     }
 
     func testReloadPerformance() {
@@ -126,8 +126,8 @@ final class PerformanceTests: XCTestCase {
         }
         measure {
             layout.controller.process(changeItems: changeItems)
+            layout.controller._resetLayoutForTests()
         }
-        layout.controller.commitUpdates()
     }
 
     func testDeletePerformance() {
@@ -140,8 +140,8 @@ final class PerformanceTests: XCTestCase {
         }
         measure {
             layout.controller.process(changeItems: changeItems)
+            layout.controller._resetLayoutForTests()
         }
-        layout.controller.commitUpdates()
     }
 
     func testItemUpdatePerformance() {
@@ -150,7 +150,7 @@ final class PerformanceTests: XCTestCase {
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
         measure {
             for i in 0..<1000 {
-                layout.controller.update(preferredSize: CGSize(width: 300, height: 300 + i), alignment: .center, interItemSpacing: 0, for: ItemPath(item: i, section: 0), kind: .cell, at: .beforeUpdate)
+                layout.controller.update(preferredSize: CGSize(width: 300, height: 300 + i), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: i, section: 0), kind: .cell, at: .beforeUpdate)
             }
         }
     }

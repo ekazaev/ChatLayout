@@ -28,12 +28,15 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
     private var itemPathByIdentifierCache: [ItemUUIDKey: ItemPath]?
 
+    private(set) var hasPinnedItems: Bool = false
+
     init(sections: ContiguousArray<SectionModel<Layout>>, collectionLayout: Layout) {
         self.sections = sections
         self.collectionLayout = collectionLayout
     }
 
     func assembleLayout() {
+        var hasPinnedItems = false
         var offsetY: CGFloat = collectionLayout.settings.additionalInsets.top
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
@@ -57,11 +60,16 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
                     let key = ItemUUIDKey(kind: .footer, id: footer.id)
                     itemPathByIdentifierCache[key] = ItemPath(item: 0, section: sectionIndex)
                 }
+                if !hasPinnedItems,
+                   directlyMutableSections[sectionIndex].hasPinnedItems {
+                    hasPinnedItems = true
+                }
             }
         }
 
         self.itemPathByIdentifierCache = itemPathByIdentifierCache
         self.sectionIndexByIdentifierCache = sectionIndexByIdentifierCache
+        self.hasPinnedItems = hasPinnedItems
     }
 
     // MARK: To use when its is important to make the correct insertion
@@ -76,6 +84,12 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         sections[sectionIndex].setAndAssemble(header: header)
         let heightDiff = sections[sectionIndex].height - oldSection.height
         offsetEverything(below: sectionIndex, by: heightDiff)
+
+        // We are only interested in switching to `hasPinnedItems`. When the layout will be assembled the true value will be calculated.
+        if !hasPinnedItems,
+           sections[sectionIndex].hasPinnedItems {
+            hasPinnedItems = true
+        }
     }
 
     func setAndAssemble(item: ItemModel, sectionIndex: Int, itemIndex: Int) {
@@ -87,6 +101,10 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         sections[sectionIndex].setAndAssemble(item: item, at: itemIndex)
         let heightDiff = sections[sectionIndex].height - oldSection.height
         offsetEverything(below: sectionIndex, by: heightDiff)
+        if !hasPinnedItems,
+           sections[sectionIndex].hasPinnedItems {
+            hasPinnedItems = true
+        }
     }
 
     func setAndAssemble(footer: ItemModel, sectionIndex: Int) {
@@ -98,6 +116,11 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         sections[sectionIndex].setAndAssemble(footer: footer)
         let heightDiff = sections[sectionIndex].height - oldSection.height
         offsetEverything(below: sectionIndex, by: heightDiff)
+
+        if !hasPinnedItems,
+           sections[sectionIndex].hasPinnedItems {
+            hasPinnedItems = true
+        }
     }
 
     func sectionIndex(by sectionId: UUID) -> Int? {
@@ -144,6 +167,80 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
                 }
             }
         }
+    }
+
+    func findPinnedSupplementaryItemIndexBefore(_ index: Int, kind: ItemKind) -> Int? {
+        guard index > 0 else {
+            return nil
+        }
+        let index = index - 1
+        for sectionIndex in (0...index).reversed() {
+            let section = sections[sectionIndex]
+            guard let supplementaryItem = kind == .header ? section.header : section.footer,
+                  supplementaryItem.pinningType != nil else {
+                continue
+            }
+            return index
+        }
+        return nil
+    }
+
+    func findPinnedSupplementaryItemIndexAfter(_ index: Int, kind: ItemKind) -> Int? {
+        guard index < sections.count - 1 else {
+            return nil
+        }
+        let index = index + 1
+        for sectionIndex in index...sections.count - 1 {
+            let section = sections[sectionIndex]
+            guard let supplementaryItem = kind == .header ? section.header : section.footer,
+                  supplementaryItem.pinningType != nil else {
+                continue
+            }
+            return index
+        }
+        return nil
+    }
+
+    func findPinnedItemBefore(_ indexPath: IndexPath, pinningType: ChatItemPinningType) -> IndexPath? {
+        for sectionIndex in (0...indexPath.section).reversed() {
+            let section = sections[sectionIndex]
+            guard let pinnedIndexes = section.pinnedIndexes[pinningType] else {
+                continue
+            }
+            for stickyItemIndex in (0..<pinnedIndexes.count).reversed() {
+                let index = pinnedIndexes[stickyItemIndex]
+
+                if sectionIndex == indexPath.section, index < indexPath.item {
+                    return IndexPath(item: index, section: sectionIndex)
+                }
+
+                if sectionIndex < indexPath.section {
+                    return IndexPath(item: index, section: sectionIndex)
+                }
+            }
+        }
+        return nil
+    }
+
+    func findPinnedItemAfter(_ indexPath: IndexPath, pinningType: ChatItemPinningType) -> IndexPath? {
+        for sectionIndex in indexPath.section..<sections.count {
+            let section = sections[sectionIndex]
+            guard let pinnedIndexes = section.pinnedIndexes[pinningType] else {
+                continue
+            }
+            for stickyItemIndex in 0..<pinnedIndexes.count {
+                let index = pinnedIndexes[stickyItemIndex]
+
+                if sectionIndex == indexPath.section, index > indexPath.item {
+                    return IndexPath(item: index, section: sectionIndex)
+                }
+
+                if sectionIndex > indexPath.section {
+                    return IndexPath(item: index, section: sectionIndex)
+                }
+            }
+        }
+        return nil
     }
 
     // MARK: To use only withing process(updateItems:)

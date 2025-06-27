@@ -180,6 +180,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         static let cachePreviousWidth = PrepareActions(rawValue: 1 << 2)
         static let cachePreviousContentInsets = PrepareActions(rawValue: 1 << 3)
         static let switchStates = PrepareActions(rawValue: 1 << 4)
+        static let updatePinnedInfo = PrepareActions(rawValue: 1 << 5)
     }
 
     private struct InvalidationActions: OptionSet {
@@ -218,8 +219,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     private var reconfigureItemsIndexPaths: [IndexPath] = []
 
     private var _supportSelfSizingInvalidation: Bool = false
-
-    var hasPinnedHeaderOrFooter: Bool = false
 
     // MARK: IOS 15.1 fix flags
 
@@ -331,6 +330,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         reconfigureItemsIndexPaths = indexPaths
     }
 
+    /// Returns index path of currently pinned item.
+    open func indexPathForItePinnedAt(_ pinningType: ChatItemPinningType) -> IndexPath? {
+        controller.pinnedIndexPaths[pinningType]?.current
+    }
+
     // MARK: Providing Layout Attributes
 
     /// Tells the layout object to update the current layout.
@@ -348,10 +352,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
             contentOffsetBeforeUpdate = nil
-        }
-
-        if prepareActions.contains(.updateLayoutMetrics) || prepareActions.contains(.recreateSectionModels) {
-            hasPinnedHeaderOrFooter = false
         }
 
         if prepareActions.contains(.recreateSectionModels) {
@@ -386,8 +386,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                                            footer: footer,
                                            items: items,
                                            collectionLayout: self)
-                section.set(shouldPinHeaderToVisibleBounds: shouldPinHeaderToVisibleBounds(at: sectionIndex))
-                section.set(shouldPinFooterToVisibleBounds: shouldPinFooterToVisibleBounds(at: sectionIndex))
                 section.assembleLayout()
                 sections.append(section)
             }
@@ -438,6 +436,12 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             cachedCollectionViewSize = collectionView.bounds.size
         }
 
+        if prepareActions.contains(.updatePinnedInfo) ||
+            prepareActions.contains(.updateLayoutMetrics) ||
+            prepareActions.contains(.recreateSectionModels) {
+            controller.updatePinnedInfo(at: state)
+        }
+
         prepareActions = []
     }
 
@@ -478,7 +482,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         guard !dontReturnAttributes else {
             return nil
         }
-        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state)
+        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state, withPinnning: true)
         return attributes
     }
 
@@ -490,7 +494,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         }
 
         let kind = ItemKind(elementKind)
-        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: kind, at: state)
+        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: kind, at: state, withPinnning: true)
 
         return attributes
     }
@@ -512,6 +516,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let newBounds = collectionView.bounds
         let heightDifference = oldBounds.height - newBounds.height
         controller.proposedCompensatingOffset += heightDifference + (oldBounds.origin.y - newBounds.origin.y)
+        controller.updatePinnedInfo(at: state)
     }
 
     /// Cleans up after any animated changes to the view’s bounds or after the insertion or deletion of items.
@@ -542,6 +547,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             || (_supportSelfSizingInvalidation ? (item.size.height - preferredMessageAttributes.size.height).rounded() != 0 : false)
             || item.alignment != preferredMessageAttributes.alignment
             || item.interItemSpacing != preferredMessageAttributes.interItemSpacing
+            || item.pinningType != preferredMessageAttributes.pinningType
 
         return shouldInvalidateLayout
     }
@@ -566,9 +572,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let newItemSize = itemSize(with: preferredMessageAttributes)
         let newItemAlignment = alignment(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
         let newInterItemSpacing = interItemSpacing(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
+        let newPinningType = pinningType(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
         controller.update(preferredSize: newItemSize,
                           alignment: newItemAlignment,
                           interItemSpacing: newInterItemSpacing,
+                          pinningType: newPinningType,
                           for: preferredAttributesItemPath,
                           kind: preferredMessageAttributes.kind,
                           at: state)
@@ -578,7 +586,9 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let heightDifference = newItemSize.height - originalAttributes.size.height
         let isAboveBottomEdge = originalAttributes.frame.minY.rounded() <= visibleBounds.maxY.rounded()
 
+        let shouldApplyCompensations = !controller.isPinnedItem(indexPath: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind)
         if heightDifference != 0,
+           shouldApplyCompensations,
            (keepContentOffsetAtBottomOnBatchUpdates && controller.contentHeight(at: state).rounded() + heightDifference > visibleBounds.height.rounded()) || isUserInitiatedScrolling,
            isAboveBottomEdge {
             let offsetCompensation: CGFloat = min(controller.contentHeight(at: state) - collectionView!.frame.height + adjustedContentInset.bottom + adjustedContentInset.top, heightDifference)
@@ -588,7 +598,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
         if let attributes = controller.itemAttributes(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state)?.typedCopy() {
             layoutAttributesForPendingAnimation?.frame = attributes.frame
-            if state == .afterUpdate {
+            if state == .afterUpdate,
+               shouldApplyCompensations {
                 controller.totalProposedCompensatingOffset += heightDifference
                 controller.offsetByTotalCompensation(attributes: layoutAttributesForPendingAnimation, for: state, backward: true)
                 if controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) ||
@@ -626,10 +637,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) ||
             cachedCollectionViewInset != .some(adjustedContentInset) ||
             invalidationActions.contains(.shouldInvalidateOnBoundsChange)
-            || (isUserInitiatedScrolling && state == .beforeUpdate)
+            || ((isUserInitiatedScrolling || !controller.pinnedIndexPaths.isEmpty) && state == .beforeUpdate)
 
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
-        return shouldInvalidateLayout || hasPinnedHeaderOrFooter
+        prepareActions.insert(.updatePinnedInfo)
+        return shouldInvalidateLayout
     }
 
     /// Retrieves a context object that defines the portions of the layout that should change when a bounds change occurs.
@@ -967,7 +979,13 @@ extension CollectionViewChatLayout {
         } else {
             interItemSpacing = 0
         }
-        return ItemModel.Configuration(alignment: alignment(for: element, at: indexPath), preferredSize: itemSize.estimated, calculatedSize: itemSize.exact, interItemSpacing: interItemSpacing)
+        return ItemModel.Configuration(
+            alignment: alignment(for: element, at: indexPath),
+            pinningType: pinningType(for: element, at: indexPath),
+            preferredSize: itemSize.estimated,
+            calculatedSize: itemSize.exact,
+            interItemSpacing: interItemSpacing
+        )
     }
 
     private func estimatedSize(for element: ItemKind, at indexPath: IndexPath) -> (estimated: CGSize, exact: CGSize?) {
@@ -1016,6 +1034,30 @@ extension CollectionViewChatLayout {
         return delegate.alignmentForItem(self, of: element, at: indexPath)
     }
 
+    private func pinningType(for kind: ItemKind, at indexPath: IndexPath) -> ChatItemPinningType? {
+        guard let delegate else {
+            return nil
+        }
+        let pinningType: ChatItemPinningType?
+        if kind == .cell,
+           settings.pinnableItems == .cells {
+            pinningType = delegate.pinningTypeForItem(self, at: indexPath)
+        } else if settings.pinnableItems == .supplementaryViews {
+            if kind == .header,
+               delegate.shouldPinHeaderToVisibleBounds(self, at: indexPath.section) {
+                pinningType = .top
+            } else if kind == .footer,
+                      delegate.shouldPinFooterToVisibleBounds(self, at: indexPath.section) {
+                pinningType = .bottom
+            } else {
+                pinningType = nil
+            }
+        } else {
+            pinningType = nil
+        }
+        return pinningType
+    }
+
     private var estimatedItemSize: CGSize {
         guard let estimatedItemSize = settings.estimatedItemSize else {
             guard collectionView != nil else {
@@ -1054,14 +1096,6 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool {
         delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false
-    }
-
-    func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool {
-        delegate?.shouldPinHeaderToVisibleBounds(self, at: sectionIndex) ?? false
-    }
-
-    func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool {
-        delegate?.shouldPinFooterToVisibleBounds(self, at: sectionIndex) ?? false
     }
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {
