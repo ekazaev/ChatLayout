@@ -594,7 +594,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         if let attributes = controller.itemAttributes(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state)?.typedCopy() {
             layoutAttributesForPendingAnimation?.frame = attributes.frame
             if state == .afterUpdate,
-                shouldApplyCompensations {
+               shouldApplyCompensations {
                 controller.totalProposedCompensatingOffset += heightDifference
                 controller.offsetByTotalCompensation(attributes: layoutAttributesForPendingAnimation, for: state, backward: true)
                 if controller.insertedIndexes.contains(preferredMessageAttributes.indexPath) ||

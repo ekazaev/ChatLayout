@@ -240,7 +240,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             pinnedIndexPaths = [:]
             return
         }
-        let visibleBounds = layoutRepresentation.visibleBounds
+        let visibleBounds = layoutRepresentation.visibleBounds.inset(by: layoutRepresentation.settings.additionalInsets)
 
         switch layoutRepresentation.settings.stickyBehavior {
         case .cells:
@@ -377,12 +377,6 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                         pinnedIndexPaths[.top] = PinnedIndexes(current: IndexPath(item: 0, section: item.index), next: nil, previous: nil)
                         return
                     }
-//
-//                    if let firstVisibleIndex = visibleSections.first?.index,
-//                       let firstPinnedIndex = layout.findPinnedSupplementaryItemIndexBefore(firstVisibleIndex, kind: .header) {
-//                        pinnedIndexPaths[.top] = PinnedIndexes(current: IndexPath(item: 0, section: firstPinnedIndex), next: nil, previous: nil)
-//                        return
-//                    }
                 }
             }
 
@@ -611,13 +605,15 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         if withPinnning,
            let behavior = item.pinningBehavior,
            let pinnedIndexPaths = pinnedIndexPaths[behavior] {
+            let visibleBounds = visibleBounds.inset(by: layoutRepresentation.settings.additionalInsets)
             switch kind {
             case .header:
-                func getNextaAttributesOffset(_ indexPath: IndexPath?) -> CGFloat {
+                func getNextaAttributesOffset(_ itemPath: ItemPath?) -> CGFloat {
                     let pinOffset: CGFloat
-                    if let indexPath,
-                       let nextElementFrame = self.itemFrame(for: indexPath.itemPath, kind: .header, at: state) {
-                        pinOffset = (nextElementFrame.minY /* - nextElementAttributes.spacing.leading*/ - visibleBounds.minY) - (itemFrame.height /* + item.spacing.trailing*/ )
+                    if let itemPath,
+                       let nextItem = self.item(for: itemPath, kind: .header, at: state),
+                       let nextElementFrame = self.itemFrame(for: itemPath, kind: .header, at: state) {
+                        pinOffset = (nextElementFrame.minY - nextItem.interItemSpacing - visibleBounds.minY) - itemFrame.height
                     } else {
                         pinOffset = 0
                     }
@@ -625,15 +621,16 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 }
 
                 if itemPath.indexPath == pinnedIndexPaths.current {
-                    let pinOffset = min(0, getNextaAttributesOffset(pinnedIndexPaths.next))
+                    let pinOffset = min(0, getNextaAttributesOffset(pinnedIndexPaths.next?.itemPath))
                     itemFrame.origin.y = visibleBounds.minY + pinOffset
                 }
             case .footer:
-                func getNextaAttributesOffset(_ indexPath: IndexPath?) -> CGFloat {
+                func getNextaAttributesOffset(_ itemPath: ItemPath?) -> CGFloat {
                     let pinOffset: CGFloat
-                    if let indexPath,
-                       let nextElementFrame = self.itemFrame(for: indexPath.itemPath, kind: .footer, at: state) {
-                        pinOffset = nextElementFrame.maxY - visibleBounds.maxY + itemFrame.height
+                    if let itemPath,
+                       let nextItem = self.item(for: itemPath, kind: .footer, at: state),
+                       let nextElementFrame = self.itemFrame(for: itemPath, kind: .footer, at: state) {
+                        pinOffset = nextElementFrame.maxY + nextItem.interItemSpacing - visibleBounds.maxY + itemFrame.height
                     } else {
                         pinOffset = 0
                     }
@@ -641,17 +638,18 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 }
 
                 if itemPath.indexPath == pinnedIndexPaths.current {
-                    let pinOffset = max(0, getNextaAttributesOffset(pinnedIndexPaths.next))
+                    let pinOffset = max(0, getNextaAttributesOffset(pinnedIndexPaths.next?.itemPath))
                     itemFrame.origin.y = visibleBounds.maxY - itemFrame.height + pinOffset
                 }
             case .cell:
                 switch behavior {
                 case .top:
-                    func getNextaAttributesOffset(_ indexPath: IndexPath?) -> CGFloat {
+                    func getNextaAttributesOffset(_ itemPath: ItemPath?) -> CGFloat {
                         let pinOffset: CGFloat
-                        if let indexPath,
-                           let nextElementFrame = self.itemFrame(for: indexPath.itemPath, kind: .cell, at: state) {
-                            pinOffset = (nextElementFrame.minY /* - nextElementAttributes.spacing.leading*/ - visibleBounds.minY) - (itemFrame.height /* + item.spacing.trailing*/ )
+                        if let itemPath,
+                           let nextItem = self.item(for: itemPath, kind: .cell, at: state),
+                           let nextElementFrame = self.itemFrame(for: itemPath, kind: .cell, at: state) {
+                            pinOffset = (nextElementFrame.minY - nextItem.interItemSpacing - visibleBounds.minY) - itemFrame.height
                         } else {
                             pinOffset = 0
                         }
@@ -659,15 +657,16 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                     }
 
                     if itemPath.indexPath == pinnedIndexPaths.current {
-                        let pinOffset = min(0, getNextaAttributesOffset(pinnedIndexPaths.next))
+                        let pinOffset = min(0, getNextaAttributesOffset(pinnedIndexPaths.next?.itemPath))
                         itemFrame.origin.y = visibleBounds.minY + pinOffset
                     }
                 case .bottom:
                     func getNextaAttributesOffset(_ indexPath: IndexPath?) -> CGFloat {
                         let pinOffset: CGFloat
                         if let indexPath,
+                           let nextItem = self.item(for: itemPath, kind: .cell, at: state),
                            let nextElementFrame = self.itemFrame(for: indexPath.itemPath, kind: .cell, at: state) {
-                            pinOffset = nextElementFrame.maxY - visibleBounds.maxY + itemFrame.height
+                            pinOffset = nextElementFrame.maxY + nextItem.interItemSpacing - visibleBounds.maxY + itemFrame.height
                         } else {
                             pinOffset = 0
                         }
@@ -1248,8 +1247,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         case .cells:
             switch kind {
-            case .header,
-                    .footer:
+            case .footer,
+                 .header:
                 return false
             case .cell:
                 return indexPath == pinnedIndexPaths[.top]?.current || indexPath == pinnedIndexPaths[.bottom]?.current
