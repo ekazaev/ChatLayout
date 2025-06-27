@@ -16,7 +16,7 @@ import Foundation
 final class DefaultChatController: ChatController {
     weak var delegate: ChatControllerDelegate?
 
-    let dataProvider: RandomDataProvider
+    private let dataProvider: RandomDataProvider
 
     private var typingState: TypingState = .idle
 
@@ -51,7 +51,6 @@ final class DefaultChatController: ChatController {
     func loadPreviousMessages(completion: @escaping ([Section]) -> Void) {
         dataProvider.loadPreviousMessages(completion: { messages in
             self.appendConvertingToMessages(messages)
-            self.messages = Array(self.messages.prefix(50))
             self.markAllMessagesAsReceived {
                 self.markAllMessagesAsRead {
                     self.propagateLatestMessages { sections in
@@ -297,8 +296,7 @@ extension DefaultChatController: ReloadDelegate {
 
 extension DefaultChatController: EditingAccessoryControllerDelegate {
     func deleteMessage(with id: UUID) {
-        let m = messages.first!
-        messages = Array(messages.filter { $0 != m })
+        messages = Array(messages.filter { $0.id != id })
         repopulateMessages(requiresIsolatedProcess: true)
     }
 }
