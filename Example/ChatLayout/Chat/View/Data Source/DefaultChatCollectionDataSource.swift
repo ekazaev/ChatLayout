@@ -19,6 +19,7 @@ typealias TextMessageCollectionCell = ContainerCollectionViewCell<MessageContain
 typealias URLCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, URLView, StatusView>>>
 typealias ImageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, ImageView, StatusView>>>
 typealias TitleCollectionCell = ContainerCollectionViewCell<UILabel>
+typealias DateSeparatorCollectionCell = ContainerCollectionViewCell<DateSeparatorView>
 typealias UserTitleCollectionCell = ContainerCollectionViewCell<SwappingContainerView<EdgeAligningView<UILabel>, UIImageView>>
 typealias TypingIndicatorCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarPlaceholderView, TextMessageView, VoidViewFactory>>>
 
@@ -56,6 +57,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         collectionView.register(ImageCollectionCell.self, forCellWithReuseIdentifier: ImageCollectionCell.reuseIdentifier)
         collectionView.register(TitleCollectionCell.self, forCellWithReuseIdentifier: TitleCollectionCell.reuseIdentifier)
         collectionView.register(UserTitleCollectionCell.self, forCellWithReuseIdentifier: UserTitleCollectionCell.reuseIdentifier)
+        collectionView.register(DateSeparatorCollectionCell.self, forCellWithReuseIdentifier: DateSeparatorCollectionCell.reuseIdentifier)
         collectionView.register(TypingIndicatorCollectionCell.self, forCellWithReuseIdentifier: TypingIndicatorCollectionCell.reuseIdentifier)
         collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TextTitleView.reuseIdentifier)
         collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: TextTitleView.reuseIdentifier)
@@ -173,13 +175,10 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createDateTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> TitleCollectionCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionCell.reuseIdentifier, for: indexPath) as! TitleCollectionCell
-        cell.customView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
-        cell.customView.text = title
-        cell.customView.textColor = .gray
-        cell.customView.numberOfLines = 0
-        cell.customView.font = .preferredFont(forTextStyle: .caption2)
+    private func createDateTitle(collectionView: UICollectionView, indexPath: IndexPath, alignment: ChatItemAlignment, title: String) -> DateSeparatorCollectionCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DateSeparatorCollectionCell.reuseIdentifier, for: indexPath) as! DateSeparatorCollectionCell
+        cell.customView.labelView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
+        cell.customView.labelView.text = title
         cell.contentView.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
         return cell
     }
@@ -316,6 +315,15 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
 
     public func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
         true
+    }
+
+    func pinningTypeForItem(_ chatLayout: CollectionViewChatLayout,
+                            at indexPath: IndexPath) -> ChatItemPinningType? {
+        let cell = sections[indexPath.section].cells[indexPath.item]
+        guard case .date = cell else {
+            return nil
+        }
+        return .top
     }
 
     public func sizeForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {

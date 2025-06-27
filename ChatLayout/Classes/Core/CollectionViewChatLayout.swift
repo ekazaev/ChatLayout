@@ -332,7 +332,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Returns index path of currently pinned item.
     open func indexPathForItePinnedAt(_ pinningType: ChatItemPinningType) -> IndexPath? {
-        return controller.pinnedIndexPaths[pinningType]?.current
+        controller.pinnedIndexPaths[pinningType]?.current
     }
 
     // MARK: Providing Layout Attributes

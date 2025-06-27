@@ -84,6 +84,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift */; };
 		65D4D44932474631D9677C50 /* Pods_ChatLayout_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12FB56A5FF321AA24C456635 /* Pods_ChatLayout_Tests.framework */; };
+		845D3CDE2E0EECB2008CEC21 /* DateSeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D3CDD2E0EECAB008CEC21 /* DateSeparatorView.swift */; };
 		D5A31E60E9BF6F8C13EDFDC5 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A31C93E56F2602C9BA605B /* PerformanceTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -182,6 +183,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateControllerProcessUpdatesTests.swift; sourceTree = "<group>"; };
 		7878AA33F3C696DE4A57C8C1 /* Pods-ChatLayout_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatLayout_Tests.release.xcconfig"; path = "Target Support Files/Pods-ChatLayout_Tests/Pods-ChatLayout_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		845D3CDD2E0EECAB008CEC21 /* DateSeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSeparatorView.swift; sourceTree = "<group>"; };
 		A7BC3E7EC6986752E73178A2 /* ChatLayout.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ChatLayout.podspec; path = ../ChatLayout.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B20283D68C00BDE38B8AB8BE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		B520747F8C032C454221D1EC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 		4504F3C924FA66F500385590 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				845D3CDC2E0EECA1008CEC21 /* Date Separator */,
 				4504F3CA24FA66F500385590 /* ChatViewController.swift */,
 				4504F3CB24FA66F500385590 /* Status View */,
 				4504F3CD24FA66F500385590 /* Data Source */,
@@ -545,6 +548,14 @@
 				7878AA33F3C696DE4A57C8C1 /* Pods-ChatLayout_Tests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		845D3CDC2E0EECA1008CEC21 /* Date Separator */ = {
+			isa = PBXGroup;
+			children = (
+				845D3CDD2E0EECAB008CEC21 /* DateSeparatorView.swift */,
+			);
+			path = "Date Separator";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -756,6 +767,7 @@
 				4504F41124FA66F600385590 /* FullCellContentBubbleController.swift in Sources */,
 				4504F40D24FA66F600385590 /* TextMessageController.swift in Sources */,
 				4504F3F924FA66F600385590 /* Cell.swift in Sources */,
+				845D3CDE2E0EECB2008CEC21 /* DateSeparatorView.swift in Sources */,
 				4504F42B24FA67F400385590 /* SceneDelegate.swift in Sources */,
 				4504F40E24FA66F600385590 /* TextMessageView.swift in Sources */,
 				4504F41224FA66F600385590 /* EditNotifier.swift in Sources */,
