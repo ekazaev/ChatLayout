@@ -330,6 +330,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         reconfigureItemsIndexPaths = indexPaths
     }
 
+    /// Returns index path of currently pinned item.
+    open func indexPathForItePinnedAt(_ pinningType: ChatItemPinningType) -> IndexPath? {
+        return controller.pinnedIndexPaths[pinningType]?.current
+    }
+
     // MARK: Providing Layout Attributes
 
     /// Tells the layout object to update the current layout.

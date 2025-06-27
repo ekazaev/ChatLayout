@@ -137,12 +137,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     struct PinnedIndexes {
         var current: IndexPath
         var next: IndexPath?
-        var previous: IndexPath?
 
-        init(current: IndexPath, next: IndexPath?, previous: IndexPath?) {
+        init(current: IndexPath, next: IndexPath?) {
             self.current = current
             self.next = next
-            self.previous = previous
         }
     }
 
@@ -273,13 +271,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             func findNewPinnedHeaderIndex() {
                 if pinnedIndexPaths[.top] == nil {
                     if let item = visibleItems.first(where: { $0.pinningType == .top && $0.frame.minY <= visibleBounds.minY }) {
-                        pinnedIndexPaths[.top] = PinnedIndexes(current: item.indexPath, next: nil, previous: nil)
+                        pinnedIndexPaths[.top] = PinnedIndexes(current: item.indexPath, next: nil)
                         return
                     }
 
                     if let firstVisibleIndexPath = visibleItems.first?.indexPath,
                        let firstPinnedIndex = layout.findPinnedItemBefore(firstVisibleIndexPath, pinningType: .top) {
-                        pinnedIndexPaths[.top] = PinnedIndexes(current: firstPinnedIndex, next: nil, previous: nil)
+                        pinnedIndexPaths[.top] = PinnedIndexes(current: firstPinnedIndex, next: nil)
                         return
                     }
                 }
@@ -312,13 +310,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             func findNewPinnedFooterIndex() {
                 if pinnedIndexPaths[.bottom] == nil {
                     if let item = visibleItems.first(where: { $0.pinningType == .bottom && $0.frame.maxY >= visibleBounds.maxY }) {
-                        pinnedIndexPaths[.bottom] = PinnedIndexes(current: item.indexPath, next: nil, previous: nil)
+                        pinnedIndexPaths[.bottom] = PinnedIndexes(current: item.indexPath, next: nil)
                         return
                     }
 
                     if let lastVisibleIndexPath = visibleItems.last?.indexPath,
                        let firstPinnedIndex = layout.findPinnedItemAfter(lastVisibleIndexPath, pinningType: .bottom) {
-                        pinnedIndexPaths[.bottom] = PinnedIndexes(current: firstPinnedIndex, next: nil, previous: nil)
+                        pinnedIndexPaths[.bottom] = PinnedIndexes(current: firstPinnedIndex, next: nil)
                         return
                     }
                 }
@@ -374,7 +372,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                         }
                         return header.pinningType != nil && headerFrame.minY <= visibleBounds.minY
                     }) {
-                        pinnedIndexPaths[.top] = PinnedIndexes(current: IndexPath(item: 0, section: item.index), next: nil, previous: nil)
+                        pinnedIndexPaths[.top] = PinnedIndexes(current: IndexPath(item: 0, section: item.index), next: nil)
                         return
                     }
                 }
@@ -413,16 +411,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                         }
                         return footer.pinningType != nil && footerFrame.maxY >= visibleBounds.maxY
                     }) {
-                        pinnedIndexPaths[.bottom] = PinnedIndexes(current: IndexPath(item: 0, section: item.index), next: nil, previous: nil)
+                        pinnedIndexPaths[.bottom] = PinnedIndexes(current: IndexPath(item: 0, section: item.index), next: nil)
                         return
                     }
-//
-//                    // If there are no pinned elements in the visible items - start searching backwards for the first pinned item.
-//                    if let lastVisibleIndex = visibleSections.last?.index,
-//                       let firstPinnedIndex = layout.findPinnedSupplementaryItemIndexAfter(lastVisibleIndex, kind: .footer) {
-//                        pinnedIndexPaths[.bottom] = PinnedIndexes(current: IndexPath(item: 0, section: firstPinnedIndex), next: nil, previous: nil)
-//                        return
-//                    }
                 }
             }
 
