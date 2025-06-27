@@ -112,8 +112,8 @@ final class PerformanceTests: XCTestCase {
         }
         measure {
             layout.controller.process(changeItems: changeItems)
+            layout.controller._resetLayoutForTests()
         }
-        layout.controller.commitUpdates()
     }
 
     func testReloadPerformance() {
@@ -126,8 +126,8 @@ final class PerformanceTests: XCTestCase {
         }
         measure {
             layout.controller.process(changeItems: changeItems)
+            layout.controller._resetLayoutForTests()
         }
-        layout.controller.commitUpdates()
     }
 
     func testDeletePerformance() {
@@ -140,8 +140,8 @@ final class PerformanceTests: XCTestCase {
         }
         measure {
             layout.controller.process(changeItems: changeItems)
+            layout.controller._resetLayoutForTests()
         }
-        layout.controller.commitUpdates()
     }
 
     func testItemUpdatePerformance() {

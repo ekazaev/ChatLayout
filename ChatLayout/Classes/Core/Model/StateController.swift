@@ -1623,4 +1623,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             return ItemPath(item: itemIndex, section: sectionIndex)
         }
     }
+
+    func _resetLayoutForTests() {
+        layoutAfterUpdate = nil
+    }
 }
