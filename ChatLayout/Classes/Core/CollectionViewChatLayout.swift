@@ -542,7 +542,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             || (_supportSelfSizingInvalidation ? (item.size.height - preferredMessageAttributes.size.height).rounded() != 0 : false)
             || item.alignment != preferredMessageAttributes.alignment
             || item.interItemSpacing != preferredMessageAttributes.interItemSpacing
-            || item.pinningBehavior != preferredMessageAttributes.stickyBehavior
+            || item.pinningType != preferredMessageAttributes.pinningType
 
         return shouldInvalidateLayout
     }
@@ -567,11 +567,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let newItemSize = itemSize(with: preferredMessageAttributes)
         let newItemAlignment = alignment(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
         let newInterItemSpacing = interItemSpacing(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
-        let newStickyBehaviour = stickyBehavour(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
+        let newPinningType = pinningType(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
         controller.update(preferredSize: newItemSize,
                           alignment: newItemAlignment,
                           interItemSpacing: newInterItemSpacing,
-                          stickyBehavior: newStickyBehaviour,
+                          pinningType: newPinningType,
                           for: preferredAttributesItemPath,
                           kind: preferredMessageAttributes.kind,
                           at: state)
@@ -629,7 +629,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Asks the layout object if the new bounds require a layout update.
     open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-//        print("BBB \(newBounds.minY)")
         let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) ||
             cachedCollectionViewInset != .some(adjustedContentInset) ||
             invalidationActions.contains(.shouldInvalidateOnBoundsChange)
@@ -728,7 +727,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Notifies the layout object that the contents of the collection view are about to change.
     open override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
-//        print("BBB \(updateItems)")
         var changeItems = updateItems.compactMap { ChangeItem(with: $0) }
         changeItems.append(contentsOf: reconfigureItemsIndexPaths.map { .itemReconfigure(itemIndexPath: $0) })
         controller.process(changeItems: changeItems)
@@ -761,7 +759,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Performs any additional animations or clean up needed during a collection view update.
     open override func finalizeCollectionViewUpdates() {
-//        print("BBB \(#function) \(controller.proposedCompensatingOffset) \(controller.totalProposedCompensatingOffset) \(controller.batchUpdateCompensatingOffset)")
         controller.proposedCompensatingOffset = 0
 
         if keepContentOffsetAtBottomOnBatchUpdates,
@@ -979,7 +976,7 @@ extension CollectionViewChatLayout {
         }
         return ItemModel.Configuration(
             alignment: alignment(for: element, at: indexPath),
-            pinningBehavior: stickyBehavour(for: element, at: indexPath),
+            pinningType: pinningType(for: element, at: indexPath),
             preferredSize: itemSize.estimated,
             calculatedSize: itemSize.exact,
             interItemSpacing: interItemSpacing
@@ -1032,28 +1029,28 @@ extension CollectionViewChatLayout {
         return delegate.alignmentForItem(self, of: element, at: indexPath)
     }
 
-    private func stickyBehavour(for kind: ItemKind, at indexPath: IndexPath) -> ChatItemPinningBehavior? {
+    private func pinningType(for kind: ItemKind, at indexPath: IndexPath) -> ChatItemPinningType? {
         guard let delegate else {
             return nil
         }
-        let stickyBehavior: ChatItemPinningBehavior?
+        let pinningType: ChatItemPinningType?
         if kind == .cell,
            settings.pinnableItems == .cells {
-            stickyBehavior = delegate.pinningBehaviorForItem(self, at: indexPath)
+            pinningType = delegate.pinningTypeForItem(self, at: indexPath)
         } else if settings.pinnableItems == .supplementaryViews {
             if kind == .header,
                delegate.shouldPinHeaderToVisibleBounds(self, at: indexPath.section) {
-                stickyBehavior = .top
+                pinningType = .top
             } else if kind == .footer,
                       delegate.shouldPinFooterToVisibleBounds(self, at: indexPath.section) {
-                stickyBehavior = .bottom
+                pinningType = .bottom
             } else {
-                stickyBehavior = nil
+                pinningType = nil
             }
         } else {
-            stickyBehavior = nil
+            pinningType = nil
         }
-        return stickyBehavior
+        return pinningType
     }
 
     private var estimatedItemSize: CGSize {

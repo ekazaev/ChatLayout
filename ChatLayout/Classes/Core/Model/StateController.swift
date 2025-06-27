@@ -132,7 +132,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
     private unowned var layoutRepresentation: Layout
 
-    private(set) var pinnedIndexPaths = [ChatItemPinningBehavior: PinnedIndexes]()
+    private(set) var pinnedIndexPaths = [ChatItemPinningType: PinnedIndexes]()
 
     struct PinnedIndexes {
         var current: IndexPath
@@ -244,13 +244,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         switch layoutRepresentation.settings.pinnableItems {
         case .cells:
-            var visibleItems = [(indexPath: IndexPath, frame: CGRect, pinningBehavior: ChatItemPinningBehavior?)]()
+            var visibleItems = [(indexPath: IndexPath, frame: CGRect, pinningType: ChatItemPinningType?)]()
             for (sectionIndex, section) in layout.sections.enumerated() {
                 for itemIndex in 0..<section.items.count {
                     let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
                     if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state) {
                         if visibleBounds.intersects(itemFrame) {
-                            visibleItems.append((indexPath: itemPath.indexPath, frame: itemFrame, pinningBehavior: section.items[itemIndex].pinningBehavior))
+                            visibleItems.append((indexPath: itemPath.indexPath, frame: itemFrame, pinningType: section.items[itemIndex].pinningType))
                         }
                     }
                 }
@@ -272,13 +272,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
             func findNewPinnedHeaderIndex() {
                 if pinnedIndexPaths[.top] == nil {
-                    if let item = visibleItems.first(where: { $0.pinningBehavior == .top && $0.frame.minY <= visibleBounds.minY }) {
+                    if let item = visibleItems.first(where: { $0.pinningType == .top && $0.frame.minY <= visibleBounds.minY }) {
                         pinnedIndexPaths[.top] = PinnedIndexes(current: item.indexPath, next: nil, previous: nil)
                         return
                     }
 
                     if let firstVisibleIndexPath = visibleItems.first?.indexPath,
-                       let firstPinnedIndex = layout.findPinnedItemBefore(firstVisibleIndexPath, behavior: .top) {
+                       let firstPinnedIndex = layout.findPinnedItemBefore(firstVisibleIndexPath, pinningType: .top) {
                         pinnedIndexPaths[.top] = PinnedIndexes(current: firstPinnedIndex, next: nil, previous: nil)
                         return
                     }
@@ -288,7 +288,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             func findNextPinnedHeaderIndex() {
                 if let pinnedIndexPaths = pinnedIndexPaths[.top],
                    pinnedIndexPaths.next == nil {
-                    if let nextPinnedIndex = layout.findPinnedItemAfter(pinnedIndexPaths.current, behavior: .top) {
+                    if let nextPinnedIndex = layout.findPinnedItemAfter(pinnedIndexPaths.current, pinningType: .top) {
                         self.pinnedIndexPaths[.top]?.next = nextPinnedIndex
                     }
                 }
@@ -311,13 +311,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
             func findNewPinnedFooterIndex() {
                 if pinnedIndexPaths[.bottom] == nil {
-                    if let item = visibleItems.first(where: { $0.pinningBehavior == .bottom && $0.frame.maxY >= visibleBounds.maxY }) {
+                    if let item = visibleItems.first(where: { $0.pinningType == .bottom && $0.frame.maxY >= visibleBounds.maxY }) {
                         pinnedIndexPaths[.bottom] = PinnedIndexes(current: item.indexPath, next: nil, previous: nil)
                         return
                     }
 
                     if let lastVisibleIndexPath = visibleItems.last?.indexPath,
-                       let firstPinnedIndex = layout.findPinnedItemAfter(lastVisibleIndexPath, behavior: .bottom) {
+                       let firstPinnedIndex = layout.findPinnedItemAfter(lastVisibleIndexPath, pinningType: .bottom) {
                         pinnedIndexPaths[.bottom] = PinnedIndexes(current: firstPinnedIndex, next: nil, previous: nil)
                         return
                     }
@@ -327,7 +327,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             func findNextPinnedFooterIndex() {
                 if let pinnedIndexPaths = pinnedIndexPaths[.bottom],
                    pinnedIndexPaths.next == nil {
-                    if let nextPinnedIndex = layout.findPinnedItemBefore(pinnedIndexPaths.current, behavior: .bottom) {
+                    if let nextPinnedIndex = layout.findPinnedItemBefore(pinnedIndexPaths.current, pinningType: .bottom) {
                         self.pinnedIndexPaths[.bottom]?.next = nextPinnedIndex
                     }
                 }
@@ -372,7 +372,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                               let headerFrame = $0.headerFrame else {
                             return false
                         }
-                        return header.pinningBehavior != nil && headerFrame.minY <= visibleBounds.minY
+                        return header.pinningType != nil && headerFrame.minY <= visibleBounds.minY
                     }) {
                         pinnedIndexPaths[.top] = PinnedIndexes(current: IndexPath(item: 0, section: item.index), next: nil, previous: nil)
                         return
@@ -411,7 +411,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                               let footerFrame = $0.footerFrame else {
                             return false
                         }
-                        return footer.pinningBehavior != nil && footerFrame.maxY >= visibleBounds.maxY
+                        return footer.pinningType != nil && footerFrame.maxY >= visibleBounds.maxY
                     }) {
                         pinnedIndexPaths[.bottom] = PinnedIndexes(current: IndexPath(item: 0, section: item.index), next: nil, previous: nil)
                         return
@@ -495,7 +495,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             attributes.zIndex = 10
             attributes.alignment = item.alignment
             attributes.interItemSpacing = item.interItemSpacing
-            attributes.stickyBehavior = item.pinningBehavior
+            attributes.pinningType = item.pinningType
         case .footer:
             guard itemPath.section < layout.sections.count,
                   itemPath.item == 0 else {
@@ -525,7 +525,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             attributes.zIndex = 10
             attributes.alignment = item.alignment
             attributes.interItemSpacing = item.interItemSpacing
-            attributes.stickyBehavior = item.pinningBehavior
+            attributes.pinningType = item.pinningType
         case .cell:
             guard itemPath.section < layout.sections.count,
                   itemPath.item < layout.sections[itemPath.section].items.count else {
@@ -552,10 +552,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             #endif
             attributes.frame = itemFrame
             attributes.indexPath = itemIndexPath
-            attributes.zIndex = item.pinningBehavior != nil ? 15 : 0
+            attributes.zIndex = item.pinningType != nil ? 15 : 0
             attributes.alignment = item.alignment
             attributes.interItemSpacing = item.interItemSpacing
-            attributes.stickyBehavior = item.pinningBehavior
+            attributes.pinningType = item.pinningType
         }
         attributes.viewSize = additionalAttributes.viewSize
         attributes.adjustedContentInsets = additionalAttributes.adjustedContentInsets
@@ -603,8 +603,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         itemFrame.offsettingBy(dx: dx, dy: section.offsetY)
 
         if withPinnning,
-           let behavior = item.pinningBehavior,
-           let pinnedIndexPaths = pinnedIndexPaths[behavior] {
+           let pinningType = item.pinningType,
+           let pinnedIndexPaths = pinnedIndexPaths[pinningType] {
             let visibleBounds = visibleBounds.inset(by: layoutRepresentation.settings.additionalInsets)
             switch kind {
             case .header:
@@ -642,7 +642,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                     itemFrame.origin.y = visibleBounds.maxY - itemFrame.height + pinOffset
                 }
             case .cell:
-                switch behavior {
+                switch pinningType {
                 case .top:
                     func getNextaAttributesOffset(_ itemPath: ItemPath?) -> CGFloat {
                         let pinOffset: CGFloat
@@ -791,7 +791,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     func update(preferredSize: CGSize,
                 alignment: ChatItemAlignment,
                 interItemSpacing: CGFloat,
-                stickyBehavior: ChatItemPinningBehavior?,
+                pinningType: ChatItemPinningType?,
                 for itemPath: ItemPath,
                 kind: ItemKind,
                 at state: ModelState) {
@@ -804,7 +804,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         let previousInterItemSpacing = item.interItemSpacing
         cachedAttributesState = nil
         item.alignment = alignment
-        item.pinningBehavior = stickyBehavior
+        item.pinningType = pinningType
         item.calculatedSize = preferredSize
         item.calculatedOnce = true
 
@@ -1302,7 +1302,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                                                isFinal: true,
                                                withPinnning: withPining,
                                                additionalAttributes: additionalAttributes),
-                    check(rect: headerFrame) || (pinnableItems == .supplementaryViews && section.header?.pinningBehavior != nil && section.frame.intersects(visibleRect)) {
+                    check(rect: headerFrame) || (pinnableItems == .supplementaryViews && section.header?.pinningType != nil && section.frame.intersects(visibleRect)) {
                     allRects.append((frame: headerFrame, indexPath: sectionPath, kind: .header))
                 }
                 guard traverseState != .done else {
@@ -1428,7 +1428,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 // When using pinned (sticky) footers, even if the cell does not intersect with the frame, the footer can intersect.
                 // Therefore, add the footer without considering the traverseState.
                 if let footerFrame = itemFrame(for: sectionPath, kind: .footer, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes),
-                   check(rect: footerFrame) || (pinnableItems == .supplementaryViews && section.footer?.pinningBehavior != nil && section.frame.intersects(visibleRect)) {
+                   check(rect: footerFrame) || (pinnableItems == .supplementaryViews && section.footer?.pinningType != nil && section.frame.intersects(visibleRect)) {
                     allRects.append((frame: footerFrame, indexPath: sectionPath, kind: .footer))
                 }
             }

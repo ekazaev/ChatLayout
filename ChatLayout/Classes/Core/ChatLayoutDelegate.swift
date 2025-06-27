@@ -64,11 +64,11 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// - Parameters:
     ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - indexPath: Index path of the cell.
-    /// - Returns: `ChatItemPinningBehavior` to configure pinning behaviour or `nil` if pinning is not required.
+    /// - Returns: `ChatItemPinningType` to configure pinning behaviour or `nil` if pinning is not required.
     ///
     /// **NB:** This method will be called only if the `ChatLayoutSettings.pinnableItems` is set to `.cells`
-    func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
-                                at indexPath: IndexPath) -> ChatItemPinningBehavior?
+    func pinningTypeForItem(_ chatLayout: CollectionViewChatLayout,
+                            at indexPath: IndexPath) -> ChatItemPinningType?
 
     /// `CollectionViewChatLayout` will call this method to ask what size the item should have.
     ///
@@ -171,8 +171,8 @@ public extension ChatLayoutDelegate {
     }
 
     /// Default implementation returns: `nil`.
-    func pinningBehaviorForItem(_ chatLayout: CollectionViewChatLayout,
-                                at indexPath: IndexPath) -> ChatItemPinningBehavior? {
+    func pinningTypeForItem(_ chatLayout: CollectionViewChatLayout,
+                            at indexPath: IndexPath) -> ChatItemPinningType? {
         nil
     }
 

@@ -18,7 +18,7 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var alignment: ChatItemAlignment = .fullWidth
 
-    public var stickyBehavior: ChatItemPinningBehavior? = nil
+    public var pinningType: ChatItemPinningType? = nil
 
     /// Inter item spacing. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var interItemSpacing: CGFloat = 0
@@ -63,7 +63,7 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         copy.additionalInsets = additionalInsets
         copy.visibleBoundsSize = visibleBoundsSize
         copy.adjustedContentInsets = adjustedContentInsets
-        copy.stickyBehavior = stickyBehavior
+        copy.pinningType = pinningType
         #if DEBUG
         copy.id = id
         #endif
@@ -72,10 +72,11 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
 
     /// Returns a Boolean value indicating whether two `ChatLayoutAttributes` are considered equal.
     public override func isEqual(_ object: Any?) -> Bool {
-        super.isEqual(object)
-            && stickyBehavior == (object as? ChatLayoutAttributes)?.stickyBehavior
-            && alignment == (object as? ChatLayoutAttributes)?.alignment
-            && interItemSpacing == (object as? ChatLayoutAttributes)?.interItemSpacing
+        let chatLayoutAttributes = (object as? ChatLayoutAttributes)
+        return super.isEqual(object)
+            && pinningType == chatLayoutAttributes?.pinningType
+            && alignment == chatLayoutAttributes?.alignment
+            && interItemSpacing == chatLayoutAttributes?.interItemSpacing
     }
 
     /// `ItemKind` represented by this attributes object.

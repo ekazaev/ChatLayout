@@ -25,10 +25,10 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     private(set) var items: ContiguousArray<ItemModel>
 
     var hasPinnedItems: Bool {
-        !pinnedIndexes.isEmpty || header?.pinningBehavior != nil || footer?.pinningBehavior != nil
+        !pinnedIndexes.isEmpty || header?.pinningType != nil || footer?.pinningType != nil
     }
 
-    private(set) var pinnedIndexes = [ChatItemPinningBehavior: ContiguousArray<Int>]()
+    private(set) var pinnedIndexes = [ChatItemPinningType: ContiguousArray<Int>]()
 
     var offsetY: CGFloat = 0
 
@@ -84,8 +84,8 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
                 directlyMutableItems[rowIndex].offsetY = offsetY
                 let offset: CGFloat = rowIndex < directlyMutableItems.count - 1 ? directlyMutableItems[rowIndex].interItemSpacing : 0
                 offsetY += directlyMutableItems[rowIndex].size.height + offset
-                if let pinnedBehavior = directlyMutableItems[rowIndex].pinningBehavior {
-                    pinnedIndexes[pinnedBehavior, default: ContiguousArray()].append(rowIndex)
+                if let pinningType = directlyMutableItems[rowIndex].pinningType {
+                    pinnedIndexes[pinningType, default: ContiguousArray()].append(rowIndex)
                 }
             }
         }
@@ -126,10 +126,10 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         #endif
         items[index] = item
 
-        if let pinningBehavior = item.pinningBehavior {
-            if var pinnedBehavourIndexes = pinnedIndexes[pinningBehavior] {
+        if let pinningType = item.pinningType {
+            if var pinnedBehavourIndexes = pinnedIndexes[pinningType] {
                 pinnedBehavourIndexes.append(index)
-                pinnedIndexes[pinningBehavior] = ContiguousArray(pinnedBehavourIndexes.sorted())
+                pinnedIndexes[pinningType] = ContiguousArray(pinnedBehavourIndexes.sorted())
             }
         } else {
             let localPinnedIndexes = pinnedIndexes

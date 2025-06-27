@@ -177,7 +177,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         for sectionIndex in (0...index).reversed() {
             let section = sections[sectionIndex]
             guard let supplementaryItem = kind == .header ? section.header : section.footer,
-                  supplementaryItem.pinningBehavior != nil else {
+                  supplementaryItem.pinningType != nil else {
                 continue
             }
             return index
@@ -193,7 +193,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         for sectionIndex in index...sections.count - 1 {
             let section = sections[sectionIndex]
             guard let supplementaryItem = kind == .header ? section.header : section.footer,
-                  supplementaryItem.pinningBehavior != nil else {
+                  supplementaryItem.pinningType != nil else {
                 continue
             }
             return index
@@ -201,10 +201,10 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         return nil
     }
 
-    func findPinnedItemBefore(_ indexPath: IndexPath, behavior: ChatItemPinningBehavior) -> IndexPath? {
+    func findPinnedItemBefore(_ indexPath: IndexPath, pinningType: ChatItemPinningType) -> IndexPath? {
         for sectionIndex in (0...indexPath.section).reversed() {
             let section = sections[sectionIndex]
-            guard let pinnedIndexes = section.pinnedIndexes[behavior] else {
+            guard let pinnedIndexes = section.pinnedIndexes[pinningType] else {
                 continue
             }
             for stickyItemIndex in (0..<pinnedIndexes.count).reversed() {
@@ -222,10 +222,10 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         return nil
     }
 
-    func findPinnedItemAfter(_ indexPath: IndexPath, behavior: ChatItemPinningBehavior) -> IndexPath? {
+    func findPinnedItemAfter(_ indexPath: IndexPath, pinningType: ChatItemPinningType) -> IndexPath? {
         for sectionIndex in indexPath.section..<sections.count {
             let section = sections[sectionIndex]
-            guard let pinnedIndexes = section.pinnedIndexes[behavior] else {
+            guard let pinnedIndexes = section.pinnedIndexes[pinningType] else {
                 continue
             }
             for stickyItemIndex in 0..<pinnedIndexes.count {
