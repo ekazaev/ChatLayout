@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          ChatLayout 2.0.5 Docs
+          ChatLayout 2.1.1 Docs
         </a>
          (100% documented)
       </p>
@@ -36,7 +36,9 @@
     </header>
 
     <p class="breadcrumbs">
-      <a class="breadcrumb" href="../index.html">ChatLayout Reference</a>
+      <a class="breadcrumb" href="../index.html">ChatLayout</a>
+      <img class="carat" src="../img/carat.png" alt=""/>
+      <a class="breadcrumb" href="../Core.html">Core</a>
       <img class="carat" src="../img/carat.png" alt=""/>
       ChatLayoutDelegate Protocol Reference
     </p>
@@ -60,6 +62,9 @@
                 <a class="nav-group-task-link" href="../Structs/ChatLayoutSettings.html">ChatLayoutSettings</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutSettings/PinneableItems.html">– PinneableItems</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a>
               </li>
               <li class="nav-group-task">
@@ -79,6 +84,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ChatItemAlignment.html">ChatItemAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ChatItemPinningType.html">ChatItemPinningType</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/InitialAttributesRequestType.html">InitialAttributesRequestType</a>
@@ -310,6 +318,225 @@
                       <div>
                         <h4>Return Value</h4>
                         <p><code>Bool</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB8DelegateP30shouldPinHeaderToVisibleBounds_2atSbAA014CollectionViewaB0C_SitF"></a>
+                    <a name="//apple_ref/swift/Method/shouldPinHeaderToVisibleBounds(_:at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP30shouldPinHeaderToVisibleBounds_2atSbAA014CollectionViewaB0C_SitF">shouldPinHeaderToVisibleBounds(_:<wbr>at:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> will call this method to ask if it should pin (stick) the header to the visible bounds in the current layout.</p>
+
+<p><strong>NB:</strong> This method will be called only if the <code><a href="../Structs/ChatLayoutSettings.html#/s:10ChatLayout0aB8SettingsV13pinnableItemsAC09PinneableE0Ovp">ChatLayoutSettings.pinnableItems</a></code> is set to <code>.supplementaryViews</code></p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation returns: <code>false</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">shouldPinHeaderToVisibleBounds</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+                                    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>chatLayout</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> reference.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sectionIndex</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Index of the section.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>Bool</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB8DelegateP30shouldPinFooterToVisibleBounds_2atSbAA014CollectionViewaB0C_SitF"></a>
+                    <a name="//apple_ref/swift/Method/shouldPinFooterToVisibleBounds(_:at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP30shouldPinFooterToVisibleBounds_2atSbAA014CollectionViewaB0C_SitF">shouldPinFooterToVisibleBounds(_:<wbr>at:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> will call this method to ask if it should pin (stick) the footer to the visible bounds in the current layout.</p>
+
+<p><strong>NB:</strong> This method will be called only if the <code><a href="../Structs/ChatLayoutSettings.html#/s:10ChatLayout0aB8SettingsV13pinnableItemsAC09PinneableE0Ovp">ChatLayoutSettings.pinnableItems</a></code> is set to <code>.supplementaryViews</code></p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation returns: <code>false</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">shouldPinFooterToVisibleBounds</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+                                    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>chatLayout</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> reference.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sectionIndex</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Index of the section.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>Bool</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB8DelegateP18pinningTypeForItem_2atAA0ag7PinningE0OSgAA014CollectionViewaB0C_10Foundation9IndexPathVtF"></a>
+                    <a name="//apple_ref/swift/Method/pinningTypeForItem(_:at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP18pinningTypeForItem_2atAA0ag7PinningE0OSgAA014CollectionViewaB0C_10Foundation9IndexPathVtF">pinningTypeForItem(_:<wbr>at:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> will call this method to ask if it should pin (stick) the cell to the visible bounds in the current layout.</p>
+
+<p><strong>NB:</strong> This method will be called only if the <code><a href="../Structs/ChatLayoutSettings.html#/s:10ChatLayout0aB8SettingsV13pinnableItemsAC09PinneableE0Ovp">ChatLayoutSettings.pinnableItems</a></code> is set to <code>.cells</code></p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation returns: <code>nil</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">pinningTypeForItem</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+                        <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ChatItemPinningType.html">ChatItemPinningType</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>chatLayout</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> reference.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>indexPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Index path of the cell.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code><a href="../Enums/ChatItemPinningType.html">ChatItemPinningType</a></code> to configure pinning behaviour or <code>nil</code> if pinning is not required.</p>
                       </div>
                     </section>
                   </div>
@@ -653,8 +880,8 @@ using Autolayout Engine anyway.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2024 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2024-04-30)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+      <p>&copy; 2025 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2025-07-02)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
 </html>

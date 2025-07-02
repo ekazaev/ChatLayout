@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ChatItemAlignment Enumeration Reference</title>
+    <title>ChatItemPinningType Enumeration Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/ChatItemAlignment" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Enum/ChatItemPinningType" class="dashAnchor"></a>
 
-    <a title="ChatItemAlignment Enumeration Reference"></a>
+    <a title="ChatItemPinningType Enumeration Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -40,7 +40,7 @@
       <img class="carat" src="../img/carat.png" alt=""/>
       <a class="breadcrumb" href="../Core.html">Core</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      ChatItemAlignment Enumeration Reference
+      ChatItemPinningType Enumeration Reference
     </p>
 
     <div class="content-wrapper">
@@ -163,15 +163,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ChatItemAlignment</h1>
+            <h1>ChatItemPinningType</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ChatItemAlignment</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ChatItemPinningType</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
 
                 </div>
               </div>
-            <p>Represent item alignment in collection view layout</p>
+            <p>Represents pinning behavour of the element.</p>
 
           </div>
         </section>
@@ -183,9 +183,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0A13ItemAlignmentO7leadingyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/leading" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0A13ItemAlignmentO7leadingyA2CmF">leading</a>
+                    <a name="/s:10ChatLayout0A15ItemPinningTypeO3topyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/top" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0A15ItemPinningTypeO3topyA2CmF">top</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -193,14 +193,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Should be aligned at the leading edge of the layout. That includes all the additional content offsets.</p>
+                        <p>Represents top edge of the visible area.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">leading</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">top</span></code></pre>
 
                         </div>
                       </div>
@@ -210,9 +210,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0A13ItemAlignmentO6centeryA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/center" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0A13ItemAlignmentO6centeryA2CmF">center</a>
+                    <a name="/s:10ChatLayout0A15ItemPinningTypeO6bottomyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/bottom" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0A15ItemPinningTypeO6bottomyA2CmF">bottom</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -220,68 +220,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Should be aligned at the center of the layout.</p>
+                        <p>Represents bottom edge of the visible area.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">center</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ChatLayout0A13ItemAlignmentO8trailingyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/trailing" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0A13ItemAlignmentO8trailingyA2CmF">trailing</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Should be aligned at the trailing edge of the layout.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">trailing</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ChatLayout0A13ItemAlignmentO9fullWidthyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/fullWidth" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0A13ItemAlignmentO9fullWidthyA2CmF">fullWidth</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Should be aligned using the full width of the available content width.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">fullWidth</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">bottom</span></code></pre>
 
                         </div>
                       </div>

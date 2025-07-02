@@ -26,6 +26,7 @@ public protocol StaticViewFactory {
 
 /// Default extension build the `UIView` using its default constructor.
 public extension StaticViewFactory where Self: UIView {
+    /// Default extension build the `UIView` using its default constructor.
     static func buildView(within bounds: CGRect) -> Self? {
         Self(frame: bounds)
     }

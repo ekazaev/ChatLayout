@@ -12,7 +12,7 @@
 
 import Foundation
 
-// Represents pinning behavour of the element.
+/// Represents pinning behavour of the element.
 public enum ChatItemPinningType: Hashable {
     /// Represents top edge of the visible area.
     case top

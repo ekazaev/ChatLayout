@@ -18,6 +18,7 @@ custom_categories:
       - ItemKind
       - ItemSize
       - ChatItemAlignment
+      - ChatItemPinningType
       - InitialAttributesRequestType
 
   - name: Extras
