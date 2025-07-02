@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// A factory that creates optional contained `UIView`s should conform to this protocol.
+@MainActor
 public protocol StaticViewFactory {
     /// A type of the view to build.
     associatedtype View: UIView

@@ -13,7 +13,9 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct ItemModel {
+    @MainActor
     struct Configuration {
         let alignment: ChatItemAlignment
 
@@ -67,7 +69,7 @@ struct ItemModel {
     // We are just resetting `calculatedSize` if needed as the actual size will be found in
     // `invalidationContext(forPreferredLayoutAttributes:, withOriginalAttributes:)`.
     // It is important for the rotation to keep previous frame size.
-    mutating func resetSize() {
+    nonisolated mutating func resetSize() {
         guard let calculatedSize else {
             return
         }

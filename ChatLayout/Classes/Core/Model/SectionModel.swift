@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct SectionModel<Layout: ChatLayoutRepresentation> {
     let id: UUID
 

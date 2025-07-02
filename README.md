@@ -8,7 +8,7 @@
 [![Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BA51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Swift 5.10](https://img.shields.io/badge/language-Swift5.10-orange.svg?style=flat)](https://developer.apple.com/swift)
-[![Platform iOS](https://img.shields.io/badge/platform-iOS%2012%20—%20iOS%2018-yellow.svg)](https://www.apple.com/ios)
+[![Platform iOS](https://img.shields.io/badge/platform-iOS%2013%20—%20iOS%2018-yellow.svg)](https://www.apple.com/ios)
 
 <p align="center">
 <img src="https://habrastorage.org/webt/ji/ba/dj/jibadjc0hul-fzfwxm2w0ywdutg.png"  alt="ChatLayout logo"/>

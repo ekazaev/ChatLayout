@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name             = 'ChatLayout'
-  s.version          = '2.1.1'
+  s.version          = '2.1.2'
   s.summary          = 'Chat UI Library. It uses custom UICollectionViewLayout to provide you full control over the presentation.'
-  s.swift_version    = '5.10'
+  s.swift_version    = '6.1'
 
   s.description      = <<-DESC
 ChatLayout is a Chat UI Library. It uses custom UICollectionViewLayout to provide you full control over the
@@ -15,7 +15,7 @@ supplementary view sizes.
   s.author           = { 'Eugene Kazaev' => 'eugene.kazaev@gmail.com' }
   s.source           = { :git => 'https://github.com/ekazaev/ChatLayout.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
 
   s.default_subspec = "Ultimate"
 

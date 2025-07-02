@@ -23,6 +23,7 @@ public enum InitialAttributesRequestType: Hashable {
 }
 
 /// `CollectionViewChatLayout` delegate
+@MainActor
 public protocol ChatLayoutDelegate: AnyObject {
     /// `CollectionViewChatLayout` will call this method to ask if it should present the header in the current layout.
     /// - Parameters:

@@ -16,13 +16,13 @@ import UIKit
 /// Custom implementation of `UICollectionViewLayoutAttributes`
 public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
-    public var alignment: ChatItemAlignment = .fullWidth
+    public nonisolated(unsafe) var alignment: ChatItemAlignment = .fullWidth
 
     /// Pinning behavour of the current item.
-    public var pinningType: ChatItemPinningType? = nil
+    public nonisolated(unsafe) var pinningType: ChatItemPinningType? = nil
 
     /// Inter item spacing. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
-    public var interItemSpacing: CGFloat = 0
+    public nonisolated(unsafe) var interItemSpacing: CGFloat = 0
 
     /// `CollectionViewChatLayout`s additional insets setup using `ChatLayoutSettings`. Added for convenience.
     public internal(set) var additionalInsets: UIEdgeInsets = .zero

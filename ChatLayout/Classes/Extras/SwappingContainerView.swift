@@ -274,19 +274,17 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
 
         if accessoryFirstObserver == nil {
             accessoryFirstObserver = accessoryView.observe(\.isHidden, options: [.new]) { [weak self] _, _ in
-                guard let self else {
-                    return
+                MainActor.assumeIsolated { [weak self] in
+                    self?.setNeedsUpdateConstraints()
                 }
-                setNeedsUpdateConstraints()
             }
         }
 
         if customViewObserver == nil {
             customViewObserver = customView.observe(\.isHidden, options: [.new]) { [weak self] _, _ in
-                guard let self else {
-                    return
+                MainActor.assumeIsolated { [weak self] in
+                    self?.setNeedsUpdateConstraints()
                 }
-                setNeedsUpdateConstraints()
             }
         }
 

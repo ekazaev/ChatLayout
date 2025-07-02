@@ -14,7 +14,8 @@ import Foundation
 import UIKit
 
 /// This protocol exists only to serve an ability to unit test `StateController`.
-protocol ChatLayoutRepresentation: AnyObject {
+@MainActor
+protocol ChatLayoutRepresentation: AnyObject, Sendable {
     var settings: ChatLayoutSettings { get }
 
     var viewSize: CGSize { get }
@@ -42,8 +43,10 @@ protocol ChatLayoutRepresentation: AnyObject {
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat
 }
 
+@MainActor
 final class StateController<Layout: ChatLayoutRepresentation> {
     // Helps to reduce the amount of looses in bridging calls to objc `UICollectionView` getter methods.
+    @MainActor
     struct AdditionalLayoutAttributes {
         fileprivate let additionalInsets: UIEdgeInsets
 

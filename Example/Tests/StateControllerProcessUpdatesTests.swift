@@ -13,6 +13,7 @@
 @testable import ChatLayout
 import XCTest
 
+@MainActor
 class StateControllerProcessUpdatesTests: XCTestCase {
     override func setUp() {
         super.setUp()

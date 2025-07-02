@@ -46,6 +46,7 @@ public enum ItemKind: CaseIterable, Hashable {
         }
     }
 
+    @MainActor
     var supplementaryElementStringType: String {
         switch self {
         case .cell:

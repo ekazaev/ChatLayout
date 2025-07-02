@@ -14,6 +14,7 @@
 import Foundation
 import XCTest
 
+@MainActor
 final class HelpersTests: XCTestCase {
     func testItemKindInit() {
         let header = ItemKind(UICollectionView.elementKindSectionHeader)

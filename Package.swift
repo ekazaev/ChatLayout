@@ -1,11 +1,11 @@
-// swift-tools-version:5.8
+// swift-tools-version:6.1
 
 import PackageDescription
 
 let package = Package(
     name: "ChatLayout",
     platforms: [
-        .iOS(.v12)
+        .iOS(.v13)
     ],
     products: [
         .library(
@@ -31,5 +31,5 @@ let package = Package(
             path: "Example/Tests"
         )
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageModes: [.v6]
 )
