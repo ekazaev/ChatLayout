@@ -57,7 +57,16 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     }
 
     func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
-        .init(alignment: .fullWidth, pinningType: nil, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!, interItemSpacing: settings.interItemSpacing)
+        let pinningType: ChatItemPinningType?
+        switch element {
+        case .header:
+            pinningType = shouldPinHeaderToVisibleBoundsAtSection[indexPath.section] == true ? .top : nil
+        case .footer:
+            pinningType = shouldPinFooterToVisibleBoundsAtSection[indexPath.section] == true ? .bottom : nil
+        case .cell:
+            pinningType = nil
+        }
+        return .init(alignment: .fullWidth, pinningType: pinningType, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!, interItemSpacing: settings.interItemSpacing)
     }
 
     func shouldPresentHeader(at sectionIndex: Int) -> Bool {
@@ -66,14 +75,6 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
 
     func shouldPresentFooter(at sectionIndex: Int) -> Bool {
         shouldPresentFooterAtSection[sectionIndex] ?? true
-    }
-
-    func shouldPinHeaderToVisibleBounds(at sectionIndex: Int) -> Bool {
-        shouldPinHeaderToVisibleBoundsAtSection[sectionIndex] ?? true
-    }
-
-    func shouldPinFooterToVisibleBounds(at sectionIndex: Int) -> Bool {
-        shouldPinFooterToVisibleBoundsAtSection[sectionIndex] ?? true
     }
 
     func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment {

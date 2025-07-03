@@ -382,8 +382,9 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         layout.visibleBounds.origin.y = scrollOffsetY
         layout.shouldPinHeaderToVisibleBoundsAtSection[0] = true
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.controller.updatePinnedInfo(at: .beforeUpdate)
 
-        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)
+        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate, withPinnning: true)
         XCTAssertEqual(item?.frame.minY, scrollOffsetY)
     }
 
@@ -391,8 +392,9 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.shouldPinFooterToVisibleBoundsAtSection[0] = true
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.controller.updatePinnedInfo(at: .beforeUpdate)
 
-        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)!
+        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate, withPinnning: true)!
         XCTAssertEqual(item.frame.minY, layout.visibleBounds.height - item.frame.height)
     }
 }
