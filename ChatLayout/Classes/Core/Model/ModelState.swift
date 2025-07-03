@@ -12,7 +12,7 @@
 
 import Foundation
 
-enum ModelState: Hashable, CaseIterable {
+enum ModelState: Hashable, CaseIterable, Sendable {
     case beforeUpdate
     case afterUpdate
 }

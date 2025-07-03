@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 @MainActor
-struct ItemModel {
+struct ItemModel: Sendable {
     @MainActor
     struct Configuration {
         let alignment: ChatItemAlignment

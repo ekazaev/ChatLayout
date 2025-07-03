@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 @MainActor
-final class LayoutModel<Layout: ChatLayoutRepresentation> {
+final class LayoutModel<Layout: ChatLayoutRepresentation>: Sendable {
     private struct ItemUUIDKey: Hashable {
         let kind: ItemKind
 

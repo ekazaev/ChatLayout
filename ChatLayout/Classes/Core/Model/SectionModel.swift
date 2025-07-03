@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 @MainActor
-struct SectionModel<Layout: ChatLayoutRepresentation> {
+struct SectionModel<Layout: ChatLayoutRepresentation>: Sendable {
     let id: UUID
 
     let interSectionSpacing: CGFloat
