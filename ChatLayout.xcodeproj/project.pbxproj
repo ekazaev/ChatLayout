@@ -44,7 +44,10 @@
 				7BE9240D2E1728AC00908CF4 /* ChatLayout */,
 				45AF49A024D9F30D00B5BBC2 /* Products */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
+			usesTabs = 0;
 		};
 		45AF49A024D9F30D00B5BBC2 /* Products */ = {
 			isa = PBXGroup;
