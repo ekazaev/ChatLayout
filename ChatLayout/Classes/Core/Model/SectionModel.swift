@@ -187,7 +187,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         footer?.offsetY += heightDiff
     }
 
-    // MARK: To use only withing process(updateItems:)
+    // MARK: To use only within process(updateItems:)
 
     mutating func insert(_ item: ItemModel, at index: Int) {
         guard index <= items.count else {
