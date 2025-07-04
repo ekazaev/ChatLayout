@@ -16,13 +16,13 @@ import UIKit
 /// Custom implementation of `UICollectionViewLayoutAttributes`
 public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Alignment of the current item. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
-    public nonisolated(unsafe) var alignment: ChatItemAlignment = .fullWidth
+    public var alignment: ChatItemAlignment = .fullWidth
 
     /// Pinning behavour of the current item.
-    public nonisolated(unsafe) var pinningType: ChatItemPinningType? = nil
+    public var pinningType: ChatItemPinningType? = nil
 
     /// Inter item spacing. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
-    public nonisolated(unsafe) var interItemSpacing: CGFloat = 0
+    public var interItemSpacing: CGFloat = 0
 
     /// `CollectionViewChatLayout`s additional insets setup using `ChatLayoutSettings`. Added for convenience.
     public internal(set) var additionalInsets: UIEdgeInsets = .zero
@@ -74,10 +74,17 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Returns a Boolean value indicating whether two `ChatLayoutAttributes` are considered equal.
     public override func isEqual(_ object: Any?) -> Bool {
         let chatLayoutAttributes = (object as? ChatLayoutAttributes)
-        return super.isEqual(object)
-            && pinningType == chatLayoutAttributes?.pinningType
-            && alignment == chatLayoutAttributes?.alignment
-            && interItemSpacing == chatLayoutAttributes?.interItemSpacing
+        /* isEqual inherits from ObjC and is not isolated.
+         * ChatLayoutAttributes is MainActor isolated; in theory it **cannot** be used outside of the main actor.
+         * If isEqual is called outside of the main actor, we’ll crash, which is good, because it would be unsafe anyway.
+         * (One possible example would be to have a collection type that would do things on the background and compare two ChatLayoutAttributes,
+         *  but as stated above, that would be unsafe, so it’s good to crash if that happens.) */
+        return MainActor.assumeIsolated {
+            return super.isEqual(chatLayoutAttributes)
+                && pinningType == chatLayoutAttributes?.pinningType
+                && alignment == chatLayoutAttributes?.alignment
+                && interItemSpacing == chatLayoutAttributes?.interItemSpacing
+        }
     }
 
     /// `ItemKind` represented by this attributes object.

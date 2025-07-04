@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 @MainActor
-final class LayoutModel<Layout: ChatLayoutRepresentation>: Sendable {
+final class LayoutModel<Layout: ChatLayoutRepresentation> {
     private struct ItemUUIDKey: Hashable {
         let kind: ItemKind
 
@@ -244,7 +244,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation>: Sendable {
         return nil
     }
 
-    // MARK: To use only withing process(updateItems:)
+    // MARK: To use only within process(updateItems:)
 
     func insertSection(_ section: SectionModel<Layout>, at sectionIndex: Int) {
         var sections = sections

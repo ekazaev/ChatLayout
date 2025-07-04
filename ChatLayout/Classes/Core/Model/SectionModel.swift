@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 @MainActor
-struct SectionModel<Layout: ChatLayoutRepresentation>: Sendable {
+struct SectionModel<Layout: ChatLayoutRepresentation> {
     let id: UUID
 
     let interSectionSpacing: CGFloat
@@ -187,7 +187,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation>: Sendable {
         footer?.offsetY += heightDiff
     }
 
-    // MARK: To use only withing process(updateItems:)
+    // MARK: To use only within process(updateItems:)
 
     mutating func insert(_ item: ItemModel, at index: Int) {
         guard index <= items.count else {

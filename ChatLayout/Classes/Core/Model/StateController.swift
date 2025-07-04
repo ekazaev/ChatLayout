@@ -15,7 +15,7 @@ import UIKit
 
 /// This protocol exists only to serve an ability to unit test `StateController`.
 @MainActor
-protocol ChatLayoutRepresentation: AnyObject, Sendable {
+protocol ChatLayoutRepresentation: AnyObject {
     var settings: ChatLayoutSettings { get }
 
     var viewSize: CGSize { get }
