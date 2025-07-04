@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          ChatLayout 2.1.1 Docs
+          ChatLayout 2.2.0 Docs
         </a>
          (100% documented)
       </p>
@@ -1020,8 +1020,10 @@ this - move to the <code>UICollectionView.reloadItems(..)</code> as a safer opti
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
-<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">layoutAttributesForSupplementaryView</span><span class="p">(</span><span class="n">ofKind</span> <span class="nv">elementKind</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
-                                                        <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
+<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">layoutAttributesForSupplementaryView</span><span class="p">(</span>
+    <span class="n">ofKind</span> <span class="nv">elementKind</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -1131,8 +1133,10 @@ this - move to the <code>UICollectionView.reloadItems(..)</code> as a safer opti
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
-<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">shouldInvalidateLayout</span><span class="p">(</span><span class="n">forPreferredLayoutAttributes</span> <span class="nv">preferredAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">,</span>
-                                          <span class="n">withOriginalAttributes</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">shouldInvalidateLayout</span><span class="p">(</span>
+    <span class="n">forPreferredLayoutAttributes</span> <span class="nv">preferredAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">,</span>
+    <span class="n">withOriginalAttributes</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -1160,8 +1164,10 @@ this - move to the <code>UICollectionView.reloadItems(..)</code> as a safer opti
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
-<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">invalidationContext</span><span class="p">(</span><span class="n">forPreferredLayoutAttributes</span> <span class="nv">preferredAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">,</span>
-                                       <span class="n">withOriginalAttributes</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutInvalidationContext</span></code></pre>
+<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">invalidationContext</span><span class="p">(</span>
+    <span class="n">forPreferredLayoutAttributes</span> <span class="nv">preferredAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">,</span>
+    <span class="n">withOriginalAttributes</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutInvalidationContext</span></code></pre>
 
                         </div>
                       </div>
@@ -1480,8 +1486,10 @@ this - move to the <code>UICollectionView.reloadItems(..)</code> as a safer opti
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
-<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">initialLayoutAttributesForAppearingSupplementaryElement</span><span class="p">(</span><span class="n">ofKind</span> <span class="nv">elementKind</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
-                                                                           <span class="n">at</span> <span class="nv">elementIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
+<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">initialLayoutAttributesForAppearingSupplementaryElement</span><span class="p">(</span>
+    <span class="n">ofKind</span> <span class="nv">elementKind</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">elementIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -1509,8 +1517,10 @@ this - move to the <code>UICollectionView.reloadItems(..)</code> as a safer opti
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
-<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">finalLayoutAttributesForDisappearingSupplementaryElement</span><span class="p">(</span><span class="n">ofKind</span> <span class="nv">elementKind</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
-                                                                            <span class="n">at</span> <span class="nv">elementIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
+<span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">finalLayoutAttributesForDisappearingSupplementaryElement</span><span class="p">(</span>
+    <span class="n">ofKind</span> <span class="nv">elementKind</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">elementIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -1525,7 +1535,7 @@ this - move to the <code>UICollectionView.reloadItems(..)</code> as a safer opti
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2025 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2025-07-02)</p>
+      <p>&copy; 2025 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2025-07-04)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

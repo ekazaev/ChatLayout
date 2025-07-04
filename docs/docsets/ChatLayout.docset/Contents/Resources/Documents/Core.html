@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          ChatLayout 2.1.1 Docs
+          ChatLayout 2.2.0 Docs
         </a>
          (100% documented)
       </p>
@@ -241,7 +241,8 @@ supplementary views.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ChatLayoutDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ChatLayoutDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -298,7 +299,7 @@ supplementary views.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ChatLayoutSettings</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ChatLayoutSettings</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -326,7 +327,7 @@ supplementary views.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ChatLayoutPositionSnapshot</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ChatLayoutPositionSnapshot</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -383,7 +384,7 @@ supplementary views.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ItemKind</span> <span class="p">:</span> <span class="kt">CaseIterable</span><span class="p">,</span> <span class="kt">Hashable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ItemKind</span> <span class="p">:</span> <span class="kt">CaseIterable</span><span class="p">,</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -411,7 +412,7 @@ supplementary views.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ItemSize</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ItemSize</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -439,7 +440,7 @@ supplementary views.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ChatItemAlignment</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ChatItemAlignment</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -467,7 +468,7 @@ supplementary views.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ChatItemPinningType</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ChatItemPinningType</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                         </div>
                       </div>
@@ -510,7 +511,7 @@ supplementary views.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2025 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2025-07-02)</p>
+      <p>&copy; 2025 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2025-07-04)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

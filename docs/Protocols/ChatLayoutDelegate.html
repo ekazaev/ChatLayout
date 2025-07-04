@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          ChatLayout 2.1.1 Docs
+          ChatLayout 2.2.0 Docs
         </a>
          (100% documented)
       </p>
@@ -167,7 +167,8 @@
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ChatLayoutDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ChatLayoutDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
               </div>
@@ -208,8 +209,11 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">shouldPresentHeader</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                         <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">shouldPresentHeader</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -279,8 +283,11 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">shouldPresentFooter</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                         <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">shouldPresentFooter</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -352,8 +359,11 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">shouldPinHeaderToVisibleBounds</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                                    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">shouldPinHeaderToVisibleBounds</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -425,8 +435,11 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">shouldPinFooterToVisibleBounds</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                                    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">shouldPinFooterToVisibleBounds</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -498,8 +511,11 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">pinningTypeForItem</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                        <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ChatItemPinningType.html">ChatItemPinningType</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">pinningTypeForItem</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ChatItemPinningType.html">ChatItemPinningType</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -576,9 +592,12 @@ using Autolayout Engine anyway.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sizeForItem</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                 <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
-                 <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ItemSize.html">ItemSize</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">sizeForItem</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ItemSize.html">ItemSize</a></span></code></pre>
 
                         </div>
                       </div>
@@ -660,9 +679,12 @@ using Autolayout Engine anyway.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">alignmentForItem</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                      <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
-                      <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ChatItemAlignment.html">ChatItemAlignment</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">alignmentForItem</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ChatItemAlignment.html">ChatItemAlignment</a></span></code></pre>
 
                         </div>
                       </div>
@@ -747,11 +769,14 @@ using Autolayout Engine anyway.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">initialLayoutAttributesForInsertedItem</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                                            <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
-                                            <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
-                                            <span class="n">modifying</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></span><span class="p">,</span>
-                                            <span class="n">on</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/InitialAttributesRequestType.html">InitialAttributesRequestType</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">initialLayoutAttributesForInsertedItem</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
+    <span class="n">modifying</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></span><span class="p">,</span>
+    <span class="n">on</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/InitialAttributesRequestType.html">InitialAttributesRequestType</a></span>
+<span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -789,10 +814,13 @@ using Autolayout Engine anyway.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">finalLayoutAttributesForDeletedItem</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                                         <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
-                                         <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
-                                         <span class="n">modifying</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">finalLayoutAttributesForDeletedItem</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
+    <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
+    <span class="n">modifying</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></span>
+<span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -827,9 +855,12 @@ using Autolayout Engine anyway.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">interItemSpacing</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                      <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
-                      <span class="n">after</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">interItemSpacing</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
+    <span class="n">after</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -864,8 +895,11 @@ using Autolayout Engine anyway.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">interSectionSpacing</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-                         <span class="n">after</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">interSectionSpacing</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
+    <span class="n">after</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -880,7 +914,7 @@ using Autolayout Engine anyway.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2025 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2025-07-02)</p>
+      <p>&copy; 2025 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2025-07-04)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
