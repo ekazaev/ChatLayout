@@ -1,10 +1,10 @@
 PODS:
-  - ChatLayout (2.1.2):
-    - ChatLayout/Ultimate (= 2.1.2)
-  - ChatLayout/Core (2.1.2)
-  - ChatLayout/Extras (2.1.2):
+  - ChatLayout (2.2.0):
+    - ChatLayout/Ultimate (= 2.2.0)
+  - ChatLayout/Core (2.2.0)
+  - ChatLayout/Extras (2.2.0):
     - ChatLayout/Core
-  - ChatLayout/Ultimate (2.1.2):
+  - ChatLayout/Ultimate (2.2.0):
     - ChatLayout/Core
     - ChatLayout/Extras
   - DifferenceKit (1.3.0):
@@ -35,7 +35,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ChatLayout: b84c865e5f4802b257f55deb136e872e585236ca
+  ChatLayout: 48f4285b27335035129a4037baa800165ad03dcc
   DifferenceKit: ab185c4d7f9cef8af3fcf593e5b387fb81e999ca
   FPSCounter: 884afec377de66637808c4f52ecc3b85a404732b
   InputBarAccessoryView: 1d7b0a672b36e370f01f264b3907ef39d03328e3

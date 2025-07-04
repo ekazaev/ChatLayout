@@ -80,7 +80,7 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
          * (One possible example would be to have a collection type that would do things on the background and compare two ChatLayoutAttributes,
          *  but as stated above, that would be unsafe, so it’s good to crash if that happens.) */
         return MainActor.assumeIsolated {
-            return super.isEqual(chatLayoutAttributes)
+            super.isEqual(chatLayoutAttributes)
                 && pinningType == chatLayoutAttributes?.pinningType
                 && alignment == chatLayoutAttributes?.alignment
                 && interItemSpacing == chatLayoutAttributes?.interItemSpacing
