@@ -66,7 +66,13 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
         case .cell:
             pinningType = nil
         }
-        return .init(alignment: .fullWidth, pinningType: pinningType, preferredSize: settings.estimatedItemSize!, calculatedSize: settings.estimatedItemSize!, interItemSpacing: settings.interItemSpacing)
+        return .init(
+            alignment: .fullWidth,
+            pinningType: pinningType,
+            preferredSize: settings.estimatedItemSize!,
+            calculatedSize: settings.estimatedItemSize!,
+            interItemSpacing: settings.interItemSpacing
+        )
     }
 
     func shouldPresentHeader(at sectionIndex: Int) -> Bool {
@@ -106,7 +112,13 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
                 items.append(ItemModel(with: configuration(for: .cell, at: indexPath)))
             }
 
-            var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex), header: header, footer: footer, items: items, collectionLayout: self)
+            var section = SectionModel(
+                interSectionSpacing: interSectionSpacing(at: sectionIndex),
+                header: header,
+                footer: footer,
+                items: items,
+                collectionLayout: self
+            )
             section.assembleLayout()
             sections.append(section)
         }
