@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 /// Type of the item supported by `CollectionViewChatLayout`
-public enum ItemKind: CaseIterable, Hashable {
+public enum ItemKind: CaseIterable, Hashable, Sendable {
     /// Header item
     case header
 
@@ -46,6 +46,7 @@ public enum ItemKind: CaseIterable, Hashable {
         }
     }
 
+    @MainActor
     var supplementaryElementStringType: String {
         switch self {
         case .cell:

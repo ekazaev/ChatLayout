@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 /// Internal replacement for `UICollectionViewUpdateItem`.
-enum ChangeItem: Equatable {
+enum ChangeItem: Equatable, Sendable {
     /// Delete section at `sectionIndex`
     case sectionDelete(sectionIndex: Int)
 
@@ -42,6 +42,7 @@ enum ChangeItem: Equatable {
     /// Move item from `initialItemIndexPath` to `finalItemIndexPath`
     case itemMove(initialItemIndexPath: IndexPath, finalItemIndexPath: IndexPath)
 
+    @MainActor
     init?(with updateItem: UICollectionViewUpdateItem) {
         let updateAction = updateItem.updateAction
         let indexPathBeforeUpdate = updateItem.indexPathBeforeUpdate
@@ -56,11 +57,15 @@ enum ChangeItem: Equatable {
                 return nil
             }
             if indexPathBeforeUpdate.item == NSNotFound, indexPathAfterUpdate.item == NSNotFound {
-                self = .sectionMove(initialSectionIndex: indexPathBeforeUpdate.section,
-                                    finalSectionIndex: indexPathAfterUpdate.section)
+                self = .sectionMove(
+                    initialSectionIndex: indexPathBeforeUpdate.section,
+                    finalSectionIndex: indexPathAfterUpdate.section
+                )
             } else {
-                self = .itemMove(initialItemIndexPath: indexPathBeforeUpdate,
-                                 finalItemIndexPath: indexPathAfterUpdate)
+                self = .itemMove(
+                    initialItemIndexPath: indexPathBeforeUpdate,
+                    finalItemIndexPath: indexPathAfterUpdate
+                )
             }
         case .insert:
             guard let indexPath = indexPathAfterUpdate else {

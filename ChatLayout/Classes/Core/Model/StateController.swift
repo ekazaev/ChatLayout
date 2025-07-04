@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// This protocol exists only to serve an ability to unit test `StateController`.
+@MainActor
 protocol ChatLayoutRepresentation: AnyObject {
     var settings: ChatLayoutSettings { get }
 
@@ -42,8 +43,10 @@ protocol ChatLayoutRepresentation: AnyObject {
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat
 }
 
+@MainActor
 final class StateController<Layout: ChatLayoutRepresentation> {
     // Helps to reduce the amount of looses in bridging calls to objc `UICollectionView` getter methods.
+    @MainActor
     struct AdditionalLayoutAttributes {
         fileprivate let additionalInsets: UIEdgeInsets
 
@@ -150,8 +153,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         resetCachedAttributeObjects()
     }
 
-    func set(_ sections: ContiguousArray<SectionModel<Layout>>,
-             at state: ModelState) {
+    func set(
+        _ sections: ContiguousArray<SectionModel<Layout>>,
+        at state: ModelState
+    ) {
         let layoutModel = LayoutModel(sections: sections, collectionLayout: layoutRepresentation)
         layoutModel.assembleLayout()
         switch state {
@@ -177,9 +182,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         return locationHeight + layoutRepresentation.settings.additionalInsets.bottom
     }
 
-    func layoutAttributesForElements(in rect: CGRect,
-                                     state: ModelState,
-                                     ignoreCache: Bool = false) -> [ChatLayoutAttributes] {
+    func layoutAttributesForElements(
+        in rect: CGRect,
+        state: ModelState,
+        ignoreCache: Bool = false
+    ) -> [ChatLayoutAttributes] {
         let predicate: (ChatLayoutAttributes) -> ComparisonResult = { attributes in
             if attributes.frame.intersects(rect) {
                 return .orderedSame
@@ -443,12 +450,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    func itemAttributes(for itemPath: ItemPath,
-                        kind: ItemKind,
-                        predefinedFrame: CGRect? = nil,
-                        at state: ModelState,
-                        withPinnning: Bool = false,
-                        additionalAttributes: AdditionalLayoutAttributes? = nil) -> ChatLayoutAttributes? {
+    func itemAttributes(
+        for itemPath: ItemPath,
+        kind: ItemKind,
+        predefinedFrame: CGRect? = nil,
+        at state: ModelState,
+        withPinnning: Bool = false,
+        additionalAttributes: AdditionalLayoutAttributes? = nil
+    ) -> ChatLayoutAttributes? {
         let additionalAttributes = additionalAttributes ?? AdditionalLayoutAttributes(layoutRepresentation)
 
         let attributes: ChatLayoutAttributes
@@ -462,20 +471,24 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
-            guard let headerFrame = predefinedFrame ?? itemFrame(for: itemPath,
-                                                                 kind: kind,
-                                                                 at: state,
-                                                                 isFinal: true,
-                                                                 withPinnning: withPinnning,
-                                                                 additionalAttributes: additionalAttributes),
+            guard let headerFrame = predefinedFrame ?? itemFrame(
+                for: itemPath,
+                kind: kind,
+                at: state,
+                isFinal: true,
+                withPinnning: withPinnning,
+                additionalAttributes: additionalAttributes
+            ),
                 let item = item(for: itemPath, kind: kind, at: state) else {
                 return nil
             }
             if let cachedAttributes = cachedAttributeObjects[state]?[.header]?[itemPath] {
                 attributes = cachedAttributes
             } else {
-                attributes = ChatLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                                  with: itemIndexPath)
+                attributes = ChatLayoutAttributes(
+                    forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                    with: itemIndexPath
+                )
                 cachedAttributeObjects[state]?[.header]?[itemPath] = attributes
             }
             #if DEBUG
@@ -493,12 +506,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
-            guard let footerFrame = predefinedFrame ?? itemFrame(for: itemPath,
-                                                                 kind: kind,
-                                                                 at: state,
-                                                                 isFinal: true,
-                                                                 withPinnning: withPinnning,
-                                                                 additionalAttributes: additionalAttributes),
+            guard let footerFrame = predefinedFrame ?? itemFrame(
+                for: itemPath,
+                kind: kind,
+                at: state,
+                isFinal: true,
+                withPinnning: withPinnning,
+                additionalAttributes: additionalAttributes
+            ),
                 let item = item(for: itemPath, kind: kind, at: state) else {
                 return nil
             }
@@ -523,12 +538,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 // This occurs when getting layout attributes for initial / final animations
                 return nil
             }
-            guard let itemFrame = predefinedFrame ?? itemFrame(for: itemPath,
-                                                               kind: .cell,
-                                                               at: state,
-                                                               isFinal: true,
-                                                               withPinnning: withPinnning,
-                                                               additionalAttributes: additionalAttributes),
+            guard let itemFrame = predefinedFrame ?? itemFrame(
+                for: itemPath,
+                kind: .cell,
+                at: state,
+                isFinal: true,
+                withPinnning: withPinnning,
+                additionalAttributes: additionalAttributes
+            ),
                 let item = item(for: itemPath, kind: kind, at: state) else {
                 return nil
             }
@@ -556,12 +573,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         return attributes
     }
 
-    func itemFrame(for itemPath: ItemPath,
-                   kind: ItemKind,
-                   at state: ModelState,
-                   isFinal: Bool = false,
-                   withPinnning: Bool = false,
-                   additionalAttributes: AdditionalLayoutAttributes? = nil) -> CGRect? {
+    func itemFrame(
+        for itemPath: ItemPath,
+        kind: ItemKind,
+        at state: ModelState,
+        isFinal: Bool = false,
+        withPinnning: Bool = false,
+        additionalAttributes: AdditionalLayoutAttributes? = nil
+    ) -> CGRect? {
         let additionalAttributes = additionalAttributes ?? AdditionalLayoutAttributes(layoutRepresentation)
         let layout = layout(at: state)
         guard itemPath.section < layout.sections.count else {
@@ -780,13 +799,15 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    func update(preferredSize: CGSize,
-                alignment: ChatItemAlignment,
-                interItemSpacing: CGFloat,
-                pinningType: ChatItemPinningType?,
-                for itemPath: ItemPath,
-                kind: ItemKind,
-                at state: ModelState) {
+    func update(
+        preferredSize: CGSize,
+        alignment: ChatItemAlignment,
+        interItemSpacing: CGFloat,
+        pinningType: ChatItemPinningType?,
+        for itemPath: ItemPath,
+        kind: ItemKind,
+        at state: ModelState
+    ) {
         guard var item = item(for: itemPath, kind: kind, at: state) else {
             assertionFailure("Item at index path (\(itemPath.section) - \(itemPath.item)) does not exist.")
             return
@@ -808,9 +829,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             case .footer:
                 layoutBeforeUpdate.setAndAssemble(footer: item, sectionIndex: itemPath.section)
             case .cell:
-                layoutBeforeUpdate.setAndAssemble(item: item,
-                                                  sectionIndex: itemPath.section,
-                                                  itemIndex: itemPath.item)
+                layoutBeforeUpdate.setAndAssemble(
+                    item: item,
+                    sectionIndex: itemPath.section,
+                    itemIndex: itemPath.item
+                )
             }
         case .afterUpdate:
             switch kind {
@@ -819,17 +842,21 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             case .footer:
                 layoutAfterUpdate?.setAndAssemble(footer: item, sectionIndex: itemPath.section)
             case .cell:
-                layoutAfterUpdate?.setAndAssemble(item: item,
-                                                  sectionIndex: itemPath.section,
-                                                  itemIndex: itemPath.item)
+                layoutAfterUpdate?.setAndAssemble(
+                    item: item,
+                    sectionIndex: itemPath.section,
+                    itemIndex: itemPath.item
+                )
             }
         }
 
         let isLastItemInSection = isLastItemInSection(itemPath, at: state)
-        let frameUpdateAction = CompensatingAction.frameUpdate(previousFrame: previousFrame,
-                                                               newFrame: item.frame,
-                                                               previousSpacing: isLastItemInSection ? 0 : previousInterItemSpacing,
-                                                               newSpacing: isLastItemInSection ? 0 : interItemSpacing)
+        let frameUpdateAction = CompensatingAction.frameUpdate(
+            previousFrame: previousFrame,
+            newFrame: item.frame,
+            previousSpacing: isLastItemInSection ? 0 : previousInterItemSpacing,
+            newSpacing: isLastItemInSection ? 0 : interItemSpacing
+        )
         compensateOffsetIfNeeded(for: itemPath, kind: kind, action: frameUpdateAction)
     }
 
@@ -848,9 +875,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
            let lastVisibleAttribute = allAttributes(at: .beforeUpdate, visibleRect: layoutRepresentation.visibleBounds, withPining: false).last,
            let itemFrame = itemFrame(for: lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, at: .beforeUpdate) {
-            itemToRestore = ItemToRestore(globalIndex: globalIndexFor(lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
-                                          kind: lastVisibleAttribute.kind,
-                                          offset: (itemFrame.maxY - layoutRepresentation.visibleBounds.maxY).rounded())
+            itemToRestore = ItemToRestore(
+                globalIndex: globalIndexFor(lastVisibleAttribute.indexPath.itemPath, kind: lastVisibleAttribute.kind, state: .beforeUpdate),
+                kind: lastVisibleAttribute.kind,
+                offset: (itemFrame.maxY - layoutRepresentation.visibleBounds.maxY).rounded()
+            )
         }
         batchUpdateCompensatingOffset = 0
         proposedCompensatingOffset = 0
@@ -923,8 +952,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             var header: ItemModel?
             if layoutRepresentation.shouldPresentHeader(at: sectionIndex) == true {
                 let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                var newHeader = section.header ?? ItemModel(with: layoutRepresentation.configuration(for: .header,
-                                                                                                     at: headerIndexPath))
+                var newHeader = section.header ?? ItemModel(with: layoutRepresentation.configuration(
+                    for: .header,
+                    at: headerIndexPath
+                ))
                 let configuration = layoutRepresentation.configuration(for: .header, at: headerIndexPath)
                 applyConfiguration(configuration, to: &newHeader)
                 header = newHeader
@@ -936,8 +967,10 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             var footer: ItemModel?
             if layoutRepresentation.shouldPresentFooter(at: sectionIndex) == true {
                 let footerIndexPath = IndexPath(item: 0, section: sectionIndex)
-                var newFooter = section.footer ?? ItemModel(with: layoutRepresentation.configuration(for: .footer,
-                                                                                                     at: footerIndexPath))
+                var newFooter = section.footer ?? ItemModel(with: layoutRepresentation.configuration(
+                    for: .footer,
+                    at: footerIndexPath
+                ))
                 let configuration = layoutRepresentation.configuration(for: .footer, at: footerIndexPath)
                 applyConfiguration(configuration, to: &newFooter)
                 footer = newFooter
@@ -1024,11 +1057,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 } else {
                     footer = nil
                 }
-                let section = SectionModel(interSectionSpacing: layoutRepresentation.interSectionSpacing(at: sectionIndex),
-                                           header: header,
-                                           footer: footer,
-                                           items: ContiguousArray(items),
-                                           collectionLayout: layoutRepresentation)
+                let section = SectionModel(
+                    interSectionSpacing: layoutRepresentation.interSectionSpacing(at: sectionIndex),
+                    header: header,
+                    footer: footer,
+                    items: ContiguousArray(items),
+                    collectionLayout: layoutRepresentation
+                )
                 insertedSection = section
                 afterUpdateModel.insertSection(section, at: sectionIndex)
             }
@@ -1218,9 +1253,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    func isLayoutBiggerThanVisibleBounds(at state: ModelState,
-                                         withFullCompensation: Bool = false,
-                                         visibleBounds: CGRect? = nil) -> Bool {
+    func isLayoutBiggerThanVisibleBounds(
+        at state: ModelState,
+        withFullCompensation: Bool = false,
+        visibleBounds: CGRect? = nil
+    ) -> Bool {
         let visibleBounds = visibleBounds ?? layoutRepresentation.visibleBounds
         let visibleBoundsHeight = visibleBounds.height + (withFullCompensation ? batchUpdateCompensatingOffset + proposedCompensatingOffset : 0)
         return contentHeight(at: state).rounded() > visibleBoundsHeight.rounded()
@@ -1288,12 +1325,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             for sectionIndex in 0..<layout.sections.count {
                 let section = layout.sections[sectionIndex]
                 let sectionPath = ItemPath(item: 0, section: sectionIndex)
-                if let headerFrame = itemFrame(for: sectionPath,
-                                               kind: .header,
-                                               at: state,
-                                               isFinal: true,
-                                               withPinnning: withPining,
-                                               additionalAttributes: additionalAttributes),
+                if let headerFrame = itemFrame(
+                    for: sectionPath,
+                    kind: .header,
+                    at: state,
+                    isFinal: true,
+                    withPinnning: withPining,
+                    additionalAttributes: additionalAttributes
+                ),
                     check(rect: headerFrame) || (pinnableItems == .supplementaryViews && section.header?.pinningType != nil && section.frame.intersects(visibleRect)) {
                     allRects.append((frame: headerFrame, indexPath: sectionPath, kind: .header))
                 }
@@ -1306,11 +1345,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 if traverseState == .notFound, !section.items.isEmpty {
                     func predicate(itemIndex: Int) -> ComparisonResult {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                        guard let itemFrame = itemFrame(for: itemPath,
-                                                        kind: .cell,
-                                                        at: state,
-                                                        isFinal: true,
-                                                        additionalAttributes: additionalAttributes) else {
+                        guard let itemFrame = itemFrame(
+                            for: itemPath,
+                            kind: .cell,
+                            at: state,
+                            isFinal: true,
+                            additionalAttributes: additionalAttributes
+                        ) else {
                             return .orderedDescending
                         }
                         if itemFrame.intersects(visibleRect) {
@@ -1331,8 +1372,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                         startingIndex = firstMatchingIndex
                         for itemIndex in (0..<firstMatchingIndex).reversed() {
                             let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                            guard let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true,
-                                                            additionalAttributes: additionalAttributes) else {
+                            guard let itemFrame = itemFrame(
+                                for: itemPath,
+                                kind: .cell,
+                                at: state,
+                                isFinal: true,
+                                additionalAttributes: additionalAttributes
+                            ) else {
                                 continue
                             }
                             guard itemFrame.maxY >= visibleRect.minY else {
@@ -1352,8 +1398,14 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                 if startingIndex < section.items.count {
                     for itemIndex in startingIndex..<section.items.count {
                         let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                        if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state, isFinal: true, withPinnning: withPining,
-                                                     additionalAttributes: additionalAttributes),
+                        if let itemFrame = itemFrame(
+                            for: itemPath,
+                            kind: .cell,
+                            at: state,
+                            isFinal: true,
+                            withPinnning: withPining,
+                            additionalAttributes: additionalAttributes
+                        ),
                             check(rect: itemFrame) || (pinnableItems == .cells && (itemPath.indexPath == pinnedIndexPaths[.top]?.current || itemPath.indexPath == pinnedIndexPaths[.bottom]?.current)) {
                             if !addedPinnedHeaderCell,
                                itemPath.indexPath == pinnedIndexPaths[.top]?.current {
@@ -1452,10 +1504,12 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    private func compensateOffsetIfNeeded(for itemPath: ItemPath,
-                                          kind: ItemKind,
-                                          action: CompensatingAction,
-                                          visibleBounds: CGRect? = nil) {
+    private func compensateOffsetIfNeeded(
+        for itemPath: ItemPath,
+        kind: ItemKind,
+        action: CompensatingAction,
+        visibleBounds: CGRect? = nil
+    ) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
@@ -1503,9 +1557,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    private func compensateOffsetOfSectionIfNeeded(for sectionIndex: Int,
-                                                   action: CompensatingAction,
-                                                   visibleBounds: CGRect? = nil) {
+    private func compensateOffsetOfSectionIfNeeded(
+        for sectionIndex: Int,
+        action: CompensatingAction,
+        visibleBounds: CGRect? = nil
+    ) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates else {
             return
         }
@@ -1547,10 +1603,12 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    private func offsetByCompensation(frame: inout CGRect,
-                                      at itemPath: ItemPath,
-                                      for state: ModelState,
-                                      backward: Bool = false) {
+    private func offsetByCompensation(
+        frame: inout CGRect,
+        at itemPath: ItemPath,
+        for state: ModelState,
+        backward: Bool = false
+    ) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
               state == .afterUpdate,
               isLayoutBiggerThanVisibleBounds(at: .afterUpdate) else {

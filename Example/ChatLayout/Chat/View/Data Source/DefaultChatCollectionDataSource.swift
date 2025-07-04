@@ -42,10 +42,12 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
 
     private var oldSections: [Section] = []
 
-    init(editNotifier: EditNotifier,
-         swipeNotifier: SwipeNotifier,
-         reloadDelegate: ReloadDelegate,
-         editingDelegate: EditingAccessoryControllerDelegate) {
+    init(
+        editNotifier: EditNotifier,
+        swipeNotifier: SwipeNotifier,
+        reloadDelegate: ReloadDelegate,
+        editingDelegate: EditingAccessoryControllerDelegate
+    ) {
         self.reloadDelegate = reloadDelegate
         self.editingDelegate = editingDelegate
         self.editNotifier = editNotifier
@@ -74,9 +76,11 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         setupSwipeHandlingAccessory(cell.customView.customView, date: date, accessoryConnectingView: cell.customView)
 
         let bubbleView = cell.customView.customView.customView
-        let controller = TextMessageController(text: text,
-                                               type: messageType,
-                                               bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: messageType, bubbleType: bubbleType))
+        let controller = TextMessageController(
+            text: text,
+            type: messageType,
+            bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: messageType, bubbleType: bubbleType)
+        )
         bubbleView.customView.setup(with: controller)
         controller.view = bubbleView.customView
         cell.delegate = bubbleView.customView
@@ -93,9 +97,11 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         setupSwipeHandlingAccessory(cell.customView.customView, date: date, accessoryConnectingView: cell.customView)
 
         let bubbleView = cell.customView.customView.customView
-        let controller = URLController(url: url,
-                                       messageId: messageId,
-                                       bubbleController: buildBezierBubbleController(for: bubbleView, messageType: messageType, bubbleType: bubbleType))
+        let controller = URLController(
+            url: url,
+            messageId: messageId,
+            bubbleController: buildBezierBubbleController(for: bubbleView, messageType: messageType, bubbleType: bubbleType)
+        )
 
         bubbleView.customView.setup(with: controller)
         controller.view = bubbleView.customView
@@ -114,9 +120,11 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         setupSwipeHandlingAccessory(cell.customView.customView, date: date, accessoryConnectingView: cell.customView)
 
         let bubbleView = cell.customView.customView.customView
-        let controller = ImageController(source: source,
-                                         messageId: messageId,
-                                         bubbleController: buildBezierBubbleController(for: bubbleView, messageType: messageType, bubbleType: bubbleType))
+        let controller = ImageController(
+            source: source,
+            messageId: messageId,
+            bubbleController: buildBezierBubbleController(for: bubbleView, messageType: messageType, bubbleType: bubbleType)
+        )
 
         controller.delegate = reloadDelegate
         bubbleView.customView.setup(with: controller)
@@ -131,9 +139,11 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         let alignment = ChatItemAlignment.leading
         cell.customView.alignment = alignment
         let bubbleView = cell.customView.customView.customView
-        let controller = TextMessageController(text: "Typing...",
-                                               type: .incoming,
-                                               bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: .incoming, bubbleType: .tailed))
+        let controller = TextMessageController(
+            text: "Typing...",
+            type: .incoming,
+            bubbleController: buildTextBubbleController(bubbleView: bubbleView, messageType: .incoming, bubbleType: .tailed)
+        )
         bubbleView.customView.setup(with: controller)
         controller.view = bubbleView.customView
         cell.customView.accessoryView?.isHiddenSafe = true
@@ -196,11 +206,13 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         }
     }
 
-    private func setupMainMessageView(_ cellView: MainContainerView<AvatarView, some Any, StatusView>,
-                                      user: User,
-                                      alignment: ChatItemAlignment,
-                                      bubble: Cell.BubbleType,
-                                      status: MessageStatus) {
+    private func setupMainMessageView(
+        _ cellView: MainContainerView<AvatarView, some Any, StatusView>,
+        user: User,
+        alignment: ChatItemAlignment,
+        bubble: Cell.BubbleType,
+        status: MessageStatus
+    ) {
         cellView.containerView.alignment = .bottom
         cellView.containerView.leadingView?.isHiddenSafe = !alignment.isIncoming
         cellView.containerView.leadingView?.alpha = alignment.isIncoming ? 1 : 0
@@ -219,9 +231,11 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         }
     }
 
-    private func setupSwipeHandlingAccessory(_ cellView: MainContainerView<AvatarView, some Any, StatusView>,
-                                             date: Date,
-                                             accessoryConnectingView: UIView) {
+    private func setupSwipeHandlingAccessory(
+        _ cellView: MainContainerView<AvatarView, some Any, StatusView>,
+        date: Date,
+        accessoryConnectingView: UIView
+    ) {
         cellView.accessoryConnectingView = accessoryConnectingView
         cellView.accessoryView.setup(with: DateAccessoryController(date: date))
         cellView.accessorySafeAreaInsets = swipeNotifier.accessorySafeAreaInsets
@@ -283,9 +297,11 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                       withReuseIdentifier: TextTitleView.reuseIdentifier,
-                                                                       for: indexPath) as! TextTitleView
+            let view = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: TextTitleView.reuseIdentifier,
+                for: indexPath
+            ) as! TextTitleView
             view.customView.text = sections[indexPath.section].title
             view.customView.preferredMaxLayoutWidth = 300
             view.customView.textColor = .lightGray
@@ -293,9 +309,11 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
             view.customView.font = .preferredFont(forTextStyle: .caption2)
             return view
         case UICollectionView.elementKindSectionFooter:
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                       withReuseIdentifier: TextTitleView.reuseIdentifier,
-                                                                       for: indexPath) as! TextTitleView
+            let view = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: TextTitleView.reuseIdentifier,
+                for: indexPath
+            ) as! TextTitleView
             view.customView.text = "Made with ChatLayout"
             view.customView.preferredMaxLayoutWidth = 300
             view.customView.textColor = .lightGray
@@ -317,8 +335,10 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         true
     }
 
-    func pinningTypeForItem(_ chatLayout: CollectionViewChatLayout,
-                            at indexPath: IndexPath) -> ChatItemPinningType? {
+    func pinningTypeForItem(
+        _ chatLayout: CollectionViewChatLayout,
+        at indexPath: IndexPath
+    ) -> ChatItemPinningType? {
         let cell = sections[indexPath.section].cells[indexPath.item]
         guard case .date = cell else {
             return nil

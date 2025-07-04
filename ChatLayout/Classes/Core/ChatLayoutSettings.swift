@@ -14,9 +14,9 @@ import Foundation
 import UIKit
 
 /// `CollectionViewChatLayout` settings.
-public struct ChatLayoutSettings: Equatable {
+public struct ChatLayoutSettings: Equatable, Sendable {
     /// Represents type of pinnable elements in the layout.
-    public enum PinneableItems: Equatable {
+    public enum PinneableItems: Equatable, Sendable {
         /// Pin supplementary views (header and/or footer).
         case supplementaryViews
         /// Pin cells

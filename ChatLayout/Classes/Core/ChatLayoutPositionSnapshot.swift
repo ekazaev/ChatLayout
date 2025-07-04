@@ -14,9 +14,9 @@ import Foundation
 import UIKit
 
 /// Represents content offset position expressed by the specific item and it offset from the top or bottom edge.
-public struct ChatLayoutPositionSnapshot: Hashable {
+public struct ChatLayoutPositionSnapshot: Hashable, Sendable {
     /// Represents the edge.
-    public enum Edge: Hashable {
+    public enum Edge: Hashable, Sendable {
         /// Top edge of the `UICollectionView`
         case top
 
@@ -42,10 +42,12 @@ public struct ChatLayoutPositionSnapshot: Hashable {
     ///   - edge: The edge of the offset.
     ///   - offset: The offset from the `edge`.
     ///   - kind: Kind of item at the `indexPath`
-    public init(indexPath: IndexPath,
-                kind: ItemKind,
-                edge: Edge,
-                offset: CGFloat = 0) {
+    public init(
+        indexPath: IndexPath,
+        kind: ItemKind,
+        edge: Edge,
+        offset: CGFloat = 0
+    ) {
         self.indexPath = indexPath
         self.edge = edge
         self.offset = offset

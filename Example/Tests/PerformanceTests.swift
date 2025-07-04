@@ -14,6 +14,7 @@
 import Foundation
 import XCTest
 
+@MainActor
 final class PerformanceTests: XCTestCase {
     func testBinarySearchPerformance() {
         let constant = 1257

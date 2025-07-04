@@ -13,6 +13,7 @@
 @testable import ChatLayout
 import XCTest
 
+@MainActor
 class StateControllerProcessUpdatesTests: XCTestCase {
     override func setUp() {
         super.setUp()
@@ -67,8 +68,10 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) + CGFloat(changeItems.count * 10), layout.controller.contentHeight(at: .afterUpdate))
         layout.controller.commitUpdates()
 
-        layout.controller.process(changeItems: [.sectionReload(sectionIndex: 0),
-                                                .sectionReload(sectionIndex: 1)])
+        layout.controller.process(changeItems: [
+            .sectionReload(sectionIndex: 0),
+            .sectionReload(sectionIndex: 1)
+        ])
 
         XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) + CGFloat(10 * 4), layout.controller.contentHeight(at: .afterUpdate))
         layout.controller.commitUpdates()
@@ -273,14 +276,22 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 1), kind: .cell, at: .afterUpdate))
         XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemPath(by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate)!,
-                                                  kind: .cell,
-                                                  at: .afterUpdate),
-                       ItemPath(item: 0, section: 0))
-        XCTAssertEqual(layout.controller.itemPath(by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)!,
-                                                  kind: .cell,
-                                                  at: .afterUpdate),
-                       ItemPath(item: 0, section: 2))
+        XCTAssertEqual(
+            layout.controller.itemPath(
+                by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate)!,
+                kind: .cell,
+                at: .afterUpdate
+            ),
+            ItemPath(item: 0, section: 0)
+        )
+        XCTAssertEqual(
+            layout.controller.itemPath(
+                by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)!,
+                kind: .cell,
+                at: .afterUpdate
+            ),
+            ItemPath(item: 0, section: 2)
+        )
         layout.controller.commitUpdates()
     }
 
@@ -381,8 +392,9 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         layout.visibleBounds.origin.y = scrollOffsetY
         layout.shouldPinHeaderToVisibleBoundsAtSection[0] = true
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.controller.updatePinnedInfo(at: .beforeUpdate)
 
-        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)
+        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate, withPinnning: true)
         XCTAssertEqual(item?.frame.minY, scrollOffsetY)
     }
 
@@ -390,8 +402,9 @@ class StateControllerProcessUpdatesTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.shouldPinFooterToVisibleBoundsAtSection[0] = true
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.controller.updatePinnedInfo(at: .beforeUpdate)
 
-        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)!
+        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate, withPinnning: true)!
         XCTAssertEqual(item.frame.minY, layout.visibleBounds.height - item.frame.height)
     }
 }

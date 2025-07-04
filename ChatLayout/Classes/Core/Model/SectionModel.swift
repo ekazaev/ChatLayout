@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct SectionModel<Layout: ChatLayoutRepresentation> {
     let id: UUID
 
@@ -36,10 +37,12 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     var frame: CGRect {
         let additionalInsets = collectionLayout.settings.additionalInsets
-        return CGRect(x: 0,
-                      y: offsetY,
-                      width: collectionLayout.visibleBounds.width - additionalInsets.left - additionalInsets.right,
-                      height: height)
+        return CGRect(
+            x: 0,
+            y: offsetY,
+            width: collectionLayout.visibleBounds.width - additionalInsets.left - additionalInsets.right,
+            height: height
+        )
     }
 
     var height: CGFloat {
@@ -57,12 +60,14 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         offsetY + height
     }
 
-    init(id: UUID = UUID(),
-         interSectionSpacing: CGFloat,
-         header: ItemModel?,
-         footer: ItemModel?,
-         items: ContiguousArray<ItemModel> = [],
-         collectionLayout: Layout) {
+    init(
+        id: UUID = UUID(),
+        interSectionSpacing: CGFloat,
+        header: ItemModel?,
+        footer: ItemModel?,
+        items: ContiguousArray<ItemModel> = [],
+        collectionLayout: Layout
+    ) {
         self.id = id
         self.interSectionSpacing = interSectionSpacing
         self.items = items
@@ -186,7 +191,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         footer?.offsetY += heightDiff
     }
 
-    // MARK: To use only withing process(updateItems:)
+    // MARK: To use only within process(updateItems:)
 
     mutating func insert(_ item: ItemModel, at index: Int) {
         guard index <= items.count else {

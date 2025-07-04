@@ -29,8 +29,9 @@
 --stripunusedargs closure-only
 --tabwidth unspecified
 --trimwhitespace always
---wraparguments preserve
---wrapcollections preserve
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
 --xcodeindentation disabled
 --modifierorder public,override
 --nevertrailing map, flatMap, compactMap

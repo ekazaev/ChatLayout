@@ -17,7 +17,7 @@ import Foundation
 /// Initializing a `ItemPath` is measurably faster than initializing an `IndexPath`.
 /// On an iPhone X, compiled with -Os optimizations, it's about 35x faster to initialize this struct
 /// compared to an `IndexPath`.
-struct ItemPath: Hashable {
+struct ItemPath: Hashable, Sendable {
     let section: Int
 
     let item: Int

@@ -13,6 +13,7 @@
 @testable import ChatLayout
 import XCTest
 
+@MainActor
 class StateControllerInternalTests: XCTestCase {
     func testUpdatePreferredSize() {
         let layout = MockCollectionLayout()

@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 /// Represents desired item size.
-public enum ItemSize: Hashable {
+public enum ItemSize: Hashable, Sendable {
     /// Item size should be fully calculated by the `CollectionViewChatLayout`.
     /// Initial estimated size will be taken from `ChatLayoutSettings`.
     case auto
@@ -27,7 +27,7 @@ public enum ItemSize: Hashable {
     case exact(CGSize)
 
     /// Represents current item size case type.
-    public enum CaseType: Hashable, CaseIterable {
+    public enum CaseType: Hashable, CaseIterable, Sendable {
         /// Represents `ItemSize.auto`
         case auto
         /// Represents `ItemSize.estimated`

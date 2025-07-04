@@ -74,10 +74,17 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Returns a Boolean value indicating whether two `ChatLayoutAttributes` are considered equal.
     public override func isEqual(_ object: Any?) -> Bool {
         let chatLayoutAttributes = (object as? ChatLayoutAttributes)
-        return super.isEqual(object)
-            && pinningType == chatLayoutAttributes?.pinningType
-            && alignment == chatLayoutAttributes?.alignment
-            && interItemSpacing == chatLayoutAttributes?.interItemSpacing
+        /* isEqual inherits from ObjC and is not isolated.
+         * ChatLayoutAttributes is MainActor isolated; in theory it **cannot** be used outside of the main actor.
+         * If isEqual is called outside of the main actor, we’ll crash, which is good, because it would be unsafe anyway.
+         * (One possible example would be to have a collection type that would do things on the background and compare two ChatLayoutAttributes,
+         *  but as stated above, that would be unsafe, so it’s good to crash if that happens.) */
+        return MainActor.assumeIsolated {
+            super.isEqual(chatLayoutAttributes)
+                && pinningType == chatLayoutAttributes?.pinningType
+                && alignment == chatLayoutAttributes?.alignment
+                && interItemSpacing == chatLayoutAttributes?.interItemSpacing
+        }
     }
 
     /// `ItemKind` represented by this attributes object.

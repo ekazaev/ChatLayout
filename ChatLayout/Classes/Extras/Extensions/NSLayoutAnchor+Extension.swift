@@ -15,28 +15,34 @@ import UIKit
 
 extension NSLayoutAnchor {
     @objc
-    func constraint(equalTo anchor: NSLayoutAnchor<AnchorType>,
-                    constant c: CGFloat = 0,
-                    priority: UILayoutPriority) -> NSLayoutConstraint {
-        let constraint = constraint(equalTo: anchor, constant: c)
+    func constraint(
+        equalTo anchor: NSLayoutAnchor<AnchorType>,
+        constant: CGFloat = 0,
+        priority: UILayoutPriority
+    ) -> NSLayoutConstraint {
+        let constraint = constraint(equalTo: anchor, constant: constant)
         constraint.priority = priority
         return constraint
     }
 
     @objc
-    func constraint(greaterThanOrEqualTo anchor: NSLayoutAnchor<AnchorType>,
-                    constant c: CGFloat = 0,
-                    priority: UILayoutPriority) -> NSLayoutConstraint {
-        let constraint = constraint(greaterThanOrEqualTo: anchor, constant: c)
+    func constraint(
+        greaterThanOrEqualTo anchor: NSLayoutAnchor<AnchorType>,
+        constant: CGFloat = 0,
+        priority: UILayoutPriority
+    ) -> NSLayoutConstraint {
+        let constraint = constraint(greaterThanOrEqualTo: anchor, constant: constant)
         constraint.priority = priority
         return constraint
     }
 
     @objc
-    func constraint(lessThanOrEqualTo anchor: NSLayoutAnchor<AnchorType>,
-                    constant c: CGFloat = 0,
-                    priority: UILayoutPriority) -> NSLayoutConstraint {
-        let constraint = constraint(lessThanOrEqualTo: anchor, constant: c)
+    func constraint(
+        lessThanOrEqualTo anchor: NSLayoutAnchor<AnchorType>,
+        constant: CGFloat = 0,
+        priority: UILayoutPriority
+    ) -> NSLayoutConstraint {
+        let constraint = constraint(lessThanOrEqualTo: anchor, constant: constant)
         constraint.priority = priority
         return constraint
     }
