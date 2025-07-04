@@ -25,9 +25,11 @@ class PersistentDataCache<CachingKey: PersistentlyCacheable>: AsyncKeyValueCachi
 
     private let cacheFileExtension: String
 
-    init(defaultTimeToLive: TimeInterval = 7 * 24 * 3600,
-         persistencePath: String = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!,
-         cacheFileExtension: String = String(describing: CachingKey.self)) {
+    init(
+        defaultTimeToLive: TimeInterval = 7 * 24 * 3600,
+        persistencePath: String = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!,
+        cacheFileExtension: String = String(describing: CachingKey.self)
+    ) {
         self.persistencePath = persistencePath
         self.defaultTimeToLive = defaultTimeToLive
         self.cacheFileExtension = cacheFileExtension.addingPercentEncoding(withAllowedCharacters: .letters)!

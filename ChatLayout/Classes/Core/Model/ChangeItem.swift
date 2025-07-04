@@ -57,11 +57,15 @@ enum ChangeItem: Equatable, Sendable {
                 return nil
             }
             if indexPathBeforeUpdate.item == NSNotFound, indexPathAfterUpdate.item == NSNotFound {
-                self = .sectionMove(initialSectionIndex: indexPathBeforeUpdate.section,
-                                    finalSectionIndex: indexPathAfterUpdate.section)
+                self = .sectionMove(
+                    initialSectionIndex: indexPathBeforeUpdate.section,
+                    finalSectionIndex: indexPathAfterUpdate.section
+                )
             } else {
-                self = .itemMove(initialItemIndexPath: indexPathBeforeUpdate,
-                                 finalItemIndexPath: indexPathAfterUpdate)
+                self = .itemMove(
+                    initialItemIndexPath: indexPathBeforeUpdate,
+                    finalItemIndexPath: indexPathAfterUpdate
+                )
             }
         case .insert:
             guard let indexPath = indexPathAfterUpdate else {

@@ -77,13 +77,17 @@ final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
         UIView.performWithoutAnimation {
             if #available(iOS 13.0, *) {
                 textView.textColor = controller.type.isIncoming ? UIColor.label : .systemBackground
-                textView.linkTextAttributes = [.foregroundColor: controller.type.isIncoming ? UIColor.systemBlue : .systemGray6,
-                                               .underlineStyle: 1]
+                textView.linkTextAttributes = [
+                    .foregroundColor: controller.type.isIncoming ? UIColor.systemBlue : .systemGray6,
+                    .underlineStyle: 1
+                ]
             } else {
                 let color = controller.type.isIncoming ? UIColor.black : .white
                 textView.textColor = color
-                textView.linkTextAttributes = [.foregroundColor: color,
-                                               .underlineStyle: 1]
+                textView.linkTextAttributes = [
+                    .foregroundColor: color,
+                    .underlineStyle: 1
+                ]
             }
         }
     }

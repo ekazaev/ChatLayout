@@ -42,10 +42,12 @@ public struct ChatLayoutPositionSnapshot: Hashable, Sendable {
     ///   - edge: The edge of the offset.
     ///   - offset: The offset from the `edge`.
     ///   - kind: Kind of item at the `indexPath`
-    public init(indexPath: IndexPath,
-                kind: ItemKind,
-                edge: Edge,
-                offset: CGFloat = 0) {
+    public init(
+        indexPath: IndexPath,
+        kind: ItemKind,
+        edge: Edge,
+        offset: CGFloat = 0
+    ) {
         self.indexPath = indexPath
         self.edge = edge
         self.offset = offset

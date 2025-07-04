@@ -37,10 +37,12 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     var frame: CGRect {
         let additionalInsets = collectionLayout.settings.additionalInsets
-        return CGRect(x: 0,
-                      y: offsetY,
-                      width: collectionLayout.visibleBounds.width - additionalInsets.left - additionalInsets.right,
-                      height: height)
+        return CGRect(
+            x: 0,
+            y: offsetY,
+            width: collectionLayout.visibleBounds.width - additionalInsets.left - additionalInsets.right,
+            height: height
+        )
     }
 
     var height: CGFloat {
@@ -58,12 +60,14 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         offsetY + height
     }
 
-    init(id: UUID = UUID(),
-         interSectionSpacing: CGFloat,
-         header: ItemModel?,
-         footer: ItemModel?,
-         items: ContiguousArray<ItemModel> = [],
-         collectionLayout: Layout) {
+    init(
+        id: UUID = UUID(),
+        interSectionSpacing: CGFloat,
+        header: ItemModel?,
+        footer: ItemModel?,
+        items: ContiguousArray<ItemModel> = [],
+        collectionLayout: Layout
+    ) {
         self.id = id
         self.interSectionSpacing = interSectionSpacing
         self.items = items

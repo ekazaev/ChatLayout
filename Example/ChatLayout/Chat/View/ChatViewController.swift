@@ -78,10 +78,12 @@ final class ChatViewController: UIViewController {
         return gesture
     }()
 
-    init(chatController: ChatController,
-         dataSource: ChatCollectionDataSource,
-         editNotifier: EditNotifier,
-         swipeNotifier: SwipeNotifier) {
+    init(
+        chatController: ChatController,
+        dataSource: ChatCollectionDataSource,
+        editNotifier: EditNotifier,
+        swipeNotifier: SwipeNotifier
+    ) {
         self.chatController = chatController
         self.dataSource = dataSource
         self.editNotifier = editNotifier
@@ -236,10 +238,12 @@ final class ChatViewController: UIViewController {
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        swipeNotifier.setAccessoryOffset(UIEdgeInsets(top: view.safeAreaInsets.top,
-                                                      left: view.safeAreaInsets.left + chatLayout.settings.additionalInsets.left,
-                                                      bottom: view.safeAreaInsets.bottom,
-                                                      right: view.safeAreaInsets.right + chatLayout.settings.additionalInsets.right))
+        swipeNotifier.setAccessoryOffset(UIEdgeInsets(
+            top: view.safeAreaInsets.top,
+            left: view.safeAreaInsets.left + chatLayout.settings.additionalInsets.left,
+            bottom: view.safeAreaInsets.bottom,
+            right: view.safeAreaInsets.right + chatLayout.settings.additionalInsets.right
+        ))
     }
 
     // Apple doesnt return sometimes inputBarView back to the app. This is an attempt to fix that
@@ -327,8 +331,10 @@ extension ChatViewController: UIScrollViewDelegate {
 
     func scrollToBottom(completion: (() -> Void)? = nil) {
         // I ask content size from the layout because on IOs 12 collection view contains not updated one
-        let contentOffsetAtBottom = CGPoint(x: collectionView.contentOffset.x,
-                                            y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom)
+        let contentOffsetAtBottom = CGPoint(
+            x: collectionView.contentOffset.x,
+            y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom
+        )
 
         guard contentOffsetAtBottom.y > collectionView.contentOffset.y else {
             completion?()
@@ -396,9 +402,11 @@ extension ChatViewController: UICollectionViewDelegate {
                 var center = cell.customView.customView.customView.center
                 center.x += (message.type.isIncoming ? cell.customView.customView.customView.offset : -cell.customView.customView.customView.offset) / 2
 
-                return UITargetedPreview(view: cell.customView.customView.customView,
-                                         parameters: parameters,
-                                         target: UIPreviewTarget(container: cell.customView.customView, center: center))
+                return UITargetedPreview(
+                    view: cell.customView.customView.customView,
+                    parameters: parameters,
+                    target: UIPreviewTarget(container: cell.customView.customView, center: center)
+                )
             default:
                 return nil
             }
@@ -469,15 +477,17 @@ extension ChatViewController: ChatControllerDelegate {
         }
 
         guard currentInterfaceActions.options.isEmpty else {
-            let reaction = SetActor<Set<InterfaceActions>, ReactionTypes>.Reaction(type: .delayedUpdate,
-                                                                                   action: .onEmpty,
-                                                                                   executionType: .once,
-                                                                                   actionBlock: { [weak self] in
-                                                                                       guard let self else {
-                                                                                           return
-                                                                                       }
-                                                                                       processUpdates(with: sections, animated: animated, requiresIsolatedProcess: requiresIsolatedProcess, completion: completion)
-                                                                                   })
+            let reaction = SetActor<Set<InterfaceActions>, ReactionTypes>.Reaction(
+                type: .delayedUpdate,
+                action: .onEmpty,
+                executionType: .once,
+                actionBlock: { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    processUpdates(with: sections, animated: animated, requiresIsolatedProcess: requiresIsolatedProcess, completion: completion)
+                }
+            )
             currentInterfaceActions.add(reaction: reaction)
             return
         }
@@ -497,32 +507,34 @@ extension ChatViewController: ChatControllerDelegate {
                 currentInterfaceActions.options.insert(.updatingCollectionInIsolation)
             }
             currentControllerActions.options.insert(.updatingCollection)
-            collectionView.reload(using: changeSet,
-                                  interrupt: { changeSet in
-                                      guard changeSet.sectionInserted.isEmpty else {
-                                          return true
-                                      }
-                                      return false
-                                  },
-                                  onInterruptedReload: {
-                                      let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
-                                      self.collectionView.reloadData()
-                                      // We want so that user on reload appeared at the very bottom of the layout
-                                      self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                                  },
-                                  completion: { _ in
-                                      DispatchQueue.main.async {
-                                          self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
-                                          if requiresIsolatedProcess {
-                                              self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
-                                          }
-                                          completion?()
-                                          self.currentControllerActions.options.remove(.updatingCollection)
-                                      }
-                                  },
-                                  setData: { data in
-                                      self.dataSource.sections = data
-                                  })
+            collectionView.reload(
+                using: changeSet,
+                interrupt: { changeSet in
+                    guard changeSet.sectionInserted.isEmpty else {
+                        return true
+                    }
+                    return false
+                },
+                onInterruptedReload: {
+                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
+                    self.collectionView.reloadData()
+                    // We want so that user on reload appeared at the very bottom of the layout
+                    self.chatLayout.restoreContentOffset(with: positionSnapshot)
+                },
+                completion: { _ in
+                    DispatchQueue.main.async {
+                        self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
+                        if requiresIsolatedProcess {
+                            self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
+                        }
+                        completion?()
+                        self.currentControllerActions.options.remove(.updatingCollection)
+                    }
+                },
+                setData: { data in
+                    self.dataSource.sections = data
+                }
+            )
         }
 
         if animated {

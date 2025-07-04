@@ -30,16 +30,20 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
-    func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout,
-                             at sectionIndex: Int) -> Bool
+    func shouldPresentHeader(
+        _ chatLayout: CollectionViewChatLayout,
+        at sectionIndex: Int
+    ) -> Bool
 
     /// `CollectionViewChatLayout` will call this method to ask if it should present the footer in the current layout.
     /// - Parameters:
     ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
-    func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout,
-                             at sectionIndex: Int) -> Bool
+    func shouldPresentFooter(
+        _ chatLayout: CollectionViewChatLayout,
+        at sectionIndex: Int
+    ) -> Bool
 
     /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the header to the visible bounds in the current layout.
     /// - Parameters:
@@ -48,8 +52,10 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// - Returns: `Bool`.
     ///
     /// **NB:** This method will be called only if the `ChatLayoutSettings.pinnableItems` is set to `.supplementaryViews`
-    func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
-                                        at sectionIndex: Int) -> Bool
+    func shouldPinHeaderToVisibleBounds(
+        _ chatLayout: CollectionViewChatLayout,
+        at sectionIndex: Int
+    ) -> Bool
 
     /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the footer to the visible bounds in the current layout.
     /// - Parameters:
@@ -58,8 +64,10 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// - Returns: `Bool`.
     ///
     /// **NB:** This method will be called only if the `ChatLayoutSettings.pinnableItems` is set to `.supplementaryViews`
-    func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
-                                        at sectionIndex: Int) -> Bool
+    func shouldPinFooterToVisibleBounds(
+        _ chatLayout: CollectionViewChatLayout,
+        at sectionIndex: Int
+    ) -> Bool
 
     /// `CollectionViewChatLayout` will call this method to ask if it should pin (stick) the cell to the visible bounds in the current layout.
     /// - Parameters:
@@ -68,8 +76,10 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// - Returns: `ChatItemPinningType` to configure pinning behaviour or `nil` if pinning is not required.
     ///
     /// **NB:** This method will be called only if the `ChatLayoutSettings.pinnableItems` is set to `.cells`
-    func pinningTypeForItem(_ chatLayout: CollectionViewChatLayout,
-                            at indexPath: IndexPath) -> ChatItemPinningType?
+    func pinningTypeForItem(
+        _ chatLayout: CollectionViewChatLayout,
+        at indexPath: IndexPath
+    ) -> ChatItemPinningType?
 
     /// `CollectionViewChatLayout` will call this method to ask what size the item should have.
     ///
@@ -85,9 +95,11 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
     /// - Returns: `ItemSize`.
-    func sizeForItem(_ chatLayout: CollectionViewChatLayout,
-                     of kind: ItemKind,
-                     at indexPath: IndexPath) -> ItemSize
+    func sizeForItem(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        at indexPath: IndexPath
+    ) -> ItemSize
 
     /// `CollectionViewChatLayout` will call this method to ask what type of alignment the item should have.
     /// - Parameters:
@@ -95,9 +107,11 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
     /// - Returns: `ChatItemAlignment`.
-    func alignmentForItem(_ chatLayout: CollectionViewChatLayout,
-                          of kind: ItemKind,
-                          at indexPath: IndexPath) -> ChatItemAlignment
+    func alignmentForItem(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        at indexPath: IndexPath
+    ) -> ChatItemAlignment
 
     ///   Asks the delegate to modify a layout attributes instance so that it represents the initial visual state of an item
     ///   being inserted.
@@ -110,11 +124,13 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - indexPath: Index path of the item.
     ///   - originalAttributes: `ChatLayoutAttributes` that the `CollectionViewChatLayout` is going to use.
     ///   - state: `InitialAttributesRequestType` instance. Represents when is this method being called.
-    func initialLayoutAttributesForInsertedItem(_ chatLayout: CollectionViewChatLayout,
-                                                of kind: ItemKind,
-                                                at indexPath: IndexPath,
-                                                modifying originalAttributes: ChatLayoutAttributes,
-                                                on state: InitialAttributesRequestType)
+    func initialLayoutAttributesForInsertedItem(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        at indexPath: IndexPath,
+        modifying originalAttributes: ChatLayoutAttributes,
+        on state: InitialAttributesRequestType
+    )
 
     ///   Asks the delegate to modify a layout attributes instance so that it represents the final visual state of an item
     ///   being removed via `UICollectionView.deleteSections(_:)`.
@@ -126,10 +142,12 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
     ///   - originalAttributes: `ChatLayoutAttributes` that the `CollectionViewChatLayout` is going to use.
-    func finalLayoutAttributesForDeletedItem(_ chatLayout: CollectionViewChatLayout,
-                                             of kind: ItemKind,
-                                             at indexPath: IndexPath,
-                                             modifying originalAttributes: ChatLayoutAttributes)
+    func finalLayoutAttributesForDeletedItem(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        at indexPath: IndexPath,
+        modifying originalAttributes: ChatLayoutAttributes
+    )
 
     ///   Returns the interval between items. If returns `nil` - the value from `ChatLayoutSettings` will be used.
     ///
@@ -137,9 +155,11 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - indexPath: Index path of the item.
-    func interItemSpacing(_ chatLayout: CollectionViewChatLayout,
-                          of kind: ItemKind,
-                          after indexPath: IndexPath) -> CGFloat?
+    func interItemSpacing(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        after indexPath: IndexPath
+    ) -> CGFloat?
 
     ///   Returns the interval between sections. If returns `nil` - the value from `ChatLayoutSettings` will be used.
     ///
@@ -147,83 +167,107 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - kind: Type of element represented by `ItemKind`.
     ///   - sectionIndex: Index of the section.
-    func interSectionSpacing(_ chatLayout: CollectionViewChatLayout,
-                             after sectionIndex: Int) -> CGFloat?
+    func interSectionSpacing(
+        _ chatLayout: CollectionViewChatLayout,
+        after sectionIndex: Int
+    ) -> CGFloat?
 }
 
 /// Default extension.
 public extension ChatLayoutDelegate {
     /// Default implementation returns: `false`.
-    func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout,
-                             at sectionIndex: Int) -> Bool {
+    func shouldPresentHeader(
+        _ chatLayout: CollectionViewChatLayout,
+        at sectionIndex: Int
+    ) -> Bool {
         false
     }
 
     /// Default implementation returns: `false`.
-    func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout,
-                             at sectionIndex: Int) -> Bool {
+    func shouldPresentFooter(
+        _ chatLayout: CollectionViewChatLayout,
+        at sectionIndex: Int
+    ) -> Bool {
         false
     }
 
     /// Default implementation returns: `false`.
-    func shouldPinHeaderToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
-                                        at sectionIndex: Int) -> Bool {
+    func shouldPinHeaderToVisibleBounds(
+        _ chatLayout: CollectionViewChatLayout,
+        at sectionIndex: Int
+    ) -> Bool {
         false
     }
 
     /// Default implementation returns: `nil`.
-    func pinningTypeForItem(_ chatLayout: CollectionViewChatLayout,
-                            at indexPath: IndexPath) -> ChatItemPinningType? {
+    func pinningTypeForItem(
+        _ chatLayout: CollectionViewChatLayout,
+        at indexPath: IndexPath
+    ) -> ChatItemPinningType? {
         nil
     }
 
     /// Default implementation returns: `false`.
-    func shouldPinFooterToVisibleBounds(_ chatLayout: CollectionViewChatLayout,
-                                        at sectionIndex: Int) -> Bool {
+    func shouldPinFooterToVisibleBounds(
+        _ chatLayout: CollectionViewChatLayout,
+        at sectionIndex: Int
+    ) -> Bool {
         false
     }
 
     /// Default implementation returns: `ItemSize.auto`.
-    func sizeForItem(_ chatLayout: CollectionViewChatLayout,
-                     of kind: ItemKind,
-                     at indexPath: IndexPath) -> ItemSize {
+    func sizeForItem(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        at indexPath: IndexPath
+    ) -> ItemSize {
         .auto
     }
 
     /// Default implementation returns: `ChatItemAlignment.fullWidth`.
-    func alignmentForItem(_ chatLayout: CollectionViewChatLayout,
-                          of kind: ItemKind,
-                          at indexPath: IndexPath) -> ChatItemAlignment {
+    func alignmentForItem(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        at indexPath: IndexPath
+    ) -> ChatItemAlignment {
         .fullWidth
     }
 
     /// Default implementation sets a `ChatLayoutAttributes.alpha` to zero.
-    func initialLayoutAttributesForInsertedItem(_ chatLayout: CollectionViewChatLayout,
-                                                of kind: ItemKind,
-                                                at indexPath: IndexPath,
-                                                modifying originalAttributes: ChatLayoutAttributes,
-                                                on state: InitialAttributesRequestType) {
+    func initialLayoutAttributesForInsertedItem(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        at indexPath: IndexPath,
+        modifying originalAttributes: ChatLayoutAttributes,
+        on state: InitialAttributesRequestType
+    ) {
         originalAttributes.alpha = 0
     }
 
     /// Default implementation sets a `ChatLayoutAttributes.alpha` to zero.
-    func finalLayoutAttributesForDeletedItem(_ chatLayout: CollectionViewChatLayout,
-                                             of kind: ItemKind,
-                                             at indexPath: IndexPath,
-                                             modifying originalAttributes: ChatLayoutAttributes) {
+    func finalLayoutAttributesForDeletedItem(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        at indexPath: IndexPath,
+        modifying originalAttributes: ChatLayoutAttributes
+    ) {
         originalAttributes.alpha = 0
     }
 
     /// Default implementation returns: `nil`.
-    func interItemSpacing(_ chatLayout: CollectionViewChatLayout,
-                          of kind: ItemKind,
-                          after indexPath: IndexPath) -> CGFloat? {
+    func interItemSpacing(
+        _ chatLayout: CollectionViewChatLayout,
+        of kind: ItemKind,
+        after indexPath: IndexPath
+    ) -> CGFloat? {
         nil
     }
 
     /// Default implementation returns: `nil`.
-    func interSectionSpacing(_ chatLayout: CollectionViewChatLayout,
-                             after sectionIndex: Int) -> CGFloat? {
+    func interSectionSpacing(
+        _ chatLayout: CollectionViewChatLayout,
+        after sectionIndex: Int
+    ) -> CGFloat? {
         nil
     }
 }

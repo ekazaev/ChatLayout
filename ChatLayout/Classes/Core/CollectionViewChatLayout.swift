@@ -96,10 +96,12 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         guard let collectionView else {
             return .zero
         }
-        return CGRect(x: adjustedContentInset.left,
-                      y: collectionView.contentOffset.y + adjustedContentInset.top,
-                      width: collectionView.bounds.width - adjustedContentInset.left - adjustedContentInset.right,
-                      height: collectionView.bounds.height - adjustedContentInset.top - adjustedContentInset.bottom)
+        return CGRect(
+            x: adjustedContentInset.left,
+            y: collectionView.contentOffset.y + adjustedContentInset.top,
+            width: collectionView.bounds.width - adjustedContentInset.left - adjustedContentInset.right,
+            height: collectionView.bounds.height - adjustedContentInset.top - adjustedContentInset.bottom
+        )
     }
 
     /// Represent the rectangle where all the items are aligned.
@@ -108,10 +110,12 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             return .zero
         }
         let additionalInsets = settings.additionalInsets
-        return CGRect(x: adjustedContentInset.left + additionalInsets.left,
-                      y: adjustedContentInset.top + additionalInsets.top,
-                      width: collectionView.bounds.width - additionalInsets.left - additionalInsets.right - adjustedContentInset.left - adjustedContentInset.right,
-                      height: controller.contentHeight(at: state) - additionalInsets.top - additionalInsets.bottom - adjustedContentInset.top - adjustedContentInset.bottom)
+        return CGRect(
+            x: adjustedContentInset.left + additionalInsets.left,
+            y: adjustedContentInset.top + additionalInsets.top,
+            width: collectionView.bounds.width - additionalInsets.left - additionalInsets.right - adjustedContentInset.left - adjustedContentInset.right,
+            height: controller.contentHeight(at: state) - additionalInsets.top - additionalInsets.bottom - adjustedContentInset.top - adjustedContentInset.bottom
+        )
     }
 
     // MARK: Inherited Properties
@@ -266,15 +270,19 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         guard let collectionView else {
             return nil
         }
-        let insets = UIEdgeInsets(top: -collectionView.frame.height,
-                                  left: 0,
-                                  bottom: -collectionView.frame.height,
-                                  right: 0)
+        let insets = UIEdgeInsets(
+            top: -collectionView.frame.height,
+            left: 0,
+            bottom: -collectionView.frame.height,
+            right: 0
+        )
         let visibleBounds = visibleBounds
-        let layoutAttributes = controller.layoutAttributesForElements(in: visibleBounds.inset(by: insets),
-                                                                      state: state,
-                                                                      ignoreCache: true)
-            .sorted(by: { $0.frame.maxY < $1.frame.maxY })
+        let layoutAttributes = controller.layoutAttributesForElements(
+            in: visibleBounds.inset(by: insets),
+            state: state,
+            ignoreCache: true
+        )
+        .sorted(by: { $0.frame.maxY < $1.frame.maxY })
 
         switch edge {
         case .top:
@@ -282,19 +290,23 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                 return nil
             }
             let visibleBoundsTopOffset = firstVisibleItemAttributes.frame.minY - visibleBounds.higherPoint.y - settings.additionalInsets.top
-            return ChatLayoutPositionSnapshot(indexPath: firstVisibleItemAttributes.indexPath,
-                                              kind: firstVisibleItemAttributes.kind,
-                                              edge: .top,
-                                              offset: visibleBoundsTopOffset)
+            return ChatLayoutPositionSnapshot(
+                indexPath: firstVisibleItemAttributes.indexPath,
+                kind: firstVisibleItemAttributes.kind,
+                edge: .top,
+                offset: visibleBoundsTopOffset
+            )
         case .bottom:
             guard let lastVisibleItemAttributes = layoutAttributes.last(where: { $0.frame.minY <= visibleBounds.lowerPoint.y }) else {
                 return nil
             }
             let visibleBoundsBottomOffset = visibleBounds.lowerPoint.y - lastVisibleItemAttributes.frame.maxY - settings.additionalInsets.bottom
-            return ChatLayoutPositionSnapshot(indexPath: lastVisibleItemAttributes.indexPath,
-                                              kind: lastVisibleItemAttributes.kind,
-                                              edge: .bottom,
-                                              offset: visibleBoundsBottomOffset)
+            return ChatLayoutPositionSnapshot(
+                indexPath: lastVisibleItemAttributes.indexPath,
+                kind: lastVisibleItemAttributes.kind,
+                edge: .bottom,
+                offset: visibleBoundsBottomOffset
+            )
         }
     }
 
@@ -381,11 +393,13 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                 } else {
                     footer = nil
                 }
-                var section = SectionModel(interSectionSpacing: interSectionSpacing(at: sectionIndex),
-                                           header: header,
-                                           footer: footer,
-                                           items: items,
-                                           collectionLayout: self)
+                var section = SectionModel(
+                    interSectionSpacing: interSectionSpacing(at: sectionIndex),
+                    header: header,
+                    footer: footer,
+                    items: items,
+                    collectionLayout: self
+                )
                 section.assembleLayout()
                 sections.append(section)
             }
@@ -487,8 +501,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves the layout attributes for the specified supplementary view.
-    open override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
-                                                            at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func layoutAttributesForSupplementaryView(
+        ofKind elementKind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes? {
         guard !dontReturnAttributes else {
             return nil
         }
@@ -535,8 +551,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: Context Invalidation
 
     /// Asks the layout object if changes to a self-sizing cell require a layout update.
-    open override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
-                                              withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
+    open override func shouldInvalidateLayout(
+        forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
+        withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes
+    ) -> Bool {
         let preferredAttributesItemPath = preferredAttributes.indexPath.itemPath
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
               let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
@@ -553,8 +571,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves a context object that identifies the portions of the layout that should change in response to dynamic cell changes.
-    open override func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
-                                           withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
+    open override func invalidationContext(
+        forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
+        withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes
+    ) -> UICollectionViewLayoutInvalidationContext {
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
               // Can be called ofter the model update in iOS <16. Checking if model for this index path exists.
               controller.item(for: preferredMessageAttributes.indexPath.itemPath, kind: .cell, at: state) != nil else {
@@ -573,13 +593,15 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let newItemAlignment = alignment(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
         let newInterItemSpacing = interItemSpacing(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
         let newPinningType = pinningType(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
-        controller.update(preferredSize: newItemSize,
-                          alignment: newItemAlignment,
-                          interItemSpacing: newInterItemSpacing,
-                          pinningType: newPinningType,
-                          for: preferredAttributesItemPath,
-                          kind: preferredMessageAttributes.kind,
-                          at: state)
+        controller.update(
+            preferredSize: newItemSize,
+            alignment: newItemAlignment,
+            interItemSpacing: newInterItemSpacing,
+            pinningType: newPinningType,
+            for: preferredAttributesItemPath,
+            kind: preferredMessageAttributes.kind,
+            at: state
+        )
 
         let context = super.invalidationContext(forPreferredLayoutAttributes: preferredMessageAttributes, withOriginalAttributes: originalAttributes) as! ChatLayoutInvalidationContext
 
@@ -881,8 +903,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: - Supplementary View Appearance Animation
 
     /// Retrieves the starting layout information for a supplementary view being inserted into the collection view.
-    open override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String,
-                                                                               at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func initialLayoutAttributesForAppearingSupplementaryElement(
+        ofKind elementKind: String,
+        at elementIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let kind = ItemKind(elementKind)
@@ -921,8 +945,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Retrieves the final layout information for a supplementary view that is about to be removed from the collection view.
-    open override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String,
-                                                                                at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func finalLayoutAttributesForDisappearingSupplementaryElement(
+        ofKind elementKind: String,
+        at elementIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes? {
         var attributes: ChatLayoutAttributes?
 
         let kind = ItemKind(elementKind)
