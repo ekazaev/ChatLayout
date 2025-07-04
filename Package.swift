@@ -30,6 +30,5 @@ let package = Package(
             dependencies: ["ChatLayout"],
             path: "Example/Tests"
         )
-    ],
-    swiftLanguageModes: [.v6]
+    ]
 )
