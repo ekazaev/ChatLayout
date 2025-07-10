@@ -13,10 +13,10 @@
 import Foundation
 import UIKit
 
-/// A collection view layout designed to display items in a grid similar to `UITableView`, while aligning them to the
-/// leading or trailing edge of the `UICollectionView`. This layout facilitates chat-like behavior by maintaining
-/// a constant content offset from the bottom. Additionally, it is capable of handling autosizing cells and
-/// supplementary views.
+/// A custom collection view layout designed to present items in a grid-like format, similar to UITableView, while aligning content to
+/// either the leading or trailing edge of the UICollectionView. This layout supports chat-style interfaces by preserving a consistent
+/// content offset from the bottom. It also accommodates self-sizing cells and supplementary views, ensuring dynamic and responsive
+/// content presentation.
 ///
 /// ### Custom Properties:
 /// `CollectionViewChatLayout.delegate`
@@ -27,6 +27,8 @@ import UIKit
 ///
 /// `CollectionViewChatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates`
 ///
+/// `CollectionViewChatLayout.keepContentAtBottomOfVisibleArea`
+///
 /// `CollectionViewChatLayout.visibleBounds`
 ///
 /// `CollectionViewChatLayout.layoutFrame`
@@ -35,6 +37,11 @@ import UIKit
 /// `CollectionViewChatLayout.getContentOffsetSnapshot(...)`
 ///
 /// `CollectionViewChatLayout.restoreContentOffset(...)`
+///
+/// `CollectionViewChatLayout.reconfigureItems(...)`
+///
+/// `CollectionViewChatLayout.indexPathForItePinnedAt(...)`
+///
 open class CollectionViewChatLayout: UICollectionViewLayout {
     // MARK: Custom Properties
 
@@ -52,22 +59,23 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         }
     }
 
-    /// The default `UIScrollView` behaviour is to keep content offset constant from the top edge. If this flag is set to `true`
-    /// `CollectionViewChatLayout` should try to compensate batch update changes to keep the current content at the bottom of the visible
-    /// part of `UICollectionView`.
+    /// By default, `UIScrollView` maintains a constant content offset relative to the top edge. When this flag is set to true,
+    /// `CollectionViewChatLayout` will attempt to adjust for batch updates in order to keep the currently visible content anchored
+    /// to the bottom of the UICollectionView.
     ///
     /// **NB:**
-    /// Keep in mind that if during the batch content inset changes also (e.g. keyboard frame changes), `CollectionViewChatLayout` will usually get that information after
-    /// the animation starts and wont be able to compensate that change too. It should be done manually.
+    /// If the content inset changes during the batch update—for example, due to keyboard frame adjustments - `CollectionViewChatLayout`
+    /// typically receives this information after the animation begins and may not be able to account for it automatically. In such cases, manual
+    /// compensation is required.
     public var keepContentOffsetAtBottomOnBatchUpdates: Bool = false
 
-    /// The default behavior of UICollectionView is to maintain UICollectionViewCells at the top of the visible rectangle
-    /// when the content size is smaller than the visible area. By setting the respective flag to true, this behavior can be
-    /// reversed to achieve the result like in Telegram..
+    /// By default, `UICollectionView` positions its cells at the top of the visible area when the content size is smaller than the viewport.
+    /// Enabling this flag reverses that behavior, allowing cells to align with the bottom edge of the `UICollectionView` - similar to the behavior
+    /// seen in applications like Telegram.
     public var keepContentAtBottomOfVisibleArea: Bool = false
 
     /// Sometimes `UIScrollView` can behave weirdly if there are too many corrections in it's `contentOffset` during the animation. Especially when content size of the `UIScrollView`
-    // is getting smaller first and then expands again as the newly appearing cells sizes are being calculated. That is why `CollectionViewChatLayout`
+    /// is getting smaller first and then expands again as the newly appearing cells sizes are being calculated. That is why `CollectionViewChatLayout`
     /// tries to process only the elements that are currently visible on the screen. But often it is not needed. This flag allows you to have fine control over this behaviour.
     /// It set to `true` by default to keep the compatibility with the older versions of the library.
     ///
@@ -75,12 +83,13 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// This flag is only to provide fine control over the batch updates. If in doubts - keep it `true`.
     public var processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
 
-    /// A mode that enables automatic self-sizing invalidation after Auto Layout changes. It's advisable to continue using the reload/reconfigure method, especially when multiple
-    /// changes occur concurrently in an animated fashion. This approach ensures that the `CollectionViewChatLayout` can handle these changes while maintaining the content offset accurately.
-    /// Consider using it when no better alternatives are available.
+    /// Enables a mode for automatic self-sizing invalidation in response to Auto Layout changes. While this can be useful in certain scenarios,
+    /// it is generally recommended to continue using explicit reload/reconfigure methods - particularly when multiple changes occur
+    /// simultaneously with animation. This ensures that `CollectionViewChatLayout` can manage layout updates while preserving content
+    /// offset consistency.
     ///
     /// **NB:**
-    /// This is an experimental flag.
+    /// This is an experimental feature and should be used only when no more reliable alternatives are available.
     @available(iOS 16.0, *)
     public var supportSelfSizingInvalidation: Bool {
         get {
