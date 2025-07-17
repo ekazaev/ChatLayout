@@ -13,13 +13,13 @@
 import Foundation
 
 extension RandomAccessCollection where Index == Int {
-    func binarySearch(predicate: (Element) -> ComparisonResult) -> Index? {
+    func binarySearch(_ predicate: (Element) throws -> ComparisonResult) rethrows -> Index? {
         var lowerBound = startIndex
         var upperBound = endIndex
 
         while lowerBound < upperBound {
             let midIndex = lowerBound &+ (upperBound &- lowerBound) / 2
-            let result = predicate(self[midIndex])
+            let result = try predicate(self[midIndex])
             if result == .orderedSame {
                 return midIndex
             } else if result == .orderedAscending {
@@ -31,51 +31,48 @@ extension RandomAccessCollection where Index == Int {
         return nil
     }
 
-    func binarySearchRange(predicate: (Element) -> ComparisonResult) -> [Element] {
-        func leftMostSearch(lowerBound: Index, upperBound: Index) -> Index? {
-            var lowerBound = lowerBound
-            var upperBound = upperBound
+    func lowerBound(_ predicate: (Element) throws -> Bool) rethrows -> Index? {
+        var lower = startIndex
+        var upper = endIndex
 
-            while lowerBound < upperBound {
-                let midIndex = (lowerBound &+ upperBound) / 2
-                if predicate(self[midIndex]) == .orderedAscending {
-                    lowerBound = midIndex &+ 1
-                } else {
-                    upperBound = midIndex
-                }
-            }
-            if predicate(self[lowerBound]) == .orderedSame {
-                return lowerBound
+        while lower < upper {
+            let mid = lower &+ (upper &- lower) / 2
+            if try predicate(self[mid]) {
+                upper = mid
             } else {
-                return nil
+                lower = mid &+ 1
             }
         }
 
-        func rightMostSearch(lowerBound: Index, upperBound: Index) -> Index? {
-            var lowerBound = lowerBound
-            var upperBound = upperBound
+        return lower < endIndex ? lower : nil
+    }
 
-            while lowerBound < upperBound {
-                let midIndex = (lowerBound &+ upperBound &+ 1) / 2
-                if predicate(self[midIndex]) == .orderedDescending {
-                    upperBound = midIndex &- 1
-                } else {
-                    lowerBound = midIndex
-                }
-            }
-            if predicate(self[lowerBound]) == .orderedSame {
-                return lowerBound
+    func binarySearchRange(_ predicate: (Element) throws -> ComparisonResult) rethrows -> [Element] {
+        var lower = startIndex
+        var upper = endIndex
+        while lower < upper {
+            let mid = lower + (upper - lower) / 2
+            if try predicate(self[mid]) == .orderedAscending {
+                lower = mid + 1
             } else {
-                return nil
+                upper = mid
             }
         }
+        let start = lower
 
-        guard !isEmpty,
-              let lowerBound = leftMostSearch(lowerBound: startIndex, upperBound: endIndex - 1),
-              let upperBound = rightMostSearch(lowerBound: startIndex, upperBound: endIndex - 1) else {
-            return []
+        lower = start
+        upper = endIndex
+        while lower < upper {
+            let mid = lower + (upper - lower) / 2
+            let result = try predicate(self[mid])
+            if result == .orderedDescending {
+                upper = mid
+            } else {
+                lower = mid + 1
+            }
         }
+        let end = lower
 
-        return Array(self[lowerBound...upperBound])
+        return Array(self[start..<end])
     }
 }

@@ -27,7 +27,10 @@ let package = Package(
         .target(
             name: "ChatLayout",
             dependencies: [],
-            path: "ChatLayout/Classes"
+            path: "ChatLayout/Classes",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
         ),
         .testTarget(
             name: "ChatLayoutTests",

@@ -28,10 +28,10 @@ final class PerformanceTests: XCTestCase {
             }
         }
         let values = (0...100000).map { $0 }
-        XCTAssertEqual(values.binarySearch(predicate: predicate), constant)
+        XCTAssertEqual(values.binarySearch(predicate), constant)
         measure {
             for _ in 0..<100000 {
-                _ = values.withUnsafeBufferPointer { $0.binarySearch(predicate: predicate) }
+                _ = values.withUnsafeBufferPointer { $0.binarySearch(predicate) }
             }
         }
     }
@@ -48,10 +48,10 @@ final class PerformanceTests: XCTestCase {
             }
         }
         let values = (0...100000).map { $0 }
-        XCTAssertEqual(values.binarySearchRange(predicate: predicate), (constant...(constant + 111)).map { $0 })
+        XCTAssertEqual(values.binarySearchRange(predicate), (constant...(constant + 111)).map { $0 })
         measure {
             for _ in 0..<100000 {
-                _ = values.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+                _ = values.withUnsafeBufferPointer { $0.binarySearchRange(predicate) }
             }
         }
     }

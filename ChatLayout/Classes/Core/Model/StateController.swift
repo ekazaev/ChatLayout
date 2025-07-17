@@ -202,8 +202,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
            let cachedAttributesState,
            cachedAttributesState.rect.contains(rect) {
             return !pinnedIndexPaths.isEmpty
-                ? cachedAttributesState.attributes.filter { $0.frame.intersects(rect) }
-                : cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+                ? cachedAttributesState.attributes.withUnsafeBufferPointer { $0.filter { $0.frame.intersects(rect) } }
+                : cachedAttributesState.attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate) }
         } else {
             let totalRect: CGRect
             switch state {
@@ -221,9 +221,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             if rect == totalRect {
                 visibleAttributes = attributes
             } else if !pinnedIndexPaths.isEmpty {
-                visibleAttributes = attributes.filter { $0.frame.intersects(rect) }
+                visibleAttributes = attributes.withUnsafeBufferPointer { $0.filter { $0.frame.intersects(rect) } }
             } else {
-                visibleAttributes = attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate: predicate) }
+                visibleAttributes = attributes.withUnsafeBufferPointer { $0.binarySearchRange(predicate) }
             }
             return visibleAttributes
         }
@@ -249,109 +249,164 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         switch layoutRepresentation.settings.pinnableItems {
         case .cells:
-            var visibleItems = [(indexPath: IndexPath, frame: CGRect, pinningType: ChatItemPinningType?)]()
-            for (sectionIndex, section) in layout.sections.enumerated() {
-                for itemIndex in 0..<section.items.count {
-                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                    if let itemFrame = itemFrame(for: itemPath, kind: .cell, at: state) {
-                        if visibleBounds.intersects(itemFrame) {
-                            visibleItems.append((indexPath: itemPath.indexPath, frame: itemFrame, pinningType: section.items[itemIndex].pinningType))
+            func getVisibleItems() throws -> [(indexPath: IndexPath, frame: CGRect, pinningType: ChatItemPinningType?)] {
+                let cumulativeCounts = layout.sections.reduce(into: [0]) { result, section in
+                    result.append((result.last ?? 0) + section.items.count)
+                }
+
+                guard let totalItemCount = cumulativeCounts.last,
+                      totalItemCount > 0 else {
+                    return []
+                }
+
+                func itemPath(for globalIndex: Int) throws -> ItemPath {
+                    guard let section = cumulativeCounts.withUnsafeBufferPointer({ $0.lowerBound({ $0 > globalIndex }) }).map({ $0 - 1 }) else {
+                        assertionFailure("Internal inconsistency.")
+                        throw NSError(domain: "ie.ekazaev.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Internal inconsistency."])
+                    }
+
+                    let item = globalIndex - cumulativeCounts[section]
+                    return ItemPath(item: item, section: section)
+                }
+
+                let visibleIndices = try (0..<totalItemCount).binarySearchRange { globalIndex in
+                    let itemPath = try itemPath(for: globalIndex)
+                    guard let frame = itemFrame(for: itemPath, kind: .cell, at: state) else {
+                        assertionFailure("Internal inconsistency.")
+                        throw NSError(domain: "ie.ekazaev.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Internal inconsistency."])
+                    }
+                    if frame.maxY < visibleBounds.minY {
+                        return .orderedAscending
+                    } else if frame.minY > visibleBounds.maxY {
+                        return .orderedDescending
+                    } else {
+                        return .orderedSame
+                    }
+                }
+
+                return try visibleIndices.map { globalIndex in
+                    let itemPath = try itemPath(for: globalIndex)
+                    guard let frame = itemFrame(for: itemPath, kind: .cell, at: state) else {
+                        assertionFailure("Internal inconsistency.")
+                        throw NSError(domain: "ie.ekazaev.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Internal inconsistency."])
+                    }
+                    return (
+                        indexPath: itemPath.indexPath,
+                        frame: frame,
+                        pinningType: layout.sections[itemPath.section].items[itemPath.item].pinningType
+                    )
+                }
+            }
+
+            guard let visibleItems = (try? getVisibleItems()) else {
+                pinnedIndexPaths = [:]
+                return
+            }
+
+            visibleItems.withUnsafeBufferPointer { visibleItems in
+                @MainActor
+                func checkExistingPinnedHeaderIndex() {
+                    if let pinnedIndexPaths = pinnedIndexPaths[.top] {
+                        guard let currentPinnedItem = visibleItems.binarySearch({ $0.indexPath.compare(pinnedIndexPaths.current) }).flatMap({ visibleItems[$0] }) else {
+                            self.pinnedIndexPaths[.top] = nil
+                            return
+                        }
+                        guard currentPinnedItem.frame.minY <= visibleBounds.minY else {
+                            self.pinnedIndexPaths[.top] = nil
+                            return
                         }
                     }
                 }
-            }
 
-            func checkExistingPinnedHeaderIndex() {
-                if let pinnedIndexPaths = pinnedIndexPaths[.top] {
-                    guard let currentPinnedItem = visibleItems.first(where: { $0.indexPath == pinnedIndexPaths.current }) else {
-                        self.pinnedIndexPaths[.top] = nil
-                        return
-                    }
+                @MainActor
+                func findNewPinnedHeaderIndex() {
+                    if pinnedIndexPaths[.top] == nil {
+                        if let item = visibleItems.first(where: { $0.pinningType == .top && $0.frame.minY <= visibleBounds.minY }) {
+                            pinnedIndexPaths[.top] = PinnedIndexes(current: item.indexPath, next: nil)
+                            return
+                        }
 
-                    guard currentPinnedItem.frame.minY <= visibleBounds.minY else {
-                        self.pinnedIndexPaths[.top] = nil
-                        return
-                    }
-                }
-            }
-
-            func findNewPinnedHeaderIndex() {
-                if pinnedIndexPaths[.top] == nil {
-                    if let item = visibleItems.first(where: { $0.pinningType == .top && $0.frame.minY <= visibleBounds.minY }) {
-                        pinnedIndexPaths[.top] = PinnedIndexes(current: item.indexPath, next: nil)
-                        return
-                    }
-
-                    if let firstVisibleIndexPath = visibleItems.first?.indexPath,
-                       let firstPinnedIndex = layout.findPinnedItemBefore(firstVisibleIndexPath, pinningType: .top) {
-                        pinnedIndexPaths[.top] = PinnedIndexes(current: firstPinnedIndex, next: nil)
-                        return
+                        if let firstVisibleIndexPath = visibleItems.first?.indexPath,
+                           let firstPinnedIndex = layout.findPinnedItemBefore(firstVisibleIndexPath, pinningType: .top) {
+                            pinnedIndexPaths[.top] = PinnedIndexes(current: firstPinnedIndex, next: nil)
+                            return
+                        }
                     }
                 }
-            }
 
-            func findNextPinnedHeaderIndex() {
-                if let pinnedIndexPaths = pinnedIndexPaths[.top],
-                   pinnedIndexPaths.next == nil {
-                    if let nextPinnedIndex = layout.findPinnedItemAfter(pinnedIndexPaths.current, pinningType: .top) {
-                        self.pinnedIndexPaths[.top]?.next = nextPinnedIndex
+                @MainActor
+                func findNextPinnedHeaderIndex() {
+                    if let pinnedIndexPaths = pinnedIndexPaths[.top],
+                       pinnedIndexPaths.next == nil {
+                        if let nextPinnedIndex = layout.findPinnedItemAfter(pinnedIndexPaths.current, pinningType: .top) {
+                            self.pinnedIndexPaths[.top]?.next = nextPinnedIndex
+                        }
                     }
                 }
-            }
 
-            func checkExistingPinnedFooterIndex() {
-                if let pinnedIndexPaths = pinnedIndexPaths[.bottom] {
-                    guard let currentPinnedItem = visibleItems.first(where: { $0.indexPath == pinnedIndexPaths.current }) else {
-                        self.pinnedIndexPaths[.bottom] = nil
-                        return
-                    }
+                @MainActor
+                func checkExistingPinnedFooterIndex() {
+                    if let pinnedIndexPaths = pinnedIndexPaths[.bottom] {
+                        guard let currentPinnedItem = visibleItems.binarySearch({ $0.indexPath.compare(pinnedIndexPaths.current) }).flatMap({ visibleItems[$0] }) else {
+                            self.pinnedIndexPaths[.bottom] = nil
+                            return
+                        }
 
-                    // If currently pinned identifier has unpinned (went below top).
-                    guard currentPinnedItem.frame.minY >= visibleBounds.maxY else {
-                        self.pinnedIndexPaths[.bottom] = nil
-                        return
-                    }
-                }
-            }
-
-            func findNewPinnedFooterIndex() {
-                if pinnedIndexPaths[.bottom] == nil {
-                    if let item = visibleItems.first(where: { $0.pinningType == .bottom && $0.frame.maxY >= visibleBounds.maxY }) {
-                        pinnedIndexPaths[.bottom] = PinnedIndexes(current: item.indexPath, next: nil)
-                        return
-                    }
-
-                    if let lastVisibleIndexPath = visibleItems.last?.indexPath,
-                       let firstPinnedIndex = layout.findPinnedItemAfter(lastVisibleIndexPath, pinningType: .bottom) {
-                        pinnedIndexPaths[.bottom] = PinnedIndexes(current: firstPinnedIndex, next: nil)
-                        return
+                        guard currentPinnedItem.frame.minY >= visibleBounds.maxY else {
+                            self.pinnedIndexPaths[.bottom] = nil
+                            return
+                        }
                     }
                 }
-            }
 
-            func findNextPinnedFooterIndex() {
-                if let pinnedIndexPaths = pinnedIndexPaths[.bottom],
-                   pinnedIndexPaths.next == nil {
-                    if let nextPinnedIndex = layout.findPinnedItemBefore(pinnedIndexPaths.current, pinningType: .bottom) {
-                        self.pinnedIndexPaths[.bottom]?.next = nextPinnedIndex
+                @MainActor
+                func findNewPinnedFooterIndex() {
+                    if pinnedIndexPaths[.bottom] == nil {
+                        if let item = visibleItems.first(where: { $0.pinningType == .bottom && $0.frame.maxY >= visibleBounds.maxY }) {
+                            pinnedIndexPaths[.bottom] = PinnedIndexes(current: item.indexPath, next: nil)
+                            return
+                        }
+
+                        if let lastVisibleIndexPath = visibleItems.last?.indexPath,
+                           let firstPinnedIndex = layout.findPinnedItemAfter(lastVisibleIndexPath, pinningType: .bottom) {
+                            pinnedIndexPaths[.bottom] = PinnedIndexes(current: firstPinnedIndex, next: nil)
+                            return
+                        }
                     }
                 }
+
+                @MainActor
+                func findNextPinnedFooterIndex() {
+                    if let pinnedIndexPaths = pinnedIndexPaths[.bottom],
+                       pinnedIndexPaths.next == nil {
+                        if let nextPinnedIndex = layout.findPinnedItemBefore(pinnedIndexPaths.current, pinningType: .bottom) {
+                            self.pinnedIndexPaths[.bottom]?.next = nextPinnedIndex
+                        }
+                    }
+                }
+
+                checkExistingPinnedHeaderIndex()
+                findNewPinnedHeaderIndex()
+                findNextPinnedHeaderIndex()
+
+                checkExistingPinnedFooterIndex()
+                findNewPinnedFooterIndex()
+                findNextPinnedFooterIndex()
             }
-
-            checkExistingPinnedHeaderIndex()
-            findNewPinnedHeaderIndex()
-            findNextPinnedHeaderIndex()
-
-            checkExistingPinnedFooterIndex()
-            findNewPinnedFooterIndex()
-            findNextPinnedFooterIndex()
         case .supplementaryViews:
             var visibleSections = [(index: Int, section: SectionModel<Layout>, headerFrame: CGRect?, footerFrame: CGRect?)]()
             for (sectionIndex, section) in layout.sections.enumerated() {
                 let sectionFrame = CGRect(origin: .init(x: 0, y: section.offsetY), size: CGSize(width: visibleBounds.width, height: section.height))
                 if visibleBounds.intersects(sectionFrame) {
                     let itemPath = ItemPath(item: 0, section: sectionIndex)
-                    visibleSections.append((index: sectionIndex, section, headerFrame: itemFrame(for: itemPath, kind: .header, at: state), footerFrame: itemFrame(for: itemPath, kind: .footer, at: state)))
+                    visibleSections.append(
+                        (
+                            index: sectionIndex,
+                            section,
+                            headerFrame: itemFrame(for: itemPath, kind: .header, at: state),
+                            footerFrame: itemFrame(for: itemPath, kind: .footer, at: state)
+                        )
+                    )
                 }
             }
 
@@ -696,7 +751,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         if layoutRepresentation.keepContentAtBottomOfVisibleArea == true,
            !(kind == .header && itemPath.section == 0),
-           !isPinnedItem(indexPath: itemPath.indexPath, kind: kind),
+           !(withPinnning && isPinnedItem(indexPath: itemPath.indexPath, kind: kind)),
            !isLayoutBiggerThanVisibleBounds(at: state, withFullCompensation: false, visibleBounds: visibleBounds) {
             itemFrame.offsettingBy(dx: 0, dy: visibleBounds.height.rounded() - contentSize(for: state).height.rounded())
         }
@@ -1367,7 +1422,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                     // Find if any of the items of the section is visible
 
                     if comparisonResults.contains(predicate(itemIndex: section.items.count - 1)),
-                       let firstMatchingIndex = ContiguousArray(0...section.items.count - 1).withUnsafeBufferPointer({ $0.binarySearch(predicate: predicate) }) {
+                       let firstMatchingIndex = ContiguousArray(0...section.items.count - 1).withUnsafeBufferPointer({ $0.binarySearch(predicate) }) {
                         // Find first item that is visible
                         startingIndex = firstMatchingIndex
                         for itemIndex in (0..<firstMatchingIndex).reversed() {
