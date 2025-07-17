@@ -20,6 +20,7 @@
 - [Features](#features)
     - [What ChatLayout doesn't provide (And why it is good)](#what-chatlayout-doesnt-provide-and-why-it-is-good)
 - [Requirements](#requirements)
+- [Documentation](#documentation)
 - [Example](#example)
 - [Installation](#installation)
 - [Contributing](#contributing)
@@ -89,6 +90,10 @@ keyboard presentation. The only thing you have to do is to update the `contentIn
 
 - `ChatLayout` doesn't provide you any input control. You can use any one you like and customise it the way you like. 
 The Example app for instance uses [InputBarAccessoryView](https://github.com/nathantannar4/InputBarAccessoryView).
+
+## Documentation
+
+Refer to the documentation at the following [link](https://ekazaev.github.io/ChatLayout/) for detailed information and usage guidelines.
 
 ## Example
 
