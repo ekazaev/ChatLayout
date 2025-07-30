@@ -919,6 +919,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         func applyConfiguration(_ configuration: ItemModel.Configuration, to item: inout ItemModel) {
             item.alignment = configuration.alignment
             item.interItemSpacing = configuration.interItemSpacing
+            item.pinningType = configuration.pinningType
             if let calculatedSize = configuration.calculatedSize {
                 item.calculatedSize = calculatedSize
                 item.calculatedOnce = true
