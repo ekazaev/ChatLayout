@@ -18,6 +18,7 @@ public struct ChatLayoutSettings: Equatable, Sendable {
     /// Represents type of pinnable elements in the layout.
     public enum PinneableItems: Equatable, Sendable {
         /// Pin supplementary views (header and/or footer).
+        @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
         case supplementaryViews
         /// Pin cells
         case cells

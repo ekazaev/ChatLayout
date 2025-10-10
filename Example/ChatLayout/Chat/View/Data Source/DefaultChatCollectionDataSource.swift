@@ -23,8 +23,6 @@ typealias DateSeparatorCollectionCell = ContainerCollectionViewCell<DateSeparato
 typealias UserTitleCollectionCell = ContainerCollectionViewCell<SwappingContainerView<EdgeAligningView<UILabel>, UIImageView>>
 typealias TypingIndicatorCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarPlaceholderView, TextMessageView, VoidViewFactory>>>
 
-typealias TextTitleView = ContainerCollectionReusableView<UILabel>
-
 final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource {
     private unowned var reloadDelegate: ReloadDelegate
 
@@ -61,11 +59,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         collectionView.register(UserTitleCollectionCell.self, forCellWithReuseIdentifier: UserTitleCollectionCell.reuseIdentifier)
         collectionView.register(DateSeparatorCollectionCell.self, forCellWithReuseIdentifier: DateSeparatorCollectionCell.reuseIdentifier)
         collectionView.register(TypingIndicatorCollectionCell.self, forCellWithReuseIdentifier: TypingIndicatorCollectionCell.reuseIdentifier)
-        collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TextTitleView.reuseIdentifier)
-        collectionView.register(TextTitleView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: TextTitleView.reuseIdentifier)
-        if #available(iOS 13.0, *) {
-            collectionView.register(URLCollectionCell.self, forCellWithReuseIdentifier: URLCollectionCell.reuseIdentifier)
-        }
+        collectionView.register(URLCollectionCell.self, forCellWithReuseIdentifier: URLCollectionCell.reuseIdentifier)
     }
 
     private func createTextCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, text: String, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
@@ -166,20 +160,16 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         cell.customView.accessoryView.contentMode = .scaleAspectFit
         cell.customView.accessoryView.tintColor = .gray
         cell.customView.accessoryView.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 13.0, *) {
-            if cell.customView.accessoryView.image == nil {
-                cell.customView.accessoryView.image = UIImage(systemName: "person")
-                let constraints = [
-                    cell.customView.accessoryView.widthAnchor.constraint(equalTo: cell.customView.accessoryView.heightAnchor),
-                    cell.customView.accessoryView.heightAnchor.constraint(equalTo: cell.customView.customView.customView.heightAnchor, constant: 2)
-                ]
-                constraints.forEach { $0.priority = UILayoutPriority(rawValue: 999) }
-                cell.customView.customView.customView.setContentHuggingPriority(.required, for: .vertical)
-                cell.customView.accessoryView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-                NSLayoutConstraint.activate(constraints)
-            }
-        } else {
-            cell.customView.accessoryView.isHidden = true
+        if cell.customView.accessoryView.image == nil {
+            cell.customView.accessoryView.image = UIImage(systemName: "person")
+            let constraints = [
+                cell.customView.accessoryView.widthAnchor.constraint(equalTo: cell.customView.accessoryView.heightAnchor),
+                cell.customView.accessoryView.heightAnchor.constraint(equalTo: cell.customView.customView.customView.heightAnchor, constant: 2)
+            ]
+            constraints.forEach { $0.priority = UILayoutPriority(rawValue: 999) }
+            cell.customView.customView.customView.setContentHuggingPriority(.required, for: .vertical)
+            cell.customView.accessoryView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+            NSLayoutConstraint.activate(constraints)
         }
         cell.contentView.layoutMargins = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 40)
         return cell
@@ -274,11 +264,7 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
                 let cell = createTextCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, text: text, date: message.date, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
                 return cell
             case let .url(url, isLocallyStored: _):
-                if #available(iOS 13.0, *) {
-                    return createURLCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, url: url, date: message.date, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
-                } else {
-                    return createTextCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, text: url.absoluteString, date: message.date, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
-                }
+                return createURLCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, url: url, date: message.date, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
             case let .image(source, isLocallyStored: _):
                 let cell = createImageCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, alignment: cell.alignment, user: message.owner, source: source, date: message.date, bubbleType: bubbleType, status: message.status, messageType: message.type)
                 return cell
@@ -293,48 +279,9 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
             return createTypingIndicatorCell(collectionView: collectionView, indexPath: indexPath)
         }
     }
-
-    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            let view = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: TextTitleView.reuseIdentifier,
-                for: indexPath
-            ) as! TextTitleView
-            view.customView.text = sections[indexPath.section].title
-            view.customView.preferredMaxLayoutWidth = 300
-            view.customView.textColor = .lightGray
-            view.customView.numberOfLines = 0
-            view.customView.font = .preferredFont(forTextStyle: .caption2)
-            return view
-        case UICollectionView.elementKindSectionFooter:
-            let view = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: TextTitleView.reuseIdentifier,
-                for: indexPath
-            ) as! TextTitleView
-            view.customView.text = "Made with ChatLayout"
-            view.customView.preferredMaxLayoutWidth = 300
-            view.customView.textColor = .lightGray
-            view.customView.numberOfLines = 0
-            view.customView.font = .preferredFont(forTextStyle: .caption2)
-            return view
-        default:
-            fatalError()
-        }
-    }
 }
 
 extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
-    public func shouldPresentHeader(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
-        true
-    }
-
-    public func shouldPresentFooter(_ chatLayout: CollectionViewChatLayout, at sectionIndex: Int) -> Bool {
-        true
-    }
-
     func pinningTypeForItem(
         _ chatLayout: CollectionViewChatLayout,
         at indexPath: IndexPath

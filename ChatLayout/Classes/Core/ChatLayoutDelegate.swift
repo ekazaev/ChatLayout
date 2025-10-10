@@ -30,6 +30,7 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     func shouldPresentHeader(
         _ chatLayout: CollectionViewChatLayout,
         at sectionIndex: Int
@@ -40,6 +41,7 @@ public protocol ChatLayoutDelegate: AnyObject {
     ///   - chatLayout: `CollectionViewChatLayout` reference.
     ///   - sectionIndex: Index of the section.
     /// - Returns: `Bool`.
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     func shouldPresentFooter(
         _ chatLayout: CollectionViewChatLayout,
         at sectionIndex: Int
@@ -52,6 +54,7 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// - Returns: `Bool`.
     ///
     /// **NB:** This method will be called only if the `ChatLayoutSettings.pinnableItems` is set to `.supplementaryViews`
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     func shouldPinHeaderToVisibleBounds(
         _ chatLayout: CollectionViewChatLayout,
         at sectionIndex: Int
@@ -64,6 +67,7 @@ public protocol ChatLayoutDelegate: AnyObject {
     /// - Returns: `Bool`.
     ///
     /// **NB:** This method will be called only if the `ChatLayoutSettings.pinnableItems` is set to `.supplementaryViews`
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     func shouldPinFooterToVisibleBounds(
         _ chatLayout: CollectionViewChatLayout,
         at sectionIndex: Int
@@ -176,6 +180,7 @@ public protocol ChatLayoutDelegate: AnyObject {
 /// Default extension.
 public extension ChatLayoutDelegate {
     /// Default implementation returns: `false`.
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     func shouldPresentHeader(
         _ chatLayout: CollectionViewChatLayout,
         at sectionIndex: Int
@@ -184,6 +189,7 @@ public extension ChatLayoutDelegate {
     }
 
     /// Default implementation returns: `false`.
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     func shouldPresentFooter(
         _ chatLayout: CollectionViewChatLayout,
         at sectionIndex: Int
@@ -192,6 +198,7 @@ public extension ChatLayoutDelegate {
     }
 
     /// Default implementation returns: `false`.
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     func shouldPinHeaderToVisibleBounds(
         _ chatLayout: CollectionViewChatLayout,
         at sectionIndex: Int
@@ -208,6 +215,7 @@ public extension ChatLayoutDelegate {
     }
 
     /// Default implementation returns: `false`.
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     func shouldPinFooterToVisibleBounds(
         _ chatLayout: CollectionViewChatLayout,
         at sectionIndex: Int

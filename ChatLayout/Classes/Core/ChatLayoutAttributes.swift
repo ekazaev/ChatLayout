@@ -43,6 +43,7 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     var id: UUID?
     #endif
 
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     convenience init(kind: ItemKind, indexPath: IndexPath = IndexPath(item: 0, section: 0)) {
         switch kind {
         case .cell:
@@ -52,6 +53,10 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         case .footer:
             self.init(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: indexPath)
         }
+    }
+
+    convenience init(indexPath: IndexPath = IndexPath(item: 0, section: 0)) {
+        self.init(forCellWith: indexPath)
     }
 
     /// Returns an exact copy of `ChatLayoutAttributes`.

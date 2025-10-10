@@ -20,17 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard !ProcessInfo.isRunningTests else {
             return false
         }
-        if #available(iOS 13.0, *) {
-        } else {
-            let window = UIWindow()
-
-            let chatViewController = ChatViewControllerBuilder().build()
-            let viewController = UINavigationController(rootViewController: chatViewController)
-
-            self.window = window
-            window.rootViewController = viewController
-            window.makeKeyAndVisible()
-        }
         return true
     }
 

@@ -105,11 +105,7 @@ final class ChatViewController: UIViewController {
         super.viewDidLoad()
         fpsCounter.delegate = self
         fpsCounter.startTracking()
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemBackground
-        } else {
-            view.backgroundColor = .white
-        }
+        view.backgroundColor = .systemBackground
 
         inputBarView.delegate = self
 
@@ -118,13 +114,8 @@ final class ChatViewController: UIViewController {
         fpsView.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 0, right: 16)
         fpsView.customView.font = .preferredFont(forTextStyle: .caption2)
         fpsView.customView.text = "FPS: unknown"
-        if #available(iOS 13.0, *) {
-            fpsView.backgroundColor = .systemBackground
-            fpsView.customView.textColor = .systemGray3
-        } else {
-            fpsView.backgroundColor = .white
-            fpsView.customView.textColor = .lightGray
-        }
+        fpsView.backgroundColor = .systemBackground
+        fpsView.customView.textColor = .systemGray3
         inputBarView.topStackView.addArrangedSubview(fpsView)
         inputBarView.shouldAnimateTextDidChangeLayout = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Show Keyboard", style: .plain, target: self, action: #selector(ChatViewController.showHideKeyboard))
@@ -353,7 +344,11 @@ extension ChatViewController: UIScrollViewDelegate {
                 collectionView.contentOffset = CGPoint(x: collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
                 if percentage == 1.0 {
                     animator = nil
-                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: 0), kind: .footer, edge: .bottom)
+                    guard let lastSection = dataSource.sections.last else {
+                        collectionView.reloadData()
+                        return
+                    }
+                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: lastSection.cells.count - 1, section: dataSource.sections.count - 1), edge: .bottom)
                     chatLayout.restoreContentOffset(with: positionSnapshot)
                     currentInterfaceActions.options.remove(.scrollingToBottom)
                     completion?()
@@ -516,7 +511,11 @@ extension ChatViewController: ChatControllerDelegate {
                     return false
                 },
                 onInterruptedReload: {
-                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: 0, section: sections.count - 1), kind: .footer, edge: .bottom)
+                    guard let lastSection = sections.last else {
+                        self.collectionView.reloadData()
+                        return
+                    }
+                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: lastSection.cells.count - 1, section: sections.count - 1), edge: .bottom)
                     self.collectionView.reloadData()
                     // We want so that user on reload appeared at the very bottom of the layout
                     self.chatLayout.restoreContentOffset(with: positionSnapshot)

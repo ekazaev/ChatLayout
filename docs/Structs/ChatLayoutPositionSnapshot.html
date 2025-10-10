@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          ChatLayout 2.2.3 Docs
+          ChatLayout 2.3.0 Docs
         </a>
          (100% documented)
       </p>
@@ -255,7 +255,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">deprecated</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"Support for supplementary views is deprecated and will be discontinued in future versions."</span><span class="p">)</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span></code></pre>
 
                         </div>
                       </div>
@@ -336,7 +337,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">deprecated</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"Support for supplementary views is deprecated and will be discontinued in future versions."</span><span class="p">)</span>
+<span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
     <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
     <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
     <span class="nv">edge</span><span class="p">:</span> <span class="kt"><a href="../Structs/ChatLayoutPositionSnapshot/Edge.html">Edge</a></span><span class="p">,</span>
@@ -403,6 +405,80 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB16PositionSnapshotV9indexPath4edge6offsetAC10Foundation05IndexF0V_AC4EdgeO04CoreI07CGFloatVtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(indexPath:edge:offset:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB16PositionSnapshotV9indexPath4edge6offsetAC10Foundation05IndexF0V_AC4EdgeO04CoreI07CGFloatVtcfc">init(indexPath:<wbr>edge:<wbr>offset:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Constructor</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
+    <span class="nv">edge</span><span class="p">:</span> <span class="kt"><a href="../Structs/ChatLayoutPositionSnapshot/Edge.html">Edge</a></span><span class="p">,</span>
+    <span class="nv">offset</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>indexPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Item&rsquo;s <code>IndexPath</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>edge</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The edge of the offset.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>offset</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The offset from the <code><a href="../Structs/ChatLayoutPositionSnapshot.html#/s:10ChatLayout0aB16PositionSnapshotV4edgeAC4EdgeOvp">edge</a></code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -411,7 +487,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2025 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2025-09-18)</p>
+      <p>&copy; 2025 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2025-10-10)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

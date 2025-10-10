@@ -28,6 +28,7 @@ public struct ChatLayoutPositionSnapshot: Hashable, Sendable {
     public var indexPath: IndexPath
 
     /// Kind of item at the `indexPath`
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     public var kind: ItemKind
 
     /// The edge of the offset.
@@ -42,6 +43,7 @@ public struct ChatLayoutPositionSnapshot: Hashable, Sendable {
     ///   - edge: The edge of the offset.
     ///   - offset: The offset from the `edge`.
     ///   - kind: Kind of item at the `indexPath`
+    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
     public init(
         indexPath: IndexPath,
         kind: ItemKind,
@@ -52,5 +54,21 @@ public struct ChatLayoutPositionSnapshot: Hashable, Sendable {
         self.edge = edge
         self.offset = offset
         self.kind = kind
+    }
+
+    /// Constructor
+    /// - Parameters:
+    ///   - indexPath: Item's `IndexPath`
+    ///   - edge: The edge of the offset.
+    ///   - offset: The offset from the `edge`.
+    public init(
+        indexPath: IndexPath,
+        edge: Edge,
+        offset: CGFloat = 0
+    ) {
+        self.indexPath = indexPath
+        self.edge = edge
+        self.offset = offset
+        kind = .cell
     }
 }

@@ -7,7 +7,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b97c279a50984376ab2649f5a7d09e69)](https://www.codacy.com/gh/ekazaev/ChatLayout/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ekazaev/ChatLayout&amp;utm_campaign=Badge_Grade)
 [![Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BA51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Swift 6.1](https://img.shields.io/badge/language-Swift6.1-orange.svg?style=flat)](https://developer.apple.com/swift)
+[![Swift 6.2](https://img.shields.io/badge/language-Swift6.2-orange.svg?style=flat)](https://developer.apple.com/swift)
 [![Platform iOS](https://img.shields.io/badge/platform-iOS%2013%20—%20iOS%2026-yellow.svg)](https://www.apple.com/ios)
 
 <p align="center">
@@ -42,12 +42,12 @@
 
 ## Features
 
-- Supports dynamic cells and supplementary view sizes.
+- Supports dynamic cells sizes.
 - Animated insertion/deletion/reloading/moving of the items.
 - Keeps content of the last visible item at the top or bottom of the `UICollectionView` during updates.
 - Provides tools for precise scrolling to the required item.
 - Shipped with generic container views to simplify the custom items implementation.
-- Pinned (sticky) headers/footers or cells.
+- Pinned (sticky) cells that can behave like headers/footers.
 
 ![](https://habrastorage.org/webt/jt/gq/sl/jtgqsluujffi4-jnxeikbwtyyu0.gif)
 ![](https://habrastorage.org/webt/b7/cu/3s/b7cu3su6uk4hw1kqg3_ky3uklu4.gif)
@@ -129,6 +129,13 @@ It can be tempting and it may look like it is the right way to go, but **do not*
 messages or groups of them. `UICollectionView` processes them in a different order: `UICollectionViewCell`s first and 
 only after switches to `UICollectionReusableView`s. You will most likely face some unexpected behaviour during the animation.
 **I strongly advice you against using sections at all.**
+
+After careful consideration and in light of the behavioral changes observed in `UICollectionView` with the release of iOS 18, 
+I have decided to discontinue support for supplementary views. As a developer, I have not utilized supplementary views in my 
+own work and have consistently advised against their use. Even within the standard `UICollectionView`, support for supplementary 
+views is limited, as they cannot be easily reloaded, added, or removed without reloading an entire section. Furthermore, all 
+functionalities provided by supplementary views can be effectively achieved using standard cells.
+*As a result, support for supplementary views will be deprecated and fully removed in future versions of `ChatLayout`.* 
 
 ### About Texture
 

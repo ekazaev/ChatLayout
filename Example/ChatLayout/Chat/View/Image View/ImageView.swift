@@ -80,11 +80,7 @@ final class ImageView: UIView, ContainerCollectionViewCellDelegate {
             if !loadingIndicator.isAnimating {
                 loadingIndicator.startAnimating()
             }
-            if #available(iOS 13.0, *) {
-                backgroundColor = .systemGray5
-            } else {
-                backgroundColor = UIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
-            }
+            backgroundColor = .systemGray5
             setupSize()
         case let .image(image):
             loadingIndicator.isHidden = true
