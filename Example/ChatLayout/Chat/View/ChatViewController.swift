@@ -141,9 +141,7 @@ final class ChatViewController: UIViewController {
         collectionView.isPrefetchingEnabled = false
 
         collectionView.contentInsetAdjustmentBehavior = .always
-        if #available(iOS 13.0, *) {
-            collectionView.automaticallyAdjustsScrollIndicatorInsets = true
-        }
+        collectionView.automaticallyAdjustsScrollIndicatorInsets = true
 
         if #available(iOS 16.0, *),
            enableSelfSizingSupport {
@@ -367,7 +365,6 @@ extension ChatViewController: UIScrollViewDelegate {
 }
 
 extension ChatViewController: UICollectionViewDelegate {
-    @available(iOS 13.0, *)
     private func preview(for configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         guard let identifier = configuration.identifier as? String else {
             return nil
@@ -410,17 +407,14 @@ extension ChatViewController: UICollectionViewDelegate {
         }
     }
 
-    @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         preview(for: configuration)
     }
 
-    @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         preview(for: configuration)
     }
 
-    @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         guard !currentInterfaceActions.options.contains(.showingPreview),
               !currentControllerActions.options.contains(.updatingCollection) else {
@@ -666,17 +660,11 @@ extension ChatViewController: KeyboardListenerDelegate {
             UIView.animate(withDuration: info.animationDuration, animations: {
                 self.collectionView.performBatchUpdates({
                     self.collectionView.contentInset.bottom = newBottomInset
-                    self.collectionView.scrollIndicatorInsets.bottom = newBottomInset
+                    self.collectionView.verticalScrollIndicatorInsets.bottom = newBottomInset
                 }, completion: nil)
 
                 if let positionSnapshot, !self.isUserInitiatedScrolling {
                     self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                }
-                if #available(iOS 13.0, *) {
-                } else {
-                    // When contentInset is changed programmatically IOs 13 calls invalidate context automatically.
-                    // this does not happen in ios 12 so we do it manually
-                    self.collectionView.collectionViewLayout.invalidateLayout()
                 }
             }, completion: { _ in
                 self.currentInterfaceActions.options.remove(.changingContentInsets)

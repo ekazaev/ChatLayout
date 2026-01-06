@@ -648,14 +648,12 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             layoutAttributesForPendingAnimation?.frame.size = newItemSize
         }
 
-        if #available(iOS 13.0, *) {
-            switch preferredMessageAttributes.kind {
-            case .cell:
-                context.invalidateItems(at: [preferredMessageAttributes.indexPath])
-            case .footer,
-                 .header:
-                context.invalidateSupplementaryElements(ofKind: preferredMessageAttributes.kind.supplementaryElementStringType, at: [preferredMessageAttributes.indexPath])
-            }
+        switch preferredMessageAttributes.kind {
+        case .cell:
+            context.invalidateItems(at: [preferredMessageAttributes.indexPath])
+        case .footer,
+             .header:
+            context.invalidateSupplementaryElements(ofKind: preferredMessageAttributes.kind.supplementaryElementStringType, at: [preferredMessageAttributes.indexPath])
         }
 
         context.invalidateLayoutMetrics = false
@@ -844,12 +842,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                       let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate) {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 attributes?.indexPath = itemIndexPath
-                if #unavailable(iOS 13.0) {
-                    if controller.reloadedIndexes.contains(itemIndexPath) || controller.reconfiguredIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
-                        // It is needed to position the new cell in the middle of the old cell on ios 12
-                        attributesForPendingAnimations[.cell]?[itemPath] = attributes
-                    }
-                }
             } else {
                 attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)
             }
@@ -936,13 +928,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                       let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .beforeUpdate) {
                 attributes = controller.itemAttributes(for: initialIndexPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
                 attributes?.indexPath = elementIndexPath
-
-                if #unavailable(iOS 13.0) {
-                    if controller.reloadedSectionsIndexes.contains(elementPath.section) {
-                        // It is needed to position the new cell in the middle of the old cell on ios 12
-                        attributesForPendingAnimations[kind]?[elementPath] = attributes
-                    }
-                }
             } else {
                 attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)
             }
