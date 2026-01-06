@@ -3,7 +3,7 @@
 // MockCollectionLayout.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2025.
+// Created by Eugene Kazaev in 2020-2026.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -35,7 +35,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     lazy var controller = StateController(layoutRepresentation: self)
 
     /// Represent the rectangle where all the items are aligned.
-    public var layoutFrame: CGRect {
+    var layoutFrame: CGRect {
         CGRect(
             x: adjustedContentInset.left + settings.additionalInsets.left,
             y: adjustedContentInset.top + settings.additionalInsets.top,

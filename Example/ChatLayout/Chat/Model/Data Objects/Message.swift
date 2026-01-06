@@ -3,7 +3,7 @@
 // Message.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2025.
+// Created by Eugene Kazaev in 2020-2026.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -54,11 +54,11 @@ struct DateGroup: Hashable {
 }
 
 extension DateGroup: Differentiable {
-    public var differenceIdentifier: Int {
+    var differenceIdentifier: Int {
         hashValue
     }
 
-    public func isContentEqual(to source: DateGroup) -> Bool {
+    func isContentEqual(to source: DateGroup) -> Bool {
         self == source
     }
 }
@@ -78,11 +78,11 @@ struct MessageGroup: Hashable {
 }
 
 extension MessageGroup: Differentiable {
-    public var differenceIdentifier: Int {
+    var differenceIdentifier: Int {
         hashValue
     }
 
-    public func isContentEqual(to source: MessageGroup) -> Bool {
+    func isContentEqual(to source: MessageGroup) -> Bool {
         self == source
     }
 }
@@ -110,11 +110,11 @@ struct Message: Hashable {
 }
 
 extension Message: Differentiable {
-    public var differenceIdentifier: Int {
+    var differenceIdentifier: Int {
         id.hashValue
     }
 
-    public func isContentEqual(to source: Message) -> Bool {
+    func isContentEqual(to source: Message) -> Bool {
         self == source
     }
 }

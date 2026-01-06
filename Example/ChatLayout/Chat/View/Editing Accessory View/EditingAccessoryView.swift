@@ -3,7 +3,7 @@
 // EditingAccessoryView.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2025.
+// Created by Eugene Kazaev in 2020-2026.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -71,7 +71,7 @@ extension EditingAccessoryView: EditNotifierDelegate {
         }
     }
 
-    public func setIsEditing(_ isEditing: Bool, duration: ActionDuration = .notAnimated) {
+    func setIsEditing(_ isEditing: Bool, duration: ActionDuration = .notAnimated) {
         guard case let .animated(duration) = duration else {
             self.isEditing = isEditing
             return

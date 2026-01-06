@@ -3,7 +3,7 @@
 // Section.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2025.
+// Created by Eugene Kazaev in 2020-2026.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -22,19 +22,19 @@ struct Section: Hashable {
 }
 
 extension Section: DifferentiableSection {
-    public var differenceIdentifier: Int {
+    var differenceIdentifier: Int {
         id
     }
 
-    public func isContentEqual(to source: Section) -> Bool {
+    func isContentEqual(to source: Section) -> Bool {
         id == source.id
     }
 
-    public var elements: [Cell] {
+    var elements: [Cell] {
         cells
     }
 
-    public init<C: Swift.Collection>(source: Section, elements: C) where C.Element == Cell {
+    init<C: Swift.Collection>(source: Section, elements: C) where C.Element == Cell {
         self.init(id: source.id, title: source.title, cells: Array(elements))
     }
 }

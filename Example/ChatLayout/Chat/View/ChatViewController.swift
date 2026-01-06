@@ -3,7 +3,7 @@
 // ChatViewController.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2025.
+// Created by Eugene Kazaev in 2020-2026.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -252,7 +252,7 @@ final class ChatViewController: UIViewController {
 }
 
 extension ChatViewController: UIScrollViewDelegate {
-    public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         guard scrollView.contentSize.height > 0,
               !currentInterfaceActions.options.contains(.showingAccessory),
               !currentInterfaceActions.options.contains(.showingPreview),
@@ -267,7 +267,7 @@ extension ChatViewController: UIScrollViewDelegate {
         return true
     }
 
-    public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         guard !currentControllerActions.options.contains(.loadingInitialMessages),
               !currentControllerActions.options.contains(.loadingPreviousMessages) else {
             return
@@ -411,12 +411,12 @@ extension ChatViewController: UICollectionViewDelegate {
     }
 
     @available(iOS 13.0, *)
-    public func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         preview(for: configuration)
     }
 
     @available(iOS 13.0, *)
-    public func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+    func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         preview(for: configuration)
     }
 
@@ -594,11 +594,11 @@ extension ChatViewController: UIGestureRecognizerDelegate {
         swipeNotifier.setSwipeCompletionRate(x / maxOffset)
     }
 
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         [gestureRecognizer, otherGestureRecognizer].contains(panGesture)
     }
 
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let gesture = gestureRecognizer as? UIPanGestureRecognizer, gesture == panGesture {
             let translation = gesture.translation(in: gesture.view)
             return (abs(translation.x) > abs(translation.y)) && (gesture == panGesture)
@@ -609,14 +609,14 @@ extension ChatViewController: UIGestureRecognizerDelegate {
 }
 
 extension ChatViewController: InputBarAccessoryViewDelegate {
-    public func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
+    func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
         guard !currentInterfaceActions.options.contains(.sendingMessage) else {
             return
         }
         scrollToBottom()
     }
 
-    public func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
+    func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         let messageText = inputBar.inputTextView.text
         currentInterfaceActions.options.insert(.sendingMessage)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
@@ -693,7 +693,7 @@ extension ChatViewController: KeyboardListenerDelegate {
 }
 
 extension ChatViewController: FPSCounterDelegate {
-    public func fpsCounter(_ counter: FPSCounter, didUpdateFramesPerSecond fps: Int) {
+    func fpsCounter(_ counter: FPSCounter, didUpdateFramesPerSecond fps: Int) {
         fpsView.customView.text = "FPS: \(fps)"
     }
 }

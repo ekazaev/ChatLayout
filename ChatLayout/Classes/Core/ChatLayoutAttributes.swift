@@ -3,7 +3,7 @@
 // ChatLayoutAttributes.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2025.
+// Created by Eugene Kazaev in 2020-2026.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -19,7 +19,7 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     public var alignment: ChatItemAlignment = .fullWidth
 
     /// Pinning behavour of the current item.
-    public var pinningType: ChatItemPinningType? = nil
+    public var pinningType: ChatItemPinningType?
 
     /// Inter item spacing. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var interItemSpacing: CGFloat = 0

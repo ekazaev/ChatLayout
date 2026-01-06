@@ -3,7 +3,7 @@
 // Cell.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2025.
+// Created by Eugene Kazaev in 2020-2026.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -44,7 +44,7 @@ enum Cell: Hashable {
 }
 
 extension Cell: Differentiable {
-    public var differenceIdentifier: Int {
+    var differenceIdentifier: Int {
         switch self {
         case let .message(message, _):
             message.differenceIdentifier
@@ -57,7 +57,7 @@ extension Cell: Differentiable {
         }
     }
 
-    public func isContentEqual(to source: Cell) -> Bool {
+    func isContentEqual(to source: Cell) -> Bool {
         self == source
     }
 }

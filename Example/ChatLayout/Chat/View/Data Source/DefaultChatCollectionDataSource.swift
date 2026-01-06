@@ -3,7 +3,7 @@
 // DefaultChatCollectionDataSource.swift
 // https://github.com/ekazaev/ChatLayout
 //
-// Created by Eugene Kazaev in 2020-2025.
+// Created by Eugene Kazaev in 2020-2026.
 // Distributed under the MIT license.
 //
 // Become a sponsor:
@@ -247,15 +247,15 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
 }
 
 extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         sections.count
     }
 
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         sections[section].cells.count
     }
 
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = sections[indexPath.section].cells[indexPath.item]
         switch cell {
         case let .message(message, bubbleType: bubbleType):
@@ -293,7 +293,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         return .top
     }
 
-    public func sizeForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
+    func sizeForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
         switch kind {
         case .cell:
             let item = sections[indexPath.section].cells[indexPath.item]
@@ -325,7 +325,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func alignmentForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
+    func alignmentForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
         switch kind {
         case .header:
             return .center
@@ -345,7 +345,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func initialLayoutAttributesForInsertedItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes, on state: InitialAttributesRequestType) {
+    func initialLayoutAttributesForInsertedItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes, on state: InitialAttributesRequestType) {
         originalAttributes.alpha = 0
         guard state == .invalidation,
               kind == .cell else {
@@ -367,7 +367,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func finalLayoutAttributesForDeletedItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes) {
+    func finalLayoutAttributesForDeletedItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes) {
         originalAttributes.alpha = 0
         guard kind == .cell else {
             return
@@ -388,7 +388,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func interItemSpacing(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, after indexPath: IndexPath) -> CGFloat? {
+    func interItemSpacing(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, after indexPath: IndexPath) -> CGFloat? {
         let item = sections[indexPath.section].cells[indexPath.item]
         switch item {
         case .messageGroup:
@@ -398,7 +398,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    public func interSectionSpacing(_ chatLayout: CollectionViewChatLayout, after sectionIndex: Int) -> CGFloat? {
+    func interSectionSpacing(_ chatLayout: CollectionViewChatLayout, after sectionIndex: Int) -> CGFloat? {
         50
     }
 }
