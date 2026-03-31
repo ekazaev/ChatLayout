@@ -18,6 +18,7 @@
 
 - [About](#about)
 - [Features](#features)
+    - [Agent mode](#agent-mode)
     - [What ChatLayout doesn't provide (And why it is good)](#what-chatlayout-doesnt-provide-and-why-it-is-good)
 - [Requirements](#requirements)
 - [Documentation](#documentation)
@@ -57,6 +58,12 @@
 ![](https://habrastorage.org/webt/gn/ny/qe/gnnyqepf46r4zdhyb4oug8vywvc.gif)
 ![](https://habrastorage.org/webt/t9/b7/4r/t9b74rdyrkf8lszjuhj_vrbp7-s.gif)
 ![](https://habrastorage.org/webt/nv/vr/js/nvvrjsqk0fzutq0y-uubjewyqjm.gif)
+
+### Agent mode
+
+The often-asked-for agent mode support is added:
+
+![](./assets/agent_mode.gif)
 
 ### What ChatLayout doesn't provide (And why it is good)
 

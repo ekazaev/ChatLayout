@@ -16,17 +16,25 @@ import UIKit
 protocol RandomDataProviderDelegate: AnyObject {
     func received(messages: [RawMessage])
 
+    func updated(message: RawMessage)
+
     func typingStateChanged(to state: TypingState)
 
     func lastReadIdChanged(to id: UUID)
 
     func lastReceivedIdChanged(to id: UUID)
+
+    func agentDidFinish()
 }
 
 protocol RandomDataProvider {
     func loadInitialMessages(completion: @escaping ([RawMessage]) -> Void)
 
     func loadPreviousMessages(completion: @escaping ([RawMessage]) -> Void)
+
+    func setAgentModeEnabled(_ isEnabled: Bool)
+
+    func startAgentResponse()
 
     func stop()
 }
@@ -37,6 +45,8 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     private var messageTimer: Timer?
 
     private var typingTimer: Timer?
+
+    private var agentMessageTimer: Timer?
 
     private var startingTimestamp = Date().timeIntervalSince1970
 
@@ -59,6 +69,16 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     private let enableNewMessages = true
 
     private let enableRichContent = true
+
+    private var isAgentModeEnabled = false
+
+    private var agentAnswerMessage: RawMessage?
+
+    private let maxAgentAnswerLetterCount = 5000
+
+    private let agentInitialResponseDelay: TimeInterval = 0.35
+
+    private let agentMessageUpdateInterval: TimeInterval = 0.12
 
     private let websiteUrls: [URL] = [
         URL(string: "https://messagekit.github.io")!,
@@ -93,8 +113,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     }
 
     func loadInitialMessages(completion: @escaping ([RawMessage]) -> Void) {
-        restartMessageTimer()
-        restartTypingTimer()
+        resumeDefaultTimersIfNeeded()
         dispatchQueue.async { [weak self] in
             guard let self else {
                 return
@@ -126,15 +145,45 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     }
 
     func stop() {
-        messageTimer?.invalidate()
-        messageTimer = nil
-        typingTimer?.invalidate()
-        typingTimer = nil
+        isAgentModeEnabled = false
+        agentAnswerMessage = nil
+        stopDefaultTimers()
+        stopAgentTimer()
+    }
+
+    func setAgentModeEnabled(_ isEnabled: Bool) {
+        guard isAgentModeEnabled != isEnabled else {
+            return
+        }
+
+        isAgentModeEnabled = isEnabled
+        let previousTypingState = typingState
+        typingState = .idle
+        if previousTypingState != .idle {
+            delegate?.typingStateChanged(to: .idle)
+        }
+
+        if isEnabled {
+            stopDefaultTimers()
+        } else {
+            agentAnswerMessage = nil
+            stopAgentTimer()
+            resumeDefaultTimersIfNeeded()
+        }
+    }
+
+    func startAgentResponse() {
+        guard isAgentModeEnabled,
+              agentAnswerMessage == nil else {
+            return
+        }
+        startAgentConversation()
     }
 
     @objc
     private func handleTimer() {
-        guard enableNewMessages else {
+        guard enableNewMessages,
+              !isAgentModeEnabled else {
             return
         }
         let message = createRandomMessage()
@@ -158,23 +207,118 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     @objc
     private func handleTypingTimer() {
-        guard enableTyping else {
+        guard enableTyping,
+              !isAgentModeEnabled else {
             return
         }
         typingState = typingState == .idle ? TypingState.typing : .idle
         delegate?.typingStateChanged(to: typingState)
     }
 
+    @objc
+    private func handleAgentMessageTimer() {
+        guard isAgentModeEnabled,
+              var answerMessage = agentAnswerMessage,
+              case let .text(currentText) = answerMessage.data else {
+            return
+        }
+
+        let updatedText = currentText + " " + randomAgentAnswerFragment()
+        answerMessage.data = .text(updatedText)
+        agentAnswerMessage = answerMessage
+        delegate?.updated(message: answerMessage)
+
+        if letterCount(in: updatedText) >= maxAgentAnswerLetterCount {
+            finishAgentMode()
+        }
+    }
+
     private func restartMessageTimer() {
+        guard !isAgentModeEnabled else {
+            return
+        }
         messageTimer?.invalidate()
         messageTimer = nil
         messageTimer = Timer.scheduledTimer(timeInterval: TimeInterval(Int.random(in: 0...6)), target: self, selector: #selector(handleTimer), userInfo: nil, repeats: true)
     }
 
     private func restartTypingTimer() {
+        guard !isAgentModeEnabled else {
+            return
+        }
         typingTimer?.invalidate()
         typingTimer = nil
         typingTimer = Timer.scheduledTimer(timeInterval: TimeInterval(Int.random(in: 1...3)), target: self, selector: #selector(handleTypingTimer), userInfo: nil, repeats: true)
+    }
+
+    private func restartAgentMessageTimer(initialDelay: TimeInterval = 0) {
+        guard isAgentModeEnabled else {
+            return
+        }
+        agentMessageTimer?.invalidate()
+        agentMessageTimer = nil
+        if initialDelay > 0 {
+            agentMessageTimer = Timer.scheduledTimer(withTimeInterval: initialDelay, repeats: false) { [weak self] _ in
+                self?.restartAgentMessageTimer()
+            }
+        } else {
+            agentMessageTimer = Timer.scheduledTimer(timeInterval: agentMessageUpdateInterval, target: self, selector: #selector(handleAgentMessageTimer), userInfo: nil, repeats: true)
+        }
+    }
+
+    private func stopDefaultTimers() {
+        messageTimer?.invalidate()
+        messageTimer = nil
+        typingTimer?.invalidate()
+        typingTimer = nil
+    }
+
+    private func stopAgentTimer() {
+        agentMessageTimer?.invalidate()
+        agentMessageTimer = nil
+    }
+
+    private func resumeDefaultTimersIfNeeded() {
+        guard !isAgentModeEnabled else {
+            return
+        }
+        restartMessageTimer()
+        restartTypingTimer()
+    }
+
+    private func startAgentConversation() {
+        stopAgentTimer()
+
+        let answerMessage = RawMessage(
+            id: UUID(),
+            date: Date().addingTimeInterval(0.001),
+            data: .text("Answer"),
+            userId: users.randomElement() ?? receiverId
+        )
+        agentAnswerMessage = answerMessage
+        delegate?.received(messages: [answerMessage])
+        restartAgentMessageTimer(initialDelay: agentInitialResponseDelay)
+    }
+
+    private func finishAgentMode() {
+        isAgentModeEnabled = false
+        agentAnswerMessage = nil
+        stopAgentTimer()
+        resumeDefaultTimersIfNeeded()
+        delegate?.agentDidFinish()
+    }
+
+    private func randomAgentAnswerFragment() -> String {
+        let sentence = TextGenerator.getString(of: Int.random(in: 4...10))
+        let trimmedSentence = sentence.hasSuffix(".") ? String(sentence.dropLast()) : sentence
+        guard let firstCharacter = trimmedSentence.first else {
+            return trimmedSentence
+        }
+        return String(firstCharacter).lowercased() + trimmedSentence.dropFirst()
+    }
+
+    private func letterCount(in text: String) -> Int {
+        text.unicodeScalars.filter(CharacterSet.letters.contains).count
     }
 
     private func createRandomMessage(date: Date = Date()) -> RawMessage {

@@ -28,6 +28,23 @@ final class DefaultChatController: ChatController {
 
     private let userId: Int
 
+    private let agentQuestions = [
+        "Why does the moon look larger near the horizon?",
+        "How do airplanes stay stable in turbulence?",
+        "Why do some metals rust while others do not?",
+        "How does a search engine rank results so quickly?",
+        "Why do people hear an echo in some spaces but not others?",
+        "How does a battery store and release energy?",
+        "Why does hot water sometimes freeze faster than cold water?",
+        "How do noise-cancelling headphones remove background sound?",
+        "Why do leaves change color before they fall?",
+        "How does a GPS device know where it is?",
+    ]
+
+    private(set) var isAgentModeEnabled = false
+
+    private(set) var extendedLayoutMessageID: UUID?
+
     var messages: [RawMessage] = []
 
     init(dataProvider: RandomDataProvider, userId: Int) {
@@ -66,6 +83,25 @@ final class DefaultChatController: ChatController {
         propagateLatestMessages { sections in
             completion(sections)
         }
+    }
+
+    func setAgentModeEnabled(_ isEnabled: Bool) {
+        guard isAgentModeEnabled != isEnabled else {
+            return
+        }
+
+        if isEnabled {
+            startAgentMode()
+        } else {
+            finishAgentMode(notifyDataProvider: true)
+        }
+    }
+
+    func startAgentResponse() {
+        guard isAgentModeEnabled else {
+            return
+        }
+        dataProvider.startAgentResponse()
     }
 
     private func appendConvertingToMessages(_ rawMessages: [RawMessage]) {
@@ -198,6 +234,53 @@ final class DefaultChatController: ChatController {
             self.delegate?.update(with: sections, requiresIsolatedProcess: requiresIsolatedProcess)
         }
     }
+
+    private func startAgentMode() {
+        isAgentModeEnabled = true
+        typingState = .idle
+
+        let questionMessage = RawMessage(
+            id: UUID(),
+            date: Date(),
+            data: .text("Question: \(randomQuestion())"),
+            userId: userId
+        )
+        messages.append(questionMessage)
+        extendedLayoutMessageID = questionMessage.id
+        dataProvider.setAgentModeEnabled(true)
+        delegate?.agentModeChanged(to: true)
+
+        propagateLatestMessages { sections in
+            self.delegate?.update(with: sections, requiresIsolatedProcess: false)
+        }
+    }
+
+    private func finishAgentMode(notifyDataProvider: Bool) {
+        let shouldNotifyDelegate = isAgentModeEnabled || extendedLayoutMessageID != nil
+        isAgentModeEnabled = false
+        extendedLayoutMessageID = nil
+        typingState = .idle
+
+        if shouldNotifyDelegate {
+            delegate?.agentModeChanged(to: false)
+            repopulateMessages()
+        }
+
+        if notifyDataProvider {
+            dataProvider.setAgentModeEnabled(false)
+        }
+    }
+
+    private func replaceMessage(_ message: RawMessage) {
+        guard let index = messages.firstIndex(where: { $0.id == message.id }) else {
+            return
+        }
+        messages[index] = message
+    }
+
+    private func randomQuestion() -> String {
+        agentQuestions.randomElement() ?? "How does this chat layout keep content pinned so reliably?"
+    }
 }
 
 extension DefaultChatController: RandomDataProviderDelegate {
@@ -215,6 +298,11 @@ extension DefaultChatController: RandomDataProviderDelegate {
         repopulateMessages()
     }
 
+    func updated(message: RawMessage) {
+        replaceMessage(message)
+        repopulateMessages()
+    }
+
     func lastReadIdChanged(to id: UUID) {
         lastReadUUID = id
         markAllMessagesAsRead {
@@ -227,6 +315,10 @@ extension DefaultChatController: RandomDataProviderDelegate {
         markAllMessagesAsReceived {
             self.repopulateMessages()
         }
+    }
+
+    func agentDidFinish() {
+        finishAgentMode(notifyDataProvider: false)
     }
 
     func markAllMessagesAsReceived(completion: @escaping () -> Void) {
@@ -298,6 +390,9 @@ extension DefaultChatController: ReloadDelegate {
 
 extension DefaultChatController: EditingAccessoryControllerDelegate {
     func deleteMessage(with id: UUID) {
+        if extendedLayoutMessageID == id {
+            extendedLayoutMessageID = nil
+        }
         messages = Array(messages.filter { $0.id != id })
         repopulateMessages(requiresIsolatedProcess: true)
     }
