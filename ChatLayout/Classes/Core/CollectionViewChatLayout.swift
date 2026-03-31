@@ -15,8 +15,7 @@ import UIKit
 
 /// A custom collection view layout designed to present items in a grid-like format, similar to UITableView, while aligning content to
 /// either the leading or trailing edge of the UICollectionView. This layout supports chat-style interfaces by preserving a consistent
-/// content offset from the bottom. It also accommodates self-sizing cells and supplementary views, ensuring dynamic and responsive
-/// content presentation.
+/// content offset from the bottom. It also accommodates self-sizing cells, ensuring dynamic and responsive content presentation.
 ///
 /// ### Custom Properties:
 /// `CollectionViewChatLayout.delegate`
@@ -213,9 +212,9 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     // These properties are used to keep the layout attributes copies used for insert/delete
     // animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
     // animations will start from the estimated height.
-    private var attributesForPendingAnimations = [ItemKind: [ItemPath: ChatLayoutAttributes]]()
+    private var attributesForPendingAnimations = [ItemPath: ChatLayoutAttributes]()
 
-    private var invalidatedAttributes = [ItemKind: Set<ItemPath>]()
+    private var invalidatedAttributes = Set<ItemPath>()
 
     private var dontReturnAttributes: Bool = true
 
@@ -297,7 +296,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             let visibleBoundsTopOffset = firstVisibleItemAttributes.frame.minY - visibleBounds.higherPoint.y - settings.additionalInsets.top
             return ChatLayoutPositionSnapshot(
                 indexPath: firstVisibleItemAttributes.indexPath,
-                kind: firstVisibleItemAttributes.kind,
                 edge: .top,
                 offset: visibleBoundsTopOffset
             )
@@ -308,7 +306,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             let visibleBoundsBottomOffset = visibleBounds.lowerPoint.y - lastVisibleItemAttributes.frame.maxY - settings.additionalInsets.bottom
             return ChatLayoutPositionSnapshot(
                 indexPath: lastVisibleItemAttributes.indexPath,
-                kind: lastVisibleItemAttributes.kind,
                 edge: .bottom,
                 offset: visibleBoundsBottomOffset
             )
@@ -375,34 +372,13 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         if prepareActions.contains(.recreateSectionModels) {
             var sections: ContiguousArray<SectionModel<CollectionViewChatLayout>> = []
             for sectionIndex in 0..<collectionView.numberOfSections {
-                // Header
-                let header: ItemModel?
-                if delegate?.shouldPresentHeader(self, at: sectionIndex) == true {
-                    let headerPath = IndexPath(item: 0, section: sectionIndex)
-                    header = ItemModel(with: configuration(for: .header, at: headerPath))
-                } else {
-                    header = nil
-                }
-
-                // Items
                 var items: ContiguousArray<ItemModel> = []
                 for itemIndex in 0..<collectionView.numberOfItems(inSection: sectionIndex) {
                     let itemPath = IndexPath(item: itemIndex, section: sectionIndex)
-                    items.append(ItemModel(with: configuration(for: .cell, at: itemPath)))
-                }
-
-                // Footer
-                let footer: ItemModel?
-                if delegate?.shouldPresentFooter(self, at: sectionIndex) == true {
-                    let footerPath = IndexPath(item: 0, section: sectionIndex)
-                    footer = ItemModel(with: configuration(for: .footer, at: footerPath))
-                } else {
-                    footer = nil
+                    items.append(ItemModel(with: configuration(at: itemPath)))
                 }
                 var section = SectionModel(
                     interSectionSpacing: interSectionSpacing(at: sectionIndex),
-                    header: header,
-                    footer: footer,
                     items: items,
                     collectionLayout: self
                 )
@@ -418,14 +394,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             sections.withUnsafeMutableBufferPointer { directlyMutableSections in
                 for sectionIndex in 0..<directlyMutableSections.count {
                     var section = directlyMutableSections[sectionIndex]
-
-                    // Header
-                    if var header = section.header {
-                        header.resetSize()
-                        section.set(header: header)
-                    }
-
-                    // Items
                     var items: ContiguousArray<ItemModel> = section.items
                     items.withUnsafeMutableBufferPointer { directlyMutableItems in
                         nonisolated(unsafe) let directlyMutableItems = directlyMutableItems
@@ -434,12 +402,6 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                         }
                     }
                     section.set(items: items)
-
-                    // Footer
-                    if var footer = section.footer {
-                        footer.resetSize()
-                        section.set(footer: footer)
-                    }
 
                     section.assembleLayout()
                     directlyMutableSections[sectionIndex] = section
@@ -503,22 +465,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         guard !dontReturnAttributes else {
             return nil
         }
-        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: state, withPinnning: true)
-        return attributes
-    }
-
-    /// Retrieves the layout attributes for the specified supplementary view.
-    open override func layoutAttributesForSupplementaryView(
-        ofKind elementKind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionViewLayoutAttributes? {
-        guard !dontReturnAttributes else {
-            return nil
-        }
-
-        let kind = ItemKind(elementKind)
-        let attributes = controller.itemAttributes(for: indexPath.itemPath, kind: kind, at: state, withPinnning: true)
-
+        let attributes = controller.itemAttributes(for: indexPath.itemPath, at: state, withPinnning: true)
         return attributes
     }
 
@@ -564,7 +511,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     ) -> Bool {
         let preferredAttributesItemPath = preferredAttributes.indexPath.itemPath
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
-              let item = controller.item(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state) else {
+              let item = controller.item(for: preferredAttributesItemPath, at: state) else {
             return true
         }
 
@@ -583,31 +530,29 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes
     ) -> UICollectionViewLayoutInvalidationContext {
         guard let preferredMessageAttributes = preferredAttributes as? ChatLayoutAttributes,
-              // Can be called ofter the model update in iOS <16. Checking if model for this index path exists.
-              controller.item(for: preferredMessageAttributes.indexPath.itemPath, kind: .cell, at: state) != nil else {
+              controller.item(for: preferredMessageAttributes.indexPath.itemPath, at: state) != nil else {
             return super.invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
         }
 
         let preferredAttributesItemPath = preferredMessageAttributes.indexPath.itemPath
 
         if state == .afterUpdate {
-            invalidatedAttributes[preferredMessageAttributes.kind]?.insert(preferredAttributesItemPath)
+            invalidatedAttributes.insert(preferredAttributesItemPath)
         }
 
-        let layoutAttributesForPendingAnimation = attributesForPendingAnimations[preferredMessageAttributes.kind]?[preferredAttributesItemPath]
+        let layoutAttributesForPendingAnimation = attributesForPendingAnimations[preferredAttributesItemPath]
         let previousExtendedHeight = extendedLayoutHeight(for: state)
 
         let newItemSize = itemSize(with: preferredMessageAttributes)
-        let newItemAlignment = alignment(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
-        let newInterItemSpacing = interItemSpacing(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
-        let newPinningType = pinningType(for: preferredMessageAttributes.kind, at: preferredMessageAttributes.indexPath)
+        let newItemAlignment = alignment(at: preferredMessageAttributes.indexPath)
+        let newInterItemSpacing = interItemSpacing(at: preferredMessageAttributes.indexPath)
+        let newPinningType = pinningType(at: preferredMessageAttributes.indexPath)
         controller.update(
             preferredSize: newItemSize,
             alignment: newItemAlignment,
             interItemSpacing: newInterItemSpacing,
             pinningType: newPinningType,
             for: preferredAttributesItemPath,
-            kind: preferredMessageAttributes.kind,
             at: state
         )
 
@@ -619,7 +564,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let effectiveHeightDifference = heightDifference + (newExtendedHeight - previousExtendedHeight)
         let isAboveBottomEdge = originalAttributes.frame.minY.rounded() <= visibleBounds.maxY.rounded()
 
-        let shouldApplyCompensations = !controller.isPinnedItem(indexPath: preferredMessageAttributes.indexPath, kind: preferredMessageAttributes.kind)
+        let shouldApplyCompensations = !controller.isPinnedItem(indexPath: preferredMessageAttributes.indexPath)
         if effectiveHeightDifference != 0,
            shouldApplyCompensations,
            (keepContentOffsetAtBottomOnBatchUpdates && contentHeight(at: state).rounded() > visibleBounds.height.rounded()) || isUserInitiatedScrolling,
@@ -629,7 +574,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             invalidationActions.formUnion([.shouldInvalidateOnBoundsChange])
         }
 
-        if let attributes = controller.itemAttributes(for: preferredAttributesItemPath, kind: preferredMessageAttributes.kind, at: state)?.typedCopy() {
+        if let attributes = controller.itemAttributes(for: preferredAttributesItemPath, at: state)?.typedCopy() {
             layoutAttributesForPendingAnimation?.frame = attributes.frame
             if state == .afterUpdate,
                shouldApplyCompensations {
@@ -642,7 +587,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                             attributes.alpha = 0
                             return
                         }
-                        delegate.initialLayoutAttributesForInsertedItem(self, of: .cell, at: attributes.indexPath, modifying: attributes, on: .invalidation)
+                        delegate.initialLayoutAttributesForInsertedItem(self, at: attributes.indexPath, modifying: attributes, on: .invalidation)
                     }
                 }
             }
@@ -650,14 +595,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             layoutAttributesForPendingAnimation?.frame.size = newItemSize
         }
 
-        switch preferredMessageAttributes.kind {
-        case .cell:
-            context.invalidateItems(at: [preferredMessageAttributes.indexPath])
-        case .footer,
-             .header:
-            context.invalidateSupplementaryElements(ofKind: preferredMessageAttributes.kind.supplementaryElementStringType, at: [preferredMessageAttributes.indexPath])
-        }
-
+        context.invalidateItems(at: [preferredMessageAttributes.indexPath])
         context.invalidateLayoutMetrics = false
 
         return context
@@ -720,7 +658,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
         if let currentPositionSnapshot {
             let contentHeight = contentHeight(at: state)
-            if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, kind: currentPositionSnapshot.kind, at: state, isFinal: true),
+            if let frame = controller.itemFrame(for: currentPositionSnapshot.indexPath.itemPath, at: state, isFinal: true),
                contentHeight != 0 {
                 let adjustedContentInset: UIEdgeInsets = collectionView.adjustedContentInset
                 let maxAllowed = max(-adjustedContentInset.top, contentHeight - collectionView.frame.height + adjustedContentInset.bottom)
@@ -783,11 +721,11 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                 .forEach { indexPath in
                     let cell = collectionView.cellForItem(at: indexPath)
 
-                    if let originalAttributes = controller.itemAttributes(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate),
+                    if let originalAttributes = controller.itemAttributes(for: indexPath.itemPath, at: .beforeUpdate),
                        let preferredAttributes = cell?.preferredLayoutAttributesFitting(originalAttributes.typedCopy()) as? ChatLayoutAttributes,
-                       let itemIdentifierBeforeUpdate = controller.itemIdentifier(for: indexPath.itemPath, kind: .cell, at: .beforeUpdate),
-                       let indexPathAfterUpdate = controller.itemPath(by: itemIdentifierBeforeUpdate, kind: .cell, at: .afterUpdate)?.indexPath,
-                       let itemAfterUpdate = controller.item(for: indexPathAfterUpdate.itemPath, kind: .cell, at: .afterUpdate),
+                       let itemIdentifierBeforeUpdate = controller.itemIdentifier(for: indexPath.itemPath, at: .beforeUpdate),
+                       let indexPathAfterUpdate = controller.itemPath(by: itemIdentifierBeforeUpdate, at: .afterUpdate)?.indexPath,
+                       let itemAfterUpdate = controller.item(for: indexPathAfterUpdate.itemPath, at: .afterUpdate),
                        (itemAfterUpdate.size.height - preferredAttributes.size.height).rounded() != 0 {
                         originalAttributes.indexPath = indexPathAfterUpdate
                         preferredAttributes.indexPath = indexPathAfterUpdate
@@ -837,25 +775,25 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let itemPath = itemIndexPath.itemPath
         if state == .afterUpdate {
             if controller.insertedIndexes.contains(itemIndexPath) || controller.insertedSectionsIndexes.contains(itemPath.section) {
-                attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .afterUpdate)?.typedCopy()
+                attributes = controller.itemAttributes(for: itemPath, at: .afterUpdate)?.typedCopy()
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
                 attributes.map { attributes in
                     guard let delegate else {
                         attributes.alpha = 0
                         return
                     }
-                    delegate.initialLayoutAttributesForInsertedItem(self, of: .cell, at: itemIndexPath, modifying: attributes, on: .initial)
+                    delegate.initialLayoutAttributesForInsertedItem(self, at: itemIndexPath, modifying: attributes, on: .initial)
                 }
-                attributesForPendingAnimations[.cell]?[itemPath] = attributes
-            } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, kind: .cell, at: .afterUpdate),
-                      let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .beforeUpdate) {
-                attributes = controller.itemAttributes(for: initialIndexPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
+                attributesForPendingAnimations[itemPath] = attributes
+            } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, at: .afterUpdate),
+                      let initialIndexPath = controller.itemPath(by: itemIdentifier, at: .beforeUpdate) {
+                attributes = controller.itemAttributes(for: initialIndexPath, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 attributes?.indexPath = itemIndexPath
             } else {
-                attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)
+                attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)
             }
         } else {
-            attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)
+            attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)
         }
 
         return attributes
@@ -868,7 +806,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let itemPath = itemIndexPath.itemPath
         if state == .afterUpdate {
             if controller.deletedIndexes.contains(itemIndexPath) || controller.deletedSectionsIndexes.contains(itemPath.section) {
-                attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
+                attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
                    controller.isLayoutBiggerThanVisibleBounds(at: state),
@@ -880,121 +818,33 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                         attributes.alpha = 0
                         return
                     }
-                    delegate.finalLayoutAttributesForDeletedItem(self, of: .cell, at: itemIndexPath, modifying: attributes)
+                    delegate.finalLayoutAttributesForDeletedItem(self, at: itemIndexPath, modifying: attributes)
                 }
-            } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, kind: .cell, at: .beforeUpdate),
-                      let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: .cell, at: .afterUpdate) {
+            } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, at: .beforeUpdate),
+                      let finalIndexPath = controller.itemPath(by: itemIdentifier, at: .afterUpdate) {
                 if controller.movedIndexes.contains(itemIndexPath) || controller.movedSectionsIndexes.contains(itemPath.section) ||
                     controller.reloadedIndexes.contains(itemIndexPath) || controller.reconfiguredIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
-                    attributes = controller.itemAttributes(for: finalIndexPath, kind: .cell, at: .afterUpdate)?.typedCopy()
+                    attributes = controller.itemAttributes(for: finalIndexPath, at: .afterUpdate)?.typedCopy()
                 } else {
-                    attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)?.typedCopy()
+                    attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)?.typedCopy()
                 }
-                if invalidatedAttributes[.cell]?.contains(itemPath) ?? false {
+                if invalidatedAttributes.contains(itemPath) {
                     attributes = nil
                 }
 
                 attributes?.indexPath = itemIndexPath
-                attributesForPendingAnimations[.cell]?[itemPath] = attributes
+                attributesForPendingAnimations[itemPath] = attributes
                 if controller.reloadedIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
                     attributes?.alpha = 0
                     attributes?.transform = CGAffineTransform(scaleX: 0, y: 0)
                 }
             } else {
-                attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)
+                attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)
             }
         } else {
-            attributes = controller.itemAttributes(for: itemPath, kind: .cell, at: .beforeUpdate)
+            attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)
         }
 
-        return attributes
-    }
-
-    // MARK: - Supplementary View Appearance Animation
-
-    /// Retrieves the starting layout information for a supplementary view being inserted into the collection view.
-    open override func initialLayoutAttributesForAppearingSupplementaryElement(
-        ofKind elementKind: String,
-        at elementIndexPath: IndexPath
-    ) -> UICollectionViewLayoutAttributes? {
-        var attributes: ChatLayoutAttributes?
-
-        let kind = ItemKind(elementKind)
-        let elementPath = elementIndexPath.itemPath
-        if state == .afterUpdate {
-            if controller.insertedSectionsIndexes.contains(elementPath.section) {
-                attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .afterUpdate)?.typedCopy()
-                controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
-                attributes.map { attributes in
-                    guard let delegate else {
-                        attributes.alpha = 0
-                        return
-                    }
-                    delegate.initialLayoutAttributesForInsertedItem(self, of: kind, at: elementIndexPath, modifying: attributes, on: .initial)
-                }
-                attributesForPendingAnimations[kind]?[elementPath] = attributes
-            } else if let itemIdentifier = controller.itemIdentifier(for: elementPath, kind: kind, at: .afterUpdate),
-                      let initialIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .beforeUpdate) {
-                attributes = controller.itemAttributes(for: initialIndexPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
-                attributes?.indexPath = elementIndexPath
-            } else {
-                attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)
-            }
-        } else {
-            attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)
-        }
-
-        return attributes
-    }
-
-    /// Retrieves the final layout information for a supplementary view that is about to be removed from the collection view.
-    open override func finalLayoutAttributesForDisappearingSupplementaryElement(
-        ofKind elementKind: String,
-        at elementIndexPath: IndexPath
-    ) -> UICollectionViewLayoutAttributes? {
-        var attributes: ChatLayoutAttributes?
-
-        let kind = ItemKind(elementKind)
-        let elementPath = elementIndexPath.itemPath
-        if state == .afterUpdate {
-            if controller.deletedSectionsIndexes.contains(elementPath.section) {
-                attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: elementIndexPath)
-                controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
-                if keepContentOffsetAtBottomOnBatchUpdates,
-                   controller.isLayoutBiggerThanVisibleBounds(at: state),
-                   let attributes {
-                    attributes.frame = attributes.frame.offsetBy(dx: 0, dy: attributes.frame.height * 0.2)
-                }
-                attributes.map { attributes in
-                    guard let delegate else {
-                        attributes.alpha = 0
-                        return
-                    }
-                    delegate.finalLayoutAttributesForDeletedItem(self, of: .cell, at: elementIndexPath, modifying: attributes)
-                }
-            } else if let itemIdentifier = controller.itemIdentifier(for: elementPath, kind: kind, at: .beforeUpdate),
-                      let finalIndexPath = controller.itemPath(by: itemIdentifier, kind: kind, at: .afterUpdate) {
-                if controller.movedSectionsIndexes.contains(elementPath.section) || controller.reloadedSectionsIndexes.contains(elementPath.section) {
-                    attributes = controller.itemAttributes(for: finalIndexPath, kind: kind, at: .afterUpdate)?.typedCopy()
-                } else {
-                    attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)?.typedCopy()
-                }
-                if invalidatedAttributes[kind]?.contains(elementPath) ?? false {
-                    attributes = nil
-                }
-
-                attributes?.indexPath = elementIndexPath
-                attributesForPendingAnimations[kind]?[elementPath] = attributes
-                if controller.reloadedSectionsIndexes.contains(elementPath.section) {
-                    attributes?.alpha = 0
-                    attributes?.transform = CGAffineTransform(scaleX: 0, y: 0)
-                }
-            } else {
-                attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)
-            }
-        } else {
-            attributes = controller.itemAttributes(for: elementPath, kind: kind, at: .beforeUpdate)
-        }
         return attributes
     }
 }
@@ -1046,29 +896,23 @@ extension CollectionViewChatLayout {
         return frame
     }
 
-    func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
-        let itemSize = estimatedSize(for: element, at: indexPath)
-        let interItemSpacing: CGFloat
-        if element == .cell {
-            interItemSpacing = self.interItemSpacing(for: element, at: indexPath)
-        } else {
-            interItemSpacing = 0
-        }
+    func configuration(at indexPath: IndexPath) -> ItemModel.Configuration {
+        let itemSize = estimatedSize(at: indexPath)
         return ItemModel.Configuration(
-            alignment: alignment(for: element, at: indexPath),
-            pinningType: pinningType(for: element, at: indexPath),
+            alignment: alignment(at: indexPath),
+            pinningType: pinningType(at: indexPath),
             preferredSize: itemSize.estimated,
             calculatedSize: itemSize.exact,
-            interItemSpacing: interItemSpacing
+            interItemSpacing: interItemSpacing(at: indexPath)
         )
     }
 
-    private func estimatedSize(for element: ItemKind, at indexPath: IndexPath) -> (estimated: CGSize, exact: CGSize?) {
+    private func estimatedSize(at indexPath: IndexPath) -> (estimated: CGSize, exact: CGSize?) {
         guard let delegate else {
             return (estimated: estimatedItemSize, exact: nil)
         }
 
-        let itemSize = delegate.sizeForItem(self, of: element, at: indexPath)
+        let itemSize = delegate.sizeForItem(self, at: indexPath)
 
         switch itemSize {
         case .auto:
@@ -1083,7 +927,7 @@ extension CollectionViewChatLayout {
     private func itemSize(with preferredAttributes: ChatLayoutAttributes) -> CGSize {
         let itemSize: CGSize
         if let delegate,
-           case let .exact(size) = delegate.sizeForItem(self, of: preferredAttributes.kind, at: preferredAttributes.indexPath) {
+           case let .exact(size) = delegate.sizeForItem(self, at: preferredAttributes.indexPath) {
             itemSize = size
         } else {
             itemSize = preferredAttributes.size
@@ -1091,10 +935,10 @@ extension CollectionViewChatLayout {
         return itemSize
     }
 
-    private func interItemSpacing(for kind: ItemKind, at indexPath: IndexPath) -> CGFloat {
+    private func interItemSpacing(at indexPath: IndexPath) -> CGFloat {
         let interItemSpacing: CGFloat
         if let delegate,
-           let customInterItemSpacing = delegate.interItemSpacing(self, of: kind, after: indexPath) {
+           let customInterItemSpacing = delegate.interItemSpacing(self, after: indexPath) {
             interItemSpacing = customInterItemSpacing
         } else {
             interItemSpacing = settings.interItemSpacing
@@ -1102,35 +946,18 @@ extension CollectionViewChatLayout {
         return interItemSpacing
     }
 
-    private func alignment(for element: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
+    private func alignment(at indexPath: IndexPath) -> ChatItemAlignment {
         guard let delegate else {
             return .fullWidth
         }
-        return delegate.alignmentForItem(self, of: element, at: indexPath)
+        return delegate.alignmentForItem(self, at: indexPath)
     }
 
-    private func pinningType(for kind: ItemKind, at indexPath: IndexPath) -> ChatItemPinningType? {
+    private func pinningType(at indexPath: IndexPath) -> ChatItemPinningType? {
         guard let delegate else {
             return nil
         }
-        let pinningType: ChatItemPinningType?
-        if kind == .cell,
-           settings.pinnableItems == .cells {
-            pinningType = delegate.pinningTypeForItem(self, at: indexPath)
-        } else if settings.pinnableItems == .supplementaryViews {
-            if kind == .header,
-               delegate.shouldPinHeaderToVisibleBounds(self, at: indexPath.section) {
-                pinningType = .top
-            } else if kind == .footer,
-                      delegate.shouldPinFooterToVisibleBounds(self, at: indexPath.section) {
-                pinningType = .bottom
-            } else {
-                pinningType = nil
-            }
-        } else {
-            pinningType = nil
-        }
-        return pinningType
+        return delegate.pinningTypeForItem(self, at: indexPath)
     }
 
     private var estimatedItemSize: CGSize {
@@ -1145,15 +972,11 @@ extension CollectionViewChatLayout {
     }
 
     private func resetAttributesForPendingAnimations() {
-        for kind in ItemKind.allCases {
-            attributesForPendingAnimations[kind] = [:]
-        }
+        attributesForPendingAnimations = [:]
     }
 
     private func resetInvalidatedAttributes() {
-        for kind in ItemKind.allCases {
-            invalidatedAttributes[kind] = []
-        }
+        invalidatedAttributes = []
     }
 }
 
@@ -1163,14 +986,6 @@ extension CollectionViewChatLayout: ChatLayoutRepresentation {
             return .zero
         }
         return collectionView.numberOfItems(inSection: section)
-    }
-
-    func shouldPresentHeader(at sectionIndex: Int) -> Bool {
-        delegate?.shouldPresentHeader(self, at: sectionIndex) ?? false
-    }
-
-    func shouldPresentFooter(at sectionIndex: Int) -> Bool {
-        delegate?.shouldPresentFooter(self, at: sectionIndex) ?? false
     }
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {

@@ -27,7 +27,6 @@
 - [Contributing](#contributing)
 - [Todo](#todo)
     - [About `UICollectionViewDiffableDataSource`](#about-uicollectionviewdiffabledatasource)
-    - [About Supplementary Views](#about-supplementary-views)
     - [About Texture](#about-texture)
     - [About animation](#about-animation)
 - [License](#license)
@@ -64,6 +63,7 @@
 The often-asked-for agent mode support is added:
 
 ![](./assets/agent_mode.gif)
+![](./assets/agent_mode1.gif)
 
 ### What ChatLayout doesn't provide (And why it is good)
 
@@ -88,7 +88,7 @@ implement `UICollectionViewDataSource`. The Example app uses [DifferenceKit](htt
 process changes in the data model.
 
 - `ChatLayout` doesn't enforce you to use any specific `UIView`s to create your collection cells. You can create them the way 
-you like. It can be any `UICollectionViewCell` or `UICollectionReusableView`. There are some generic `UIView`s bundled with
+you like. There are some generic `UIView`s bundled with
 the library that may help you to build them faster. However, you do not have to use them. 
 
 - `ChatLayout` doesn't handle the keyboard appearance behavior. You have to implement
@@ -129,20 +129,6 @@ read [the contribution guidelines](https://github.com/ekazaev/route-composer/blo
 
 `ChatLayout` can process any update commands that you send to your `UICollectionView`, so you can use 
 `UICollectionViewDiffableDataSource` as well. 
-
-### About Supplementary Views
-
-It can be tempting and it may look like it is the right way to go, but **do not** use supplementary views to decorate your
-messages or groups of them. `UICollectionView` processes them in a different order: `UICollectionViewCell`s first and 
-only after switches to `UICollectionReusableView`s. You will most likely face some unexpected behaviour during the animation.
-**I strongly advice you against using sections at all.**
-
-After careful consideration and in light of the behavioral changes observed in `UICollectionView` with the release of iOS 18, 
-I have decided to discontinue support for supplementary views. As a developer, I have not utilized supplementary views in my 
-own work and have consistently advised against their use. Even within the standard `UICollectionView`, support for supplementary 
-views is limited, as they cannot be easily reloaded, added, or removed without reloading an entire section. Furthermore, all 
-functionalities provided by supplementary views can be effectively achieved using standard cells.
-*As a result, support for supplementary views will be deprecated and fully removed in future versions of `ChatLayout`.* 
 
 ### About Texture
 

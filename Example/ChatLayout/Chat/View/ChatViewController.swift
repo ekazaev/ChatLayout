@@ -128,7 +128,6 @@ final class ChatViewController: UIViewController {
         chatLayout.settings.interItemSpacing = 8
         chatLayout.settings.interSectionSpacing = 8
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
-        chatLayout.settings.pinnableItems = .cells
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
         chatLayout.keepContentAtBottomOfVisibleArea = true

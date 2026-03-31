@@ -60,8 +60,6 @@ final class PerformanceTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.numberOfItemsInSection[0] = 100000
         layout.numberOfItemsInSection[1] = 100000
-        layout.shouldPresentHeaderAtSection = [0: false, 1: false]
-        layout.shouldPresentFooterAtSection = [0: false, 1: false]
         layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         layout.settings.estimatedItemSize = CGSize(width: 300, height: 1)
         layout.settings.interItemSpacing = 0
@@ -82,16 +80,13 @@ final class PerformanceTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.numberOfItemsInSection[0] = 100000
         layout.numberOfItemsInSection[1] = 100000
-        layout.shouldPresentHeaderAtSection = [0: false, 1: false]
-        layout.shouldPresentFooterAtSection = [0: false, 1: false]
-        layout.shouldPinHeaderToVisibleBoundsAtSection = [2: true]
-        layout.shouldPinFooterToVisibleBoundsAtSection = [2: true]
+        layout.pinningTypeAtIndexPath[IndexPath(item: 0, section: 1)] = .top
+        layout.pinningTypeAtIndexPath[IndexPath(item: 99999, section: 1)] = .bottom
         layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         layout.settings.estimatedItemSize = CGSize(width: 300, height: 1)
         layout.settings.interItemSpacing = 0
         layout.settings.interSectionSpacing = 0
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        layout.hasPinnedHeaderOrFooter = true
 
         let rect = CGRect(origin: CGPoint(x: 0, y: 99999), size: CGSize(width: 300, height: 2))
         let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate, ignoreCache: true)
@@ -151,7 +146,7 @@ final class PerformanceTests: XCTestCase {
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
         measure {
             for i in 0..<1000 {
-                layout.controller.update(preferredSize: CGSize(width: 300, height: 300 + i), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: i, section: 0), kind: .cell, at: .beforeUpdate)
+                layout.controller.update(preferredSize: CGSize(width: 300, height: 300 + i), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: i, section: 0), at: .beforeUpdate)
             }
         }
     }
