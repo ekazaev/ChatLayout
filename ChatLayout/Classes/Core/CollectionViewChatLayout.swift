@@ -233,6 +233,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     private var _supportSelfSizingInvalidation: Bool = false
 
+    private var cachedBoundsOriginYForPinning: CGFloat?
+
     // MARK: IOS 15.1 fix flags
 
     private var needsIOS15_1IssueFix: Bool {
@@ -373,6 +375,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             resetAttributesForPendingAnimations()
             resetInvalidatedAttributes()
             contentOffsetBeforeUpdate = nil
+            cachedBoundsOriginYForPinning = nil
         }
 
         if prepareActions.contains(.recreateSectionModels) {
@@ -463,6 +466,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             prepareActions.contains(.updateLayoutMetrics) ||
             prepareActions.contains(.recreateSectionModels) {
             controller.updatePinnedInfo(at: state)
+            cachedBoundsOriginYForPinning = collectionView.contentOffset.y
         }
 
         prepareActions = []
@@ -663,10 +667,12 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     /// Asks the layout object if the new bounds require a layout update.
     open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        let boundsOriginMeaningfullyChanged = cachedBoundsOriginYForPinning.map { $0.rounded() != newBounds.origin.y.rounded() } ?? true
         let shouldInvalidateLayout = cachedCollectionViewSize != .some(newBounds.size) ||
             cachedCollectionViewInset != .some(adjustedContentInset) ||
             invalidationActions.contains(.shouldInvalidateOnBoundsChange)
-            || ((isUserInitiatedScrolling || !controller.pinnedIndexPaths.isEmpty) && state == .beforeUpdate)
+            || (isUserInitiatedScrolling && state == .beforeUpdate)
+            || (!controller.pinnedIndexPaths.isEmpty && state == .beforeUpdate && boundsOriginMeaningfullyChanged)
 
         invalidationActions.remove(.shouldInvalidateOnBoundsChange)
         prepareActions.insert(.updatePinnedInfo)
