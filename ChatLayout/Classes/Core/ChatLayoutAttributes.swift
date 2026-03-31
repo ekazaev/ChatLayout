@@ -43,18 +43,6 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     var id: UUID?
     #endif
 
-    @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
-    convenience init(kind: ItemKind, indexPath: IndexPath = IndexPath(item: 0, section: 0)) {
-        switch kind {
-        case .cell:
-            self.init(forCellWith: indexPath)
-        case .header:
-            self.init(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: indexPath)
-        case .footer:
-            self.init(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: indexPath)
-        }
-    }
-
     convenience init(indexPath: IndexPath = IndexPath(item: 0, section: 0)) {
         self.init(forCellWith: indexPath)
     }
@@ -89,20 +77,6 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
                 && pinningType == chatLayoutAttributes?.pinningType
                 && alignment == chatLayoutAttributes?.alignment
                 && interItemSpacing == chatLayoutAttributes?.interItemSpacing
-        }
-    }
-
-    /// `ItemKind` represented by this attributes object.
-    public var kind: ItemKind {
-        switch (representedElementCategory, representedElementKind) {
-        case (.cell, nil):
-            .cell
-        case (.supplementaryView, .some(UICollectionView.elementKindSectionHeader)):
-            .header
-        case (.supplementaryView, .some(UICollectionView.elementKindSectionFooter)):
-            .footer
-        default:
-            preconditionFailure("Unsupported element kind.")
         }
     }
 

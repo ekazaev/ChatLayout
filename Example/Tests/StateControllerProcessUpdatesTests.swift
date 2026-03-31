@@ -14,397 +14,354 @@
 import XCTest
 
 @MainActor
-class StateControllerProcessUpdatesTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+final class StateControllerProcessUpdatesTests: XCTestCase {
+    func testHeightAndItems() throws {
+        let layout = preparedLayout(sectionCounts: [100, 100, 100])
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), expectedContentHeight(sectionHeights: [
+            sectionHeight(itemHeights: Array(repeating: CGFloat(40), count: 100)),
+            sectionHeight(itemHeights: Array(repeating: CGFloat(40), count: 100)),
+            sectionHeight(itemHeights: Array(repeating: CGFloat(40), count: 100))
+        ]))
 
-    func testHeight() {
-        let layout = MockCollectionLayout()
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.settings.estimatedItemSize!.height * (102 * 3) + layout.settings.interItemSpacing * (99 * 3) + layout.settings.interSectionSpacing * 2)
-
-        for i in 0..<layout.numberOfItemsInSection.count {
-            let header = layout.controller.item(for: ItemPath(item: 0, section: i), kind: .header, at: .beforeUpdate)
-            let footer = layout.controller.item(for: ItemPath(item: 0, section: i), kind: .footer, at: .beforeUpdate)
-            XCTAssertNotNil(header)
-            XCTAssertNotNil(footer)
-            XCTAssertEqual(header?.size, layout.settings.estimatedItemSize)
-            XCTAssertEqual(footer?.size, layout.settings.estimatedItemSize)
-            XCTAssertEqual(header?.size, layout.controller.itemAttributes(for: ItemPath(item: 0, section: i), kind: .header, at: .beforeUpdate)?.size)
-            XCTAssertEqual(footer?.size, layout.controller.itemAttributes(for: ItemPath(item: 0, section: i), kind: .footer, at: .beforeUpdate)?.size)
-            for j in 0..<100 {
-                let item = layout.controller.item(for: ItemPath(item: j, section: i), kind: .cell, at: .beforeUpdate)
-                XCTAssertNotNil(item)
-                XCTAssertEqual(item?.size, layout.settings.estimatedItemSize)
-                XCTAssertEqual(item?.size, layout.controller.itemAttributes(for: ItemPath(item: j, section: i), kind: .cell, at: .beforeUpdate)?.size)
-            }
-        }
-        XCTAssertNil(layout.controller.item(for: ItemPath(item: 0, section: 5), kind: .header, at: .beforeUpdate))
-        XCTAssertNil(layout.controller.item(for: ItemPath(item: 0, section: 5), kind: .footer, at: .beforeUpdate))
-    }
-
-    func testItemReload() {
-        let layout = MockCollectionLayout()
-        var changeItems: [ChangeItem] = []
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        for sectionIndex in 0..<layout.numberOfItemsInSection.count {
-            for itemIndex in 0..<layout.numberOfItems(in: sectionIndex) {
-                let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
-                let changeItem = ChangeItem.itemReload(itemIndexPath: indexPath)
-                changeItems.append(changeItem)
+        for sectionIndex in 0..<3 {
+            XCTAssertEqual(layout.controller.numberOfItems(in: sectionIndex, at: .beforeUpdate), 100)
+            for itemIndex in 0..<100 {
+                let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                let item = try XCTUnwrap(layout.controller.item(for: itemPath, at: .beforeUpdate))
+                let attributes = try XCTUnwrap(layout.controller.itemAttributes(for: itemPath, at: .beforeUpdate))
+                XCTAssertEqual(item.size, CGSize(width: 300, height: 40))
+                XCTAssertEqual(attributes.size, CGSize(width: 300, height: 40))
             }
         }
 
-        layout.settings.estimatedItemSize = .init(width: 300, height: 50)
-        layout.controller.process(changeItems: changeItems)
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) + CGFloat(changeItems.count * 10), layout.controller.contentHeight(at: .afterUpdate))
+        XCTAssertNil(layout.controller.item(for: ItemPath(item: 0, section: 3), at: .beforeUpdate))
+    }
+
+    func testItemReloadUsesLatestConfiguration() throws {
+        let layout = preparedLayout(sectionCounts: [3])
+        let reloadedIdentifier = try itemIdentifier(in: layout, item: 1, section: 0, state: .beforeUpdate)
+
+        layout.preferredSizeAtIndexPath[IndexPath(item: 1, section: 0)] = CGSize(width: 300, height: 80)
+        layout.calculatedSizeAtIndexPath[IndexPath(item: 1, section: 0)] = CGSize(width: 300, height: 80)
+
+        layout.controller.process(changeItems: [
+            .itemReload(itemIndexPath: IndexPath(item: 1, section: 0))
+        ])
+
+        XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), 174)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 1, section: 0, state: .afterUpdate), reloadedIdentifier)
+        XCTAssertEqual(
+            try XCTUnwrap(layout.controller.itemFrame(for: ItemPath(item: 1, section: 0), at: .afterUpdate)).size,
+            CGSize(width: 300, height: 80)
+        )
+        XCTAssertEqual(
+            try XCTUnwrap(layout.controller.itemFrame(for: ItemPath(item: 2, section: 0), at: .afterUpdate)).minY,
+            134
+        )
+
         layout.controller.commitUpdates()
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), 174)
+    }
+
+    func testSectionReloadRebuildsSectionModels() throws {
+        let layout = preparedLayout(sectionCounts: [2, 3])
+        let firstSectionFirstItem = try itemIdentifier(in: layout, item: 0, section: 0, state: .beforeUpdate)
+        let firstSectionSecondItem = try itemIdentifier(in: layout, item: 1, section: 0, state: .beforeUpdate)
+        let secondSectionFirstItem = try itemIdentifier(in: layout, item: 0, section: 1, state: .beforeUpdate)
+
+        layout.setSections([3, 1])
+        layout.preferredSizeAtIndexPath[IndexPath(item: 0, section: 0)] = CGSize(width: 300, height: 50)
+        layout.calculatedSizeAtIndexPath[IndexPath(item: 0, section: 0)] = CGSize(width: 300, height: 50)
+        layout.preferredSizeAtIndexPath[IndexPath(item: 2, section: 0)] = CGSize(width: 300, height: 60)
+        layout.calculatedSizeAtIndexPath[IndexPath(item: 2, section: 0)] = CGSize(width: 300, height: 60)
+        layout.preferredSizeAtIndexPath[IndexPath(item: 0, section: 1)] = CGSize(width: 300, height: 55)
+        layout.calculatedSizeAtIndexPath[IndexPath(item: 0, section: 1)] = CGSize(width: 300, height: 55)
 
         layout.controller.process(changeItems: [
             .sectionReload(sectionIndex: 0),
             .sectionReload(sectionIndex: 1)
         ])
 
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) + CGFloat(10 * 4), layout.controller.contentHeight(at: .afterUpdate))
-        layout.controller.commitUpdates()
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 3)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 1)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 0, state: .afterUpdate), firstSectionFirstItem)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 1, section: 0, state: .afterUpdate), firstSectionSecondItem)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 1, state: .afterUpdate), secondSectionFirstItem)
+        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 1), at: .afterUpdate))
+        XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), 222)
+        XCTAssertEqual(
+            try XCTUnwrap(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), at: .afterUpdate)).size,
+            CGSize(width: 300, height: 50)
+        )
+        XCTAssertEqual(
+            try XCTUnwrap(layout.controller.itemFrame(for: ItemPath(item: 2, section: 0), at: .afterUpdate)).size,
+            CGSize(width: 300, height: 60)
+        )
+        XCTAssertEqual(
+            try XCTUnwrap(layout.controller.itemFrame(for: ItemPath(item: 0, section: 1), at: .afterUpdate)).size,
+            CGSize(width: 300, height: 55)
+        )
     }
 
-    func testSectionReload() {
-        let layout = MockCollectionLayout()
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+    func testItemInsertionPreservesExistingIdentifiers() throws {
+        let layout = preparedLayout(sectionCounts: [2, 2, 0])
+        let lastFirstSectionItem = try itemIdentifier(in: layout, item: 1, section: 0, state: .beforeUpdate)
+        let firstSecondSectionItem = try itemIdentifier(in: layout, item: 0, section: 1, state: .beforeUpdate)
+        let contentHeightBefore = layout.controller.contentHeight(at: .beforeUpdate)
 
-        var changeItems: [ChangeItem] = []
-        changeItems.append(.sectionReload(sectionIndex: 0))
-        changeItems.append(.sectionReload(sectionIndex: 1))
-        changeItems.append(.sectionReload(sectionIndex: 2))
+        layout.controller.process(changeItems: [
+            .itemInsert(itemIndexPath: IndexPath(item: 2, section: 0)),
+            .itemInsert(itemIndexPath: IndexPath(item: 0, section: 1)),
+            .itemInsert(itemIndexPath: IndexPath(item: 0, section: 2)),
+            .itemInsert(itemIndexPath: IndexPath(item: 1, section: 2))
+        ])
 
-        layout.settings.estimatedItemSize = .init(width: 300, height: 50)
-        layout.shouldPresentHeaderAtSection[0] = false
-        layout.shouldPresentFooterAtSection[0] = false
-        layout.shouldPresentHeaderAtSection[2] = false
-        layout.numberOfItemsInSection[0] = 200
-        layout.numberOfItemsInSection[1] = 50
-        layout.controller.process(changeItems: changeItems)
-
-        // Headers
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate))
-        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate))
-        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .header, at: .beforeUpdate))
-        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .header, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .footer, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .footer, at: .afterUpdate))
-
-        // Items count
-        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 200)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .beforeUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 50)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .beforeUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .afterUpdate), 100)
-
-        // Frames
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.origin, .zero)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.origin, .zero)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 40))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 50))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 99, section: 0), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 40))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 100, section: 0), kind: .cell, at: .afterUpdate)?.size, layout.settings.estimatedItemSize)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 49, section: 1), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 50))
-
-        layout.controller.commitUpdates()
+        XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), contentHeightBefore + 181)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 1, section: 0, state: .afterUpdate), lastFirstSectionItem)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 1, section: 1, state: .afterUpdate), firstSecondSectionItem)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .afterUpdate), 2)
+        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), at: .afterUpdate))
+        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 2), at: .afterUpdate))
     }
 
-    func testItemInsertion() {
-        let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection = [0: 100, 1: 100, 2: 0]
-        var changeItems: [ChangeItem] = []
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+    func testSectionInsertPreservesMovedSectionIdentifiers() throws {
+        let layout = preparedLayout(sectionCounts: [2, 2, 2])
+        let firstSectionIdentifier = try sectionIdentifier(in: layout, section: 0, state: .beforeUpdate)
+        let secondSectionIdentifier = try sectionIdentifier(in: layout, section: 1, state: .beforeUpdate)
+        let thirdSectionIdentifier = try sectionIdentifier(in: layout, section: 2, state: .beforeUpdate)
+        let secondSectionFirstItem = try itemIdentifier(in: layout, item: 0, section: 1, state: .beforeUpdate)
+        let thirdSectionFirstItem = try itemIdentifier(in: layout, item: 0, section: 2, state: .beforeUpdate)
 
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.settings.estimatedItemSize!.height * (102 + 102 + 2) + layout.settings.interItemSpacing * (99 + 99 + 0) + layout.settings.interSectionSpacing * 2)
+        layout.setSections([2, 1, 3, 2, 2])
+        layout.controller.process(changeItems: [
+            .sectionInsert(sectionIndex: 1),
+            .sectionInsert(sectionIndex: 2)
+        ])
 
-        changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: 100, section: 0)))
-        changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: 0, section: 1)))
-        changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: 0, section: 2)))
-        changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: 1, section: 2)))
-
-        layout.controller.process(changeItems: changeItems)
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) + layout.settings.estimatedItemSize!.height * 4.0 + layout.settings.interItemSpacing * 3.0, layout.controller.contentHeight(at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 99, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 99, section: 0), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 1), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 2), kind: .cell, at: .afterUpdate))
-        layout.controller.commitUpdates()
+        XCTAssertEqual(layout.controller.numberOfSections(at: .afterUpdate), 5)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 2)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 1)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .afterUpdate), 3)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 3, at: .afterUpdate), 2)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 4, at: .afterUpdate), 2)
+        XCTAssertEqual(try sectionIdentifier(in: layout, section: 0, state: .afterUpdate), firstSectionIdentifier)
+        XCTAssertEqual(try sectionIdentifier(in: layout, section: 3, state: .afterUpdate), secondSectionIdentifier)
+        XCTAssertEqual(try sectionIdentifier(in: layout, section: 4, state: .afterUpdate), thirdSectionIdentifier)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 3, state: .afterUpdate), secondSectionFirstItem)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 4, state: .afterUpdate), thirdSectionFirstItem)
     }
 
-    func testSectionInsert() {
-        let layout = MockCollectionLayout()
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+    func testItemDeletionRemovesItemsAndShiftsRemainingIdentifiers() throws {
+        let layout = preparedLayout(sectionCounts: [2, 2, 1])
+        let firstSectionFirstItem = try itemIdentifier(in: layout, item: 0, section: 0, state: .beforeUpdate)
+        let secondSectionLastItem = try itemIdentifier(in: layout, item: 1, section: 1, state: .beforeUpdate)
+        let contentHeightBefore = layout.controller.contentHeight(at: .beforeUpdate)
 
-        var changeItems: [ChangeItem] = []
-        changeItems.append(.sectionInsert(sectionIndex: 1))
-        changeItems.append(.sectionInsert(sectionIndex: 2))
+        layout.controller.process(changeItems: [
+            .itemDelete(itemIndexPath: IndexPath(item: 1, section: 0)),
+            .itemDelete(itemIndexPath: IndexPath(item: 0, section: 1)),
+            .itemDelete(itemIndexPath: IndexPath(item: 0, section: 2))
+        ])
 
-        layout.settings.estimatedItemSize = .init(width: 300, height: 50)
-        layout.shouldPresentHeaderAtSection[0] = false
-        layout.shouldPresentFooterAtSection[0] = false
-        layout.shouldPresentHeaderAtSection[2] = false
-        layout.numberOfItemsInSection[0] = 200
-        layout.numberOfItemsInSection[1] = 50
-        layout.numberOfItemsInSection[2] = 300
-        layout.numberOfItemsInSection[4] = 100
-        layout.controller.process(changeItems: changeItems)
-
-        // Headers
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .header, at: .beforeUpdate))
-        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .header, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .footer, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .footer, at: .afterUpdate))
-
-        // Items count
-        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .beforeUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 50)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .beforeUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .afterUpdate), 300)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 3, at: .afterUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 4, at: .afterUpdate), 100)
-
-        // Frames
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.origin, .zero)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .header, at: .afterUpdate)?.origin, .zero)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.size, layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.size)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 99, section: 0), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 40))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 49, section: 1), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 40))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 49, section: 1), kind: .cell, at: .afterUpdate)?.size, layout.settings.estimatedItemSize)
-
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 3), kind: .cell, at: .afterUpdate))
-
-        layout.controller.commitUpdates()
+        XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), contentHeightBefore - 134)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 1)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 1)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .afterUpdate), 0)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 0, state: .afterUpdate), firstSectionFirstItem)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 1, state: .afterUpdate), secondSectionLastItem)
+        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), at: .afterUpdate))
     }
 
-    func testItemDeletion() {
-        let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection = [0: 100, 1: 100, 2: 1]
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+    func testSectionDeleteRemovesSectionsAndKeepsRemainingIdentifiers() throws {
+        let layout = preparedLayout(sectionCounts: [2, 2, 2])
+        let remainingSectionIdentifier = try sectionIdentifier(in: layout, section: 1, state: .beforeUpdate)
+        let remainingItemIdentifier = try itemIdentifier(in: layout, item: 0, section: 1, state: .beforeUpdate)
 
-        var changeItems: [ChangeItem] = []
-        changeItems.append(.itemDelete(itemIndexPath: IndexPath(item: 99, section: 0)))
-        changeItems.append(.itemDelete(itemIndexPath: IndexPath(item: 0, section: 1)))
-        changeItems.append(.itemDelete(itemIndexPath: IndexPath(item: 0, section: 2)))
+        layout.controller.process(changeItems: [
+            .sectionDelete(sectionIndex: 0),
+            .sectionDelete(sectionIndex: 2)
+        ])
 
-        layout.controller.process(changeItems: changeItems)
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate) - layout.settings.estimatedItemSize!.height * 3.0 - layout.settings.interItemSpacing * 2.0, layout.controller.contentHeight(at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 98, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 98, section: 0), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
-        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 2), kind: .cell, at: .afterUpdate))
-        layout.controller.commitUpdates()
-    }
-
-    func testSectionDelete() {
-        let layout = MockCollectionLayout()
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-
-        var changeItems: [ChangeItem] = []
-        changeItems.append(.sectionDelete(sectionIndex: 0))
-        changeItems.append(.sectionDelete(sectionIndex: 2))
-
-        layout.settings.estimatedItemSize = .init(width: 300, height: 50)
-        layout.shouldPresentHeaderAtSection[0] = false
-        layout.shouldPresentFooterAtSection[0] = false
-        layout.shouldPresentHeaderAtSection[2] = false
-        layout.numberOfItemsInSection[0] = 200
-        layout.controller.process(changeItems: changeItems)
-
-        // Headers
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .header, at: .beforeUpdate))
-        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .header, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .footer, at: .beforeUpdate))
-        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .footer, at: .afterUpdate))
-
-        // Items count
-        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfSections(at: .beforeUpdate), 3)
         XCTAssertEqual(layout.controller.numberOfSections(at: .afterUpdate), 1)
-
-        // Frames
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.origin, .zero)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .header, at: .afterUpdate)?.origin, .zero)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.size, layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.size)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 40))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 40))
-
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate))
-
-        layout.controller.commitUpdates()
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 2)
+        XCTAssertEqual(try sectionIdentifier(in: layout, section: 0, state: .afterUpdate), remainingSectionIdentifier)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 0, state: .afterUpdate), remainingItemIdentifier)
+        XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), 87)
     }
 
-    func testItemMove() {
-        let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection = [0: 100, 1: 100, 2: 1]
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+    func testItemMoveUpdatesIdentifiersAndPaths() throws {
+        let layout = preparedLayout(sectionCounts: [3, 3, 1])
+        let movedFromFirstSection = try itemIdentifier(in: layout, item: 0, section: 0, state: .beforeUpdate)
+        let untouchedFirstSectionItem = try itemIdentifier(in: layout, item: 1, section: 0, state: .beforeUpdate)
+        let movedWithinSecondSection = try itemIdentifier(in: layout, item: 0, section: 1, state: .beforeUpdate)
+        let movedFromThirdSection = try itemIdentifier(in: layout, item: 0, section: 2, state: .beforeUpdate)
+        let contentHeightBefore = layout.controller.contentHeight(at: .beforeUpdate)
 
-        var changeItems: [ChangeItem] = []
-        changeItems.append(.itemMove(initialItemIndexPath: IndexPath(item: 0, section: 0), finalItemIndexPath: IndexPath(item: 0, section: 2)))
-        changeItems.append(.itemMove(initialItemIndexPath: IndexPath(item: 0, section: 1), finalItemIndexPath: IndexPath(item: 1, section: 1)))
-        changeItems.append(.itemMove(initialItemIndexPath: IndexPath(item: 0, section: 2), finalItemIndexPath: IndexPath(item: 0, section: 0)))
+        layout.controller.process(changeItems: [
+            .itemMove(initialItemIndexPath: IndexPath(item: 0, section: 0), finalItemIndexPath: IndexPath(item: 0, section: 2)),
+            .itemMove(initialItemIndexPath: IndexPath(item: 0, section: 1), finalItemIndexPath: IndexPath(item: 1, section: 1)),
+            .itemMove(initialItemIndexPath: IndexPath(item: 0, section: 2), finalItemIndexPath: IndexPath(item: 0, section: 0))
+        ])
 
-        layout.controller.process(changeItems: changeItems)
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), layout.controller.contentHeight(at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 0), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 1), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 1), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(
-            layout.controller.itemPath(
-                by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate)!,
-                kind: .cell,
-                at: .afterUpdate
-            ),
-            ItemPath(item: 0, section: 0)
-        )
-        XCTAssertEqual(
-            layout.controller.itemPath(
-                by: layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)!,
-                kind: .cell,
-                at: .afterUpdate
-            ),
-            ItemPath(item: 0, section: 2)
-        )
-        layout.controller.commitUpdates()
+        XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), contentHeightBefore)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 0, state: .afterUpdate), movedFromThirdSection)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 1, section: 0, state: .afterUpdate), untouchedFirstSectionItem)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 1, section: 1, state: .afterUpdate), movedWithinSecondSection)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 2, state: .afterUpdate), movedFromFirstSection)
+        XCTAssertEqual(layout.controller.itemPath(by: movedFromFirstSection, at: .afterUpdate), ItemPath(item: 0, section: 2))
+        XCTAssertEqual(layout.controller.itemPath(by: movedFromThirdSection, at: .afterUpdate), ItemPath(item: 0, section: 0))
     }
 
-    func testSectionMove() {
-        let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection[0] = 100
-        layout.numberOfItemsInSection[1] = 200
-        layout.numberOfItemsInSection[2] = 300
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+    func testSectionMoveReordersSections() throws {
+        let layout = preparedLayout(sectionCounts: [2, 3, 4])
+        let firstSectionIdentifier = try sectionIdentifier(in: layout, section: 0, state: .beforeUpdate)
+        let secondSectionIdentifier = try sectionIdentifier(in: layout, section: 1, state: .beforeUpdate)
+        let thirdSectionIdentifier = try sectionIdentifier(in: layout, section: 2, state: .beforeUpdate)
+        let firstSectionFirstItem = try itemIdentifier(in: layout, item: 0, section: 0, state: .beforeUpdate)
+        let secondSectionFirstItem = try itemIdentifier(in: layout, item: 0, section: 1, state: .beforeUpdate)
+        let thirdSectionFirstItem = try itemIdentifier(in: layout, item: 0, section: 2, state: .beforeUpdate)
 
-        var changeItems: [ChangeItem] = []
-        changeItems.append(.sectionMove(initialSectionIndex: 0, finalSectionIndex: 1))
-        changeItems.append(.sectionMove(initialSectionIndex: 2, finalSectionIndex: 0))
+        layout.controller.process(changeItems: [
+            .sectionMove(initialSectionIndex: 0, finalSectionIndex: 1),
+            .sectionMove(initialSectionIndex: 2, finalSectionIndex: 0)
+        ])
 
-        layout.settings.estimatedItemSize = .init(width: 300, height: 50)
-        layout.shouldPresentHeaderAtSection[0] = false
-        layout.shouldPresentFooterAtSection[0] = false
-        layout.shouldPresentHeaderAtSection[2] = false
-        layout.numberOfItemsInSection[0] = 200
-        layout.controller.process(changeItems: changeItems)
-
-        // Headers
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .header, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .header, at: .afterUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .footer, at: .beforeUpdate))
-        XCTAssertNotNil(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .footer, at: .afterUpdate))
-
-        // Items count
-        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 300)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .beforeUpdate), 200)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 100)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .beforeUpdate), 300)
-        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .afterUpdate), 200)
-        XCTAssertEqual(layout.controller.numberOfSections(at: .beforeUpdate), 3)
         XCTAssertEqual(layout.controller.numberOfSections(at: .afterUpdate), 3)
-
-        // Frames
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.origin, .zero)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .header, at: .afterUpdate)?.origin, .zero)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.size, layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.size)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate)?.size, CGSize(width: 300, height: 40))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 40))
-
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .afterUpdate))
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 1), kind: .cell, at: .beforeUpdate), layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 2), kind: .cell, at: .afterUpdate))
-
-        layout.controller.commitUpdates()
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 4)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 2)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 2, at: .afterUpdate), 3)
+        XCTAssertEqual(try sectionIdentifier(in: layout, section: 0, state: .afterUpdate), thirdSectionIdentifier)
+        XCTAssertEqual(try sectionIdentifier(in: layout, section: 1, state: .afterUpdate), firstSectionIdentifier)
+        XCTAssertEqual(try sectionIdentifier(in: layout, section: 2, state: .afterUpdate), secondSectionIdentifier)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 0, state: .afterUpdate), thirdSectionFirstItem)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 1, state: .afterUpdate), firstSectionFirstItem)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 2, state: .afterUpdate), secondSectionFirstItem)
     }
 
-    func testDeleteReloadProcessOrder() {
-        let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection = [0: 3]
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        var changeItems: [ChangeItem] = []
-        changeItems.append(.itemDelete(itemIndexPath: IndexPath(item: 0, section: 0)))
-        changeItems.append(.itemDelete(itemIndexPath: IndexPath(item: 1, section: 0)))
-        changeItems.append(.itemReload(itemIndexPath: IndexPath(item: 2, section: 0)))
-        layout.controller.process(changeItems: changeItems)
+    func testDeleteReloadProcessOrder() throws {
+        let layout = preparedLayout(sectionCounts: [3])
+        let survivingItemIdentifier = try itemIdentifier(in: layout, item: 2, section: 0, state: .beforeUpdate)
+        layout.preferredSizeAtIndexPath[IndexPath(item: 0, section: 0)] = CGSize(width: 300, height: 80)
+        layout.calculatedSizeAtIndexPath[IndexPath(item: 0, section: 0)] = CGSize(width: 300, height: 80)
+
+        layout.controller.process(changeItems: [
+            .itemDelete(itemIndexPath: IndexPath(item: 0, section: 0)),
+            .itemDelete(itemIndexPath: IndexPath(item: 1, section: 0)),
+            .itemReload(itemIndexPath: IndexPath(item: 2, section: 0))
+        ])
+
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 1)
+        XCTAssertEqual(layout.controller.reloadedIndexes, Set([IndexPath(item: 0, section: 0)]))
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 0, section: 0, state: .afterUpdate), survivingItemIdentifier)
+        XCTAssertEqual(
+            try XCTUnwrap(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), at: .afterUpdate)).size,
+            CGSize(width: 300, height: 80)
+        )
     }
 
-    func testDeleteInsertProcessOrder() {
-        let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection = [0: 3]
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        var changeItems: [ChangeItem] = []
-        changeItems.append(.itemDelete(itemIndexPath: IndexPath(item: 0, section: 0)))
-        changeItems.append(.itemDelete(itemIndexPath: IndexPath(item: 1, section: 0)))
-        changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: 0, section: 0)))
-        layout.controller.process(changeItems: changeItems)
+    func testDeleteInsertProcessOrder() throws {
+        let layout = preparedLayout(sectionCounts: [3])
+        let survivingItemIdentifier = try itemIdentifier(in: layout, item: 2, section: 0, state: .beforeUpdate)
+
+        layout.controller.process(changeItems: [
+            .itemDelete(itemIndexPath: IndexPath(item: 0, section: 0)),
+            .itemDelete(itemIndexPath: IndexPath(item: 1, section: 0)),
+            .itemInsert(itemIndexPath: IndexPath(item: 0, section: 0))
+        ])
+
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 2)
+        XCTAssertEqual(try itemIdentifier(in: layout, item: 1, section: 0, state: .afterUpdate), survivingItemIdentifier)
     }
 
     func testMoveInsertReloadProcessOrder() {
-        let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection = [0: 3]
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        var changeItems: [ChangeItem] = []
-        changeItems.append(.itemMove(initialItemIndexPath: IndexPath(item: 2, section: 0), finalItemIndexPath: IndexPath(item: 0, section: 0)))
-        changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: 0, section: 0)))
-        changeItems.append(.itemReload(itemIndexPath: IndexPath(item: 0, section: 0)))
-        layout.controller.process(changeItems: changeItems)
+        let layout = preparedLayout(sectionCounts: [3])
+
+        layout.controller.process(changeItems: [
+            .itemMove(initialItemIndexPath: IndexPath(item: 2, section: 0), finalItemIndexPath: IndexPath(item: 0, section: 0)),
+            .itemInsert(itemIndexPath: IndexPath(item: 0, section: 0)),
+            .itemReload(itemIndexPath: IndexPath(item: 0, section: 0))
+        ])
+
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 4)
+        XCTAssertEqual(layout.controller.reloadedIndexes, Set([IndexPath(item: 2, section: 0)]))
     }
 
-    func testPinnedHeader() {
+    func testPinnedTopItem() throws {
         let layout = MockCollectionLayout()
-        let scrollOffsetY = CGFloat(400)
-        layout.visibleBounds.origin.y = scrollOffsetY
-        layout.shouldPinHeaderToVisibleBoundsAtSection[0] = true
+        layout.setSections([100])
+        layout.visibleBounds.origin.y = 400
+        layout.pinningTypeAtIndexPath[IndexPath(item: 0, section: 0)] = .top
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
         layout.controller.updatePinnedInfo(at: .beforeUpdate)
 
-        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate, withPinnning: true)
-        XCTAssertEqual(item?.frame.minY, scrollOffsetY)
+        let item = try XCTUnwrap(
+            layout.controller.itemAttributes(
+                for: ItemPath(item: 0, section: 0),
+                at: .beforeUpdate,
+                withPinnning: true
+            )
+        )
+        XCTAssertEqual(item.frame.minY, 400)
     }
 
-    func testPinnedFooter() {
+    func testPinnedBottomItem() throws {
         let layout = MockCollectionLayout()
-        layout.shouldPinFooterToVisibleBoundsAtSection[0] = true
+        layout.setSections([100])
+        layout.pinningTypeAtIndexPath[IndexPath(item: 99, section: 0)] = .bottom
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
         layout.controller.updatePinnedInfo(at: .beforeUpdate)
 
-        let item = layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate, withPinnning: true)!
-        XCTAssertEqual(item.frame.minY, layout.visibleBounds.height - item.frame.height)
+        let item = try XCTUnwrap(
+            layout.controller.itemAttributes(
+                for: ItemPath(item: 99, section: 0),
+                at: .beforeUpdate,
+                withPinnning: true
+            )
+        )
+        XCTAssertEqual(item.frame.minY, layout.visibleBounds.maxY - item.frame.height)
+    }
+
+    private func preparedLayout(sectionCounts: [Int]) -> MockCollectionLayout {
+        let layout = MockCollectionLayout()
+        layout.setSections(sectionCounts)
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        return layout
+    }
+
+    private func itemIdentifier(
+        in layout: MockCollectionLayout,
+        item: Int,
+        section: Int,
+        state: ModelState
+    ) throws -> UUID {
+        try XCTUnwrap(layout.controller.itemIdentifier(for: ItemPath(item: item, section: section), at: state))
+    }
+
+    private func sectionIdentifier(
+        in layout: MockCollectionLayout,
+        section: Int,
+        state: ModelState
+    ) throws -> UUID {
+        try XCTUnwrap(layout.controller.sectionIdentifier(for: section, at: state))
+    }
+
+    private func sectionHeight(itemHeights: [CGFloat], spacing: CGFloat = 7) -> CGFloat {
+        guard !itemHeights.isEmpty else {
+            return 0
+        }
+        return itemHeights.reduce(0, +) + CGFloat(itemHeights.count - 1) * spacing
+    }
+
+    private func expectedContentHeight(
+        sectionHeights: [CGFloat],
+        interSectionSpacing: CGFloat = 3,
+        additionalInsets: UIEdgeInsets = .zero
+    ) -> CGFloat {
+        let totalSectionSpacing = CGFloat(max(sectionHeights.count - 1, 0)) * interSectionSpacing
+        return additionalInsets.top + additionalInsets.bottom + sectionHeights.reduce(0, +) + totalSectionSpacing
     }
 }

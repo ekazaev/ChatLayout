@@ -293,62 +293,48 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         return .top
     }
 
-    func sizeForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
-        switch kind {
-        case .cell:
-            let item = sections[indexPath.section].cells[indexPath.item]
-            switch item {
-            case let .message(message, bubbleType: _):
-                switch message.data {
+    func sizeForItem(_ chatLayout: CollectionViewChatLayout, at indexPath: IndexPath) -> ItemSize {
+        let item = sections[indexPath.section].cells[indexPath.item]
+        switch item {
+        case let .message(message, bubbleType: _):
+            switch message.data {
 // Uncomment to test exact sizes
-//                case let .text(text):
-//                    let rect = (text as NSString).boundingRect(with: .init(width: chatLayout.layoutFrame.width * Constants.maxWidth, height: CGFloat.greatestFiniteMagnitude),options: [NSStringDrawingOptions.usesLineFragmentOrigin, NSStringDrawingOptions.usesFontLeading] , attributes: [.font: UIFont.preferredFont(forTextStyle: .body)], context: nil)
-//                    return .exact(CGSize(width: chatLayout.layoutFrame.width, height: rect.height + 16))
+//            case let .text(text):
+//                let rect = (text as NSString).boundingRect(with: .init(width: chatLayout.layoutFrame.width * Constants.maxWidth, height: CGFloat.greatestFiniteMagnitude),options: [NSStringDrawingOptions.usesLineFragmentOrigin, NSStringDrawingOptions.usesFontLeading] , attributes: [.font: UIFont.preferredFont(forTextStyle: .body)], context: nil)
+//                return .exact(CGSize(width: chatLayout.layoutFrame.width, height: rect.height + 16))
 
-                case .text:
-                    return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 36))
-                case let .image(_, isLocallyStored: isDownloaded):
-                    return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 120 : 80))
-                case let .url(_, isLocallyStored: isDownloaded):
-                    return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 60 : 36))
-                }
-            case .date:
-                return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 18))
-            case .typingIndicator:
-                return .estimated(CGSize(width: 60, height: 36))
-            case .messageGroup:
-                return .estimated(CGSize(width: min(85, chatLayout.layoutFrame.width / 3), height: 18))
+            case .text:
+                return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 36))
+            case let .image(_, isLocallyStored: isDownloaded):
+                return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 120 : 80))
+            case let .url(_, isLocallyStored: isDownloaded):
+                return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: isDownloaded ? 60 : 36))
             }
-        case .footer,
-             .header:
-            return .auto
+        case .date:
+            return .estimated(CGSize(width: chatLayout.layoutFrame.width, height: 18))
+        case .typingIndicator:
+            return .estimated(CGSize(width: 60, height: 36))
+        case .messageGroup:
+            return .estimated(CGSize(width: min(85, chatLayout.layoutFrame.width / 3), height: 18))
         }
     }
 
-    func alignmentForItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
-        switch kind {
-        case .header:
+    func alignmentForItem(_ chatLayout: CollectionViewChatLayout, at indexPath: IndexPath) -> ChatItemAlignment {
+        let item = sections[indexPath.section].cells[indexPath.item]
+        switch item {
+        case .date:
             return .center
-        case .cell:
-            let item = sections[indexPath.section].cells[indexPath.item]
-            switch item {
-            case .date:
-                return .center
-            case .message:
-                return .fullWidth
-            case .messageGroup,
-                 .typingIndicator:
-                return .leading
-            }
-        case .footer:
-            return .trailing
+        case .message:
+            return .fullWidth
+        case .messageGroup,
+             .typingIndicator:
+            return .leading
         }
     }
 
-    func initialLayoutAttributesForInsertedItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes, on state: InitialAttributesRequestType) {
+    func initialLayoutAttributesForInsertedItem(_ chatLayout: CollectionViewChatLayout, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes, on state: InitialAttributesRequestType) {
         originalAttributes.alpha = 0
-        guard state == .invalidation,
-              kind == .cell else {
+        guard state == .invalidation else {
             return
         }
         switch sections[indexPath.section].cells[indexPath.item] {
@@ -367,11 +353,8 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    func finalLayoutAttributesForDeletedItem(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes) {
+    func finalLayoutAttributesForDeletedItem(_ chatLayout: CollectionViewChatLayout, at indexPath: IndexPath, modifying originalAttributes: ChatLayoutAttributes) {
         originalAttributes.alpha = 0
-        guard kind == .cell else {
-            return
-        }
         switch oldSections[indexPath.section].cells[indexPath.item] {
         // Uncomment to see the effect
 //        case .messageGroup:
@@ -388,7 +371,7 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         }
     }
 
-    func interItemSpacing(_ chatLayout: CollectionViewChatLayout, of kind: ItemKind, after indexPath: IndexPath) -> CGFloat? {
+    func interItemSpacing(_ chatLayout: CollectionViewChatLayout, after indexPath: IndexPath) -> CGFloat? {
         let item = sections[indexPath.section].cells[indexPath.item]
         switch item {
         case .messageGroup:

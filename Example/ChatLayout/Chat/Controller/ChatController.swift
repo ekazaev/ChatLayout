@@ -13,9 +13,17 @@
 import Foundation
 
 protocol ChatController {
+    var isAgentModeEnabled: Bool { get }
+
+    var extendedLayoutMessageID: UUID? { get }
+
     func loadInitialMessages(completion: @escaping ([Section]) -> Void)
 
     func loadPreviousMessages(completion: @escaping ([Section]) -> Void)
 
     func sendMessage(_ data: Message.Data, completion: @escaping ([Section]) -> Void)
+
+    func setAgentModeEnabled(_ isEnabled: Bool)
+
+    func startAgentResponse()
 }

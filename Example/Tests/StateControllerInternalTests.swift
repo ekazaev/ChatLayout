@@ -14,129 +14,155 @@
 import XCTest
 
 @MainActor
-class StateControllerInternalTests: XCTestCase {
-    func testUpdatePreferredSize() {
+final class StateControllerInternalTests: XCTestCase {
+    func testUpdatePreferredSizeUpdatesFollowingItemOffsets() throws {
         let layout = MockCollectionLayout()
+        layout.setSections([4])
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        layout.controller.update(preferredSize: CGSize(width: 300, height: 100), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)
-        layout.controller.update(preferredSize: CGSize(width: 300, height: 300), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)
-        layout.controller.update(preferredSize: CGSize(width: 300, height: 100), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.size, CGSize(width: 300, height: 100))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)?.size, CGSize(width: 300, height: 100))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 300))
-        XCTAssertEqual(layout.controller.itemFrame(for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)?.size, CGSize(width: 300, height: 40))
+
+        layout.controller.update(
+            preferredSize: CGSize(width: 300, height: 300),
+            alignment: .center,
+            interItemSpacing: 0,
+            pinningType: nil,
+            for: ItemPath(item: 0, section: 0),
+            at: .beforeUpdate
+        )
+
+        let updatedFrame = try XCTUnwrap(layout.controller.itemFrame(for: ItemPath(item: 0, section: 0), at: .beforeUpdate))
+        let followingFrame = try XCTUnwrap(layout.controller.itemFrame(for: ItemPath(item: 1, section: 0), at: .beforeUpdate))
+
+        XCTAssertEqual(updatedFrame.size, CGSize(width: 300, height: 300))
+        XCTAssertEqual(followingFrame.origin.y, 307)
+        XCTAssertEqual(followingFrame.size, CGSize(width: 300, height: 40))
     }
 
-    func testUpdatePreferredAlignment() {
+    func testUpdatePreferredAlignmentAdjustsFrames() throws {
         let layout = MockCollectionLayout()
+        layout.setSections([5])
         layout.settings.additionalInsets = UIEdgeInsets(top: 0, left: 13, bottom: 0, right: 7)
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
-        layout.controller.update(preferredSize: CGSize(width: 100, height: 100), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)
-        layout.controller.update(preferredSize: CGSize(width: 100, height: 300), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)
-        layout.controller.update(preferredSize: CGSize(width: 100, height: 100), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)
-        layout.controller.update(preferredSize: CGSize(width: 100, height: 100), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)
+        layout.controller.update(
+            preferredSize: CGSize(width: 100, height: 100),
+            alignment: .leading,
+            interItemSpacing: 0,
+            pinningType: nil,
+            for: ItemPath(item: 0, section: 0),
+            at: .beforeUpdate
+        )
+        layout.controller.update(
+            preferredSize: CGSize(width: 100, height: 100),
+            alignment: .trailing,
+            interItemSpacing: 0,
+            pinningType: nil,
+            for: ItemPath(item: 1, section: 0),
+            at: .beforeUpdate
+        )
+        layout.controller.update(
+            preferredSize: CGSize(width: 100, height: 100),
+            alignment: .center,
+            interItemSpacing: 0,
+            pinningType: nil,
+            for: ItemPath(item: 2, section: 0),
+            at: .beforeUpdate
+        )
+        layout.controller.update(
+            preferredSize: CGSize(width: 100, height: 100),
+            alignment: .fullWidth,
+            interItemSpacing: 0,
+            pinningType: nil,
+            for: ItemPath(item: 3, section: 0),
+            at: .beforeUpdate
+        )
 
-        layout.controller.update(preferredSize: CGSize(width: 100, height: 100), alignment: .leading, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)
-        layout.controller.update(preferredSize: CGSize(width: 100, height: 100), alignment: .trailing, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)
-        layout.controller.update(preferredSize: CGSize(width: 100, height: 100), alignment: .center, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)
-        layout.controller.update(preferredSize: CGSize(width: 100, height: 100), alignment: .fullWidth, interItemSpacing: 0, pinningType: nil, for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)
+        let leadingAttributes = try XCTUnwrap(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), at: .beforeUpdate))
+        let trailingAttributes = try XCTUnwrap(layout.controller.itemAttributes(for: ItemPath(item: 1, section: 0), at: .beforeUpdate))
+        let centeredAttributes = try XCTUnwrap(layout.controller.itemAttributes(for: ItemPath(item: 2, section: 0), at: .beforeUpdate))
+        let fullWidthAttributes = try XCTUnwrap(layout.controller.itemAttributes(for: ItemPath(item: 3, section: 0), at: .beforeUpdate))
+        let untouchedAttributes = try XCTUnwrap(layout.controller.itemAttributes(for: ItemPath(item: 4, section: 0), at: .beforeUpdate))
 
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.alignment, .trailing)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)?.alignment, .leading)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.alignment, .center)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)?.alignment, .fullWidth)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 2, section: 0), kind: .cell, at: .beforeUpdate)?.alignment, .fullWidth)
+        XCTAssertEqual(leadingAttributes.alignment, .leading)
+        XCTAssertEqual(leadingAttributes.frame.origin.x, 13)
 
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate)?.frame.origin.x, 300 - 100 - layout.settings.additionalInsets.right)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate)?.frame.origin.x, layout.settings.additionalInsets.left)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate)?.frame.origin.x, layout.settings.additionalInsets.left + (300 - layout.settings.additionalInsets.right - layout.settings.additionalInsets.left) / 2 - 100 / 2)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)?.frame.origin.x, layout.settings.additionalInsets.left)
-        XCTAssertEqual(layout.controller.itemAttributes(for: ItemPath(item: 1, section: 0), kind: .cell, at: .beforeUpdate)?.frame.width, 300 - layout.settings.additionalInsets.left - layout.settings.additionalInsets.right)
+        XCTAssertEqual(trailingAttributes.alignment, .trailing)
+        XCTAssertEqual(trailingAttributes.frame.origin.x, 193)
+
+        XCTAssertEqual(centeredAttributes.alignment, .center)
+        XCTAssertEqual(centeredAttributes.frame.origin.x, 103)
+
+        XCTAssertEqual(fullWidthAttributes.alignment, .fullWidth)
+        XCTAssertEqual(fullWidthAttributes.frame.origin.x, 13)
+        XCTAssertEqual(fullWidthAttributes.frame.width, 280)
+
+        XCTAssertEqual(untouchedAttributes.alignment, .fullWidth)
+        XCTAssertEqual(untouchedAttributes.frame.origin.x, 13)
+        XCTAssertEqual(untouchedAttributes.frame.width, 280)
     }
 
-    func testItemIdentifierAtIndexPath() {
+    func testItemAndSectionIdentifiersRoundTrip() throws {
         let layout = MockCollectionLayout()
+        layout.setSections([2, 1])
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .cell, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[0].items[0].id)
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .header, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[0].header?.id)
-        XCTAssertEqual(layout.controller.itemIdentifier(for: ItemPath(item: 0, section: 0), kind: .footer, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[0].footer?.id)
+
+        let section0Identifier = try XCTUnwrap(layout.controller.sectionIdentifier(for: 0, at: .beforeUpdate))
+        let section1Identifier = try XCTUnwrap(layout.controller.sectionIdentifier(for: 1, at: .beforeUpdate))
+        let itemIdentifier = try XCTUnwrap(layout.controller.itemIdentifier(for: ItemPath(item: 1, section: 0), at: .beforeUpdate))
+
+        XCTAssertEqual(layout.controller.sectionIndex(for: section0Identifier, at: .beforeUpdate), 0)
+        XCTAssertEqual(layout.controller.sectionIndex(for: section1Identifier, at: .beforeUpdate), 1)
+        XCTAssertEqual(layout.controller.itemPath(by: itemIdentifier, at: .beforeUpdate), ItemPath(item: 1, section: 0))
+        XCTAssertNil(layout.controller.itemIdentifier(for: ItemPath(item: 2, section: 1), at: .beforeUpdate))
+        XCTAssertNil(layout.controller.sectionIdentifier(for: 2, at: .beforeUpdate))
     }
 
-    func testSectionIdentifierAtIndexPath() {
+    func testLayoutAttributesInRectCaching() throws {
         let layout = MockCollectionLayout()
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        XCTAssertEqual(layout.controller.sectionIdentifier(for: 0, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[0].id)
-        XCTAssertEqual(layout.controller.sectionIdentifier(for: 1, at: .beforeUpdate), layout.controller.layout(at: .beforeUpdate).sections[1].id)
-    }
-
-    func testLayoutAttributesInRect() {
-        let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection[0] = 5
-        layout.numberOfItemsInSection[1] = 5
+        layout.setSections([5, 5])
         layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
         let rect = CGRect(origin: .zero, size: CGSize(width: 300, height: 400))
         let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
         XCTAssertEqual(attributes.count, 9)
-        attributes.forEach { attributes in
-            XCTAssertTrue(attributes.frame.intersects(rect))
-        }
-    }
+        XCTAssertTrue(attributes.allSatisfy { $0.frame.intersects(rect) })
 
-    func testLayoutAttributesInRectCaching() {
-        let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection[0] = 5
-        layout.numberOfItemsInSection[1] = 5
-        layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
-        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-
-        let rect = CGRect(origin: .zero, size: CGSize(width: 300, height: 400))
-        let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
         let cachedAttributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
         XCTAssertEqual(cachedAttributes.count, attributes.count)
-        if cachedAttributes.count == attributes.count {
-            cachedAttributes.enumerated().forEach { index, cachedAttributes in
-                XCTAssertTrue(cachedAttributes === attributes[index])
-            }
+        for index in attributes.indices {
+            XCTAssertTrue(cachedAttributes[index] === attributes[index])
         }
 
         layout.controller.resetCachedAttributes()
 
-        let cachedInObjectsAttributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
-        XCTAssertEqual(cachedInObjectsAttributes.count, attributes.count)
-        XCTAssertEqual(cachedInObjectsAttributes.count, cachedAttributes.count)
-        if cachedInObjectsAttributes.count == attributes.count {
-            cachedInObjectsAttributes.enumerated().forEach { index, nonCachedAttributes in
-                XCTAssertTrue(nonCachedAttributes == attributes[index])
-                XCTAssertTrue(nonCachedAttributes == cachedAttributes[index])
-            }
+        let cachedObjectsAttributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
+        XCTAssertEqual(cachedObjectsAttributes.count, attributes.count)
+        for index in attributes.indices {
+            XCTAssertTrue(cachedObjectsAttributes[index] === attributes[index])
         }
 
         layout.controller.resetCachedAttributes()
         layout.controller.resetCachedAttributeObjects()
 
-        let notCachedAttributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
-
-        if notCachedAttributes.count == attributes.count {
-            notCachedAttributes.enumerated().forEach { index, nonCachedAttributes in
-                XCTAssertTrue(nonCachedAttributes !== attributes[index])
-                XCTAssertTrue(nonCachedAttributes !== cachedAttributes[index])
-            }
+        let rebuiltAttributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate)
+        XCTAssertEqual(rebuiltAttributes.count, attributes.count)
+        for index in attributes.indices {
+            XCTAssertTrue(rebuiltAttributes[index].isEqual(attributes[index]))
+            XCTAssertFalse(rebuiltAttributes[index] === attributes[index])
         }
     }
 
-    func testContentSize() {
+    func testContentSizeIncludesAdditionalInsets() {
         let layout = MockCollectionLayout()
-        layout.numberOfItemsInSection[0] = 5
-        layout.numberOfItemsInSection[1] = 5
-        layout.numberOfItemsInSection[2] = 5
+        layout.setSections([5, 5, 5])
         layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
 
-        let estimatedContentHeight = layout.settings.additionalInsets.top + layout.settings.additionalInsets.bottom + layout.settings.estimatedItemSize!.height * (7 * 3) + layout.settings.interItemSpacing * (4 * 3) + layout.settings.interSectionSpacing * 2
-        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), estimatedContentHeight)
-        XCTAssertEqual(layout.controller.contentSize(for: .beforeUpdate), CGSize(width: layout.viewSize.width - 0.0001, height: estimatedContentHeight))
+        let expectedHeight: CGFloat = 10.0 + 30.0 + 15.0 * 40.0 + 12.0 * 7.0 + 2.0 * 3.0
+        let contentSize = layout.controller.contentSize(for: .beforeUpdate)
+
+        XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), expectedHeight)
+        XCTAssertEqual(contentSize.width, layout.viewSize.width - 0.0001, accuracy: 0.0001)
+        XCTAssertEqual(contentSize.height, expectedHeight)
     }
 }

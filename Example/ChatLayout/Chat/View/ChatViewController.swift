@@ -23,7 +23,7 @@ import UIKit
 let enableSelfSizingSupport = false
 
 // By setting this flag to true you can test reconfigure instead of reload.
-let enableReconfigure = false
+let enableReconfigure = true
 
 final class ChatViewController: UIViewController {
     private enum ReactionTypes {
@@ -68,6 +68,9 @@ final class ChatViewController: UIViewController {
     private let fpsCounter = FPSCounter()
     private let fpsView = EdgeAligningView<UILabel>(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))
     private var animator: ManualAnimator?
+    private lazy var editBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
+    private lazy var agentBarButtonItem = UIBarButtonItem(title: "Agent", style: .plain, target: self, action: #selector(ChatViewController.toggleAgentMode))
+    private var shouldStartAgentAnswerAfterNextUpdate = false
 
     private var translationX: CGFloat = 0
     private var currentOffset: CGFloat = 0
@@ -119,12 +122,12 @@ final class ChatViewController: UIViewController {
         inputBarView.topStackView.addArrangedSubview(fpsView)
         inputBarView.shouldAnimateTextDidChangeLayout = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Show Keyboard", style: .plain, target: self, action: #selector(ChatViewController.showHideKeyboard))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
+        navigationItem.rightBarButtonItems = [editBarButtonItem, agentBarButtonItem]
+        syncAgentModeUI()
 
         chatLayout.settings.interItemSpacing = 8
         chatLayout.settings.interSectionSpacing = 8
         chatLayout.settings.additionalInsets = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
-        chatLayout.settings.pinnableItems = .cells
         chatLayout.keepContentOffsetAtBottomOnBatchUpdates = true
         chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
         chatLayout.keepContentAtBottomOfVisibleArea = true
@@ -185,7 +188,7 @@ final class ChatViewController: UIViewController {
             return
         }
         currentInterfaceActions.options.insert(.changingFrameSize)
-        let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
+        let positionSnapshot = contentOffsetSnapshotForCurrentLayout()
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.setNeedsLayout()
         coordinator.animate(alongsideTransition: { _ in
@@ -221,7 +224,16 @@ final class ChatViewController: UIViewController {
     private func setEditNotEdit() {
         isEditing = !isEditing
         editNotifier.setIsEditing(isEditing, duration: .animated(duration: 0.25))
-        navigationItem.rightBarButtonItem?.title = isEditing ? "Done" : "Edit"
+        editBarButtonItem.title = isEditing ? "Done" : "Edit"
+        chatLayout.invalidateLayout()
+    }
+
+    @objc
+    private func toggleAgentMode() {
+        let shouldEnableAgentMode = !chatController.isAgentModeEnabled
+        shouldStartAgentAnswerAfterNextUpdate = shouldEnableAgentMode
+        chatController.setAgentModeEnabled(shouldEnableAgentMode)
+        syncAgentModeUI()
         chatLayout.invalidateLayout()
     }
 
@@ -452,11 +464,39 @@ extension ChatViewController: UICollectionViewDelegate {
 
 extension ChatViewController: ChatControllerDelegate {
     func update(with sections: [Section], requiresIsolatedProcess: Bool) {
+        syncAgentModeUI()
+        chatLayout.settings.indexPathForExtendedLayout = indexPathForExtendedLayout(in: sections)
+        let shouldStartAgentAnswerAfterUpdate = shouldStartAgentAnswerAfterNextUpdate &&
+            chatController.isAgentModeEnabled &&
+            chatController.extendedLayoutMessageID != nil
         // if `chatLayout.keepContentAtBottomOfVisibleArea` is enabled and content size is actually smaller than the visible size - it is better to process each batch update
         // in isolation. Example: If you insert a cell animatingly and then reload some cell - the reload animation will appear on top of the insertion animation.
         // Basically everytime you see any animation glitches - process batch updates in isolation.
         let requiresIsolatedProcess = chatLayout.keepContentAtBottomOfVisibleArea == true && chatLayout.collectionViewContentSize.height < chatLayout.visibleBounds.height ? true : requiresIsolatedProcess
-        processUpdates(with: sections, animated: true, requiresIsolatedProcess: requiresIsolatedProcess)
+        processUpdates(with: sections, animated: true, requiresIsolatedProcess: requiresIsolatedProcess) {
+            guard shouldStartAgentAnswerAfterUpdate else {
+                return
+            }
+            self.shouldStartAgentAnswerAfterNextUpdate = false
+            guard self.chatController.isAgentModeEnabled else {
+                return
+            }
+            self.scrollToBottom { [weak self] in
+                guard let self,
+                      chatController.isAgentModeEnabled else {
+                    return
+                }
+                chatController.startAgentResponse()
+            }
+        }
+    }
+
+    func agentModeChanged(to isEnabled: Bool) {
+        syncAgentModeUI()
+        if !isEnabled {
+            shouldStartAgentAnswerAfterNextUpdate = false
+            chatLayout.settings.indexPathForExtendedLayout = nil
+        }
     }
 
     private func processUpdates(with sections: [Section], animated: Bool = true, requiresIsolatedProcess: Bool, completion: (() -> Void)? = nil) {
@@ -646,7 +686,7 @@ extension ChatViewController: KeyboardListenerDelegate {
         let newBottomInset = collectionView.frame.minY + collectionView.frame.size.height - keyboardFrame.minY - collectionView.safeAreaInsets.bottom
         if newBottomInset > 0,
            collectionView.contentInset.bottom != newBottomInset {
-            let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
+            let positionSnapshot = contentOffsetSnapshotForCurrentLayout()
 
             // Interrupting current update animation if user starts to scroll while batchUpdate is performed.
             if currentControllerActions.options.contains(.updatingCollection) {
@@ -677,6 +717,39 @@ extension ChatViewController: KeyboardListenerDelegate {
             return
         }
         currentInterfaceActions.options.remove(.changingKeyboardFrame)
+    }
+}
+
+private extension ChatViewController {
+    func syncAgentModeUI() {
+        agentBarButtonItem.title = chatController.isAgentModeEnabled ? "Agent Off" : "Agent"
+    }
+
+    func indexPathForExtendedLayout(in sections: [Section]) -> IndexPath? {
+        guard chatController.isAgentModeEnabled,
+              let extendedLayoutMessageID = chatController.extendedLayoutMessageID else {
+            return nil
+        }
+
+        for (sectionIndex, section) in sections.enumerated() {
+            for (itemIndex, cell) in section.cells.enumerated() {
+                guard case let .message(message, bubbleType: _) = cell,
+                      message.id == extendedLayoutMessageID else {
+                    continue
+                }
+                return IndexPath(item: itemIndex, section: sectionIndex)
+            }
+        }
+
+        return nil
+    }
+
+    func contentOffsetSnapshotForCurrentLayout() -> ChatLayoutPositionSnapshot? {
+        if chatLayout.settings.indexPathForExtendedLayout != nil {
+            return chatLayout.getContentOffsetSnapshot(from: .top)
+        } else {
+            return chatLayout.getContentOffsetSnapshot(from: .bottom)
+        }
     }
 }
 

@@ -16,10 +16,12 @@ import UIKit
 
 class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     var numberOfItemsInSection: [Int: Int] = [0: 100, 1: 100, 2: 100]
-    var shouldPresentHeaderAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
-    var shouldPresentFooterAtSection: [Int: Bool] = [0: true, 1: true, 2: true]
-    var shouldPinHeaderToVisibleBoundsAtSection: [Int: Bool] = [0: false, 1: false, 2: false]
-    var shouldPinFooterToVisibleBoundsAtSection: [Int: Bool] = [0: false, 1: false, 2: false]
+    var pinningTypeAtIndexPath: [IndexPath: ChatItemPinningType] = [:]
+    var preferredSizeAtIndexPath: [IndexPath: CGSize] = [:]
+    var calculatedSizeAtIndexPath: [IndexPath: CGSize] = [:]
+    var alignmentAtIndexPath: [IndexPath: ChatItemAlignment] = [:]
+    var interItemSpacingAtIndexPath: [IndexPath: CGFloat] = [:]
+    var interSectionSpacingAtSection: [Int: CGFloat] = [:]
 
     // swiftlint:disable weak_delegate
     lazy var delegate: ChatLayoutDelegate? = self
@@ -52,72 +54,52 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
 
     let processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
 
-    var hasPinnedHeaderOrFooter: Bool = false
+    func setSections(_ counts: [Int]) {
+        numberOfItemsInSection = Dictionary(uniqueKeysWithValues: counts.enumerated().map { ($0.offset, $0.element) })
+    }
 
     func numberOfItems(in section: Int) -> Int {
         numberOfItemsInSection[section] ?? 0
     }
 
-    func configuration(for element: ItemKind, at indexPath: IndexPath) -> ItemModel.Configuration {
-        let pinningType: ChatItemPinningType?
-        switch element {
-        case .header:
-            pinningType = shouldPinHeaderToVisibleBoundsAtSection[indexPath.section] == true ? .top : nil
-        case .footer:
-            pinningType = shouldPinFooterToVisibleBoundsAtSection[indexPath.section] == true ? .bottom : nil
-        case .cell:
-            pinningType = nil
-        }
+    func configuration(at indexPath: IndexPath) -> ItemModel.Configuration {
+        let preferredSize = preferredSizeAtIndexPath[indexPath] ?? settings.estimatedItemSize ?? .zero
         return .init(
-            alignment: .fullWidth,
-            pinningType: pinningType,
-            preferredSize: settings.estimatedItemSize!,
-            calculatedSize: settings.estimatedItemSize!,
-            interItemSpacing: settings.interItemSpacing
+            alignment: alignmentAtIndexPath[indexPath] ?? .fullWidth,
+            pinningType: pinningTypeAtIndexPath[indexPath],
+            preferredSize: preferredSize,
+            calculatedSize: calculatedSizeAtIndexPath[indexPath] ?? preferredSize,
+            interItemSpacing: interItemSpacingAtIndexPath[indexPath] ?? settings.interItemSpacing
         )
     }
 
-    func shouldPresentHeader(at sectionIndex: Int) -> Bool {
-        shouldPresentHeaderAtSection[sectionIndex] ?? true
-    }
-
-    func shouldPresentFooter(at sectionIndex: Int) -> Bool {
-        shouldPresentFooterAtSection[sectionIndex] ?? true
-    }
-
-    func alignment(for element: ItemKind, at itemPath: ItemPath) -> ChatItemAlignment {
-        alignmentForItem(of: element, at: itemPath.indexPath)
-    }
-
-    func alignmentForItem(of kind: ItemKind, at indexPath: IndexPath) -> ChatItemAlignment {
+    func alignmentForItem(_ chatLayout: CollectionViewChatLayout, at indexPath: IndexPath) -> ChatItemAlignment {
         .fullWidth
     }
 
-    func sizeForItem(of kind: ItemKind, at indexPath: IndexPath) -> ItemSize {
+    func sizeForItem(_ chatLayout: CollectionViewChatLayout, at indexPath: IndexPath) -> ItemSize {
         .estimated(settings.estimatedItemSize!)
     }
 
+    func pinningTypeForItem(_ chatLayout: CollectionViewChatLayout, at indexPath: IndexPath) -> ChatItemPinningType? {
+        pinningTypeAtIndexPath[indexPath]
+    }
+
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {
-        settings.interSectionSpacing
+        interSectionSpacingAtSection[sectionIndex] ?? settings.interSectionSpacing
     }
 
     func getPreparedSections() -> ContiguousArray<SectionModel<MockCollectionLayout>> {
         var sections: ContiguousArray<SectionModel<MockCollectionLayout>> = []
         for sectionIndex in 0..<numberOfItemsInSection.count {
-            let headerIndexPath = IndexPath(item: 0, section: sectionIndex)
-            let header = ItemModel(with: configuration(for: .header, at: headerIndexPath))
-            let footer = ItemModel(with: configuration(for: .footer, at: headerIndexPath))
-
             var items: ContiguousArray<ItemModel> = []
             for itemIndex in 0..<numberOfItems(in: sectionIndex) {
                 let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
-                items.append(ItemModel(with: configuration(for: .cell, at: indexPath)))
+                items.append(ItemModel(with: configuration(at: indexPath)))
             }
 
             var section = SectionModel(
                 interSectionSpacing: interSectionSpacing(at: sectionIndex),
-                header: header,
-                footer: footer,
                 items: items,
                 collectionLayout: self
             )

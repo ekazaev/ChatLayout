@@ -15,7 +15,6 @@ custom_categories:
       - ChatLayoutSettings
       - ChatLayoutPositionSnapshot
       - ChatLayoutInvalidationContext
-      - ItemKind
       - ItemSize
       - ChatItemAlignment
       - ChatItemPinningType

@@ -15,15 +15,6 @@ import UIKit
 
 /// `CollectionViewChatLayout` settings.
 public struct ChatLayoutSettings: Equatable, Sendable {
-    /// Represents type of pinnable elements in the layout.
-    public enum PinneableItems: Equatable, Sendable {
-        /// Pin supplementary views (header and/or footer).
-        @available(*, deprecated, message: "Support for supplementary views is deprecated and will be discontinued in future versions.")
-        case supplementaryViews
-        /// Pin cells
-        case cells
-    }
-
     /// Estimated item size for `CollectionViewChatLayout`. This value will be used as the initial size of the item and the final size
     /// will be calculated using `UICollectionViewCell.preferredLayoutAttributesFitting(...)`.
     public var estimatedItemSize: CGSize?
@@ -37,6 +28,7 @@ public struct ChatLayoutSettings: Equatable, Sendable {
     /// Additional insets for the `CollectionViewChatLayout` content.
     public var additionalInsets: UIEdgeInsets = .zero
 
-    /// Confugures what elements can be pinned in the layout.
-    public var pinnableItems: PinneableItems = .supplementaryViews
+    /// When set to a valid cell index path, `CollectionViewChatLayout` reports additional vertical content size
+    /// so that the specified cell can scroll all the way to the top edge of the layout viewport.
+    public var indexPathForExtendedLayout: IndexPath?
 }

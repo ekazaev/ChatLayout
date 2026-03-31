@@ -16,33 +16,6 @@ import XCTest
 
 @MainActor
 final class HelpersTests: XCTestCase {
-    func testItemKindInit() {
-        let header = ItemKind(UICollectionView.elementKindSectionHeader)
-        XCTAssertTrue(header == ItemKind.header)
-
-        let footer = ItemKind(UICollectionView.elementKindSectionFooter)
-        XCTAssertTrue(footer == ItemKind.footer)
-    }
-
-    func testItemKindSupplementaryType() {
-        let header = ItemKind.header
-        XCTAssertTrue(header.isSupplementaryItem)
-
-        let footer = ItemKind.footer
-        XCTAssertTrue(footer.isSupplementaryItem)
-
-        let cell = ItemKind.cell
-        XCTAssertFalse(cell.isSupplementaryItem)
-    }
-
-    func testSupplementaryElementStringType() {
-        let header = ItemKind(UICollectionView.elementKindSectionHeader)
-        XCTAssertTrue(header.supplementaryElementStringType == UICollectionView.elementKindSectionHeader)
-
-        let footer = ItemKind(UICollectionView.elementKindSectionFooter)
-        XCTAssertTrue(footer.supplementaryElementStringType == UICollectionView.elementKindSectionFooter)
-    }
-
     func testBinarySearch() {
         let predicate: (Int) -> ComparisonResult = { integer in
             if integer < 100 {

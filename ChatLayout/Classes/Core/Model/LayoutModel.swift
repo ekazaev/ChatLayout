@@ -15,19 +15,13 @@ import UIKit
 
 @MainActor
 final class LayoutModel<Layout: ChatLayoutRepresentation> {
-    private struct ItemUUIDKey: Hashable {
-        let kind: ItemKind
-
-        let id: UUID
-    }
-
     private(set) var sections: ContiguousArray<SectionModel<Layout>>
 
     private unowned var collectionLayout: Layout
 
     private var sectionIndexByIdentifierCache: [UUID: Int]?
 
-    private var itemPathByIdentifierCache: [ItemUUIDKey: ItemPath]?
+    private var itemPathByIdentifierCache: [UUID: ItemPath]?
 
     private(set) var hasPinnedItems: Bool = false
 
@@ -42,24 +36,16 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
         let capacity = sections.reduce(into: 0) { $0 += $1.items.count }
-        var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath](minimumCapacity: capacity)
+        var itemPathByIdentifierCache = [UUID: ItemPath](minimumCapacity: capacity)
 
         sections.withUnsafeMutableBufferPointer { directlyMutableSections in
             for sectionIndex in 0..<directlyMutableSections.count {
                 sectionIndexByIdentifierCache[directlyMutableSections[sectionIndex].id] = sectionIndex
                 directlyMutableSections[sectionIndex].offsetY = offsetY
                 offsetY += directlyMutableSections[sectionIndex].height + (sectionIndex < directlyMutableSections.count - 1 ? directlyMutableSections[sectionIndex].interSectionSpacing : 0)
-                if let header = directlyMutableSections[sectionIndex].header {
-                    let key = ItemUUIDKey(kind: .header, id: header.id)
-                    itemPathByIdentifierCache[key] = ItemPath(item: 0, section: sectionIndex)
-                }
                 for itemIndex in 0..<directlyMutableSections[sectionIndex].items.count {
-                    let key = ItemUUIDKey(kind: .cell, id: directlyMutableSections[sectionIndex].items[itemIndex].id)
-                    itemPathByIdentifierCache[key] = ItemPath(item: itemIndex, section: sectionIndex)
-                }
-                if let footer = directlyMutableSections[sectionIndex].footer {
-                    let key = ItemUUIDKey(kind: .footer, id: footer.id)
-                    itemPathByIdentifierCache[key] = ItemPath(item: 0, section: sectionIndex)
+                    let itemId = directlyMutableSections[sectionIndex].items[itemIndex].id
+                    itemPathByIdentifierCache[itemId] = ItemPath(item: itemIndex, section: sectionIndex)
                 }
                 if !hasPinnedItems,
                    directlyMutableSections[sectionIndex].hasPinnedItems {
@@ -74,24 +60,6 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
     }
 
     // MARK: To use when its is important to make the correct insertion
-
-    func setAndAssemble(header: ItemModel, sectionIndex: Int) {
-        guard sectionIndex < sections.count else {
-            assertionFailure("Incorrect section index.")
-            return
-        }
-
-        let oldSection = sections[sectionIndex]
-        sections[sectionIndex].setAndAssemble(header: header)
-        let heightDiff = sections[sectionIndex].height - oldSection.height
-        offsetEverything(below: sectionIndex, by: heightDiff)
-
-        // We are only interested in switching to `hasPinnedItems`. When the layout will be assembled the true value will be calculated.
-        if !hasPinnedItems,
-           sections[sectionIndex].hasPinnedItems {
-            hasPinnedItems = true
-        }
-    }
 
     func setAndAssemble(item: ItemModel, sectionIndex: Int, itemIndex: Int) {
         guard sectionIndex < sections.count else {
@@ -108,22 +76,6 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    func setAndAssemble(footer: ItemModel, sectionIndex: Int) {
-        guard sectionIndex < sections.count else {
-            assertionFailure("Incorrect section index.")
-            return
-        }
-        let oldSection = sections[sectionIndex]
-        sections[sectionIndex].setAndAssemble(footer: footer)
-        let heightDiff = sections[sectionIndex].height - oldSection.height
-        offsetEverything(below: sectionIndex, by: heightDiff)
-
-        if !hasPinnedItems,
-           sections[sectionIndex].hasPinnedItems {
-            hasPinnedItems = true
-        }
-    }
-
     func sectionIndex(by sectionId: UUID) -> Int? {
         guard let sectionIndexByIdentifierCache else {
             assertionFailure("Internal inconsistency. Cache is not prepared.")
@@ -132,74 +84,16 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         return sectionIndexByIdentifierCache[sectionId]
     }
 
-    func itemPath(by itemId: UUID, kind: ItemKind) -> ItemPath? {
+    func itemPath(by itemId: UUID) -> ItemPath? {
         guard let itemPathByIdentifierCache else {
             for (sectionIndex, section) in sections.enumerated() {
-                switch kind {
-                case .header:
-                    if itemId == section.header?.id {
-                        return ItemPath(item: 0, section: sectionIndex)
-                    }
-                case .footer:
-                    if itemId == section.footer?.id {
-                        return ItemPath(item: 0, section: sectionIndex)
-                    }
-                case .cell:
-                    if let itemIndex = section.items.firstIndex(where: { $0.id == itemId }) {
-                        return ItemPath(item: itemIndex, section: sectionIndex)
-                    }
+                if let itemIndex = section.items.firstIndex(where: { $0.id == itemId }) {
+                    return ItemPath(item: itemIndex, section: sectionIndex)
                 }
             }
             return nil
         }
-        return itemPathByIdentifierCache[ItemUUIDKey(kind: kind, id: itemId)]
-    }
-
-    private func offsetEverything(below index: Int, by heightDiff: CGFloat) {
-        guard heightDiff != 0 else {
-            return
-        }
-        if index < sections.count &- 1 {
-            let nextIndex = index &+ 1
-            sections.withUnsafeMutableBufferPointer { directlyMutableSections in
-                nonisolated(unsafe) let directlyMutableSections = directlyMutableSections
-                DispatchQueue.concurrentPerform(iterations: directlyMutableSections.count &- nextIndex) { internalIndex in
-                    directlyMutableSections[internalIndex &+ nextIndex].offsetY += heightDiff
-                }
-            }
-        }
-    }
-
-    func findPinnedSupplementaryItemIndexBefore(_ index: Int, kind: ItemKind) -> Int? {
-        guard index > 0 else {
-            return nil
-        }
-        let index = index - 1
-        for sectionIndex in (0...index).reversed() {
-            let section = sections[sectionIndex]
-            guard let supplementaryItem = kind == .header ? section.header : section.footer,
-                  supplementaryItem.pinningType != nil else {
-                continue
-            }
-            return index
-        }
-        return nil
-    }
-
-    func findPinnedSupplementaryItemIndexAfter(_ index: Int, kind: ItemKind) -> Int? {
-        guard index < sections.count - 1 else {
-            return nil
-        }
-        let index = index + 1
-        for sectionIndex in index...sections.count - 1 {
-            let section = sections[sectionIndex]
-            guard let supplementaryItem = kind == .header ? section.header : section.footer,
-                  supplementaryItem.pinningType != nil else {
-                continue
-            }
-            return index
-        }
-        return nil
+        return itemPathByIdentifierCache[itemId]
     }
 
     func findPinnedItemBefore(_ indexPath: IndexPath, pinningType: ChatItemPinningType) -> IndexPath? {
@@ -301,5 +195,20 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
     private func resetCache() {
         itemPathByIdentifierCache = nil
         sectionIndexByIdentifierCache = nil
+    }
+
+    private func offsetEverything(below index: Int, by heightDiff: CGFloat) {
+        guard heightDiff != 0 else {
+            return
+        }
+        if index < sections.count &- 1 {
+            let nextIndex = index &+ 1
+            sections.withUnsafeMutableBufferPointer { directlyMutableSections in
+                nonisolated(unsafe) let directlyMutableSections = directlyMutableSections
+                DispatchQueue.concurrentPerform(iterations: directlyMutableSections.count &- nextIndex) { internalIndex in
+                    directlyMutableSections[internalIndex &+ nextIndex].offsetY += heightDiff
+                }
+            }
+        }
     }
 }

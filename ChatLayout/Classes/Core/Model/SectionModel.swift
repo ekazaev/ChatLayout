@@ -19,14 +19,10 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
 
     let interSectionSpacing: CGFloat
 
-    private(set) var header: ItemModel?
-
-    private(set) var footer: ItemModel?
-
     private(set) var items: ContiguousArray<ItemModel>
 
     var hasPinnedItems: Bool {
-        !pinnedIndexes.isEmpty || header?.pinningType != nil || footer?.pinningType != nil
+        !pinnedIndexes.isEmpty
     }
 
     private(set) var pinnedIndexes = [ChatItemPinningType: ContiguousArray<Int>]()
@@ -46,14 +42,10 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     }
 
     var height: CGFloat {
-        if let footer {
-            return footer.frame.maxY
-        } else {
-            guard let lastItem = items.last else {
-                return header?.frame.maxY ?? .zero
-            }
-            return lastItem.frame.maxY
+        guard let lastItem = items.last else {
+            return .zero
         }
+        return lastItem.frame.maxY
     }
 
     var locationHeight: CGFloat {
@@ -63,8 +55,6 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     init(
         id: UUID = UUID(),
         interSectionSpacing: CGFloat,
-        header: ItemModel?,
-        footer: ItemModel?,
         items: ContiguousArray<ItemModel> = [],
         collectionLayout: Layout
     ) {
@@ -72,17 +62,11 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         self.interSectionSpacing = interSectionSpacing
         self.items = items
         self.collectionLayout = collectionLayout
-        self.header = header
-        self.footer = footer
     }
 
     mutating func assembleLayout() {
         var offsetY: CGFloat = 0
         pinnedIndexes = [:]
-        if header != nil {
-            header?.offsetY = 0
-            offsetY += header?.frame.height ?? 0
-        }
 
         items.withUnsafeMutableBufferPointer { directlyMutableItems in
             for rowIndex in 0..<directlyMutableItems.count {
@@ -94,28 +78,6 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
                 }
             }
         }
-
-        if footer != nil {
-            footer?.offsetY = offsetY
-        }
-    }
-
-    // MARK: To use when its is important to make the correct insertion
-
-    mutating func setAndAssemble(header: ItemModel) {
-        guard let oldHeader = self.header else {
-            self.header = header
-            offsetEverything(below: -1, by: header.size.height)
-            return
-        }
-        #if DEBUG
-        if header.id != oldHeader.id {
-            assertionFailure("Internal inconsistency.")
-        }
-        #endif
-        self.header = header
-        let heightDiff = header.size.height - oldHeader.size.height
-        offsetEverything(below: -1, by: heightDiff)
     }
 
     mutating func setAndAssemble(item: ItemModel, at index: Int) {
@@ -151,28 +113,8 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         offsetEverything(below: index, by: heightDiff)
     }
 
-    mutating func setAndAssemble(footer: ItemModel) {
-        #if DEBUG
-        if let oldFooter = self.footer,
-           footer.id != oldFooter.id {
-            assertionFailure("Internal inconsistency.")
-        }
-        #endif
-        self.footer = footer
-    }
-
-    // MARK: Just updaters
-
-    mutating func set(header: ItemModel?) {
-        self.header = header
-    }
-
     mutating func set(items: ContiguousArray<ItemModel>) {
         self.items = items
-    }
-
-    mutating func set(footer: ItemModel?) {
-        self.footer = footer
     }
 
     private mutating func offsetEverything(below index: Int, by heightDiff: CGFloat) {
@@ -188,7 +130,6 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
                 }
             }
         }
-        footer?.offsetY += heightDiff
     }
 
     // MARK: To use only within process(updateItems:)
