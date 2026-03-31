@@ -37,6 +37,10 @@ public struct ChatLayoutSettings: Equatable, Sendable {
     /// Additional insets for the `CollectionViewChatLayout` content.
     public var additionalInsets: UIEdgeInsets = .zero
 
+    /// When set to a valid cell index path, `CollectionViewChatLayout` reports additional vertical content size
+    /// so that the specified cell can scroll all the way to the top edge of the layout viewport.
+    public var indexPathForExtendedLayout: IndexPath?
+
     /// Confugures what elements can be pinned in the layout.
     public var pinnableItems: PinneableItems = .supplementaryViews
 }

@@ -299,19 +299,19 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     private func loadPreviousMessages() {
-        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
-        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
-        currentControllerActions.options.insert(.loadingPreviousMessages)
-        chatController.loadPreviousMessages { [weak self] sections in
-            guard let self else {
-                return
-            }
-            // Reloading the content without animation just because it looks better is the scrolling is in process.
-            let animated = !isUserInitiatedScrolling
-            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
-                self.currentControllerActions.options.remove(.loadingPreviousMessages)
-            }
-        }
+//        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
+//        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
+//        currentControllerActions.options.insert(.loadingPreviousMessages)
+//        chatController.loadPreviousMessages { [weak self] sections in
+//            guard let self else {
+//                return
+//            }
+//            // Reloading the content without animation just because it looks better is the scrolling is in process.
+//            let animated = !isUserInitiatedScrolling
+//            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
+//                self.currentControllerActions.options.remove(.loadingPreviousMessages)
+//            }
+//        }
     }
 
     fileprivate var isUserInitiatedScrolling: Bool {
@@ -511,6 +511,7 @@ extension ChatViewController: ChatControllerDelegate {
                     }
                     let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: lastSection.cells.count - 1, section: sections.count - 1), edge: .bottom)
                     self.collectionView.reloadData()
+                    self.chatLayout.settings.indexPathForExtendedLayout = IndexPath(item: lastSection.cells.count - 1, section: sections.count - 1)
                     // We want so that user on reload appeared at the very bottom of the layout
                     self.chatLayout.restoreContentOffset(with: positionSnapshot)
                 },
