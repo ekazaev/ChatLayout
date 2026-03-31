@@ -185,7 +185,7 @@ final class ChatViewController: UIViewController {
             return
         }
         currentInterfaceActions.options.insert(.changingFrameSize)
-        let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
+        let positionSnapshot = contentOffsetSnapshotForCurrentLayout()
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.setNeedsLayout()
         coordinator.animate(alongsideTransition: { _ in
@@ -299,19 +299,19 @@ extension ChatViewController: UIScrollViewDelegate {
     }
 
     private func loadPreviousMessages() {
-//        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
-//        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
-//        currentControllerActions.options.insert(.loadingPreviousMessages)
-//        chatController.loadPreviousMessages { [weak self] sections in
-//            guard let self else {
-//                return
-//            }
-//            // Reloading the content without animation just because it looks better is the scrolling is in process.
-//            let animated = !isUserInitiatedScrolling
-//            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
-//                self.currentControllerActions.options.remove(.loadingPreviousMessages)
-//            }
-//        }
+        // Blocking the potential multiple call of that function as during the content invalidation the contentOffset of the UICollectionView can change
+        // in any way so it may trigger another call of that function and lead to unexpected behaviour/animation
+        currentControllerActions.options.insert(.loadingPreviousMessages)
+        chatController.loadPreviousMessages { [weak self] sections in
+            guard let self else {
+                return
+            }
+            // Reloading the content without animation just because it looks better is the scrolling is in process.
+            let animated = !isUserInitiatedScrolling
+            processUpdates(with: sections, animated: animated, requiresIsolatedProcess: false) {
+                self.currentControllerActions.options.remove(.loadingPreviousMessages)
+            }
+        }
     }
 
     fileprivate var isUserInitiatedScrolling: Bool {
@@ -511,7 +511,6 @@ extension ChatViewController: ChatControllerDelegate {
                     }
                     let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: lastSection.cells.count - 1, section: sections.count - 1), edge: .bottom)
                     self.collectionView.reloadData()
-                    self.chatLayout.settings.indexPathForExtendedLayout = IndexPath(item: lastSection.cells.count - 1, section: sections.count - 1)
                     // We want so that user on reload appeared at the very bottom of the layout
                     self.chatLayout.restoreContentOffset(with: positionSnapshot)
                 },
@@ -608,7 +607,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         guard !currentInterfaceActions.options.contains(.sendingMessage) else {
             return
         }
-        scrollToBottom()
+        //scrollToBottom()
     }
 
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
@@ -647,7 +646,7 @@ extension ChatViewController: KeyboardListenerDelegate {
         let newBottomInset = collectionView.frame.minY + collectionView.frame.size.height - keyboardFrame.minY - collectionView.safeAreaInsets.bottom
         if newBottomInset > 0,
            collectionView.contentInset.bottom != newBottomInset {
-            let positionSnapshot = chatLayout.getContentOffsetSnapshot(from: .bottom)
+            let positionSnapshot = contentOffsetSnapshotForCurrentLayout()
 
             // Interrupting current update animation if user starts to scroll while batchUpdate is performed.
             if currentControllerActions.options.contains(.updatingCollection) {
@@ -678,6 +677,16 @@ extension ChatViewController: KeyboardListenerDelegate {
             return
         }
         currentInterfaceActions.options.remove(.changingKeyboardFrame)
+    }
+}
+
+private extension ChatViewController {
+    func contentOffsetSnapshotForCurrentLayout() -> ChatLayoutPositionSnapshot? {
+        if chatLayout.settings.indexPathForExtendedLayout != nil {
+            return chatLayout.getContentOffsetSnapshot(from: .top)
+        } else {
+            return chatLayout.getContentOffsetSnapshot(from: .bottom)
+        }
     }
 }
 
