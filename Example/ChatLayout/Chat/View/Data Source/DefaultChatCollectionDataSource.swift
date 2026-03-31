@@ -286,12 +286,11 @@ extension DefaultChatCollectionDataSource: ChatLayoutDelegate {
         _ chatLayout: CollectionViewChatLayout,
         at indexPath: IndexPath
     ) -> ChatItemPinningType? {
-        return nil
-//        let cell = sections[indexPath.section].cells[indexPath.item]
-//        guard case .date = cell else {
-//            return nil
-//        }
-//        return .top
+        let cell = sections[indexPath.section].cells[indexPath.item]
+        guard case .date = cell else {
+            return nil
+        }
+        return .top
     }
 
     func sizeForItem(_ chatLayout: CollectionViewChatLayout, at indexPath: IndexPath) -> ItemSize {

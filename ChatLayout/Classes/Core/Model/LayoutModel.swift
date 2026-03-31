@@ -15,17 +15,13 @@ import UIKit
 
 @MainActor
 final class LayoutModel<Layout: ChatLayoutRepresentation> {
-    private struct ItemUUIDKey: Hashable {
-        let id: UUID
-    }
-
     private(set) var sections: ContiguousArray<SectionModel<Layout>>
 
     private unowned var collectionLayout: Layout
 
     private var sectionIndexByIdentifierCache: [UUID: Int]?
 
-    private var itemPathByIdentifierCache: [ItemUUIDKey: ItemPath]?
+    private var itemPathByIdentifierCache: [UUID: ItemPath]?
 
     private(set) var hasPinnedItems: Bool = false
 
@@ -40,7 +36,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
 
         var sectionIndexByIdentifierCache = [UUID: Int](minimumCapacity: sections.count)
         let capacity = sections.reduce(into: 0) { $0 += $1.items.count }
-        var itemPathByIdentifierCache = [ItemUUIDKey: ItemPath](minimumCapacity: capacity)
+        var itemPathByIdentifierCache = [UUID: ItemPath](minimumCapacity: capacity)
 
         sections.withUnsafeMutableBufferPointer { directlyMutableSections in
             for sectionIndex in 0..<directlyMutableSections.count {
@@ -48,8 +44,8 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
                 directlyMutableSections[sectionIndex].offsetY = offsetY
                 offsetY += directlyMutableSections[sectionIndex].height + (sectionIndex < directlyMutableSections.count - 1 ? directlyMutableSections[sectionIndex].interSectionSpacing : 0)
                 for itemIndex in 0..<directlyMutableSections[sectionIndex].items.count {
-                    let key = ItemUUIDKey(id: directlyMutableSections[sectionIndex].items[itemIndex].id)
-                    itemPathByIdentifierCache[key] = ItemPath(item: itemIndex, section: sectionIndex)
+                    let itemId = directlyMutableSections[sectionIndex].items[itemIndex].id
+                    itemPathByIdentifierCache[itemId] = ItemPath(item: itemIndex, section: sectionIndex)
                 }
                 if !hasPinnedItems,
                    directlyMutableSections[sectionIndex].hasPinnedItems {
@@ -97,7 +93,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
             }
             return nil
         }
-        return itemPathByIdentifierCache[ItemUUIDKey(id: itemId)]
+        return itemPathByIdentifierCache[itemId]
     }
 
     func findPinnedItemBefore(_ indexPath: IndexPath, pinningType: ChatItemPinningType) -> IndexPath? {

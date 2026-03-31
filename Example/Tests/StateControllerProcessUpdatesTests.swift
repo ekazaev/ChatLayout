@@ -21,7 +21,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.contentHeight(at: .beforeUpdate), expectedContentHeight(sectionHeights: [
             sectionHeight(itemHeights: Array(repeating: CGFloat(40), count: 100)),
             sectionHeight(itemHeights: Array(repeating: CGFloat(40), count: 100)),
-            sectionHeight(itemHeights: Array(repeating: CGFloat(40), count: 100)),
+            sectionHeight(itemHeights: Array(repeating: CGFloat(40), count: 100))
         ]))
 
         for sectionIndex in 0..<3 {
@@ -46,7 +46,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         layout.calculatedSizeAtIndexPath[IndexPath(item: 1, section: 0)] = CGSize(width: 300, height: 80)
 
         layout.controller.process(changeItems: [
-            .itemReload(itemIndexPath: IndexPath(item: 1, section: 0)),
+            .itemReload(itemIndexPath: IndexPath(item: 1, section: 0))
         ])
 
         XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), 174)
@@ -80,7 +80,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
 
         layout.controller.process(changeItems: [
             .sectionReload(sectionIndex: 0),
-            .sectionReload(sectionIndex: 1),
+            .sectionReload(sectionIndex: 1)
         ])
 
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 3)
@@ -114,7 +114,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
             .itemInsert(itemIndexPath: IndexPath(item: 2, section: 0)),
             .itemInsert(itemIndexPath: IndexPath(item: 0, section: 1)),
             .itemInsert(itemIndexPath: IndexPath(item: 0, section: 2)),
-            .itemInsert(itemIndexPath: IndexPath(item: 1, section: 2)),
+            .itemInsert(itemIndexPath: IndexPath(item: 1, section: 2))
         ])
 
         XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), contentHeightBefore + 181)
@@ -136,7 +136,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         layout.setSections([2, 1, 3, 2, 2])
         layout.controller.process(changeItems: [
             .sectionInsert(sectionIndex: 1),
-            .sectionInsert(sectionIndex: 2),
+            .sectionInsert(sectionIndex: 2)
         ])
 
         XCTAssertEqual(layout.controller.numberOfSections(at: .afterUpdate), 5)
@@ -161,7 +161,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         layout.controller.process(changeItems: [
             .itemDelete(itemIndexPath: IndexPath(item: 1, section: 0)),
             .itemDelete(itemIndexPath: IndexPath(item: 0, section: 1)),
-            .itemDelete(itemIndexPath: IndexPath(item: 0, section: 2)),
+            .itemDelete(itemIndexPath: IndexPath(item: 0, section: 2))
         ])
 
         XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), contentHeightBefore - 134)
@@ -180,7 +180,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
 
         layout.controller.process(changeItems: [
             .sectionDelete(sectionIndex: 0),
-            .sectionDelete(sectionIndex: 2),
+            .sectionDelete(sectionIndex: 2)
         ])
 
         XCTAssertEqual(layout.controller.numberOfSections(at: .afterUpdate), 1)
@@ -201,7 +201,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         layout.controller.process(changeItems: [
             .itemMove(initialItemIndexPath: IndexPath(item: 0, section: 0), finalItemIndexPath: IndexPath(item: 0, section: 2)),
             .itemMove(initialItemIndexPath: IndexPath(item: 0, section: 1), finalItemIndexPath: IndexPath(item: 1, section: 1)),
-            .itemMove(initialItemIndexPath: IndexPath(item: 0, section: 2), finalItemIndexPath: IndexPath(item: 0, section: 0)),
+            .itemMove(initialItemIndexPath: IndexPath(item: 0, section: 2), finalItemIndexPath: IndexPath(item: 0, section: 0))
         ])
 
         XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), contentHeightBefore)
@@ -224,7 +224,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
 
         layout.controller.process(changeItems: [
             .sectionMove(initialSectionIndex: 0, finalSectionIndex: 1),
-            .sectionMove(initialSectionIndex: 2, finalSectionIndex: 0),
+            .sectionMove(initialSectionIndex: 2, finalSectionIndex: 0)
         ])
 
         XCTAssertEqual(layout.controller.numberOfSections(at: .afterUpdate), 3)
@@ -248,7 +248,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         layout.controller.process(changeItems: [
             .itemDelete(itemIndexPath: IndexPath(item: 0, section: 0)),
             .itemDelete(itemIndexPath: IndexPath(item: 1, section: 0)),
-            .itemReload(itemIndexPath: IndexPath(item: 2, section: 0)),
+            .itemReload(itemIndexPath: IndexPath(item: 2, section: 0))
         ])
 
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
@@ -268,7 +268,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         layout.controller.process(changeItems: [
             .itemDelete(itemIndexPath: IndexPath(item: 0, section: 0)),
             .itemDelete(itemIndexPath: IndexPath(item: 1, section: 0)),
-            .itemInsert(itemIndexPath: IndexPath(item: 0, section: 0)),
+            .itemInsert(itemIndexPath: IndexPath(item: 0, section: 0))
         ])
 
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)
@@ -282,7 +282,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         layout.controller.process(changeItems: [
             .itemMove(initialItemIndexPath: IndexPath(item: 2, section: 0), finalItemIndexPath: IndexPath(item: 0, section: 0)),
             .itemInsert(itemIndexPath: IndexPath(item: 0, section: 0)),
-            .itemReload(itemIndexPath: IndexPath(item: 0, section: 0)),
+            .itemReload(itemIndexPath: IndexPath(item: 0, section: 0))
         ])
 
         XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .beforeUpdate), 3)

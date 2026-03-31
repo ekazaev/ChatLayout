@@ -38,7 +38,7 @@ final class DefaultChatController: ChatController {
         "Why does hot water sometimes freeze faster than cold water?",
         "How do noise-cancelling headphones remove background sound?",
         "Why do leaves change color before they fall?",
-        "How does a GPS device know where it is?",
+        "How does a GPS device know where it is?"
     ]
 
     private(set) var isAgentModeEnabled = false

@@ -483,10 +483,10 @@ extension ChatViewController: ChatControllerDelegate {
             }
             self.scrollToBottom { [weak self] in
                 guard let self,
-                      self.chatController.isAgentModeEnabled else {
+                      chatController.isAgentModeEnabled else {
                     return
                 }
-                self.chatController.startAgentResponse()
+                chatController.startAgentResponse()
             }
         }
     }
