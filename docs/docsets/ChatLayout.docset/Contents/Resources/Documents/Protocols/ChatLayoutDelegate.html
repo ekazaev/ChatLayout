@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          ChatLayout 2.3.2 Docs
+          ChatLayout 2.4.0 Docs
         </a>
          (100% documented)
       </p>
@@ -62,9 +62,6 @@
                 <a class="nav-group-task-link" href="../Structs/ChatLayoutSettings.html">ChatLayoutSettings</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ChatLayoutSettings/PinneableItems.html">– PinneableItems</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a>
               </li>
               <li class="nav-group-task">
@@ -72,9 +69,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/ChatLayoutInvalidationContext.html">ChatLayoutInvalidationContext</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/ItemKind.html">ItemKind</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ItemSize.html">ItemSize</a>
@@ -184,310 +178,6 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0aB8DelegateP19shouldPresentHeader_2atSbAA014CollectionViewaB0C_SitF"></a>
-                    <a name="//apple_ref/swift/Method/shouldPresentHeader(_:at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP19shouldPresentHeader_2atSbAA014CollectionViewaB0C_SitF">shouldPresentHeader(_:<wbr>at:<wbr>)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> will call this method to ask if it should present the header in the current layout.</p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Default implementation returns: <code>false</code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">deprecated</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"Support for supplementary views is deprecated and will be discontinued in future versions."</span><span class="p">)</span>
-<span class="kd">@MainActor</span>
-<span class="kd">func</span> <span class="nf">shouldPresentHeader</span><span class="p">(</span>
-    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>chatLayout</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> reference.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>sectionIndex</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Index of the section.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p><code>Bool</code>.</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ChatLayout0aB8DelegateP19shouldPresentFooter_2atSbAA014CollectionViewaB0C_SitF"></a>
-                    <a name="//apple_ref/swift/Method/shouldPresentFooter(_:at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP19shouldPresentFooter_2atSbAA014CollectionViewaB0C_SitF">shouldPresentFooter(_:<wbr>at:<wbr>)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> will call this method to ask if it should present the footer in the current layout.</p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Default implementation returns: <code>false</code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">deprecated</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"Support for supplementary views is deprecated and will be discontinued in future versions."</span><span class="p">)</span>
-<span class="kd">@MainActor</span>
-<span class="kd">func</span> <span class="nf">shouldPresentFooter</span><span class="p">(</span>
-    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>chatLayout</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> reference.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>sectionIndex</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Index of the section.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p><code>Bool</code>.</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ChatLayout0aB8DelegateP30shouldPinHeaderToVisibleBounds_2atSbAA014CollectionViewaB0C_SitF"></a>
-                    <a name="//apple_ref/swift/Method/shouldPinHeaderToVisibleBounds(_:at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP30shouldPinHeaderToVisibleBounds_2atSbAA014CollectionViewaB0C_SitF">shouldPinHeaderToVisibleBounds(_:<wbr>at:<wbr>)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> will call this method to ask if it should pin (stick) the header to the visible bounds in the current layout.</p>
-
-<p><strong>NB:</strong> This method will be called only if the <code><a href="../Structs/ChatLayoutSettings.html#/s:10ChatLayout0aB8SettingsV13pinnableItemsAC09PinneableE0Ovp">ChatLayoutSettings.pinnableItems</a></code> is set to <code>.supplementaryViews</code></p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Default implementation returns: <code>false</code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">deprecated</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"Support for supplementary views is deprecated and will be discontinued in future versions."</span><span class="p">)</span>
-<span class="kd">@MainActor</span>
-<span class="kd">func</span> <span class="nf">shouldPinHeaderToVisibleBounds</span><span class="p">(</span>
-    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>chatLayout</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> reference.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>sectionIndex</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Index of the section.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p><code>Bool</code>.</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ChatLayout0aB8DelegateP30shouldPinFooterToVisibleBounds_2atSbAA014CollectionViewaB0C_SitF"></a>
-                    <a name="//apple_ref/swift/Method/shouldPinFooterToVisibleBounds(_:at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP30shouldPinFooterToVisibleBounds_2atSbAA014CollectionViewaB0C_SitF">shouldPinFooterToVisibleBounds(_:<wbr>at:<wbr>)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> will call this method to ask if it should pin (stick) the footer to the visible bounds in the current layout.</p>
-
-<p><strong>NB:</strong> This method will be called only if the <code><a href="../Structs/ChatLayoutSettings.html#/s:10ChatLayout0aB8SettingsV13pinnableItemsAC09PinneableE0Ovp">ChatLayoutSettings.pinnableItems</a></code> is set to <code>.supplementaryViews</code></p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Default implementation returns: <code>false</code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">deprecated</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"Support for supplementary views is deprecated and will be discontinued in future versions."</span><span class="p">)</span>
-<span class="kd">@MainActor</span>
-<span class="kd">func</span> <span class="nf">shouldPinFooterToVisibleBounds</span><span class="p">(</span>
-    <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-    <span class="n">at</span> <span class="nv">sectionIndex</span><span class="p">:</span> <span class="kt">Int</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>chatLayout</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> reference.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>sectionIndex</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Index of the section.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p><code>Bool</code>.</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:10ChatLayout0aB8DelegateP18pinningTypeForItem_2atAA0ag7PinningE0OSgAA014CollectionViewaB0C_10Foundation9IndexPathVtF"></a>
                     <a name="//apple_ref/swift/Method/pinningTypeForItem(_:at:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ChatLayout0aB8DelegateP18pinningTypeForItem_2atAA0ag7PinningE0OSgAA014CollectionViewaB0C_10Foundation9IndexPathVtF">pinningTypeForItem(_:<wbr>at:<wbr>)</a>
@@ -502,8 +192,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> will call this method to ask if it should pin (stick) the cell to the visible bounds in the current layout.</p>
-
-<p><strong>NB:</strong> This method will be called only if the <code><a href="../Structs/ChatLayoutSettings.html#/s:10ChatLayout0aB8SettingsV13pinnableItemsAC09PinneableE0Ovp">ChatLayoutSettings.pinnableItems</a></code> is set to <code>.cells</code></p>
 
                       </div>
                       <h4>Default Implementation</h4>
@@ -564,9 +252,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0aB8DelegateP11sizeForItem_2of2atAA0F4SizeOAA014CollectionViewaB0C_AA0F4KindO10Foundation9IndexPathVtF"></a>
-                    <a name="//apple_ref/swift/Method/sizeForItem(_:of:at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP11sizeForItem_2of2atAA0F4SizeOAA014CollectionViewaB0C_AA0F4KindO10Foundation9IndexPathVtF">sizeForItem(_:<wbr>of:<wbr>at:<wbr>)</a>
+                    <a name="/s:10ChatLayout0aB8DelegateP11sizeForItem_2atAA0F4SizeOAA014CollectionViewaB0C_10Foundation9IndexPathVtF"></a>
+                    <a name="//apple_ref/swift/Method/sizeForItem(_:at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP11sizeForItem_2atAA0F4SizeOAA014CollectionViewaB0C_10Foundation9IndexPathVtF">sizeForItem(_:<wbr>at:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -599,7 +287,6 @@ using Autolayout Engine anyway.</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
 <span class="kd">func</span> <span class="nf">sizeForItem</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
     <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ItemSize.html">ItemSize</a></span></code></pre>
 
@@ -618,18 +305,6 @@ using Autolayout Engine anyway.</p>
                               <td>
                                 <div>
                                   <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> reference.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>kind</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Type of element represented by <code><a href="../Enums/ItemKind.html">ItemKind</a></code>.</p>
                                 </div>
                               </td>
                             </tr>
@@ -658,9 +333,9 @@ using Autolayout Engine anyway.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0aB8DelegateP16alignmentForItem_2of2atAA0aF9AlignmentOAA014CollectionViewaB0C_AA0F4KindO10Foundation9IndexPathVtF"></a>
-                    <a name="//apple_ref/swift/Method/alignmentForItem(_:of:at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP16alignmentForItem_2of2atAA0aF9AlignmentOAA014CollectionViewaB0C_AA0F4KindO10Foundation9IndexPathVtF">alignmentForItem(_:<wbr>of:<wbr>at:<wbr>)</a>
+                    <a name="/s:10ChatLayout0aB8DelegateP16alignmentForItem_2atAA0aF9AlignmentOAA014CollectionViewaB0C_10Foundation9IndexPathVtF"></a>
+                    <a name="//apple_ref/swift/Method/alignmentForItem(_:at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP16alignmentForItem_2atAA0aF9AlignmentOAA014CollectionViewaB0C_10Foundation9IndexPathVtF">alignmentForItem(_:<wbr>at:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -686,7 +361,6 @@ using Autolayout Engine anyway.</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
 <span class="kd">func</span> <span class="nf">alignmentForItem</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
     <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ChatItemAlignment.html">ChatItemAlignment</a></span></code></pre>
 
@@ -705,18 +379,6 @@ using Autolayout Engine anyway.</p>
                               <td>
                                 <div>
                                   <p><code><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></code> reference.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>kind</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Type of element represented by <code><a href="../Enums/ItemKind.html">ItemKind</a></code>.</p>
                                 </div>
                               </td>
                             </tr>
@@ -745,9 +407,9 @@ using Autolayout Engine anyway.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0aB8DelegateP07initialB25AttributesForInsertedItem_2of2at9modifying2onyAA014CollectionViewaB0C_AA0H4KindO10Foundation9IndexPathVAA0abE0CAA07InitialE11RequestTypeOtF"></a>
-                    <a name="//apple_ref/swift/Method/initialLayoutAttributesForInsertedItem(_:of:at:modifying:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP07initialB25AttributesForInsertedItem_2of2at9modifying2onyAA014CollectionViewaB0C_AA0H4KindO10Foundation9IndexPathVAA0abE0CAA07InitialE11RequestTypeOtF">initialLayoutAttributesForInsertedItem(_:<wbr>of:<wbr>at:<wbr>modifying:<wbr>on:<wbr>)</a>
+                    <a name="/s:10ChatLayout0aB8DelegateP07initialB25AttributesForInsertedItem_2at9modifying2onyAA014CollectionViewaB0C_10Foundation9IndexPathVAA0abE0CAA07InitialE11RequestTypeOtF"></a>
+                    <a name="//apple_ref/swift/Method/initialLayoutAttributesForInsertedItem(_:at:modifying:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP07initialB25AttributesForInsertedItem_2at9modifying2onyAA014CollectionViewaB0C_10Foundation9IndexPathVAA0abE0CAA07InitialE11RequestTypeOtF">initialLayoutAttributesForInsertedItem(_:<wbr>at:<wbr>modifying:<wbr>on:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -776,7 +438,6 @@ using Autolayout Engine anyway.</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
 <span class="kd">func</span> <span class="nf">initialLayoutAttributesForInsertedItem</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
     <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
     <span class="n">modifying</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></span><span class="p">,</span>
     <span class="n">on</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/InitialAttributesRequestType.html">InitialAttributesRequestType</a></span>
@@ -790,9 +451,9 @@ using Autolayout Engine anyway.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0aB8DelegateP05finalB24AttributesForDeletedItem_2of2at9modifyingyAA014CollectionViewaB0C_AA0H4KindO10Foundation9IndexPathVAA0abE0CtF"></a>
-                    <a name="//apple_ref/swift/Method/finalLayoutAttributesForDeletedItem(_:of:at:modifying:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP05finalB24AttributesForDeletedItem_2of2at9modifyingyAA014CollectionViewaB0C_AA0H4KindO10Foundation9IndexPathVAA0abE0CtF">finalLayoutAttributesForDeletedItem(_:<wbr>of:<wbr>at:<wbr>modifying:<wbr>)</a>
+                    <a name="/s:10ChatLayout0aB8DelegateP05finalB24AttributesForDeletedItem_2at9modifyingyAA014CollectionViewaB0C_10Foundation9IndexPathVAA0abE0CtF"></a>
+                    <a name="//apple_ref/swift/Method/finalLayoutAttributesForDeletedItem(_:at:modifying:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP05finalB24AttributesForDeletedItem_2at9modifyingyAA014CollectionViewaB0C_10Foundation9IndexPathVAA0abE0CtF">finalLayoutAttributesForDeletedItem(_:<wbr>at:<wbr>modifying:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -821,7 +482,6 @@ using Autolayout Engine anyway.</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
 <span class="kd">func</span> <span class="nf">finalLayoutAttributesForDeletedItem</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
     <span class="n">at</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span>
     <span class="n">modifying</span> <span class="nv">originalAttributes</span><span class="p">:</span> <span class="kt"><a href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a></span>
 <span class="p">)</span></code></pre>
@@ -834,9 +494,9 @@ using Autolayout Engine anyway.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ChatLayout0aB8DelegateP16interItemSpacing_2of5after14CoreFoundation7CGFloatVSgAA014CollectionViewaB0C_AA0E4KindO0J09IndexPathVtF"></a>
-                    <a name="//apple_ref/swift/Method/interItemSpacing(_:of:after:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP16interItemSpacing_2of5after14CoreFoundation7CGFloatVSgAA014CollectionViewaB0C_AA0E4KindO0J09IndexPathVtF">interItemSpacing(_:<wbr>of:<wbr>after:<wbr>)</a>
+                    <a name="/s:10ChatLayout0aB8DelegateP16interItemSpacing_5after14CoreFoundation7CGFloatVSgAA014CollectionViewaB0C_0I09IndexPathVtF"></a>
+                    <a name="//apple_ref/swift/Method/interItemSpacing(_:after:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB8DelegateP16interItemSpacing_5after14CoreFoundation7CGFloatVSgAA014CollectionViewaB0C_0I09IndexPathVtF">interItemSpacing(_:<wbr>after:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -862,7 +522,6 @@ using Autolayout Engine anyway.</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
 <span class="kd">func</span> <span class="nf">interItemSpacing</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">chatLayout</span><span class="p">:</span> <span class="kt"><a href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a></span><span class="p">,</span>
-    <span class="n">of</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Enums/ItemKind.html">ItemKind</a></span><span class="p">,</span>
     <span class="n">after</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span><span class="p">?</span></code></pre>
 
@@ -918,7 +577,7 @@ using Autolayout Engine anyway.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2026 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2026-01-06)</p>
+      <p>&copy; 2026 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2026-03-31)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

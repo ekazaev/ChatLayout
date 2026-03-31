@@ -17,6 +17,11 @@ import UIKit
 class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     var numberOfItemsInSection: [Int: Int] = [0: 100, 1: 100, 2: 100]
     var pinningTypeAtIndexPath: [IndexPath: ChatItemPinningType] = [:]
+    var preferredSizeAtIndexPath: [IndexPath: CGSize] = [:]
+    var calculatedSizeAtIndexPath: [IndexPath: CGSize] = [:]
+    var alignmentAtIndexPath: [IndexPath: ChatItemAlignment] = [:]
+    var interItemSpacingAtIndexPath: [IndexPath: CGFloat] = [:]
+    var interSectionSpacingAtSection: [Int: CGFloat] = [:]
 
     // swiftlint:disable weak_delegate
     lazy var delegate: ChatLayoutDelegate? = self
@@ -49,17 +54,22 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
 
     let processOnlyVisibleItemsOnAnimatedBatchUpdates: Bool = true
 
+    func setSections(_ counts: [Int]) {
+        numberOfItemsInSection = Dictionary(uniqueKeysWithValues: counts.enumerated().map { ($0.offset, $0.element) })
+    }
+
     func numberOfItems(in section: Int) -> Int {
         numberOfItemsInSection[section] ?? 0
     }
 
     func configuration(at indexPath: IndexPath) -> ItemModel.Configuration {
+        let preferredSize = preferredSizeAtIndexPath[indexPath] ?? settings.estimatedItemSize ?? .zero
         return .init(
-            alignment: .fullWidth,
+            alignment: alignmentAtIndexPath[indexPath] ?? .fullWidth,
             pinningType: pinningTypeAtIndexPath[indexPath],
-            preferredSize: settings.estimatedItemSize!,
-            calculatedSize: settings.estimatedItemSize!,
-            interItemSpacing: settings.interItemSpacing
+            preferredSize: preferredSize,
+            calculatedSize: calculatedSizeAtIndexPath[indexPath] ?? preferredSize,
+            interItemSpacing: interItemSpacingAtIndexPath[indexPath] ?? settings.interItemSpacing
         )
     }
 
@@ -76,7 +86,7 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     }
 
     func interSectionSpacing(at sectionIndex: Int) -> CGFloat {
-        settings.interSectionSpacing
+        interSectionSpacingAtSection[sectionIndex] ?? settings.interSectionSpacing
     }
 
     func getPreparedSections() -> ContiguousArray<SectionModel<MockCollectionLayout>> {
