@@ -48,6 +48,8 @@ final class ChatViewController: UIViewController {
         case updatingCollection
     }
 
+    // https://github.com/nathantannar4/InputBarAccessoryView/issues/285
+    // Keep in mind that InputBarAccessoryView has this issue on IOS 26. I strongly suggest you to consider using `keyboardLayoutGuide` to attach it to your view.
     override var inputAccessoryView: UIView? {
         inputBarView
     }
