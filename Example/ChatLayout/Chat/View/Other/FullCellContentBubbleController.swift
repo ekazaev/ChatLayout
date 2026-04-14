@@ -14,6 +14,7 @@ import ChatLayout
 import Foundation
 import UIKit
 
+@MainActor
 final class FullCellContentBubbleController<CustomView: UIView>: BubbleController {
     weak var bubbleView: BezierMaskedView<CustomView>? {
         didSet {

@@ -28,7 +28,7 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
         }
     }
 
-    // Here we are trying to mimic the offsets in the bubbles represented by UIImage in `ImageMaskedView`
+    /// Here we are trying to mimic the offsets in the bubbles represented by UIImage in `ImageMaskedView`
     var offset: CGFloat {
         switch bubbleType {
         case .tailed:

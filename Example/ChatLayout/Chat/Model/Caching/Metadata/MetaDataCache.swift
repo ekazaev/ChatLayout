@@ -14,9 +14,16 @@ import Foundation
 import LinkPresentation
 import UIKit
 
-@available(iOS 13, *)
-final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching where Cache.CachingKey == URL, Cache.Entity == Data {
-    private var cache: Cache
+struct SendableLinkMetadata: @unchecked Sendable {
+    let value: LPLinkMetadata
+
+    init(_ value: LPLinkMetadata) {
+        self.value = value
+    }
+}
+
+final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching, @unchecked Sendable where Cache.CachingKey == URL, Cache.Entity == Data {
+    private let cache: Cache
 
     init(cache: Cache) {
         self.cache = cache
@@ -26,31 +33,16 @@ final class MetaDataCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching whe
         cache.isEntityCached(for: url)
     }
 
-    func getEntity(for url: URL) throws -> LPLinkMetadata {
+    func getEntity(for url: URL) throws -> SendableLinkMetadata {
         let data = try cache.getEntity(for: url)
         guard let entity = try NSKeyedUnarchiver.unarchivedObject(ofClass: LPLinkMetadata.self, from: data) else {
             throw CacheError.invalidData
         }
-        return entity
+        return SendableLinkMetadata(entity)
     }
 
-    func getEntity(for key: URL, completion: @escaping (Result<LPLinkMetadata, Error>) -> Void) {
-        DispatchQueue.global().async {
-            do {
-                let entity = try self.getEntity(for: key)
-                DispatchQueue.main.async {
-                    completion(.success(entity))
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-            }
-        }
-    }
-
-    func store(entity: LPLinkMetadata, for key: URL) throws {
-        let codedData = try NSKeyedArchiver.archivedData(withRootObject: entity, requiringSecureCoding: true)
+    func store(entity: SendableLinkMetadata, for key: URL) throws {
+        let codedData = try NSKeyedArchiver.archivedData(withRootObject: entity.value, requiringSecureCoding: true)
         try cache.store(entity: codedData, for: key)
     }
 }

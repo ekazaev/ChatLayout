@@ -7,8 +7,8 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b97c279a50984376ab2649f5a7d09e69)](https://www.codacy.com/gh/ekazaev/ChatLayout/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ekazaev/ChatLayout&amp;utm_campaign=Badge_Grade)
 [![Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BA51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Swift 6.2](https://img.shields.io/badge/language-Swift6.2-orange.svg?style=flat)](https://developer.apple.com/swift)
-[![Platform iOS](https://img.shields.io/badge/platform-iOS%2013%20—%20iOS%2026-yellow.svg)](https://www.apple.com/ios)
+[![Swift 6.3](https://img.shields.io/badge/language-Swift6.3-orange.svg?style=flat)](https://developer.apple.com/swift)
+[![Platform iOS](https://img.shields.io/badge/platform-iOS%2015%20—%20iOS%2026-yellow.svg)](https://www.apple.com/ios)
 
 <p align="center">
 <img src="https://habrastorage.org/webt/ji/ba/dj/jibadjc0hul-fzfwxm2w0ywdutg.png"  alt="ChatLayout logo"/>

@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 typealias TextMessageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, TextMessageView, StatusView>>>
-@available(iOS 13, *)
 typealias URLCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, URLView, StatusView>>>
 typealias ImageCollectionCell = ContainerCollectionViewCell<MessageContainerView<EditingAccessoryView, MainContainerView<AvatarView, ImageView, StatusView>>>
 typealias TitleCollectionCell = ContainerCollectionViewCell<UILabel>
@@ -82,7 +81,6 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    @available(iOS 13, *)
     private func createURLCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, url: URL, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: URLCollectionCell.reuseIdentifier, for: indexPath) as! URLCollectionCell
         setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)

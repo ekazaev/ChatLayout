@@ -18,6 +18,7 @@ public enum ActionDuration {
     case animated(duration: TimeInterval)
 }
 
+@MainActor
 public protocol EditNotifierDelegate: AnyObject {
     func setIsEditing(_ isEditing: Bool, duration: ActionDuration)
 }

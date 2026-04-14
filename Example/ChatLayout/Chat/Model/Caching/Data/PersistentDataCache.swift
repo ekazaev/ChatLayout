@@ -14,7 +14,7 @@ import Foundation
 
 private let expirationFileAttribute = "saks.persistent-auto-purging-cache.expiration"
 
-class PersistentDataCache<CachingKey: PersistentlyCacheable>: AsyncKeyValueCaching {
+class PersistentDataCache<CachingKey: PersistentlyCacheable & Sendable>: AsyncKeyValueCaching, @unchecked Sendable {
     private let fileManager = FileManager()
 
     private let persistencePath: String
@@ -55,7 +55,10 @@ class PersistentDataCache<CachingKey: PersistentlyCacheable>: AsyncKeyValueCachi
         }
     }
 
-    func getEntity(for key: CachingKey, completion: @escaping (Result<Data, Error>) -> Void) {
+    func getEntity(
+        for key: CachingKey,
+        completion: @escaping @Sendable (Result<Data, Error>) -> Void
+    ) {
         queue.async {
             do {
                 let data = try self.getEntity(for: key)

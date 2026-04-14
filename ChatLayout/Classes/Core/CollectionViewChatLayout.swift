@@ -209,9 +209,9 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     private var contentOffsetBeforeUpdate: CGPoint?
 
-    // These properties are used to keep the layout attributes copies used for insert/delete
-    // animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
-    // animations will start from the estimated height.
+    /// These properties are used to keep the layout attributes copies used for insert/delete
+    /// animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
+    /// animations will start from the estimated height.
     private var attributesForPendingAnimations = [ItemPath: ChatLayoutAttributes]()
 
     private var invalidatedAttributes = Set<ItemPath>()

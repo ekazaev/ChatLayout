@@ -14,7 +14,8 @@ import ChatLayout
 import Foundation
 import UIKit
 
-// Just to visually test `ChatLayout.supportSelfSizingInvalidation`
+/// Just to visually test `ChatLayout.supportSelfSizingInvalidation`
+@MainActor
 protocol AvatarViewDelegate: AnyObject {
     func avatarTapped()
 }

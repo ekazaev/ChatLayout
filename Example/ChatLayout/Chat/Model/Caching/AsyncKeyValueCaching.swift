@@ -13,25 +13,16 @@
 import Foundation
 
 public protocol AsyncKeyValueCaching: KeyValueCaching {
-    associatedtype CachingKey
-
-    associatedtype Entity
-
-    func getEntity(for key: CachingKey, completion: @escaping (Result<Entity, Error>) -> Void)
+    func getEntity(for key: CachingKey, completion: @escaping @Sendable (Result<Entity, Error>) -> Void)
 }
 
 public extension AsyncKeyValueCaching {
-    func getEntity(for key: CachingKey, completion: @escaping (Result<Entity, Error>) -> Void) {
-        DispatchQueue.global().async {
+    func getEntity(for key: CachingKey, completion: @escaping @Sendable (Result<Entity, Error>) -> Void) {
+        Task.detached(priority: .utility) {
             do {
-                let entity = try self.getEntity(for: key)
-                DispatchQueue.main.async {
-                    completion(.success(entity))
-                }
+                try completion(.success(self.getEntity(for: key)))
             } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
         }
     }

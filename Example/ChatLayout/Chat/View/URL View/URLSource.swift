@@ -16,11 +16,7 @@ struct URLSource: Hashable {
     let url: URL
 
     var isPresentLocally: Bool {
-        if #available(iOS 13, *) {
-            metadataCache.isEntityCached(for: url)
-        } else {
-            true
-        }
+        metadataCache.isEntityCached(for: url)
     }
 
     func hash(into hasher: inout Hasher) {

@@ -22,9 +22,9 @@ extension UIView {
         subviews.compactMap { $0 as? T ?? $0.subview(of: type) }.first
     }
 
-    // Even though we do not set it animated - it can happen during the animated batch update
-    // http://www.openradar.me/25087688
-    // https://github.com/nkukushkin/StackView-Hiding-With-Animation-Bug-Example
+    /// Even though we do not set it animated - it can happen during the animated batch update
+    /// http://www.openradar.me/25087688
+    /// https://github.com/nkukushkin/StackView-Hiding-With-Animation-Bug-Example
     var isHiddenSafe: Bool {
         get {
             isHidden
@@ -39,7 +39,7 @@ extension UIView {
 }
 
 extension UIViewController {
-    // https://github.com/ekazaev/route-composer can do it better
+    /// https://github.com/ekazaev/route-composer can do it better
     func topMostViewController() -> UIViewController {
         if presentedViewController == nil {
             return self

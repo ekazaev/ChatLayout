@@ -22,6 +22,7 @@ final class EditNotifier {
         delegates.add(delegate)
     }
 
+    @MainActor
     func setIsEditing(_ isEditing: Bool, duration: ActionDuration) {
         self.isEditing = isEditing
         delegates.allObjects.compactMap { $0 as? EditNotifierDelegate }.forEach { $0.setIsEditing(isEditing, duration: duration) }

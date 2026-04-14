@@ -14,8 +14,7 @@ import Foundation
 
 let loader = CachingImageLoader(cache: imageCache, loader: DefaultImageLoader())
 
-@available(iOS 13, *)
-var metadataCache = IterativeCache(
+let metadataCache = IterativeCache(
     mainCache: MetaDataCache(cache: MemoryDataCache<URL>()),
     backupCache: MetaDataCache(cache: PersistentDataCache<URL>(cacheFileExtension: "metadataCache"))
 )
@@ -25,8 +24,7 @@ let imageCache = IterativeCache(
     backupCache: ImageForUrlCache(cache: PersistentDataCache<CacheableImageKey>())
 )
 
-//// Uncomment to reload dynamic content on every start.
-// @available(iOS 13, *)
-// var metadataCache = MetaDataCache(cache: MemoryDataCache<URL>())
+// Uncomment to reload dynamic content on every start.
+// let metadataCache = MetaDataCache(cache: MemoryDataCache<URL>())
 //
 // let imageCache = ImageForUrlCache(cache: MemoryDataCache<CacheableImageKey>())

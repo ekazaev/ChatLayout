@@ -12,12 +12,10 @@
 
 import Foundation
 
-public final class ChatDateFormatter {
+public final class ChatDateFormatter: Sendable {
     // MARK: - Properties
 
     public static let shared = ChatDateFormatter()
-
-    private let formatter = DateFormatter()
 
     // MARK: - Initializer
 
@@ -26,7 +24,7 @@ public final class ChatDateFormatter {
     // MARK: - Methods
 
     public func string(from date: Date) -> String {
-        configureDateFormatter(for: date)
+        let formatter = configuredFormatter(for: date)
         return formatter.string(from: date)
     }
 
@@ -35,7 +33,8 @@ public final class ChatDateFormatter {
         return NSAttributedString(string: dateString, attributes: attributes)
     }
 
-    func configureDateFormatter(for date: Date) {
+    private func configuredFormatter(for date: Date) -> DateFormatter {
+        let formatter = DateFormatter()
         switch true {
         case Calendar.current.isDateInToday(date) || Calendar.current.isDateInYesterday(date):
             formatter.doesRelativeDateFormatting = true
@@ -48,22 +47,22 @@ public final class ChatDateFormatter {
         default:
             formatter.dateFormat = "MMM d, yyyy, hh:mm"
         }
+
+        return formatter
     }
 }
 
-public final class MessageDateFormatter {
+public final class MessageDateFormatter: Sendable {
     public static let shared = MessageDateFormatter()
 
-    private let formatter = DateFormatter()
+    private init() {}
 
-    private init() {
+    public func string(from date: Date) -> String {
+        let formatter = DateFormatter()
         formatter.doesRelativeDateFormatting = true
         formatter.dateStyle = .none
         formatter.timeStyle = .short
-    }
-
-    public func string(from date: Date) -> String {
-        formatter.string(from: date)
+        return formatter.string(from: date)
     }
 
     public func attributedString(from date: Date, with attributes: [NSAttributedString.Key: Any]) -> NSAttributedString {

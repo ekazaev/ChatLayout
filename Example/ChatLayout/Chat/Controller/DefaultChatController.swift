@@ -13,6 +13,40 @@
 import ChatLayout
 import Foundation
 
+private final class SerialTaskQueue {
+    private let continuation: AsyncStream<@Sendable () async -> Void>.Continuation
+
+    private let workerTask: Task<Void, Never>
+
+    init(priority: TaskPriority? = .userInitiated) {
+        var createdContinuation: AsyncStream<@Sendable () async -> Void>.Continuation?
+        let stream = AsyncStream<@Sendable () async -> Void> { continuation in
+            createdContinuation = continuation
+        }
+        guard let createdContinuation else {
+            preconditionFailure("Failed to create serial task queue continuation")
+        }
+        continuation = createdContinuation
+        workerTask = Task(priority: priority) {
+            for await operation in stream {
+                guard !Task.isCancelled else {
+                    break
+                }
+                await operation()
+            }
+        }
+    }
+
+    func enqueue(_ operation: @escaping @Sendable () async -> Void) {
+        continuation.yield(operation)
+    }
+
+    deinit {
+        continuation.finish()
+        workerTask.cancel()
+    }
+}
+
 final class DefaultChatController: ChatController {
     weak var delegate: ChatControllerDelegate?
 
@@ -20,7 +54,7 @@ final class DefaultChatController: ChatController {
 
     private var typingState: TypingState = .idle
 
-    private let dispatchQueue = DispatchQueue(label: "DefaultChatController", qos: .userInteractive)
+    private let processingQueue = SerialTaskQueue(priority: .userInitiated)
 
     private var lastReadUUID: UUID?
 
@@ -52,7 +86,7 @@ final class DefaultChatController: ChatController {
         self.userId = userId
     }
 
-    func loadInitialMessages(completion: @escaping ([Section]) -> Void) {
+    func loadInitialMessages(completion: @escaping @MainActor @Sendable ([Section]) -> Void) {
         dataProvider.loadInitialMessages { messages in
             self.appendConvertingToMessages(messages)
             self.markAllMessagesAsReceived {
@@ -65,7 +99,7 @@ final class DefaultChatController: ChatController {
         }
     }
 
-    func loadPreviousMessages(completion: @escaping ([Section]) -> Void) {
+    func loadPreviousMessages(completion: @escaping @MainActor @Sendable ([Section]) -> Void) {
         dataProvider.loadPreviousMessages(completion: { messages in
             self.appendConvertingToMessages(messages)
             self.markAllMessagesAsReceived {
@@ -78,7 +112,7 @@ final class DefaultChatController: ChatController {
         })
     }
 
-    func sendMessage(_ data: Message.Data, completion: @escaping ([Section]) -> Void) {
+    func sendMessage(_ data: Message.Data, completion: @escaping @MainActor @Sendable ([Section]) -> Void) {
         messages.append(RawMessage(id: UUID(), date: Date(), data: convert(data), userId: userId))
         propagateLatestMessages { sections in
             completion(sections)
@@ -110,21 +144,40 @@ final class DefaultChatController: ChatController {
         self.messages = messages.sorted(by: { $0.date.timeIntervalSince1970 < $1.date.timeIntervalSince1970 })
     }
 
-    private func propagateLatestMessages(completion: @escaping ([Section]) -> Void) {
-        var lastMessageStorage: Message?
-        dispatchQueue.async { [weak self] in
-            guard let self else {
-                return
-            }
+    private func propagateLatestMessages(completion: @escaping @MainActor @Sendable ([Section]) -> Void) {
+        let messages = messages
+        let typingState = typingState
+        let userId = userId
+
+        processingQueue.enqueue {
             let messagesSplitByDay = messages
-                .map { Message(
-                    id: $0.id,
-                    date: $0.date,
-                    data: self.convert($0.data),
-                    owner: User(id: $0.userId),
-                    type: $0.userId == self.userId ? .outgoing : .incoming,
-                    status: $0.status
-                ) }
+                .map { rawMessage in
+                    let data: Message.Data
+                    switch rawMessage.data {
+                    case let .url(url):
+                        data = .url(url, isLocallyStored: metadataCache.isEntityCached(for: url))
+                    case let .image(source):
+                        let isLocallyStored: Bool
+                        switch source {
+                        case .image:
+                            isLocallyStored = true
+                        case let .imageURL(url):
+                            isLocallyStored = imageCache.isEntityCached(for: CacheableImageKey(url: url))
+                        }
+                        data = .image(source, isLocallyStored: isLocallyStored)
+                    case let .text(text):
+                        data = .text(text)
+                    }
+
+                    return Message(
+                        id: rawMessage.id,
+                        date: rawMessage.date,
+                        data: data,
+                        owner: User(id: rawMessage.userId),
+                        type: rawMessage.userId == userId ? .outgoing : .incoming,
+                        status: rawMessage.status
+                    )
+                }
                 .reduce(into: [[Message]]()) { result, message in
                     guard var section = result.last,
                           let prevMessage = section.last else {
@@ -141,55 +194,46 @@ final class DefaultChatController: ChatController {
                     }
                 }
 
-            let cells = messagesSplitByDay.enumerated().map { index, messages -> [Cell] in
-                var cells: [Cell] = Array(messages.enumerated().map { index, message -> [Cell] in
+            var lastMessageStorage: Message?
+            var cells: [Cell] = []
+
+            for (messageGroupIndex, messageGroup) in messagesSplitByDay.enumerated() {
+                if let firstMessage = messageGroup.first {
+                    cells.append(.date(DateGroup(id: firstMessage.id, date: firstMessage.date)))
+                }
+
+                for (messageIndex, message) in messageGroup.enumerated() {
                     let bubble: Cell.BubbleType
-                    if index < messages.count - 1 {
-                        let nextMessage = messages[index + 1]
+                    if messageIndex < messageGroup.count - 1 {
+                        let nextMessage = messageGroup[messageIndex + 1]
                         bubble = nextMessage.owner == message.owner ? .normal : .tailed
                     } else {
                         bubble = .tailed
                     }
+
                     guard message.type != .outgoing else {
                         lastMessageStorage = message
-                        return [.message(message, bubbleType: bubble)]
+                        cells.append(.message(message, bubbleType: bubble))
+                        continue
                     }
 
                     let titleCell = Cell.messageGroup(MessageGroup(id: message.id, title: "\(message.owner.name)", type: message.type))
-
-                    if let lastMessage = lastMessageStorage {
-                        if lastMessage.owner != message.owner {
-                            lastMessageStorage = message
-                            return [titleCell, .message(message, bubbleType: bubble)]
-                        } else {
-                            lastMessageStorage = message
-                            return [.message(message, bubbleType: bubble)]
-                        }
-                    } else {
-                        lastMessageStorage = message
-                        return [titleCell, .message(message, bubbleType: bubble)]
+                    let shouldInsertTitle = lastMessageStorage.map { $0.owner != message.owner } ?? true
+                    if shouldInsertTitle {
+                        cells.append(titleCell)
                     }
-                }.joined())
-
-                if let firstMessage = messages.first {
-                    let dateCell = Cell.date(DateGroup(id: firstMessage.id, date: firstMessage.date))
-                    cells.insert(dateCell, at: 0)
+                    cells.append(.message(message, bubbleType: bubble))
+                    lastMessageStorage = message
                 }
 
-                if self.typingState == .typing,
-                   index == messagesSplitByDay.count - 1 {
+                if typingState == .typing,
+                   messageGroupIndex == messagesSplitByDay.count - 1 {
                     cells.append(.typingIndicator)
                 }
-
-                return cells // Section(id: sectionTitle.hashValue, title: sectionTitle, cells: cells)
-            }.joined()
-
-            DispatchQueue.main.async { [weak self] in
-                guard self != nil else {
-                    return
-                }
-                completion([Section(id: 0, title: "Loading...", cells: Array(cells))])
             }
+
+            let sections = [Section(id: 0, title: "Loading...", cells: cells)]
+            await completion(sections)
         }
     }
 
@@ -204,37 +248,14 @@ final class DefaultChatController: ChatController {
         }
     }
 
-    private func convert(_ data: RawMessage.Data) -> Message.Data {
-        switch data {
-        case let .url(url):
-            let isLocallyStored: Bool
-            if #available(iOS 13, *) {
-                isLocallyStored = metadataCache.isEntityCached(for: url)
-            } else {
-                isLocallyStored = true
-            }
-            return .url(url, isLocallyStored: isLocallyStored)
-        case let .image(source):
-            func isPresentLocally(_ source: ImageMessageSource) -> Bool {
-                switch source {
-                case .image:
-                    true
-                case let .imageURL(url):
-                    imageCache.isEntityCached(for: CacheableImageKey(url: url))
-                }
-            }
-            return .image(source, isLocallyStored: isPresentLocally(source))
-        case let .text(text):
-            return .text(text)
-        }
-    }
-
+    @MainActor
     private func repopulateMessages(requiresIsolatedProcess: Bool = false) {
         propagateLatestMessages { sections in
             self.delegate?.update(with: sections, requiresIsolatedProcess: requiresIsolatedProcess)
         }
     }
 
+    @MainActor
     private func startAgentMode() {
         isAgentModeEnabled = true
         typingState = .idle
@@ -255,6 +276,7 @@ final class DefaultChatController: ChatController {
         }
     }
 
+    @MainActor
     private func finishAgentMode(notifyDataProvider: Bool) {
         let shouldNotifyDelegate = isAgentModeEnabled || extendedLayoutMessageID != nil
         isAgentModeEnabled = false
@@ -321,17 +343,21 @@ extension DefaultChatController: RandomDataProviderDelegate {
         finishAgentMode(notifyDataProvider: false)
     }
 
-    func markAllMessagesAsReceived(completion: @escaping () -> Void) {
+    func markAllMessagesAsReceived(completion: @escaping @MainActor @Sendable () -> Void) {
         guard let lastReceivedUUID else {
             completion()
             return
         }
-        dispatchQueue.async { [weak self] in
-            guard let self else {
-                return
-            }
+
+        let messages = messages
+        let applyUpdatedMessages: @MainActor @Sendable ([RawMessage]) -> Void = { [weak self] updatedMessages in
+            self?.messages = updatedMessages
+            completion()
+        }
+
+        processingQueue.enqueue {
             var finished = false
-            messages = messages.map { message in
+            let updatedMessages = messages.map { message in
                 guard !finished, message.status != .received, message.status != .read else {
                     if message.id == lastReceivedUUID {
                         finished = true
@@ -345,23 +371,25 @@ extension DefaultChatController: RandomDataProviderDelegate {
                 }
                 return message
             }
-            DispatchQueue.main.async {
-                completion()
-            }
+            await applyUpdatedMessages(updatedMessages)
         }
     }
 
-    func markAllMessagesAsRead(completion: @escaping () -> Void) {
+    func markAllMessagesAsRead(completion: @escaping @MainActor @Sendable () -> Void) {
         guard let lastReadUUID else {
             completion()
             return
         }
-        dispatchQueue.async { [weak self] in
-            guard let self else {
-                return
-            }
+
+        let messages = messages
+        let applyUpdatedMessages: @MainActor @Sendable ([RawMessage]) -> Void = { [weak self] updatedMessages in
+            self?.messages = updatedMessages
+            completion()
+        }
+
+        processingQueue.enqueue {
             var finished = false
-            messages = messages.map { message in
+            let updatedMessages = messages.map { message in
                 guard !finished, message.status != .read else {
                     if message.id == lastReadUUID {
                         finished = true
@@ -375,19 +403,19 @@ extension DefaultChatController: RandomDataProviderDelegate {
                 }
                 return message
             }
-            DispatchQueue.main.async {
-                completion()
-            }
+            await applyUpdatedMessages(updatedMessages)
         }
     }
 }
 
+@MainActor
 extension DefaultChatController: ReloadDelegate {
     func reloadMessage(with id: UUID) {
         repopulateMessages()
     }
 }
 
+@MainActor
 extension DefaultChatController: EditingAccessoryControllerDelegate {
     func deleteMessage(with id: UUID) {
         if extendedLayoutMessageID == id {

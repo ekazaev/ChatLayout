@@ -14,6 +14,7 @@ import ChatLayout
 import Foundation
 import UIKit
 
+@MainActor
 final class TextBubbleController<CustomView: UIView>: BubbleController {
     private let type: MessageType
 

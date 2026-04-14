@@ -46,11 +46,6 @@ struct DateGroup: Hashable {
     var value: String {
         ChatDateFormatter.shared.string(from: date)
     }
-
-    init(id: UUID, date: Date) {
-        self.id = id
-        self.date = date
-    }
 }
 
 extension DateGroup: Differentiable {
@@ -69,12 +64,6 @@ struct MessageGroup: Hashable {
     var title: String
 
     var type: MessageType
-
-    init(id: UUID, title: String, type: MessageType) {
-        self.id = id
-        self.title = title
-        self.type = type
-    }
 }
 
 extension MessageGroup: Differentiable {

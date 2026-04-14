@@ -23,25 +23,14 @@ public struct CachingImageLoader<C: AsyncKeyValueCaching>: ImageLoader where C.C
         self.loader = loader
     }
 
-    public func loadImage(
-        from url: URL,
-        completion: @escaping (Result<UIImage, Error>) -> Void
-    ) {
+    public func loadImage(from url: URL) async throws -> UIImage {
         let imageKey = CacheableImageKey(url: url)
-        cache.getEntity(for: imageKey, completion: { result in
-            guard case .failure = result else {
-                completion(result)
-                return
-            }
-            loader.loadImage(from: url, completion: { result in
-                switch result {
-                case let .success(image):
-                    try? cache.store(entity: image, for: imageKey)
-                    completion(.success(image))
-                case .failure:
-                    completion(result)
-                }
-            })
-        })
+        if let image = try? cache.getEntity(for: imageKey) {
+            return image
+        }
+
+        let image = try await loader.loadImage(from: url)
+        try? cache.store(entity: image, for: imageKey)
+        return image
     }
 }

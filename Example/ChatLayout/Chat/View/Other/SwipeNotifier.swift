@@ -13,12 +13,14 @@
 import Foundation
 import UIKit
 
+@MainActor
 public protocol SwipeNotifierDelegate: AnyObject {
     var swipeCompletionRate: CGFloat { get set }
 
     var accessorySafeAreaInsets: UIEdgeInsets { get set }
 }
 
+@MainActor
 final class SwipeNotifier {
     private var delegates = NSHashTable<AnyObject>.weakObjects()
 

@@ -13,7 +13,7 @@
 import Foundation
 import LinkPresentation
 
-@available(iOS 13, *)
+@MainActor
 final class URLController {
     let url: URL
 
@@ -43,30 +43,34 @@ final class URLController {
     }
 
     private func startFetchingMetadata() {
-        if let metadata = try? metadataCache.getEntity(for: url) {
+        if let metadata = try? metadataCache.getEntity(for: url).value {
             self.metadata = metadata
             view?.reloadData()
-        } else {
-            provider.startFetchingMetadata(for: url) { [weak self] metadata, error in
-                guard let self,
-                      let metadata,
-                      error == nil else {
+            return
+        }
+
+        provider.startFetchingMetadata(for: url) { [weak self] metadata, error in
+            guard let self,
+                  let metadata,
+                  error == nil else {
+                return
+            }
+
+            let sendableMetadata = SendableLinkMetadata(metadata)
+
+            try? metadataCache.store(entity: sendableMetadata, for: url)
+
+            DispatchQueue.main.async { [weak self] in
+                guard let self else {
                     return
                 }
 
-                try? metadataCache.store(entity: metadata, for: url)
-
-                DispatchQueue.main.async { [weak self] in
-                    guard let self else {
-                        return
-                    }
-                    if #available(iOS 16.0, *),
-                       enableSelfSizingSupport {
-                        self.metadata = metadata
-                        view?.reloadData()
-                    } else {
-                        delegate?.reloadMessage(with: messageId)
-                    }
+                if #available(iOS 16.0, *),
+                   enableSelfSizingSupport {
+                    self.metadata = sendableMetadata.value
+                    view?.reloadData()
+                } else {
+                    delegate?.reloadMessage(with: messageId)
                 }
             }
         }

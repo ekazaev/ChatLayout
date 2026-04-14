@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 final class ImageController {
     weak var view: ImageView? {
         didSet {
@@ -33,6 +34,8 @@ final class ImageController {
 
     private var image: UIImage?
 
+    private var imageTask: Task<Void, Never>?
+
     private let messageId: UUID
 
     private let source: ImageMessageSource
@@ -46,6 +49,10 @@ final class ImageController {
         loadImage()
     }
 
+    deinit {
+        imageTask?.cancel()
+    }
+
     private func loadImage() {
         switch source {
         case let .imageURL(url):
@@ -53,9 +60,12 @@ final class ImageController {
                 self.image = image
                 view?.reloadData()
             } else {
-                loader.loadImage(from: url) { [weak self] result in
-                    guard let self,
-                          case let .success(image) = result else {
+                imageTask?.cancel()
+                imageTask = Task { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    guard let image = try? await loader.loadImage(from: url) else {
                         return
                     }
                     if #available(iOS 16.0, *),

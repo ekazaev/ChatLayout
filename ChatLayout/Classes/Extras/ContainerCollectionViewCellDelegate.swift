@@ -15,6 +15,7 @@ import UIKit
 
 /// A delegate of `ContainerCollectionViewCell`/`ContainerCollectionReusableView` should implement this methods if
 /// it is required to participate in containers lifecycle.
+@MainActor
 public protocol ContainerCollectionViewCellDelegate: AnyObject {
     /// Perform any clean up necessary to prepare the view for use again.
     func prepareForReuse()

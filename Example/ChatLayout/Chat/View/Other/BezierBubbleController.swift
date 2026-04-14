@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 final class BezierBubbleController<CustomView: UIView>: BubbleController {
     private let controllerProxy: BubbleController
 

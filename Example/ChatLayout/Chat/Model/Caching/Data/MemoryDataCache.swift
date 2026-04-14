@@ -12,7 +12,7 @@
 
 import Foundation
 
-public final class MemoryDataCache<CachingKey: Hashable>: AsyncKeyValueCaching {
+public final class MemoryDataCache<CachingKey: Hashable & Sendable>: AsyncKeyValueCaching, @unchecked Sendable {
     private final class WrappedKey: NSObject {
         let key: CachingKey
 
@@ -43,39 +43,47 @@ public final class MemoryDataCache<CachingKey: Hashable>: AsyncKeyValueCaching {
 
     private let cache = NSCache<WrappedKey, Entry>()
 
-    private let lock = NSLock()
+    private let queue = DispatchQueue(label: "MemoryDataCache")
 
     public init() {
         cache.countLimit = Int.max
     }
 
     public func isEntityCached(for key: CachingKey) -> Bool {
-        cache.object(forKey: WrappedKey(key)) != nil
+        queue.sync {
+            cache.object(forKey: WrappedKey(key)) != nil
+        }
     }
 
     public func getEntity(for key: CachingKey) throws -> Data {
-        lock.lock()
-        defer {
-            lock.unlock()
-        }
+        try queue.sync {
+            guard let entry = cache.object(forKey: WrappedKey(key)) else {
+                throw CacheError.notFound
+            }
 
-        guard let entry = cache.object(forKey: WrappedKey(key)) else {
-            throw CacheError.notFound
+            return entry.data
         }
-
-        return entry.data
     }
 
-    public func getEntity(for key: CachingKey, completion: @escaping (Result<Data, Error>) -> Void) {
+    public func getEntity(
+        for key: CachingKey,
+        completion: @escaping @Sendable (Result<Data, Error>) -> Void
+    ) {
         guard let data = try? getEntity(for: key) else {
-            completion(.failure(CacheError.notFound))
+            DispatchQueue.main.async {
+                completion(.failure(CacheError.notFound))
+            }
             return
         }
 
-        completion(.success(data))
+        DispatchQueue.main.async {
+            completion(.success(data))
+        }
     }
 
     public func store(entity: Data, for key: CachingKey) {
-        cache.setObject(Entry(entity), forKey: WrappedKey(key), cost: Int(Date().timeIntervalSince1970))
+        queue.sync {
+            cache.setObject(Entry(entity), forKey: WrappedKey(key), cost: Int(Date().timeIntervalSince1970))
+        }
     }
 }

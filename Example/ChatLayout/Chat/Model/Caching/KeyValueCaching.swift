@@ -12,10 +12,10 @@
 
 import Foundation
 
-public protocol KeyValueCaching {
-    associatedtype CachingKey
+public protocol KeyValueCaching: Sendable {
+    associatedtype CachingKey: Sendable
 
-    associatedtype Entity
+    associatedtype Entity: Sendable
 
     func isEntityCached(for key: CachingKey) -> Bool
 

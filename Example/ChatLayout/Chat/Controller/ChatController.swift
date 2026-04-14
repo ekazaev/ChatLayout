@@ -12,16 +12,17 @@
 
 import Foundation
 
+@MainActor
 protocol ChatController {
     var isAgentModeEnabled: Bool { get }
 
     var extendedLayoutMessageID: UUID? { get }
 
-    func loadInitialMessages(completion: @escaping ([Section]) -> Void)
+    func loadInitialMessages(completion: @escaping @MainActor @Sendable ([Section]) -> Void)
 
-    func loadPreviousMessages(completion: @escaping ([Section]) -> Void)
+    func loadPreviousMessages(completion: @escaping @MainActor @Sendable ([Section]) -> Void)
 
-    func sendMessage(_ data: Message.Data, completion: @escaping ([Section]) -> Void)
+    func sendMessage(_ data: Message.Data, completion: @escaping @MainActor @Sendable ([Section]) -> Void)
 
     func setAgentModeEnabled(_ isEnabled: Bool)
 

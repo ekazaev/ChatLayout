@@ -116,7 +116,7 @@ final class StateControllerInternalTests: XCTestCase {
         XCTAssertNil(layout.controller.sectionIdentifier(for: 2, at: .beforeUpdate))
     }
 
-    func testLayoutAttributesInRectCaching() throws {
+    func testLayoutAttributesInRectCaching() {
         let layout = MockCollectionLayout()
         layout.setSections([5, 5])
         layout.settings.additionalInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)

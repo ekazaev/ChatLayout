@@ -17,12 +17,12 @@ import FPSCounter
 import InputBarAccessoryView
 import UIKit
 
-// It's advisable to continue using the reload/reconfigure method, especially when multiple changes occur concurrently in an animated fashion.
-// This approach ensures that the ChatLayout can handle these changes while maintaining the content offset accurately.
-// Consider using it when no better alternatives are available.
+/// It's advisable to continue using the reload/reconfigure method, especially when multiple changes occur concurrently in an animated fashion.
+/// This approach ensures that the ChatLayout can handle these changes while maintaining the content offset accurately.
+/// Consider using it when no better alternatives are available.
 let enableSelfSizingSupport = false
 
-// By setting this flag to true you can test reconfigure instead of reload.
+/// By setting this flag to true you can test reconfigure instead of reload.
 let enableReconfigure = true
 
 final class ChatViewController: UIViewController {
@@ -48,8 +48,8 @@ final class ChatViewController: UIViewController {
         case updatingCollection
     }
 
-    // https://github.com/nathantannar4/InputBarAccessoryView/issues/285
-    // Keep in mind that InputBarAccessoryView has this issue on IOS 26. I strongly suggest you to consider using `keyboardLayoutGuide` to attach it to your view.
+    /// https://github.com/nathantannar4/InputBarAccessoryView/issues/285
+    /// Keep in mind that InputBarAccessoryView has this issue on IOS 26. I strongly suggest you to consider using `keyboardLayoutGuide` to attach it to your view.
     override var inputAccessoryView: UIView? {
         inputBarView
     }
@@ -142,7 +142,7 @@ final class ChatViewController: UIViewController {
         collectionView.delegate = self
         collectionView.keyboardDismissMode = .interactive
 
-        /// https://openradar.appspot.com/40926834
+        // https://openradar.appspot.com/40926834
         collectionView.isPrefetchingEnabled = false
 
         collectionView.contentInsetAdjustmentBehavior = .always
@@ -456,7 +456,6 @@ extension ChatViewController: UICollectionViewDelegate {
         }
     }
 
-    @available(iOS 13.2, *)
     func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
         animator?.addCompletion {
             self.currentInterfaceActions.options.remove(.showingPreview)
@@ -464,6 +463,7 @@ extension ChatViewController: UICollectionViewDelegate {
     }
 }
 
+@MainActor
 extension ChatViewController: ChatControllerDelegate {
     func update(with sections: [Section], requiresIsolatedProcess: Bool) {
         syncAgentModeUI()
@@ -644,7 +644,7 @@ extension ChatViewController: UIGestureRecognizerDelegate {
     }
 }
 
-extension ChatViewController: InputBarAccessoryViewDelegate {
+extension ChatViewController: @MainActor InputBarAccessoryViewDelegate {
     func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
         guard !currentInterfaceActions.options.contains(.sendingMessage) else {
             return
@@ -675,6 +675,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
     }
 }
 
+@MainActor
 extension ChatViewController: KeyboardListenerDelegate {
     func keyboardWillChangeFrame(info: KeyboardInfo) {
         guard !currentInterfaceActions.options.contains(.changingFrameSize),
@@ -755,7 +756,7 @@ private extension ChatViewController {
     }
 }
 
-extension ChatViewController: FPSCounterDelegate {
+extension ChatViewController: @MainActor FPSCounterDelegate {
     func fpsCounter(_ counter: FPSCounter, didUpdateFramesPerSecond fps: Int) {
         fpsView.customView.text = "FPS: \(fps)"
     }

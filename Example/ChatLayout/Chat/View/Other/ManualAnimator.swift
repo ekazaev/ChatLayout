@@ -13,8 +13,8 @@
 import Foundation
 import UIKit
 
-// Read why this class is needed here:
-// https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
+/// Read why this class is needed here:
+/// https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
 class ManualAnimator {
     enum AnimationCurve {
         case linear

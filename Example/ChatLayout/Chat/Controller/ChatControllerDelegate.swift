@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 protocol ChatControllerDelegate: AnyObject {
     func update(with sections: [Section], requiresIsolatedProcess: Bool)
 

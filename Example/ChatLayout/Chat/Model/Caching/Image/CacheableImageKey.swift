@@ -13,7 +13,7 @@
 import Foundation
 import UIKit
 
-public struct CacheableImageKey: Hashable, PersistentlyCacheable {
+public struct CacheableImageKey: Hashable, PersistentlyCacheable, Sendable {
     public let url: URL
 
     var persistentIdentifier: String {

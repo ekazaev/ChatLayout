@@ -13,7 +13,7 @@
 import Foundation
 import UIKit
 
-public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: AsyncKeyValueCaching>: AsyncKeyValueCaching
+public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: AsyncKeyValueCaching>: AsyncKeyValueCaching, @unchecked Sendable
     where
     FastCache.CachingKey == SlowCache.CachingKey, FastCache.Entity == SlowCache.Entity {
     public let mainCache: FastCache
@@ -37,7 +37,10 @@ public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: As
         }
     }
 
-    public func getEntity(for key: FastCache.CachingKey, completion: @escaping (Result<FastCache.Entity, Error>) -> Void) {
+    public func getEntity(
+        for key: FastCache.CachingKey,
+        completion: @escaping @Sendable (Result<FastCache.Entity, Error>) -> Void
+    ) {
         mainCache.getEntity(for: key, completion: { result in
             guard case .failure = result else {
                 completion(result)

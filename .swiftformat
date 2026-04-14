@@ -37,6 +37,6 @@
 --nevertrailing map, flatMap, compactMap
 --funcattributes prev-line
 --typeattributes prev-line
---disable wrapMultilineStatementBraces, preferKeyPath, trailingclosures, preferForLoop,conditionalAssignment
+--disable wrapMultilineStatementBraces, preferKeyPath, trailingclosures, preferForLoop,conditionalAssignment,redundantVariable
 --enable isEmpty,wrapConditionalBodies,noExplicitOwnership,wrapEnumCases,wrapSwitchCases,sortSwitchCases,wrapAttributes
 --exclude Pods,docs,Example/Pods,RecyclerView/Classes/Utils/Stolen

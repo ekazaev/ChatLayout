@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 /// Internal replacement for `UICollectionViewUpdateItem`.
-enum ChangeItem: Equatable, Sendable {
+enum ChangeItem: Equatable {
     /// Delete section at `sectionIndex`
     case sectionDelete(sectionIndex: Int)
 

@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 protocol RandomDataProviderDelegate: AnyObject {
     func received(messages: [RawMessage])
 
@@ -27,6 +28,7 @@ protocol RandomDataProviderDelegate: AnyObject {
     func agentDidFinish()
 }
 
+@MainActor
 protocol RandomDataProvider {
     func loadInitialMessages(completion: @escaping ([RawMessage]) -> Void)
 
@@ -39,6 +41,7 @@ protocol RandomDataProvider {
     func stop()
 }
 
+@MainActor
 final class DefaultRandomDataProvider: RandomDataProvider {
     weak var delegate: RandomDataProviderDelegate?
 
@@ -61,8 +64,6 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     private var lastReadUUID: UUID?
 
     private var lastReceivedUUID: UUID?
-
-    private let dispatchQueue = DispatchQueue.global(qos: .userInteractive)
 
     private let enableTyping = true
 
@@ -95,8 +96,8 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let imageUrls: [URL] = [
         URL(string: "https://upload.wikimedia.org/wikipedia/commons/a/a4/General_Post_Office_Dublin_20060803.jpg")!,
-        URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/O%27Connell_Street_Dublin_%26_Jim_Larkin.JPG/800px-O%27Connell_Street_Dublin_%26_Jim_Larkin.JPG")!,
-        URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/St.Patrick%27s_Bridge.jpg/2560px-St.Patrick%27s_Bridge.jpg")!,
+        URL(string: "https://upload.wikimedia.org/wikipedia/commons/4/42/Samuel_Beckett_Bridge_At_Sunset_Dublin_Ireland_%2897037639%29_%28cropped%29.jpeg")!,
+        URL(string: "https://upload.wikimedia.org/wikipedia/commons/f/f2/Cork_river_lee.jpg")!,
         URL(string: "https://upload.wikimedia.org/wikipedia/commons/9/97/Fountain_Galway_01.jpg")!,
         URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Limerick-King-Johns-Castle-2012.JPG/1920px-Limerick-King-Johns-Castle-2012.JPG")!
     ]
@@ -114,34 +115,18 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     func loadInitialMessages(completion: @escaping ([RawMessage]) -> Void) {
         resumeDefaultTimersIfNeeded()
-        dispatchQueue.async { [weak self] in
-            guard let self else {
-                return
-            }
-            let messages = createBunchOfMessages(number: 50)
-            if messages.count > 10 {
-                lastReceivedUUID = messages[messages.count - 10].id
-            }
-            if messages.count > 3 {
-                lastReadUUID = messages[messages.count - 3].id
-            }
-            DispatchQueue.main.async {
-                completion(messages)
-            }
+        let messages = createBunchOfMessages(number: 50)
+        if messages.count > 10 {
+            lastReceivedUUID = messages[messages.count - 10].id
         }
+        if messages.count > 3 {
+            lastReadUUID = messages[messages.count - 3].id
+        }
+        completion(messages)
     }
 
     func loadPreviousMessages(completion: @escaping ([RawMessage]) -> Void) {
-        dispatchQueue.async { [weak self] in
-            guard let self else {
-                return
-            }
-            let messages = createBunchOfMessages(number: 50)
-
-            DispatchQueue.main.async {
-                completion(messages)
-            }
-        }
+        completion(createBunchOfMessages(number: 50))
     }
 
     func stop() {
@@ -258,12 +243,15 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         agentMessageTimer?.invalidate()
         agentMessageTimer = nil
         if initialDelay > 0 {
-            agentMessageTimer = Timer.scheduledTimer(withTimeInterval: initialDelay, repeats: false) { [weak self] _ in
-                self?.restartAgentMessageTimer()
-            }
+            agentMessageTimer = Timer.scheduledTimer(timeInterval: initialDelay, target: self, selector: #selector(handleInitialAgentMessageTimer), userInfo: nil, repeats: false)
         } else {
             agentMessageTimer = Timer.scheduledTimer(timeInterval: agentMessageUpdateInterval, target: self, selector: #selector(handleAgentMessageTimer), userInfo: nil, repeats: true)
         }
+    }
+
+    @objc
+    private func handleInitialAgentMessageTimer() {
+        restartAgentMessageTimer()
     }
 
     private func stopDefaultTimers() {
@@ -335,9 +323,11 @@ final class DefaultRandomDataProvider: RandomDataProvider {
             return RawMessage(
                 id: UUID(),
                 date: date,
-                data: .text(TextGenerator.getString(of: 5) +
-                    " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " +
-                    TextGenerator.getString(of: 5)),
+                data: .text(
+                    TextGenerator.getString(of: 5) +
+                        " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " +
+                        TextGenerator.getString(of: 5)
+                ),
                 userId: sender
             )
         default:

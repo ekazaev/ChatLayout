@@ -12,4 +12,5 @@
 
 import Foundation
 
+@MainActor
 protocol BubbleController {}

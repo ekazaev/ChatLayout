@@ -112,10 +112,10 @@ public extension UICollectionView {
 }
 
 extension StagedChangeset {
-    // DifferenceKit splits different type of actions into the different change sets to avoid the limitations of UICollectionView
-    // But it may lead to the situations that `UICollectionViewLayout` doesnt know what change will happen next within the single portion
-    // of changes. As we know that at least insertions and deletions can be processed together, we fix that in the StagedChangeset we got from
-    // DifferenceKit.
+    /// DifferenceKit splits different type of actions into the different change sets to avoid the limitations of UICollectionView
+    /// But it may lead to the situations that `UICollectionViewLayout` doesnt know what change will happen next within the single portion
+    /// of changes. As we know that at least insertions and deletions can be processed together, we fix that in the StagedChangeset we got from
+    /// DifferenceKit.
     func flattenIfPossible() -> StagedChangeset {
         if count == 2,
            self[0].sectionChangeCount == 0,

@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 protocol KeyboardListenerDelegate: AnyObject {
     func keyboardWillShow(info: KeyboardInfo)
     func keyboardDidShow(info: KeyboardInfo)

@@ -13,10 +13,12 @@
 import Foundation
 import UIKit
 
+@MainActor
 protocol EditingAccessoryControllerDelegate: AnyObject {
     func deleteMessage(with id: UUID)
 }
 
+@MainActor
 final class EditingAccessoryController {
     weak var delegate: EditingAccessoryControllerDelegate?
 

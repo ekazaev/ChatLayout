@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 final class TextMessageController {
     weak var view: TextMessageView? {
         didSet {

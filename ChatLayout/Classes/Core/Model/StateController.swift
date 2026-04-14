@@ -41,7 +41,7 @@ protocol ChatLayoutRepresentation: AnyObject, Sendable {
 
 @MainActor
 final class StateController<Layout: ChatLayoutRepresentation> {
-    // Helps to reduce the amount of looses in bridging calls to objc `UICollectionView` getter methods.
+    /// Helps to reduce the amount of looses in bridging calls to objc `UICollectionView` getter methods.
     @MainActor
     struct AdditionalLayoutAttributes {
         fileprivate let additionalInsets: UIEdgeInsets
@@ -92,8 +92,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         case done
     }
 
-    // This thing exists here as `UICollectionView` calls `targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint)`
-    // only once at the beginning of the animated updates. But we must compensate the other changes that happened during the update.
+    /// This thing exists here as `UICollectionView` calls `targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint)`
+    /// only once at the beginning of the animated updates. But we must compensate the other changes that happened during the update.
     var batchUpdateCompensatingOffset: CGFloat = 0
 
     var proposedCompensatingOffset: CGFloat = 0

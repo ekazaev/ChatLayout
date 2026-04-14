@@ -13,6 +13,6 @@
 import Foundation
 import UIKit
 
-public protocol ImageLoader {
-    func loadImage(from url: URL, completion: @escaping (Result<UIImage, Error>) -> Void)
+public protocol ImageLoader: Sendable {
+    func loadImage(from url: URL) async throws -> UIImage
 }

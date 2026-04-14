@@ -13,7 +13,7 @@
 import Foundation
 import UIKit
 
-public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching where Cache.CachingKey: Hashable, Cache.Entity == Data {
+public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueCaching, @unchecked Sendable where Cache.CachingKey: Hashable, Cache.Entity == Data {
     private let cache: Cache
 
     public init(cache: Cache) {
@@ -32,25 +32,26 @@ public final class ImageForUrlCache<Cache: AsyncKeyValueCaching>: AsyncKeyValueC
         return image
     }
 
-    public func getEntity(for key: Cache.CachingKey, completion: @escaping (Result<UIImage, Error>) -> Void) {
+    public func getEntity(
+        for key: Cache.CachingKey,
+        completion: @escaping @Sendable (Result<UIImage, Error>) -> Void
+    ) {
         cache.getEntity(for: key, completion: { result in
-            DispatchQueue.global(qos: .utility).async {
-                switch result {
-                case let .success(data):
+            switch result {
+            case let .success(data):
+                Task.detached(priority: .utility) {
                     guard let image = UIImage(data: data) else {
-                        DispatchQueue.main.async {
+                        await MainActor.run {
                             completion(.failure(CacheError.invalidData))
                         }
                         return
                     }
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         completion(.success(image))
                     }
-                case let .failure(error):
-                    DispatchQueue.main.async {
-                        completion(.failure(error))
-                    }
                 }
+            case let .failure(error):
+                completion(.failure(error))
             }
         })
     }

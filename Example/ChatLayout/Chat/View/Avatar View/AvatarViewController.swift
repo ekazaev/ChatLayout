@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 final class AvatarViewController {
     var image: UIImage? {
         guard bubble == .tailed else {

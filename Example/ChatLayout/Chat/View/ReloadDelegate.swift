@@ -12,6 +12,7 @@
 
 import Foundation
 
+@MainActor
 protocol ReloadDelegate: AnyObject {
     func reloadMessage(with id: UUID)
 }

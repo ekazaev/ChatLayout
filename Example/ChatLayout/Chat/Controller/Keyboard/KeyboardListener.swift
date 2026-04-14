@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 final class KeyboardListener {
     static let shared = KeyboardListener()
 
