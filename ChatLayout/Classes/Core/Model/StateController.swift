@@ -465,7 +465,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             } else {
                 attributes.pinningProgress = 0
             }
-        } else{
+        } else {
             attributes.pinningProgress = 0
         }
         attributes.viewSize = additionalAttributes.viewSize

@@ -24,7 +24,9 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Indicates whether the current item is actively pinned.
     public internal(set) var isPinned = false
 
-    /// Pinning progress of the current item from `0` to `1`.
+    /// Pinning transition progress of the current item from `0` to `1`.
+    /// For the pinned item, it decreases from `1` as the next pinnable item pushes it away.
+    /// For the next pinnable item, it increases toward `1` during that handoff.
     public internal(set) var pinningProgress: CGFloat = 0
 
     /// Inter item spacing. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
