@@ -428,6 +428,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         attributes.alignment = item.alignment
         attributes.interItemSpacing = item.interItemSpacing
         attributes.pinningType = item.pinningType
+        attributes.isPinned = withPinnning && isPinnedItem(indexPath: itemIndexPath)
         attributes.viewSize = additionalAttributes.viewSize
         attributes.adjustedContentInsets = additionalAttributes.adjustedContentInsets
         attributes.visibleBoundsSize = additionalAttributes.visibleBounds.size
@@ -1130,7 +1131,13 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
 
             return allRects.compactMap { frame, path in
-                itemAttributes(for: path, predefinedFrame: frame, at: state, additionalAttributes: additionalAttributes)
+                itemAttributes(
+                    for: path,
+                    predefinedFrame: frame,
+                    at: state,
+                    withPinnning: withPining,
+                    additionalAttributes: additionalAttributes
+                )
             }
         } else {
             var attributes = [ChatLayoutAttributes]()

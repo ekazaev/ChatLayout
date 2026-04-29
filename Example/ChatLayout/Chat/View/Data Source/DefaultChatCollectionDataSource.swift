@@ -177,6 +177,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DateSeparatorCollectionCell.reuseIdentifier, for: indexPath) as! DateSeparatorCollectionCell
         cell.customView.labelView.preferredMaxLayoutWidth = (collectionView.collectionViewLayout as? CollectionViewChatLayout)?.layoutFrame.width ?? collectionView.frame.width
         cell.customView.labelView.text = title
+        cell.delegate = cell.customView
         cell.contentView.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
         return cell
     }
