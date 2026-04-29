@@ -43,11 +43,13 @@ final class DateSeparatorView: UIView, StaticViewFactory, ContainerCollectionVie
     }
 
     func prepareForReuse() {
+        borderView.alpha = 0
         borderView.isHidden = true
     }
 
     func apply(_ layoutAttributes: ChatLayoutAttributes) {
-        borderView.isHidden = !layoutAttributes.isPinned
+        borderView.alpha = layoutAttributes.pinningProgress
+        borderView.isHidden = layoutAttributes.pinningProgress == 0
     }
 
     override func layoutSubviews() {
