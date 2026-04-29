@@ -345,8 +345,13 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     }
 
     /// Returns index path of currently pinned item.
-    open func indexPathForItePinnedAt(_ pinningType: ChatItemPinningType) -> IndexPath? {
+    open func indexPathForItemPinnedAt(_ pinningType: ChatItemPinningType) -> IndexPath? {
         controller.pinnedIndexPaths[pinningType]?.current
+    }
+
+    /// Returns index path of next to become pinned item.
+    open func indexPathForItemBecomingPinnedAt(_ pinningType: ChatItemPinningType) -> IndexPath? {
+        controller.pinnedIndexPaths[pinningType]?.next
     }
 
     // MARK: Providing Layout Attributes
