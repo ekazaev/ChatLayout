@@ -21,6 +21,14 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Pinning behavour of the current item.
     public var pinningType: ChatItemPinningType?
 
+    /// Indicates whether the current item is actively pinned.
+    public internal(set) var isPinned = false
+
+    /// Pinning transition progress of the current item from `0` to `1`.
+    /// For the pinned item, it decreases from `1` as the next pinnable item pushes it away.
+    /// For the next pinnable item, it increases toward `1` during that handoff.
+    public internal(set) var pinningProgress: CGFloat = 0
+
     /// Inter item spacing. Can be changed within `UICollectionViewCell.preferredLayoutAttributesFitting(...)`
     public var interItemSpacing: CGFloat = 0
 
@@ -58,6 +66,8 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         copy.visibleBoundsSize = visibleBoundsSize
         copy.adjustedContentInsets = adjustedContentInsets
         copy.pinningType = pinningType
+        copy.isPinned = isPinned
+        copy.pinningProgress = pinningProgress
         #if DEBUG
         copy.id = id
         #endif
@@ -75,6 +85,8 @@ public final class ChatLayoutAttributes: UICollectionViewLayoutAttributes {
         return MainActor.assumeIsolated {
             super.isEqual(chatLayoutAttributes)
                 && pinningType == chatLayoutAttributes?.pinningType
+                && isPinned == chatLayoutAttributes?.isPinned
+                && pinningProgress == chatLayoutAttributes?.pinningProgress
                 && alignment == chatLayoutAttributes?.alignment
                 && interItemSpacing == chatLayoutAttributes?.interItemSpacing
         }

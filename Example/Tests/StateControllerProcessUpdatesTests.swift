@@ -306,6 +306,49 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
             )
         )
         XCTAssertEqual(item.frame.minY, 400)
+        XCTAssertEqual(item.pinningType, .top)
+        XCTAssertTrue(item.isPinned)
+        XCTAssertEqual(item.pinningProgress, 1)
+
+        let unpinnedItem = try XCTUnwrap(
+            layout.controller.itemAttributes(
+                for: ItemPath(item: 1, section: 0),
+                at: .beforeUpdate,
+                withPinnning: true
+            )
+        )
+        XCTAssertFalse(unpinnedItem.isPinned)
+        XCTAssertEqual(unpinnedItem.pinningProgress, 0)
+    }
+
+    func testPinnedTopItemProgressTracksShiftByNextPinnedItem() throws {
+        let layout = MockCollectionLayout()
+        layout.setSections([100])
+        layout.visibleBounds.origin.y = 20
+        layout.pinningTypeAtIndexPath[IndexPath(item: 0, section: 0)] = .top
+        layout.pinningTypeAtIndexPath[IndexPath(item: 1, section: 0)] = .top
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.controller.updatePinnedInfo(at: .beforeUpdate)
+
+        let item = try XCTUnwrap(
+            layout.controller.itemAttributes(
+                for: ItemPath(item: 0, section: 0),
+                at: .beforeUpdate,
+                withPinnning: true
+            )
+        )
+        XCTAssertEqual(item.frame.minY, 0)
+        XCTAssertEqual(item.pinningProgress, 0.5)
+
+        let nextItem = try XCTUnwrap(
+            layout.controller.itemAttributes(
+                for: ItemPath(item: 1, section: 0),
+                at: .beforeUpdate,
+                withPinnning: true
+            )
+        )
+        XCTAssertFalse(nextItem.isPinned)
+        XCTAssertEqual(nextItem.pinningProgress, 0.5)
     }
 
     func testPinnedBottomItem() throws {
@@ -323,6 +366,39 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
             )
         )
         XCTAssertEqual(item.frame.minY, layout.visibleBounds.maxY - item.frame.height)
+        XCTAssertEqual(item.pinningType, .bottom)
+        XCTAssertTrue(item.isPinned)
+        XCTAssertEqual(item.pinningProgress, 1)
+    }
+
+    func testPinnedBottomItemProgressTracksShiftByNextPinnedItem() throws {
+        let layout = MockCollectionLayout()
+        layout.setSections([100])
+        layout.visibleBounds.origin.y = 4273
+        layout.pinningTypeAtIndexPath[IndexPath(item: 98, section: 0)] = .bottom
+        layout.pinningTypeAtIndexPath[IndexPath(item: 99, section: 0)] = .bottom
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.controller.updatePinnedInfo(at: .beforeUpdate)
+
+        let item = try XCTUnwrap(
+            layout.controller.itemAttributes(
+                for: ItemPath(item: 99, section: 0),
+                at: .beforeUpdate,
+                withPinnning: true
+            )
+        )
+        XCTAssertEqual(item.frame.minY, 4653)
+        XCTAssertEqual(item.pinningProgress, 0.5)
+
+        let nextItem = try XCTUnwrap(
+            layout.controller.itemAttributes(
+                for: ItemPath(item: 98, section: 0),
+                at: .beforeUpdate,
+                withPinnning: true
+            )
+        )
+        XCTAssertFalse(nextItem.isPinned)
+        XCTAssertEqual(nextItem.pinningProgress, 0.5)
     }
 
     private func preparedLayout(sectionCounts: [Int]) -> MockCollectionLayout {

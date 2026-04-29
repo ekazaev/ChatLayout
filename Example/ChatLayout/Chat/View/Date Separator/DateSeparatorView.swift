@@ -14,10 +14,11 @@ import ChatLayout
 import Foundation
 import UIKit
 
-final class DateSeparatorView: UIView, StaticViewFactory {
+final class DateSeparatorView: UIView, StaticViewFactory, ContainerCollectionViewCellDelegate {
     private lazy var borderView = {
         let view = UIView()
         view.backgroundColor = .white
+        view.isHidden = true
         view.frame = bounds.insetBy(dx: -5, dy: -5)
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.gray.cgColor
@@ -39,6 +40,16 @@ final class DateSeparatorView: UIView, StaticViewFactory {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupSubviews()
+    }
+
+    func prepareForReuse() {
+        borderView.alpha = 0
+        borderView.isHidden = true
+    }
+
+    func apply(_ layoutAttributes: ChatLayoutAttributes) {
+        borderView.alpha = layoutAttributes.pinningProgress
+        borderView.isHidden = layoutAttributes.pinningProgress == 0
     }
 
     override func layoutSubviews() {
