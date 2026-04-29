@@ -339,6 +339,16 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         )
         XCTAssertEqual(item.frame.minY, 0)
         XCTAssertEqual(item.pinningProgress, 0.5)
+
+        let nextItem = try XCTUnwrap(
+            layout.controller.itemAttributes(
+                for: ItemPath(item: 1, section: 0),
+                at: .beforeUpdate,
+                withPinnning: true
+            )
+        )
+        XCTAssertFalse(nextItem.isPinned)
+        XCTAssertEqual(nextItem.pinningProgress, 0.5)
     }
 
     func testPinnedBottomItem() throws {
@@ -379,6 +389,16 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         )
         XCTAssertEqual(item.frame.minY, 4653)
         XCTAssertEqual(item.pinningProgress, 0.5)
+
+        let nextItem = try XCTUnwrap(
+            layout.controller.itemAttributes(
+                for: ItemPath(item: 98, section: 0),
+                at: .beforeUpdate,
+                withPinnning: true
+            )
+        )
+        XCTAssertFalse(nextItem.isPinned)
+        XCTAssertEqual(nextItem.pinningProgress, 0.5)
     }
 
     private func preparedLayout(sectionCounts: [Int]) -> MockCollectionLayout {

@@ -429,13 +429,45 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         attributes.interItemSpacing = item.interItemSpacing
         attributes.pinningType = item.pinningType
         attributes.isPinned = withPinnning && isPinnedItem(indexPath: itemIndexPath)
-        attributes.pinningProgress = pinningProgress(
-            for: itemPath,
-            item: item,
-            frame: itemFrame,
-            withPinnning: withPinnning,
-            additionalAttributes: additionalAttributes
-        )
+        if withPinnning,
+           let pinningType = item.pinningType,
+           let pinnedIndexPaths = pinnedIndexPaths[pinningType] {
+            func pinnedItemProgress(for frame: CGRect) -> CGFloat {
+                guard frame.height > 0 else {
+                    return 0
+                }
+
+                let visibleBounds = additionalAttributes.visibleBounds.inset(
+                    by: layoutRepresentation.settings.additionalInsets
+                )
+
+                let progress: CGFloat
+                switch pinningType {
+                case .top:
+                    progress = (frame.maxY - visibleBounds.minY) / frame.height
+                case .bottom:
+                    progress = (visibleBounds.maxY - frame.minY) / frame.height
+                }
+                return min(1, max(0, progress))
+            }
+
+            if itemIndexPath == pinnedIndexPaths.current {
+                attributes.pinningProgress = pinnedItemProgress(for: itemFrame)
+            } else if itemIndexPath == pinnedIndexPaths.next,
+                      let currentFrame = self.itemFrame(
+                          for: pinnedIndexPaths.current.itemPath,
+                          at: state,
+                          isFinal: true,
+                          withPinnning: true,
+                          additionalAttributes: additionalAttributes
+                      ) {
+                attributes.pinningProgress = 1 - pinnedItemProgress(for: currentFrame)
+            } else {
+                attributes.pinningProgress = 0
+            }
+        } else{
+            attributes.pinningProgress = 0
+        }
         attributes.viewSize = additionalAttributes.viewSize
         attributes.adjustedContentInsets = additionalAttributes.adjustedContentInsets
         attributes.visibleBoundsSize = additionalAttributes.visibleBounds.size
@@ -532,31 +564,6 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
 
         return itemFrame
-    }
-
-    private func pinningProgress(
-        for itemPath: ItemPath,
-        item: ItemModel,
-        frame: CGRect,
-        withPinnning: Bool,
-        additionalAttributes: AdditionalLayoutAttributes
-    ) -> CGFloat {
-        guard withPinnning,
-              let pinningType = item.pinningType,
-              itemPath.indexPath == pinnedIndexPaths[pinningType]?.current,
-              frame.height > 0 else {
-            return 0
-        }
-
-        let visibleBounds = additionalAttributes.visibleBounds.inset(by: layoutRepresentation.settings.additionalInsets)
-        let progress: CGFloat
-        switch pinningType {
-        case .top:
-            progress = (frame.maxY - visibleBounds.minY) / frame.height
-        case .bottom:
-            progress = (visibleBounds.maxY - frame.minY) / frame.height
-        }
-        return min(1, max(0, progress))
     }
 
     func itemPath(by itemId: UUID, at state: ModelState) -> ItemPath? {
