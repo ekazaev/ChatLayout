@@ -190,6 +190,22 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.contentHeight(at: .afterUpdate), 87)
     }
 
+    func testItemDeleteInDeletedSectionIsIgnored() {
+        let layout = preparedLayout(sectionCounts: [1])
+        layout.setSections([3, 2])
+
+        layout.controller.process(changeItems: [
+            .sectionDelete(sectionIndex: 0),
+            .sectionInsert(sectionIndex: 0),
+            .sectionInsert(sectionIndex: 1),
+            .itemDelete(itemIndexPath: IndexPath(item: 0, section: 0))
+        ])
+
+        XCTAssertEqual(layout.controller.numberOfSections(at: .afterUpdate), 2)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 0, at: .afterUpdate), 3)
+        XCTAssertEqual(layout.controller.numberOfItems(in: 1, at: .afterUpdate), 2)
+    }
+
     func testItemMoveUpdatesIdentifiersAndPaths() throws {
         let layout = preparedLayout(sectionCounts: [3, 3, 1])
         let movedFromFirstSection = try itemIdentifier(in: layout, item: 0, section: 0, state: .beforeUpdate)

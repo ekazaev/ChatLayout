@@ -836,6 +836,9 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         }
 
         for indexPath in deletedItemsIndexesArray {
+            guard !deletedSectionsIndexes.contains(indexPath.section) else {
+                continue
+            }
             guard let itemId = itemIdentifier(for: indexPath.itemPath, at: .beforeUpdate) else {
                 assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
                 continue
