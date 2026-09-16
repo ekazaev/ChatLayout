@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Other Guides  Reference</title>
+    <title>Other Classes  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Section/Other Guides" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Section/Other Classes" class="dashAnchor"></a>
 
-    <a title="Other Guides  Reference"></a>
+    <a title="Other Classes  Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="index.html">ChatLayout</a>
       <img class="carat" src="img/carat.png" alt=""/>
-      Other Guides  Reference
+      Other Classes  Reference
     </p>
 
     <div class="content-wrapper">
@@ -163,8 +163,8 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>Other Guides</h1>
-            <p>The following guides are available globally.</p>
+            <h1>Other Classes</h1>
+            <p>The following classes are available globally.</p>
 
           </div>
         </section>
@@ -176,10 +176,39 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/documentation.README"></a>
-                    <a name="//apple_ref/swift/Guide/README" class="dashAnchor"></a>
-                    <a class="direct-link" href="readme.html">README</a>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC"></a>
+                    <a name="//apple_ref/swift/Class/ChatLayoutDiffableDataSource" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC">ChatLayoutDiffableDataSource</a>
                     </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A diffable data source created specifically to coordinate <code>UICollectionView.reconfigureItems(at:)</code> with
+<code><a href="Classes/CollectionViewChatLayout.html#/s:10ChatLayout014CollectionViewaB0C16reconfigureItems2atySay10Foundation9IndexPathVG_tF">CollectionViewChatLayout.reconfigureItems(at:)</a></code>.</p>
+
+<p>Apple&rsquo;s <code>UICollectionViewDiffableDataSource</code> forwards snapshot application to private <code>__UIDiffableDataSource</code> and
+<code>_UIDiffableDataSourceViewUpdater</code> objects. Those objects use the private <code>_performDiffableUpdate(_:)</code> transaction and
+an internal <code>commitAlongsideHandler</code> to replace identifier state while UIKit applies the view updates.</p>
+
+<p><code>ChatLayoutDiffableDataSource</code> cannot use those private hooks, so <code>commitAlongsideUpdates</code> exposes the equivalent
+synchronization point within its public <code>performBatchUpdates</code> transaction. Clients must update any application-owned
+models read by the cell provider and layout delegate in that closure so they remain consistent with the new snapshot.</p>
+
+                        <a href="Classes/ChatLayoutDiffableDataSource.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">class</span> <span class="kt">ChatLayoutDiffableDataSource</span><span class="o">&lt;</span><span class="kt">SectionID</span><span class="p">,</span> <span class="kt">ItemID</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">UICollectionViewDataSource</span> <span class="k">where</span> <span class="kt">SectionID</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">SectionID</span> <span class="p">:</span> <span class="kt">Sendable</span><span class="p">,</span> <span class="kt">ItemID</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">ItemID</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
                   </div>
                 </li>
               </ul>

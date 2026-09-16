@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ChatLayoutDiffableDataSource Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/ChatLayoutDiffableDataSource" class="dashAnchor"></a>
+
+    <a title="ChatLayoutDiffableDataSource Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          ChatLayout 2.5.0 Docs
+        </a>
+         (100% documented)
+      </p>
+    
+      <div class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </div>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">ChatLayout</a>
+      <img class="carat" src="../img/carat.png" alt=""/>
+      <a class="breadcrumb" href="../Other%20Classes.html">Other Classes</a>
+      <img class="carat" src="../img/carat.png" alt=""/>
+      ChatLayoutDiffableDataSource Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Core.html">Core</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CollectionViewChatLayout.html">CollectionViewChatLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ChatLayoutDelegate.html">ChatLayoutDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayoutAttributes.html">ChatLayoutAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutSettings.html">ChatLayoutSettings</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot.html">ChatLayoutPositionSnapshot</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ChatLayoutPositionSnapshot/Edge.html">– Edge</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayoutInvalidationContext.html">ChatLayoutInvalidationContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ItemSize.html">ItemSize</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ItemSize/CaseType.html">– CaseType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ChatItemAlignment.html">ChatItemAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ChatItemPinningType.html">ChatItemPinningType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/InitialAttributesRequestType.html">InitialAttributesRequestType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extras.html">Extras</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ContainerCollectionViewCell.html">ContainerCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ContainerCollectionViewCellDelegate.html">ContainerCollectionViewCellDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ContainerCollectionReusableView.html">ContainerCollectionReusableView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/MessageContainerView.html">MessageContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CellLayoutContainerView.html">CellLayoutContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/CellLayoutContainerViewAlignment.html">CellLayoutContainerViewAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/EdgeAligningView.html">EdgeAligningView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/EdgeAligningView/Edge.html">– Edge</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwappingContainerView.html">SwappingContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwappingContainerView/Axis.html">– Axis</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwappingContainerView/Distribution.html">– Distribution</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ImageMaskedView.html">ImageMaskedView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ImageMaskedViewTransformation.html">ImageMaskedViewTransformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/RoundedCornersContainerView.html">RoundedCornersContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/StaticViewFactory.html">StaticViewFactory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VoidViewFactory.html">VoidViewFactory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/VoidViewFactory.html#/s:10ChatLayout15VoidViewFactoryV0cD0C">– VoidView</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Guides.html">Other Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../readme.html">README</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Classes.html">Other Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ChatLayoutDiffableDataSource.html">ChatLayoutDiffableDataSource</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>ChatLayoutDiffableDataSource</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">class</span> <span class="kt">ChatLayoutDiffableDataSource</span><span class="o">&lt;</span><span class="kt">SectionID</span><span class="p">,</span> <span class="kt">ItemID</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">UICollectionViewDataSource</span> <span class="k">where</span> <span class="kt">SectionID</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">SectionID</span> <span class="p">:</span> <span class="kt">Sendable</span><span class="p">,</span> <span class="kt">ItemID</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">ItemID</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
+
+                </div>
+              </div>
+            <p>A diffable data source created specifically to coordinate <code>UICollectionView.reconfigureItems(at:)</code> with
+<code><a href="../Classes/CollectionViewChatLayout.html#/s:10ChatLayout014CollectionViewaB0C16reconfigureItems2atySay10Foundation9IndexPathVG_tF">CollectionViewChatLayout.reconfigureItems(at:)</a></code>.</p>
+
+<p>Apple&rsquo;s <code>UICollectionViewDiffableDataSource</code> forwards snapshot application to private <code>__UIDiffableDataSource</code> and
+<code>_UIDiffableDataSourceViewUpdater</code> objects. Those objects use the private <code>_performDiffableUpdate(_:)</code> transaction and
+an internal <code>commitAlongsideHandler</code> to replace identifier state while UIKit applies the view updates.</p>
+
+<p><code>ChatLayoutDiffableDataSource</code> cannot use those private hooks, so <code>commitAlongsideUpdates</code> exposes the equivalent
+synchronization point within its public <code>performBatchUpdates</code> transaction. Clients must update any application-owned
+models read by the cell provider and layout delegate in that closure so they remain consistent with the new snapshot.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC8snapshot5UIKit010NSDiffabledE8SnapshotVyxq_GSgvp"></a>
+                    <a name="//apple_ref/swift/Property/snapshot" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC8snapshot5UIKit010NSDiffabledE8SnapshotVyxq_GSgvp">snapshot</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The snapshot currently represented by the collection view, or <code>nil</code> before the first snapshot is applied.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="k">var</span> <span class="nv">snapshot</span><span class="p">:</span> <span class="kt">NSDiffableDataSourceSnapshot</span><span class="o">&lt;</span><span class="kt">SectionID</span><span class="p">,</span> <span class="kt">ItemID</span><span class="o">&gt;</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC14collectionView21onCellReconfiguration12cellProviderACyxq_GSo012UICollectionG0C_ySo0mgI0CcSgAKSgAI_10Foundation9IndexPathVq_tctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(collectionView:onCellReconfiguration:cellProvider:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC14collectionView21onCellReconfiguration12cellProviderACyxq_GSo012UICollectionG0C_ySo0mgI0CcSgAKSgAI_10Foundation9IndexPathVq_tctcfc">init(collectionView:<wbr>onCellReconfiguration:<wbr>cellProvider:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Constructor.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span>
+    <span class="nv">onCellReconfiguration</span><span class="p">:</span> <span class="p">((</span><span class="kt">UICollectionViewCell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">cellProvider</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">UICollectionView</span><span class="p">,</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="kt">ItemID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewCell</span><span class="p">?</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>collectionView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The collection view managed by the data source.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>onCellReconfiguration</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional closure called after <code>cellProvider</code> returns a cell for a reconfigured item.
+The closure runs within the collection view&rsquo;s batch-update transaction and, when differences are animated,
+within that update animation. Use it to perform additional actions alongside the update or to animate changes
+within the cell itself.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cellProvider</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure that creates and configures a cell for an item identifier.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC024applySnapshotUsingReloadD0_22commitAlongsideUpdates10completiony5UIKit010NSDiffabledeG0Vyxq_G_yyXEyycSgtF"></a>
+                    <a name="//apple_ref/swift/Method/applySnapshotUsingReloadData(_:commitAlongsideUpdates:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC024applySnapshotUsingReloadD0_22commitAlongsideUpdates10completiony5UIKit010NSDiffabledeG0Vyxq_G_yyXEyycSgtF">applySnapshotUsingReloadData(_:<wbr>commitAlongsideUpdates:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Replaces the current snapshot and reloads the collection view.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">applySnapshotUsingReloadData</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">snapshot</span><span class="p">:</span> <span class="kt">NSDiffableDataSourceSnapshot</span><span class="o">&lt;</span><span class="kt">SectionID</span><span class="p">,</span> <span class="kt">ItemID</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">commitAlongsideUpdates</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>snapshot</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snapshot that replaces the current state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>commitAlongsideUpdates</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure that commits application-owned models before the collection view reloads its data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional closure called after the new snapshot is applied.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC024applySnapshotUsingReloadD0_22commitAlongsideUpdatesy5UIKit010NSDiffabledeG0Vyxq_G_yyXEtYaF"></a>
+                    <a name="//apple_ref/swift/Method/applySnapshotUsingReloadData(_:commitAlongsideUpdates:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC024applySnapshotUsingReloadD0_22commitAlongsideUpdatesy5UIKit010NSDiffabledeG0Vyxq_G_yyXEtYaF">applySnapshotUsingReloadData(_:<wbr>commitAlongsideUpdates:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Replaces the current snapshot, reloads the collection view, and returns after the new snapshot is applied.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">applySnapshotUsingReloadData</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">snapshot</span><span class="p">:</span> <span class="kt">NSDiffableDataSourceSnapshot</span><span class="o">&lt;</span><span class="kt">SectionID</span><span class="p">,</span> <span class="kt">ItemID</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">commitAlongsideUpdates</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span>
+<span class="p">)</span> <span class="k">async</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>snapshot</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snapshot that replaces the current state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>commitAlongsideUpdates</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure that commits application-owned models before the collection view reloads its data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC5apply_20animatingDifferences22commitAlongsideUpdates10completiony5UIKit010NSDiffabledE8SnapshotVyxq_G_SbyycyycSgtF"></a>
+                    <a name="//apple_ref/swift/Method/apply(_:animatingDifferences:commitAlongsideUpdates:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC5apply_20animatingDifferences22commitAlongsideUpdates10completiony5UIKit010NSDiffabledE8SnapshotVyxq_G_SbyycyycSgtF">apply(_:<wbr>animatingDifferences:<wbr>commitAlongsideUpdates:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Applies a snapshot while committing application-owned models alongside the collection-view update.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">snapshot</span><span class="p">:</span> <span class="kt">NSDiffableDataSourceSnapshot</span><span class="o">&lt;</span><span class="kt">SectionID</span><span class="p">,</span> <span class="kt">ItemID</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">animatingDifferences</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span>
+    <span class="nv">commitAlongsideUpdates</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>snapshot</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snapshot that replaces the current state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>animatingDifferences</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A Boolean value that determines whether changes are animated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>commitAlongsideUpdates</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure that commits application-owned models within the collection-view update transaction.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional closure called after the collection view finishes applying the update.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC5apply_20animatingDifferences22commitAlongsideUpdatesy5UIKit010NSDiffabledE8SnapshotVyxq_G_SbyyctYaF"></a>
+                    <a name="//apple_ref/swift/Method/apply(_:animatingDifferences:commitAlongsideUpdates:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC5apply_20animatingDifferences22commitAlongsideUpdatesy5UIKit010NSDiffabledE8SnapshotVyxq_G_SbyyctYaF">apply(_:<wbr>animatingDifferences:<wbr>commitAlongsideUpdates:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Applies a snapshot and returns after the collection view finishes applying the update.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">snapshot</span><span class="p">:</span> <span class="kt">NSDiffableDataSourceSnapshot</span><span class="o">&lt;</span><span class="kt">SectionID</span><span class="p">,</span> <span class="kt">ItemID</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">animatingDifferences</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span>
+    <span class="nv">commitAlongsideUpdates</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span>
+<span class="p">)</span> <span class="k">async</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>snapshot</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snapshot that replaces the current state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>animatingDifferences</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A Boolean value that determines whether changes are animated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>commitAlongsideUpdates</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure that commits application-owned models within the collection-view update transaction.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC9indexPath3for10Foundation05IndexG0VSgq_Sg_tF"></a>
+                    <a name="//apple_ref/swift/Method/indexPath(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC9indexPath3for10Foundation05IndexG0VSgq_Sg_tF">indexPath(for:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the current index path for an item identifier.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">indexPath</span><span class="p">(</span><span class="k">for</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">ItemID</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">IndexPath</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The item identifier to locate.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The item&rsquo;s index path, or <code>nil</code> when the identifier is <code>nil</code> or is not present in the current snapshot.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC14itemIdentifier3forq_Sg10Foundation9IndexPathV_tF"></a>
+                    <a name="//apple_ref/swift/Method/itemIdentifier(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC14itemIdentifier3forq_Sg10Foundation9IndexPathV_tF">itemIdentifier(for:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the item identifier at an index path in the current snapshot.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">itemIdentifier</span><span class="p">(</span><span class="k">for</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ItemID</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>indexPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index path to locate.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The item identifier, or <code>nil</code> when the index path is not present in the current snapshot.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC16numberOfSections2inSiSo16UICollectionViewC_tF"></a>
+                    <a name="//apple_ref/swift/Method/numberOfSections(in:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC16numberOfSections2inSiSo16UICollectionViewC_tF">numberOfSections(in:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the number of sections represented by the current snapshot.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">numberOfSections</span><span class="p">(</span><span class="k">in</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>collectionView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The collection view requesting the information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The number of sections in the current snapshot.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC14collectionView_22numberOfItemsInSectionSiSo012UICollectionG0C_SitF"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:numberOfItemsInSection:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC14collectionView_22numberOfItemsInSectionSiSo012UICollectionG0C_SitF">collectionView(_:<wbr>numberOfItemsInSection:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the number of items in a section represented by the current snapshot.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">numberOfItemsInSection</span> <span class="nv">section</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>collectionView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The collection view requesting the information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>section</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of the section.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The number of items in the section, or <code>0</code> when the section does not exist.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ChatLayout0aB18DiffableDataSourceC14collectionView_13cellForItemAtSo012UICollectionG4CellCSo0lG0C_10Foundation9IndexPathVtF"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:cellForItemAt:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ChatLayout0aB18DiffableDataSourceC14collectionView_13cellForItemAtSo012UICollectionG4CellCSo0lG0C_10Foundation9IndexPathVtF">collectionView(_:<wbr>cellForItemAt:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the cell provided for the item identifier at an index path.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">cellForItemAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewCell</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>collectionView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The collection view requesting the cell.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>indexPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index path of the requested cell.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The cell returned by the cell provider.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2026 <a class="link" href="https://github.com/ekazaev" target="_blank" rel="external noopener">Evgeny Kazaev</a>. All rights reserved. (Last updated: 2026-09-16)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+    </section>
+  </body>
+</html>
