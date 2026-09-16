@@ -40,6 +40,10 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
 
     private var cachedBounds: CGRect?
 
+    private var appliedBubbleType: Cell.BubbleType?
+
+    private var appliedMessageType: MessageType?
+
     var maskingPath: UIBezierPath {
         let bezierPath: UIBezierPath
         let size = bounds.size
@@ -62,7 +66,7 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
         return bezierPath
     }
 
-    private var borderLayer = CAShapeLayer()
+    private let maskLayer = CAShapeLayer()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -89,6 +93,7 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
         insetsLayoutMarginsFromSafeArea = false
         preservesSuperviewLayoutMargins = false
         addSubview(customView)
+        layer.mask = maskLayer
         customView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
@@ -100,11 +105,22 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
 
     private func updateChannelStyle() {
         cachedBounds = nil
+        let bezierPath = maskingPath
+        if bubbleType == appliedBubbleType,
+           messageType == appliedMessageType,
+           let boundsAnimation = layer.animation(forKey: "bounds.size") as? CABasicAnimation,
+           let pathAnimation = boundsAnimation.copy() as? CABasicAnimation {
+            pathAnimation.keyPath = "path"
+            pathAnimation.fromValue = maskLayer.presentation()?.path
+            pathAnimation.toValue = bezierPath.cgPath
+            pathAnimation.isRemovedOnCompletion = true
+            maskLayer.add(pathAnimation, forKey: "pathAnimation")
+        }
+        appliedBubbleType = bubbleType
+        appliedMessageType = messageType
         UIView.performWithoutAnimation {
-            let maskLayer = CAShapeLayer()
             maskLayer.frame = bounds
-            maskLayer.path = maskingPath.cgPath
-            layer.mask = maskLayer
+            maskLayer.path = bezierPath.cgPath
         }
     }
 }

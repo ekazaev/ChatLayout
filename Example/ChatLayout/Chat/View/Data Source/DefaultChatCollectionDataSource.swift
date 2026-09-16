@@ -256,6 +256,10 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = sections[indexPath.section].cells[indexPath.item]
+        return self.collectionView(collectionView, cellFor: cell, at: indexPath)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellFor cell: Cell, at indexPath: IndexPath) -> UICollectionViewCell {
         switch cell {
         case let .message(message, bubbleType: bubbleType):
             switch message.data {

@@ -12,8 +12,14 @@
 
 import Foundation
 
+let concurrentCachingQueue = DispatchQueue(
+    label: "KeyValueCaching",
+    qos: .userInteractive,
+    attributes: .concurrent
+)
+
 public protocol KeyValueCaching: Sendable {
-    associatedtype CachingKey: Sendable
+    associatedtype CachingKey: Hashable & Sendable
 
     associatedtype Entity: Sendable
 

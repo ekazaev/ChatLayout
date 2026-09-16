@@ -11,11 +11,18 @@
 //
 
 import ChatLayout
-import DifferenceKit
 import Foundation
 import UIKit
 
 enum Cell: Hashable {
+    // swiftlint:disable:next type_name
+    enum ID: Hashable {
+        case message(UUID)
+        case typingIndicator
+        case messageGroup(UUID)
+        case date(UUID)
+    }
+
     enum BubbleType {
         case normal
         case tailed
@@ -29,6 +36,19 @@ enum Cell: Hashable {
 
     case date(DateGroup)
 
+    var id: ID {
+        switch self {
+        case let .message(message, _):
+            .message(message.id)
+        case .typingIndicator:
+            .typingIndicator
+        case let .messageGroup(group):
+            .messageGroup(group.id)
+        case let .date(group):
+            .date(group.id)
+        }
+    }
+
     var alignment: ChatItemAlignment {
         switch self {
         case let .message(message, _):
@@ -40,24 +60,5 @@ enum Cell: Hashable {
         case .date:
             .center
         }
-    }
-}
-
-extension Cell: Differentiable {
-    var differenceIdentifier: Int {
-        switch self {
-        case let .message(message, _):
-            message.differenceIdentifier
-        case .typingIndicator:
-            hashValue
-        case let .messageGroup(group):
-            group.differenceIdentifier
-        case let .date(group):
-            group.differenceIdentifier
-        }
-    }
-
-    func isContentEqual(to source: Cell) -> Bool {
-        self == source
     }
 }

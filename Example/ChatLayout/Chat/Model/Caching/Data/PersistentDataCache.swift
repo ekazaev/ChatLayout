@@ -14,12 +14,12 @@ import Foundation
 
 private let expirationFileAttribute = "saks.persistent-auto-purging-cache.expiration"
 
-class PersistentDataCache<CachingKey: PersistentlyCacheable & Sendable>: AsyncKeyValueCaching, @unchecked Sendable {
+class PersistentDataCache<CachingKey: Hashable & PersistentlyCacheable & Sendable>: AsyncKeyValueCaching, @unchecked Sendable {
     private let fileManager = FileManager()
 
     private let persistencePath: String
 
-    private let queue = DispatchQueue.global()
+    private let queue: DispatchQueue
 
     private let defaultTimeToLive: TimeInterval
 
@@ -33,6 +33,12 @@ class PersistentDataCache<CachingKey: PersistentlyCacheable & Sendable>: AsyncKe
         self.persistencePath = persistencePath
         self.defaultTimeToLive = defaultTimeToLive
         self.cacheFileExtension = cacheFileExtension.addingPercentEncoding(withAllowedCharacters: .letters)!
+        queue = DispatchQueue(
+            label: "persistent-data-cache-\(CachingKey.self)",
+            qos: .utility,
+            attributes: .concurrent,
+            target: concurrentCachingQueue
+        )
 
         var isDir: ObjCBool = false
         precondition(fileManager.fileExists(atPath: persistencePath, isDirectory: &isDir) && isDir.boolValue, "The persistence path should exist, and it should be a directory")

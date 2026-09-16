@@ -306,6 +306,92 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(layout.controller.reloadedIndexes, Set([IndexPath(item: 2, section: 0)]))
     }
 
+    func testSnapshotLookupDoesNotMutatePinnedAttributes() throws {
+        let layout = MockCollectionLayout()
+        layout.setSections([100])
+        layout.visibleBounds.origin.y = 400
+        layout.pinningTypeAtIndexPath[IndexPath(item: 0, section: 0)] = .top
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.controller.updatePinnedInfo(at: .beforeUpdate)
+        let attributes = try XCTUnwrap(layout.controller.layoutAttributesForElements(
+            in: layout.visibleBounds,
+            state: .beforeUpdate
+        ).first { $0.indexPath.item == 0 })
+        let originalFrame = attributes.frame
+
+        _ = layout.controller.layoutAttributesForElements(
+            in: layout.visibleBounds.insetBy(dx: 0, dy: -400),
+            state: .beforeUpdate,
+            ignoreCache: true
+        )
+
+        XCTAssertEqual(attributes.frame, originalFrame)
+        XCTAssertTrue(attributes.isPinned)
+        XCTAssertEqual(attributes.pinningProgress, 1)
+        let cached = try XCTUnwrap(layout.controller.layoutAttributesForElements(
+            in: layout.visibleBounds,
+            state: .beforeUpdate
+        ).first { $0.indexPath.item == 0 })
+        XCTAssertEqual(cached.frame, originalFrame)
+        XCTAssertEqual(cached.pinningProgress, 1)
+    }
+
+    func testPinnedFrameDoesNotReceiveContentOffsetCompensation() throws {
+        let layout = MockCollectionLayout()
+        layout.setSections([100])
+        layout.visibleBounds.origin.y = 400
+        layout.pinningTypeAtIndexPath[IndexPath(item: 0, section: 0)] = .top
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.controller.updatePinnedInfo(at: .beforeUpdate)
+        layout.controller.process(changeItems: [])
+        layout.controller.proposedCompensatingOffset = 200
+
+        let attributes = try XCTUnwrap(layout.controller.itemAttributes(
+            for: ItemPath(item: 0, section: 0),
+            at: .afterUpdate,
+            withPinnning: true
+        ))
+
+        XCTAssertEqual(attributes.frame.minY, layout.visibleBounds.minY)
+        XCTAssertEqual(attributes.pinningProgress, 1)
+    }
+
+    func testPinnedItemsTrackDeferredReconfigureOffsetWithoutLosingPinningProgress() throws {
+        let layout = MockCollectionLayout()
+        layout.setSections([100])
+        layout.visibleBounds.origin.y = 400
+        layout.pinningTypeAtIndexPath[IndexPath(item: 0, section: 0)] = .top
+        layout.pinningTypeAtIndexPath[IndexPath(item: 99, section: 0)] = .bottom
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+        layout.controller.updatePinnedInfo(at: .beforeUpdate)
+        layout.controller.process(changeItems: [])
+        layout.controller.batchUpdateCompensatingOffset = 60
+        layout.controller.reconfigureCompensatingOffset = 60
+
+        for (item, originalY): (Int, CGFloat) in [(0, 400), (99, 760)] {
+            let original = try XCTUnwrap(layout.controller.itemAttributes(
+                for: ItemPath(item: item, section: 0), at: .beforeUpdate, withPinnning: true
+            ))
+            let target = try XCTUnwrap(layout.controller.itemAttributes(
+                for: ItemPath(item: item, section: 0), at: .afterUpdate, withPinnning: true
+            ))
+            XCTAssertEqual(original.frame.minY, originalY)
+            XCTAssertEqual(target.frame.minY, originalY + 60)
+            XCTAssertEqual(target.pinningProgress, 1)
+        }
+
+        layout.visibleBounds.origin.y += 60
+        layout.controller.batchUpdateCompensatingOffset = 0
+        layout.controller.reconfigureCompensatingOffset = 0
+        for (item, expectedY): (Int, CGFloat) in [(0, 460), (99, 820)] {
+            let settled = try XCTUnwrap(layout.controller.itemAttributes(
+                for: ItemPath(item: item, section: 0), at: .afterUpdate, withPinnning: true
+            ))
+            XCTAssertEqual(settled.frame.minY, expectedY)
+            XCTAssertEqual(settled.pinningProgress, 1)
+        }
+    }
+
     func testPinnedTopItem() throws {
         let layout = MockCollectionLayout()
         layout.setSections([100])

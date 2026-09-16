@@ -43,10 +43,16 @@ public final class MemoryDataCache<CachingKey: Hashable & Sendable>: AsyncKeyVal
 
     private let cache = NSCache<WrappedKey, Entry>()
 
-    private let queue = DispatchQueue(label: "MemoryDataCache")
+    private let queue: DispatchQueue
 
-    public init() {
-        cache.countLimit = Int.max
+    public init(countLimit: Int = 0) {
+        cache.countLimit = countLimit
+        queue = DispatchQueue(
+            label: "memory-data-cache-\(CachingKey.self)",
+            qos: .userInteractive,
+            attributes: .concurrent,
+            target: concurrentCachingQueue
+        )
     }
 
     public func isEntityCached(for key: CachingKey) -> Bool {
@@ -82,7 +88,7 @@ public final class MemoryDataCache<CachingKey: Hashable & Sendable>: AsyncKeyVal
     }
 
     public func store(entity: Data, for key: CachingKey) {
-        queue.sync {
+        queue.sync(flags: .barrier) {
             cache.setObject(Entry(entity), forKey: WrappedKey(key), cost: Int(Date().timeIntervalSince1970))
         }
     }

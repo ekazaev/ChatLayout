@@ -11,7 +11,6 @@
 //
 
 import ChatLayout
-import DifferenceKit
 import Foundation
 
 enum MessageType: Hashable {
@@ -48,32 +47,12 @@ struct DateGroup: Hashable {
     }
 }
 
-extension DateGroup: Differentiable {
-    var differenceIdentifier: Int {
-        hashValue
-    }
-
-    func isContentEqual(to source: DateGroup) -> Bool {
-        self == source
-    }
-}
-
 struct MessageGroup: Hashable {
     var id: UUID
 
     var title: String
 
     var type: MessageType
-}
-
-extension MessageGroup: Differentiable {
-    var differenceIdentifier: Int {
-        hashValue
-    }
-
-    func isContentEqual(to source: MessageGroup) -> Bool {
-        self == source
-    }
 }
 
 struct Message: Hashable {
@@ -96,14 +75,4 @@ struct Message: Hashable {
     var type: MessageType
 
     var status: MessageStatus = .sent
-}
-
-extension Message: Differentiable {
-    var differenceIdentifier: Int {
-        id.hashValue
-    }
-
-    func isContentEqual(to source: Message) -> Bool {
-        self == source
-    }
 }

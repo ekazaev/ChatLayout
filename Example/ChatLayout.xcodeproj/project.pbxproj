@@ -12,7 +12,6 @@
 		1BE5414502ACF8741EF496CD /* BezierBubbleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54F26FB528AA26139CF57 /* BezierBubbleController.swift */; };
 		1BE5423ADDEC30417584C100 /* ImageMessageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54555707622F43D0F70CF /* ImageMessageSource.swift */; };
 		1BE542E819F317921A21472A /* CachingImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE545A58CC88CC261D6D6EB /* CachingImageLoader.swift */; };
-		1BE544096F4D8B22904E10BE /* DifferenceKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54E2968B01DBE7ACF5737 /* DifferenceKit+Extension.swift */; };
 		1BE544269CC3DC62CEB1D56E /* StateControllerInternalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE54A1413D0DCF3036C9508 /* StateControllerInternalTests.swift */; };
 		1BE546BC2257F3C448BA54F2 /* KeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE549842603653F31E6555B /* KeyboardListener.swift */; };
 		1BE546DB3B8341357F3FD91E /* MainContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE5431FCC8ECE314F3F4343 /* MainContainerView.swift */; };
@@ -85,6 +84,7 @@
 		607FACEC1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift */; };
 		65D4D44932474631D9677C50 /* Pods_ChatLayout_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12FB56A5FF321AA24C456635 /* Pods_ChatLayout_Tests.framework */; };
 		845D3CDE2E0EECB2008CEC21 /* DateSeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D3CDD2E0EECAB008CEC21 /* DateSeparatorView.swift */; };
+		A112DA030000000000000003 /* ChatLayoutDiffableDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112DA040000000000000004 /* ChatLayoutDiffableDataSourceTests.swift */; };
 		D5A31E60E9BF6F8C13EDFDC5 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A31C93E56F2602C9BA605B /* PerformanceTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -123,7 +123,6 @@
 		1BE54A1413D0DCF3036C9508 /* StateControllerInternalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateControllerInternalTests.swift; sourceTree = "<group>"; };
 		1BE54A4C633608F47B961133 /* DefaultImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultImageLoader.swift; sourceTree = "<group>"; };
 		1BE54C4BD41AD5FD82FFEB64 /* SetActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetActor.swift; sourceTree = "<group>"; };
-		1BE54E2968B01DBE7ACF5737 /* DifferenceKit+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DifferenceKit+Extension.swift"; sourceTree = "<group>"; };
 		1BE54F26FB528AA26139CF57 /* BezierBubbleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BezierBubbleController.swift; sourceTree = "<group>"; };
 		1BE54F6AA8FA6A399EC2FC22 /* PersistentlyCacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentlyCacheable.swift; sourceTree = "<group>"; };
 		1E094931D1426F33B8D1D082 /* Pods-ChatLayout_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatLayout_Tests.debug.xcconfig"; path = "Target Support Files/Pods-ChatLayout_Tests/Pods-ChatLayout_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -184,6 +183,7 @@
 		607FACEB1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateControllerProcessUpdatesTests.swift; sourceTree = "<group>"; };
 		7878AA33F3C696DE4A57C8C1 /* Pods-ChatLayout_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatLayout_Tests.release.xcconfig"; path = "Target Support Files/Pods-ChatLayout_Tests/Pods-ChatLayout_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		845D3CDD2E0EECAB008CEC21 /* DateSeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSeparatorView.swift; sourceTree = "<group>"; };
+		A112DA040000000000000004 /* ChatLayoutDiffableDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatLayoutDiffableDataSourceTests.swift; sourceTree = "<group>"; };
 		A7BC3E7EC6986752E73178A2 /* ChatLayout.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ChatLayout.podspec; path = ../ChatLayout.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B20283D68C00BDE38B8AB8BE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		B520747F8C032C454221D1EC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -245,7 +245,6 @@
 			isa = PBXGroup;
 			children = (
 				1BE54C4BD41AD5FD82FFEB64 /* SetActor.swift */,
-				1BE54E2968B01DBE7ACF5737 /* DifferenceKit+Extension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -511,6 +510,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				A112DA040000000000000004 /* ChatLayoutDiffableDataSourceTests.swift */,
 				607FACEB1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift */,
 				1BE5467A07C249BDD8C03D51 /* MockCollectionLayout.swift */,
 				1BE5443B3AE1C502DEC3F805 /* MockUICollectionViewUpdateItem.swift */,
@@ -692,14 +692,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ChatLayout_Example/Pods-ChatLayout_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/ChatLayout/ChatLayout.framework",
-				"${BUILT_PRODUCTS_DIR}/DifferenceKit/DifferenceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FPSCounter/FPSCounter.framework",
 				"${BUILT_PRODUCTS_DIR}/InputBarAccessoryView/InputBarAccessoryView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChatLayout.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DifferenceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FPSCounter.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InputBarAccessoryView.framework",
 			);
@@ -790,7 +788,6 @@
 				1BE54E0ABF0E8D9E61D2662B /* ChatViewControllerBuilder.swift in Sources */,
 				1BE54745DF4AD8A754F93E39 /* PersistentlyCacheable.swift in Sources */,
 				1BE5470A0DF3A73855F889F3 /* SetActor.swift in Sources */,
-				1BE544096F4D8B22904E10BE /* DifferenceKit+Extension.swift in Sources */,
 				1BE542E819F317921A21472A /* CachingImageLoader.swift in Sources */,
 				1BE54BA96464B328D52322A1 /* ImageLoader.swift in Sources */,
 				1BE54AC173D67905A2EF727B /* DefaultImageLoader.swift in Sources */,
@@ -813,6 +810,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A112DA030000000000000003 /* ChatLayoutDiffableDataSourceTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* StateControllerProcessUpdatesTests.swift in Sources */,
 				1BE5486E03A837AE2F8457DA /* MockCollectionLayout.swift in Sources */,
 				1BE54DBD5F84AF25128B6789 /* MockUICollectionViewUpdateItem.swift in Sources */,
@@ -997,6 +995,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1E094931D1426F33B8D1D082 /* Pods-ChatLayout_Tests.debug.xcconfig */;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = PG4V34R8QT;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
@@ -1020,6 +1019,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7878AA33F3C696DE4A57C8C1 /* Pods-ChatLayout_Tests.release.xcconfig */;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = PG4V34R8QT;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",

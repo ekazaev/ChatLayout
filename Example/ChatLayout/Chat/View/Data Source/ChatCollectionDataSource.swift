@@ -18,4 +18,6 @@ protocol ChatCollectionDataSource: UICollectionViewDataSource, ChatLayoutDelegat
     var sections: [Section] { get set }
 
     func prepare(with collectionView: UICollectionView)
+
+    func collectionView(_ collectionView: UICollectionView, cellFor cell: Cell, at indexPath: IndexPath) -> UICollectionViewCell
 }

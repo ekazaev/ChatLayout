@@ -11,7 +11,6 @@
 //
 
 import ChatLayout
-import DifferenceKit
 import Foundation
 import FPSCounter
 import InputBarAccessoryView
@@ -48,16 +47,6 @@ final class ChatViewController: UIViewController {
         case updatingCollection
     }
 
-    /// https://github.com/nathantannar4/InputBarAccessoryView/issues/285
-    /// Keep in mind that InputBarAccessoryView has this issue on IOS 26. I strongly suggest you to consider using `keyboardLayoutGuide` to attach it to your view.
-    override var inputAccessoryView: UIView? {
-        inputBarView
-    }
-
-    override var canBecomeFirstResponder: Bool {
-        true
-    }
-
     private var currentInterfaceActions: SetActor<Set<InterfaceActions>, ReactionTypes> = SetActor()
     private var currentControllerActions: SetActor<Set<ControllerActions>, ReactionTypes> = SetActor()
     private let editNotifier: EditNotifier
@@ -66,13 +55,27 @@ final class ChatViewController: UIViewController {
     private var chatLayout = CollectionViewChatLayout()
     private let inputBarView = InputBarAccessoryView()
     private let chatController: ChatController
-    private let dataSource: ChatCollectionDataSource
+    private let layoutDataSource: ChatCollectionDataSource
     private let fpsCounter = FPSCounter()
     private let fpsView = EdgeAligningView<UILabel>(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))
     private var animator: ManualAnimator?
+    private var activeCollectionUpdates = 0
+    private var needsScrollToBottomOnAppearance = false
+    private var cellsByID: [Cell.ID: Cell] = [:]
     private lazy var editBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
     private lazy var agentBarButtonItem = UIBarButtonItem(title: "Agent", style: .plain, target: self, action: #selector(ChatViewController.toggleAgentMode))
     private var shouldStartAgentAnswerAfterNextUpdate = false
+
+    private lazy var dataSource = ChatLayoutDiffableDataSource<Int, Cell.ID>(
+        collectionView: collectionView,
+        cellProvider: { [weak self] collectionView, indexPath, id in
+            guard let self,
+                  let cell = cellsByID[id] else {
+                return nil
+            }
+            return layoutDataSource.collectionView(collectionView, cellFor: cell, at: indexPath)
+        }
+    )
 
     private var translationX: CGFloat = 0
     private var currentOffset: CGFloat = 0
@@ -90,7 +93,7 @@ final class ChatViewController: UIViewController {
         swipeNotifier: SwipeNotifier
     ) {
         self.chatController = chatController
-        self.dataSource = dataSource
+        layoutDataSource = dataSource
         self.editNotifier = editNotifier
         self.swipeNotifier = swipeNotifier
         super.init(nibName: nil, bundle: nil)
@@ -138,7 +141,7 @@ final class ChatViewController: UIViewController {
         view.addSubview(collectionView)
         collectionView.alwaysBounceVertical = true
         collectionView.dataSource = dataSource
-        chatLayout.delegate = dataSource
+        chatLayout.delegate = layoutDataSource
         collectionView.delegate = self
         collectionView.keyboardDismissMode = .interactive
 
@@ -164,12 +167,21 @@ final class ChatViewController: UIViewController {
         ])
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
-        dataSource.prepare(with: collectionView)
+        inputBarView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(inputBarView)
+        NSLayoutConstraint.activate([
+            inputBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            inputBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            inputBarView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)
+        ])
+
+        layoutDataSource.prepare(with: collectionView)
 
         currentControllerActions.options.insert(.loadingInitialMessages)
         chatController.loadInitialMessages { sections in
-            self.currentControllerActions.options.remove(.loadingInitialMessages)
-            self.processUpdates(with: sections, animated: true, requiresIsolatedProcess: false)
+            self.processUpdates(with: sections, animated: false, requiresIsolatedProcess: false) {
+                self.currentControllerActions.options.remove(.loadingInitialMessages)
+            }
         }
 
         KeyboardListener.shared.add(delegate: self)
@@ -178,11 +190,6 @@ final class ChatViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        collectionView.collectionViewLayout.invalidateLayout()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -249,16 +256,43 @@ final class ChatViewController: UIViewController {
         ))
     }
 
-    // Apple doesnt return sometimes inputBarView back to the app. This is an attempt to fix that
-    // See: https://github.com/ekazaev/ChatLayout/issues/24
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        if inputBarView.superview == nil,
-           topMostViewController() is ChatViewController {
-            DispatchQueue.main.async { [weak self] in
-                self?.reloadInputViews()
+        updateComposerInsets()
+        if needsScrollToBottomOnAppearance, view.window != nil {
+            needsScrollToBottomOnAppearance = false
+            UIView.performWithoutAnimation {
+                self.restoreContentOffsetToBottom(in: self.layoutDataSource.sections)
             }
+        }
+    }
+
+    private func updateComposerInsets() {
+        guard !currentInterfaceActions.options.contains(.changingContentInsets) else {
+            return
+        }
+
+        let composerFrame = inputBarView.convert(inputBarView.bounds, to: collectionView)
+        let overlap = max(0, collectionView.bounds.maxY - composerFrame.minY)
+        let bottomInset = max(0, overlap - collectionView.safeAreaInsets.bottom)
+        guard collectionView.contentInset.bottom != bottomInset else {
+            return
+        }
+
+        currentInterfaceActions.options.insert(.changingContentInsets)
+        defer { currentInterfaceActions.options.remove(.changingContentInsets) }
+        let positionSnapshot = contentOffsetSnapshotForCurrentLayout()
+
+        if currentControllerActions.options.contains(.updatingCollection) {
+            UIView.performWithoutAnimation {
+                self.collectionView.performBatchUpdates({})
+            }
+        }
+
+        collectionView.contentInset.bottom = bottomInset
+        collectionView.verticalScrollIndicatorInsets.bottom = bottomInset
+        if let positionSnapshot, !isUserInitiatedScrolling {
+            chatLayout.restoreContentOffset(with: positionSnapshot)
         }
     }
 }
@@ -356,11 +390,11 @@ extension ChatViewController: UIScrollViewDelegate {
                 collectionView.contentOffset = CGPoint(x: collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
                 if percentage == 1.0 {
                     animator = nil
-                    guard let lastSection = dataSource.sections.last else {
+                    guard let lastSection = layoutDataSource.sections.last else {
                         collectionView.reloadData()
                         return
                     }
-                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: lastSection.cells.count - 1, section: dataSource.sections.count - 1), edge: .bottom)
+                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: lastSection.cells.count - 1, section: layoutDataSource.sections.count - 1), edge: .bottom)
                     chatLayout.restoreContentOffset(with: positionSnapshot)
                     currentInterfaceActions.options.remove(.scrollingToBottom)
                     completion?()
@@ -391,7 +425,7 @@ extension ChatViewController: UICollectionViewDelegate {
             return nil
         }
 
-        let item = dataSource.sections[0].cells[itemIndex]
+        let item = layoutDataSource.sections[0].cells[itemIndex]
         switch item {
         case let .message(message, bubbleType: _):
             switch message.data {
@@ -434,7 +468,7 @@ extension ChatViewController: UICollectionViewDelegate {
               !currentControllerActions.options.contains(.updatingCollection) else {
             return nil
         }
-        let item = dataSource.sections[indexPath.section].cells[indexPath.item]
+        let item = layoutDataSource.sections[indexPath.section].cells[indexPath.item]
         switch item {
         case let .message(message, bubbleType: _):
             switch message.data {
@@ -503,7 +537,11 @@ extension ChatViewController: ChatControllerDelegate {
 
     private func processUpdates(with sections: [Section], animated: Bool = true, requiresIsolatedProcess: Bool, completion: (() -> Void)? = nil) {
         guard isViewLoaded else {
-            dataSource.sections = sections
+            layoutDataSource.sections = sections
+            cellsByID = sections
+                .flatMap(\.cells)
+                .reduce(into: [Cell.ID: Cell]()) { $0[$1.id] = $1 }
+            completion?()
             return
         }
 
@@ -523,62 +561,117 @@ extension ChatViewController: ChatControllerDelegate {
             return
         }
 
-        func process() {
-            // If there is a big amount of changes, it is better to move that calculation out of the main thread.
-            // Here is on the main thread for the simplicity.
-            let changeSet = StagedChangeset(source: dataSource.sections, target: sections).flattenIfPossible()
+        performUpdates(
+            with: sections,
+            animated: animated,
+            requiresIsolatedProcess: requiresIsolatedProcess,
+            completion: completion
+        )
+    }
 
-            guard !changeSet.isEmpty else {
-                completion?()
-                return
-            }
-
-            if requiresIsolatedProcess {
-                chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = true
-                currentInterfaceActions.options.insert(.updatingCollectionInIsolation)
-            }
-            currentControllerActions.options.insert(.updatingCollection)
-            collectionView.reload(
-                using: changeSet,
-                interrupt: { changeSet in
-                    guard changeSet.sectionInserted.isEmpty else {
-                        return true
-                    }
-                    return false
-                },
-                onInterruptedReload: {
-                    guard let lastSection = sections.last else {
-                        self.collectionView.reloadData()
-                        return
-                    }
-                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: lastSection.cells.count - 1, section: sections.count - 1), edge: .bottom)
-                    self.collectionView.reloadData()
-                    // We want so that user on reload appeared at the very bottom of the layout
-                    self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                },
-                completion: { _ in
-                    DispatchQueue.main.async {
-                        self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
-                        if requiresIsolatedProcess {
-                            self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
-                        }
-                        completion?()
-                        self.currentControllerActions.options.remove(.updatingCollection)
-                    }
-                },
-                setData: { data in
-                    self.dataSource.sections = data
-                }
-            )
+    private func performUpdates(with sections: [Section], animated: Bool, requiresIsolatedProcess: Bool, completion: (() -> Void)?) {
+        guard layoutDataSource.sections != sections else {
+            completion?()
+            return
         }
 
-        if animated {
-            process()
-        } else {
+        if dataSource.snapshot == nil || collectionView.window == nil {
+            needsScrollToBottomOnAppearance = collectionView.window == nil
             UIView.performWithoutAnimation {
-                process()
+                self.dataSource.applySnapshotUsingReloadData(self.makeSnapshot(for: sections)) {
+                    self.layoutDataSource.sections = sections
+                    self.cellsByID = sections.flatMap(\.cells).reduce(into: [Cell.ID: Cell]()) { $0[$1.id] = $1 }
+                }
+                self.view.layoutIfNeeded()
+                self.restoreContentOffsetToBottom(in: sections)
+            }
+            completion?()
+            return
+        }
+
+        let oldCells = layoutDataSource.sections
+            .flatMap(\.cells)
+            .reduce(into: [Cell.ID: Cell]()) { $0[$1.id] = $1 }
+        let newCells = sections.flatMap(\.cells)
+        let newCellsByID = newCells.reduce(into: [Cell.ID: Cell]()) { $0[$1.id] = $1 }
+        var snapshot = makeSnapshot(for: sections)
+        var reconfiguredCellIDs: [Cell.ID] = []
+        var reloadedCellIDs: [Cell.ID] = []
+        for cell in newCells {
+            guard let oldCell = oldCells[cell.id], oldCell != cell else {
+                continue
+            }
+
+            var usesSameCellType = true
+            if case let .message(oldMessage, _) = oldCell,
+               case let .message(newMessage, _) = cell {
+                switch (oldMessage.data, newMessage.data) {
+                case (.image, .image),
+                     (.text, .text),
+                     (.url, .url):
+                    break
+                default:
+                    usesSameCellType = false
+                }
+            }
+
+            if enableReconfigure, usesSameCellType {
+                reconfiguredCellIDs.append(cell.id)
+            } else {
+                reloadedCellIDs.append(cell.id)
             }
         }
+        snapshot.reconfigureItems(reconfiguredCellIDs)
+        snapshot.reloadItems(reloadedCellIDs)
+
+        if requiresIsolatedProcess {
+            chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = true
+            currentInterfaceActions.options.insert(.updatingCollectionInIsolation)
+        }
+        activeCollectionUpdates += 1
+        currentControllerActions.options.insert(.updatingCollection)
+
+        dataSource.apply(snapshot, animatingDifferences: animated, commitAlongsideUpdates: {
+            self.layoutDataSource.sections = sections
+            self.cellsByID = newCellsByID
+        }, completion: {
+            DispatchQueue.main.async {
+                self.collectionView.setNeedsLayout()
+                self.collectionView.layoutIfNeeded()
+
+                if requiresIsolatedProcess {
+                    self.chatLayout.processOnlyVisibleItemsOnAnimatedBatchUpdates = false
+                    self.currentInterfaceActions.options.remove(.updatingCollectionInIsolation)
+                }
+                completion?()
+                self.activeCollectionUpdates -= 1
+                if self.activeCollectionUpdates == 0 {
+                    self.currentControllerActions.options.remove(.updatingCollection)
+                }
+            }
+        })
+    }
+
+    private func makeSnapshot(for sections: [Section]) -> NSDiffableDataSourceSnapshot<Int, Cell.ID> {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Cell.ID>()
+        for section in sections {
+            snapshot.appendSections([section.id])
+            snapshot.appendItems(section.cells.map(\.id), toSection: section.id)
+        }
+        return snapshot
+    }
+
+    private func restoreContentOffsetToBottom(in sections: [Section]) {
+        guard let lastSection = sections.last,
+              !lastSection.cells.isEmpty else {
+            return
+        }
+        collectionView.layoutIfNeeded()
+        let positionSnapshot = ChatLayoutPositionSnapshot(
+            indexPath: IndexPath(item: lastSection.cells.count - 1, section: sections.count - 1),
+            edge: .bottom
+        )
+        chatLayout.restoreContentOffset(with: positionSnapshot)
     }
 }
 
@@ -646,10 +739,7 @@ extension ChatViewController: UIGestureRecognizerDelegate {
 
 extension ChatViewController: @MainActor InputBarAccessoryViewDelegate {
     func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
-        guard !currentInterfaceActions.options.contains(.sendingMessage) else {
-            return
-        }
-        scrollToBottom()
+        view.setNeedsLayout()
     }
 
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
@@ -678,47 +768,11 @@ extension ChatViewController: @MainActor InputBarAccessoryViewDelegate {
 @MainActor
 extension ChatViewController: KeyboardListenerDelegate {
     func keyboardWillChangeFrame(info: KeyboardInfo) {
-        guard !currentInterfaceActions.options.contains(.changingFrameSize),
-              collectionView.contentInsetAdjustmentBehavior != .never,
-              let keyboardFrame = collectionView.window?.convert(info.frameEnd, to: view),
-              keyboardFrame.minY > 0,
-              collectionView.convert(collectionView.bounds, to: collectionView.window).maxY > info.frameEnd.minY else {
-            return
-        }
         currentInterfaceActions.options.insert(.changingKeyboardFrame)
-        let newBottomInset = collectionView.frame.minY + collectionView.frame.size.height - keyboardFrame.minY - collectionView.safeAreaInsets.bottom
-        if newBottomInset > 0,
-           collectionView.contentInset.bottom != newBottomInset {
-            let positionSnapshot = contentOffsetSnapshotForCurrentLayout()
-
-            // Interrupting current update animation if user starts to scroll while batchUpdate is performed.
-            if currentControllerActions.options.contains(.updatingCollection) {
-                UIView.performWithoutAnimation {
-                    self.collectionView.performBatchUpdates({})
-                }
-            }
-
-            // Blocks possible updates when keyboard is being hidden interactively
-            currentInterfaceActions.options.insert(.changingContentInsets)
-            UIView.animate(withDuration: info.animationDuration, animations: {
-                self.collectionView.performBatchUpdates({
-                    self.collectionView.contentInset.bottom = newBottomInset
-                    self.collectionView.verticalScrollIndicatorInsets.bottom = newBottomInset
-                }, completion: nil)
-
-                if let positionSnapshot, !self.isUserInitiatedScrolling {
-                    self.chatLayout.restoreContentOffset(with: positionSnapshot)
-                }
-            }, completion: { _ in
-                self.currentInterfaceActions.options.remove(.changingContentInsets)
-            })
-        }
     }
 
     func keyboardDidChangeFrame(info: KeyboardInfo) {
-        guard currentInterfaceActions.options.contains(.changingKeyboardFrame) else {
-            return
-        }
+        view.layoutIfNeeded()
         currentInterfaceActions.options.remove(.changingKeyboardFrame)
     }
 }

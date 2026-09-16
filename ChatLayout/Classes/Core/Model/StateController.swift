@@ -96,6 +96,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     /// only once at the beginning of the animated updates. But we must compensate the other changes that happened during the update.
     var batchUpdateCompensatingOffset: CGFloat = 0
 
+    var reconfigureCompensatingOffset: CGFloat = 0
+
     var proposedCompensatingOffset: CGFloat = 0
 
     var totalProposedCompensatingOffset: CGFloat = 0
@@ -413,11 +415,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
         let attributes: ChatLayoutAttributes
         if let cachedAttributes = cachedAttributeObjects[state]?[itemPath] {
-            attributes = cachedAttributes
+            attributes = item.pinningType == nil ? cachedAttributes : cachedAttributes.typedCopy()
         } else {
             attributes = ChatLayoutAttributes(forCellWith: itemIndexPath)
-            cachedAttributeObjects[state]?[itemPath] = attributes
         }
+        cachedAttributeObjects[state]?[itemPath] = attributes
 
         #if DEBUG
         attributes.id = item.id
@@ -439,7 +441,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
                 let visibleBounds = additionalAttributes.visibleBounds.inset(
                     by: layoutRepresentation.settings.additionalInsets
-                )
+                ).offsetBy(dx: 0, dy: state == .afterUpdate && layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates ? reconfigureCompensatingOffset : 0)
 
                 let progress: CGFloat
                 switch pinningType {
@@ -515,6 +517,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
            let pinningType = item.pinningType,
            let pinnedIndexPaths = pinnedIndexPaths[pinningType] {
             let visibleBounds = visibleBounds.inset(by: layoutRepresentation.settings.additionalInsets)
+                .offsetBy(dx: 0, dy: state == .afterUpdate && layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates ? reconfigureCompensatingOffset : 0)
             switch pinningType {
             case .top:
                 func getNextAttributesOffset(_ itemPath: ItemPath?) -> CGFloat {
@@ -553,7 +556,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             }
         }
 
-        if isFinal {
+        if isFinal, !(withPinnning && isPinnedItem(indexPath: itemPath.indexPath)) {
             offsetByCompensation(frame: &itemFrame, at: itemPath, for: state, backward: true)
         }
 
@@ -689,6 +692,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             )
         }
         batchUpdateCompensatingOffset = 0
+        reconfigureCompensatingOffset = 0
         proposedCompensatingOffset = 0
 
         var afterUpdateModel = layoutAfterUpdate ?? LayoutModel(sections: layoutBeforeUpdate.sections, collectionLayout: layoutRepresentation)
@@ -973,7 +977,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
     func offsetByTotalCompensation(attributes: UICollectionViewLayoutAttributes?, for state: ModelState, backward: Bool = false) {
         guard layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates,
               state == .afterUpdate,
-              let attributes else {
+              let attributes,
+              (attributes as? ChatLayoutAttributes)?.isPinned != true else {
             return
         }
         if backward, isLayoutBiggerThanVisibleBounds(at: .afterUpdate) {
@@ -1014,174 +1019,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         let layout = layout(at: state)
         let additionalAttributes = AdditionalLayoutAttributes(layoutRepresentation)
 
-        if let visibleRect {
-            var traverseState: TraverseState = .notFound
-
-            func check(rect: CGRect) -> Bool {
-                switch traverseState {
-                case .notFound:
-                    if visibleRect.intersects(rect) {
-                        traverseState = .found
-                        return true
-                    } else {
-                        return false
-                    }
-                case .found:
-                    if visibleRect.intersects(rect) {
-                        return true
-                    } else {
-                        if rect.minY >= visibleRect.maxY + batchUpdateCompensatingOffset + proposedCompensatingOffset {
-                            traverseState = .done
-                        }
-                        return false
-                    }
-                case .done:
-                    return false
-                }
-            }
-
-            var allRects = ContiguousArray<(frame: CGRect, indexPath: ItemPath)>()
-            allRects.reserveCapacity(200)
-
-            let comparisonResults = [ComparisonResult.orderedSame, .orderedDescending]
-
-            for sectionIndex in 0..<layout.sections.count {
-                let section = layout.sections[sectionIndex]
-
-                guard traverseState != .done else {
-                    break
-                }
-
-                var startingIndex = 0
-                if traverseState == .notFound, !section.items.isEmpty {
-                    func predicate(itemIndex: Int) -> ComparisonResult {
-                        let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                        guard let itemFrame = itemFrame(
-                            for: itemPath,
-                            at: state,
-                            isFinal: true,
-                            additionalAttributes: additionalAttributes
-                        ) else {
-                            return .orderedDescending
-                        }
-                        if itemFrame.intersects(visibleRect) {
-                            return .orderedSame
-                        } else if itemFrame.minY >= visibleRect.maxY {
-                            return .orderedDescending
-                        } else if itemFrame.maxX <= visibleRect.minY {
-                            return .orderedAscending
-                        }
-                        return .orderedSame
-                    }
-
-                    if comparisonResults.contains(predicate(itemIndex: section.items.count - 1)),
-                       let firstMatchingIndex = ContiguousArray(0...section.items.count - 1).withUnsafeBufferPointer({ $0.binarySearch(predicate) }) {
-                        startingIndex = firstMatchingIndex
-                        for itemIndex in (0..<firstMatchingIndex).reversed() {
-                            let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                            guard let itemFrame = itemFrame(
-                                for: itemPath,
-                                at: state,
-                                isFinal: true,
-                                additionalAttributes: additionalAttributes
-                            ) else {
-                                continue
-                            }
-                            guard itemFrame.maxY >= visibleRect.minY else {
-                                break
-                            }
-                            startingIndex = itemIndex
-                        }
-                    } else {
-                        startingIndex = section.items.count
-                    }
-                }
-
-                var addedPinnedHeaderCell = false
-                var addedPinnedFooterCell = false
-
-                if startingIndex < section.items.count {
-                    for itemIndex in startingIndex..<section.items.count {
-                        let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
-                        if let itemFrame = itemFrame(
-                            for: itemPath,
-                            at: state,
-                            isFinal: true,
-                            withPinnning: withPining,
-                            additionalAttributes: additionalAttributes
-                        ),
-                            check(rect: itemFrame) || itemPath.indexPath == pinnedIndexPaths[.top]?.current || itemPath.indexPath == pinnedIndexPaths[.bottom]?.current {
-                            if !addedPinnedHeaderCell,
-                               itemPath.indexPath == pinnedIndexPaths[.top]?.current {
-                                addedPinnedHeaderCell = true
-                            }
-                            if !addedPinnedFooterCell,
-                               itemPath.indexPath == pinnedIndexPaths[.bottom]?.current {
-                                addedPinnedFooterCell = true
-                            }
-                            if state == .beforeUpdate || isAnimatedBoundsChange || !layoutRepresentation.processOnlyVisibleItemsOnAnimatedBatchUpdates {
-                                allRects.append((frame: itemFrame, indexPath: itemPath))
-                            } else {
-                                var itemWasVisibleBefore: Bool {
-                                    guard let itemIdentifier = itemIdentifier(for: itemPath, at: .afterUpdate),
-                                          let initialIndexPath = self.itemPath(by: itemIdentifier, at: .beforeUpdate),
-                                          let item = item(for: initialIndexPath, at: .beforeUpdate),
-                                          item.calculatedOnce == true,
-                                          let itemFrame = self.itemFrame(for: initialIndexPath, at: .beforeUpdate, isFinal: false, withPinnning: withPining, additionalAttributes: additionalAttributes),
-                                          itemFrame.intersects(additionalAttributes.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
-                                        return false
-                                    }
-                                    return true
-                                }
-                                var itemWillBeVisible: Bool {
-                                    let offsetVisibleBounds = additionalAttributes.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)
-                                    if insertedIndexes.contains(itemPath.indexPath),
-                                       let itemFrame = self.itemFrame(for: itemPath, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes),
-                                       itemFrame.intersects(offsetVisibleBounds) {
-                                        return true
-                                    }
-                                    if let itemIdentifier = itemIdentifier(for: itemPath, at: .afterUpdate),
-                                       let initialIndexPath = self.itemPath(by: itemIdentifier, at: .beforeUpdate)?.indexPath,
-                                       movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
-                                       let itemFrame = self.itemFrame(for: itemPath, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes),
-                                       itemFrame.intersects(offsetVisibleBounds) {
-                                        return true
-                                    }
-                                    return false
-                                }
-                                if itemWillBeVisible || itemWasVisibleBefore {
-                                    allRects.append((frame: itemFrame, indexPath: itemPath))
-                                }
-                            }
-                        }
-                        guard traverseState != .done else {
-                            break
-                        }
-                    }
-                }
-
-                if !addedPinnedHeaderCell,
-                   let pinnedHeaderIndexPath = pinnedIndexPaths[.top]?.current,
-                   let itemFrame = itemFrame(for: pinnedHeaderIndexPath.itemPath, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes) {
-                    allRects.insert((frame: itemFrame, indexPath: pinnedHeaderIndexPath.itemPath), at: 0)
-                }
-                if !addedPinnedFooterCell,
-                   let pinnedFooterIndexPath = pinnedIndexPaths[.bottom]?.current,
-                   let itemFrame = itemFrame(for: pinnedFooterIndexPath.itemPath, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes) {
-                    allRects.append((frame: itemFrame, indexPath: pinnedFooterIndexPath.itemPath))
-                }
-            }
-
-            return allRects.compactMap { frame, path in
-                itemAttributes(
-                    for: path,
-                    predefinedFrame: frame,
-                    at: state,
-                    withPinnning: withPining,
-                    additionalAttributes: additionalAttributes
-                )
-            }
-        } else {
+        // Keep the full-layout path available for debugging.
+        guard let visibleRect else {
             var attributes = [ChatLayoutAttributes]()
             attributes.reserveCapacity(layout.sections.reduce(into: 0) { $0 += $1.items.count })
             for (sectionIndex, section) in layout.sections.enumerated() {
@@ -1192,8 +1031,134 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                     }
                 }
             }
-
             return attributes
+        }
+
+        var traverseState: TraverseState = .notFound
+
+        func check(rect: CGRect) -> Bool {
+            guard traverseState != .done else {
+                return false
+            }
+            if visibleRect.intersects(rect) {
+                traverseState = .found
+                return true
+            }
+            if rect.minY >= visibleRect.maxY + batchUpdateCompensatingOffset + proposedCompensatingOffset {
+                traverseState = .done
+            }
+            return false
+        }
+
+        var allRects = ContiguousArray<(frame: CGRect, indexPath: ItemPath)>()
+        allRects.reserveCapacity(200)
+
+        let includeAllVisibleItems = state == .beforeUpdate || isAnimatedBoundsChange || !layoutRepresentation.processOnlyVisibleItemsOnAnimatedBatchUpdates
+
+        for sectionIndex in 0..<layout.sections.count {
+            let section = layout.sections[sectionIndex]
+
+            guard traverseState != .done else {
+                break
+            }
+
+            var startingIndex = 0
+            if traverseState == .notFound, !section.items.isEmpty {
+                startingIndex = (0..<section.items.count).lowerBound { itemIndex in
+                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                    guard let itemFrame = itemFrame(
+                        for: itemPath,
+                        at: state,
+                        isFinal: true,
+                        additionalAttributes: additionalAttributes
+                    ) else {
+                        return true
+                    }
+                    return itemFrame.maxY >= visibleRect.minY
+                } ?? section.items.count
+            }
+
+            var addedPinnedHeaderCell = false
+            var addedPinnedFooterCell = false
+
+            if startingIndex < section.items.count {
+                for itemIndex in startingIndex..<section.items.count {
+                    let itemPath = ItemPath(item: itemIndex, section: sectionIndex)
+                    if let itemFrame = itemFrame(
+                        for: itemPath,
+                        at: state,
+                        isFinal: true,
+                        withPinnning: withPining,
+                        additionalAttributes: additionalAttributes
+                    ),
+                        check(rect: itemFrame) || itemPath.indexPath == pinnedIndexPaths[.top]?.current || itemPath.indexPath == pinnedIndexPaths[.bottom]?.current {
+                        if !addedPinnedHeaderCell,
+                           itemPath.indexPath == pinnedIndexPaths[.top]?.current {
+                            addedPinnedHeaderCell = true
+                        }
+                        if !addedPinnedFooterCell,
+                           itemPath.indexPath == pinnedIndexPaths[.bottom]?.current {
+                            addedPinnedFooterCell = true
+                        }
+                        if includeAllVisibleItems {
+                            allRects.append((frame: itemFrame, indexPath: itemPath))
+                        } else {
+                            var itemWasVisibleBefore: Bool {
+                                guard let itemIdentifier = itemIdentifier(for: itemPath, at: .afterUpdate),
+                                      let initialIndexPath = self.itemPath(by: itemIdentifier, at: .beforeUpdate),
+                                      let item = item(for: initialIndexPath, at: .beforeUpdate),
+                                      item.calculatedOnce == true,
+                                      let itemFrame = self.itemFrame(for: initialIndexPath, at: .beforeUpdate, isFinal: false, withPinnning: withPining, additionalAttributes: additionalAttributes),
+                                      itemFrame.intersects(additionalAttributes.visibleBounds.offsetBy(dx: 0, dy: -totalProposedCompensatingOffset)) else {
+                                    return false
+                                }
+                                return true
+                            }
+                            var itemWillBeVisible: Bool {
+                                let offsetVisibleBounds = additionalAttributes.visibleBounds.offsetBy(dx: 0, dy: proposedCompensatingOffset + batchUpdateCompensatingOffset)
+                                if insertedIndexes.contains(itemPath.indexPath),
+                                   itemFrame.intersects(offsetVisibleBounds) {
+                                    return true
+                                }
+                                if let itemIdentifier = itemIdentifier(for: itemPath, at: .afterUpdate),
+                                   let initialIndexPath = self.itemPath(by: itemIdentifier, at: .beforeUpdate)?.indexPath,
+                                   movedIndexes.contains(initialIndexPath) || reloadedIndexes.contains(initialIndexPath),
+                                   itemFrame.intersects(offsetVisibleBounds) {
+                                    return true
+                                }
+                                return false
+                            }
+                            if itemWillBeVisible || itemWasVisibleBefore {
+                                allRects.append((frame: itemFrame, indexPath: itemPath))
+                            }
+                        }
+                    }
+                    guard traverseState != .done else {
+                        break
+                    }
+                }
+            }
+
+            if !addedPinnedHeaderCell,
+               let pinnedHeaderIndexPath = pinnedIndexPaths[.top]?.current,
+               let itemFrame = itemFrame(for: pinnedHeaderIndexPath.itemPath, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes) {
+                allRects.insert((frame: itemFrame, indexPath: pinnedHeaderIndexPath.itemPath), at: 0)
+            }
+            if !addedPinnedFooterCell,
+               let pinnedFooterIndexPath = pinnedIndexPaths[.bottom]?.current,
+               let itemFrame = itemFrame(for: pinnedFooterIndexPath.itemPath, at: state, isFinal: true, withPinnning: withPining, additionalAttributes: additionalAttributes) {
+                allRects.append((frame: itemFrame, indexPath: pinnedFooterIndexPath.itemPath))
+            }
+        }
+
+        return allRects.compactMap { frame, path in
+            itemAttributes(
+                for: path,
+                predefinedFrame: frame,
+                at: state,
+                withPinnning: withPining,
+                additionalAttributes: additionalAttributes
+            )
         }
     }
 

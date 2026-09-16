@@ -11,18 +11,29 @@
 //
 
 import Foundation
-import UIKit
+
+private let iterativeTargetQueue = DispatchQueue(label: "IterativeCache", qos: .userInteractive, attributes: .concurrent)
 
 public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: AsyncKeyValueCaching>: AsyncKeyValueCaching, @unchecked Sendable
     where
     FastCache.CachingKey == SlowCache.CachingKey, FastCache.Entity == SlowCache.Entity {
+    public typealias CachingKey = FastCache.CachingKey
+    public typealias Entity = FastCache.Entity
     public let mainCache: FastCache
 
     public let backupCache: SlowCache
 
+    private let queue: DispatchQueue
+
     public init(mainCache: FastCache, backupCache: SlowCache) {
         self.mainCache = mainCache
         self.backupCache = backupCache
+        queue = DispatchQueue(
+            label: "iterative-cache-\(CachingKey.self)-\(Entity.self)",
+            qos: .userInteractive,
+            attributes: .concurrent,
+            target: iterativeTargetQueue
+        )
     }
 
     public func isEntityCached(for key: FastCache.CachingKey) -> Bool {
@@ -30,11 +41,12 @@ public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: As
     }
 
     public func getEntity(for key: FastCache.CachingKey) throws -> FastCache.Entity {
-        if let image = try? mainCache.getEntity(for: key) {
-            image
-        } else {
-            try backupCache.getEntity(for: key)
+        if let entity = try? queue.sync(execute: { try mainCache.getEntity(for: key) }) {
+            return entity
         }
+        let entity = try backupCache.getEntity(for: key)
+        try? queue.sync(flags: .barrier) { try mainCache.store(entity: entity, for: key) }
+        return entity
     }
 
     public func getEntity(
@@ -51,7 +63,7 @@ public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: As
                 switch result {
                 case let .success(image):
                     completion(.success(image))
-                    DispatchQueue.global(qos: .utility).async {
+                    self.queue.async(flags: .barrier) {
                         try? self.mainCache.store(entity: image, for: key)
                     }
                 case let .failure(error):
@@ -62,7 +74,9 @@ public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: As
     }
 
     public func store(entity: FastCache.Entity, for key: FastCache.CachingKey) throws {
-        try mainCache.store(entity: entity, for: key)
-        try backupCache.store(entity: entity, for: key)
+        try queue.sync(flags: .barrier) {
+            try mainCache.store(entity: entity, for: key)
+            try backupCache.store(entity: entity, for: key)
+        }
     }
 }

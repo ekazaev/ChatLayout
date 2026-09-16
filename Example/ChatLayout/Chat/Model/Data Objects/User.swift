@@ -10,7 +10,6 @@
 // https://github.com/sponsors/ekazaev
 //
 
-import DifferenceKit
 import Foundation
 import UIKit
 
@@ -32,5 +31,3 @@ struct User: Hashable {
         }
     }
 }
-
-extension User: Differentiable {}

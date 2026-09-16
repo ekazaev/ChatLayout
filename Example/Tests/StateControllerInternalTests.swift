@@ -152,6 +152,32 @@ final class StateControllerInternalTests: XCTestCase {
         }
     }
 
+    func testVisibleAttributesMatchFramesAcrossSectionsAndGaps() throws {
+        let layout = MockCollectionLayout()
+        layout.setSections([0, 80, 0, 30])
+        layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
+
+        let frames = try [1, 3].flatMap { section in
+            try (0..<layout.numberOfItems(in: section)).map { item in
+                let path = ItemPath(item: item, section: section)
+                return try (path.indexPath, XCTUnwrap(layout.controller.itemFrame(for: path, at: .beforeUpdate, isFinal: true)))
+            }
+        }
+        let rects = [
+            CGRect(x: 0, y: -100, width: 300, height: 10),
+            CGRect(x: 0, y: 42, width: 300, height: 1),
+            CGRect(x: 0, y: 1000, width: 300, height: 200),
+            CGRect(x: 0, y: 3700, width: 300, height: 200),
+            CGRect(x: 0, y: 10000, width: 300, height: 200)
+        ]
+
+        for rect in rects {
+            let expected = frames.filter { $0.1.intersects(rect) }.map { $0.0 }
+            let attributes = layout.controller.layoutAttributesForElements(in: rect, state: .beforeUpdate, ignoreCache: true)
+            XCTAssertEqual(attributes.map(\.indexPath), expected, "Rectangle: \(rect)")
+        }
+    }
+
     func testContentSizeIncludesAdditionalInsets() {
         let layout = MockCollectionLayout()
         layout.setSections([5, 5, 5])

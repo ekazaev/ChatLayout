@@ -209,6 +209,8 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
 
     private var contentOffsetBeforeUpdate: CGPoint?
 
+    private var pinnedAttributesDuringOffsetRestoration: [IndexPath: ChatLayoutAttributes]?
+
     /// These properties are used to keep the layout attributes copies used for insert/delete
     /// animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
     /// animations will start from the estimated height.
@@ -319,8 +321,13 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             return
         }
 
-        // We do not want to return attributes while we just looking for a position so that `UICollectionView` wont
-        // create unnecessary cells that may not be used when we find the actual position.
+        pinnedAttributesDuringOffsetRestoration = Dictionary(uniqueKeysWithValues: collectionView.indexPathsForVisibleItems.compactMap { indexPath in
+            guard controller.isPinnedItem(indexPath: indexPath),
+                  let attributes = controller.itemAttributes(for: indexPath.itemPath, at: state, withPinnning: true) else {
+                return nil
+            }
+            return (indexPath, attributes.typedCopy())
+        })
         dontReturnAttributes = true
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
@@ -330,6 +337,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         invalidateLayout(with: context)
 
         dontReturnAttributes = false
+        pinnedAttributesDuringOffsetRestoration = nil
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
         currentPositionSnapshot = nil
@@ -458,7 +466,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         // details about the updates to the collection view before `layoutAttributesForElementsInRect:`
         // is invoked, enabling them to resolve their layout in time.
         guard !dontReturnAttributes else {
-            return nil
+            return pinnedAttributesDuringOffsetRestoration.map { Array($0.values) }
         }
 
         let visibleAttributes = controller.layoutAttributesForElements(in: rect, state: state)
@@ -468,7 +476,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// Retrieves layout information for an item at the specified index path with a corresponding cell.
     open override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         guard !dontReturnAttributes else {
-            return nil
+            return pinnedAttributesDuringOffsetRestoration?[indexPath]
         }
         let attributes = controller.itemAttributes(for: indexPath.itemPath, at: state, withPinnning: true)
         return attributes
@@ -504,6 +512,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
             controller.isAnimatedBoundsChange = false
             controller.proposedCompensatingOffset = 0
             controller.batchUpdateCompensatingOffset = 0
+            controller.reconfigureCompensatingOffset = 0
         }
     }
 
@@ -734,7 +743,9 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                        (itemAfterUpdate.size.height - preferredAttributes.size.height).rounded() != 0 {
                         originalAttributes.indexPath = indexPathAfterUpdate
                         preferredAttributes.indexPath = indexPathAfterUpdate
+                        let previousCompensatingOffset = controller.batchUpdateCompensatingOffset
                         _ = invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
+                        controller.reconfigureCompensatingOffset += controller.batchUpdateCompensatingOffset - previousCompensatingOffset
                     }
                 }
             reconfigureItemsIndexPaths = []
@@ -746,6 +757,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// Performs any additional animations or clean up needed during a collection view update.
     open override func finalizeCollectionViewUpdates() {
         controller.proposedCompensatingOffset = 0
+        controller.reconfigureCompensatingOffset = 0
 
         if keepContentOffsetAtBottomOnBatchUpdates,
            isLayoutBiggerThanVisibleBounds(at: state),
@@ -780,7 +792,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let itemPath = itemIndexPath.itemPath
         if state == .afterUpdate {
             if controller.insertedIndexes.contains(itemIndexPath) || controller.insertedSectionsIndexes.contains(itemPath.section) {
-                attributes = controller.itemAttributes(for: itemPath, at: .afterUpdate)?.typedCopy()
+                attributes = controller.itemAttributes(for: itemPath, at: .afterUpdate, withPinnning: true)?.typedCopy()
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: true)
                 attributes.map { attributes in
                     guard let delegate else {
@@ -792,13 +804,13 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                 attributesForPendingAnimations[itemPath] = attributes
             } else if let itemIdentifier = controller.itemIdentifier(for: itemPath, at: .afterUpdate),
                       let initialIndexPath = controller.itemPath(by: itemIdentifier, at: .beforeUpdate) {
-                attributes = controller.itemAttributes(for: initialIndexPath, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
+                attributes = controller.itemAttributes(for: initialIndexPath, at: .beforeUpdate, withPinnning: true)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 attributes?.indexPath = itemIndexPath
             } else {
-                attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)
+                attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate, withPinnning: true)
             }
         } else {
-            attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)
+            attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate, withPinnning: true)
         }
 
         return attributes
@@ -811,7 +823,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
         let itemPath = itemIndexPath.itemPath
         if state == .afterUpdate {
             if controller.deletedIndexes.contains(itemIndexPath) || controller.deletedSectionsIndexes.contains(itemPath.section) {
-                attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
+                attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate, withPinnning: true)?.typedCopy() ?? ChatLayoutAttributes(forCellWith: itemIndexPath)
                 controller.offsetByTotalCompensation(attributes: attributes, for: state, backward: false)
                 if keepContentOffsetAtBottomOnBatchUpdates,
                    controller.isLayoutBiggerThanVisibleBounds(at: state),
@@ -829,9 +841,9 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                       let finalIndexPath = controller.itemPath(by: itemIdentifier, at: .afterUpdate) {
                 if controller.movedIndexes.contains(itemIndexPath) || controller.movedSectionsIndexes.contains(itemPath.section) ||
                     controller.reloadedIndexes.contains(itemIndexPath) || controller.reconfiguredIndexes.contains(itemIndexPath) || controller.reloadedSectionsIndexes.contains(itemPath.section) {
-                    attributes = controller.itemAttributes(for: finalIndexPath, at: .afterUpdate)?.typedCopy()
+                    attributes = controller.itemAttributes(for: finalIndexPath, at: .afterUpdate, withPinnning: true)?.typedCopy()
                 } else {
-                    attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)?.typedCopy()
+                    attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate, withPinnning: true)?.typedCopy()
                 }
                 if invalidatedAttributes.contains(itemPath) {
                     attributes = nil
@@ -844,10 +856,10 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
                     attributes?.transform = CGAffineTransform(scaleX: 0, y: 0)
                 }
             } else {
-                attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)
+                attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate, withPinnning: true)
             }
         } else {
-            attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate)
+            attributes = controller.itemAttributes(for: itemPath, at: .beforeUpdate, withPinnning: true)
         }
 
         return attributes
