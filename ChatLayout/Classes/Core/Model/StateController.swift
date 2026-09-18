@@ -569,11 +569,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         return itemFrame
     }
 
-    func itemPath(by itemId: UUID, at state: ModelState) -> ItemPath? {
+    func itemPath(by itemId: UInt64, at state: ModelState) -> ItemPath? {
         layout(at: state).itemPath(by: itemId)
     }
 
-    func sectionIdentifier(for index: Int, at state: ModelState) -> UUID? {
+    func sectionIdentifier(for index: Int, at state: ModelState) -> UInt64? {
         let layout = layout(at: state)
         guard index < layout.sections.count else {
             return nil
@@ -581,7 +581,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         return layout.sections[index].id
     }
 
-    func sectionIndex(for sectionIdentifier: UUID, at state: ModelState) -> Int? {
+    func sectionIndex(for sectionIdentifier: UInt64, at state: ModelState) -> Int? {
         guard let sectionIndex = layout(at: state).sectionIndex(by: sectionIdentifier) else {
             return nil
         }
@@ -597,7 +597,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         return layout(at: state).sections[index]
     }
 
-    func itemIdentifier(for itemPath: ItemPath, at state: ModelState) -> UUID? {
+    func itemIdentifier(for itemPath: ItemPath, at state: ModelState) -> UInt64? {
         let layout = layout(at: state)
         guard itemPath.section < layout.sections.count,
               itemPath.item < layout.sections[itemPath.section].items.count else {

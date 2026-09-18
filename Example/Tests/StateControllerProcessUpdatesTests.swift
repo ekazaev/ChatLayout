@@ -515,7 +515,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         item: Int,
         section: Int,
         state: ModelState
-    ) throws -> UUID {
+    ) throws -> UInt64 {
         try XCTUnwrap(layout.controller.itemIdentifier(for: ItemPath(item: item, section: section), at: state))
     }
 
@@ -523,7 +523,7 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         in layout: MockCollectionLayout,
         section: Int,
         state: ModelState
-    ) throws -> UUID {
+    ) throws -> UInt64 {
         try XCTUnwrap(layout.controller.sectionIdentifier(for: section, at: state))
     }
 

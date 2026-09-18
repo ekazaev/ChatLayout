@@ -15,7 +15,7 @@ import UIKit
 
 @MainActor
 struct SectionModel<Layout: ChatLayoutRepresentation> {
-    let id: UUID
+    let id: UInt64
 
     let interSectionSpacing: CGFloat
 
@@ -53,7 +53,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
     }
 
     init(
-        id: UUID = UUID(),
+        id: UInt64 = ModelIdentifierGenerator.make(),
         interSectionSpacing: CGFloat,
         items: ContiguousArray<ItemModel> = [],
         collectionLayout: Layout
