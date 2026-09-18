@@ -34,19 +34,10 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         var hasPinnedItems = false
         var offsetY: CGFloat = collectionLayout.settings.additionalInsets.top
 
-        var sectionIndexByIdentifierCache = [UInt64: Int](minimumCapacity: sections.count)
-        let capacity = sections.reduce(into: 0) { $0 += $1.items.count }
-        var itemPathByIdentifierCache = [UInt64: ItemPath](minimumCapacity: capacity)
-
         sections.withUnsafeMutableBufferPointer { directlyMutableSections in
             for sectionIndex in 0..<directlyMutableSections.count {
-                sectionIndexByIdentifierCache[directlyMutableSections[sectionIndex].id] = sectionIndex
                 directlyMutableSections[sectionIndex].offsetY = offsetY
                 offsetY += directlyMutableSections[sectionIndex].height + (sectionIndex < directlyMutableSections.count - 1 ? directlyMutableSections[sectionIndex].interSectionSpacing : 0)
-                for itemIndex in 0..<directlyMutableSections[sectionIndex].items.count {
-                    let itemId = directlyMutableSections[sectionIndex].items[itemIndex].id
-                    itemPathByIdentifierCache[itemId] = ItemPath(item: itemIndex, section: sectionIndex)
-                }
                 if !hasPinnedItems,
                    directlyMutableSections[sectionIndex].hasPinnedItems {
                     hasPinnedItems = true
@@ -54,8 +45,7 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
             }
         }
 
-        self.itemPathByIdentifierCache = itemPathByIdentifierCache
-        self.sectionIndexByIdentifierCache = sectionIndexByIdentifierCache
+        resetCache()
         self.hasPinnedItems = hasPinnedItems
     }
 
@@ -77,23 +67,17 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
     }
 
     func sectionIndex(by sectionId: UInt64) -> Int? {
-        guard let sectionIndexByIdentifierCache else {
-            assertionFailure("Internal inconsistency. Cache is not prepared.")
-            return sections.firstIndex(where: { $0.id == sectionId })
+        if sectionIndexByIdentifierCache == nil {
+            sectionIndexByIdentifierCache = makeSectionIndexByIdentifierCache()
         }
-        return sectionIndexByIdentifierCache[sectionId]
+        return sectionIndexByIdentifierCache?[sectionId]
     }
 
     func itemPath(by itemId: UInt64) -> ItemPath? {
-        guard let itemPathByIdentifierCache else {
-            for (sectionIndex, section) in sections.enumerated() {
-                if let itemIndex = section.items.firstIndex(where: { $0.id == itemId }) {
-                    return ItemPath(item: itemIndex, section: sectionIndex)
-                }
-            }
-            return nil
+        if itemPathByIdentifierCache == nil {
+            itemPathByIdentifierCache = makeItemPathByIdentifierCache()
         }
-        return itemPathByIdentifierCache[itemId]
+        return itemPathByIdentifierCache?[itemId]
     }
 
     func findPinnedItemBefore(_ indexPath: IndexPath, pinningType: ChatItemPinningType) -> IndexPath? {
@@ -204,11 +188,30 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         if index < sections.count &- 1 {
             let nextIndex = index &+ 1
             sections.withUnsafeMutableBufferPointer { directlyMutableSections in
-                nonisolated(unsafe) let directlyMutableSections = directlyMutableSections
-                DispatchQueue.concurrentPerform(iterations: directlyMutableSections.count &- nextIndex) { internalIndex in
+                for internalIndex in 0..<(directlyMutableSections.count &- nextIndex) {
                     directlyMutableSections[internalIndex &+ nextIndex].offsetY += heightDiff
                 }
             }
         }
+    }
+
+    private func makeSectionIndexByIdentifierCache() -> [UInt64: Int] {
+        var cache = [UInt64: Int](minimumCapacity: sections.count)
+        for sectionIndex in 0..<sections.count {
+            cache[sections[sectionIndex].id] = sectionIndex
+        }
+        return cache
+    }
+
+    private func makeItemPathByIdentifierCache() -> [UInt64: ItemPath] {
+        let capacity = sections.reduce(into: 0) { $0 += $1.items.count }
+        var cache = [UInt64: ItemPath](minimumCapacity: capacity)
+        for sectionIndex in 0..<sections.count {
+            for itemIndex in 0..<sections[sectionIndex].items.count {
+                let itemId = sections[sectionIndex].items[itemIndex].id
+                cache[itemId] = ItemPath(item: itemIndex, section: sectionIndex)
+            }
+        }
+        return cache
     }
 }

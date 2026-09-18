@@ -297,6 +297,7 @@ final class ChatViewController: UIViewController {
     }
 }
 
+@MainActor
 extension ChatViewController: UIScrollViewDelegate {
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         guard scrollView.contentSize.height > 0,
@@ -370,7 +371,7 @@ extension ChatViewController: UIScrollViewDelegate {
         // I ask content size from the layout because on IOs 12 collection view contains not updated one
         let contentOffsetAtBottom = CGPoint(
             x: collectionView.contentOffset.x,
-            y: chatLayout.collectionViewContentSize.height - collectionView.frame.height + collectionView.adjustedContentInset.bottom
+            y: chatLayout.collectionViewContentSize.height - collectionView.bounds.height + collectionView.adjustedContentInset.bottom
         )
 
         guard contentOffsetAtBottom.y > collectionView.contentOffset.y else {
@@ -380,6 +381,7 @@ extension ChatViewController: UIScrollViewDelegate {
 
         let initialOffset = collectionView.contentOffset.y
         let delta = contentOffsetAtBottom.y - initialOffset
+        currentInterfaceActions.options.insert(.scrollingToBottom)
         if abs(delta) > chatLayout.visibleBounds.height {
             // See: https://dasdom.dev/posts/scrolling-a-collection-view-with-custom-duration/
             animator = ManualAnimator()
@@ -390,28 +392,27 @@ extension ChatViewController: UIScrollViewDelegate {
                 collectionView.contentOffset = CGPoint(x: collectionView.contentOffset.x, y: initialOffset + (delta * percentage))
                 if percentage == 1.0 {
                     animator = nil
-                    guard let lastSection = layoutDataSource.sections.last else {
-                        collectionView.reloadData()
-                        return
+                    if let lastSection = layoutDataSource.sections.last, !lastSection.cells.isEmpty {
+                        let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: lastSection.cells.count - 1, section: layoutDataSource.sections.count - 1), edge: .bottom)
+                        chatLayout.restoreContentOffset(with: positionSnapshot)
                     }
-                    let positionSnapshot = ChatLayoutPositionSnapshot(indexPath: IndexPath(item: lastSection.cells.count - 1, section: layoutDataSource.sections.count - 1), edge: .bottom)
-                    chatLayout.restoreContentOffset(with: positionSnapshot)
                     currentInterfaceActions.options.remove(.scrollingToBottom)
                     completion?()
                 }
             }
         } else {
-            currentInterfaceActions.options.insert(.scrollingToBottom)
-            UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                self?.collectionView.setContentOffset(contentOffsetAtBottom, animated: true)
-            }, completion: { [weak self] _ in
+            CATransaction.begin()
+            CATransaction.setCompletionBlock { [weak self] in
                 self?.currentInterfaceActions.options.remove(.scrollingToBottom)
                 completion?()
-            })
+            }
+            collectionView.setContentOffset(contentOffsetAtBottom, animated: true)
+            CATransaction.commit()
         }
     }
 }
 
+@MainActor
 extension ChatViewController: UICollectionViewDelegate {
     private func preview(for configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         guard let identifier = configuration.identifier as? String else {
@@ -674,6 +675,7 @@ extension ChatViewController: ChatControllerDelegate {
     }
 }
 
+@MainActor
 extension ChatViewController: UIGestureRecognizerDelegate {
     @objc
     private func handleRevealPan(_ gesture: UIPanGestureRecognizer) {
@@ -764,7 +766,6 @@ extension ChatViewController: @MainActor InputBarAccessoryViewDelegate {
     }
 }
 
-@MainActor
 extension ChatViewController: KeyboardListenerDelegate {
     func keyboardWillChangeFrame(info: KeyboardInfo) {
         currentInterfaceActions.options.insert(.changingKeyboardFrame)
@@ -776,6 +777,7 @@ extension ChatViewController: KeyboardListenerDelegate {
     }
 }
 
+@MainActor
 private extension ChatViewController {
     func syncAgentModeUI() {
         agentBarButtonItem.title = chatController.isAgentModeEnabled ? "Agent Off" : "Agent"
@@ -814,3 +816,4 @@ extension ChatViewController: @MainActor FPSCounterDelegate {
         fpsView.customView.text = "FPS: \(fps)"
     }
 }
+
