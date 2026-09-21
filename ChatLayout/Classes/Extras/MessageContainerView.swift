@@ -15,8 +15,6 @@ import UIKit
 
 /// A container view that helps to layout the message view and its accessory
 public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory, MainView: UIView>: UIView {
-    private lazy var stackView = UIStackView(frame: bounds)
-
     /// An accessory view.
     public lazy var accessoryView: AccessoryViewFactory.View? = AccessoryViewFactory.buildView(within: bounds)
 
@@ -41,7 +39,9 @@ public final class MessageContainerView<AccessoryViewFactory: StaticViewFactory,
         }
     }
 
-    private lazy var internalContentView = EdgeAligningView<MainView>(frame: bounds)
+    private lazy var internalContentView: EdgeAligningView<MainView> = .init(frame: bounds)
+
+    private lazy var stackView: UIStackView = .init(frame: bounds)
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative

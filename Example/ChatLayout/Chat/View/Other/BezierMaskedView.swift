@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 final class BezierMaskedView<CustomView: UIView>: UIView {
-    lazy var customView = CustomView(frame: bounds)
+    lazy var customView: CustomView = .init(frame: bounds)
 
     var bubbleType: Cell.BubbleType = .tailed {
         didSet {
@@ -66,7 +66,7 @@ final class BezierMaskedView<CustomView: UIView>: UIView {
         return bezierPath
     }
 
-    private let maskLayer = CAShapeLayer()
+    private let maskLayer: CAShapeLayer = .init()
 
     override init(frame: CGRect) {
         super.init(frame: frame)

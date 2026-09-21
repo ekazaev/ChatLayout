@@ -15,13 +15,13 @@ import UIKit
 
 @MainActor
 final class KeyboardListener {
-    static let shared = KeyboardListener()
+    static let shared: KeyboardListener = .init()
 
     private(set) var isKeyboardVisible: Bool = false
 
     private(set) var keyboardRect: CGRect?
 
-    private var delegates = NSHashTable<AnyObject>.weakObjects()
+    private var delegates: NSHashTable<AnyObject> = .weakObjects()
 
     func add(delegate: KeyboardListenerDelegate) {
         delegates.add(delegate)

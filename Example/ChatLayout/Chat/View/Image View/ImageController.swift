@@ -36,15 +36,15 @@ final class ImageController {
 
     private var imageTask: Task<Void, Never>?
 
-    private let messageId: UUID
+    private let messageID: UUID
 
     private let source: ImageMessageSource
 
     private let bubbleController: BubbleController
 
-    init(source: ImageMessageSource, messageId: UUID, bubbleController: BubbleController) {
+    init(source: ImageMessageSource, messageID: UUID, bubbleController: BubbleController) {
         self.source = source
-        self.messageId = messageId
+        self.messageID = messageID
         self.bubbleController = bubbleController
         loadImage()
     }
@@ -73,7 +73,7 @@ final class ImageController {
                         self.image = image
                         view?.reloadData()
                     } else {
-                        delegate?.reloadMessage(with: messageId)
+                        delegate?.reloadMessage(with: messageID)
                     }
                 }
             }

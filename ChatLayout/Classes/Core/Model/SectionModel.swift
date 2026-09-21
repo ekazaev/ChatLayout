@@ -25,7 +25,7 @@ struct SectionModel<Layout: ChatLayoutRepresentation> {
         !pinnedIndexes.isEmpty
     }
 
-    private(set) var pinnedIndexes = [ChatItemPinningType: ContiguousArray<Int>]()
+    private(set) var pinnedIndexes: [ChatItemPinningType: ContiguousArray<Int>] = [:]
 
     var offsetY: CGFloat = 0
 

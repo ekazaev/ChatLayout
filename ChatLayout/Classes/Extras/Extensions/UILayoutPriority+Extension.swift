@@ -14,5 +14,5 @@ import Foundation
 import UIKit
 
 extension UILayoutPriority {
-    static let almostRequired = UILayoutPriority(rawValue: UILayoutPriority.required.rawValue - 1)
+    static let almostRequired: UILayoutPriority = .init(rawValue: UILayoutPriority.required.rawValue - 1)
 }

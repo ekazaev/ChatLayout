@@ -1,10 +1,10 @@
 PODS:
-  - ChatLayout (2.5.1):
-    - ChatLayout/Ultimate (= 2.5.1)
-  - ChatLayout/Core (2.5.1)
-  - ChatLayout/Extras (2.5.1):
+  - ChatLayout (2.5.2):
+    - ChatLayout/Ultimate (= 2.5.2)
+  - ChatLayout/Core (2.5.2)
+  - ChatLayout/Extras (2.5.2):
     - ChatLayout/Core
-  - ChatLayout/Ultimate (2.5.1):
+  - ChatLayout/Ultimate (2.5.2):
     - ChatLayout/Core
     - ChatLayout/Extras
   - FPSCounter (4.1.0)
@@ -27,7 +27,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ChatLayout: c62af580b90f0c634af0685d11e2104efeab009d
+  ChatLayout: a1ab5b3e40ac33ebf939b1a453b292bae41922d6
   FPSCounter: 884afec377de66637808c4f52ecc3b85a404732b
   InputBarAccessoryView: 1d7b0a672b36e370f01f264b3907ef39d03328e3
 

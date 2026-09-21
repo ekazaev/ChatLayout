@@ -29,15 +29,15 @@ final class URLController {
         }
     }
 
-    private let provider = LPMetadataProvider()
+    private let provider: LPMetadataProvider = .init()
 
-    private let messageId: UUID
+    private let messageID: UUID
 
     private let bubbleController: BubbleController
 
-    init(url: URL, messageId: UUID, bubbleController: BubbleController) {
+    init(url: URL, messageID: UUID, bubbleController: BubbleController) {
         self.url = url
-        self.messageId = messageId
+        self.messageID = messageID
         self.bubbleController = bubbleController
         startFetchingMetadata()
     }
@@ -70,7 +70,7 @@ final class URLController {
                     self.metadata = sendableMetadata.value
                     view?.reloadData()
                 } else {
-                    delegate?.reloadMessage(with: messageId)
+                    delegate?.reloadMessage(with: messageID)
                 }
             }
         }

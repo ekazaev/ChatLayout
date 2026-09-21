@@ -102,7 +102,7 @@ final class PerformanceTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.numberOfItemsInSection = [0: 0]
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        var changeItems: [ChangeItem] = []
+        var changeItems = [ChangeItem]()
         for i in 0..<10000 {
             changeItems.append(.itemInsert(itemIndexPath: IndexPath(item: i, section: 0)))
         }
@@ -116,7 +116,7 @@ final class PerformanceTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.numberOfItemsInSection = [0: 1000]
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        var changeItems: [ChangeItem] = []
+        var changeItems = [ChangeItem]()
         for i in 0..<1000 {
             changeItems.append(.itemReload(itemIndexPath: IndexPath(item: i, section: 0)))
         }
@@ -130,7 +130,7 @@ final class PerformanceTests: XCTestCase {
         let layout = MockCollectionLayout()
         layout.numberOfItemsInSection = [0: 10000]
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
-        var changeItems: [ChangeItem] = []
+        var changeItems = [ChangeItem]()
         for i in 0..<10000 {
             changeItems.append(.itemDelete(itemIndexPath: IndexPath(item: i, section: 0)))
         }

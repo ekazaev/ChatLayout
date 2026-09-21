@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 final class DateAccessoryView: UIView {
-    private var accessoryView = UILabel()
+    private var accessoryView: UILabel = .init()
 
     private var controller: DateAccessoryController?
 

@@ -13,8 +13,10 @@
 import Foundation
 import UIKit
 
-/// Container view that allows its `CustomView` to have lose connection to the margins of the container according to the
-/// settings provided in `EdgeAligningView.flexibleEdges`
+/// A container that can loosen selected edges of its `customView` from its layout margins.
+///
+/// When both edges of an axis are flexible, `customView` must provide its own size on that axis through intrinsic
+/// content size or constraints.
 public final class EdgeAligningView<CustomView: UIView>: UIView {
     /// Represents an edge of `EdgeAligningView`
     public enum Edge: CaseIterable {
@@ -31,7 +33,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         case bottom
     }
 
-    /// Set of edge constraints  to be set as loose.
+    /// Edges that may move away from the container's layout margins.
     public var flexibleEdges: Set<Edge> = [] {
         didSet {
             guard flexibleEdges != oldValue else {
@@ -60,17 +62,18 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
             guard preferredPriority != oldValue else {
                 return
             }
-            setupContainer()
+            managedConstraints.forEach { $0.priority = preferredPriority }
+            setNeedsLayout()
         }
     }
 
-    private var rigidConstraints: [Edge: NSLayoutConstraint] = [:]
+    private var pinnedConstraints: [Edge: NSLayoutConstraint] = [:]
 
-    private var flexibleConstraints: [Edge: NSLayoutConstraint] = [:]
+    private var minimumMarginConstraints: [Edge: NSLayoutConstraint] = [:]
 
-    private var centerConstraints: (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint)?
+    private var centeringConstraints: (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint)?
 
-    private var addedConstraints: [NSLayoutConstraint] = []
+    private var managedConstraints: [NSLayoutConstraint] = []
 
     private var lastConstraintsUpdateEdges: Set<Edge>?
 
@@ -81,14 +84,14 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     ///   - preferredPriority: Preferred priority of the internal constraints.
     public init(
         with customView: CustomView,
-        flexibleEdges: Set<Edge> = [.top],
+        flexibleEdges: Set<Edge> = [],
         preferredPriority: UILayoutPriority = .required
     ) {
         self.customView = customView
         self.flexibleEdges = flexibleEdges
         self.preferredPriority = preferredPriority
         super.init(frame: customView.frame)
-        setupContainer()
+        setupSubviews()
     }
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
@@ -119,9 +122,9 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     }
 
     /// This constructor is unavailable.
-    @available(*, unavailable, message: "Use init(with:flexibleEdges:) instead.")
+    @available(*, unavailable, message: "Use init(with:flexibleEdges:preferredPriority:) or init(frame:flexibleEdges:preferredPriority:) instead.")
     public required init?(coder: NSCoder) {
-        fatalError("Use init(with:flexibleEdges:) instead.")
+        fatalError("Use init(with:flexibleEdges:preferredPriority:) or init(frame:flexibleEdges:preferredPriority:) instead.")
     }
 
     /// A Boolean value that indicates whether the receiver depends on the constraint-based layout system.
@@ -137,15 +140,15 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         }
 
         for edge in flexibleEdges {
-            rigidConstraints[edge]?.isActive = false
-            flexibleConstraints[edge]?.isActive = true
+            pinnedConstraints[edge]?.isActive = false
+            minimumMarginConstraints[edge]?.isActive = true
         }
         for edge in Set(Edge.allCases).subtracting(flexibleEdges) {
-            flexibleConstraints[edge]?.isActive = false
-            rigidConstraints[edge]?.isActive = true
+            minimumMarginConstraints[edge]?.isActive = false
+            pinnedConstraints[edge]?.isActive = true
         }
-        centerConstraints?.centerX.isActive = flexibleEdges.contains(.leading) && flexibleEdges.contains(.trailing)
-        centerConstraints?.centerY.isActive = flexibleEdges.contains(.top) && flexibleEdges.contains(.bottom)
+        centeringConstraints?.centerX.isActive = flexibleEdges.contains(.leading) && flexibleEdges.contains(.trailing)
+        centeringConstraints?.centerY.isActive = flexibleEdges.contains(.top) && flexibleEdges.contains(.bottom)
 
         lastConstraintsUpdateEdges = flexibleEdges
 
@@ -153,7 +156,6 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
     }
 
     private func setupSubviews() {
-        translatesAutoresizingMaskIntoConstraints = false
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
         setupContainer()
@@ -165,37 +167,37 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
             addSubview(customView)
         }
         customView.translatesAutoresizingMaskIntoConstraints = false
-        if !addedConstraints.isEmpty {
-            NSLayoutConstraint.deactivate(addedConstraints)
-            addedConstraints.removeAll()
+        if !managedConstraints.isEmpty {
+            NSLayoutConstraint.deactivate(managedConstraints)
+            managedConstraints.removeAll()
         }
 
         lastConstraintsUpdateEdges = nil
 
-        let rigidConstraints = buildRigidConstraints(customView)
-        let flexibleConstraints = buildFlexibleConstraints(customView)
-        let centerConstraints = buildCenterConstraints(customView)
+        let pinnedConstraints = buildPinnedConstraints(customView)
+        let minimumMarginConstraints = buildMinimumMarginConstraints(customView)
+        let centeringConstraints = buildCenteringConstraints(customView)
 
-        addedConstraints.append(contentsOf: rigidConstraints.values)
-        addedConstraints.append(contentsOf: flexibleConstraints.values)
-        addedConstraints.append(centerConstraints.centerX)
-        addedConstraints.append(centerConstraints.centerY)
+        managedConstraints.append(contentsOf: pinnedConstraints.values)
+        managedConstraints.append(contentsOf: minimumMarginConstraints.values)
+        managedConstraints.append(centeringConstraints.centerX)
+        managedConstraints.append(centeringConstraints.centerY)
 
-        self.rigidConstraints = rigidConstraints
-        self.flexibleConstraints = flexibleConstraints
-        self.centerConstraints = centerConstraints
+        self.pinnedConstraints = pinnedConstraints
+        self.minimumMarginConstraints = minimumMarginConstraints
+        self.centeringConstraints = centeringConstraints
         setNeedsUpdateConstraints()
         setNeedsLayout()
     }
 
-    private func buildCenterConstraints(_ view: UIView) -> (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint) {
+    private func buildCenteringConstraints(_ view: UIView) -> (centerX: NSLayoutConstraint, centerY: NSLayoutConstraint) {
         (
             centerX: view.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor, priority: preferredPriority),
             centerY: view.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor, priority: preferredPriority)
         )
     }
 
-    private func buildRigidConstraints(_ view: UIView) -> [Edge: NSLayoutConstraint] {
+    private func buildPinnedConstraints(_ view: UIView) -> [Edge: NSLayoutConstraint] {
         [
             .top: view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
             .bottom: view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),
@@ -204,7 +206,7 @@ public final class EdgeAligningView<CustomView: UIView>: UIView {
         ]
     }
 
-    private func buildFlexibleConstraints(_ view: UIView) -> [Edge: NSLayoutConstraint] {
+    private func buildMinimumMarginConstraints(_ view: UIView) -> [Edge: NSLayoutConstraint] {
         [
             .top: view.topAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
             .bottom: view.bottomAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority),

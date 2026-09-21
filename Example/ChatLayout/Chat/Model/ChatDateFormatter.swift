@@ -15,7 +15,7 @@ import Foundation
 public final class ChatDateFormatter: Sendable {
     // MARK: - Properties
 
-    public static let shared = ChatDateFormatter()
+    public static let shared: ChatDateFormatter = .init()
 
     // MARK: - Initializer
 
@@ -53,7 +53,7 @@ public final class ChatDateFormatter: Sendable {
 }
 
 public final class MessageDateFormatter: Sendable {
-    public static let shared = MessageDateFormatter()
+    public static let shared: MessageDateFormatter = .init()
 
     private init() {}
 

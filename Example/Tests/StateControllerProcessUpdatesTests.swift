@@ -313,10 +313,12 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         layout.pinningTypeAtIndexPath[IndexPath(item: 0, section: 0)] = .top
         layout.controller.set(layout.getPreparedSections(), at: .beforeUpdate)
         layout.controller.updatePinnedInfo(at: .beforeUpdate)
-        let attributes = try XCTUnwrap(layout.controller.layoutAttributesForElements(
-            in: layout.visibleBounds,
-            state: .beforeUpdate
-        ).first { $0.indexPath.item == 0 })
+        let attributes = try XCTUnwrap(layout.controller
+            .layoutAttributesForElements(
+                in: layout.visibleBounds,
+                state: .beforeUpdate
+            )
+            .first { $0.indexPath.item == 0 })
         let originalFrame = attributes.frame
 
         _ = layout.controller.layoutAttributesForElements(
@@ -328,10 +330,12 @@ final class StateControllerProcessUpdatesTests: XCTestCase {
         XCTAssertEqual(attributes.frame, originalFrame)
         XCTAssertTrue(attributes.isPinned)
         XCTAssertEqual(attributes.pinningProgress, 1)
-        let cached = try XCTUnwrap(layout.controller.layoutAttributesForElements(
-            in: layout.visibleBounds,
-            state: .beforeUpdate
-        ).first { $0.indexPath.item == 0 })
+        let cached = try XCTUnwrap(layout.controller
+            .layoutAttributesForElements(
+                in: layout.visibleBounds,
+                state: .beforeUpdate
+            )
+            .first { $0.indexPath.item == 0 })
         XCTAssertEqual(cached.frame, originalFrame)
         XCTAssertEqual(cached.pinningProgress, 1)
     }

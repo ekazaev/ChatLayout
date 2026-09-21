@@ -24,13 +24,13 @@ final class EditingAccessoryController {
 
     weak var view: EditingAccessoryView?
 
-    private let messageId: UUID
+    private let messageID: UUID
 
-    init(messageId: UUID) {
-        self.messageId = messageId
+    init(messageID: UUID) {
+        self.messageID = messageID
     }
 
     func deleteButtonTapped() {
-        delegate?.deleteMessage(with: messageId)
+        delegate?.deleteMessage(with: messageID)
     }
 }

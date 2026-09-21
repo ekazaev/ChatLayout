@@ -19,7 +19,7 @@ public final class RoundedCornersContainerView<CustomView: UIView>: UIView {
     public var cornerRadius: CGFloat?
 
     /// Contained view.
-    public lazy var customView = CustomView(frame: bounds)
+    public lazy var customView: CustomView = .init(frame: bounds)
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative

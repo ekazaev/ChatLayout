@@ -66,18 +66,18 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         }
     }
 
-    func sectionIndex(by sectionId: UInt64) -> Int? {
+    func sectionIndex(by sectionID: UInt64) -> Int? {
         if sectionIndexByIdentifierCache == nil {
             sectionIndexByIdentifierCache = makeSectionIndexByIdentifierCache()
         }
-        return sectionIndexByIdentifierCache?[sectionId]
+        return sectionIndexByIdentifierCache?[sectionID]
     }
 
-    func itemPath(by itemId: UInt64) -> ItemPath? {
+    func itemPath(by itemID: UInt64) -> ItemPath? {
         if itemPathByIdentifierCache == nil {
             itemPathByIdentifierCache = makeItemPathByIdentifierCache()
         }
-        return itemPathByIdentifierCache?[itemId]
+        return itemPathByIdentifierCache?[itemID]
     }
 
     func findPinnedItemBefore(_ indexPath: IndexPath, pinningType: ChatItemPinningType) -> IndexPath? {
@@ -160,10 +160,10 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         resetCache()
     }
 
-    func removeItem(by itemId: UInt64) {
+    func removeItem(by itemID: UInt64) {
         var itemPath: ItemPath?
         for (sectionIndex, section) in sections.enumerated() {
-            if let itemIndex = section.items.firstIndex(where: { $0.id == itemId }) {
+            if let itemIndex = section.items.firstIndex(where: { $0.id == itemID }) {
                 itemPath = ItemPath(item: itemIndex, section: sectionIndex)
                 break
             }
@@ -208,8 +208,8 @@ final class LayoutModel<Layout: ChatLayoutRepresentation> {
         var cache = [UInt64: ItemPath](minimumCapacity: capacity)
         for sectionIndex in 0..<sections.count {
             for itemIndex in 0..<sections[sectionIndex].items.count {
-                let itemId = sections[sectionIndex].items[itemIndex].id
-                cache[itemId] = ItemPath(item: itemIndex, section: sectionIndex)
+                let itemID = sections[sectionIndex].items[itemIndex].id
+                cache[itemID] = ItemPath(item: itemIndex, section: sectionIndex)
             }
         }
         return cache

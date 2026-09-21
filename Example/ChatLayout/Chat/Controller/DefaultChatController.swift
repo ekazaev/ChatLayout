@@ -54,13 +54,13 @@ final class DefaultChatController: ChatController {
 
     private var typingState: TypingState = .idle
 
-    private let processingQueue = SerialTaskQueue(priority: .userInitiated)
+    private let processingQueue: SerialTaskQueue = .init(priority: .userInitiated)
 
     private var lastReadUUID: UUID?
 
     private var lastReceivedUUID: UUID?
 
-    private let userId: Int
+    private let userID: Int
 
     private let agentQuestions = [
         "Why does the moon look larger near the horizon?",
@@ -81,9 +81,9 @@ final class DefaultChatController: ChatController {
 
     var messages: [RawMessage] = []
 
-    init(dataProvider: RandomDataProvider, userId: Int) {
+    init(dataProvider: RandomDataProvider, userID: Int) {
         self.dataProvider = dataProvider
-        self.userId = userId
+        self.userID = userID
     }
 
     func loadInitialMessages(completion: @escaping @MainActor @Sendable ([Section]) -> Void) {
@@ -113,7 +113,7 @@ final class DefaultChatController: ChatController {
     }
 
     func sendMessage(_ data: Message.Data, completion: @escaping @MainActor @Sendable ([Section]) -> Void) {
-        messages.append(RawMessage(id: UUID(), date: Date(), data: convert(data), userId: userId))
+        messages.append(RawMessage(id: UUID(), date: Date(), data: convert(data), userID: userID))
         propagateLatestMessages { sections in
             completion(sections)
         }
@@ -147,7 +147,7 @@ final class DefaultChatController: ChatController {
     private func propagateLatestMessages(completion: @escaping @MainActor @Sendable ([Section]) -> Void) {
         let messages = messages
         let typingState = typingState
-        let userId = userId
+        let userID = userID
 
         processingQueue.enqueue {
             let messagesSplitByDay = messages
@@ -173,8 +173,8 @@ final class DefaultChatController: ChatController {
                         id: rawMessage.id,
                         date: rawMessage.date,
                         data: data,
-                        owner: User(id: rawMessage.userId),
-                        type: rawMessage.userId == userId ? .outgoing : .incoming,
+                        owner: User(id: rawMessage.userID),
+                        type: rawMessage.userID == userID ? .outgoing : .incoming,
                         status: rawMessage.status
                     )
                 }
@@ -195,7 +195,7 @@ final class DefaultChatController: ChatController {
                 }
 
             var lastMessageStorage: Message?
-            var cells: [Cell] = []
+            var cells = [Cell]()
 
             for (messageGroupIndex, messageGroup) in messagesSplitByDay.enumerated() {
                 if let firstMessage = messageGroup.first {
@@ -264,7 +264,7 @@ final class DefaultChatController: ChatController {
             id: UUID(),
             date: Date(),
             data: .text("Question: \(randomQuestion())"),
-            userId: userId
+            userID: userID
         )
         messages.append(questionMessage)
         extendedLayoutMessageID = questionMessage.id
@@ -325,14 +325,14 @@ extension DefaultChatController: RandomDataProviderDelegate {
         repopulateMessages()
     }
 
-    func lastReadIdChanged(to id: UUID) {
+    func lastReadIDChanged(to id: UUID) {
         lastReadUUID = id
         markAllMessagesAsRead {
             self.repopulateMessages()
         }
     }
 
-    func lastReceivedIdChanged(to id: UUID) {
+    func lastReceivedIDChanged(to id: UUID) {
         lastReceivedUUID = id
         markAllMessagesAsReceived {
             self.repopulateMessages()

@@ -12,7 +12,7 @@
 
 import Foundation
 
-let concurrentCachingQueue = DispatchQueue(
+let concurrentCachingQueue: DispatchQueue = .init(
     label: "KeyValueCaching",
     qos: .userInteractive,
     attributes: .concurrent

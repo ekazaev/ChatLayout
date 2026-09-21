@@ -12,19 +12,19 @@
 
 import Foundation
 
-let loader = CachingImageLoader(cache: imageCache, loader: DefaultImageLoader())
+let loader: CachingImageLoader = .init(cache: imageCache, loader: DefaultImageLoader())
 
-let metadataCache = IterativeCache(
+let metadataCache: IterativeCache = .init(
     mainCache: MetaDataCache(cache: MemoryDataCache<URL>()),
     backupCache: MetaDataCache(cache: PersistentDataCache<URL>(cacheFileExtension: "metadataCache"))
 )
 
-let imageCache = IterativeCache(
-    mainCache: ImageForUrlCache(cache: MemoryDataCache<CacheableImageKey>()),
-    backupCache: ImageForUrlCache(cache: PersistentDataCache<CacheableImageKey>())
+let imageCache: IterativeCache = .init(
+    mainCache: ImageForURLCache(cache: MemoryDataCache<CacheableImageKey>()),
+    backupCache: ImageForURLCache(cache: PersistentDataCache<CacheableImageKey>())
 )
 
 // Uncomment to reload dynamic content on every start.
 // let metadataCache = MetaDataCache(cache: MemoryDataCache<URL>())
 //
-// let imageCache = ImageForUrlCache(cache: MemoryDataCache<CacheableImageKey>())
+// let imageCache = ImageForURLCache(cache: MemoryDataCache<CacheableImageKey>())

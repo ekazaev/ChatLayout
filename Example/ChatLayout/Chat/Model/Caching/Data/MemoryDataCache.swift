@@ -41,7 +41,7 @@ public final class MemoryDataCache<CachingKey: Hashable & Sendable>: AsyncKeyVal
         }
     }
 
-    private let cache = NSCache<WrappedKey, Entry>()
+    private let cache: NSCache<WrappedKey, Entry> = .init()
 
     private let queue: DispatchQueue
 

@@ -52,18 +52,18 @@ final class ChatViewController: UIViewController {
     private let editNotifier: EditNotifier
     private let swipeNotifier: SwipeNotifier
     private var collectionView: UICollectionView!
-    private var chatLayout = CollectionViewChatLayout()
-    private let inputBarView = InputBarAccessoryView()
+    private var chatLayout: CollectionViewChatLayout = .init()
+    private let inputBarView: InputBarAccessoryView = .init()
     private let chatController: ChatController
     private let layoutDataSource: ChatCollectionDataSource
-    private let fpsCounter = FPSCounter()
-    private let fpsView = EdgeAligningView<UILabel>(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))
+    private let fpsCounter: FPSCounter = .init()
+    private let fpsView: EdgeAligningView<UILabel> = .init(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))
     private var animator: ManualAnimator?
     private var activeCollectionUpdates = 0
     private var needsScrollToBottomOnAppearance = false
     private var cellsByID: [Cell.ID: Cell] = [:]
-    private lazy var editBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
-    private lazy var agentBarButtonItem = UIBarButtonItem(title: "Agent", style: .plain, target: self, action: #selector(ChatViewController.toggleAgentMode))
+    private lazy var editBarButtonItem: UIBarButtonItem = .init(title: "Edit", style: .plain, target: self, action: #selector(ChatViewController.setEditNotEdit))
+    private lazy var agentBarButtonItem: UIBarButtonItem = .init(title: "Agent", style: .plain, target: self, action: #selector(ChatViewController.toggleAgentMode))
     private var shouldStartAgentAnswerAfterNextUpdate = false
 
     private lazy var dataSource = ChatLayoutDiffableDataSource<Int, Cell.ID>(
@@ -595,8 +595,8 @@ extension ChatViewController: ChatControllerDelegate {
         let newCells = sections.flatMap(\.cells)
         let newCellsByID = newCells.reduce(into: [Cell.ID: Cell]()) { $0[$1.id] = $1 }
         var snapshot = makeSnapshot(for: sections)
-        var reconfiguredCellIDs: [Cell.ID] = []
-        var reloadedCellIDs: [Cell.ID] = []
+        var reconfiguredCellIDs = [Cell.ID]()
+        var reloadedCellIDs = [Cell.ID]()
         for cell in newCells {
             guard let oldCell = oldCells[cell.id], oldCell != cell else {
                 continue
@@ -816,4 +816,3 @@ extension ChatViewController: @MainActor FPSCounterDelegate {
         fpsView.customView.text = "FPS: \(fps)"
     }
 }
-

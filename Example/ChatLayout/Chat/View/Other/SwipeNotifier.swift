@@ -22,7 +22,7 @@ public protocol SwipeNotifierDelegate: AnyObject {
 
 @MainActor
 final class SwipeNotifier {
-    private var delegates = NSHashTable<AnyObject>.weakObjects()
+    private var delegates: NSHashTable<AnyObject> = .weakObjects()
 
     private(set) var accessorySafeAreaInsets: UIEdgeInsets = .zero
 

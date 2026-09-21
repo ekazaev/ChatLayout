@@ -16,8 +16,8 @@ import UIKit
 struct ChatViewControllerBuilder {
     @MainActor
     func build() -> UIViewController {
-        let dataProvider = DefaultRandomDataProvider(receiverId: 0, usersIds: [1, 2, 3])
-        let messageController = DefaultChatController(dataProvider: dataProvider, userId: 0)
+        let dataProvider = DefaultRandomDataProvider(receiverID: 0, usersIDs: [1, 2, 3])
+        let messageController = DefaultChatController(dataProvider: dataProvider, userID: 0)
 
         let editNotifier = EditNotifier()
         let swipeNotifier = SwipeNotifier()

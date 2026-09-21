@@ -15,7 +15,7 @@ import Foundation
 import UIKit
 
 final class EditingAccessoryView: UIView, StaticViewFactory {
-    private lazy var button = UIButton(type: .system)
+    private lazy var button: UIButton = .init(type: .system)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

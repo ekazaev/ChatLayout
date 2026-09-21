@@ -17,7 +17,7 @@ import UIKit
 final class TextMessageView: UIView, ContainerCollectionViewCellDelegate {
     private var viewPortWidth: CGFloat = 300
 
-    private lazy var textView = MessageTextView()
+    private lazy var textView: MessageTextView = .init()
 
     private var controller: TextMessageController?
 

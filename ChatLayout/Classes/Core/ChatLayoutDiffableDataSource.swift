@@ -35,7 +35,7 @@ open class ChatLayoutDiffableDataSource<SectionID: Hashable & Sendable, ItemID: 
 
         init(snapshot: NSDiffableDataSourceSnapshot<SectionID, ItemID>) {
             self.snapshot = snapshot
-            var itemLocations: [ItemID: ItemLocation] = [:]
+            var itemLocations = [ItemID: ItemLocation]()
             for (sectionIndex, sectionID) in snapshot.sectionIdentifiers.enumerated() {
                 for (itemIndex, itemID) in snapshot.itemIdentifiers(inSection: sectionID).enumerated() {
                     itemLocations[itemID] = ItemLocation(
@@ -330,10 +330,10 @@ open class ChatLayoutDiffableDataSource<SectionID: Hashable & Sendable, ItemID: 
 
         let oldItemIDs = Set(oldState.itemLocations.keys)
         let newItemIDs = Set(newState.itemLocations.keys)
-        var insertedItems: [IndexPath] = []
-        var deletedItems: [IndexPath] = []
-        var movedItems: [ItemMove] = []
-        var movedItemIDs: Set<ItemID> = []
+        var insertedItems = [IndexPath]()
+        var deletedItems = [IndexPath]()
+        var movedItems = [ItemMove]()
+        var movedItemIDs = Set<ItemID>()
 
         for id in oldItemIDs.subtracting(newItemIDs) {
             guard let oldLocation = oldState.itemLocations[id],
@@ -438,11 +438,11 @@ open class ChatLayoutDiffableDataSource<SectionID: Hashable & Sendable, ItemID: 
         let difference = newSnapshot.sectionIdentifiers
             .difference(from: oldSnapshot.sectionIdentifiers)
             .inferringMoves()
-        var insertedIndexes: [Int] = []
-        var deletedIndexes: [Int] = []
-        var moves: [SectionMove] = []
-        var insertedIDs: Set<SectionID> = []
-        var deletedIDs: Set<SectionID> = []
+        var insertedIndexes = [Int]()
+        var deletedIndexes = [Int]()
+        var moves = [SectionMove]()
+        var insertedIDs = Set<SectionID>()
+        var deletedIDs = Set<SectionID>()
 
         for update in difference {
             switch update {

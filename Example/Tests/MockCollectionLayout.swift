@@ -27,14 +27,14 @@ class MockCollectionLayout: ChatLayoutRepresentation, ChatLayoutDelegate {
     lazy var delegate: ChatLayoutDelegate? = self
     // swiftlint:enable weak_delegate
 
-    var settings = ChatLayoutSettings(estimatedItemSize: CGSize(width: 300, height: 40), interItemSpacing: 7, interSectionSpacing: 3)
-    var viewSize = CGSize(width: 300, height: 400)
+    var settings: ChatLayoutSettings = .init(estimatedItemSize: CGSize(width: 300, height: 40), interItemSpacing: 7, interSectionSpacing: 3)
+    var viewSize: CGSize = .init(width: 300, height: 400)
 
-    lazy var visibleBounds = CGRect(origin: .zero, size: viewSize)
+    lazy var visibleBounds: CGRect = .init(origin: .zero, size: viewSize)
 
     var state: ModelState = .beforeUpdate
 
-    lazy var controller = StateController(layoutRepresentation: self)
+    lazy var controller: StateController = .init(layoutRepresentation: self)
 
     /// Represent the rectangle where all the items are aligned.
     var layoutFrame: CGRect {

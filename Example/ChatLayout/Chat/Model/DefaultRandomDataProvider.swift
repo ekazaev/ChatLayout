@@ -21,9 +21,9 @@ protocol RandomDataProviderDelegate: AnyObject {
 
     func typingStateChanged(to state: TypingState)
 
-    func lastReadIdChanged(to id: UUID)
+    func lastReadIDChanged(to id: UUID)
 
-    func lastReceivedIdChanged(to id: UUID)
+    func lastReceivedIDChanged(to id: UUID)
 
     func agentDidFinish()
 }
@@ -57,7 +57,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let users: [Int]
 
-    private let receiverId: Int
+    private let receiverID: Int
 
     private var lastMessageIndex: Int = 0
 
@@ -81,7 +81,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let agentMessageUpdateInterval: TimeInterval = 0.12
 
-    private let websiteUrls: [URL] = [
+    private let websiteURLs: [URL] = [
         URL(string: "https://messagekit.github.io")!,
         URL(string: "https://www.youtube.com/watch?v=GEZhD3J89ZE"),
         URL(string: "https://www.raywenderlich.com/7565482-visually-rich-links-tutorial-for-ios-image-thumbnails"),
@@ -94,7 +94,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         URL(string: "https://websummit.com")
     ].compactMap { $0 }
 
-    private let imageUrls: [URL] = [
+    private let imageURLs: [URL] = [
         URL(string: "https://upload.wikimedia.org/wikipedia/commons/a/a4/General_Post_Office_Dublin_20060803.jpg")!,
         URL(string: "https://upload.wikimedia.org/wikipedia/commons/4/42/Samuel_Beckett_Bridge_At_Sunset_Dublin_Ireland_%2897037639%29_%28cropped%29.jpeg")!,
         URL(string: "https://upload.wikimedia.org/wikipedia/commons/f/f2/Cork_river_lee.jpg")!,
@@ -104,13 +104,13 @@ final class DefaultRandomDataProvider: RandomDataProvider {
 
     private let images: [UIImage] = (1...8).compactMap { UIImage(named: "demo\($0)") }
 
-    private var allUsersIds: [Int] {
-        Array([users, [receiverId]].joined())
+    private var allUsersIDs: [Int] {
+        Array([users, [receiverID]].joined())
     }
 
-    init(receiverId: Int, usersIds: [Int]) {
-        users = usersIds
-        self.receiverId = receiverId
+    init(receiverID: Int, usersIDs: [Int]) {
+        users = usersIDs
+        self.receiverID = receiverID
     }
 
     func loadInitialMessages(completion: @escaping ([RawMessage]) -> Void) {
@@ -174,15 +174,15 @@ final class DefaultRandomDataProvider: RandomDataProvider {
         let message = createRandomMessage()
         delegate?.received(messages: [message])
 
-        if message.userId != receiverId {
+        if message.userID != receiverID {
             if Int.random(in: 0...1) == 0 {
                 lastReceivedUUID = message.id
-                delegate?.lastReceivedIdChanged(to: message.id)
+                delegate?.lastReceivedIDChanged(to: message.id)
             }
             if Int.random(in: 0...3) == 0 {
                 lastReadUUID = lastReceivedUUID
                 lastReceivedUUID = message.id
-                delegate?.lastReadIdChanged(to: message.id)
+                delegate?.lastReadIDChanged(to: message.id)
             }
         }
 
@@ -281,7 +281,7 @@ final class DefaultRandomDataProvider: RandomDataProvider {
             id: UUID(),
             date: Date().addingTimeInterval(0.001),
             data: .text("Answer"),
-            userId: users.randomElement() ?? receiverId
+            userID: users.randomElement() ?? receiverID
         )
         agentAnswerMessage = answerMessage
         delegate?.received(messages: [answerMessage])
@@ -310,28 +310,28 @@ final class DefaultRandomDataProvider: RandomDataProvider {
     }
 
     private func createRandomMessage(date: Date = Date()) -> RawMessage {
-        let sender = allUsersIds[Int.random(in: 0..<allUsersIds.count)] // allUsersIds.first!//
+        let sender = allUsersIDs[Int.random(in: 0..<allUsersIDs.count)] // allUsersIds.first!//
         lastMessageIndex += 1
         switch (Int.random(in: 0...8), enableRichContent) {
         case (5, true):
-            return RawMessage(id: UUID(), date: date, data: .url(websiteUrls[Int.random(in: 0..<websiteUrls.count)]), userId: sender)
+            return RawMessage(id: UUID(), date: date, data: .url(websiteURLs[Int.random(in: 0..<websiteURLs.count)]), userID: sender)
         case (6, true):
-            return RawMessage(id: UUID(), date: date, data: .image(.imageURL(imageUrls[Int.random(in: 0..<imageUrls.count)])), userId: sender)
+            return RawMessage(id: UUID(), date: date, data: .image(.imageURL(imageURLs[Int.random(in: 0..<imageURLs.count)])), userID: sender)
         case (7, true):
-            return RawMessage(id: UUID(), date: date, data: .image(.image(images[Int.random(in: 0..<images.count)])), userId: sender)
+            return RawMessage(id: UUID(), date: date, data: .image(.image(images[Int.random(in: 0..<images.count)])), userID: sender)
         case (8, true):
             return RawMessage(
                 id: UUID(),
                 date: date,
                 data: .text(
                     TextGenerator.getString(of: 5) +
-                        " \(websiteUrls[Int.random(in: 0..<websiteUrls.count)]). " +
+                        " \(websiteURLs[Int.random(in: 0..<websiteURLs.count)]). " +
                         TextGenerator.getString(of: 5)
                 ),
-                userId: sender
+                userID: sender
             )
         default:
-            return RawMessage(id: UUID(), date: date, data: .text(TextGenerator.getString(of: 20)), userId: sender)
+            return RawMessage(id: UUID(), date: date, data: .text(TextGenerator.getString(of: 20)), userID: sender)
         }
     }
 

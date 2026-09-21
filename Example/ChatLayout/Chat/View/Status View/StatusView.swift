@@ -15,7 +15,7 @@ import Foundation
 import UIKit
 
 final class StatusView: UIView, StaticViewFactory {
-    private lazy var imageView = UIImageView(frame: bounds)
+    private lazy var imageView: UIImageView = .init(frame: bounds)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

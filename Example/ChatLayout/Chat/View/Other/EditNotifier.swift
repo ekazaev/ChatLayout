@@ -16,7 +16,7 @@ import UIKit
 final class EditNotifier {
     private(set) var isEditing = false
 
-    private var delegates = NSHashTable<AnyObject>.weakObjects()
+    private var delegates: NSHashTable<AnyObject> = .weakObjects()
 
     func add(delegate: EditNotifierDelegate) {
         delegates.add(delegate)

@@ -13,19 +13,20 @@
 import Foundation
 import UIKit
 
-/// This container view is designed to hold two `UIView` elements and arrange them in a horizontal or vertical axis.
-/// It also allows to easily change the order of the views if needed.
+/// A container that arranges two views along a horizontal or vertical axis.
+///
+/// Hiding either view makes the other fill the arrangement axis.
 public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIView>: UIView {
-    /// Keys that specify a horizontal or vertical layout constraint between views.
+    /// The axis along which the contained views are arranged.
     public enum Axis: Hashable {
-        /// The constraint applied when laying out the horizontal relationship between views.
+        /// The views are arranged side by side.
         case horizontal
 
-        /// The constraint applied when laying out the vertical relationship between views.
+        /// The views are arranged one above the other.
         case vertical
     }
 
-    /// Keys that specify a distribution of the contained views.
+    /// The order of the contained views along the arrangement axis.
     public enum Distribution: Hashable {
         /// The `AccessoryView` should be positioned before the `CustomView`.
         case accessoryFirst
@@ -34,7 +35,7 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         case accessoryLast
     }
 
-    /// The layout of the arranged subviews along the axis.
+    /// The order of the arranged subviews.
     public var distribution: Distribution = .accessoryFirst {
         didSet {
             guard distribution != oldValue else {
@@ -45,7 +46,7 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         }
     }
 
-    /// The distribution axis of the contained view.
+    /// The axis along which the contained views are arranged.
     public var axis: Axis = .horizontal {
         didSet {
             guard axis != oldValue else {
@@ -61,7 +62,8 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
             guard spacing != oldValue else {
                 return
             }
-            setNeedsUpdateConstraints()
+            accessoryFirstSpacingConstraint?.constant = -spacing
+            customViewFirstSpacingConstraint?.constant = -spacing
             setNeedsLayout()
         }
     }
@@ -72,7 +74,8 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
             guard preferredPriority != oldValue else {
                 return
             }
-            setupContainer()
+            updateConstraintPriorities()
+            setNeedsLayout()
         }
     }
 
@@ -85,8 +88,8 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
             if oldValue.superview === self {
                 oldValue.removeFromSuperview()
             }
-            accessoryFirstObserver?.invalidate()
-            accessoryFirstObserver = nil
+            accessoryViewObserver?.invalidate()
+            accessoryViewObserver = nil
             setupContainer()
         }
     }
@@ -106,33 +109,39 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         }
     }
 
-    private struct SwappingContainerState: Equatable {
-        let axis: Axis
-
+    private struct ConstraintState: Equatable {
         let distribution: Distribution
-
-        let spacing: CGFloat
 
         let isAccessoryHidden: Bool
 
         let isCustomViewHidden: Bool
     }
 
-    private var addedConstraints: [NSLayoutConstraint] = []
+    private struct ArrangementConstraints {
+        let spacingConstraint: NSLayoutConstraint
 
-    private var accessoryFirstConstraints: [NSLayoutConstraint] = []
+        let constraints: [NSLayoutConstraint]
+    }
 
-    private var accessoryFullConstraints: [NSLayoutConstraint] = []
+    private var managedConstraints: [NSLayoutConstraint] = []
 
-    private var customViewFirstConstraints: [NSLayoutConstraint] = []
+    private var accessoryFirstArrangementConstraints: [NSLayoutConstraint] = []
 
-    private var customViewFullConstraints: [NSLayoutConstraint] = []
+    private var accessoryFullSpanConstraints: [NSLayoutConstraint] = []
 
-    private var edgeConstraints: (accessory: [NSLayoutConstraint], customView: [NSLayoutConstraint]) = (accessory: [], customView: [])
+    private var customViewFirstArrangementConstraints: [NSLayoutConstraint] = []
 
-    private var cachedState: SwappingContainerState?
+    private var customViewFullSpanConstraints: [NSLayoutConstraint] = []
 
-    private var accessoryFirstObserver: NSKeyValueObservation?
+    private var crossAxisConstraints: (accessory: [NSLayoutConstraint], customView: [NSLayoutConstraint]) = (accessory: [], customView: [])
+
+    private var accessoryFirstSpacingConstraint: NSLayoutConstraint?
+
+    private var customViewFirstSpacingConstraint: NSLayoutConstraint?
+
+    private var lastConstraintsState: ConstraintState?
+
+    private var accessoryViewObserver: NSKeyValueObservation?
 
     private var customViewObserver: NSKeyValueObservation?
 
@@ -143,12 +152,11 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
     ///   - distribution: The layout of the arranged subviews along the axis.
     ///   - spacing: The distance in points between the edges of the contained views.
     ///   - preferredPriority: Preferred priority of the internal constraints.
-    ///   to the superview in which you plan to add it.
     public init(
         frame: CGRect,
         axis: Axis = .horizontal,
         distribution: Distribution = .accessoryFirst,
-        spacing: CGFloat,
+        spacing: CGFloat = .zero,
         preferredPriority: UILayoutPriority = .required
     ) {
         customView = CustomView(frame: frame)
@@ -156,7 +164,34 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         self.axis = axis
         self.distribution = distribution
         self.spacing = spacing
+        self.preferredPriority = preferredPriority
         super.init(frame: frame)
+        setupSubviews()
+    }
+
+    /// Initializes and returns a newly allocated container with the provided views.
+    /// - Parameters:
+    ///   - customView: The main view.
+    ///   - accessoryView: The accessory view.
+    ///   - axis: The view distribution axis.
+    ///   - distribution: The layout of the contained views along the axis.
+    ///   - spacing: The distance in points between the edges of the contained views.
+    ///   - preferredPriority: Preferred priority of the internal constraints.
+    public init(
+        with customView: CustomView,
+        accessoryView: AccessoryView,
+        axis: Axis = .horizontal,
+        distribution: Distribution = .accessoryFirst,
+        spacing: CGFloat = .zero,
+        preferredPriority: UILayoutPriority = .required
+    ) {
+        self.customView = customView
+        self.accessoryView = accessoryView
+        self.axis = axis
+        self.distribution = distribution
+        self.spacing = spacing
+        self.preferredPriority = preferredPriority
+        super.init(frame: customView.frame)
         setupSubviews()
     }
 
@@ -171,9 +206,9 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
     }
 
     /// This constructor is unavailable.
-    @available(*, unavailable, message: "Use init(frame:) instead.")
+    @available(*, unavailable, message: "Use init(frame:axis:distribution:spacing:preferredPriority:) or init(with:accessoryView:axis:distribution:spacing:preferredPriority:) instead.")
     public required init?(coder: NSCoder) {
-        fatalError("Use init(with:flexibleEdges:) instead.")
+        fatalError("Use init(frame:axis:distribution:spacing:preferredPriority:) or init(with:accessoryView:axis:distribution:spacing:preferredPriority:) instead.")
     }
 
     /// A Boolean value that indicates whether the receiver depends on the constraint-based layout system.
@@ -183,101 +218,85 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
 
     /// Updates constraints for the view.
     public override func updateConstraints() {
-        let currentState = SwappingContainerState(
-            axis: axis,
+        let currentState = ConstraintState(
             distribution: distribution,
-            spacing: spacing,
             isAccessoryHidden: accessoryView.isHidden,
             isCustomViewHidden: customView.isHidden
         )
-        guard currentState != cachedState else {
+        guard currentState != lastConstraintsState else {
             super.updateConstraints()
             return
         }
 
-        cachedState = currentState
+        lastConstraintsState = currentState
 
         if currentState.isAccessoryHidden, currentState.isCustomViewHidden {
-            NSLayoutConstraint.deactivate(edgeConstraints.accessory)
-            NSLayoutConstraint.deactivate(edgeConstraints.customView)
-            NSLayoutConstraint.deactivate(accessoryFirstConstraints)
-            NSLayoutConstraint.deactivate(customViewFirstConstraints)
-            NSLayoutConstraint.deactivate(accessoryFullConstraints)
-            NSLayoutConstraint.deactivate(customViewFullConstraints)
+            NSLayoutConstraint.deactivate(crossAxisConstraints.accessory)
+            NSLayoutConstraint.deactivate(crossAxisConstraints.customView)
+            NSLayoutConstraint.deactivate(accessoryFirstArrangementConstraints)
+            NSLayoutConstraint.deactivate(customViewFirstArrangementConstraints)
+            NSLayoutConstraint.deactivate(accessoryFullSpanConstraints)
+            NSLayoutConstraint.deactivate(customViewFullSpanConstraints)
         } else if currentState.isAccessoryHidden {
-            NSLayoutConstraint.deactivate(edgeConstraints.accessory)
-            NSLayoutConstraint.deactivate(accessoryFirstConstraints)
-            NSLayoutConstraint.deactivate(customViewFirstConstraints)
-            NSLayoutConstraint.deactivate(accessoryFullConstraints)
-            NSLayoutConstraint.activate(customViewFullConstraints)
-            NSLayoutConstraint.activate(edgeConstraints.customView)
+            NSLayoutConstraint.deactivate(crossAxisConstraints.accessory)
+            NSLayoutConstraint.deactivate(accessoryFirstArrangementConstraints)
+            NSLayoutConstraint.deactivate(customViewFirstArrangementConstraints)
+            NSLayoutConstraint.deactivate(accessoryFullSpanConstraints)
+            NSLayoutConstraint.activate(customViewFullSpanConstraints)
+            NSLayoutConstraint.activate(crossAxisConstraints.customView)
         } else if currentState.isCustomViewHidden {
-            NSLayoutConstraint.deactivate(edgeConstraints.customView)
-            NSLayoutConstraint.deactivate(accessoryFirstConstraints)
-            NSLayoutConstraint.deactivate(customViewFirstConstraints)
-            NSLayoutConstraint.deactivate(customViewFullConstraints)
-            NSLayoutConstraint.activate(accessoryFullConstraints)
-            NSLayoutConstraint.activate(edgeConstraints.accessory)
+            NSLayoutConstraint.deactivate(crossAxisConstraints.customView)
+            NSLayoutConstraint.deactivate(accessoryFirstArrangementConstraints)
+            NSLayoutConstraint.deactivate(customViewFirstArrangementConstraints)
+            NSLayoutConstraint.deactivate(customViewFullSpanConstraints)
+            NSLayoutConstraint.activate(accessoryFullSpanConstraints)
+            NSLayoutConstraint.activate(crossAxisConstraints.accessory)
         } else {
-            NSLayoutConstraint.deactivate(accessoryFullConstraints)
-            NSLayoutConstraint.deactivate(customViewFullConstraints)
+            NSLayoutConstraint.deactivate(accessoryFullSpanConstraints)
+            NSLayoutConstraint.deactivate(customViewFullSpanConstraints)
 
             switch distribution {
             case .accessoryFirst:
-                guard !(accessoryFirstConstraints.first?.isActive ?? false) else {
-                    accessoryFirstConstraints.first?.constant = -spacing
-                    break
-                }
-                accessoryFirstConstraints.first?.constant = -spacing
-                customViewFirstConstraints.first?.constant = spacing
-                NSLayoutConstraint.deactivate(customViewFirstConstraints)
-                NSLayoutConstraint.activate(accessoryFirstConstraints)
+                NSLayoutConstraint.deactivate(customViewFirstArrangementConstraints)
+                NSLayoutConstraint.activate(accessoryFirstArrangementConstraints)
             case .accessoryLast:
-                guard !(customViewFirstConstraints.first?.isActive ?? false) else {
-                    customViewFirstConstraints.first?.constant = -spacing
-                    break
-                }
-                accessoryFirstConstraints.first?.constant = spacing
-                customViewFirstConstraints.first?.constant = -spacing
-                NSLayoutConstraint.deactivate(accessoryFirstConstraints)
-                NSLayoutConstraint.activate(customViewFirstConstraints)
+                NSLayoutConstraint.deactivate(accessoryFirstArrangementConstraints)
+                NSLayoutConstraint.activate(customViewFirstArrangementConstraints)
             }
-            NSLayoutConstraint.activate(edgeConstraints.customView)
-            NSLayoutConstraint.activate(edgeConstraints.accessory)
+            NSLayoutConstraint.activate(crossAxisConstraints.customView)
+            NSLayoutConstraint.activate(crossAxisConstraints.accessory)
         }
 
         super.updateConstraints()
     }
 
     private func setupSubviews() {
-        translatesAutoresizingMaskIntoConstraints = false
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
-        clipsToBounds = false
 
         setupContainer()
     }
 
     private func setupContainer() {
-        if !addedConstraints.isEmpty {
-            NSLayoutConstraint.deactivate(addedConstraints)
-            addedConstraints.removeAll()
+        if !managedConstraints.isEmpty {
+            NSLayoutConstraint.deactivate(managedConstraints)
+            managedConstraints.removeAll()
         }
 
+        customView.translatesAutoresizingMaskIntoConstraints = false
         if customView.superview != self {
-            customView.translatesAutoresizingMaskIntoConstraints = false
             customView.removeFromSuperview()
             addSubview(customView)
         }
 
+        accessoryView.translatesAutoresizingMaskIntoConstraints = false
         if accessoryView.superview != self {
-            accessoryView.translatesAutoresizingMaskIntoConstraints = false
             accessoryView.removeFromSuperview()
             addSubview(accessoryView)
         }
 
-        if accessoryFirstObserver == nil {
-            accessoryFirstObserver = accessoryView.observe(\.isHidden, options: [.new]) { [weak self] _, _ in
+        if accessoryViewObserver == nil {
+            accessoryViewObserver = accessoryView.observe(\.isHidden, options: [.new]) { [weak self] _, _ in
                 MainActor.assumeIsolated { [weak self] in
                     self?.setNeedsUpdateConstraints()
                 }
@@ -292,26 +311,28 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
             }
         }
 
-        cachedState = nil
+        lastConstraintsState = nil
 
-        let accessoryFirstConstraints = buildAccessoryFirstConstraints()
-        let accessoryFullConstraints = buildAccessoryFullConstraints()
-        let customViewFirstConstraints = buildCustomViewFirstConstraints()
-        let customViewFullConstraints = buildCustomViewFullConstraints()
-        let edgeConstraints = buildEdgeConstraints()
+        let accessoryFirstArrangement = buildAccessoryFirstArrangementConstraints()
+        let accessoryFullSpanConstraints = buildAccessoryFullSpanConstraints()
+        let customViewFirstArrangement = buildCustomViewFirstArrangementConstraints()
+        let customViewFullSpanConstraints = buildCustomViewFullSpanConstraints()
+        let crossAxisConstraints = buildCrossAxisConstraints()
 
-        addedConstraints.append(contentsOf: accessoryFirstConstraints)
-        addedConstraints.append(contentsOf: accessoryFullConstraints)
-        addedConstraints.append(contentsOf: customViewFirstConstraints)
-        addedConstraints.append(contentsOf: customViewFullConstraints)
-        addedConstraints.append(contentsOf: edgeConstraints.customView)
-        addedConstraints.append(contentsOf: edgeConstraints.accessory)
+        managedConstraints.append(contentsOf: accessoryFirstArrangement.constraints)
+        managedConstraints.append(contentsOf: accessoryFullSpanConstraints)
+        managedConstraints.append(contentsOf: customViewFirstArrangement.constraints)
+        managedConstraints.append(contentsOf: customViewFullSpanConstraints)
+        managedConstraints.append(contentsOf: crossAxisConstraints.customView)
+        managedConstraints.append(contentsOf: crossAxisConstraints.accessory)
 
-        self.accessoryFirstConstraints = accessoryFirstConstraints
-        self.accessoryFullConstraints = accessoryFullConstraints
-        self.customViewFirstConstraints = customViewFirstConstraints
-        self.customViewFullConstraints = customViewFullConstraints
-        self.edgeConstraints = edgeConstraints
+        accessoryFirstArrangementConstraints = accessoryFirstArrangement.constraints
+        self.accessoryFullSpanConstraints = accessoryFullSpanConstraints
+        customViewFirstArrangementConstraints = customViewFirstArrangement.constraints
+        self.customViewFullSpanConstraints = customViewFullSpanConstraints
+        self.crossAxisConstraints = crossAxisConstraints
+        accessoryFirstSpacingConstraint = accessoryFirstArrangement.spacingConstraint
+        customViewFirstSpacingConstraint = customViewFirstArrangement.spacingConstraint
 
         setNeedsUpdateConstraints()
         setNeedsLayout()
@@ -321,56 +342,78 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         preferredPriority == .required ? .almostRequired : preferredPriority
     }
 
-    private func buildAccessoryFirstConstraints() -> [NSLayoutConstraint] {
+    private func updateConstraintPriorities() {
+        managedConstraints.forEach { $0.priority = preferredPriority }
+        accessoryFirstSpacingConstraint?.priority = spacingPriority()
+        customViewFirstSpacingConstraint?.priority = spacingPriority()
+    }
+
+    private func buildAccessoryFirstArrangementConstraints() -> ArrangementConstraints {
         switch axis {
         case .horizontal:
-            [
-                accessoryView.trailingAnchor.constraint(equalTo: customView.leadingAnchor, constant: spacing, priority: spacingPriority()),
-                accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-                customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
-            ]
+            let spacingConstraint = accessoryView.trailingAnchor.constraint(equalTo: customView.leadingAnchor, constant: -spacing, priority: spacingPriority())
+            return .init(
+                spacingConstraint: spacingConstraint,
+                constraints: [
+                    spacingConstraint,
+                    accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                    customView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+                ]
+            )
         case .vertical:
-            [
-                accessoryView.bottomAnchor.constraint(equalTo: customView.topAnchor, constant: spacing, priority: spacingPriority()),
-                accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-                customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
-            ]
+            let spacingConstraint = accessoryView.bottomAnchor.constraint(equalTo: customView.topAnchor, constant: -spacing, priority: spacingPriority())
+            return .init(
+                spacingConstraint: spacingConstraint,
+                constraints: [
+                    spacingConstraint,
+                    accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                    customView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+                ]
+            )
         }
     }
 
-    private func buildCustomViewFirstConstraints() -> [NSLayoutConstraint] {
+    private func buildCustomViewFirstArrangementConstraints() -> ArrangementConstraints {
+        switch axis {
+        case .horizontal:
+            let spacingConstraint = customView.trailingAnchor.constraint(equalTo: accessoryView.leadingAnchor, constant: -spacing, priority: spacingPriority())
+            return .init(
+                spacingConstraint: spacingConstraint,
+                constraints: [
+                    spacingConstraint,
+                    customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                    accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
+                ]
+            )
+        case .vertical:
+            let spacingConstraint = customView.bottomAnchor.constraint(equalTo: accessoryView.topAnchor, constant: -spacing, priority: spacingPriority())
+            return .init(
+                spacingConstraint: spacingConstraint,
+                constraints: [
+                    spacingConstraint,
+                    customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                    accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
+                ]
+            )
+        }
+    }
+
+    private func buildAccessoryFullSpanConstraints() -> [NSLayoutConstraint] {
         switch axis {
         case .horizontal:
             [
-                customView.trailingAnchor.constraint(equalTo: accessoryView.leadingAnchor, constant: -spacing, priority: spacingPriority()),
-                customView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
+                accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
                 accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
             ]
         case .vertical:
             [
-                customView.bottomAnchor.constraint(equalTo: accessoryView.topAnchor, constant: -spacing, priority: spacingPriority()),
-                customView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
+                accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
                 accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
             ]
         }
     }
 
-    private func buildAccessoryFullConstraints() -> [NSLayoutConstraint] {
-        switch axis {
-        case .horizontal:
-            [
-                accessoryView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, priority: preferredPriority),
-                accessoryView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, priority: preferredPriority)
-            ]
-        case .vertical:
-            [
-                accessoryView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, priority: preferredPriority),
-                accessoryView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, priority: preferredPriority)
-            ]
-        }
-    }
-
-    private func buildCustomViewFullConstraints() -> [NSLayoutConstraint] {
+    private func buildCustomViewFullSpanConstraints() -> [NSLayoutConstraint] {
         switch axis {
         case .horizontal:
             [
@@ -385,7 +428,7 @@ public final class SwappingContainerView<CustomView: UIView, AccessoryView: UIVi
         }
     }
 
-    private func buildEdgeConstraints() -> (accessory: [NSLayoutConstraint], customView: [NSLayoutConstraint]) {
+    private func buildCrossAxisConstraints() -> (accessory: [NSLayoutConstraint], customView: [NSLayoutConstraint]) {
         switch axis {
         case .horizontal:
             (

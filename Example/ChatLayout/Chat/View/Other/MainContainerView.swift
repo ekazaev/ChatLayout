@@ -42,7 +42,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
         }
     }
 
-    var accessoryView = DateAccessoryView()
+    var accessoryView: DateAccessoryView = .init()
 
     var accessorySafeAreaInsets: UIEdgeInsets = .zero {
         didSet {
@@ -55,7 +55,7 @@ final class MainContainerView<LeadingAccessory: StaticViewFactory, CustomView: U
         }
     }
 
-    private(set) lazy var containerView = CellLayoutContainerView<LeadingAccessory, BezierMaskedView<CustomView>, TrailingAccessory>()
+    private(set) lazy var containerView: CellLayoutContainerView<LeadingAccessory, BezierMaskedView<CustomView>, TrailingAccessory> = .init()
 
     private weak var accessoryOffsetConstraint: NSLayoutConstraint?
 

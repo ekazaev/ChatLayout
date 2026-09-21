@@ -25,7 +25,7 @@ public enum ImageMaskedViewTransformation {
 /// A container view that masks its contained view with an image provided.
 public final class ImageMaskedView<CustomView: UIView>: UIView {
     /// Contained view.
-    public lazy var customView = CustomView(frame: bounds)
+    public lazy var customView: CustomView = .init(frame: bounds)
 
     /// An Image to be used as a mask for the `customView`.
     public var maskingImage: UIImage? {
@@ -44,7 +44,7 @@ public final class ImageMaskedView<CustomView: UIView>: UIView {
         }
     }
 
-    private lazy var imageView = UIImageView(frame: bounds)
+    private lazy var imageView: UIImageView = .init(frame: bounds)
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative

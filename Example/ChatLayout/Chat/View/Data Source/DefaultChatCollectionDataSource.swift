@@ -61,9 +61,9 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         collectionView.register(URLCollectionCell.self, forCellWithReuseIdentifier: URLCollectionCell.reuseIdentifier)
     }
 
-    private func createTextCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, text: String, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
+    private func createTextCell(collectionView: UICollectionView, messageID: UUID, indexPath: IndexPath, text: String, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextMessageCollectionCell.reuseIdentifier, for: indexPath) as! TextMessageCollectionCell
-        setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)
+        setupMessageContainerView(cell.customView, messageID: messageID, alignment: alignment)
         setupMainMessageView(cell.customView.customView, user: user, alignment: alignment, bubble: bubbleType, status: status)
 
         setupSwipeHandlingAccessory(cell.customView.customView, date: date, accessoryConnectingView: cell.customView)
@@ -81,9 +81,9 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createURLCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, url: URL, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
+    private func createURLCell(collectionView: UICollectionView, messageID: UUID, indexPath: IndexPath, url: URL, date: Date, alignment: ChatItemAlignment, user: User, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: URLCollectionCell.reuseIdentifier, for: indexPath) as! URLCollectionCell
-        setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)
+        setupMessageContainerView(cell.customView, messageID: messageID, alignment: alignment)
         setupMainMessageView(cell.customView.customView, user: user, alignment: alignment, bubble: bubbleType, status: status)
 
         setupSwipeHandlingAccessory(cell.customView.customView, date: date, accessoryConnectingView: cell.customView)
@@ -91,7 +91,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         let bubbleView = cell.customView.customView.customView
         let controller = URLController(
             url: url,
-            messageId: messageId,
+            messageID: messageID,
             bubbleController: buildBezierBubbleController(for: bubbleView, messageType: messageType, bubbleType: bubbleType)
         )
 
@@ -103,10 +103,10 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func createImageCell(collectionView: UICollectionView, messageId: UUID, indexPath: IndexPath, alignment: ChatItemAlignment, user: User, source: ImageMessageSource, date: Date, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> ImageCollectionCell {
+    private func createImageCell(collectionView: UICollectionView, messageID: UUID, indexPath: IndexPath, alignment: ChatItemAlignment, user: User, source: ImageMessageSource, date: Date, bubbleType: Cell.BubbleType, status: MessageStatus, messageType: MessageType) -> ImageCollectionCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionCell.reuseIdentifier, for: indexPath) as! ImageCollectionCell
 
-        setupMessageContainerView(cell.customView, messageId: messageId, alignment: alignment)
+        setupMessageContainerView(cell.customView, messageID: messageID, alignment: alignment)
         setupMainMessageView(cell.customView.customView, user: user, alignment: alignment, bubble: bubbleType, status: status)
 
         setupSwipeHandlingAccessory(cell.customView.customView, date: date, accessoryConnectingView: cell.customView)
@@ -114,7 +114,7 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         let bubbleView = cell.customView.customView.customView
         let controller = ImageController(
             source: source,
-            messageId: messageId,
+            messageID: messageID,
             bubbleController: buildBezierBubbleController(for: bubbleView, messageType: messageType, bubbleType: bubbleType)
         )
 
@@ -182,13 +182,13 @@ final class DefaultChatCollectionDataSource: NSObject, ChatCollectionDataSource 
         return cell
     }
 
-    private func setupMessageContainerView(_ messageContainerView: MessageContainerView<EditingAccessoryView, some Any>, messageId: UUID, alignment: ChatItemAlignment) {
+    private func setupMessageContainerView(_ messageContainerView: MessageContainerView<EditingAccessoryView, some Any>, messageID: UUID, alignment: ChatItemAlignment) {
         messageContainerView.alignment = alignment
         if let accessoryView = messageContainerView.accessoryView {
             editNotifier.add(delegate: accessoryView)
             accessoryView.setIsEditing(editNotifier.isEditing)
 
-            let controller = EditingAccessoryController(messageId: messageId)
+            let controller = EditingAccessoryController(messageID: messageID)
             controller.view = accessoryView
             controller.delegate = editingDelegate
             accessoryView.setup(with: controller)
@@ -264,12 +264,12 @@ extension DefaultChatCollectionDataSource: UICollectionViewDataSource {
         case let .message(message, bubbleType: bubbleType):
             switch message.data {
             case let .text(text):
-                let cell = createTextCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, text: text, date: message.date, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
+                let cell = createTextCell(collectionView: collectionView, messageID: message.id, indexPath: indexPath, text: text, date: message.date, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
                 return cell
             case let .url(url, isLocallyStored: _):
-                return createURLCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, url: url, date: message.date, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
+                return createURLCell(collectionView: collectionView, messageID: message.id, indexPath: indexPath, url: url, date: message.date, alignment: cell.alignment, user: message.owner, bubbleType: bubbleType, status: message.status, messageType: message.type)
             case let .image(source, isLocallyStored: _):
-                let cell = createImageCell(collectionView: collectionView, messageId: message.id, indexPath: indexPath, alignment: cell.alignment, user: message.owner, source: source, date: message.date, bubbleType: bubbleType, status: message.status, messageType: message.type)
+                let cell = createImageCell(collectionView: collectionView, messageID: message.id, indexPath: indexPath, alignment: cell.alignment, user: message.owner, source: source, date: message.date, bubbleType: bubbleType, status: message.status, messageType: message.type)
                 return cell
             }
         case let .messageGroup(group):

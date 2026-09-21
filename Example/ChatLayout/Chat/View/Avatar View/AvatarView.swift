@@ -23,7 +23,7 @@ protocol AvatarViewDelegate: AnyObject {
 final class AvatarView: UIView, StaticViewFactory {
     weak var delegate: AvatarViewDelegate?
 
-    private lazy var circleImageView = RoundedCornersContainerView<UIImageView>(frame: bounds)
+    private lazy var circleImageView: RoundedCornersContainerView<UIImageView> = .init(frame: bounds)
 
     private var controller: AvatarViewController?
 

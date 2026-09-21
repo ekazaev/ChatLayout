@@ -12,7 +12,7 @@
 
 import Foundation
 
-private let iterativeTargetQueue = DispatchQueue(label: "IterativeCache", qos: .userInteractive, attributes: .concurrent)
+private let iterativeTargetQueue: DispatchQueue = .init(label: "IterativeCache", qos: .userInteractive, attributes: .concurrent)
 
 public final class IterativeCache<FastCache: AsyncKeyValueCaching, SlowCache: AsyncKeyValueCaching>: AsyncKeyValueCaching, @unchecked Sendable
     where

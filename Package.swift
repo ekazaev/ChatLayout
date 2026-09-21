@@ -1,4 +1,4 @@
-// swift-tools-version:6.1
+// swift-tools-version:6.2
 
 import PackageDescription
 
@@ -26,16 +26,14 @@ let package = Package(
     targets: [
         .target(
             name: "ChatLayout",
-            dependencies: [],
-            path: "ChatLayout/Classes",
-            swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency")
-            ]
+            path: "ChatLayout/Classes"
         ),
         .testTarget(
             name: "ChatLayoutTests",
             dependencies: ["ChatLayout"],
-            path: "Example/Tests"
+            path: "Example/Tests",
+            exclude: ["Info.plist"]
         )
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )

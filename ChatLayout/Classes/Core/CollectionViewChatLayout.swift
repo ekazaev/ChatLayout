@@ -48,7 +48,7 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     open weak var delegate: ChatLayoutDelegate?
 
     /// Additional settings for `CollectionViewChatLayout`.
-    public var settings = ChatLayoutSettings() {
+    public var settings: ChatLayoutSettings = .init() {
         didSet {
             guard collectionView != nil,
                   settings != oldValue else {
@@ -181,21 +181,21 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     private struct PrepareActions: OptionSet {
         let rawValue: UInt
 
-        static let recreateSectionModels = PrepareActions(rawValue: 1 << 0)
-        static let updateLayoutMetrics = PrepareActions(rawValue: 1 << 1)
-        static let cachePreviousWidth = PrepareActions(rawValue: 1 << 2)
-        static let cachePreviousContentInsets = PrepareActions(rawValue: 1 << 3)
-        static let switchStates = PrepareActions(rawValue: 1 << 4)
-        static let updatePinnedInfo = PrepareActions(rawValue: 1 << 5)
+        static let recreateSectionModels: PrepareActions = .init(rawValue: 1 << 0)
+        static let updateLayoutMetrics: PrepareActions = .init(rawValue: 1 << 1)
+        static let cachePreviousWidth: PrepareActions = .init(rawValue: 1 << 2)
+        static let cachePreviousContentInsets: PrepareActions = .init(rawValue: 1 << 3)
+        static let switchStates: PrepareActions = .init(rawValue: 1 << 4)
+        static let updatePinnedInfo: PrepareActions = .init(rawValue: 1 << 5)
     }
 
     private struct InvalidationActions: OptionSet {
         let rawValue: UInt
 
-        static let shouldInvalidateOnBoundsChange = InvalidationActions(rawValue: 1 << 0)
+        static let shouldInvalidateOnBoundsChange: InvalidationActions = .init(rawValue: 1 << 0)
     }
 
-    private lazy var controller = StateController(layoutRepresentation: self)
+    private lazy var controller: StateController = .init(layoutRepresentation: self)
 
     private var state: ModelState = .beforeUpdate
 
@@ -214,9 +214,9 @@ open class CollectionViewChatLayout: UICollectionViewLayout {
     /// These properties are used to keep the layout attributes copies used for insert/delete
     /// animations up-to-date as items are self-sized. If we don't keep these copies up-to-date, then
     /// animations will start from the estimated height.
-    private var attributesForPendingAnimations = [ItemPath: ChatLayoutAttributes]()
+    private var attributesForPendingAnimations: [ItemPath: ChatLayoutAttributes] = [:]
 
-    private var invalidatedAttributes = Set<ItemPath>()
+    private var invalidatedAttributes: Set<ItemPath> = []
 
     private var dontReturnAttributes: Bool = true
 

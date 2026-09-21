@@ -29,10 +29,14 @@ public enum CellLayoutContainerViewAlignment {
 
     fileprivate var stackAlignment: UIStackView.Alignment {
         switch self {
-        case .fill: .fill
-        case .top: .top
-        case .center: .center
-        case .bottom: .bottom
+        case .fill:
+            .fill
+        case .top:
+            .top
+        case .center:
+            .center
+        case .bottom:
+            .bottom
         }
     }
 }
@@ -45,7 +49,7 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
     public lazy var leadingView: LeadingAccessory.View? = LeadingAccessory.buildView(within: bounds)
 
     /// Main view.
-    public lazy var customView = CustomView(frame: bounds)
+    public lazy var customView: CustomView = .init(frame: bounds)
 
     /// Trailing accessory view.
     public lazy var trailingView: TrailingAccessory.View? = TrailingAccessory.buildView(within: bounds)
@@ -93,7 +97,7 @@ public final class CellLayoutContainerView<LeadingAccessory: StaticViewFactory, 
         }
     }
 
-    private let stackView = UIStackView()
+    private let stackView: UIStackView = .init()
 
     /// Initializes and returns a newly allocated view object with the specified frame rectangle.
     /// - Parameter frame: The frame rectangle for the view, measured in points. The origin of the frame is relative

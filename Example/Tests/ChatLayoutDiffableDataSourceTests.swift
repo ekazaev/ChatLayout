@@ -18,7 +18,7 @@ import XCTest
 final class ChatLayoutDiffableDataSourceTests: XCTestCase {
     func testApplyingInitialSnapshotCommitsModelsBeforeReloadingData() {
         let collectionView = DiffableDataSourceCollectionViewMock()
-        var committedItems: [Int] = []
+        var committedItems = [Int]()
         var completionWasCalled = false
         collectionView.onReloadData = {
             XCTAssertEqual(committedItems, [10, 20])

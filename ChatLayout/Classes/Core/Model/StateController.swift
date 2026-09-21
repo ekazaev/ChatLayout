@@ -124,7 +124,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
     private var cachedAttributesState: (rect: CGRect, attributes: [ChatLayoutAttributes])?
 
-    private var cachedAttributeObjects = [ModelState: [ItemPath: ChatLayoutAttributes]]()
+    private var cachedAttributeObjects: [ModelState: [ItemPath: ChatLayoutAttributes]] = [:]
 
     private var layoutBeforeUpdate: LayoutModel<Layout>
 
@@ -132,7 +132,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
 
     private unowned var layoutRepresentation: Layout
 
-    private(set) var pinnedIndexPaths = [ChatItemPinningType: PinnedIndexes]()
+    private(set) var pinnedIndexPaths: [ChatItemPinningType: PinnedIndexes] = [:]
 
     struct PinnedIndexes {
         var current: IndexPath
@@ -439,9 +439,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
                     return 0
                 }
 
-                let visibleBounds = additionalAttributes.visibleBounds.inset(
-                    by: layoutRepresentation.settings.additionalInsets
-                ).offsetBy(dx: 0, dy: state == .afterUpdate && layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates ? reconfigureCompensatingOffset : 0)
+                let visibleBounds = additionalAttributes.visibleBounds
+                    .inset(
+                        by: layoutRepresentation.settings.additionalInsets
+                    )
+                    .offsetBy(dx: 0, dy: state == .afterUpdate && layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates ? reconfigureCompensatingOffset : 0)
 
                 let progress: CGFloat
                 switch pinningType {
@@ -569,8 +571,8 @@ final class StateController<Layout: ChatLayoutRepresentation> {
         return itemFrame
     }
 
-    func itemPath(by itemId: UInt64, at state: ModelState) -> ItemPath? {
-        layout(at: state).itemPath(by: itemId)
+    func itemPath(by itemID: UInt64, at state: ModelState) -> ItemPath? {
+        layout(at: state).itemPath(by: itemID)
     }
 
     func sectionIdentifier(for index: Int, at state: ModelState) -> UInt64? {
@@ -843,11 +845,11 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             guard !deletedSectionsIndexes.contains(indexPath.section) else {
                 continue
             }
-            guard let itemId = itemIdentifier(for: indexPath.itemPath, at: .beforeUpdate) else {
+            guard let itemID = itemIdentifier(for: indexPath.itemPath, at: .beforeUpdate) else {
                 assertionFailure("Item at index path (\(indexPath.section) - \(indexPath.item)) does not exist.")
                 continue
             }
-            afterUpdateModel.removeItem(by: itemId)
+            afterUpdateModel.removeItem(by: itemID)
             if layoutRepresentation.keepContentOffsetAtBottomOnBatchUpdates {
                 let globalIndex = globalIndexFor(indexPath.itemPath, state: .beforeUpdate)
                 if let localItemToRestore = itemToRestore,
@@ -1034,7 +1036,7 @@ final class StateController<Layout: ChatLayoutRepresentation> {
             return attributes
         }
 
-        var traverseState: TraverseState = .notFound
+        var traverseState = TraverseState.notFound
 
         func check(rect: CGRect) -> Bool {
             guard traverseState != .done else {

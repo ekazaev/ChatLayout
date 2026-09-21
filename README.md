@@ -8,7 +8,7 @@
 [![Swift Package Manager](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BA51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Swift 6.3](https://img.shields.io/badge/language-Swift6.3-orange.svg?style=flat)](https://developer.apple.com/swift)
-[![Platform iOS](https://img.shields.io/badge/platform-iOS%2015%20—%20iOS%2026-yellow.svg)](https://www.apple.com/ios)
+[![Platform iOS](https://img.shields.io/badge/platform-iOS%2015%20—%20iOS%2027-yellow.svg)](https://www.apple.com/ios)
 
 <p align="center">
 <img src="https://habrastorage.org/webt/ji/ba/dj/jibadjc0hul-fzfwxm2w0ywdutg.png"  alt="ChatLayout logo"/>
@@ -84,8 +84,8 @@ to get better performance.
 
 - `ChatLayout` doesn't enforce you to use any specific data model. You can store your messages and update `UICollectionView`
 the way you like. The only thing you need is to respect the natural boundaries that `UICollectionView` have and correctly
-implement `UICollectionViewDataSource`. The Example app uses [DifferenceKit](https://github.com/ra1028/DifferenceKit) to 
-process changes in the data model.
+implement `UICollectionViewDataSource`. The Example app uses the provided `ChatLayoutDiffableDataSource`, but you can use
+any diffing solution, such as [DifferenceKit](https://github.com/ra1028/DifferenceKit).
 
 - `ChatLayout` doesn't enforce you to use any specific `UIView`s to create your collection cells. You can create them the way 
 you like. There are some generic `UIView`s bundled with
@@ -128,7 +128,9 @@ read [the contribution guidelines](https://github.com/ekazaev/route-composer/blo
 ### About `UICollectionViewDiffableDataSource`
 
 `ChatLayout` can process any update commands that you send to your `UICollectionView`, so you can use 
-`UICollectionViewDiffableDataSource` as well. 
+`UICollectionViewDiffableDataSource` as well. The Example app uses the provided `ChatLayoutDiffableDataSource` that behaves 
+like `UICollectionViewDiffableDataSource`, but also calls `CollectionViewChatLayout.reconfigureItems(at:)` when 
+required so reconfigured items participate in layout updates.
 
 ### About Texture
 
